@@ -1,0 +1,38 @@
+--------------------------------------------------------------------------------------------------------------------
+6.17:
+更换机械臂的模型跑完了，下一步是测试效果如何
+7.8：
+测试更换机械臂的模型：
+python3 train_DCMM.py test=True task=Catching_TwoStage num_envs=1 checkpoint_catching=/home/isee/catch_it/catch_it/outputs/Dcmm/2026-06-12/21:17:54/nn/best_reward_185.90.pth object_eval=false viewer=True imshow_cam=false
+反馈：灵巧手好像有点问题
+原因：灵巧手安装的模型有问题
+
+7.11：
+正在测试最新一版：灵巧手加了个挡板，不然挡不住球（参考原模型的）
+
+7.17:
+用32来训练track看看
+
+7.18：
+track的效果好像还算可以，后续测试一下catch：
+python3 train_DCMM.py test=False task=Catching_TwoStage num_envs=32 checkpoint_tracking=/home/isee/catch_it/catch_it/outputs/Dcmm/2026-07-18/09:15:05/nn/best_reward_51.98.pth
+
+7.20:
+    效果很差啊，这个灵巧手不知道怎么调
+
+7.21：
+    建模好像也没问题，但是track任务还可以，catch任务表现很差
+    得出结果可能是换了模型无法跑出这样的效果
+
+7.30:
+1.bounce加了摩擦：
+    python3 train_DCMM.py test=False task=Catching_TwoStage num_envs=32 checkpoint_tracking=/home/yuhao2/2026-7-30/catch_it_copy/outputs/Dcmm/best/bounce_track_58.18.pth
+2.roll新的模式修改了一些奖励函数：
+    python3 train_DCMM.py test=False task=Tracking num_envs=32
+3.新增运动模式，抛出去：
+    throw_basket
+
+进度汇报：
+1.机械臂只跑小球：224(很慢)、217
+2.bounce加摩擦：200
+3.roll训练track：204

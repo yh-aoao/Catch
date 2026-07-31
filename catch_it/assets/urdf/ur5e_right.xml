@@ -1,0 +1,128 @@
+<mujoco model="ur5e_right">
+    <compiler angle="radian" meshdir="../meshes/" autolimits="true"/>
+    <option integrator="RK4"/>
+    <asset>
+        <texture name="grid" type="2d" builtin="checker" rgb1=".1 .2 .3"
+        rgb2=".2 .3 .4" width="300" height="300" mark="edge" markrgb=".2 .3 .4"/>
+        <material name="grid" texture="grid" texrepeat="2 2" texuniform="true"
+        reflectance=".2"/>
+        <material name="black" rgba="0.033 0.033 0.033 1"/>
+        <material name="jointgray" rgba="0.278 0.278 0.278 1"/>
+        <material name="linkgray" rgba="0.82 0.82 0.82 1"/>
+        <material name="urblue" rgba="0.49 0.678 0.8 1"/>
+        <mesh name="base_0" file="base_0.obj"/>
+        <mesh name="base_1" file="base_1.obj"/>
+        <mesh name="shoulder_0" file="shoulder_0.obj"/>
+        <mesh name="shoulder_1" file="shoulder_1.obj"/>
+        <mesh name="shoulder_2" file="shoulder_2.obj"/>
+        <mesh name="upperarm_0" file="upperarm_0.obj"/>
+        <mesh name="upperarm_1" file="upperarm_1.obj"/>
+        <mesh name="upperarm_2" file="upperarm_2.obj"/>
+        <mesh name="upperarm_3" file="upperarm_3.obj"/>
+        <mesh name="forearm_0" file="forearm_0.obj"/>
+        <mesh name="forearm_1" file="forearm_1.obj"/>
+        <mesh name="forearm_2" file="forearm_2.obj"/>
+        <mesh name="forearm_3" file="forearm_3.obj"/>
+        <mesh name="wrist1_0" file="wrist1_0.obj"/>
+        <mesh name="wrist1_1" file="wrist1_1.obj"/>
+        <mesh name="wrist1_2" file="wrist1_2.obj"/>
+        <mesh name="wrist2_0" file="wrist2_0.obj"/>
+        <mesh name="wrist2_1" file="wrist2_1.obj"/>
+        <mesh name="wrist2_2" file="wrist2_2.obj"/>
+        <mesh name="wrist3" file="wrist3.obj"/>
+    </asset>
+    <default>
+        <joint damping="1"/>
+    </default>
+    <worldbody>
+        <light pos="0 0 1" mode="trackcom" diffuse="1 1 1" />
+        <geom name="ground" type="plane" pos="0 0 -.5" size="2 2 .1" material="grid" solimp=".99 .99 .01" solref=".001 1"/>
+        <body name="arm_base" quat="0 0 0 -1">
+            <!-- UR5e base visual -->
+            <geom type="mesh" contype="0" conaffinity="0" group="1" material="black" mesh="base_0" />
+            <geom type="mesh" material="black" mesh="base_0" />
+            <geom type="mesh" contype="0" conaffinity="0" group="1" material="jointgray" mesh="base_1" />
+            <geom type="mesh" material="jointgray" mesh="base_1" />
+            <body name="shoulder_link" pos="0 0 0.163">
+                <inertial mass="3.7" pos="0 0 0" diaginertia="0.0102675 0.0102675 0.00666"/>
+                <joint name="shoulder_pan_joint" axis="0 0 1" limited="true" range="-3.1415 3.1415" damping="1" frictionloss="1"/>
+                <geom type="mesh" contype="0" conaffinity="0" group="1" material="urblue" mesh="shoulder_0" />
+                <geom type="mesh" material="urblue" mesh="shoulder_0" />
+                <geom type="mesh" contype="0" conaffinity="0" group="1" material="black" mesh="shoulder_1" />
+                <geom type="mesh" material="black" mesh="shoulder_1" />
+                <geom type="mesh" contype="0" conaffinity="0" group="1" material="jointgray" mesh="shoulder_2" />
+                <geom type="mesh" material="jointgray" mesh="shoulder_2" />
+                <geom type="capsule" size="0.06 0.06" pos="0 0 -0.04" material="black" />
+                <body name="upper_arm_link" pos="0 0.138 0" quat="1 0 1 0">
+                    <inertial mass="8.393" pos="0 0 0.2125" diaginertia="0.133886 0.133886 0.0151074"/>
+                    <joint name="shoulder_lift_joint" axis="0 1 0" limited="true" range="-3.1415 3.1415" damping="1" frictionloss="1"/>
+                    <geom type="mesh" contype="0" conaffinity="0" group="1" material="linkgray" mesh="upperarm_0" />
+                    <geom type="mesh" material="linkgray" mesh="upperarm_0" />
+                    <geom type="mesh" contype="0" conaffinity="0" group="1" material="black" mesh="upperarm_1" />
+                    <geom type="mesh" material="black" mesh="upperarm_1" />
+                    <geom type="mesh" contype="0" conaffinity="0" group="1" material="jointgray" mesh="upperarm_2" />
+                    <geom type="mesh" material="jointgray" mesh="upperarm_2" />
+                    <geom type="mesh" contype="0" conaffinity="0" group="1" material="urblue" mesh="upperarm_3" />
+                    <geom type="mesh" material="urblue" mesh="upperarm_3" />
+                    <geom type="capsule" pos="0 -0.04 0" quat="1 1 0 0" size="0.06 0.06" />
+                    <geom type="capsule" size="0.05 0.2" pos="0 0 0.2" />
+                    <body name="forearm_link" pos="0 -0.131 0.425">
+                        <inertial mass="2.275" pos="0 0 0.196" diaginertia="0.0311796 0.0311796 0.004095"/>
+                        <joint name="elbow_joint" axis="0 1 0" limited="true" range="-3.1415 3.1415" damping="1" frictionloss="1"/>
+                        <geom type="mesh" contype="0" conaffinity="0" group="1" material="urblue" mesh="forearm_0" />
+                        <geom type="mesh" material="urblue" mesh="forearm_0" />
+                        <geom type="mesh" contype="0" conaffinity="0" group="1" material="linkgray" mesh="forearm_1" />
+                        <geom type="mesh" material="linkgray" mesh="forearm_1" />
+                        <geom type="mesh" contype="0" conaffinity="0" group="1" material="black" mesh="forearm_2" />
+                        <geom type="mesh" material="black" mesh="forearm_2" />
+                        <geom type="mesh" contype="0" conaffinity="0" group="1" material="jointgray" mesh="forearm_3" />
+                        <geom type="mesh" material="jointgray" mesh="forearm_3" />
+                        <geom type="capsule" pos="0 0.08 0" quat="1 1 0 0" size="0.055 0.06" />
+                        <geom type="capsule" size="0.038 0.19" pos="0 0 0.2" />
+                        <body name="wrist_1_link" pos="0 0 0.392" quat="1 0 1 0">
+                            <inertial mass="1.219" pos="0 0.127 0" diaginertia="0.0025599 0.0025599 0.0021942"/>
+                            <joint name="wrist_1_joint" axis="0 1 0" limited="true" range="-3.1415 3.1415" damping="1" frictionloss="1"/>
+                            <geom type="mesh" contype="0" conaffinity="0" group="1" material="black" mesh="wrist1_0" />
+                            <geom type="mesh" material="black" mesh="wrist1_0" />
+                            <geom type="mesh" contype="0" conaffinity="0" group="1" material="urblue" mesh="wrist1_1" />
+                            <geom type="mesh" material="urblue" mesh="wrist1_1" />
+                            <geom type="mesh" contype="0" conaffinity="0" group="1" material="jointgray" mesh="wrist1_2" />
+                            <geom type="mesh" material="jointgray" mesh="wrist1_2" />
+                            <geom type="capsule" pos="0 0.05 0" quat="1 1 0 0" size="0.04 0.07" />
+                            <body name="wrist_2_link" pos="0 0.127 0">
+                                <inertial mass="1.219" pos="0 0 0.1" diaginertia="0.0025599 0.0025599 0.0021942"/>
+                                <joint name="wrist_2_joint" axis="0 0 1" limited="true" range="-3.1415 3.1415" damping="1" frictionloss="1"/>
+                                <geom type="mesh" contype="0" conaffinity="0" group="1" material="black" mesh="wrist2_0" />
+                                <geom type="mesh" material="black" mesh="wrist2_0" />
+                                <geom type="mesh" contype="0" conaffinity="0" group="1" material="urblue" mesh="wrist2_1" />
+                                <geom type="mesh" material="urblue" mesh="wrist2_1" />
+                                <geom type="mesh" contype="0" conaffinity="0" group="1" material="jointgray" mesh="wrist2_2" />
+                                <geom type="mesh" material="jointgray" mesh="wrist2_2" />
+                                <geom type="capsule" size="0.04 0.06" pos="0 0 0.04" />
+                                <geom type="capsule" pos="0 0.02 0.1" quat="1 1 0 0" size="0.04 0.04" />
+                                <body name="wrist_3_link" pos="0 0 0.1">
+                                    <inertial mass="0.1889" pos="0 0.0771683 0" quat="1 0 0 1" diaginertia="0.000132134 9.90863e-05 9.90863e-05"/>
+                                    <joint name="wrist_3_joint" axis="0 1 0" limited="true" range="-3.1415 3.1415" damping="1" frictionloss="1"/>
+                                    <geom type="mesh" contype="0" conaffinity="0" group="1" material="linkgray" mesh="wrist3" />
+                                    <geom type="mesh" material="linkgray" mesh="wrist3" />
+                                    <geom type="cylinder" pos="0 0.08 0" quat="1 1 0 0" size="0.04 0.02" />
+                                    <site name="attachment_site" pos="0 0.1 0" quat="-1 1 0 0"/>
+                                </body>
+                            </body>
+                        </body>
+                    </body>
+                </body>
+            </body>
+        </body>
+    </worldbody>
+    <contact>
+    </contact>
+    <actuator>
+        <motor joint="shoulder_pan_joint" ctrlrange="-100 100" />
+        <motor joint="shoulder_lift_joint" ctrlrange="-100 100" />
+        <motor joint="elbow_joint" ctrlrange="-100 100" />
+        <motor joint="wrist_1_joint" ctrlrange="-100 100" />
+        <motor joint="wrist_2_joint" ctrlrange="-100 100" />
+        <motor joint="wrist_3_joint" ctrlrange="-100 100" />
+    </actuator>
+</mujoco>

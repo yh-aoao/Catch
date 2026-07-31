@@ -1,0 +1,121 @@
+7.8:
+测试滚动roll：
+    track：python3 train_DCMM.py test=True task=Tracking num_envs=1 checkpoint_tracking=/home/isee/catch_it/catch_it_copy/outputs/Dcmm/2026-05-28/23:44:53/nn/best_reward_613.46.pth object_eval=false viewer=True imshow_cam=false object_motion=roll
+    catch: python3 train_DCMM.py test=True task=Catching_TwoStage num_envs=1 checkpoint_catching=/home/isee/catch_it/catch_it_copy/outputs/Dcmm/2026-05-28/23:44:53/nn/best_reward_613.46.pth object_eval=false viewer=True imshow_cam=false object_motion=roll
+训练滚动roll：
+    catch: python3 train_DCMM.py test=False task=Catching_TwoStage num_envs=32 checkpoint_tracking=/home/isee/catch_it/catch_it_copy/outputs/Dcmm/2026-05-28/23:44:53/nn/best_reward_613.46.pth
+7.10：
+roll：
+    无论是track还是catch都有问题，我的建议是如果是roll的运动模式的话一开始就翻转手腕，代码还没修改完
+bounce：
+    track的任务好像还可以，因为比较像throw，后面测试一下catch任务
+    已测试catch任务：灵巧手的手指明显不会抓取，但是成功率又很高，所以怀疑灵巧手的手指变动有问题同时bounce成功的评定标准也有问题
+
+
+现在针对bounce：为测试了track任务，似乎没有什么问题，因为bounce跟throw很像，但是我测试catch任务时却发现问题，手指的抓取是混乱的，但是成功率却有很高，所以请你检查一下bounce的灵巧手相关的奖励函数以及catch任务的成功的判定标准首否有问题
+因为球会弹。有弹性
+
+7.11:
+bounce：
+    bounce的catch手指混乱是因为手指位置初始随机化，已修改：
+    后续测试修复后的bounce的catch：
+    python3 train_DCMM.py test=False task=Catching_TwoStage num_envs=32 checkpoint_tracking=/home/isee/catch_it/catch_it_copy/outputs/Dcmm/best/bounce_track_58.18.pth object_motion=bounce
+
+roll：
+    好像还是不会反转手腕
+
+7.16：
+针对bounce任务，我运行python3 train_DCMM.py test=True task=Catching_TwoStage num_envs=1 checkpoint_catching=/home/isee/catch_it/catch_it_copy/outputs/Dcmm/2026-07-12/23:29:10/nn/best_reward_715.10.pth object_eval=false viewer=true imshow_cam=false object_motion=bounce测试效果，发现存在下面的问题：
+1.手指位置初始随机化的问题已经解决了
+2.但是可能由于bounce任务小球具有弹性，手指根本没学会抓取，手指基本不动，小球碰到手掌就弹开了
+3.并且任务的成功率还很高，但是小球实际并没有被抓取成功
+
+所以需要解决：
+1.怎样修改使得手指学会抓取有弹性的小球
+2.检查一下bounce的catch任务的成功的判定逻辑是否存在漏洞
+
+修复内容：
+1.修改成功判定：原来只看「球接触手掌 + 低速 + 近距离」，手指张开也能判定成功，现在要求闭合
+2.新增手指闭合奖励函数：抓取阶段没有任何鼓励手指闭合的奖励信号，模型不知道要合拢手指
+3.修改手指初始的姿态：跟踪阶段手指被强制保持在 0 位（全开），进入抓取阶段后才开始闭合。但 bounce 的球接触手掌后 1-2 步就弹走，来不及从全开到闭合（需要 60+ 步）。
+
+后续测试
+1.python3 train_DCMM.py test=False task=Tracking num_envs=32 object_motion=bounce
+2.python3 train_DCMM.py test=False task=Catching_TwoStage num_envs=32 checkpoint_tracking=xxx object_motion=bounce
+
+track测出来的效果好像很差，不知道为什么
+
+针对roll任务，目前还是没有学会手腕翻转啊，我目前的想法是：
+1.灵巧手跟机械臂末端的连接处的那个关节能否转动，使得识别到是roll运动模式时就转动这个关节使得掌心朝下，但是我不确定这样的姿态是否还需要转动其他关节才能达到
+2.如果单纯只转动灵巧手跟机械臂末端的连接处的那个关节无法做到的话，那么有没有一种姿态使得转动机械臂可以最终让手掌朝下？但是会不会要花费很长时间导致无法即使抓住小球
+3.如果实在无法实现手腕翻转手掌朝下的话，或许可以换一种抓小球的方法，即掌心是朝上的，手放在地面上，然后放在小球的必经之路上，小球自己滚上来，然后收紧手指抓住小球
+
+修复内容：
+1.改变原来手掌朝下的想法，用手掌朝上放在地面上小球自己滚上来的想法
+
+后续测试：
+1.python3 train_DCMM.py test=False task=Tracking num_envs=32 object_motion=roll
+2.python3 train_DCMM.py test=False task=Catching_TwoStage num_envs=32 checkpoint_tracking=xxx object_motion=roll
+3.感觉两个方法都不可行，看看有没有这样的文章看看是怎么做的
+
+
+7.17整理：
+bounce任务：
+    本来训练好track模型感觉效果很可以，但是跟throw不同，弹的运动小球有弹性，不太能抓住，所以接着训的catch模型效果很差，抓不住有弹性的小球
+    于是考虑最初的时候改变灵巧手的姿态，变成稍微弯曲的，这样可能可以更好的在小球弹飞之前就抓住小球
+    但是这样子训练track效果又很差，根本跟踪不到小球，但是成功率又很高，不知道为什么，而且一开始就稍微弯曲的灵巧手又变直了
+roll任务：
+    无论是手掌朝下抓还是手掌朝上放在地面上小球自己滚上来貌似都不太可行，不知道有没有其他方法：
+        手掌朝下抓：无法实现翻转
+        手掌朝上放在地面上小球自己滚上来：位姿无法满足
+更换机械臂：
+    灵巧手那一块模型有问题，不知道怎么改
+
+7.17修改：
+bounce：
+    之前的问题是因为奖励函数出问题了，现在修改了，重新训练track看看效果（加了初始的手指弯曲）：
+    python3 train_DCMM.py test=False task=Tracking num_envs=32 object_motion=bounce
+    然后效果好就继续训练catch
+    python3 train_DCMM.py test=False task=Catching_TwoStage num_envs=32 checkpoint_tracking=xxx object_motion=bounce
+roll：
+    现在的想法底盘可以转动，让手臂从侧面够球 → 前臂更水平 → 掌心自由（感觉效果不一定好，这个抓滚动的球还是太难了）
+更改机械臂的：
+    试试训练32的track效果怎么样
+
+7.18更新：
+bounce：
+    修改了小球的速度跟弹性
+    后续用32训练一下track：
+        python3 train_DCMM.py test=False task=Tracking num_envs=32 object_motion=bounce
+
+
+7.20:
+bounce：
+    小球弹性或者速度不够导致太快停下来了，手还没跟踪到小球，小球就已经在地面上了
+    现在更新了一版改了弹性的训练看看效果
+roll：
+    问题就是小球在地面上滚的话，其实机械臂无法伸下去使得手指可以挨到小球
+
+7.21：
+bounce：
+    重新训练长时间一点
+    python3 train_DCMM.py test=False task=Tracking num_envs=32 object_motion=bounce
+roll：
+    变成了桌子上的滚动，考虑两种方法：
+        1.在桌面上抓球
+        2.等球从桌子上滚下来接住
+    目前考虑1先训练看看效果
+    python3 train_DCMM.py test=False task=Tracking num_envs=32 object_motion=roll
+
+
+如何录制roll
+
+训练一版新的bounce的catch!!!
+
+7.23：
+机械臂：
+    track任务还行，但是catch任务成功率很低，并且手指感觉学习的效果不是很好
+roll：
+    无法把手伸到地面上，考虑球在桌子上滚？
+bounce：
+    track任务还不错，catch任务的话因为球太弹了，碰到手掌就弹开，灵巧手学不会抓紧小球，考虑在手上加一个用于接球的东西？

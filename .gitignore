@@ -1,0 +1,42 @@
+# 历史备份 — 不在当前开发范围内
+old/
+
+# IDE 配置
+.idea/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+*.egg
+
+# 训练输出和日志
+outputs/
+*.log
+MUJOCO_LOG.TXT
+
+# 模型 checkpoint（文件太大，不适合 git）
+*.pth
+
+# TensorBoard 日志
+**/events.out.tfevents.*
+
+# 子项目的 git 历史（用全新的根仓库管理）
+catch_it/.git/
+catch_it_copy/.git/
+
+# MuJoCo
+*.mjb
+
+# Claude Code 本地配置（含本地路径和权限）
+.claude/
+
+# 历史快照
+**/.history/
+
+# VS Code
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db

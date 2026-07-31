@@ -303,10 +303,14 @@ class DcmmVecEnv(gym.Env):
         # 计算不同任务的观测/动作维度
         self.obs_dim = get_total_dimension(self.observation_space)  # 总观测维度（44）
         self.act_dim = get_total_dimension(self.action_space)      # 总动作维度（20）
-        self.obs_t_dim = self.obs_dim - 12 - 6  # 跟踪任务观测维度（18）：减去机械手12+关节角度6
-        self.act_t_dim = self.act_dim - 12      # 跟踪任务动作维度（8）：base2 + arm6，减去机械手12
-        self.obs_c_dim = self.obs_dim - 6       # 抓取任务观测维度（30）：减去关节角度6
+        self.obs_t_dim = self.obs_dim - 12 - 6  # 跟踪任务观测维度（18）
+        self.act_t_dim = self.act_dim - 12      # 跟踪任务动作维度（8）
+        self.obs_c_dim = self.obs_dim - 6       # 抓取任务观测维度（30）
         self.act_c_dim = self.act_dim           # 抓取任务动作维度（20）
+        # throw_basket 模式需要全身协同，Tracking 也使用 Catching 维度
+        if self.object_motion == "throw_basket":
+            self.obs_t_dim = self.obs_c_dim
+            self.act_t_dim = self.act_c_dim
         print("##### Tracking Task \n obs_dim: {}, act_dim: {}".format(self.obs_t_dim, self.act_t_dim))
         print("##### Catching Task \n obs_dim: {}, act_dim: {}\n".format(self.obs_c_dim, self.act_c_dim))
 
@@ -926,28 +930,25 @@ class DcmmVecEnv(gym.Env):
                     'pos': ' '.join(str(v) for v in DcmmCfg.basket_center),
                     'quat': '1 0 0 0',
                 })
-                # 篮筐圆环（用椭球近似）
-                ET.SubElement(basket, 'geom', {
-                    'name': 'basket_rim',
-                    'type': 'ellipsoid',
-                    # 扁平的椭球模拟圆环形状
-                    'size': f"{DcmmCfg.basket_radius} {DcmmCfg.basket_radius} 0.02",
-                    'rgba': ' '.join(str(v) for v in DcmmCfg.basket_rgba),
-                    'contype': '0',
-                    'conaffinity': '0',
-                    'group': '1',
-                })
-                # 篮筐底部指示（小半球）
-                ET.SubElement(basket, 'geom', {
-                    'name': 'basket_bottom',
-                    'type': 'cylinder',
-                    'size': f"{DcmmCfg.basket_radius} 0.01",
-                    'pos': f"0 0 -{DcmmCfg.basket_depth}",
-                    'rgba': ' '.join(str(v) for v in DcmmCfg.basket_rgba),
-                    'contype': '0',
-                    'conaffinity': '0',
-                    'group': '1',
-                })
+                # 空心圆环（平行于地面）：24 个小球在 XY 平面围成圆
+                import math as _math
+                _n = 24
+                _r = DcmmCfg.basket_radius
+                _dot_r = 0.01  # 小球半径
+                for _i in range(_n):
+                    _ang = 2 * _math.pi * _i / _n
+                    _cx = _r * _math.cos(_ang)
+                    _cy = _r * _math.sin(_ang)
+                    ET.SubElement(basket, 'geom', {
+                        'name': f'basket_seg_{_i}',
+                        'type': 'sphere',
+                        'size': str(_dot_r),
+                        'pos': f'{_cx:.4f} {_cy:.4f} 0',
+                        'rgba': ' '.join(str(v) for v in DcmmCfg.basket_rgba),
+                        'contype': '0',
+                        'conaffinity': '0',
+                        'group': '1',
+                    })
 
         xml_str = ET.tostring(root, encoding='unicode')
         return xml_str
@@ -1105,14 +1106,19 @@ class DcmmVecEnv(gym.Env):
         self.Dcmm.data_arm.ctrl = np.zeros(self.Dcmm.model_arm.nu)
         
         # 设置机械臂/机械手初始关节角度
+        self.Dcmm.data.qpos[15:21] = DcmmCfg.arm_joints[:]
+        self.Dcmm.data_arm.qpos[0:6] = DcmmCfg.arm_joints[:]
+        # throw_basket 模式：手指初始就弯曲托球，不用全开
         if self.object_motion == "throw_basket":
-            self.Dcmm.data.qpos[15:21] = DcmmCfg.basket_arm_joints[:]
-            self.Dcmm.data_arm.qpos[0:6] = DcmmCfg.basket_arm_joints[:]
+            _cup = np.zeros(16)
+            _cup[0] = 0.6; _cup[2] = 0.4; _cup[3] = 0.4
+            _cup[4] = 0.6; _cup[6] = 0.4; _cup[7] = 0.4
+            _cup[8] = 0.6; _cup[10] = 0.4; _cup[11] = 0.4
+            _cup[13] = 0.3; _cup[14] = 0.3; _cup[15] = 0.3
+            self.Dcmm.data.qpos[21:37] = _cup
         else:
-            self.Dcmm.data.qpos[15:21] = DcmmCfg.arm_joints[:]
-            self.Dcmm.data_arm.qpos[0:6] = DcmmCfg.arm_joints[:]
-        self.Dcmm.data.qpos[21:37] = DcmmCfg.hand_joints[:]
-        
+            self.Dcmm.data.qpos[21:37] = DcmmCfg.hand_joints[:]
+
         # 设置物体初始位置（默认）
         #self.Dcmm.data.body("object").xpos[0:3] = np.array([2, 2, 1])
         
@@ -1135,11 +1141,15 @@ class DcmmVecEnv(gym.Env):
         elif self.object_motion == "throw_basket":
             self.random_object_pose_throw_basket()
             init_vel = np.zeros(6)
-            # 球初始在手掌位置：使用 FK 计算 arm_base 前方的 palm 位置
+            # 球放在手掌上方：计算 link6 位姿，沿掌心法线偏移
             mujoco.mj_forward(self.Dcmm.model, self.Dcmm.data)
             ee_xpos = self.Dcmm.data.body("link6").xpos.copy()
-            # 向前方偏移
-            palm_pos = ee_xpos + np.array([0.0, 0.05, -0.05])
+            ee_xmat = self.Dcmm.data.body("link6").xmat.copy().reshape(3, 3)
+            palm_normal = ee_xmat[:, 1]  # link6 Y轴 = 掌心方向
+            palm_up = ee_xmat[:, 2]      # link6 Z轴 ≈ 手指方向
+            # 球放在掌心上方：沿法线偏移（离开掌面）+ 沿手指方向偏移（在掌面上方）
+            ball_radius = DcmmCfg.basket_ball_radius
+            palm_pos = ee_xpos + palm_normal * 0.03 + palm_up * (ball_radius + 0.03)
             self.object_pos3d = palm_pos
             if self.print_info:
                 print(f"[DEBUG] _reset_simulation: THROW_BASKET mode, ball at palm={palm_pos}")
@@ -1289,11 +1299,16 @@ class DcmmVecEnv(gym.Env):
 
         # 重置目标控制指令
         self.Dcmm.target_base_vel = np.array([0.0, 0.0, 0.0])
+        self.Dcmm.target_arm_qpos[:] = DcmmCfg.arm_joints[:]
         if self.object_motion == "throw_basket":
-            self.Dcmm.target_arm_qpos[:] = DcmmCfg.basket_arm_joints[:]
+            _cup = np.zeros(16)
+            _cup[0] = 0.6; _cup[2] = 0.4; _cup[3] = 0.4
+            _cup[4] = 0.6; _cup[6] = 0.4; _cup[7] = 0.4
+            _cup[8] = 0.6; _cup[10] = 0.4; _cup[11] = 0.4
+            _cup[13] = 0.3; _cup[14] = 0.3; _cup[15] = 0.3
+            self.Dcmm.target_hand_qpos[:] = _cup
         else:
-            self.Dcmm.target_arm_qpos[:] = DcmmCfg.arm_joints[:]
-        self.Dcmm.target_hand_qpos[:] = DcmmCfg.hand_joints[:]
+            self.Dcmm.target_hand_qpos[:] = DcmmCfg.hand_joints[:]
 
         # 重置奖励和阶段
         self.stage = "tracking"
@@ -1818,15 +1833,26 @@ class DcmmVecEnv(gym.Env):
         # throw_basket 模式：手指微屈握杯姿态托住球，然后主要通过臂的动作抛球
         # 抓取阶段：执行手部动作，让手指合拢包裹球体
         if self.object_motion == "throw_basket":
-            # 手部微屈成"杯状"托球，不参与抓取动作
+            # 手部弯曲托球：手指微屈成碗状
             cup_qpos = np.zeros(16)
-            cup_qpos[0] = 0.4; cup_qpos[2] = 0.3; cup_qpos[3] = 0.3    # finger 1
-            cup_qpos[4] = 0.4; cup_qpos[6] = 0.3; cup_qpos[7] = 0.3    # finger 2
-            cup_qpos[8] = 0.4; cup_qpos[10] = 0.3; cup_qpos[11] = 0.3  # finger 3
-            cup_qpos[13] = 0.2; cup_qpos[14] = 0.2; cup_qpos[15] = 0.2 # thumb
+            cup_qpos[0] = 0.6; cup_qpos[2] = 0.4; cup_qpos[3] = 0.4    # finger 1
+            cup_qpos[4] = 0.6; cup_qpos[6] = 0.4; cup_qpos[7] = 0.4    # finger 2
+            cup_qpos[8] = 0.6; cup_qpos[10] = 0.4; cup_qpos[11] = 0.4  # finger 3
+            cup_qpos[13] = 0.3; cup_qpos[14] = 0.3; cup_qpos[15] = 0.3 # thumb
             self.Dcmm.target_hand_qpos[:] = cup_qpos
-            # 手部只做微小调整，不参与主要动作
-            self.Dcmm.action_hand2qpos(action_dict["hand"] * 0.1)
+            self.Dcmm.action_hand2qpos(action_dict["hand"])
+
+            # ★ 自动演示：模型无动作时（全零），机械臂自动做抛球动作
+            _is_demo = np.allclose(action_dict["arm"], 0, atol=1e-6) and np.allclose(action_dict["base"], 0, atol=1e-6)
+            if _is_demo and not self.object_throw:
+                elapsed = self.Dcmm.data.time - self.start_time
+                hold_dur = getattr(DcmmCfg, 'basket_hold_duration', 0.3)
+                phase = np.clip(elapsed / max(hold_dur, 1e-6), 0.0, 1.0)  # 0→1
+                # demo 抛球动作：臂末端向前上方移动
+                _demo_delta = np.array([0.0, 0.6 * phase, 0.4 * phase, 0.0, 0.0, 0.0])
+                result_QP, _ = self.Dcmm.move_ee_pose(_demo_delta)
+                if result_QP[1]:
+                    self.Dcmm.target_arm_qpos[:] = result_QP[0]
         elif self.task == "Catching" and self.stage == "tracking":
             if self.object_motion == "bounce":
                 # roll/bounce: 手指预置为"预备接球"姿态（MCP 半屈，指尖微屈）
@@ -1896,9 +1922,13 @@ class DcmmVecEnv(gym.Env):
                 elapsed = self.Dcmm.data.time - self.start_time
 
                 if elapsed < hold_duration:
-                    # 持球阶段：球粘在手掌上
+                    # 持球阶段：球粘在手掌上，用 FK 计算准确的掌心位置
                     ee_xpos = self.Dcmm.data.body("link6").xpos.copy()
-                    palm_pos = ee_xpos + np.array([0.0, 0.05, -0.05])
+                    ee_xmat = self.Dcmm.data.body("link6").xmat.copy().reshape(3, 3)
+                    palm_normal = ee_xmat[:, 1]  # link6 Y = 掌心方向
+                    palm_up = ee_xmat[:, 2]      # link6 Z = 手指方向
+                    ball_radius = DcmmCfg.basket_ball_radius
+                    palm_pos = ee_xpos + palm_normal * 0.03 + palm_up * (ball_radius + 0.03)
                     self.Dcmm.set_throw_pos_vel(
                         pose=np.concatenate((palm_pos, self.object_q[:])),
                         velocity=np.zeros(6))

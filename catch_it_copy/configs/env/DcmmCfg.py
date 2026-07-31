@@ -287,7 +287,7 @@ bounce_hand_friction = np.array([2.0, 0.5, 0.1])
 
 # ---- 篮筐参数 ----
 # 篮筐中心世界坐标（m），从 arm_base 前方约 1.8m、高 0.9m 处
-basket_center = np.array([0.0, 2.2, 1.2])
+basket_center = np.array([0.0, 2.2, 0.9])
 # 篮筐半径（m），定义一个圆形目标区域
 basket_radius = 0.15
 # 篮筐高度（m），从篮筐中心向下的深度
@@ -302,9 +302,6 @@ basket_ball_radius = 0.04
 basket_ball_mass = 0.05
 # 持球时长（s），球在手中稳定后再抛出
 basket_hold_duration = 0.3
-# 初始臂姿（抛掷准备姿态）
-basket_arm_joints = np.array([0.0, -0.5, -1.5, 2.5, 0.0, -1.5])
-
 # ---- 抛球入篮奖励权重 ----
 # 球到篮筐中心的 3D 距离奖励（高斯型）
 basket_w_dist = 10.0

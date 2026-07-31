@@ -119,3 +119,47 @@ roll：
     无法把手伸到地面上，考虑球在桌子上滚？
 bounce：
     track任务还不错，catch任务的话因为球太弹了，碰到手掌就弹开，灵巧手学不会抓紧小球，考虑在手上加一个用于接球的东西？
+
+====================================================================================================
+7.31：bounce 手部摩擦、roll 台面高度、bounce 手部控制修复
+
+1. bounce：灵巧手增加摩擦
+   问题：小球碰到手掌后快速弹开，手指来不及抓
+   修复：bounce reset 时设置手部 16 个碰撞几何体摩擦为 [2.0, 0.5, 0.1]
+        （MuJoCo 默认 [1.0, 0.005, 0.0001]，大幅提升扭转+滚动摩擦）
+   配置：DcmmCfg.bounce_hand_friction
+   代码：DcmmVecEnv._reset_simulation() bounce 段
+
+2. roll：台面抬高
+   问题：训练 track 时机械臂位姿奇怪、手向上抬
+   根因：台面顶部 z=0.39，arm_base z≈0.40，球只比肩高 3cm
+        XArm6 需要平伸 2m+ 去够几乎同高的球，关节角度逼近极限
+   修复：
+   - roll_table_height: 0.39 → 0.65
+   - roll_table_pos z: 0.37 → 0.63
+   - roll_table_anchor_z: 0.42 → 0.69
+   - 运行时动态设置台面 body 位置（不再依赖 XML 硬编码）
+   现在球比 arm_base 高约 29cm，在臂的舒适工作区间内
+
+3. bounce：手指不动的根因修复 ★ 重要
+   问题：bounce catch 训练后手指完全不动，没有学到抓取策略
+   根因：对比 throw 和 bounce 的 Catching tracking 阶段手部控制代码：
+
+   throw 模式：
+       self.Dcmm.action_hand2qpos(action_dict["hand"])  # target 累积，全比例
+
+   bounce 模式（旧）：
+       self.Dcmm.target_hand_qpos[:] = ready_qpos        # ← 每步重置target！
+       self.Dcmm.action_hand2qpos(action_dict["hand"] * 0.3)  # ← 只 30%
+
+   bounce 每步把 target 重置到半开状态 + 动作比例只有 30%
+   → 模型的手部动作被覆盖，手指永远在半开状态微小摆动
+   → grasping 阶段只有 1-2 步，来不及从半开到闭合
+
+   throw 能学会是因为 target 累加 + 全比例，手指可以逐步合拢
+
+   修复：bounce/roll 也统一为 self.Dcmm.action_hand2qpos(action_dict["hand"])
+        （跟 throw 一样，不重置 target，全比例）
+   代码：DcmmVecEnv._step_mujoco_simulation() 手部控制段
+
+4. throw_basket：新增抛球入篮运动模式，详见 CLAUDE.md

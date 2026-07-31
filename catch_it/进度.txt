@@ -24,15 +24,33 @@ python3 train_DCMM.py test=False task=Catching_TwoStage num_envs=32 checkpoint_t
     建模好像也没问题，但是track任务还可以，catch任务表现很差
     得出结果可能是换了模型无法跑出这样的效果
 
-7.30:
-1.bounce加了摩擦：
-    python3 train_DCMM.py test=False task=Catching_TwoStage num_envs=32 checkpoint_tracking=/home/yuhao2/2026-7-30/catch_it_copy/outputs/Dcmm/best/bounce_track_58.18.pth
-2.roll新的模式修改了一些奖励函数：
-    python3 train_DCMM.py test=False task=Tracking num_envs=32
-3.新增运动模式，抛出去：
-    throw_basket
+====================================================================================================
+7.31：UR5e 灵巧手建模问题分析与修复
 
-进度汇报：
-1.机械臂只跑小球：224(很慢)、217
-2.bounce加摩擦：200
-3.roll训练track：204
+问题：更换 UR5e 后 catch 任务手指"歪七扭八"，不符合实际的抓取动作。
+
+对比 XArm6（原版）和 UR5e 的 XML 模型，发现灵巧手安装参数错误：
+
+1. hand_link（手掌）位置错误：
+   UR5e: pos="-0.005 -0.016 0.005"（缩在手腕内部，viewer 里看不到手掌）
+   XArm6: pos="0 0.045 0.0325"（在 link6 前方 4.5cm）
+   → 修复为 XArm6 相同值
+
+2. mcp_joint / mcp_joint_2 / mcp_joint_3（三指基座）位置全部错误：
+   UR5e 手指1: pos="0.040 0.016 -0.001"   → 修复为 "0.063 0.053 0.029"
+   UR5e 手指2: pos="-0.005 0.016 -0.001"  → 修复为 "0.018 0.053 0.029"
+   UR5e 手指3: pos="-0.051 0.016 -0.001"  → 修复为 "-0.028 0.053 0.029"
+   全部比 XArm6 更贴近手腕，手指活动空间受限
+
+3. pip_4（拇指基座）位置错误：
+   UR5e: pos="0.016 -0.047 0.002" → 修复为 "0.039 -0.009 0.032"
+   拇指装在了完全错误的位置
+
+4. hand_mount 旋转四元数：
+   最初怀疑缺少 quat="0.707 -0.707 0 0"（XArm6 的 link6 有 -90° X 旋转）
+   加上后手掌朝下（不对），去掉后手掌朝向正常（UR5e 腕关节自然朝向不同，不需要此旋转）
+
+结论：手指建模问题是 XML 中身体位置参数错误导致的，非奖励函数问题。
+修复前需要从头重新训练 track → catch（之前训练的模型作废）。
+
+修改文件：assets/urdf/x1_ur5e_leap_right_object.xml（4处 body pos 修改）

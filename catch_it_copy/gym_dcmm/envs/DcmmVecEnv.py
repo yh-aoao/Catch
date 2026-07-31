@@ -1177,8 +1177,13 @@ class DcmmVecEnv(gym.Env):
         # self.Dcmm.model.opt.gravity[2] = -9.81 + 0.5*np.random.uniform(-1, 1)
         self.Dcmm.model.opt.gravity[2] = -9.81
 
-        # ---------- 台面管理：roll 模式可见+碰撞，非 roll 模式隐藏+无碰撞 ----------
+        # ---------- 台面管理：roll 模式可见+碰撞+动态高度，非 roll 模式隐藏 ----------
         if self.object_motion == "roll":
+            # 根据配置动态设置台面位置
+            _table_pos = DcmmCfg.roll_table_pos
+            _table_body_id = mujoco.mj_name2id(self.Dcmm.model, mujoco.mjtObj.mjOBJ_BODY, 'table_body')
+            if _table_body_id >= 0:
+                self.Dcmm.model.body_pos[_table_body_id] = _table_pos
             self.Dcmm.model.geom_rgba[self.table_geom_id] = self.table_geom_rgba_backup  # 恢复可见
             self.Dcmm.model.geom_contype[self.table_geom_id] = 1
             self.Dcmm.model.geom_conaffinity[self.table_geom_id] = 1
@@ -1854,31 +1859,8 @@ class DcmmVecEnv(gym.Env):
                 if result_QP[1]:
                     self.Dcmm.target_arm_qpos[:] = result_QP[0]
         elif self.task == "Catching" and self.stage == "tracking":
-            if self.object_motion == "bounce":
-                # roll/bounce: 手指预置为"预备接球"姿态（MCP 半屈，指尖微屈）
-                # 对于 roll 舀球策略，半闭合手指形成"栅栏"，小球滚入掌心后被挡住
-                # 重置 target 防止上一策略步的累积漂移，然后叠加模型输出的微调
-                if self.object_motion == "roll":
-                    mcp_val = getattr(DcmmCfg, 'roll_hand_ready_mcp', 0.6)
-                    dip_val = getattr(DcmmCfg, 'roll_hand_ready_dip', 0.3)
-                    thumb_val = getattr(DcmmCfg, 'roll_hand_ready_thumb', 0.3)
-                    action_scale = getattr(DcmmCfg, 'roll_hand_action_scale', 0.3)
-                else:
-                    mcp_val = getattr(DcmmCfg, 'bounce_hand_ready_mcp', 0.5)
-                    dip_val = getattr(DcmmCfg, 'bounce_hand_ready_dip', 0.2)
-                    thumb_val = getattr(DcmmCfg, 'bounce_hand_ready_thumb', 0.2)
-                    action_scale = getattr(DcmmCfg, 'bounce_hand_action_scale', 0.3)
-                ready_qpos = np.zeros(16)
-                ready_qpos[0] = mcp_val; ready_qpos[2] = dip_val; ready_qpos[3] = dip_val   # finger 1
-                ready_qpos[4] = mcp_val; ready_qpos[6] = dip_val; ready_qpos[7] = dip_val   # finger 2
-                ready_qpos[8] = mcp_val; ready_qpos[10] = dip_val; ready_qpos[11] = dip_val  # finger 3
-                ready_qpos[13] = thumb_val; ready_qpos[14] = thumb_val; ready_qpos[15] = thumb_val
-                self.Dcmm.target_hand_qpos[:] = ready_qpos
-                # 允许模型在此基础上微调
-                self.Dcmm.action_hand2qpos(action_dict["hand"] * action_scale)
-            else:
-                # throw 模式：保持原始行为，不做干预
-                self.Dcmm.action_hand2qpos(action_dict["hand"])
+            # 所有模式统一：不重置 target，让模型自由控制手指
+            self.Dcmm.action_hand2qpos(action_dict["hand"])
         else:
             self.Dcmm.action_hand2qpos(action_dict["hand"])
         

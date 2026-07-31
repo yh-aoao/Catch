@@ -230,10 +230,10 @@
                                     <site name="attachment_site" pos="0 0.1 0" quat="-1 1 0 0" />
                                     <body name="hand_mount" pos="0 0.1 0">
                                         <!-- Palm visual mesh (non-colliding, group 1) -->
-                                        <geom pos="-0.005 -0.016 0.005" quat="0.500398 -0.499602 -0.5 -0.5" type="mesh" contype="0" conaffinity="0" group="1" rgba="0.2 0.2 0.2 1" mesh="hand_link" />
+                                        <geom pos="0 0.045 0.0325" quat="0.500398 -0.499602 -0.5 -0.5" type="mesh" contype="0" conaffinity="0" group="1" rgba="0.2 0.2 0.2 1" mesh="hand_link" />
                                         <!-- Palm collision mesh -->
-                                        <geom pos="-0.005 -0.016 0.005" quat="0.500398 -0.499602 -0.5 -0.5" type="mesh" rgba="0.2 0.2 0.2 1" mesh="hand_link" />
-                                        <body name="mcp_joint" pos="0.0401501 0.0156058 -0.0007498" quat="-0.707106 0.000281544 0.707107 -0.000844632">
+                                        <geom pos="0 0.045 0.0325" quat="0.500398 -0.499602 -0.5 -0.5" type="mesh" rgba="0.2 0.2 0.2 1" mesh="hand_link" />
+                                        <body name="mcp_joint" pos="0.0630634 0.0529529 0.0287337" quat="-0.707106 0.000281544 0.707107 -0.000844632">
                                             <inertial pos="0 0 0" quat="0.388585 0.626468 -0.324549 0.592628" mass="0.044" diaginertia="1.47756e-05 1.31982e-05 6.0802e-06" />
                                             <joint name="1" pos="0 0 0" axis="0 0 -1" limited="true" range="-0.314 2.23" />
                                             <geom name="mcp_joint" pos="0.0084069 0.00776624 0.0146574" type="mesh" contype="0" conaffinity="0" group="1" rgba="0.2 0.2 0.2 1" mesh="mcp_joint" />
@@ -257,7 +257,7 @@
                                                 </body>
                                             </body>
                                         </body>
-                                        <body name="mcp_joint_2" pos="-0.0052999 0.0155696 -0.0007498" quat="-0.707106 0.000281544 0.707107 -0.000844632">
+                                        <body name="mcp_joint_2" pos="0.0176134 0.0529167 0.0287337" quat="-0.707106 0.000281544 0.707107 -0.000844632">
                                             <inertial pos="0 0 0" quat="0.388585 0.626468 -0.324549 0.592628" mass="0.044" diaginertia="1.47756e-05 1.31982e-05 6.0802e-06" />
                                             <joint name="5" pos="0 0 0" axis="0 0 -1" limited="true" range="-0.314 2.23" />
                                             <geom name="mcp_joint_2" pos="0.0084069 0.00776624 0.0146574" type="mesh" contype="0" conaffinity="0" group="1" rgba="0.2 0.2 0.2 1" mesh="mcp_joint" />
@@ -281,7 +281,7 @@
                                                 </body>
                                             </body>
                                         </body>
-                                        <body name="mcp_joint_3" pos="-0.0507499 0.0155335 -0.0007498" quat="-0.707106 0.000281544 0.707107 -0.000844632">
+                                        <body name="mcp_joint_3" pos="-0.0278366 0.0528806 0.0287337" quat="-0.707106 0.000281544 0.707107 -0.000844632">
                                             <inertial pos="0 0 0" quat="0.388585 0.626468 -0.324549 0.592628" mass="0.044" diaginertia="1.47756e-05 1.31982e-05 6.0802e-06" />
                                             <joint name="9" pos="0 0 0" axis="0 0 -1" limited="true" range="-0.314 2.23" />
                                             <geom name="mcp_joint_3" pos="0.0084069 0.00776624 0.0146574" type="mesh" contype="0" conaffinity="0" group="1" rgba="0.2 0.2 0.2 1" mesh="mcp_joint" />
@@ -305,7 +305,7 @@
                                                 </body>
                                             </body>
                                         </body>
-                                        <body name="pip_4" pos="0.0158997 -0.0467088 0.0022494" quat="-0.499801 0.500199 0.500597 0.499403">
+                                        <body name="pip_4" pos="0.038813 -0.00936169 0.0317329" quat="-0.499801 0.500199 0.500597 0.499403">
                                             <inertial pos="0 0 0" quat="0.709913 0.704273 -0.000363156 0.00475427" mass="0.032" diaginertia="4.7981e-06 4.23406e-06 2.86184e-06" />
                                             <joint name="12" pos="0 0 0" axis="0 0 -1" limited="true" range="-0.01 0.01" />
                                             <geom name="pip_4" pos="-0.00535664 0.0003 0.000784034" quat="0.5 -0.5 -0.5 -0.5" type="mesh" contype="0" conaffinity="0" group="1" rgba="0.74902 0.74902 0.74902 1" mesh="pip" />

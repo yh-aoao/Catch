@@ -1,0 +1,41 @@
+seed: ${..seed}
+algo: SAC
+
+network:
+  mlp:
+    units: [256, 128]
+  separate_value_mlp: True
+
+sac:
+  name: ${resolve_default:Dcmm,${...experiment}}
+  # --- 通用参数 ---
+  normalize_input: True
+  num_actors: ${resolve_default:1,${...num_envs}}
+  reward_scale_value: 1.0
+  gamma: 0.99
+  learning_rate: 3e-4
+  lr_schedule: fixed
+  save_best_after: 500
+  save_frequency: 2000
+  grad_norm: 1.0
+  truncate_grads: True
+  action_track_denorm: [1.5, 0.025, 0.01]
+  action_catch_denorm: [1.5, 0.025, 0.15]
+  horizon_length: 64
+  max_agent_steps: 25000000
+  max_test_steps: 10000
+  test_num_episodes: 100
+  img_dim: [112, 112]
+  num_frames: 2
+
+  # --- SAC 专属参数 ---
+  tau: 0.005
+  alpha_lr: 3e-4
+  target_entropy_scale: 1.0
+  replay_buffer_size: 1000000
+  batch_size: 256
+  start_steps: 10000
+  updates_per_step: 1
+  log_std_min: -20
+  log_std_max: 2
+  auto_entropy_tuning: True

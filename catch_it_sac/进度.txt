@@ -1,3 +1,23 @@
+7.31:
+创建 catch_it_sac：从 catch_it_copy 复制，将 PPO 替换为 SAC 算法
+  - 新增 gym_dcmm/algs/sac_dcmm/ 包：
+    - replay_buffer.py: 环形 ReplayBuffer（off-policy 经验回放）
+    - models_track.py: SACActor（单分支 MLP, state-dependent log_std）+ QNetwork（Twin Q）
+    - models_catch.py: SACActor（双分支，track 冻结 + catch 训练）+ QNetwork
+    - sac_dcmm_track.py: SAC_Track 训练器（阶段1 Tracking）
+    - sac_dcmm_catch_two_stage.py: SAC_Catch_TwoStage 训练器（阶段2 Catching, 加载track checkpoint 冻结）
+    - sac_dcmm_catch_one_stage.py: SAC_Catch_OneStage 训练器（备选单阶段）
+    - utils.py: RunningMeanStd, AverageScalarMeter（复用自 PPO）
+  - 新增 configs/train/DcmmSAC.yaml: SAC 超参数配置
+  - 修改 configs/config.yaml: defaults.train → DcmmSAC
+  - 修改 train_DCMM.py: import SAC 类
+  - 删除 gym_dcmm/algs/ppo_dcmm/ 整个目录
+待验证：
+  - SAC Tracking 训练效果（与 PPO 对比）
+  - SAC Catching 训练效果（与 PPO 对比）
+  - SAC 在 bounce/roll/throw_basket 模式下的表现
+  - 超参数可能需要调优（tau, alpha_lr, batch_size, reward_scale_value 等）
+
 7.8:
 测试滚动roll：
     track：python3 train_DCMM.py test=True task=Tracking num_envs=1 checkpoint_tracking=/home/isee/catch_it/catch_it_copy/outputs/Dcmm/2026-05-28/23:44:53/nn/best_reward_613.46.pth object_eval=false viewer=True imshow_cam=false object_motion=roll

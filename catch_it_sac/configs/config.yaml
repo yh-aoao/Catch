@@ -31,7 +31,7 @@ wandb_project: 'RL_Dcmm_Catch_Random'
 
 # set default task and default training config based on task
 defaults:
-  - train: DcmmPPO
+  - train: DcmmSAC
   - hydra/job_logging: disabled
 
 # set the directory where the output files get saved

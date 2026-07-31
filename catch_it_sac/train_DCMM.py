@@ -9,9 +9,9 @@ from hydra.utils import to_absolute_path
 from omegaconf import DictConfig, OmegaConf
 from termcolor import cprint
 from gym_dcmm.utils.util import omegaconf_to_dict
-from gym_dcmm.algs.ppo_dcmm.ppo_dcmm_catch_two_stage import PPO_Catch_TwoStage
-from gym_dcmm.algs.ppo_dcmm.ppo_dcmm_catch_one_stage import PPO_Catch_OneStage
-from gym_dcmm.algs.ppo_dcmm.ppo_dcmm_track import PPO_Track
+from gym_dcmm.algs.sac_dcmm.sac_dcmm_catch_two_stage import SAC_Catch_TwoStage
+from gym_dcmm.algs.sac_dcmm.sac_dcmm_catch_one_stage import SAC_Catch_OneStage
+from gym_dcmm.algs.sac_dcmm.sac_dcmm_track import SAC_Track
 import gymnasium as gym
 import gym_dcmm
 import datetime
@@ -75,10 +75,10 @@ def main(config: DictConfig):
     output_dif = os.path.join(output_dif, current_datetime_str)
     os.makedirs(output_dif, exist_ok=True)
 
-    PPO = PPO_Track if config.task == 'Tracking' else \
-          PPO_Catch_TwoStage if config.task == 'Catching_TwoStage' else \
-          PPO_Catch_OneStage
-    agent = PPO(env, output_dif, full_config=config)
+    SAC = SAC_Track if config.task == 'Tracking' else \
+          SAC_Catch_TwoStage if config.task == 'Catching_TwoStage' else \
+          SAC_Catch_OneStage
+    agent = SAC(env, output_dif, full_config=config)
 
     cprint('Start Training/Testing the Agent', 'green', attrs=['bold'])
     if config.test:

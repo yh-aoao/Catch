@@ -2144,28 +2144,8 @@ class DcmmVecEnv(gym.Env):
                     if dxy <= self.roll_tracking_xy_thresh and dz <= self.roll_tracking_z_thresh and palm_face_ball and no_contact and in_front:
                         self.stage = "grasping"
                 elif self.object_motion == "bounce":
-                    ee_pos = obs['arm']['ee_pos3d']
-                    obj_pos = obs['object']['pos3d']
-                    dxy = np.linalg.norm(ee_pos[0:2] - obj_pos[0:2])
-                    dz = abs(ee_pos[2] - obj_pos[2])
-                    # 掌心朝向球体判定（替代固定掌心朝下，掌心法线 = link6 Y 轴）
-                    try:
-                        rot = quaternion_to_rotation_matrix(obs['arm']['ee_quat'])
-                        palm_normal_world = rot[:, 1]  # link6 Y = 掌心法线
-                        dir_to_ball = obj_pos - ee_pos
-                        d_norm = np.linalg.norm(dir_to_ball)
-                        if d_norm > 1e-6:
-                            dir_to_ball = dir_to_ball / d_norm
-                            palm_face_ball = np.dot(palm_normal_world, dir_to_ball) > self.bounce_palm_face_cos_stage
-                        else:
-                            palm_face_ball = True
-                    except Exception:
-                        palm_face_ball = False
-                    obj_contacts = self.contacts.get('object_contacts', np.array([])).astype(int)
-                    obj_contacts = obj_contacts[(obj_contacts != self.floor_id) & (obj_contacts != self.table_geom_id)]
-                    no_contact = obj_contacts.size == 0
-                    in_front = obj_pos[1] > 0.0
-                    if dxy <= self.bounce_tracking_xy_thresh and dz <= self.bounce_tracking_z_thresh and palm_face_ball and no_contact and in_front:
+                    # 跟 throw 一样用宽松距离判断（0.25m），让 grasping 有足够时间训练手指
+                    if info['ee_distance'] < DcmmCfg.distance_thresh:
                         self.stage = "grasping"
                 else:
                     if info['ee_distance'] < DcmmCfg.distance_thresh:

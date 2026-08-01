@@ -454,20 +454,24 @@ class PPO_Catch_TwoStage(object):
             task = self.env.call('task')[0]
         # Map the step result to tensor
         if task == 'Catching':
-            obs_array = np.concatenate((
-                        obs["base"]["v_lin_2d"], 
-                        obs["arm"]["ee_pos3d"], obs["arm"]["ee_quat"], 
-                        obs["arm"]["ee_v_lin_3d"],
-                        obs["object"]["pos3d"], obs["object"]["v_lin_3d"], 
-                        obs["hand"],
-                        ), axis=1)
+            _parts = [
+                obs["base"]["v_lin_2d"],
+                obs["arm"]["ee_pos3d"], obs["arm"]["ee_quat"], obs["arm"]["ee_v_lin_3d"],
+                obs["object"]["pos3d"], obs["object"]["v_lin_3d"],
+                obs["hand"],
+            ]
+            if "basket" in obs:
+                _parts.append(obs["basket"]["rel_pos3d"])
+            obs_array = np.concatenate(tuple(_parts), axis=1)
         else:
-            obs_array = np.concatenate((
-                    obs["base"]["v_lin_2d"], 
-                    obs["arm"]["ee_pos3d"], obs["arm"]["ee_quat"], 
-                    obs["arm"]["ee_v_lin_3d"], 
-                    obs["object"]["pos3d"], obs["object"]["v_lin_3d"]
-                    ), axis=1)
+            _parts = [
+                obs["base"]["v_lin_2d"],
+                obs["arm"]["ee_pos3d"], obs["arm"]["ee_quat"], obs["arm"]["ee_v_lin_3d"],
+                obs["object"]["pos3d"], obs["object"]["v_lin_3d"],
+            ]
+            if "basket" in obs:
+                _parts.append(obs["basket"]["rel_pos3d"])
+            obs_array = np.concatenate(tuple(_parts), axis=1)
         obs_tensor = torch.tensor(obs_array, dtype=torch.float32).to(self.device)
         return obs_tensor
 

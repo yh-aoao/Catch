@@ -17,10 +17,8 @@ task: Tracking # Catching_TwoStage, Catching_OneStage, Tracking
 num_envs: 32 # This should be no more than 2x your CPUs (1x is recommended)
 object_eval: False
 # used to set checkpoint path
-checkpoint_tracking: 'assets/models/track.pth'
+checkpoint_tracking: ''
 checkpoint_catching: ''
-# checkpoint_tracking: 'assets/models/track.pth'
-# checkpoint_catching: 'assets/models/catch_two_stage.pth'
 
 # wandb config
 output_name: Dcmm

@@ -223,6 +223,9 @@ roll_hand_ready_thumb = 0.3
 # 跟踪阶段手指动作缩放系数（0=完全固定，0.3=允许模型微调）
 roll_hand_action_scale = 0.3
 
+# roll 模式固定底座（仅训练臂+手，排除底座协同问题）
+roll_fix_base = True
+
 # ---- 桌面高度奖励（新增）----
 # 桌面高度锚点（m），手在桌面上方这个高度范围内获得奖励
 roll_table_anchor_z = 0.69
@@ -268,6 +271,7 @@ bounce_catch_v_thresh = 0.05       # 抓取成功：球速低于此值（m/s）
 bounce_catch_N_control = 5         # 抓取成功：连续低速步数
 bounce_catch_wait_steps = 20       # 抓取失败：最大等待步数
 bounce_catch_finger_thresh = 0.3   # 抓取成功：MCP 关节平均屈曲超过此值才算真正抓取（rad）
+bounce_catch_require_palm_contact = True  # 抓取成功必须手掌接触球
 bounce_hand_ready_mcp = 0.5        # 跟踪阶段手指预置 MCP 屈曲角（rad），0=全开
 bounce_hand_ready_dip = 0.2        # 跟踪阶段手指预置 DIP/指尖屈曲角（rad）
 bounce_hand_ready_thumb = 0.2      # 跟踪阶段拇指预置屈曲角（rad）
@@ -323,6 +327,9 @@ basket_floor_z = 0.0
 basket_fail_dist = 2.5
 # 最大 episode 时长（s）
 basket_max_time = 4.0
+
+# 固定底座（True=只训练臂+手，False=底盘也参与）
+basket_fix_base = True
 
 ## Define PID params for wheel drive and steering.
 # driving

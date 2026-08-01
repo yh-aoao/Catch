@@ -227,12 +227,21 @@
                                     <geom type="mesh" contype="0" conaffinity="0" group="1" material="linkgray" mesh="ur5e_wrist3" />
                                     <geom type="mesh" material="linkgray" mesh="ur5e_wrist3" />
                                     <geom type="cylinder" pos="0 0.08 0" quat="1 1 0 0" size="0.04 0.02" />
-                                    <site name="attachment_site" pos="0 0.1 0" quat="-1 1 0 0" />
-                                    <body name="hand_mount" pos="0 0.1 0">
-                                        <!-- Palm visual mesh (non-colliding, group 1) -->
-                                        <geom pos="0 0.045 0.0325" quat="0.500398 -0.499602 -0.5 -0.5" type="mesh" contype="0" conaffinity="0" group="1" rgba="0.2 0.2 0.2 1" mesh="hand_link" />
-                                        <!-- Palm collision mesh -->
-                                        <geom pos="0 0.045 0.0325" quat="0.500398 -0.499602 -0.5 -0.5" type="mesh" rgba="0.2 0.2 0.2 1" mesh="hand_link" />
+                                    <site name="attachment_site" pos="0 0.095 0.08" quat="-1 1 0 0" />
+                                    <!-- L 型直角连接件：一端接 UR5e 腕部，另一端朝前朝上接手背安装口 -->
+                                    <body name="hand_connector" pos="0 0.02 0">
+                                        <!-- 水平段：从腕部向前延伸（Y方向） -->
+                                        <geom type="box" size="0.025 0.04 0.018" pos="0 0.04 0" rgba="0.45 0.45 0.45 1"/>
+                                        <!-- 竖直段：90°向上弯到手背安装位（+Z方向） -->
+                                        <geom type="box" size="0.025 0.018 0.04" pos="0 0.075 0.04" rgba="0.45 0.45 0.45 1"/>
+                                        <!-- 手背安装板（扁平板） -->
+                                        <geom type="box" size="0.032 0.005 0.045" pos="0 0.075 0.08" rgba="0.55 0.55 0.55 1"/>
+                                        <!-- 灵巧手手背安装口，朝前朝上 -->
+                                        <body name="hand_mount" pos="0 0.075 0.08">
+                                            <!-- Palm visual mesh (non-colliding, group 1) -->
+                                            <geom pos="0 0.045 0.0325" quat="0.500398 -0.499602 -0.5 -0.5" type="mesh" contype="0" conaffinity="0" group="1" rgba="0.2 0.2 0.2 1" mesh="hand_link" />
+                                            <!-- Palm collision mesh -->
+                                            <geom pos="0 0.045 0.0325" quat="0.500398 -0.499602 -0.5 -0.5" type="mesh" rgba="0.2 0.2 0.2 1" mesh="hand_link" />
                                         <body name="mcp_joint" pos="0.0630634 0.0529529 0.0287337" quat="-0.707106 0.000281544 0.707107 -0.000844632">
                                             <inertial pos="0 0 0" quat="0.388585 0.626468 -0.324549 0.592628" mass="0.044" diaginertia="1.47756e-05 1.31982e-05 6.0802e-06" />
                                             <joint name="1" pos="0 0 0" axis="0 0 -1" limited="true" range="-0.314 2.23" />
@@ -329,6 +338,7 @@
                                                 </body>
                                             </body>
                                         </body>
+                                    </body>
                                     </body>
                                 </body>
                             </body>

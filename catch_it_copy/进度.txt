@@ -120,6 +120,19 @@ roll：
 bounce：
     track任务还不错，catch任务的话因为球太弹了，碰到手掌就弹开，灵巧手学不会抓紧小球，考虑在手上加一个用于接球的东西？
 
+7.30:
+1.bounce加了摩擦：
+    python3 train_DCMM.py test=False task=Catching_TwoStage num_envs=32 checkpoint_tracking=/home/yuhao2/2026-7-30/catch_it_copy/outputs/Dcmm/best/bounce_track_58.18.pth object_motion=bounce
+2.roll新的模式修改了一些奖励函数：
+    python3 train_DCMM.py test=False task=Tracking num_envs=32 object_motion=roll
+3.新增运动模式，抛出去：
+    throw_basket
+
+进度汇报：
+1.机械臂只跑小球：224(很慢)、217
+2.bounce加摩擦：200
+3.roll训练track：204
+
 ====================================================================================================
 7.31：bounce 手部摩擦、roll 台面高度、bounce 手部控制修复
 
@@ -163,3 +176,23 @@ bounce：
    代码：DcmmVecEnv._step_mujoco_simulation() 手部控制段
 
 4. throw_basket：新增抛球入篮运动模式，详见 CLAUDE.md
+
+====================================================================================================
+8.1：roll 固定底座、bounce 成功判定收紧、throw_basket 训练优化
+
+1. roll：固定底座训练
+   问题：台面抬高后 track 训练，整车往后倒退，跟踪不了球
+   方案：先固定底座（roll_fix_base=True），只训练臂+手，排除底座协同问题
+   实现：DcmmVecEnv._step_mujoco_simulation() 中，roll 模式可强制底座速度为 0
+   配置：DcmmCfg.roll_fix_base
+
+2. bounce：成功判定增加手掌接触条件
+   问题：修改手指控制后，手指学习仍混乱但成功率高
+   修复：bounce_catch_require_palm_contact = True
+        成功判定必须同时满足「手掌接触球 + 连续低速 + 距离近 + 手指闭合」
+        之前球在地面慢速也可能被误判为抓取成功
+
+3. throw_basket：训练优化
+   - 观测新增 basket 字段：obs["basket"]["rel_pos3d"] = 篮筐相对臂末端位置
+   - 固定底座：basket_fix_base = True（默认只训练臂+手）
+   - 模型现在知道目标在哪，可以学习瞄准

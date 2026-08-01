@@ -251,6 +251,10 @@ class DcmmVecEnv(gym.Env):
                     ## TODO: to be determined - 物体形状特征（待实现）
                     # "shape": spaces.Box(-5, 5, shape=(2,), dtype=np.float32),
                 }),
+                # throw_basket 模式：篮筐相对位置
+                "basket": spaces.Dict({
+                    "rel_pos3d": spaces.Box(-10, 10, shape=(3,), dtype=np.float32),
+                }),
             }
         )
         
@@ -586,6 +590,15 @@ class DcmmVecEnv(gym.Env):
             },
         }
         
+        # 篮筐观测（throw_basket 用真实值，其他模式填零）
+        if self.object_motion == "throw_basket":
+            _basket_rel = DcmmCfg.basket_center - self._get_relative_ee_pos3d()
+            obs["basket"] = {
+                "rel_pos3d": _basket_rel + np.random.normal(0, self.k_obs_object, 3),
+            }
+        else:
+            obs["basket"] = {"rel_pos3d": np.zeros(3)}
+
         # 更新历史位置
         self.prev_ee_pos3d = ee_pos3d
         self.prev_obj_pos3d = obj_pos3d
@@ -1816,7 +1829,12 @@ class DcmmVecEnv(gym.Env):
             action_dict: dict - 动作指令字典（base/arm/hand）
         """
         ## 设置底盘目标速度
-        self.Dcmm.target_base_vel[0:2] = action_dict['base']
+        # roll/throw_basket 模式可选固定底座
+        if (self.object_motion == "roll" and getattr(DcmmCfg, 'roll_fix_base', False)) or \
+           (self.object_motion == "throw_basket" and getattr(DcmmCfg, 'basket_fix_base', False)):
+            self.Dcmm.target_base_vel[0:2] = np.zeros(2)
+        else:
+            self.Dcmm.target_base_vel[0:2] = action_dict['base']
         
         ## 机械臂逆运动学求解（末端位置/姿态增量→关节角度）
         action_arm = np.asarray(action_dict["arm"], dtype=np.float64).reshape(-1)
@@ -2186,7 +2204,12 @@ class DcmmVecEnv(gym.Env):
                                                       hand_qpos[8], hand_qpos[12]]))
                         fingers_closed_enough = mcp_flexion > finger_thresh
 
-                    if self.consecutive_low_vel >= n_control and dxy_grasp <= xy_thresh and fingers_closed_enough:
+                    # bounce 模式额外检查：手掌必须接触球
+                    extra_ok = True
+                    if self.object_motion == "bounce" and getattr(DcmmCfg, 'bounce_catch_require_palm_contact', False):
+                        extra_ok = contact_on_palm
+
+                    if self.consecutive_low_vel >= n_control and dxy_grasp <= xy_thresh and fingers_closed_enough and extra_ok:
                         self.terminated = True
                         info['success'] = True
                         self.terminated_reason = 'catch_success'

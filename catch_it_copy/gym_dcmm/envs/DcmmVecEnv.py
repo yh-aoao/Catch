@@ -251,12 +251,13 @@ class DcmmVecEnv(gym.Env):
                     ## TODO: to be determined - 物体形状特征（待实现）
                     # "shape": spaces.Box(-5, 5, shape=(2,), dtype=np.float32),
                 }),
-                # throw_basket 模式：篮筐相对位置
-                "basket": spaces.Dict({
-                    "rel_pos3d": spaces.Box(-10, 10, shape=(3,), dtype=np.float32),
-                }),
             }
         )
+        # throw_basket 模式才加篮筐观测（避免其他模式维度变化导致旧 checkpoint 不兼容）
+        if self.object_motion == "throw_basket":
+            self.observation_space.spaces["basket"] = spaces.Dict({
+                "rel_pos3d": spaces.Box(-10, 10, shape=(3,), dtype=np.float32),
+            })
         
         # ===================== 定义动作空间（gym.spaces.Dict）=====================
         # 动作空间维度说明：总计2+6+12=20维
@@ -590,14 +591,12 @@ class DcmmVecEnv(gym.Env):
             },
         }
         
-        # 篮筐观测（throw_basket 用真实值，其他模式填零）
+        # 篮筐观测（仅 throw_basket 模式）
         if self.object_motion == "throw_basket":
             _basket_rel = DcmmCfg.basket_center - self._get_relative_ee_pos3d()
             obs["basket"] = {
                 "rel_pos3d": _basket_rel + np.random.normal(0, self.k_obs_object, 3),
             }
-        else:
-            obs["basket"] = {"rel_pos3d": np.zeros(3)}
 
         # 更新历史位置
         self.prev_ee_pos3d = ee_pos3d

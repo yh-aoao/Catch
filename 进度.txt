@@ -113,8 +113,9 @@ Catch 工作空间 — 进度总览
 当前训练任务
 ════════════════════════════════════════════════════════════════════════════════
 服务器: 224, 217, 200, 204
-  - catch_it:  机械臂 catch（已修复建模，需重新训练 track）
-  - catch_it_copy: bounce catch / roll track / throw_basket track / throw_basket catch
+  - catch_it:       UR5e track→catch（建模修复后重新训练）
+  - catch_it_copy:  roll track / bounce catch / throw_basket track
+  训练命令见下方「训练命令」章节
 
 ════════════════════════════════════════════════════════════════════════════════
 8.2：四任务统一修改
@@ -152,3 +153,32 @@ Catch 工作空间 — 进度总览
    - 观测空间 basket 字段改条件添加，仅 throw_basket 模式
    - obs2tensor 改为按内容自动拼接（不再按 task 分支）
    - ball_in_hand 接触不触发 early_term
+
+6. roll 微调：
+   - 去掉底盘瞬移，改为球移近(y=0.9~1.4)+速度降低(0.3~0.6)
+   - 小车前移 qpos[1]=0.4
+   - 台面降低 roll_table_height=0.55
+
+════════════════════════════════════════════════════════════════════════════════
+训练命令
+════════════════════════════════════════════════════════════════════════════════
+
+# 1. UR5e（catch_it）— 重新训练 track → catch
+cd ~/Catch/catch_it
+sed -i "s/# os.environ\['MUJOCO_GL'\]/os.environ['MUJOCO_GL']/" train_DCMM.py
+python3 train_DCMM.py test=False task=Tracking num_envs=32
+python3 train_DCMM.py test=False task=Catching_TwoStage num_envs=32 \
+  checkpoint_tracking=outputs/Dcmm/日期/时间/nn/best_reward_xxx.pth
+
+# 2. Roll（catch_it_copy）— 训练 track（固定底座+球移近）
+cd ~/Catch/catch_it_copy
+python3 train_DCMM.py test=False task=Tracking num_envs=32 object_motion=roll
+
+# 3. Bounce（catch_it_copy）— 训练 catch（阶段切换+预闭合已修复）
+cd ~/Catch/catch_it_copy
+python3 train_DCMM.py test=False task=Catching_TwoStage num_envs=32 \
+  checkpoint_tracking=outputs/Dcmm/best/bounce_track_58.18.pth object_motion=bounce
+
+# 4. Basket（catch_it_copy）— 单阶段 Tracking（握球+自由控手）
+cd ~/Catch/catch_it_copy
+python3 train_DCMM.py test=False task=Tracking num_envs=32 object_motion=throw_basket

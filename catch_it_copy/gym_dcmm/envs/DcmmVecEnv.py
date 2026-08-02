@@ -971,9 +971,9 @@ class DcmmVecEnv(gym.Env):
         方向：-45° ~ 15° 之间随机（相对于正前方）
         """
         x = np.random.uniform(-0.25, 0.25)
-        # 固定底座时小球靠近小车（arm_base≈0.5，臂展≈0.7，球在0.9-1.4可达）
+        # 固定底座时小球靠近台面前部（臂可达范围内）
         if getattr(DcmmCfg, 'roll_fix_base', False):
-            y = np.random.uniform(0.9, 1.4)
+            y = np.random.uniform(1.2, 1.5)
         else:
             y = np.random.uniform(2.1, 2.6)
 
@@ -1204,9 +1204,9 @@ class DcmmVecEnv(gym.Env):
             _table_body_id = mujoco.mj_name2id(self.Dcmm.model, mujoco.mjtObj.mjOBJ_BODY, 'table_body')
             if _table_body_id >= 0:
                 self.Dcmm.model.body_pos[_table_body_id] = _table_pos
-            # 固定底座时，小车稍往前靠（不穿模：台面边缘 y≈0.9，小车 qpos[1]=0.4 安全）
+            # 固定底座时，小车稍往前靠（台面边缘 y≈0.9，小车 qpos[1]=0.2 不穿模）
             if getattr(DcmmCfg, 'roll_fix_base', False):
-                self.Dcmm.data.qpos[1] = 0.4  # 底盘前移 40cm
+                self.Dcmm.data.qpos[1] = 0.35  # 底盘前移 30cm
             self.Dcmm.model.geom_rgba[self.table_geom_id] = self.table_geom_rgba_backup  # 恢复可见
             self.Dcmm.model.geom_contype[self.table_geom_id] = 1
             self.Dcmm.model.geom_conaffinity[self.table_geom_id] = 1

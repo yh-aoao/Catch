@@ -153,9 +153,9 @@ bounce_init_vz = np.array([-0.2, -0.2])
 # ---- 台面参数 ----
 # 台面顶部高度（m），球心 = roll_table_height + radius + 0.002
 # arm_base 在 z≈0.40，台面提高到 0.65 让球在臂的舒适工作区间内（比肩高 ~29cm）
-roll_table_height = 0.65
+roll_table_height = 0.55
 roll_table_size = np.array([1.2, 1.6, 0.02])  # 半尺寸: x, y, z (宽 2.4m, 长 3.2m, 厚 4cm)
-roll_table_pos = np.array([0.0, 2.5, 0.63])   # 台面中心世界坐标 (z=0.63, 顶部=0.65)
+roll_table_pos = np.array([0.0, 2.5, 0.53])   # 台面中心世界坐标 (z=0.53, 顶部=0.55)
 
 # ---- 跟踪阶段（Tracking）奖励权重 ----
 # XY 即时奖励权重（高斯型，距离越近分越高）
@@ -228,7 +228,7 @@ roll_fix_base = True
 
 # ---- 桌面高度奖励（新增）----
 # 桌面高度锚点（m），手在桌面上方这个高度范围内获得奖励
-roll_table_anchor_z = 0.69
+roll_table_anchor_z = 0.59
 # 桌面高度奖励权重
 roll_w_table_h = 2.0
 # 桌面高度奖励衰减参数（m），离桌面越远奖励越低

@@ -1204,6 +1204,9 @@ class DcmmVecEnv(gym.Env):
             _table_body_id = mujoco.mj_name2id(self.Dcmm.model, mujoco.mjtObj.mjOBJ_BODY, 'table_body')
             if _table_body_id >= 0:
                 self.Dcmm.model.body_pos[_table_body_id] = _table_pos
+            # 固定底座时，小车稍往前靠（不穿模：台面边缘 y≈0.9，小车 qpos[1]=0.4 安全）
+            if getattr(DcmmCfg, 'roll_fix_base', False):
+                self.Dcmm.data.qpos[1] = 0.4  # 底盘前移 40cm
             self.Dcmm.model.geom_rgba[self.table_geom_id] = self.table_geom_rgba_backup  # 恢复可见
             self.Dcmm.model.geom_contype[self.table_geom_id] = 1
             self.Dcmm.model.geom_conaffinity[self.table_geom_id] = 1

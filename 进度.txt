@@ -113,5 +113,42 @@ Catch 工作空间 — 进度总览
 当前训练任务
 ════════════════════════════════════════════════════════════════════════════════
 服务器: 224, 217, 200, 204
-  - catch_it:  机械臂 catch（已修复建模，需重新训练）
-  - catch_it_copy: bounce catch / roll track / throw_basket track
+  - catch_it:  机械臂 catch（已修复建模，需重新训练 track）
+  - catch_it_copy: bounce catch / roll track / throw_basket track / throw_basket catch
+
+════════════════════════════════════════════════════════════════════════════════
+8.2：四任务统一修改
+
+1. UR5e L 型连接件：
+   问题：建模修改后训练 catch 效果差，球跟踪到连接件而非手
+   结论：运动学变了，旧 track 模型不适用，需重新训练 track→catch
+   改动：无代码改动，重新训练即可
+
+2. Roll 固定底座：
+   问题：roll_fix_base=True 锁底盘但车在原点，臂够不到 2m 外的台面
+   修复：reset 时底盘瞬移到台面前方 1.2m（x 略随机 ±0.3m）
+   代码：DcmmVecEnv._reset_simulation() roll 段
+
+3. Bounce 抓取修复：
+   a) 阶段切换：
+      问题：0.25m（跟 throw）太松 / 3cm（原始）太紧
+      修复：独立切换逻辑——d_3d < 0.10m 且掌心朝球(palm_dot>0.7)，不要求 no_contact
+      效果：grasping ~10-15 步，足够闭合手指
+   b) 预闭合奖励：
+      问题：tracking 阶段无手指闭合引导，摸着石头过河
+      修复：reward_pre_close = 2.0 * proximity * mcp_flex
+            proximity = exp(-d_3d/0.2)，距离越近手指越该闭合
+      代码：DcmmVecEnv.compute_reward() Catching tracking 段
+
+4. Throw_Basket 手指参与：
+   问题：手指固定杯状，不参与抛球，无法学会"手臂甩+手指张"协调
+   修复：
+   a) 初始握球姿态改为 grip（MCP=1.5, DIP=1.0, 拇指=0.8）= 像人握球
+   b) _step_mujoco_simulation 不再覆盖 target_hand_qpos，模型自由控手
+   c) 保持 0.3s 持球+释放机制，模型学会在释放时张开手指
+   d) 不需要两阶段训练，单阶段 Tracking 即可
+
+5. throw_basket bug 修复：
+   - 观测空间 basket 字段改条件添加，仅 throw_basket 模式
+   - obs2tensor 改为按内容自动拼接（不再按 task 分支）
+   - ball_in_hand 接触不触发 early_term

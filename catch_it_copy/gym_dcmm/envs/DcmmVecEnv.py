@@ -1120,14 +1120,14 @@ class DcmmVecEnv(gym.Env):
         # 设置机械臂/机械手初始关节角度
         self.Dcmm.data.qpos[15:21] = DcmmCfg.arm_joints[:]
         self.Dcmm.data_arm.qpos[0:6] = DcmmCfg.arm_joints[:]
-        # throw_basket 模式：手指初始就弯曲托球，不用全开
+        # throw_basket 模式：手指初始握球（像人握住球一样弯曲），之后模型自由控制张开抛球
         if self.object_motion == "throw_basket":
-            _cup = np.zeros(16)
-            _cup[0] = 0.6; _cup[2] = 0.4; _cup[3] = 0.4
-            _cup[4] = 0.6; _cup[6] = 0.4; _cup[7] = 0.4
-            _cup[8] = 0.6; _cup[10] = 0.4; _cup[11] = 0.4
-            _cup[13] = 0.3; _cup[14] = 0.3; _cup[15] = 0.3
-            self.Dcmm.data.qpos[21:37] = _cup
+            _grip = np.zeros(16)
+            _grip[0] = 1.5; _grip[2] = 1.0; _grip[3] = 1.0
+            _grip[4] = 1.5; _grip[6] = 1.0; _grip[7] = 1.0
+            _grip[8] = 1.5; _grip[10] = 1.0; _grip[11] = 1.0
+            _grip[13] = 0.8; _grip[14] = 0.8; _grip[15] = 0.8
+            self.Dcmm.data.qpos[21:37] = _grip
         else:
             self.Dcmm.data.qpos[21:37] = DcmmCfg.hand_joints[:]
 
@@ -1189,13 +1189,18 @@ class DcmmVecEnv(gym.Env):
         # self.Dcmm.model.opt.gravity[2] = -9.81 + 0.5*np.random.uniform(-1, 1)
         self.Dcmm.model.opt.gravity[2] = -9.81
 
-        # ---------- 台面管理：roll 模式可见+碰撞+动态高度，非 roll 模式隐藏 ----------
+        # ---------- 台面管理：roll 模式可见+碰撞+动态高度+底盘瞬移，非 roll 模式隐藏 ----------
         if self.object_motion == "roll":
             # 根据配置动态设置台面位置
             _table_pos = DcmmCfg.roll_table_pos
             _table_body_id = mujoco.mj_name2id(self.Dcmm.model, mujoco.mjtObj.mjOBJ_BODY, 'table_body')
             if _table_body_id >= 0:
                 self.Dcmm.model.body_pos[_table_body_id] = _table_pos
+            # 固定底座时，底盘瞬移到台面前方，使臂能自然够到球
+            if getattr(DcmmCfg, 'roll_fix_base', False):
+                self.Dcmm.data.qpos[0] = _table_pos[0] + np.random.uniform(-0.3, 0.3)  # x 略随机
+                self.Dcmm.data.qpos[1] = _table_pos[1] - 1.2  # 台面前方 1.2m
+                self.Dcmm.data.qpos[2] = 0.0
             self.Dcmm.model.geom_rgba[self.table_geom_id] = self.table_geom_rgba_backup  # 恢复可见
             self.Dcmm.model.geom_contype[self.table_geom_id] = 1
             self.Dcmm.model.geom_conaffinity[self.table_geom_id] = 1
@@ -1318,12 +1323,12 @@ class DcmmVecEnv(gym.Env):
         self.Dcmm.target_base_vel = np.array([0.0, 0.0, 0.0])
         self.Dcmm.target_arm_qpos[:] = DcmmCfg.arm_joints[:]
         if self.object_motion == "throw_basket":
-            _cup = np.zeros(16)
-            _cup[0] = 0.6; _cup[2] = 0.4; _cup[3] = 0.4
-            _cup[4] = 0.6; _cup[6] = 0.4; _cup[7] = 0.4
-            _cup[8] = 0.6; _cup[10] = 0.4; _cup[11] = 0.4
-            _cup[13] = 0.3; _cup[14] = 0.3; _cup[15] = 0.3
-            self.Dcmm.target_hand_qpos[:] = _cup
+            _grip = np.zeros(16)
+            _grip[0] = 1.5; _grip[2] = 1.0; _grip[3] = 1.0
+            _grip[4] = 1.5; _grip[6] = 1.0; _grip[7] = 1.0
+            _grip[8] = 1.5; _grip[10] = 1.0; _grip[11] = 1.0
+            _grip[13] = 0.8; _grip[14] = 0.8; _grip[15] = 0.8
+            self.Dcmm.target_hand_qpos[:] = _grip
         else:
             self.Dcmm.target_hand_qpos[:] = DcmmCfg.hand_joints[:]
 
@@ -1705,7 +1710,19 @@ class DcmmVecEnv(gym.Env):
                 if self.object_motion == "roll":
                     rewards = reward_pos_component + reward_height + reward_table_h + reward_palm_face + reward_finger_dir + reward_ctrl + reward_collision + reward_constraint + self.reward_touch
                 elif self.object_motion == "bounce":
-                    rewards = reward_pos_component + reward_palm_face + reward_vel_match + reward_finger_dir + reward_ctrl + reward_collision + reward_constraint + self.reward_touch
+                    # ★ 手指预闭合奖励：距离越近，手指越该闭合（tracking 阶段就开始引导）
+                    reward_pre_close = 0.0
+                    try:
+                        ee_pos = obs['arm']['ee_pos3d']
+                        obj_pos = obs['object']['pos3d']
+                        d_3d = np.linalg.norm(ee_pos - obj_pos)
+                        proximity = np.exp(-d_3d / 0.2)  # 0.2m 衰减，距离越近值越大
+                        hand_qpos = self.Dcmm.data.qpos[21:37]
+                        mcp_flex = float(np.mean([hand_qpos[0], hand_qpos[4], hand_qpos[8], hand_qpos[12]]))
+                        reward_pre_close = 2.0 * proximity * mcp_flex  # 附近手指闭合给奖励
+                    except Exception:
+                        reward_pre_close = 0.0
+                    rewards = reward_pos_component + reward_palm_face + reward_vel_match + reward_finger_dir + reward_pre_close + reward_ctrl + reward_collision + reward_constraint + self.reward_touch
                 elif self.object_motion == "throw_basket":
                     w_ctrl_b = getattr(DcmmCfg, 'basket_w_ctrl_base', 0.1)
                     w_ctrl_a = getattr(DcmmCfg, 'basket_w_ctrl_arm', 0.5)
@@ -1852,16 +1869,8 @@ class DcmmVecEnv(gym.Env):
         ## 设置机械手目标关节角度
         # 跟踪阶段：throw/roll 保持手掌张开（零动作），避免手部随机动作导致手指变形
         # bounce 模式特殊处理：手指预置为"半闭合"准备姿态，以便在短暂的接触窗口内快速抓取
-        # throw_basket 模式：手指微屈握杯姿态托住球，然后主要通过臂的动作抛球
-        # 抓取阶段：执行手部动作，让手指合拢包裹球体
+        # throw_basket 模式：手指初始握球，模型自由控制（握球→瞄准→张开→抛出）
         if self.object_motion == "throw_basket":
-            # 手部弯曲托球：手指微屈成碗状
-            cup_qpos = np.zeros(16)
-            cup_qpos[0] = 0.6; cup_qpos[2] = 0.4; cup_qpos[3] = 0.4    # finger 1
-            cup_qpos[4] = 0.6; cup_qpos[6] = 0.4; cup_qpos[7] = 0.4    # finger 2
-            cup_qpos[8] = 0.6; cup_qpos[10] = 0.4; cup_qpos[11] = 0.4  # finger 3
-            cup_qpos[13] = 0.3; cup_qpos[14] = 0.3; cup_qpos[15] = 0.3 # thumb
-            self.Dcmm.target_hand_qpos[:] = cup_qpos
             self.Dcmm.action_hand2qpos(action_dict["hand"])
 
             # ★ 自动演示：模型无动作时（全零），机械臂自动做抛球动作
@@ -2146,8 +2155,22 @@ class DcmmVecEnv(gym.Env):
                     if dxy <= self.roll_tracking_xy_thresh and dz <= self.roll_tracking_z_thresh and palm_face_ball and no_contact and in_front:
                         self.stage = "grasping"
                 elif self.object_motion == "bounce":
-                    # 跟 throw 一样用宽松距离判断（0.25m），让 grasping 有足够时间训练手指
-                    if info['ee_distance'] < DcmmCfg.distance_thresh:
+                    # bounce 独立切换：3D距离 < 0.10m 且掌心朝向球（不要求 no_contact）
+                    ee_pos = obs['arm']['ee_pos3d']
+                    obj_pos = obs['object']['pos3d']
+                    d_3d = np.linalg.norm(ee_pos - obj_pos)
+                    try:
+                        rot = quaternion_to_rotation_matrix(obs['arm']['ee_quat'])
+                        palm_normal = rot[:, 1]
+                        dir_to_ball = obj_pos - ee_pos
+                        d_norm = np.linalg.norm(dir_to_ball)
+                        if d_norm > 1e-6:
+                            palm_dot = np.dot(palm_normal, dir_to_ball / d_norm)
+                        else:
+                            palm_dot = 1.0
+                    except Exception:
+                        palm_dot = 1.0
+                    if d_3d < 0.10 and palm_dot > 0.7:
                         self.stage = "grasping"
                 else:
                     if info['ee_distance'] < DcmmCfg.distance_thresh:

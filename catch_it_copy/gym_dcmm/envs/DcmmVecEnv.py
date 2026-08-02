@@ -971,13 +971,21 @@ class DcmmVecEnv(gym.Env):
         方向：-45° ~ 15° 之间随机（相对于正前方）
         """
         x = np.random.uniform(-0.25, 0.25)
-        y = np.random.uniform(2.1, 2.6)
+        # 固定底座时小球靠近小车（arm_base≈0.5，臂展≈0.7，球在0.9-1.4可达）
+        if getattr(DcmmCfg, 'roll_fix_base', False):
+            y = np.random.uniform(0.9, 1.4)
+        else:
+            y = np.random.uniform(2.1, 2.6)
 
         radius = float(self.Dcmm.model.geom_size[self.object_id][0])
         z = DcmmCfg.roll_table_height + radius + 0.002
 
         # ===================== 速度大小（可自己调快慢）=====================
-        speed = np.random.uniform(0.5, 1) 
+        # 固定底座时球更近，速度适当降低
+        if getattr(DcmmCfg, 'roll_fix_base', False):
+            speed = np.random.uniform(0.3, 0.6)
+        else:
+            speed = np.random.uniform(0.5, 1)
 
         # ===================== 核心：方向角度限制在 -45° ~ 15° =====================
         # 角度单位：弧度
@@ -1189,18 +1197,13 @@ class DcmmVecEnv(gym.Env):
         # self.Dcmm.model.opt.gravity[2] = -9.81 + 0.5*np.random.uniform(-1, 1)
         self.Dcmm.model.opt.gravity[2] = -9.81
 
-        # ---------- 台面管理：roll 模式可见+碰撞+动态高度+底盘瞬移，非 roll 模式隐藏 ----------
+        # ---------- 台面管理：roll 模式可见+碰撞+动态高度，非 roll 模式隐藏 ----------
         if self.object_motion == "roll":
             # 根据配置动态设置台面位置
             _table_pos = DcmmCfg.roll_table_pos
             _table_body_id = mujoco.mj_name2id(self.Dcmm.model, mujoco.mjtObj.mjOBJ_BODY, 'table_body')
             if _table_body_id >= 0:
                 self.Dcmm.model.body_pos[_table_body_id] = _table_pos
-            # 固定底座时，底盘瞬移到台面前方，使臂能自然够到球
-            if getattr(DcmmCfg, 'roll_fix_base', False):
-                self.Dcmm.data.qpos[0] = _table_pos[0] + np.random.uniform(-0.3, 0.3)  # x 略随机
-                self.Dcmm.data.qpos[1] = _table_pos[1] - 1.2  # 台面前方 1.2m
-                self.Dcmm.data.qpos[2] = 0.0
             self.Dcmm.model.geom_rgba[self.table_geom_id] = self.table_geom_rgba_backup  # 恢复可见
             self.Dcmm.model.geom_contype[self.table_geom_id] = 1
             self.Dcmm.model.geom_conaffinity[self.table_geom_id] = 1

@@ -244,11 +244,12 @@ class MJ_DCMM(object):
         
         return mv_steer, mv_drive
     
-    def move_ee_pose(self, delta_pose):
+    def move_ee_pose(self, delta_pose, wrist_flip=False):
         """
         Move the end-effector to the target pose.
         delta_pose[0:3]: delta x,y,z
         delta_pose[3:6]: delta euler angles roll, pitch, yaw
+        wrist_flip: if True, flip orientation 180° around X (roll舀球用)
 
         Return:
         - The target joint positions of the arm
@@ -258,6 +259,8 @@ class MJ_DCMM(object):
         target_pos = self.current_ee_pos + delta_pose[0:3]
         r_delta = R.from_euler('zxy', delta_pose[3:6])
         r_current = R.from_quat(self.current_ee_quat)
+        if wrist_flip:
+            r_current = r_current * R.from_euler('x', 180, degrees=True)
         target_quat = (r_delta * r_current).as_quat()
         result_QP = self.ik_arm_solve(target_pos, target_quat)
         if DEBUG_ARM: print("result_QP: ", result_QP)

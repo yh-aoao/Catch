@@ -310,7 +310,7 @@ basket_w_dist = 10.0
 # 球到篮筐距离衰减参数（m）
 basket_sigma_dist = 0.3
 # 入篮成功奖励（球进入篮筐区域，即距离 < basket_radius）
-basket_w_score = 50.0
+basket_w_score = 100.0
 # 靠近奖励权重（鼓励球向篮筐移动）
 basket_w_approach = 5.0
 # 篮筐上方奖励权重（鼓励球从上方接近篮筐）

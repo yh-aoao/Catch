@@ -973,7 +973,7 @@ class DcmmVecEnv(gym.Env):
         x = np.random.uniform(-0.25, 0.25)
         # 固定底座时小球靠近台面前部（臂可达范围内）
         if getattr(DcmmCfg, 'roll_fix_base', False):
-            y = np.random.uniform(1.2, 1.5)
+            y = np.random.uniform(0.9, 1.2)
         else:
             y = np.random.uniform(2.1, 2.6)
 
@@ -1131,10 +1131,10 @@ class DcmmVecEnv(gym.Env):
         # throw_basket 模式：手指初始握球（像人握住球一样弯曲），之后模型自由控制张开抛球
         if self.object_motion == "throw_basket":
             _grip = np.zeros(16)
-            _grip[0] = 1.5; _grip[2] = 1.0; _grip[3] = 1.0
-            _grip[4] = 1.5; _grip[6] = 1.0; _grip[7] = 1.0
-            _grip[8] = 1.5; _grip[10] = 1.0; _grip[11] = 1.0
-            _grip[13] = 0.8; _grip[14] = 0.8; _grip[15] = 0.8
+            _grip[0] = 1.0; _grip[2] = 0.8; _grip[3] = 0.8
+            _grip[4] = 1.0; _grip[6] = 0.8; _grip[7] = 0.8
+            _grip[8] = 1.0; _grip[10] = 0.8; _grip[11] = 0.8
+            _grip[13] = 0.6; _grip[14] = 0.6; _grip[15] = 0.6
             self.Dcmm.data.qpos[21:37] = _grip
         else:
             self.Dcmm.data.qpos[21:37] = DcmmCfg.hand_joints[:]
@@ -1330,10 +1330,10 @@ class DcmmVecEnv(gym.Env):
         self.Dcmm.target_arm_qpos[:] = DcmmCfg.arm_joints[:]
         if self.object_motion == "throw_basket":
             _grip = np.zeros(16)
-            _grip[0] = 1.5; _grip[2] = 1.0; _grip[3] = 1.0
-            _grip[4] = 1.5; _grip[6] = 1.0; _grip[7] = 1.0
-            _grip[8] = 1.5; _grip[10] = 1.0; _grip[11] = 1.0
-            _grip[13] = 0.8; _grip[14] = 0.8; _grip[15] = 0.8
+            _grip[0] = 1.0; _grip[2] = 0.8; _grip[3] = 0.8
+            _grip[4] = 1.0; _grip[6] = 0.8; _grip[7] = 0.8
+            _grip[8] = 1.0; _grip[10] = 0.8; _grip[11] = 0.8
+            _grip[13] = 0.6; _grip[14] = 0.6; _grip[15] = 0.6
             self.Dcmm.target_hand_qpos[:] = _grip
         else:
             self.Dcmm.target_hand_qpos[:] = DcmmCfg.hand_joints[:]
@@ -1702,8 +1702,11 @@ class DcmmVecEnv(gym.Env):
             reward_orient = 0
             # 跟踪阶段（tracking）
             if self.stage == "tracking":
-                # 控制惩罚（惩罚机械手动作突变）
-                reward_ctrl = - self.norm_ctrl(ctrl, {"hand"})
+                # 控制惩罚（bounce/roll 只惩罚底盘，让臂和手自由探索）
+                if self.object_motion in ("roll", "bounce"):
+                    reward_ctrl = - self.norm_ctrl(ctrl, {"base"})
+                else:
+                    reward_ctrl = - self.norm_ctrl(ctrl, {"hand"})
                 # 姿态奖励（末端z轴与物体速度方向对齐）
                 rotation_matrix = quaternion_to_rotation_matrix(obs["arm"]["ee_quat"])
                 local_velocity_vector = np.dot(rotation_matrix.T, obs["object"]["v_lin_3d"])
@@ -1722,7 +1725,7 @@ class DcmmVecEnv(gym.Env):
                         ee_pos = obs['arm']['ee_pos3d']
                         obj_pos = obs['object']['pos3d']
                         d_3d = np.linalg.norm(ee_pos - obj_pos)
-                        proximity = np.exp(-d_3d / 0.2)  # 0.2m 衰减，距离越近值越大
+                        proximity = np.exp(-d_3d / 0.35)  # 0.35m 衰减，更远距离也有信号
                         hand_qpos = self.Dcmm.data.qpos[21:37]
                         mcp_flex = float(np.mean([hand_qpos[0], hand_qpos[4], hand_qpos[8], hand_qpos[12]]))
                         reward_pre_close = 2.0 * proximity * mcp_flex  # 附近手指闭合给奖励
@@ -1736,7 +1739,13 @@ class DcmmVecEnv(gym.Env):
                     reward_ctrl_basket = - (w_ctrl_b * self.norm_ctrl(ctrl, {"base"})
                                            + w_ctrl_a * self.norm_ctrl(ctrl, {"arm"})
                                            + w_ctrl_h * self.norm_ctrl(ctrl, {"hand"}))
-                    rewards = reward_pos_component + reward_ctrl_basket + reward_collision + reward_constraint
+                    # 释放后张开手指奖励（MCP 小 = 张开 = 高分）
+                    reward_release_open = 0.0
+                    if self.object_throw:
+                        _hq = self.Dcmm.data.qpos[21:37]
+                        _mcp = float(np.mean([_hq[0], _hq[4], _hq[8], _hq[12]]))
+                        reward_release_open = 3.0 * max(0.0, 1.0 - _mcp)
+                    rewards = reward_pos_component + reward_release_open + reward_ctrl_basket + reward_collision + reward_constraint
                 else:
                     rewards = reward_pos_component + reward_orient + reward_ctrl + reward_collision + reward_constraint + self.reward_touch
 
@@ -1788,7 +1797,12 @@ class DcmmVecEnv(gym.Env):
                     w_ctrl_a = getattr(DcmmCfg, 'basket_w_ctrl_arm', 0.5)
                     reward_ctrl_basket = - (w_ctrl_b * self.norm_ctrl(ctrl, {"base"})
                                            + w_ctrl_a * self.norm_ctrl(ctrl, {"arm"}))
-                    rewards = reward_pos_component + reward_ctrl_basket + reward_collision + reward_constraint
+                    reward_release_open = 0.0
+                    if self.object_throw:
+                        _hq = self.Dcmm.data.qpos[21:37]
+                        _mcp = float(np.mean([_hq[0], _hq[4], _hq[8], _hq[12]]))
+                        reward_release_open = 3.0 * max(0.0, 1.0 - _mcp)
+                    rewards = reward_pos_component + reward_release_open + reward_ctrl_basket + reward_collision + reward_constraint
                 else:
                     rewards = reward_base_pos + reward_ee_pos + reward_ee_precision + reward_orient + reward_ctrl + reward_collision + reward_constraint \
                             + self.reward_touch + self.reward_stability
@@ -1824,7 +1838,12 @@ class DcmmVecEnv(gym.Env):
                 w_ctrl_a = getattr(DcmmCfg, 'basket_w_ctrl_arm', 0.5)
                 reward_ctrl_basket = - (w_ctrl_b * self.norm_ctrl(ctrl, {"base"})
                                        + w_ctrl_a * self.norm_ctrl(ctrl, {"arm"}))
-                rewards = reward_pos_component + reward_ctrl_basket + reward_collision + reward_constraint
+                reward_release_open = 0.0
+                if self.object_throw:
+                    _hq = self.Dcmm.data.qpos[21:37]
+                    _mcp = float(np.mean([_hq[0], _hq[4], _hq[8], _hq[12]]))
+                    reward_release_open = 3.0 * max(0.0, 1.0 - _mcp)
+                rewards = reward_pos_component + reward_release_open + reward_ctrl_basket + reward_collision + reward_constraint
             else:
                 rewards = reward_base_pos + reward_ee_pos + reward_ee_precision + reward_orient + reward_ctrl + reward_collision + reward_constraint + self.reward_touch
             
@@ -1960,6 +1979,21 @@ class DcmmVecEnv(gym.Env):
                         velocity=release_vel)
                     self.Dcmm.data.ctrl[-1] = 0.0
                     self.object_throw = True
+                    # 释放时手指半张开，帮助球顺利出手
+                    _open = self.Dcmm.target_hand_qpos.copy()
+                    _open[0] = max(0.1, _open[0] - 0.5)
+                    _open[2] = max(0.1, _open[2] - 0.3)
+                    _open[3] = max(0.1, _open[3] - 0.3)
+                    _open[4] = max(0.1, _open[4] - 0.5)
+                    _open[6] = max(0.1, _open[6] - 0.3)
+                    _open[7] = max(0.1, _open[7] - 0.3)
+                    _open[8] = max(0.1, _open[8] - 0.5)
+                    _open[10] = max(0.1, _open[10] - 0.3)
+                    _open[11] = max(0.1, _open[11] - 0.3)
+                    _open[13] = max(0.05, _open[13] - 0.3)
+                    _open[14] = max(0.05, _open[14] - 0.3)
+                    _open[15] = max(0.05, _open[15] - 0.3)
+                    self.Dcmm.target_hand_qpos[:] = _open
                     if self.print_info:
                         print(f"[throw_basket] Ball released! vel={release_vel}")
                 else:
@@ -2176,7 +2210,7 @@ class DcmmVecEnv(gym.Env):
                             palm_dot = 1.0
                     except Exception:
                         palm_dot = 1.0
-                    if d_3d < 0.10 and palm_dot > 0.7:
+                    if d_3d < 0.18 and palm_dot > 0.7:
                         self.stage = "grasping"
                 else:
                     if info['ee_distance'] < DcmmCfg.distance_thresh:

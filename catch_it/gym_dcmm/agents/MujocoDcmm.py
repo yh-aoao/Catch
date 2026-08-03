@@ -84,8 +84,9 @@ class MJ_DCMM(object):
         mujoco.mj_forward(self.model, self.data)
         mujoco.mj_forward(self.model_arm, self.data_arm)
         self.arm_base_pos = self.data.body("arm_base").xpos
-        self.current_ee_pos = copy.deepcopy(self.data_arm.body("wrist_3_link").xpos)
-        self.current_ee_quat = copy.deepcopy(self.data_arm.body("wrist_3_link").xquat)
+        # 使用 hand_mount 作为 ee 观测点（手掌实际位置，而非腕部）
+        self.current_ee_pos = copy.deepcopy(self.data.body("hand_mount").xpos)
+        self.current_ee_quat = copy.deepcopy(self.data.body("hand_mount").xquat)
 
         ## Get the joint ID for the body, base, arm, hand and object
         # Note: The joint id of the mm body is 0 by default
@@ -253,13 +254,18 @@ class MJ_DCMM(object):
         Return:
         - The target joint positions of the arm
         """
-        self.current_ee_pos[:] = self.data_arm.body("wrist_3_link").xpos[:]
-        self.current_ee_quat[:] = self.data_arm.body("wrist_3_link").xquat[:]
+        self.current_ee_pos[:] = self.data.body("hand_mount").xpos[:]
+        self.current_ee_quat[:] = self.data.body("hand_mount").xquat[:]
         target_pos = self.current_ee_pos + delta_pose[0:3]
         r_delta = R.from_euler('zxy', delta_pose[3:6])
         r_current = R.from_quat(self.current_ee_quat)
         target_quat = (r_delta * r_current).as_quat()
-        result_QP = self.ik_arm_solve(target_pos, target_quat)
+        # IK 用 arm 模型的 wrist_3_link，target 是 hand_mount 位置，需减偏移
+        _wrist_pos = self.data_arm.body("wrist_3_link").xpos.copy()
+        _wrist_rot = self.data_arm.body("wrist_3_link").xmat.copy().reshape(3,3)
+        _hand_offset = _wrist_rot @ np.array([0.0, 0.095, 0.08])
+        wrist_target = target_pos - _hand_offset
+        result_QP = self.ik_arm_solve(wrist_target, target_quat)
         if DEBUG_ARM: print("result_QP: ", result_QP)
         # Update the qpos of the arm with the IK solution
         self.data_arm.qpos[0:6] = result_QP[0]

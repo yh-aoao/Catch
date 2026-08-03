@@ -188,3 +188,23 @@ python3 train_DCMM.py test=False task=Tracking num_envs=32 object_motion=throw_b
 2.bounce加摩擦：200
 3.roll训练track：204
 4.basket：214
+
+════════════════════════════════════════════════════════════════════════════════
+8.3：四任务二次修复
+
+1. UR5e ee 追踪修正：
+   问题：球落在 L 型连接件上而非手掌。ee 追踪点在 wrist_3_link（腕部），
+        但手掌在 hand_mount（偏移 0.095m 前 + 0.08m 上）
+   修复：
+   a) MujocoDcmm.py: current_ee_pos/quat 从 wrist_3_link 改为 hand_mount
+   b) DcmmVecEnv.py: 所有 wrist_3_link 引用改为 hand_mount
+   c) move_ee_pose: IK target 从 hand 转回 wrist（减偏移量）求解关节角
+   文件：catch_it 的 MujocoDcmm.py、DcmmVecEnv.py
+
+2. Roll 球移近 + bounce+basket 优化：
+   a) Roll: 球起始 y 1.2-1.5 → 0.9-1.2（球更近，确保臂可达）
+   b) Bounce: 阶段切换 0.10m→0.18m；tracking ctrl 只罚 base；
+      预闭合衰减 0.2m→0.35m
+   c) Basket: 握球姿态降低(1.5→1.0)；释放时手指半张开；
+      新增 reward_release_open（MCP 越小分越高）
+   文件：catch_it_copy 的 DcmmVecEnv.py

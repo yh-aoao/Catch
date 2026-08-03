@@ -2074,7 +2074,7 @@ class DcmmVecEnv(gym.Env):
                     # 台面范围: x=[-1.2, 1.2], y=[0.9, 4.1], z_top=0.39
                     off_table_x = abs(obj_x) > 1.2
                     off_table_y = obj_y < 0.8 or obj_y > 4.1
-                    off_table_z = obj_z < (DcmmCfg.roll_table_height - 0.02)
+                    off_table_z = obj_z < (DcmmCfg.roll_table_height - 0.05)
                     out_of_bounds = off_table_x or off_table_y or off_table_z
                 elif self.object_motion == "bounce":
                     out_left_right = abs(obj_x) > 1.2
@@ -2105,18 +2105,18 @@ class DcmmVecEnv(gym.Env):
                     elif self.object_motion == "throw":
                         # 保持原有抛射模式逻辑
                         self.terminated = np.any(mask_coll) or np.any(mask_finger)
+                    elif self.object_motion == "roll":
+                        # roll 模式：只检查越界，不因手接触球而终止
+                        self.terminated = out_of_bounds
                     else:
-                        # 滚动模式下的跟踪失败判定（更严格）
-                        # 1) 提前接触：忽略正常地面接触；掌面接触由 step_touch 作为成功截断处理。
+                        # bounce 跟踪失败判定
                         bad_object_contact = np.any(mask_coll) or np.any(mask_finger)
                         if bad_object_contact:
                             self.terminated = True
                             self.terminated_reason = 'early_contact'
-                        # 2) 越界/超过机器人
                         elif out_of_bounds:
                             self.terminated = True
                             self.terminated_reason = 'out_of_bounds'
-                        # 3) 在球后面（相对坐标 y < 0 视为在后面）
                         elif obj_rel is not None and obj_rel[1] < 0.0:
                             self.terminated = True
                             self.terminated_reason = 'behind'

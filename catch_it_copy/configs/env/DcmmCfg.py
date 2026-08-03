@@ -22,8 +22,7 @@ arm_joints = np.array([
    0.0, 0.0, -0.0, 3.07, 2.25, -1.5
 ])
 
-# roll 模式初始臂姿：回退到默认值，通过 _apply_wrist_flip 在 reset 后执行翻转动作
-# 直接修改关节值（如 j5=0.0/-1.0）会导致 MuJoCo 零范数四元数 / 运动学奇点
+# roll 模式初始臂姿：手掌朝下舀球，通过 wrist_flip 在 reset 时应用
 roll_arm_joints = np.array([
     0.0, 0.0, -0.0, 3.07, 2.25, -1.5
 ])

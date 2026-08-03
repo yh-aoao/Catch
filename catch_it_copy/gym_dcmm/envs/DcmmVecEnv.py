@@ -1126,8 +1126,13 @@ class DcmmVecEnv(gym.Env):
         self.Dcmm.data_arm.ctrl = np.zeros(self.Dcmm.model_arm.nu)
         
         # 设置机械臂/机械手初始关节角度
-        self.Dcmm.data.qpos[15:21] = DcmmCfg.arm_joints[:]
-        self.Dcmm.data_arm.qpos[0:6] = DcmmCfg.arm_joints[:]
+        if self.object_motion == "roll":
+            _roll_joints = getattr(DcmmCfg, 'roll_arm_joints', DcmmCfg.arm_joints)
+            self.Dcmm.data.qpos[15:21] = _roll_joints[:]
+            self.Dcmm.data_arm.qpos[0:6] = _roll_joints[:]
+        else:
+            self.Dcmm.data.qpos[15:21] = DcmmCfg.arm_joints[:]
+            self.Dcmm.data_arm.qpos[0:6] = DcmmCfg.arm_joints[:]
         # throw_basket 模式：手指初始握球（像人握住球一样弯曲），之后模型自由控制张开抛球
         if self.object_motion == "throw_basket":
             _grip = np.zeros(16)
@@ -1672,7 +1677,7 @@ class DcmmVecEnv(gym.Env):
 
         # 位置项合并：roll 使用 XY + approach；bounce 使用 3D + approach；throw_basket 使用距离+入篮；throw 保持原有基线项
         if self.object_motion == "roll":
-            reward_pos_component = reward_xy + reward_approach
+            reward_pos_component = reward_approach  # 只保留靠近增量（跟 throw 一致）
         elif self.object_motion == "bounce":
             reward_pos_component = reward_3d_pos + reward_approach_3d
         elif self.object_motion == "throw_basket":
@@ -1717,7 +1722,8 @@ class DcmmVecEnv(gym.Env):
                     reward_orient = abs(cos_angle_between_vectors(local_velocity_vector, hand_z_axis)) * DcmmCfg.reward_weights["r_orient"]
                 # 总奖励（若为 roll/bounce，则替换位置项为专用奖励）
                 if self.object_motion == "roll":
-                    rewards = reward_pos_component + reward_height + reward_table_h + reward_palm_face + reward_finger_dir + reward_ctrl + reward_collision + reward_constraint + self.reward_touch
+                    # 简化奖励：去掉掌心/手指姿态约束，用增量式距离奖励（跟 throw 一致）
+                    rewards = reward_pos_component + reward_height + reward_table_h + reward_ctrl + reward_collision + reward_constraint + self.reward_touch
                 elif self.object_motion == "bounce":
                     # ★ 手指预闭合奖励：距离越近，手指越该闭合（tracking 阶段就开始引导）
                     reward_pre_close = 0.0
@@ -1795,7 +1801,7 @@ class DcmmVecEnv(gym.Env):
 
                 # 总奖励（抓取阶段：位置项包含精度奖励 + roll/bounce 专用项）
                 if self.object_motion == "roll":
-                    rewards = reward_pos_component + reward_ee_precision + reward_height + reward_table_h + reward_palm_face + reward_orient + reward_ctrl + reward_collision + reward_constraint \
+                    rewards = reward_pos_component + reward_ee_precision + reward_height + reward_table_h + reward_orient + reward_ctrl + reward_collision + reward_constraint \
                             + self.reward_touch + self.reward_stability + reward_finger_closure
                 elif self.object_motion == "bounce":
                     rewards = reward_pos_component + reward_ee_precision + reward_palm_face + reward_orient + reward_ctrl + reward_collision + reward_constraint \
@@ -1894,8 +1900,7 @@ class DcmmVecEnv(gym.Env):
             action_arm = np.concatenate((action_arm, np.zeros(6 - action_arm.size)))
         else:
             action_arm = action_arm[:6]
-        _flip = (self.object_motion == "roll")  # roll 模式翻转手腕
-        result_QP, _ = self.Dcmm.move_ee_pose(action_arm, wrist_flip=_flip)
+        result_QP, _ = self.Dcmm.move_ee_pose(action_arm)
         if result_QP[1]:
             self.arm_limit = True
             self.Dcmm.target_arm_qpos[:] = result_QP[0]

@@ -2073,7 +2073,7 @@ class DcmmVecEnv(gym.Env):
                     # roll 台面模式：球必须保持在台面上
                     # 台面范围: x=[-1.2, 1.2], y=[0.9, 4.1], z_top=0.39
                     off_table_x = abs(obj_x) > 1.2
-                    off_table_y = obj_y < 0.9 or obj_y > 4.1
+                    off_table_y = obj_y < 0.8 or obj_y > 4.1
                     off_table_z = obj_z < (DcmmCfg.roll_table_height - 0.02)
                     out_of_bounds = off_table_x or off_table_y or off_table_z
                 elif self.object_motion == "bounce":

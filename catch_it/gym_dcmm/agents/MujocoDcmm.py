@@ -261,8 +261,9 @@ class MJ_DCMM(object):
         r_current = R.from_quat(self.current_ee_quat)
         target_quat = (r_delta * r_current).as_quat()
         # IK 用 arm 模型的 wrist_3_link，target 是 hand_mount 位置，需减偏移
-        _wrist_pos = self.data_arm.body("wrist_3_link").xpos.copy()
-        _wrist_rot = self.data_arm.body("wrist_3_link").xmat.copy().reshape(3,3)
+        # 注意：旋转矩阵必须用 full model 的（跟 current_ee_pos 同步），不能取 arm model
+        _wrist_pos = self.data.body("wrist_3_link").xpos.copy()
+        _wrist_rot = self.data.body("wrist_3_link").xmat.copy().reshape(3,3)
         _hand_offset = _wrist_rot @ np.array([0.0, 0.095, 0.08])
         wrist_target = target_pos - _hand_offset
         result_QP = self.ik_arm_solve(wrist_target, target_quat)

@@ -793,7 +793,8 @@ class DcmmVecEnv(gym.Env):
             self.arm_limit = True
             self.Dcmm.target_arm_qpos[:] = result_QP[0]
         else:
-            # print("IK Failed!!!")
+            import sys
+            print("IK Failed!!!", file=sys.stderr, flush=True)
             self.arm_limit = False
         self.Dcmm.action_hand2qpos(action_dict["hand"])
         # Add Target Action to the Buffer

@@ -971,9 +971,9 @@ class DcmmVecEnv(gym.Env):
         方向：-45° ~ 15° 之间随机（相对于正前方）
         """
         x = np.random.uniform(-0.25, 0.25)
-        # 固定底座时小球靠台面前部（稍微远离，给臂更多反应时间）
+        # 固定底座时小球在台面前部
         if getattr(DcmmCfg, 'roll_fix_base', False):
-            y = np.random.uniform(1.0, 1.3)
+            y = np.random.uniform(1.1, 1.4)
         else:
             y = np.random.uniform(2.1, 2.6)
 

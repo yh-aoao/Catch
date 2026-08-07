@@ -123,7 +123,7 @@ act_delay = {
 ## 弹跳模式物理参数
 # 弹性系数 COR → dampratio = (1-COR)*damp_scale
 # COR=0.80 → dampratio=0.10, 弹跳 5~6 次
-bounce_restitution = np.array([0.78, 0.78])
+bounce_restitution = np.array([0.8, 0.8])
 # 接触时间常数（秒）
 bounce_solref_timeconst = np.array([0.008, 0.008])
 # solref 阻尼比缩放系数

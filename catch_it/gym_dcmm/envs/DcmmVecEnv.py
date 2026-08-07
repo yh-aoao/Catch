@@ -269,7 +269,7 @@ class DcmmVecEnv(gym.Env):
         self.vel_history = deque(maxlen=4)
 
         self.info = {
-            "ee_distance": np.linalg.norm(self.Dcmm.data.body("hand_mount").xpos - 
+            "ee_distance": np.linalg.norm(self.Dcmm.data.body("wrist_3_link").xpos - 
                                           self.Dcmm.data.body(self.Dcmm.object_name).xpos[0:3]),
             "base_distance": np.linalg.norm(self.Dcmm.data.body("arm_base").xpos[0:2] - 
                                             self.Dcmm.data.body(self.Dcmm.object_name).xpos[0:2]),
@@ -367,21 +367,21 @@ class DcmmVecEnv(gym.Env):
         # Caclulate the ee_pos3d w.r.t. the base_link
         base_yaw = quat2theta(self.Dcmm.data.body("base_link").xquat[0], self.Dcmm.data.body("base_link").xquat[3])
         x,y = relative_position(self.Dcmm.data.body("arm_base").xpos[0:2], 
-                                self.Dcmm.data.body("hand_mount").xpos[0:2], 
+                                self.Dcmm.data.body("wrist_3_link").xpos[0:2], 
                                 base_yaw)
         return np.array([x, y, 
-                         self.Dcmm.data.body("hand_mount").xpos[2]-self.Dcmm.data.body("arm_base").xpos[2]])
+                         self.Dcmm.data.body("wrist_3_link").xpos[2]-self.Dcmm.data.body("arm_base").xpos[2]])
 
     def _get_relative_ee_quat(self):
         # Caclulate the ee_pos3d w.r.t. the base_link
-        quat = relative_quaternion(self.Dcmm.data.body("base_link").xquat, self.Dcmm.data.body("hand_mount").xquat)
+        quat = relative_quaternion(self.Dcmm.data.body("base_link").xquat, self.Dcmm.data.body("wrist_3_link").xquat)
         return np.array(quat)
 
     def _get_relative_ee_v_lin_3d(self):
         # Caclulate the ee_v_lin3d w.r.t. the base_link
         # In simulation, we can directly get the velocity of the end-effector
         base_vel = self.Dcmm.data.body("arm_base").cvel[3:6]
-        global_ee_v_lin = self.Dcmm.data.body("hand_mount").cvel[3:6]
+        global_ee_v_lin = self.Dcmm.data.body("wrist_3_link").cvel[3:6]
         base_yaw = quat2theta(self.Dcmm.data.body("base_link").xquat[0], self.Dcmm.data.body("base_link").xquat[3])
         ee_v_lin_x = math.cos(base_yaw) * (global_ee_v_lin[0]-base_vel[0]) + math.sin(base_yaw) * (global_ee_v_lin[1]-base_vel[1])
         ee_v_lin_y = -math.sin(base_yaw) * (global_ee_v_lin[0]-base_vel[0]) + math.cos(base_yaw) * (global_ee_v_lin[1]-base_vel[1])
@@ -457,7 +457,7 @@ class DcmmVecEnv(gym.Env):
     def _get_info(self):
         # Time of the Mujoco environment
         env_time = self.Dcmm.data.time - self.start_time
-        ee_distance = np.linalg.norm(self.Dcmm.data.body("hand_mount").xpos - 
+        ee_distance = np.linalg.norm(self.Dcmm.data.body("wrist_3_link").xpos - 
                                     self.Dcmm.data.body(self.Dcmm.object_name).xpos[0:3])
         base_distance = np.linalg.norm(self.Dcmm.data.body("arm_base").xpos[0:2] -
                                         self.Dcmm.data.body(self.Dcmm.object_name).xpos[0:2])
@@ -641,7 +641,7 @@ class DcmmVecEnv(gym.Env):
         self.reward_stability = 0
 
         self.info = {
-            "ee_distance": np.linalg.norm(self.Dcmm.data.body("hand_mount").xpos - 
+            "ee_distance": np.linalg.norm(self.Dcmm.data.body("wrist_3_link").xpos - 
                                        self.Dcmm.data.body(self.Dcmm.object_name).xpos[0:3]),
             "base_distance": np.linalg.norm(self.Dcmm.data.body("arm_base").xpos[0:2] -
                                              self.Dcmm.data.body(self.Dcmm.object_name).xpos[0:2]),
@@ -793,8 +793,7 @@ class DcmmVecEnv(gym.Env):
             self.arm_limit = True
             self.Dcmm.target_arm_qpos[:] = result_QP[0]
         else:
-            import sys
-            print("IK Failed!!!", file=sys.stderr, flush=True)
+            # print("IK Failed!!!")
             self.arm_limit = False
         self.Dcmm.action_hand2qpos(action_dict["hand"])
         # Add Target Action to the Buffer
@@ -1004,7 +1003,7 @@ class DcmmVecEnv(gym.Env):
                 'base': base_tensor,
                 'hand': hand_tensor
             }
-            # print("self.Dcmm.data.body('hand_mount'):", self.Dcmm.data.body('hand_mount'))
+            # print("self.Dcmm.data.body('wrist_3_link'):", self.Dcmm.data.body('wrist_3_link'))
             observation, reward, terminated, truncated, info = self.step(actions_dict)
 
 if __name__ == "__main__":

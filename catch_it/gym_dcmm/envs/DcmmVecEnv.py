@@ -269,7 +269,7 @@ class DcmmVecEnv(gym.Env):
         self.vel_history = deque(maxlen=4)
 
         self.info = {
-            "ee_distance": np.linalg.norm(self.Dcmm.data.body("wrist_3_link").xpos - 
+            "ee_distance": np.linalg.norm(self._get_ee_world_pos() -
                                           self.Dcmm.data.body(self.Dcmm.object_name).xpos[0:3]),
             "base_distance": np.linalg.norm(self.Dcmm.data.body("arm_base").xpos[0:2] - 
                                             self.Dcmm.data.body(self.Dcmm.object_name).xpos[0:2]),
@@ -363,14 +363,18 @@ class DcmmVecEnv(gym.Env):
         base_vel_y = -math.sin(base_yaw) * global_base_vel[0] + math.cos(base_yaw) * global_base_vel[1]
         return np.array([base_vel_x, base_vel_y])
 
+    def _get_ee_world_pos(self):
+        """返回手掌世界坐标（wrist_3_link + hand_mount 偏移）"""
+        wrist = self.Dcmm.data.body("wrist_3_link").xpos.copy()
+        rot = self.Dcmm.data.body("wrist_3_link").xmat.copy().reshape(3,3)
+        return wrist + rot @ np.array([0.0, 0.095, 0.08])
+
     def _get_relative_ee_pos3d(self):
-        # Caclulate the ee_pos3d w.r.t. the base_link
+        # 返回手掌位置的相对坐标（而非腕部）
+        hand_world = self._get_ee_world_pos()
         base_yaw = quat2theta(self.Dcmm.data.body("base_link").xquat[0], self.Dcmm.data.body("base_link").xquat[3])
-        x,y = relative_position(self.Dcmm.data.body("arm_base").xpos[0:2], 
-                                self.Dcmm.data.body("wrist_3_link").xpos[0:2], 
-                                base_yaw)
-        return np.array([x, y, 
-                         self.Dcmm.data.body("wrist_3_link").xpos[2]-self.Dcmm.data.body("arm_base").xpos[2]])
+        x,y = relative_position(self.Dcmm.data.body("arm_base").xpos[0:2], hand_world[0:2], base_yaw)
+        return np.array([x, y, hand_world[2] - self.Dcmm.data.body("arm_base").xpos[2]])
 
     def _get_relative_ee_quat(self):
         # Caclulate the ee_pos3d w.r.t. the base_link
@@ -457,7 +461,7 @@ class DcmmVecEnv(gym.Env):
     def _get_info(self):
         # Time of the Mujoco environment
         env_time = self.Dcmm.data.time - self.start_time
-        ee_distance = np.linalg.norm(self.Dcmm.data.body("wrist_3_link").xpos - 
+        ee_distance = np.linalg.norm(self._get_ee_world_pos() - 
                                     self.Dcmm.data.body(self.Dcmm.object_name).xpos[0:3])
         base_distance = np.linalg.norm(self.Dcmm.data.body("arm_base").xpos[0:2] -
                                         self.Dcmm.data.body(self.Dcmm.object_name).xpos[0:2])
@@ -641,7 +645,7 @@ class DcmmVecEnv(gym.Env):
         self.reward_stability = 0
 
         self.info = {
-            "ee_distance": np.linalg.norm(self.Dcmm.data.body("wrist_3_link").xpos - 
+            "ee_distance": np.linalg.norm(self._get_ee_world_pos() - 
                                        self.Dcmm.data.body(self.Dcmm.object_name).xpos[0:3]),
             "base_distance": np.linalg.norm(self.Dcmm.data.body("arm_base").xpos[0:2] -
                                              self.Dcmm.data.body(self.Dcmm.object_name).xpos[0:2]),

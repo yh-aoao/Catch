@@ -177,7 +177,7 @@ python3 train_DCMM.py test=False task=Tracking num_envs=32 object_motion=roll
 # 3. Bounce（catch_it_copy）— 训练 catch（阶段切换+预闭合已修复）
 cd ~/Catch/catch_it_copy
 python3 train_DCMM.py test=False task=Catching_TwoStage num_envs=32 \
-  checkpoint_tracking=outputs/Dcmm/best/bounce_track_58.18.pth object_motion=bounce
+  checkpoint_tracking=/home/yuhao2/2026-7-30/catch_it_copy/outputs/Dcmm/best/bounce_track_58.18.pth object_motion=bounce
 
 # 4. Basket（catch_it_copy）— 单阶段 Tracking（握球+自由控手）
 cd ~/Catch/catch_it_copy
@@ -214,7 +214,7 @@ python3 train_DCMM.py test=False task=Tracking num_envs=32 object_motion=throw_b
    文件：catch_it 的 MujocoDcmm.py、DcmmVecEnv.py
 
 ════════════════════════════════════════════════════════════════════════════════
-8.4：roll 奖励对齐 throw、bounce 单指协同、basket 去硬编码
+8.7：roll 奖励对齐 throw、bounce 单指协同、basket 去硬编码
 
 1. Roll 奖励简化：
    问题：roll 奖励跟 throw 不一致，多了高度/台面/掌心朝向等项

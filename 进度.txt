@@ -208,3 +208,32 @@ python3 train_DCMM.py test=False task=Tracking num_envs=32 object_motion=throw_b
    c) Basket: 握球姿态降低(1.5→1.0)；释放时手指半张开；
       新增 reward_release_open（MCP 越小分越高）
    文件：catch_it_copy 的 DcmmVecEnv.p
+3. UR5e hand_mount 撤回：
+   问题：ee 追踪改为 hand_mount 后 IK 全失败，臂完全不动
+   修复：撤回所有 hand_mount 改动，恢复 wrist_3_link 追踪
+   文件：catch_it 的 MujocoDcmm.py、DcmmVecEnv.py
+
+════════════════════════════════════════════════════════════════════════════════
+8.4：roll 奖励对齐 throw、bounce 单指协同、basket 去硬编码
+
+1. Roll 奖励简化：
+   问题：roll 奖励跟 throw 不一致，多了高度/台面/掌心朝向等项
+   修复：roll 奖励完全对齐 throw 结构——只保留 reward_approach + reward_ctrl
+   文件：catch_it_copy 的 DcmmVecEnv.py
+
+2. Bounce 单指关节链协同：
+   问题：单根手指的 MCP 弯了但 PIP/DIP 不跟，关节间不同步
+   修复：新增 reward_finger_chain——同指 MCP/PIP/DIP 同向弯曲加分、反向扣分
+   文件：catch_it_copy 的 DcmmVecEnv.py（tracking + grasping 两处）
+
+3. Basket 优化：
+   问题：硬编码释放推手导致姿势僵硬、臂策略变差、手指不自然
+   修复：
+   a) 去掉硬编码释放推手（MCP → 0.1 强制全开）
+   b) 初始握球降低 MCP 1.0→0.6（松握，容易自然脱手）
+   c) 加入 reward_finger_chain 单指协同
+   文件：catch_it_copy 的 DcmmVecEnv.py
+
+4. 当前训练状态：
+   - catch_it: UR5e track 训练中（wrist_3_link 追踪）
+   - catch_it_copy: roll track / bounce catch / basket track

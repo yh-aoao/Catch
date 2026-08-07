@@ -1739,10 +1739,19 @@ class DcmmVecEnv(gym.Env):
                         _mcp_vals = [hand_qpos[0], hand_qpos[4], hand_qpos[8]]
                         _mcp_var = float(np.var(_mcp_vals))
                         reward_finger_sync = 2.0 * max(0.0, 0.3 - _mcp_var)
+                        # 单指关节链协同：同指 MCP/PIP/DIP 应同向弯曲
+                        reward_finger_chain = 0.0
+                        for _j in [[0,2,3], [4,6,7], [8,10,11], [13,14,15]]:
+                            _vs = [hand_qpos[j] for j in _j]
+                            if all(v >= 0.01 for v in _vs):
+                                reward_finger_chain += 0.5 * sum(_vs)
+                            elif any(v > 0.01 for v in _vs) and any(v < -0.01 for v in _vs):
+                                reward_finger_chain -= 1.0
                     except Exception:
                         reward_pre_close = 0.0
                         reward_finger_sync = 0.0
-                    rewards = reward_pos_component + reward_palm_face + reward_vel_match + reward_finger_dir + reward_pre_close + reward_finger_sync + reward_ctrl + reward_collision + reward_constraint + self.reward_touch
+                        reward_finger_chain = 0.0
+                    rewards = reward_pos_component + reward_palm_face + reward_vel_match + reward_finger_dir + reward_pre_close + reward_finger_sync + reward_finger_chain + reward_ctrl + reward_collision + reward_constraint + self.reward_touch
                 elif self.object_motion == "throw_basket":
                     w_ctrl_b = getattr(DcmmCfg, 'basket_w_ctrl_base', 0.1)
                     w_ctrl_a = getattr(DcmmCfg, 'basket_w_ctrl_arm', 0.5)
@@ -1796,8 +1805,17 @@ class DcmmVecEnv(gym.Env):
                                                    hand_qpos[8], hand_qpos[12]]))
                         # 奖励与屈曲程度成正比，最大奖励约 5.0（MCP 接近上限 ~2.2 rad）
                         reward_finger_closure = 3.0 * mcp_flex
+                        # 单指关节链协同：同指 MCP/PIP/DIP 应同向弯曲
+                        reward_finger_chain = 0.0
+                        for _j in [[0,2,3], [4,6,7], [8,10,11], [13,14,15]]:
+                            _vs = [hand_qpos[j] for j in _j]
+                            if all(v >= 0.01 for v in _vs):
+                                reward_finger_chain += 0.5 * sum(_vs)
+                            elif any(v > 0.01 for v in _vs) and any(v < -0.01 for v in _vs):
+                                reward_finger_chain -= 1.0
                     except Exception:
                         reward_finger_closure = 0.0
+                        reward_finger_chain = 0.0
 
                 # 总奖励（抓取阶段：位置项包含精度奖励 + roll/bounce 专用项）
                 if self.object_motion == "roll":
@@ -1805,7 +1823,7 @@ class DcmmVecEnv(gym.Env):
                             + self.reward_touch + self.reward_stability + reward_finger_closure
                 elif self.object_motion == "bounce":
                     rewards = reward_pos_component + reward_ee_precision + reward_palm_face + reward_orient + reward_ctrl + reward_collision + reward_constraint \
-                            + self.reward_touch + self.reward_stability + reward_finger_closure
+                            + self.reward_touch + self.reward_stability + reward_finger_closure + reward_finger_chain
                 elif self.object_motion == "throw_basket":
                     w_ctrl_b = getattr(DcmmCfg, 'basket_w_ctrl_base', 0.1)
                     w_ctrl_a = getattr(DcmmCfg, 'basket_w_ctrl_arm', 0.5)

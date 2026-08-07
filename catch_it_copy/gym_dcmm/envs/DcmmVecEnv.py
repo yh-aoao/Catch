@@ -1679,7 +1679,7 @@ class DcmmVecEnv(gym.Env):
         if self.object_motion == "roll":
             reward_pos_component = reward_approach  # 只保留靠近增量（跟 throw 一致）
         elif self.object_motion == "bounce":
-            reward_pos_component = reward_3d_pos + reward_approach_3d
+            reward_pos_component = reward_approach_3d  # 只保留靠近增量（跟 throw 一致）
         elif self.object_motion == "throw_basket":
             pass  # reward_pos_component 已在 throw_basket 段中赋值
         else:
@@ -1707,16 +1707,13 @@ class DcmmVecEnv(gym.Env):
             reward_orient = 0
             # 跟踪阶段（tracking）
             if self.stage == "tracking":
-                # 控制惩罚（bounce 只罚底盘；roll/throw 罚手）
-                if self.object_motion == "bounce":
-                    reward_ctrl = - self.norm_ctrl(ctrl, {"base"})
-                else:
-                    reward_ctrl = - self.norm_ctrl(ctrl, {"hand"})
+                # 控制惩罚（所有模式统一罚手）
+                reward_ctrl = - self.norm_ctrl(ctrl, {"hand"})
                 # 姿态奖励（末端z轴与物体速度方向对齐）
                 rotation_matrix = quaternion_to_rotation_matrix(obs["arm"]["ee_quat"])
                 local_velocity_vector = np.dot(rotation_matrix.T, obs["object"]["v_lin_3d"])
                 hand_z_axis = np.array([0, 0, 1])
-                if self.object_motion in ("roll", "bounce"):
+                if self.object_motion == "roll":
                     reward_orient = 0.0
                 else:
                     reward_orient = abs(cos_angle_between_vectors(local_velocity_vector, hand_z_axis)) * DcmmCfg.reward_weights["r_orient"]
@@ -1751,7 +1748,8 @@ class DcmmVecEnv(gym.Env):
                         reward_pre_close = 0.0
                         reward_finger_sync = 0.0
                         reward_finger_chain = 0.0
-                    rewards = reward_pos_component + reward_palm_face + reward_vel_match + reward_finger_dir + reward_pre_close + reward_finger_sync + reward_finger_chain + reward_ctrl + reward_collision + reward_constraint + self.reward_touch
+                    # 跟 throw 对齐 + 手指协同/关节链
+                    rewards = reward_pos_component + reward_orient + reward_finger_sync + reward_finger_chain + reward_ctrl + reward_collision + reward_constraint + self.reward_touch
                 elif self.object_motion == "throw_basket":
                     w_ctrl_b = getattr(DcmmCfg, 'basket_w_ctrl_base', 0.1)
                     w_ctrl_a = getattr(DcmmCfg, 'basket_w_ctrl_arm', 0.5)
@@ -1814,7 +1812,7 @@ class DcmmVecEnv(gym.Env):
                     rewards = reward_pos_component + reward_ee_precision + reward_orient + reward_ctrl + reward_collision + reward_constraint \
                             + self.reward_touch + self.reward_stability + reward_finger_closure
                 elif self.object_motion == "bounce":
-                    rewards = reward_pos_component + reward_ee_precision + reward_palm_face + reward_orient + reward_ctrl + reward_collision + reward_constraint \
+                    rewards = reward_pos_component + reward_ee_precision + reward_orient + reward_ctrl + reward_collision + reward_constraint \
                             + self.reward_touch + self.reward_stability + reward_finger_closure + reward_finger_chain
                 elif self.object_motion == "throw_basket":
                     w_ctrl_b = getattr(DcmmCfg, 'basket_w_ctrl_base', 0.1)

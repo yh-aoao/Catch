@@ -1735,7 +1735,11 @@ class DcmmVecEnv(gym.Env):
                         # 手指协同奖励：三指 MCP 同步弯曲，方差越小奖励越高
                         _mcp_vals = [hand_qpos[0], hand_qpos[4], hand_qpos[8]]
                         _mcp_var = float(np.var(_mcp_vals))
-                        reward_finger_sync = 2.0 * max(0.0, 0.3 - _mcp_var)
+                        reward_finger_sync = 5.0 * max(0.0, 0.3 - _mcp_var)
+                        # 方向一致性惩罚：三指 MCP 符号不一致时扣分
+                        reward_finger_dir_penalty = 0.0
+                        if any(v > 0.05 for v in _mcp_vals) and any(v < -0.05 for v in _mcp_vals):
+                            reward_finger_dir_penalty = -3.0
                         # 单指关节链协同：同指 MCP/PIP/DIP 应同向弯曲
                         reward_finger_chain = 0.0
                         for _j in [[0,2,3], [4,6,7], [8,10,11], [13,14,15]]:
@@ -1747,9 +1751,10 @@ class DcmmVecEnv(gym.Env):
                     except Exception:
                         reward_pre_close = 0.0
                         reward_finger_sync = 0.0
+                        reward_finger_dir_penalty = 0.0
                         reward_finger_chain = 0.0
-                    # 跟 throw 对齐 + 手指协同/关节链
-                    rewards = reward_pos_component + reward_orient + reward_finger_sync + reward_finger_chain + reward_ctrl + reward_collision + reward_constraint + self.reward_touch
+                    # 跟 throw 对齐 + 手指协同/方向一致性/关节链
+                    rewards = reward_pos_component + reward_orient + reward_finger_sync + reward_finger_dir_penalty + reward_finger_chain + reward_ctrl + reward_collision + reward_constraint + self.reward_touch
                 elif self.object_motion == "throw_basket":
                     w_ctrl_b = getattr(DcmmCfg, 'basket_w_ctrl_base', 0.1)
                     w_ctrl_a = getattr(DcmmCfg, 'basket_w_ctrl_arm', 0.5)
@@ -1758,7 +1763,25 @@ class DcmmVecEnv(gym.Env):
                                            + w_ctrl_a * self.norm_ctrl(ctrl, {"arm"})
                                            + w_ctrl_h * self.norm_ctrl(ctrl, {"hand"}))
                     # 释放后张开手指奖励（MCP 小 = 张开 = 高分）
-                    rewards = reward_pos_component + reward_ctrl_basket + reward_collision + reward_constraint
+                    # 第二阶段（训练手指）时加入手指奖励
+                    reward_hand_extra = 0.0
+                    if getattr(DcmmCfg, 'basket_train_hand', False):
+                        try:
+                            _hq = self.Dcmm.data.qpos[21:37]
+                            _mcp = float(np.mean([_hq[0], _hq[4], _hq[8], _hq[12]]))
+                            if self.object_throw:
+                                reward_hand_extra += 3.0 * max(0.0, 1.0 - _mcp)  # 释放后张开
+                            _mcv = float(np.var([_hq[0], _hq[4], _hq[8]]))
+                            reward_hand_extra += 2.0 * max(0.0, 0.3 - _mcv)      # 三指同步
+                            for _j in [[0,2,3], [4,6,7], [8,10,11], [13,14,15]]:
+                                _vs = [_hq[j] for j in _j]
+                                if all(v >= 0.01 for v in _vs):
+                                    reward_hand_extra += 0.5 * sum(_vs)
+                                elif any(v > 0.01 for v in _vs) and any(v < -0.01 for v in _vs):
+                                    reward_hand_extra -= 1.0
+                        except Exception:
+                            reward_hand_extra = 0.0
+                    rewards = reward_pos_component + reward_hand_extra + reward_ctrl_basket + reward_collision + reward_constraint
                 else:
                     rewards = reward_pos_component + reward_orient + reward_ctrl + reward_collision + reward_constraint + self.reward_touch
 
@@ -1819,7 +1842,25 @@ class DcmmVecEnv(gym.Env):
                     w_ctrl_a = getattr(DcmmCfg, 'basket_w_ctrl_arm', 0.5)
                     reward_ctrl_basket = - (w_ctrl_b * self.norm_ctrl(ctrl, {"base"})
                                            + w_ctrl_a * self.norm_ctrl(ctrl, {"arm"}))
-                    rewards = reward_pos_component + reward_ctrl_basket + reward_collision + reward_constraint
+                    # 第二阶段（训练手指）时加入手指奖励
+                    reward_hand_extra = 0.0
+                    if getattr(DcmmCfg, 'basket_train_hand', False):
+                        try:
+                            _hq = self.Dcmm.data.qpos[21:37]
+                            _mcp = float(np.mean([_hq[0], _hq[4], _hq[8], _hq[12]]))
+                            if self.object_throw:
+                                reward_hand_extra += 3.0 * max(0.0, 1.0 - _mcp)  # 释放后张开
+                            _mcv = float(np.var([_hq[0], _hq[4], _hq[8]]))
+                            reward_hand_extra += 2.0 * max(0.0, 0.3 - _mcv)      # 三指同步
+                            for _j in [[0,2,3], [4,6,7], [8,10,11], [13,14,15]]:
+                                _vs = [_hq[j] for j in _j]
+                                if all(v >= 0.01 for v in _vs):
+                                    reward_hand_extra += 0.5 * sum(_vs)
+                                elif any(v > 0.01 for v in _vs) and any(v < -0.01 for v in _vs):
+                                    reward_hand_extra -= 1.0
+                        except Exception:
+                            reward_hand_extra = 0.0
+                    rewards = reward_pos_component + reward_hand_extra + reward_ctrl_basket + reward_collision + reward_constraint
                 else:
                     rewards = reward_base_pos + reward_ee_pos + reward_ee_precision + reward_orient + reward_ctrl + reward_collision + reward_constraint \
                             + self.reward_touch + self.reward_stability
@@ -1856,7 +1897,25 @@ class DcmmVecEnv(gym.Env):
                 w_ctrl_a = getattr(DcmmCfg, 'basket_w_ctrl_arm', 0.5)
                 reward_ctrl_basket = - (w_ctrl_b * self.norm_ctrl(ctrl, {"base"})
                                        + w_ctrl_a * self.norm_ctrl(ctrl, {"arm"}))
-                rewards = reward_pos_component + reward_ctrl_basket + reward_collision + reward_constraint
+                # 第二阶段（训练手指）时加入手指奖励
+                reward_hand_extra = 0.0
+                if getattr(DcmmCfg, 'basket_train_hand', False):
+                    try:
+                        _hq = self.Dcmm.data.qpos[21:37]
+                        _mcp = float(np.mean([_hq[0], _hq[4], _hq[8], _hq[12]]))
+                        if self.object_throw:
+                            reward_hand_extra += 3.0 * max(0.0, 1.0 - _mcp)
+                        _mcv = float(np.var([_hq[0], _hq[4], _hq[8]]))
+                        reward_hand_extra += 2.0 * max(0.0, 0.3 - _mcv)
+                        for _j in [[0,2,3], [4,6,7], [8,10,11], [13,14,15]]:
+                            _vs = [_hq[j] for j in _j]
+                            if all(v >= 0.01 for v in _vs):
+                                reward_hand_extra += 0.5 * sum(_vs)
+                            elif any(v > 0.01 for v in _vs) and any(v < -0.01 for v in _vs):
+                                reward_hand_extra -= 1.0
+                    except Exception:
+                        reward_hand_extra = 0.0
+                rewards = reward_pos_component + reward_hand_extra + reward_ctrl_basket + reward_collision + reward_constraint
             else:
                 rewards = reward_base_pos + reward_ee_pos + reward_ee_precision + reward_orient + reward_ctrl + reward_collision + reward_constraint + self.reward_touch
             
@@ -1907,15 +1966,20 @@ class DcmmVecEnv(gym.Env):
         ## 设置机械手目标关节角度
         # 跟踪阶段：throw/roll 保持手掌张开（零动作），避免手部随机动作导致手指变形
         # bounce 模式特殊处理：手指预置为"半闭合"准备姿态，以便在短暂的接触窗口内快速抓取
-        # throw_basket 模式：手固定杯状托球，只训臂（第一阶段，手指不参与）
+        # throw_basket 模式手部控制：basket_train_hand=False 固定杯状只训臂，True 自由控手训手指
         if self.object_motion == "throw_basket":
-            _cup = np.zeros(16)
-            _cup[0] = 0.6; _cup[2] = 0.4; _cup[3] = 0.4
-            _cup[4] = 0.6; _cup[6] = 0.4; _cup[7] = 0.4
-            _cup[8] = 0.6; _cup[10] = 0.4; _cup[11] = 0.4
-            _cup[13] = 0.3; _cup[14] = 0.3; _cup[15] = 0.3
-            self.Dcmm.target_hand_qpos[:] = _cup
-            self.Dcmm.action_hand2qpos(action_dict["hand"] * 0.1)
+            if getattr(DcmmCfg, 'basket_train_hand', False):
+                # 第二阶段：手自由控制，模型学张开释放
+                self.Dcmm.action_hand2qpos(action_dict["hand"])
+            else:
+                # 第一阶段：手固定杯状托球
+                _cup = np.zeros(16)
+                _cup[0] = 0.6; _cup[2] = 0.4; _cup[3] = 0.4
+                _cup[4] = 0.6; _cup[6] = 0.4; _cup[7] = 0.4
+                _cup[8] = 0.6; _cup[10] = 0.4; _cup[11] = 0.4
+                _cup[13] = 0.3; _cup[14] = 0.3; _cup[15] = 0.3
+                self.Dcmm.target_hand_qpos[:] = _cup
+                self.Dcmm.action_hand2qpos(action_dict["hand"] * 0.1)
 
             # ★ 自动演示：模型无动作时（全零），机械臂自动做抛球动作
             _is_demo = np.allclose(action_dict["arm"], 0, atol=1e-6) and np.allclose(action_dict["base"], 0, atol=1e-6)

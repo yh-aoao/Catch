@@ -312,10 +312,6 @@ class DcmmVecEnv(gym.Env):
         self.act_t_dim = self.act_dim - 12      # 跟踪任务动作维度（8）
         self.obs_c_dim = self.obs_dim - 6       # 抓取任务观测维度（30）
         self.act_c_dim = self.act_dim           # 抓取任务动作维度（20）
-        # throw_basket 模式需要全身协同，Tracking 也使用 Catching 维度
-        if self.object_motion == "throw_basket":
-            self.obs_t_dim = self.obs_c_dim
-            self.act_t_dim = self.act_c_dim
         print("##### Tracking Task \n obs_dim: {}, act_dim: {}".format(self.obs_t_dim, self.act_t_dim))
         print("##### Catching Task \n obs_dim: {}, act_dim: {}\n".format(self.obs_c_dim, self.act_c_dim))
 

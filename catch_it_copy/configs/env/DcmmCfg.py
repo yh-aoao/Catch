@@ -330,9 +330,6 @@ basket_max_time = 4.0
 # 固定底座（True=只训练臂+手，False=底盘也参与）
 basket_fix_base = True
 
-# 第二阶段：训练手指（True=手自由控制+手指奖励，False=手固定杯状只训臂）
-basket_train_hand = False
-
 ## Define PID params for wheel drive and steering.
 # driving
 Kp_drive = 5

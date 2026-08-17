@@ -1761,7 +1761,7 @@ class DcmmVecEnv(gym.Env):
                     # 释放后张开手指奖励（MCP 小 = 张开 = 高分）
                     # 第二阶段（训练手指）时加入手指奖励
                     reward_hand_extra = 0.0
-                    if getattr(DcmmCfg, 'basket_train_hand', False):
+                    if (self.task == "Catching"):
                         try:
                             _hq = self.Dcmm.data.qpos[21:37]
                             _mcp = float(np.mean([_hq[0], _hq[4], _hq[8], _hq[12]]))
@@ -1840,7 +1840,7 @@ class DcmmVecEnv(gym.Env):
                                            + w_ctrl_a * self.norm_ctrl(ctrl, {"arm"}))
                     # 第二阶段（训练手指）时加入手指奖励
                     reward_hand_extra = 0.0
-                    if getattr(DcmmCfg, 'basket_train_hand', False):
+                    if (self.task == "Catching"):
                         try:
                             _hq = self.Dcmm.data.qpos[21:37]
                             _mcp = float(np.mean([_hq[0], _hq[4], _hq[8], _hq[12]]))
@@ -1895,7 +1895,7 @@ class DcmmVecEnv(gym.Env):
                                        + w_ctrl_a * self.norm_ctrl(ctrl, {"arm"}))
                 # 第二阶段（训练手指）时加入手指奖励
                 reward_hand_extra = 0.0
-                if getattr(DcmmCfg, 'basket_train_hand', False):
+                if (self.task == "Catching"):
                     try:
                         _hq = self.Dcmm.data.qpos[21:37]
                         _mcp = float(np.mean([_hq[0], _hq[4], _hq[8], _hq[12]]))
@@ -1962,9 +1962,9 @@ class DcmmVecEnv(gym.Env):
         ## 设置机械手目标关节角度
         # 跟踪阶段：throw/roll 保持手掌张开（零动作），避免手部随机动作导致手指变形
         # bounce 模式特殊处理：手指预置为"半闭合"准备姿态，以便在短暂的接触窗口内快速抓取
-        # throw_basket 模式手部控制：basket_train_hand=False 固定杯状只训臂，True 自由控手训手指
+        # throw_basket 模式手部控制：Tracking=固定杯状只训臂，Catching=自由控手训手指
         if self.object_motion == "throw_basket":
-            if getattr(DcmmCfg, 'basket_train_hand', False):
+            if (self.task == "Catching"):
                 # 第二阶段：手自由控制，模型学张开释放
                 self.Dcmm.action_hand2qpos(action_dict["hand"])
             else:

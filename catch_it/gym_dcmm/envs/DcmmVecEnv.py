@@ -367,7 +367,7 @@ class DcmmVecEnv(gym.Env):
         """返回手掌世界坐标（wrist_3_link + hand_mount 偏移）"""
         wrist = self.Dcmm.data.body("wrist_3_link").xpos.copy()
         rot = self.Dcmm.data.body("wrist_3_link").xmat.copy().reshape(3,3)
-        return wrist + rot @ np.array([0.0, 0.095, 0.08])
+        return wrist + rot @ np.array([0.0, 0.095, 0.04])
 
     def _get_relative_ee_pos3d(self):
         # 返回手掌位置的相对坐标（而非腕部）

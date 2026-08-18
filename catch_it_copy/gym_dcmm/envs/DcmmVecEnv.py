@@ -2309,10 +2309,13 @@ class DcmmVecEnv(gym.Env):
                                                       hand_qpos[8], hand_qpos[12]]))
                         fingers_closed_enough = mcp_flexion > finger_thresh
 
-                    # bounce 模式额外检查：手掌必须接触球
+                    # bounce 模式额外检查：手掌必须接触球 + 球必须离地（在手中）
                     extra_ok = True
                     if self.object_motion == "bounce" and getattr(DcmmCfg, 'bounce_catch_require_palm_contact', False):
                         extra_ok = contact_on_palm
+                    # 球离地判定：球心高度高于阈值（接触地面后球会低到接近地面）
+                    ball_off_ground = obs['object']['pos3d'][2] > 0.05
+                    extra_ok = extra_ok and ball_off_ground
 
                     if self.consecutive_low_vel >= n_control and dxy_grasp <= xy_thresh and fingers_closed_enough and extra_ok:
                         self.terminated = True

@@ -384,12 +384,9 @@ class PPO_Track(object):
             obs["arm"]["ee_pos3d"], obs["arm"]["ee_quat"], obs["arm"]["ee_v_lin_3d"],
             obs["object"]["pos3d"], obs["object"]["v_lin_3d"],
         ]
-        # hand: Catching 始终需要，Tracking 只在 throw_basket 时需要
-        if "hand" in obs:
-            task = self.env.call('task')[0]
-            obj_motion = self.env.call('object_motion')[0]
-            if task != 'Tracking' or obj_motion == 'throw_basket':
-                _parts.append(obs["hand"])
+        # hand 只在 Catching 任务加入（Tracking 不含 hand）
+        if self.env.call('task')[0] == 'Catching':
+            _parts.append(obs["hand"])
         if "basket" in obs:
             _parts.append(obs["basket"]["rel_pos3d"])
         obs_array = np.concatenate(tuple(_parts), axis=1)

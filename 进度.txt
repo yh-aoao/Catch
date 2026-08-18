@@ -271,3 +271,29 @@ python3 train_DCMM.py test=False task=Tracking num_envs=32 object_motion=throw_b
    修复：恢复 reward_3d_pos（绝对高斯位置奖励），与增量奖励叠加
          reward_pos_component = reward_3d_pos + reward_approach_3d
    文件：catch_it_copy 的 DcmmVecEnv.py
+
+════════════════════════════════════════════════════════════════════════════════
+8.18（续）：三任务跟进
+
+1. UR5e（更换机械臂）：
+   catch 任务手指乱抓、重置很快
+   重置条件：
+   a) 底盘碰撞 → 终止
+   b) 球碰非手几何体(地面/臂/L连接件) → 终止（mask_coll）
+   c) grasping 阶段 ee_distance > 0.25 → 阶段回退终止
+   重置快原因：球落在 L 连接件上，触发 mask_coll
+   跟踪部位：观测 _get_ee_world_pos() = wrist + rot@[0,0.095,0.08]（hand_mount 位置）
+   问题：hand_mount 正是连接件安装板，不是手掌
+   修复：跟踪点 Z 偏移 0.08 → 0.04，球落在手掌/手指处
+   文件：catch_it 的 DcmmVecEnv.py
+
+2. Roll：
+   确认桌面已降 0.35（代码计算验证）
+   手腕 link6 z=0.615、指尖 z=0.519，比台面 0.35 高 0.17m
+   初始姿态不会撞桌；若仍撞桌可能是训练中臂下探或未 pull 最新代码
+
+3. Bounce：
+   成功率高但实际失败
+   修复：成功判定加"球离地"条件（球心 z > 0.05）
+   碰到手后球落地 → 判定失败
+   文件：catch_it_copy 的 DcmmVecEnv.py

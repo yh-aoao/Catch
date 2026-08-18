@@ -184,7 +184,7 @@ cd ~/Catch/catch_it_copy
 python3 train_DCMM.py test=False task=Tracking num_envs=32 object_motion=throw_basket
 
 
-1.机械臂：217
+1.机械臂：217-》207
 2.bounce加摩擦：200
 3.roll训练track：204
 4.basket：214
@@ -239,27 +239,13 @@ python3 train_DCMM.py test=False task=Tracking num_envs=32 object_motion=throw_b
    - catch_it_copy: roll track / bounce catch / basket track
 
 ════════════════════════════════════════════════════════════════════════════════
-8.17：四任务跟进
+8.18：basket 两阶段维度修正
 
-1. Roll：需要降桌面高度 → 台面 0.45 → 0.35（避免手前伸时撞桌）
-
-2. UR5e（更换机械臂）：
-   现状：效果尚可，大部分跟踪手腕，成功率 ~70%，远不及原模型
-   原因：加了 L 型连接件后手掌 hand_mount 离腕部偏移 10cm
-        虚拟观测 _get_ee_world_pos() 已改手掌位置，但模型需重新训练学会偏移
-   决定：先接着训练 catch 任务看效果
-
-3. Bounce：
-   问题：上次"对齐 throw"删掉绝对位置奖励后，跟踪完全丢失，碰不到球
-   修复：恢复 reward_3d_pos 绝对位置奖励（+ reward_approach_3d 增量）
-   原因：增量奖励太稀疏，模型乱走无信号
-
-4. Basket：
-   现状：第一阶段（纯臂）已训好
-   计划：第二阶段训练手指，手指协同仍存在问题
-   实现：重新加 basket_train_hand 开关
-         False=手固定杯状只训臂；True=手自由控手+手指奖励（释放张开/三指同步/单指关节链）
-   命令：
-    第一阶段 python3 train_DCMM.py test=False task=Tracking num_envs=32 object_motion=throw_basket
-    第二阶段（basket_train_hand=True 后）
-     python3 train_DCMM.py test=False task=Tracking num_envs=32 checkpoint_tracking=xxx object_motion=throw_basket
+问题：basket 第二阶段加载 tracking 模型时报 size mismatch（checkpoint 33 维 vs 模型 21 维）
+根因：之前给 throw_basket 加的 obs_t_dim = obs_c_dim 覆盖是错的
+      把第一阶段 Tracking 的观测设成了 33 维，但两阶段模型的 tracking 分支
+      actor_mlp_t 本就该是 21 维（tracking = catching - hand 12）
+修复：删除 obs_t_dim / act_t_dim 覆盖
+      现在第一阶段 obs=21/act=8（base+arm），第二阶段 obs=33/act=20（全身体）
+注意：之前的 stage1 checkpoint（33维）作废，需重新训练第一阶段
+另外 basket 手训练改为自动判断：task=Tracking 固定手，task=Catching 训手指

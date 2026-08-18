@@ -249,3 +249,25 @@ python3 train_DCMM.py test=False task=Tracking num_envs=32 object_motion=throw_b
       现在第一阶段 obs=21/act=8（base+arm），第二阶段 obs=33/act=20（全身体）
 注意：之前的 stage1 checkpoint（33维）作废，需重新训练第一阶段
 另外 basket 手训练改为自动判断：task=Tracking 固定手，task=Catching 训手指
+
+════════════════════════════════════════════════════════════════════════════════
+8.18：其余三任务跟进（roll / UR5e / bounce）
+
+1. Roll：
+   问题：手会被桌子挡住
+   修复：台面高度 0.45 → 0.35（roll_table_height/pos/anchor_z）
+   文件：catch_it_copy 的 DcmmCfg.py
+
+2. UR5e（更换机械臂）：
+   现状：效果尚可，大部分跟踪手腕，成功率 ~70%，远不及原模型
+   原因：加了 L 型连接件后手掌 hand_mount 离腕部 wrist_3_link 偏移 10cm
+        原模型(XArm6)跟踪 link6=手掌位置，无偏移，容易学
+        虚拟观测 _get_ee_world_pos() 已改为手掌位置，但需重新训练学会偏移
+   决定：先接着训练 catch 任务观察效果
+
+3. Bounce：
+   问题：上次"对齐 throw"删掉绝对位置奖励后，跟踪完全丢失，碰不到球
+   根因：reward_approach_3d（增量奖励）太稀疏，模型乱走时无任何信号
+   修复：恢复 reward_3d_pos（绝对高斯位置奖励），与增量奖励叠加
+         reward_pos_component = reward_3d_pos + reward_approach_3d
+   文件：catch_it_copy 的 DcmmVecEnv.py

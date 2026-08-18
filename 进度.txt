@@ -297,3 +297,15 @@ python3 train_DCMM.py test=False task=Tracking num_envs=32 object_motion=throw_b
    修复：成功判定加"球离地"条件（球心 z > 0.05）
    碰到手后球落地 → 判定失败
    文件：catch_it_copy 的 DcmmVecEnv.py
+
+════════════════════════════════════════════════════════════════════════════════
+8.18（再续）：bounce 手指协同加强
+
+问题：手指方向仍不一致（有的上卷、有的整体朝下），关节链协同太弱
+修复：
+a) reward_finger_sync 权重 2.0 → 5.0
+b) 方向一致性惩罚 reward_finger_dir_penalty 从只查 MCP 扩展到 MCP/PIP/DIP 全部关节
+   （任何关节有正有负即扣 3.0）
+c) 单指关节链 reward_finger_chain 权重 0.5/-1.0 → 1.0/-2.0
+预闭合 reward_pre_close 此前已从奖励汇总移除，不再导致提前合拢
+文件：catch_it_copy 的 DcmmVecEnv.py（tracking + grasping 两处）

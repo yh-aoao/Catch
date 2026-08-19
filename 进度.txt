@@ -309,3 +309,17 @@ b) 方向一致性惩罚 reward_finger_dir_penalty 从只查 MCP 扩展到 MCP/P
 c) 单指关节链 reward_finger_chain 权重 0.5/-1.0 → 1.0/-2.0
 预闭合 reward_pre_close 此前已从奖励汇总移除，不再导致提前合拢
 文件：catch_it_copy 的 DcmmVecEnv.py（tracking + grasping 两处）
+
+════════════════════════════════════════════════════════════════════════════════
+8.19：bounce 手指奖励移到抓取阶段
+
+问题：bounce 越学越差，追不上球、手指乱学
+根因：手指奖励（同步/方向/关节链）堆在 tracking 阶段，与位置追踪目标打架
+     模型既要追球又要协调手指，恶性循环
+修复：
+a) tracking 阶段去掉所有手指项，改为纯位置追踪（跟 throw 一致）
+   rewards = reward_pos_component + reward_orient + reward_ctrl + ...
+b) 手指项全部移到 grasping 阶段
+   reward_finger_closure + reward_finger_sync + reward_finger_dir_penalty + reward_finger_chain
+效果：追踪时专心追球、手保持张开，球到手心才协调闭合
+文件：catch_it_copy 的 DcmmVecEnv.py

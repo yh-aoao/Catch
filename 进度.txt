@@ -323,3 +323,27 @@ b) 手指项全部移到 grasping 阶段
    reward_finger_closure + reward_finger_sync + reward_finger_dir_penalty + reward_finger_chain
 效果：追踪时专心追球、手保持张开，球到手心才协调闭合
 文件：catch_it_copy 的 DcmmVecEnv.py
+
+════════════════════════════════════════════════════════════════════════════════
+8.19（续）：bounce 同步收紧 + basket 删 demo + 抛球引导奖励
+
+1. Bounce 手指同步：
+   问题：三指方向一致但弯曲程度不一致（中间手指跟两边不一样）
+   修复：reward_finger_sync 阈值 0.3 → 0.1，三指弯曲程度更接近
+   文件：catch_it_copy 的 DcmmVecEnv.py
+
+2. Basket 删 demo 模式：
+   问题：demo 模式替模型抛球，模型学会"不动也能进球"，存了假模型
+        第二阶段加载假模型 → 整个僵住不动
+   修复：删除 _step_mujoco_simulation 里的自动演示代码
+   注意：需重新训练第一阶段 track
+
+3. Basket 抛球引导奖励（新增）：
+   问题：删 demo 后模型需要自己学会抛球，原奖励只有落点距离，信号稀疏
+   新增三个引导奖励：
+   a) reward_release：球离手 +5（鼓励抛球，不握着不放）
+   b) reward_release_dir：球速度方向朝篮筐 3.0*点积（鼓励朝对方向抛）
+   c) reward_forward：球水平朝篮筐移动 2.0（鼓励抛得够远而非往上）
+   配合已有的 reward_basket_dist（落点距离，含合适高度）
+   覆盖"会抛→朝对抛→抛得远→抛得准"完整学习路径
+   文件：catch_it_copy 的 DcmmVecEnv.py

@@ -750,9 +750,35 @@ class DcmmVecEnv(gym.Env):
                     self.reward_stability = (info["env_time"] - self.catch_time) * DcmmCfg.reward_weights["r_stability"]
                 else:
                     self.reward_stability = 0.0
+                ## 手指协同奖励（抓取阶段）：闭合 + 三指同步 + 方向一致 + 单指关节链
+                reward_finger_closure = 0.0
+                reward_finger_sync = 0.0
+                reward_finger_dir_penalty = 0.0
+                reward_finger_chain = 0.0
+                try:
+                    hand_qpos = self.Dcmm.data.qpos[21:37]
+                    # 闭合奖励：MCP 屈曲均值（正方向=闭合）
+                    mcp_flex = float(np.mean([hand_qpos[0], hand_qpos[4], hand_qpos[8], hand_qpos[12]]))
+                    reward_finger_closure = 3.0 * mcp_flex
+                    # 三指 MCP 同步
+                    _mcp_vals = [hand_qpos[0], hand_qpos[4], hand_qpos[8]]
+                    reward_finger_sync = 5.0 * max(0.0, 0.3 - float(np.var(_mcp_vals)))
+                    # 方向一致性惩罚
+                    _all_flex = [hand_qpos[j] for j in [0,2,3,4,6,7,8,10,11]]
+                    if any(v > 0.05 for v in _all_flex) and any(v < -0.05 for v in _all_flex):
+                        reward_finger_dir_penalty = -3.0
+                    # 单指关节链协同
+                    for _j in [[0,2,3], [4,6,7], [8,10,11], [13,14,15]]:
+                        _vs = [hand_qpos[j] for j in _j]
+                        if all(v >= 0.01 for v in _vs):
+                            reward_finger_chain += 1.0 * sum(_vs)
+                        elif any(v > 0.01 for v in _vs) and any(v < -0.01 for v in _vs):
+                            reward_finger_chain -= 2.0
+                except Exception:
+                    pass
                 ## Add up the rewards
                 rewards = reward_base_pos + reward_ee_pos + reward_ee_precision + reward_orient + reward_ctrl + reward_collision + reward_constraint \
-                        + self.reward_touch + self.reward_stability
+                        + self.reward_touch + self.reward_stability + reward_finger_closure + reward_finger_sync + reward_finger_dir_penalty + reward_finger_chain
                 if self.print_reward:
                     print("##### print reward")
                     print("reward_touch: {}, \nreward_ee_pos: {:.3f}, reward_ee_precision: {:.3f}, reward_orient: {:.3f}, \n".format(

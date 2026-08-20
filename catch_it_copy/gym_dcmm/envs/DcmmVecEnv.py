@@ -1756,8 +1756,26 @@ class DcmmVecEnv(gym.Env):
                     # 跟 throw 完全一致的奖励结构
                     rewards = reward_pos_component + reward_ctrl + reward_collision + reward_constraint + self.reward_touch
                 elif self.object_motion == "bounce":
-                    # 跟 throw 对齐：tracking 阶段纯位置追踪，不管手指
-                    rewards = reward_pos_component + reward_orient + reward_ctrl + reward_collision + reward_constraint + self.reward_touch
+                    # 手指协同奖励（tracking 阶段）：三指同步 + 方向一致 + 单指关节链
+                    reward_finger_sync = 0.0
+                    reward_finger_dir_penalty = 0.0
+                    reward_finger_chain = 0.0
+                    try:
+                        hand_qpos = self.Dcmm.data.qpos[21:37]
+                        _mcp_vals = [hand_qpos[0], hand_qpos[4], hand_qpos[8]]
+                        reward_finger_sync = 5.0 * max(0.0, 0.3 - float(np.var(_mcp_vals)))
+                        _all_flex = [hand_qpos[j] for j in [0,2,3,4,6,7,8,10,11]]
+                        if any(v > 0.05 for v in _all_flex) and any(v < -0.05 for v in _all_flex):
+                            reward_finger_dir_penalty = -3.0
+                        for _j in [[0,2,3], [4,6,7], [8,10,11], [13,14,15]]:
+                            _vs = [hand_qpos[j] for j in _j]
+                            if all(v >= 0.01 for v in _vs):
+                                reward_finger_chain += 1.0 * sum(_vs)
+                            elif any(v > 0.01 for v in _vs) and any(v < -0.01 for v in _vs):
+                                reward_finger_chain -= 2.0
+                    except Exception:
+                        pass
+                    rewards = reward_pos_component + reward_orient + reward_finger_sync + reward_finger_dir_penalty + reward_finger_chain + reward_ctrl + reward_collision + reward_constraint + self.reward_touch
                 elif self.object_motion == "throw_basket":
                     w_ctrl_b = getattr(DcmmCfg, 'basket_w_ctrl_base', 0.1)
                     w_ctrl_a = getattr(DcmmCfg, 'basket_w_ctrl_arm', 0.5)
@@ -1821,14 +1839,6 @@ class DcmmVecEnv(gym.Env):
                                                    hand_qpos[8], hand_qpos[12]]))
                         # 奖励与屈曲程度成正比，最大奖励约 5.0（MCP 接近上限 ~2.2 rad）
                         reward_finger_closure = 3.0 * mcp_flex
-                        # 三指 MCP 同步弯曲，方差越小奖励越高
-                        _mcp_vals = [hand_qpos[0], hand_qpos[4], hand_qpos[8]]
-                        reward_finger_sync = 5.0 * max(0.0, 0.1 - float(np.var(_mcp_vals)))
-                        # 方向一致性惩罚：三指所有关节(MCP/PIP/DIP)符号不一致时扣分
-                        reward_finger_dir_penalty = 0.0
-                        _all_flex = [hand_qpos[j] for j in [0,2,3,4,6,7,8,10,11]]
-                        if any(v > 0.05 for v in _all_flex) and any(v < -0.05 for v in _all_flex):
-                            reward_finger_dir_penalty = -3.0
                         # 单指关节链协同：同指 MCP/PIP/DIP 应同向弯曲，提高权重
                         reward_finger_chain = 0.0
                         for _j in [[0,2,3], [4,6,7], [8,10,11], [13,14,15]]:
@@ -1839,8 +1849,6 @@ class DcmmVecEnv(gym.Env):
                                 reward_finger_chain -= 2.0
                     except Exception:
                         reward_finger_closure = 0.0
-                        reward_finger_sync = 0.0
-                        reward_finger_dir_penalty = 0.0
                         reward_finger_chain = 0.0
 
                 # 总奖励（抓取阶段：位置项包含精度奖励 + roll/bounce 专用项）
@@ -1849,7 +1857,7 @@ class DcmmVecEnv(gym.Env):
                             + self.reward_touch + self.reward_stability + reward_finger_closure
                 elif self.object_motion == "bounce":
                     rewards = reward_pos_component + reward_ee_precision + reward_orient + reward_ctrl + reward_collision + reward_constraint \
-                            + self.reward_touch + self.reward_stability + reward_finger_closure + reward_finger_sync + reward_finger_dir_penalty + reward_finger_chain
+                            + self.reward_touch + self.reward_stability + reward_finger_closure + reward_finger_chain
                 elif self.object_motion == "throw_basket":
                     w_ctrl_b = getattr(DcmmCfg, 'basket_w_ctrl_base', 0.1)
                     w_ctrl_a = getattr(DcmmCfg, 'basket_w_ctrl_arm', 0.5)

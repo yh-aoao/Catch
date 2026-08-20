@@ -347,3 +347,25 @@ b) 手指项全部移到 grasping 阶段
    配合已有的 reward_basket_dist（落点距离，含合适高度）
    覆盖"会抛→朝对抛→抛得远→抛得准"完整学习路径
    文件：catch_it_copy 的 DcmmVecEnv.py
+
+════════════════════════════════════════════════════════════════════════════════
+8.21：三任务跟进
+
+1. UR5e（更换机械臂）：
+   catch 效果好一点，但手指协同仍差（两根上卷、一根往下、收拢不足）
+   修复：抓取阶段新增手指协同奖励
+   - reward_finger_closure（闭合）+ reward_finger_sync（三指同步）
+   - reward_finger_dir_penalty（方向一致）+ reward_finger_chain（单指关节链）
+   文件：catch_it 的 DcmmVecEnv.py
+
+2. Bounce：
+   上次"手指奖励移到grasping"后效果反而更差
+   回退到上一版：手指奖励回到 tracking 阶段（同步5.0+方向惩罚+关节链）
+   grasping 阶段保留闭合+关节链
+   文件：catch_it_copy 的 DcmmVecEnv.py
+
+3. Basket：
+   可尝试训练 catch（第二阶段），需先有新的 track checkpoint
+   命令：
+     python3 train_DCMM.py test=False task=Catching_TwoStage num_envs=32 \
+       checkpoint_tracking=新track路径 object_motion=throw_basket

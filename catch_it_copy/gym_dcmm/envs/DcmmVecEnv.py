@@ -1353,6 +1353,8 @@ class DcmmVecEnv(gym.Env):
         self.prev_palm_dot = -1.0  # 重置上一步手掌朝向
         self.prev_finger_dot = -1.0  # 重置上一步手指方向
         self.prev_d_basket = 2.0  # 重置上一步到篮筐距离（throw_basket 模式）
+        self._release_rewarded = False  # 出手奖励是否已给（每回合重置）
+        self._prev_basket_obj = None    # 上一策略步球位置（向前位移奖励用）
         self.consecutive_low_vel = 0
 
         # 重置信息字典
@@ -1563,8 +1565,43 @@ class DcmmVecEnv(gym.Env):
             dz = obj_pos[2] - DcmmCfg.basket_center[2]
             reward_above = w_above * max(0.0, dz) / (1.0 + abs(dz))
 
+            # 5) 出手奖励：球刚离手给固定奖励，鼓励抛球而不是握着不放
+            reward_release = 0.0
+            if self.object_throw and not getattr(self, '_release_rewarded', False):
+                reward_release = 5.0
+                self._release_rewarded = True
+
+            # 6) 出手方向奖励：球离手后速度方向朝篮筐
+            reward_release_dir = 0.0
+            if self.object_throw:
+                try:
+                    obj_vel = obs['object']['v_lin_3d']
+                    to_basket = basket_center - obj_pos
+                    _v_norm = np.linalg.norm(obj_vel)
+                    _b_norm = np.linalg.norm(to_basket)
+                    if _v_norm > 0.1 and _b_norm > 0.01:
+                        _dir_align = float(np.dot(obj_vel / _v_norm, to_basket / _b_norm))
+                        reward_release_dir = 3.0 * max(0.0, _dir_align)
+                except Exception:
+                    reward_release_dir = 0.0
+
+            # 7) 向前位移奖励：球水平方向朝篮筐移动
+            reward_forward = 0.0
+            if self.object_throw:
+                try:
+                    _prev_obj = getattr(self, '_prev_basket_obj', obj_pos.copy())
+                    _horiz_mov = (obj_pos - _prev_obj)[:2]
+                    _to_basket_h = (basket_center - _prev_obj)[:2]
+                    _bh_norm = np.linalg.norm(_to_basket_h)
+                    if _bh_norm > 0.01:
+                        reward_forward = 2.0 * float(np.dot(_horiz_mov, _to_basket_h / _bh_norm))
+                except Exception:
+                    reward_forward = 0.0
+            self._prev_basket_obj = obj_pos.copy()
+
             # 汇总位置相关奖励
-            reward_pos_component = reward_basket_dist + reward_basket_approach + reward_score + reward_above
+            reward_pos_component = reward_basket_dist + reward_basket_approach + reward_score + reward_above \
+                                   + reward_release + reward_release_dir + reward_forward
             reward_height = 0.0
             reward_table_h = 0.0
             reward_palm_face = 0.0
@@ -1786,7 +1823,7 @@ class DcmmVecEnv(gym.Env):
                         reward_finger_closure = 3.0 * mcp_flex
                         # 三指 MCP 同步弯曲，方差越小奖励越高
                         _mcp_vals = [hand_qpos[0], hand_qpos[4], hand_qpos[8]]
-                        reward_finger_sync = 5.0 * max(0.0, 0.3 - float(np.var(_mcp_vals)))
+                        reward_finger_sync = 5.0 * max(0.0, 0.1 - float(np.var(_mcp_vals)))
                         # 方向一致性惩罚：三指所有关节(MCP/PIP/DIP)符号不一致时扣分
                         reward_finger_dir_penalty = 0.0
                         _all_flex = [hand_qpos[j] for j in [0,2,3,4,6,7,8,10,11]]
@@ -1957,17 +1994,6 @@ class DcmmVecEnv(gym.Env):
                 self.Dcmm.target_hand_qpos[:] = _cup
                 self.Dcmm.action_hand2qpos(action_dict["hand"] * 0.1)
 
-            # ★ 自动演示：模型无动作时（全零），机械臂自动做抛球动作
-            _is_demo = np.allclose(action_dict["arm"], 0, atol=1e-6) and np.allclose(action_dict["base"], 0, atol=1e-6)
-            if _is_demo and not self.object_throw:
-                elapsed = self.Dcmm.data.time - self.start_time
-                hold_dur = getattr(DcmmCfg, 'basket_hold_duration', 0.3)
-                phase = np.clip(elapsed / max(hold_dur, 1e-6), 0.0, 1.0)  # 0→1
-                # demo 抛球动作：臂末端向前上方移动
-                _demo_delta = np.array([0.0, 0.6 * phase, 0.4 * phase, 0.0, 0.0, 0.0])
-                result_QP, _ = self.Dcmm.move_ee_pose(_demo_delta)
-                if result_QP[1]:
-                    self.Dcmm.target_arm_qpos[:] = result_QP[0]
         elif self.task == "Catching" and self.stage == "tracking":
             # 所有模式统一：不重置 target，让模型自由控制手指
             self.Dcmm.action_hand2qpos(action_dict["hand"])

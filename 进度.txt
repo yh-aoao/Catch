@@ -438,3 +438,50 @@ b) 手指项全部移到 grasping 阶段
   throw_force:  python3 train_DCMM.py test=False task=Tracking num_envs=32 object_motion=throw_force
   roll(球滚下):  python3 train_DCMM.py test=False task=Tracking num_envs=32 object_motion=roll
   catch→throw:   python3 catch_throw_demo.py catch_tracking=xxx catch_catching=xxx basket_tracking=xxx viewer=true
+
+════════════════════════════════════════════════════════════════════════════════
+各任务训练/运行命令
+
+【接球类任务（两阶段 track → catch）】
+
+1. roll（球滚下接住）：
+   # 阶段1 训 track
+   python3 train_DCMM.py test=False task=Tracking num_envs=32 object_motion=roll
+   # 阶段2 训 catch（用新 track checkpoint）
+   python3 train_DCMM.py test=False task=Catching_TwoStage num_envs=32 \
+     checkpoint_tracking=outputs/xxx/track_best.pth object_motion=roll
+
+2. bounce（已有模型，测试成功率）：
+   python3 train_DCMM.py test=True task=Catching_TwoStage num_envs=1 \
+     checkpoint_catching=outputs/xxx/catch_best.pth object_motion=bounce viewer=true
+
+3. throw_bounce（抛+弹，新）：
+   # 阶段1 训 track
+   python3 train_DCMM.py test=False task=Tracking num_envs=32 object_motion=throw_bounce
+   # 阶段2 训 catch
+   python3 train_DCMM.py test=False task=Catching_TwoStage num_envs=32 \
+     checkpoint_tracking=outputs/xxx/track_best.pth object_motion=throw_bounce
+
+【抛球类任务】
+
+4. throw_basket（第一阶段 track）：
+   python3 train_DCMM.py test=False task=Tracking num_envs=32 object_motion=throw_basket
+   # 第二阶段（训练手指，可选）
+   python3 train_DCMM.py test=False task=Catching_TwoStage num_envs=32 \
+     checkpoint_tracking=outputs/xxx/track_best.pth object_motion=throw_basket
+
+5. throw_force（扔，单阶段）：
+   python3 train_DCMM.py test=False task=Tracking num_envs=32 object_motion=throw_force
+
+【顺序任务】
+
+6. catch→throw（先训好 throw 的 catch 模型 + throw_basket 的 track 模型，再跑）：
+   python3 catch_throw_demo.py \
+     catch_tracking=outputs/xxx/throw_track.pth \
+     catch_catching=outputs/xxx/throw_catch.pth \
+     basket_tracking=outputs/xxx/basket_track.pth \
+     viewer=true
+
+【最终交付】
+
+7. 主表：各任务训练好后，固定种子跑 N 个 episode 统计成功率

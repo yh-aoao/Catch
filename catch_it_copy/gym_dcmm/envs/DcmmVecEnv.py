@@ -1724,7 +1724,10 @@ class DcmmVecEnv(gym.Env):
                 obj_vel = np.zeros(3)
 
             # 1) 球飞出的水平距离奖励（相对初始位置）
-            _start = getattr(self, '_throw_force_start', obj_pos.copy())
+            _start = getattr(self, '_throw_force_start', None)
+            if _start is None:
+                _start = obj_pos.copy()
+                self._throw_force_start = _start
             if self.object_throw:
                 _horiz_dist = float(np.linalg.norm((obj_pos - _start)[:2]))
             else:

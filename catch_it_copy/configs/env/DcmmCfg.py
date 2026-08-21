@@ -143,6 +143,33 @@ bounce_init_speed = np.array([1.0, 1.0])
 # 初始竖直速度（m/s），负=向下
 bounce_init_vz = np.array([-0.2, -0.2])
 
+## ==================== Throw_Bounce 模式专用参数 ====================
+# 抛+弹自适应：球从远处抛出，飞行→落地弹跳→车接住弹跳的球
+# 初始位置（远处，车来不及接）
+throw_bounce_init_y = np.array([3.0, 3.5])
+throw_bounce_init_z = np.array([1.5, 2.0])
+# 初始速度（朝小车方向，水平速度快）
+throw_bounce_speed = np.array([2.0, 2.5])
+throw_bounce_vz = np.array([0.5, 1.0])
+# 飞行宽容期（秒）：球还在飞行时，不惩罚追不上
+throw_bounce_grace = 0.5
+
+## ==================== Throw_Force 模式专用参数 ====================
+# "扔"模式：抓紧球用力甩出去（无篮筐目标，奖励=扔得远/快）
+# 持球时长（秒）
+throw_force_hold = 0.3
+# 小球半径/质量
+throw_force_radius = 0.04
+throw_force_mass = 0.05
+# 抛掷初速度加成（释放时给球加的额外速度）
+throw_force_boost = np.array([0.0, 2.0, 3.0])
+# 奖励权重
+throw_force_w_dist = 5.0      # 球飞出的水平距离奖励
+throw_force_w_speed = 3.0     # 球初速度奖励
+# 终止：球落地
+throw_force_floor_z = 0.0
+throw_force_max_time = 3.0
+
 ## ==================== Roll 模式专用参数 ====================
 ## Roll 模式采用"掌心朝上舀球"策略（palm-up scooping）：
 ##   手放在地面上，掌心朝上，手指半闭合形成"栅栏"，
@@ -222,8 +249,8 @@ roll_hand_ready_thumb = 0.3
 # 跟踪阶段手指动作缩放系数（0=完全固定，0.3=允许模型微调）
 roll_hand_action_scale = 0.3
 
-# roll 模式固定底座（仅训练臂+手，排除底座协同问题）
-roll_fix_base = True
+# roll 模式固定底座（True=固定底座只训臂；False=底座可动，车向前接球）
+roll_fix_base = False
 
 # ---- 桌面高度奖励（新增）----
 # 桌面高度锚点（m），手在桌面上方这个高度范围内获得奖励
@@ -295,6 +322,8 @@ basket_radius = 0.15
 basket_depth = 0.3
 # 篮筐颜色 RGBA
 basket_rgba = [1.0, 0.4, 0.0, 0.7]
+# 篮筐倾斜角度（度），绕 X 轴旋转，让开口朝斜方向（朝小车）。0=水平朝上
+basket_tilt_deg = 25.0
 
 # ---- 抛球物理参数 ----
 # 小球半径（m）

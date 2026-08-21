@@ -2355,8 +2355,8 @@ class DcmmVecEnv(gym.Env):
                         self.terminated = out_of_bounds
 
                 elif self.task == "Tracking":
-                    if self.object_motion == "throw_basket":
-                        # 抛球入篮：球在手中，不因手接触而终止。只检查底盘碰撞
+                    if self.object_motion in ("throw_basket", "throw_force"):
+                        # 抛球/扔：球在手中，不因手接触而终止。只检查底盘碰撞
                         self.terminated = np.any(mask_coll)
                     elif self.object_motion == "throw":
                         # 保持原有抛射模式逻辑

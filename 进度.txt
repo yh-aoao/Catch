@@ -412,14 +412,7 @@ b) 手指项全部移到 grasping 阶段
 3.roll训练track：204
 4.basket：214
 
-200：
-204：roll
-207：throw_bounce
-210：
-211：throw_force
-214：xx
-216:
-217：
+
 
 ════════════════════════════════════════════════════════════════════════════════
 8.21（再续）：多任务实现
@@ -440,6 +433,15 @@ b) 手指项全部移到 grasping 阶段
   catch→throw:   python3 catch_throw_demo.py catch_tracking=xxx catch_catching=xxx basket_tracking=xxx viewer=true
 
 ════════════════════════════════════════════════════════════════════════════════
+200：
+204：roll
+207：throw_bounce
+210：bounce_track test
+211：throw_force
+214：bounce_catch test
+216:
+217：throw_force
+
 各任务训练/运行命令
 
 【接球类任务（两阶段 track → catch）】

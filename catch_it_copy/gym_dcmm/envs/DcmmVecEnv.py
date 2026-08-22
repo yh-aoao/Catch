@@ -1095,14 +1095,14 @@ class DcmmVecEnv(gym.Env):
 
     def random_object_pose_throw_bounce(self):
         """抛+弹自适应模式：球从远处抛出，飞行后落地弹跳，车接住弹跳的球。"""
-        x = np.random.uniform(-0.3, 0.3)
+        x = np.random.uniform(-0.05, 0.05)  # 收窄 X 范围
         y = np.random.uniform(*DcmmCfg.throw_bounce_init_y)
         radius = float(self.Dcmm.model.geom_size[self.object_id][0])
         z = np.random.uniform(*DcmmCfg.throw_bounce_init_z)
 
         # 水平速度朝向小车（-y 方向为主），速度快
         speed = np.random.uniform(*DcmmCfg.throw_bounce_speed)
-        angle_deg = np.random.uniform(-20.0, 20.0)
+        angle_deg = np.random.uniform(-5.0, 5.0)  # 收窄角度范围
         heading = np.radians(angle_deg)
         vx = speed * math.sin(heading)
         vy = -speed * math.cos(heading)

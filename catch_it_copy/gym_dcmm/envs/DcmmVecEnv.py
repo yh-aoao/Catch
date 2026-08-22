@@ -1202,6 +1202,10 @@ class DcmmVecEnv(gym.Env):
             _roll_joints = getattr(DcmmCfg, 'roll_arm_joints', DcmmCfg.arm_joints)
             self.Dcmm.data.qpos[15:21] = _roll_joints[:]
             self.Dcmm.data_arm.qpos[0:6] = _roll_joints[:]
+        elif self.object_motion == "throw_force":
+            _tf_joints = getattr(DcmmCfg, 'throw_force_arm_joints', DcmmCfg.arm_joints)
+            self.Dcmm.data.qpos[15:21] = _tf_joints[:]
+            self.Dcmm.data_arm.qpos[0:6] = _tf_joints[:]
         else:
             self.Dcmm.data.qpos[15:21] = DcmmCfg.arm_joints[:]
             self.Dcmm.data_arm.qpos[0:6] = DcmmCfg.arm_joints[:]
@@ -1309,6 +1313,9 @@ class DcmmVecEnv(gym.Env):
             # 固定底座时，小车稍往前靠（台面边缘 y≈0.9，小车 qpos[1]=0.2 不穿模）
             if getattr(DcmmCfg, 'roll_fix_base', False):
                 self.Dcmm.data.qpos[1] = 0.35  # 底盘前移 30cm
+            else:
+                # 底座可动时，初始放远一点，给车前移空间
+                self.Dcmm.data.qpos[1] = getattr(DcmmCfg, 'roll_base_init_y', -0.8)
             self.Dcmm.model.geom_rgba[self.table_geom_id] = self.table_geom_rgba_backup  # 恢复可见
             self.Dcmm.model.geom_contype[self.table_geom_id] = 1
             self.Dcmm.model.geom_conaffinity[self.table_geom_id] = 1
@@ -1429,7 +1436,10 @@ class DcmmVecEnv(gym.Env):
 
         # 重置目标控制指令
         self.Dcmm.target_base_vel = np.array([0.0, 0.0, 0.0])
-        self.Dcmm.target_arm_qpos[:] = DcmmCfg.arm_joints[:]
+        if self.object_motion == "throw_force":
+            self.Dcmm.target_arm_qpos[:] = getattr(DcmmCfg, 'throw_force_arm_joints', DcmmCfg.arm_joints)[:]
+        else:
+            self.Dcmm.target_arm_qpos[:] = DcmmCfg.arm_joints[:]
         if self.object_motion == "throw_basket":
             _grip = np.zeros(16)
             _grip[0] = 0.6; _grip[2] = 0.5; _grip[3] = 0.5

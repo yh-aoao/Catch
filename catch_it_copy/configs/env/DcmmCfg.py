@@ -147,10 +147,10 @@ bounce_init_vz = np.array([-0.2, -0.2])
 # 抛+弹自适应：球从远处抛出，飞行→落地弹跳→车接住弹跳的球
 # 初始位置（远处，车来不及接）
 throw_bounce_init_y = np.array([3.0, 3.5])
-throw_bounce_init_z = np.array([1.5, 2.0])
+throw_bounce_init_z = np.array([1.0, 1.2])
 # 初始速度（朝小车方向，水平速度快）
 throw_bounce_speed = np.array([2.0, 2.5])
-throw_bounce_vz = np.array([0.5, 1.0])
+throw_bounce_vz = np.array([0.0, 0.3])
 # 飞行宽容期（秒）：球还在飞行时，不惩罚追不上
 throw_bounce_grace = 0.5
 
@@ -169,6 +169,8 @@ throw_force_w_speed = 3.0     # 球初速度奖励
 # 终止：球落地
 throw_force_floor_z = 0.0
 throw_force_max_time = 3.0
+# 初始臂姿（抛球准备姿态，IK 可达；掌心朝前下、手指朝前上）
+throw_force_arm_joints = np.array([0.0, 0.25, -1.54, 3.06, 0.96, -1.42])
 
 ## ==================== Roll 模式专用参数 ====================
 ## Roll 模式采用"掌心朝上舀球"策略（palm-up scooping）：
@@ -251,6 +253,8 @@ roll_hand_action_scale = 0.3
 
 # roll 模式固定底座（True=固定底座只训臂；False=底座可动，车向前接球）
 roll_fix_base = False
+# roll 模式底盘初始 Y 位置（负=离桌面更远，给车更多前移空间）
+roll_base_init_y = -0.8
 
 # ---- 桌面高度奖励（新增）----
 # 桌面高度锚点（m），手在桌面上方这个高度范围内获得奖励

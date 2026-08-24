@@ -147,10 +147,10 @@ bounce_init_vz = np.array([-0.2, -0.2])
 # 抛+弹自适应：球从远处抛出，飞行→落地弹跳→车接住弹跳的球
 # 初始位置（远处，车来不及接）——固定轨迹降低随机性
 throw_bounce_init_y = np.array([3.2, 3.2])
-throw_bounce_init_z = np.array([1.1, 1.1])
+throw_bounce_init_z = np.array([0.6, 0.6])
 # 初始速度（朝小车方向，水平速度快）——固定
-throw_bounce_speed = np.array([2.2, 2.2])
-throw_bounce_vz = np.array([0.15, 0.15])
+throw_bounce_speed = np.array([1.8, 1.8])
+throw_bounce_vz = np.array([0.0, 0.0])
 # 飞行宽容期（秒）：球还在飞行时，不惩罚追不上（球飞行约1秒）
 throw_bounce_grace = 1.2
 

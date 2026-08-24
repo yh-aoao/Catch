@@ -436,11 +436,11 @@ b) 手指项全部移到 grasping 阶段
 200：
 204：roll
 207：throw_bounce
-210：bounce_track test
+210：bounce_track test + throw_basket
 211：throw_force xx
 214：bounce_catch test
 216:
-217：throw_force + bounce_catch test
+217：throw_force + bounce_catch test + throw_basket
 
 各任务训练/运行命令
 
@@ -502,3 +502,12 @@ b) 手指项全部移到 grasping 阶段
 3.throw_basket我还在训练
 4.throw_bounce任务的话，感觉小球弹得有点太高了？这样会导致越过小车，这样的话小车就需要远一点或者不能让小球弹得太高
 5.throw_force因为是扔球，所以我设想的手臂和手的初始抓球位姿应该是手背朝下，四指朝下抓着球，然后朝前扔出去，请你改变一下初始位姿，计算一下IK
+
+现在有的任务：
+1.roll：现在的情况是小车运动的还是过快了，导致小球还没到桌面边缘，小车的手已经到了桌边，并且为了跟踪小球会导致碰撞，所以能不能要么让小车学会预测小球的速度与方向然后控制自己的速度，最好到达边缘时小球也能到达并且落下，要么提前到达边缘后等待小球落下
+2.bounce：目前catch的成功率很高，百分之99，但是我觉得是正常的，因为我在view里看到的catch很成功并且大部分都是成功的，所以我觉得这个成功率没有问题，并且看他跟踪的也很成功，不然也不会有这么高的成功率，但是测试track的成功率却很低，这到底是为什么，难道track的成功评定标准对bounce任务不适用？但是效果其实还不错吗，并且我观看track任务的view发现其实成功率还是很高的，所以到底是什么原因
+3.throw_basket：还在训练
+4.throw_bounce：小球的运动随机性还是很大，能不能先固定住一个合适的运动站台，并且但是训练后的模型小车一动不动
+5.throw_force：这个扔球姿势还是不对，现在还是捧着球的姿势，并且训练后一动不动
+6.catch_throw：还没测试
+7.还要测主表

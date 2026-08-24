@@ -145,14 +145,14 @@ bounce_init_vz = np.array([-0.2, -0.2])
 
 ## ==================== Throw_Bounce 模式专用参数 ====================
 # 抛+弹自适应：球从远处抛出，飞行→落地弹跳→车接住弹跳的球
-# 初始位置（远处，车来不及接）——收窄范围降低随机性
-throw_bounce_init_y = np.array([3.2, 3.3])
+# 初始位置（远处，车来不及接）——固定轨迹降低随机性
+throw_bounce_init_y = np.array([3.2, 3.2])
 throw_bounce_init_z = np.array([1.1, 1.1])
-# 初始速度（朝小车方向，水平速度快）——收窄范围
-throw_bounce_speed = np.array([2.2, 2.3])
-throw_bounce_vz = np.array([0.1, 0.2])
-# 飞行宽容期（秒）：球还在飞行时，不惩罚追不上
-throw_bounce_grace = 0.5
+# 初始速度（朝小车方向，水平速度快）——固定
+throw_bounce_speed = np.array([2.2, 2.2])
+throw_bounce_vz = np.array([0.15, 0.15])
+# 飞行宽容期（秒）：球还在飞行时，不惩罚追不上（球飞行约1秒）
+throw_bounce_grace = 1.2
 
 ## ==================== Throw_Force 模式专用参数 ====================
 # "扔"模式：抓紧球用力甩出去（无篮筐目标，奖励=扔得远/快）
@@ -255,6 +255,8 @@ roll_hand_action_scale = 0.3
 roll_fix_base = False
 # roll 模式底盘初始 Y 位置（负=离桌面更远，给车更多前移空间）
 roll_base_init_y = -0.8
+# 球还在桌面上时的跟踪奖励缩放（0.1=降权重，避免车过早追到桌边）
+roll_on_table_scale = 0.1
 
 # ---- 桌面高度奖励（新增）----
 # 桌面高度锚点（m），手在桌面上方这个高度范围内获得奖励

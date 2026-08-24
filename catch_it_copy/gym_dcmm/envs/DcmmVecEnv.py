@@ -1095,14 +1095,14 @@ class DcmmVecEnv(gym.Env):
 
     def random_object_pose_throw_bounce(self):
         """抛+弹自适应模式：球从远处抛出，飞行后落地弹跳，车接住弹跳的球。"""
-        x = np.random.uniform(-0.05, 0.05)  # 收窄 X 范围
+        x = 0.0  # 固定 X
         y = np.random.uniform(*DcmmCfg.throw_bounce_init_y)
         radius = float(self.Dcmm.model.geom_size[self.object_id][0])
         z = np.random.uniform(*DcmmCfg.throw_bounce_init_z)
 
         # 水平速度朝向小车（-y 方向为主），速度快
         speed = np.random.uniform(*DcmmCfg.throw_bounce_speed)
-        angle_deg = np.random.uniform(-5.0, 5.0)  # 收窄角度范围
+        angle_deg = 0.0  # 固定角度
         heading = np.radians(angle_deg)
         vx = speed * math.sin(heading)
         vy = -speed * math.cos(heading)
@@ -1275,7 +1275,8 @@ class DcmmVecEnv(gym.Env):
             palm_normal = ee_xmat[:, 1]
             palm_up = ee_xmat[:, 2]
             ball_radius = DcmmCfg.throw_force_radius
-            palm_pos = ee_xpos + palm_normal * 0.03 + palm_up * (ball_radius + 0.03)
+            # 掌心朝下抓球：球在掌心正下方（palm_normal 方向偏移球半径+间隙）
+            palm_pos = ee_xpos + palm_normal * (ball_radius + 0.02)
             self.object_pos3d = palm_pos
             if self.print_info:
                 print(f"[DEBUG] _reset_simulation: THROW_FORCE mode, ball at palm={palm_pos}")
@@ -1557,7 +1558,11 @@ class DcmmVecEnv(gym.Env):
             # 即时 XY 奖励（距离越小越好）。倒数型比窄高斯更不稀疏，远距离也有学习信号。
             reward_xy = w_xy / (1.0 + (curr_d_xy / max(1e-6, sigma_xy))**2)
             # 靠近奖励（鼓励最近一步更靠近）
-            reward_approach = w_approach * max(0.0, prev_d_xy - curr_d_xy)
+            # 方案A：球还在桌面上时降权重，避免车过早追到桌边
+            _track_scale = 1.0
+            if obj_pos[2] > DcmmCfg.roll_table_height:
+                _track_scale = getattr(DcmmCfg, 'roll_on_table_scale', 0.1)
+            reward_approach = w_approach * _track_scale * max(0.0, prev_d_xy - curr_d_xy)
 
             # 高度奖励：舀球策略中手与球同高（offset=0），手放在地面上等球滚过来
             height_offset = getattr(DcmmCfg, 'roll_height_offset', 0.0)
@@ -1749,7 +1754,24 @@ class DcmmVecEnv(gym.Env):
             w_speed = getattr(DcmmCfg, 'throw_force_w_speed', 3.0)
             reward_throw_speed = w_speed * float(np.linalg.norm(obj_vel)) if self.object_throw else 0.0
 
-            reward_pos_component = reward_throw_dist + reward_throw_speed
+            # 3) 出手奖励：球刚离手给固定奖励，鼓励扔出去
+            reward_release = 0.0
+            if self.object_throw and not getattr(self, '_release_rewarded', False):
+                reward_release = 5.0
+                self._release_rewarded = True
+
+            # 4) 出手方向奖励：球离手后速度方向朝前（+y）
+            reward_throw_dir = 0.0
+            if self.object_throw:
+                try:
+                    _v = obj_vel
+                    _v_norm = np.linalg.norm(_v)
+                    if _v_norm > 0.1:
+                        reward_throw_dir = 3.0 * max(0.0, _v[1] / _v_norm)  # y 分量越大越朝前
+                except Exception:
+                    reward_throw_dir = 0.0
+
+            reward_pos_component = reward_throw_dist + reward_throw_speed + reward_release + reward_throw_dir
             reward_height = 0.0
             reward_table_h = 0.0
             reward_palm_face = 0.0
@@ -2241,13 +2263,12 @@ class DcmmVecEnv(gym.Env):
                 elapsed = self.Dcmm.data.time - self.start_time
 
                 if elapsed < hold_duration:
-                    # 持球阶段：球粘在手掌上
+                    # 持球阶段：球粘在掌心正下方
                     ee_xpos = self.Dcmm.data.body("link6").xpos.copy()
                     ee_xmat = self.Dcmm.data.body("link6").xmat.copy().reshape(3, 3)
                     palm_normal = ee_xmat[:, 1]
-                    palm_up = ee_xmat[:, 2]
                     ball_radius = DcmmCfg.throw_force_radius
-                    palm_pos = ee_xpos + palm_normal * 0.03 + palm_up * (ball_radius + 0.03)
+                    palm_pos = ee_xpos + palm_normal * (ball_radius + 0.02)
                     self.Dcmm.set_throw_pos_vel(
                         pose=np.concatenate((palm_pos, self.object_q[:])),
                         velocity=np.zeros(6))
@@ -2317,7 +2338,8 @@ class DcmmVecEnv(gym.Env):
             if self.step_touch == False:
                 if self.task == "Catching" and np.any(mask_hand):
                     self.step_touch = True
-                elif self.task == "Tracking" and np.any(mask_palm):
+                elif self.task == "Tracking" and (np.any(mask_hand) if self.object_motion in ("bounce", "throw_bounce") else np.any(mask_palm)):
+                    # bounce/throw_bounce 的球常先碰手指，track 成功也接受手指接触
                     self.step_touch = True
             # 更新相对位置/距离历史（用于 no-approach 检测）
             try:

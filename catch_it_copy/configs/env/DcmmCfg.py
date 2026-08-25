@@ -96,6 +96,8 @@ k_hand = np.array([0.75, 1.25])
 ## Object Shape and Size
 object_shape = ["box", "cylinder", "sphere", "ellipsoid", "capsule"]
 object_mesh = ["bottle_mesh", "bread_mesh", "bowl_mesh", "cup_mesh", "winnercup_mesh"]
+# 训练时限制物体形状（None=全部形状；["sphere"]=只小球）。catch_throw 时设为 ["sphere"]
+train_object_filter = None
 object_size = {
     "sphere": np.array([[0.035, 0.045]]),
     "capsule": np.array([[0.025, 0.035], [0.025, 0.04]]),
@@ -120,39 +122,39 @@ act_delay = {
     'hand': [1,],
 }
 
-## 弹跳模式物理参数
+## 弹跳模式物理参数（Domain Randomization：用范围让模型泛化物理参数）
 # 弹性系数 COR → dampratio = (1-COR)*damp_scale
-# COR=0.80 → dampratio=0.10, 弹跳 5~6 次
-bounce_restitution = np.array([0.8, 0.8])
+# 范围 [0.6, 0.95]：下限 0.6 保持有弹性，上限 0.95 弹很高
+bounce_restitution = np.array([0.6, 0.95])
 # 接触时间常数（秒）
 bounce_solref_timeconst = np.array([0.008, 0.008])
 # solref 阻尼比缩放系数
 bounce_damp_scale = 0.50
 # 自由关节阻尼（空气阻力）
 bounce_joint_damping = np.array([0.00015, 0.00015])
-# 地面摩擦系数（滑动、扭转、滚动）
-bounce_friction = np.array([[0.50, 0.05, 0.015], [0.50, 0.05, 0.015]])
-# 小球质量（kg）
-bounce_mass = np.array([0.05, 0.05])
+# 地面摩擦系数（滑动、扭转、滚动）——范围
+bounce_friction = np.array([[0.3, 0.03, 0.01], [0.8, 0.08, 0.03]])
+# 小球质量（kg）——范围
+bounce_mass = np.array([0.03, 0.08])
 # 小球半径（m）
 bounce_radius = np.array([0.04, 0.04])
-# 初始释放高度（m）
-bounce_init_height = np.array([0.90, 0.90])
-# 初始水平速度（m/s）
-bounce_init_speed = np.array([1.0, 1.0])
-# 初始竖直速度（m/s），负=向下
-bounce_init_vz = np.array([-0.2, -0.2])
+# 初始释放高度（m）——范围
+bounce_init_height = np.array([0.7, 1.2])
+# 初始水平速度（m/s）——范围
+bounce_init_speed = np.array([0.8, 1.5])
+# 初始竖直速度（m/s），负=向下——范围
+bounce_init_vz = np.array([-0.4, 0.0])
 
 ## ==================== Throw_Bounce 模式专用参数 ====================
 # 抛+弹自适应：球从远处抛出，飞行→落地弹跳→车接住弹跳的球
 # 初始位置（远处，车来不及接）——固定轨迹降低随机性
 throw_bounce_init_y = np.array([3.2, 3.2])
-throw_bounce_init_z = np.array([0.6, 0.6])
-# 初始速度（朝小车方向，水平速度快）——固定
-throw_bounce_speed = np.array([1.8, 1.8])
-throw_bounce_vz = np.array([0.0, 0.0])
-# 飞行宽容期（秒）：球还在飞行时，不惩罚追不上（球飞行约1秒）
-throw_bounce_grace = 1.2
+throw_bounce_init_z = np.array([1.2, 1.2])
+# 初始速度（朝小车方向，水平速度快；竖直向上让球"抛"起来）——固定
+throw_bounce_speed = np.array([2.5, 2.5])
+throw_bounce_vz = np.array([1.5, 1.5])
+# 飞行宽容期（秒）：球还在飞行时，不惩罚追不上（球飞行约0.7秒）
+throw_bounce_grace = 1.0
 
 ## ==================== Throw_Force 模式专用参数 ====================
 # "扔"模式：抓紧球用力甩出去（无篮筐目标，奖励=扔得远/快）
@@ -323,7 +325,7 @@ bounce_hand_friction = np.array([2.0, 0.5, 0.1])
 # 篮筐中心世界坐标（m），从 arm_base 前方约 1.8m、高 0.9m 处
 basket_center = np.array([0.0, 2.2, 0.9])
 # 篮筐半径（m），定义一个圆形目标区域
-basket_radius = 0.15
+basket_radius = 0.20
 # 篮筐高度（m），从篮筐中心向下的深度
 basket_depth = 0.3
 # 篮筐颜色 RGBA

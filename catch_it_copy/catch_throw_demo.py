@@ -65,12 +65,16 @@ def run_phase(agent, env, max_steps=150, phase_name=""):
         actions_dict = agent.action2dict(actions)
         obs, r, terminates, truncates, infos = env.step(actions_dict)
         agent.obs = {'obs': agent.obs2tensor(obs)}
-        # 成功判定
-        if infos.get('success', False):
+        # 成功判定：vector env 的 infos['success'] 是 list，取第一个元素
+        _success = infos.get('success', [False])
+        if isinstance(_success, (list, np.ndarray)):
+            _success = _success[0] if len(_success) > 0 else False
+        if _success:
             print(f"[{phase_name}] 成功，step={step}")
             return True, infos
-        if terminates or truncates:
-            print(f"[{phase_name}] 提前结束，step={step}, reason={env.call('terminated_reason')[0] if hasattr(env, 'call') else 'unknown'}")
+        # 终止判定：terminates/truncates 是 np.array，用 any
+        if np.any(terminates) or np.any(truncates):
+            print(f"[{phase_name}] 提前结束，step={step}")
             return False, infos
     print(f"[{phase_name}] 超时")
     return False, infos
@@ -81,6 +85,9 @@ def main(config: DictConfig):
     torch.multiprocessing.set_start_method('spawn')
     config.rl_device = f'cuda:{config.device_id}' if config.device_id >= 0 else 'cpu'
     config.test = True
+    # 固定小球（throw 任务默认随机形状，这里强制球体）
+    import configs.env.DcmmCfg as DcmmCfg
+    DcmmCfg.train_object_filter = ["sphere"]
 
     # 输出目录（复用现有结构）
     output_dif = os.path.join('outputs', config.output_name, 'catch_throw')

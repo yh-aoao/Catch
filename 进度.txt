@@ -622,3 +622,54 @@ Bounce 的奖励在 `gym_dcmm/envs/DcmmVecEnv.py` 中单独实现，不再直接
 
 但小球是否快速停下不只由手部摩擦决定，还同时受到小球与地面的摩擦、球地响。因此当接触阻尼、弹性系数、自由关节阻尼以及碰撞姿态的影前实现更准确的表述是“手部高摩擦有助于吸收接触后的切向运动并降低弹飞概率”，不能单独断言小球停下完全由手掌摩擦造成。
 ————当前滑动摩擦属于较高水平，需要给摩擦做泛化、消融
+
+════════════════════════════════════════════════════════════════════════════════
+8.22（二）：成功判定修复 + bounce 参数泛化 + 奖励总结
+
+【问题1：成功判定 bug 修复】
+根因：PPO 循环里 success 统计用的是 truncates（超时），不是 info['success']（抓取成功）
+  → Catching 任务的 truncated=超时，导致"成功率=超时率=100%"
+修复：
+a) _get_info 加 "success": False 默认值
+b) PPO 三个文件 success 统计改用 infos['success']
+c) catch_throw_demo.py 的 run_phase 成功/终止判定修复（vector env 的 info 是 list）
+
+【问题3：throw_basket】
+a) basket_radius 0.15 → 0.20（球筐调大一圈）
+b) 斜筐成功判定：改为"球穿过篮筐平面 + 平面内距离 < 半径"
+   （原来是简单 3D 距离，斜筐下不准确）
+
+【问题4：throw_bounce 运动模式重设】
+球"先抛后弹"：初始高度 1.2m、竖直初速 1.5（向上）、水平速度 2.5
+球抛出 → 上升 → 下降 → 落地 → 弹跳，车在弹跳阶段追踪
+
+【问题5：catch_throw 两个 bug】
+a) 固定小球：新增 train_object_filter，catch_throw 里设为 ["sphere"]
+b) run_phase 成功/终止判定修复
+
+【问题6：bounce 参数泛化（Domain Randomization）】
+改之前（固定）：
+  弹性 0.8、摩擦 [0.50,0.05,0.015]、质量 0.05、半径 0.04
+  高度 0.9、速度 1.0、竖直 -0.2
+改之后（范围）：
+  弹性 [0.6, 0.95]（下限 0.6 保持有弹性）
+  摩擦 [0.3~0.8]、质量 [0.03~0.08]
+  高度 [0.7~1.2]、速度 [0.8~1.5]、竖直 [-0.4~0.0]
+需重新训练 track 和 catch
+
+【问题7：bounce 奖励总结 vs throw】
+bounce tracking 阶段奖励（当前）：
+  reward_pos_component(reward_3d_pos + reward_approach_3d) + reward_orient
+  + reward_finger_sync(5.0) + reward_finger_dir_penalty(-3.0) + reward_finger_chain(1.0/-2.0)
+  + reward_ctrl(罚hand) + collision + constraint + touch
+bounce grasping 阶段奖励：
+  reward_finger_closure(3.0*mcp) + reward_finger_chain
+throw tracking 阶段奖励：
+  reward_ee_pos(增量) + reward_orient + reward_ctrl(罚hand) + touch
+区别：
+  1. bounce 多了手指协同奖励（sync/dir_penalty/chain），throw 没有
+  2. bounce 位置奖励是 3D 绝对值+增量，throw 是纯增量
+  3. bounce grasping 有手指闭合奖励，throw 没有（throw 靠自然闭合）
+手掌摩擦：bounce_hand_friction = [2.0, 0.5, 0.1]
+  （默认 MuJoCo 是 [1.0, 0.005, 0.0001]，大幅提升，让球碰到手掌不弹飞）
+  这确实会让球比较容易停在手上，是"软抓取"的一部分

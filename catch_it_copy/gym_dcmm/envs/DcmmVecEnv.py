@@ -652,6 +652,7 @@ class DcmmVecEnv(gym.Env):
             "env_time": env_time,
             "ee_distance": ee_distance,
             "base_distance": base_distance,
+            "success": False,  # 默认失败，抓取成功时在 step() 里改为 True
         }
     
     def update_target_ctrl(self):
@@ -713,7 +714,13 @@ class DcmmVecEnv(gym.Env):
             # 随机化物体形状/尺寸（训练模式）或网格模型（评估模式）
             geom = object_body.find(".//geom[@name='object']")
             if geom is not None:
-                object_id = np.random.choice([0, 1, 2, 3, 4])
+                # 根据 train_object_filter 过滤可选形状
+                _tf = getattr(DcmmCfg, 'train_object_filter', None)
+                if _tf is not None:
+                    _filter_idx = [i for i, s in enumerate(DcmmCfg.object_shape) if s in _tf]
+                else:
+                    _filter_idx = [0, 1, 2, 3, 4]
+                object_id = np.random.choice(_filter_idx)
                 if self.object_train:
                     # 训练模式：使用简单几何形状
                     object_shape = DcmmCfg.object_shape[object_id]
@@ -2579,8 +2586,15 @@ class DcmmVecEnv(gym.Env):
             basket_center = DcmmCfg.basket_center
             d_basket = np.linalg.norm(obj_pos - basket_center)
 
-            # 成功：球进入篮筐
-            if d_basket < DcmmCfg.basket_radius:
+            # 篮筐平面法线（斜筐绕 X 轴倾斜，法线 = 局部 Z 轴）
+            _tilt_rad = np.radians(getattr(DcmmCfg, 'basket_tilt_deg', 0.0))
+            _normal = np.array([0.0, -np.sin(_tilt_rad), np.cos(_tilt_rad)])
+            _rel = obj_pos - basket_center
+            _normal_proj = float(np.dot(_rel, _normal))          # 球沿法线方向到平面距离
+            _in_plane_dist = float(np.linalg.norm(_rel - _normal_proj * _normal))  # 平面内离中心距离
+
+            # 成功：球穿过篮筐平面（法线距离小）+ 平面内离中心 < 半径
+            if _in_plane_dist < DcmmCfg.basket_radius and abs(_normal_proj) < DcmmCfg.basket_ball_radius:
                 self.terminated = True
                 info['success'] = True
                 self.terminated_reason = 'basket_score'

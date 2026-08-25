@@ -1541,10 +1541,26 @@ class DcmmVecEnv(gym.Env):
         reward_palm_face = 0.0
         reward_vel_match = 0.0
         if self.object_motion == "roll":
+            # 方案B'：球在桌面上时追"预测落点"，球掉下来后追球本身
             try:
-                ee_pos = obs['arm']['ee_pos3d']
-                obj_pos = obs['object']['pos3d']
-                curr_d_xy = np.linalg.norm(ee_pos[0:2] - obj_pos[0:2])
+                obj_world = self.Dcmm.data.body(self.object_name).xpos.copy()
+                ee_world = self.Dcmm.data.body("link6").xpos.copy()
+                obj_vel = self.Dcmm.data.body(self.object_name).cvel[3:6].copy()
+
+                if obj_world[2] > DcmmCfg.roll_table_height:
+                    # 球还在桌面上：预测球滚到桌边(前缘 y=0.9)时的落点 x
+                    vy = obj_vel[1]
+                    vx = obj_vel[0]
+                    if abs(vy) > 0.01:
+                        t = max(0.0, (obj_world[1] - 0.9) / abs(vy))
+                        x_landing = obj_world[0] + vx * t
+                    else:
+                        x_landing = obj_world[0]
+                    target_xy = np.array([x_landing, getattr(DcmmCfg, 'roll_landing_y', 0.7)])
+                    curr_d_xy = np.linalg.norm(ee_world[0:2] - target_xy)
+                else:
+                    # 球掉下来了：追球本身
+                    curr_d_xy = np.linalg.norm(ee_world[0:2] - obj_world[0:2])
                 prev_d_xy = self.xy_dist_history[-1] if len(self.xy_dist_history) >= 1 else curr_d_xy
             except Exception:
                 curr_d_xy = np.linalg.norm(self.info.get("ee_distance", 0.0))
@@ -1557,12 +1573,8 @@ class DcmmVecEnv(gym.Env):
 
             # 即时 XY 奖励（距离越小越好）。倒数型比窄高斯更不稀疏，远距离也有学习信号。
             reward_xy = w_xy / (1.0 + (curr_d_xy / max(1e-6, sigma_xy))**2)
-            # 靠近奖励（鼓励最近一步更靠近）
-            # 方案A：球还在桌面上时降权重，避免车过早追到桌边
-            _track_scale = 1.0
-            if obj_pos[2] > DcmmCfg.roll_table_height:
-                _track_scale = getattr(DcmmCfg, 'roll_on_table_scale', 0.1)
-            reward_approach = w_approach * _track_scale * max(0.0, prev_d_xy - curr_d_xy)
+            # 靠近奖励（鼓励最近一步更靠近目标）
+            reward_approach = w_approach * max(0.0, prev_d_xy - curr_d_xy)
 
             # 高度奖励：舀球策略中手与球同高（offset=0），手放在地面上等球滚过来
             height_offset = getattr(DcmmCfg, 'roll_height_offset', 0.0)
@@ -2276,12 +2288,14 @@ class DcmmVecEnv(gym.Env):
                 elif not self.object_throw:
                     # 释放：球以手掌速度 + 大力抛掷加成飞出
                     ee_xpos = self.Dcmm.data.body("link6").xpos.copy()
+                    ee_xmat = self.Dcmm.data.body("link6").xmat.copy().reshape(3, 3)
+                    palm_normal = ee_xmat[:, 1]
                     palm_vel = self.Dcmm.data.body("link6").cvel.copy()
                     ee_lin_vel = palm_vel[3:6] if len(palm_vel) >= 6 else np.zeros(3)
                     throw_boost = DcmmCfg.throw_force_boost
                     release_vel = np.concatenate((ee_lin_vel[:3] + throw_boost, np.zeros(3)))
                     self.Dcmm.set_throw_pos_vel(
-                        pose=np.concatenate((ee_xpos + np.array([0.0, 0.05, -0.05]), self.object_q[:])),
+                        pose=np.concatenate((ee_xpos + palm_normal * (DcmmCfg.throw_force_radius + 0.02), self.object_q[:])),
                         velocity=release_vel)
                     self.Dcmm.data.ctrl[-1] = 0.0
                     self.object_throw = True

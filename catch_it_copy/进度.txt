@@ -4,6 +4,7 @@
     catch: python3 train_DCMM.py test=True task=Catching_TwoStage num_envs=1 checkpoint_catching=/home/isee/catch_it/catch_it_copy/outputs/Dcmm/2026-05-28/23:44:53/nn/best_reward_613.46.pth object_eval=false viewer=True imshow_cam=false object_motion=roll
 训练滚动roll：
     catch: python3 train_DCMM.py test=False task=Catching_TwoStage num_envs=32 checkpoint_tracking=/home/isee/catch_it/catch_it_copy/outputs/Dcmm/2026-05-28/23:44:53/nn/best_reward_613.46.pth
+
 7.10：
 roll：
     无论是track还是catch都有问题，我的建议是如果是roll的运动模式的话一开始就翻转手腕，代码还没修改完
@@ -196,3 +197,5 @@ bounce：
    - 观测新增 basket 字段：obs["basket"]["rel_pos3d"] = 篮筐相对臂末端位置
    - 固定底座：basket_fix_base = True（默认只训练臂+手）
    - 模型现在知道目标在哪，可以学习瞄准
+
+   

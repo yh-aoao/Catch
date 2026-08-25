@@ -169,8 +169,8 @@ throw_force_w_speed = 3.0     # 球初速度奖励
 # 终止：球落地
 throw_force_floor_z = 0.0
 throw_force_max_time = 3.0
-# 初始臂姿（手背朝上、掌心朝下抓球姿态，IK 网格搜索可达）
-throw_force_arm_joints = np.array([0.0, 0.0, -0.0, 3.9, 1.5, -1.55])
+# 初始臂姿（手背朝上、掌心朝前下、手指朝下夹球；IK 网格搜索可达）
+throw_force_arm_joints = np.array([-0.3637, 0.1076, -0.3946, 3.8347, 0.2845, -2.3405])
 
 ## ==================== Roll 模式专用参数 ====================
 ## Roll 模式采用"掌心朝上舀球"策略（palm-up scooping）：
@@ -255,8 +255,8 @@ roll_hand_action_scale = 0.3
 roll_fix_base = False
 # roll 模式底盘初始 Y 位置（负=离桌面更远，给车更多前移空间）
 roll_base_init_y = -0.8
-# 球还在桌面上时的跟踪奖励缩放（0.1=降权重，避免车过早追到桌边）
-roll_on_table_scale = 0.1
+# 方案B'：球在桌面上时追"预测落点"，落点 Y 坐标（世界坐标，桌边下方等待位置）
+roll_landing_y = 0.7
 
 # ---- 桌面高度奖励（新增）----
 # 桌面高度锚点（m），手在桌面上方这个高度范围内获得奖励

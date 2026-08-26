@@ -16,7 +16,7 @@ import gymnasium as gym
 import gym_dcmm
 import datetime
 import pytz
-# os.environ['MUJOCO_GL'] = 'egl'
+os.environ['MUJOCO_GL'] = 'egl'
 OmegaConf.register_new_resolver('resolve_default', lambda default, arg: default if arg=='' else arg)
 
 @hydra.main(config_name='config', config_path='configs')

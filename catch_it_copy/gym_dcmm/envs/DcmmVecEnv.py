@@ -1285,7 +1285,7 @@ class DcmmVecEnv(gym.Env):
                 self.Dcmm.data.body(name).xpos.copy()
                 for name in ("fingertip", "fingertip_2", "fingertip_3")
             ], axis=0)
-            palm_pos = mcp_center + 0.60 * (fingertip_center - mcp_center)
+            palm_pos = mcp_center + 0.35 * (fingertip_center - mcp_center)
             self.object_pos3d = palm_pos
             if self.print_info:
                 print(f"[DEBUG] _reset_simulation: THROW_FORCE mode, ball at palm={palm_pos}")
@@ -1369,7 +1369,8 @@ class DcmmVecEnv(gym.Env):
 
             # ★ 灵巧手加摩擦：减缓小球碰到手掌后弹开的速度
             # 遍历灵巧手所有碰撞几何体，设置更高的摩擦系数
-            hand_friction = getattr(DcmmCfg, 'bounce_hand_friction', [2.0, 0.5, 0.1])
+            # 滑动摩擦随机 [1.5, 2.5]，扭转/滚动固定
+            hand_friction = np.random.uniform(*DcmmCfg.bounce_hand_friction)
             _hand_collision_geoms = [
                 'mcp_joint_', 'mcp_joint_2_', 'mcp_joint_3_',
                 'pip_', 'pip_2_', 'pip_3_', 'pip_4_',
@@ -2159,7 +2160,8 @@ class DcmmVecEnv(gym.Env):
         ## 设置底盘目标速度
         # roll/throw_basket/throw_force 模式可选固定底座
         if (self.object_motion == "roll" and getattr(DcmmCfg, 'roll_fix_base', False)) or \
-           (self.object_motion in ("throw_basket", "throw_force") and getattr(DcmmCfg, 'basket_fix_base', False)):
+           (self.object_motion == "throw_basket" and getattr(DcmmCfg, 'basket_fix_base', False)) or \
+           (self.object_motion == "throw_force" and getattr(DcmmCfg, 'throw_force_fix_base', True)):
             self.Dcmm.target_base_vel[0:2] = np.zeros(2)
         else:
             self.Dcmm.target_base_vel[0:2] = action_dict['base']
@@ -2296,7 +2298,7 @@ class DcmmVecEnv(gym.Env):
                         self.Dcmm.data.body(name).xpos.copy()
                         for name in ("fingertip", "fingertip_2", "fingertip_3")
                     ], axis=0)
-                    palm_pos = mcp_center + 0.60 * (fingertip_center - mcp_center)
+                    palm_pos = mcp_center + 0.35 * (fingertip_center - mcp_center)
                     self.Dcmm.set_throw_pos_vel(
                         pose=np.concatenate((palm_pos, self.object_q[:])),
                         velocity=np.zeros(6))

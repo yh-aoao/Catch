@@ -30,7 +30,7 @@ def main():
         axis=0,
     )
     finger_span = fingertip_center - mcp_center
-    ball_pos = mcp_center + 0.60 * finger_span
+    ball_pos = mcp_center + 0.35 * finger_span
 
     structural_contacts = []
     for contact_index in range(dcmm.data.ncon):
@@ -55,7 +55,7 @@ def main():
     expected_distance = DcmmCfg.throw_force_radius + 0.02
     ball_ratio = np.linalg.norm(ball_pos - mcp_center) / np.linalg.norm(finger_span)
     print("ball grasp ratio:", round(float(ball_ratio), 4))
-    assert np.isclose(ball_ratio, 0.60, atol=1e-3), (
+    assert np.isclose(ball_ratio, 0.35, atol=1e-3), (
         "ball is not between the finger roots and fingertips"
     )
     print("throw_force pose checks passed")

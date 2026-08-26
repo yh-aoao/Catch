@@ -122,28 +122,31 @@ act_delay = {
     'hand': [1,],
 }
 
-## 弹跳模式物理参数（Domain Randomization：用范围让模型泛化物理参数）
+## 弹跳模式物理参数（固定基线 + 部分随机化）
+# ---------- 固定参数（基线，不随机） ----------
 # 弹性系数 COR → dampratio = (1-COR)*damp_scale
-# 范围 [0.7, 0.85]：0.7 弹 3~4 次，0.85 弹 5~7 次，都在合理区间（不会变滚或弹飞）
-bounce_restitution = np.array([0.7, 0.85])
+bounce_restitution = np.array([0.8, 0.8])
 # 接触时间常数（秒）
 bounce_solref_timeconst = np.array([0.008, 0.008])
+# 地面摩擦系数（滑动、扭转、滚动）——固定 [0.50, 0.05, 0.015]
+bounce_friction = np.array([[0.50, 0.05, 0.015], [0.50, 0.05, 0.015]])
+# 初始释放高度（m）——固定 0.9
+bounce_init_height = np.array([0.9, 0.9])
+# 初始水平速度（m/s）——固定 1.0
+bounce_init_speed = np.array([1.0, 1.0])
+# 初始竖直速度（m/s），负=向下——固定 -0.2
+bounce_init_vz = np.array([-0.2, -0.2])
 # solref 阻尼比缩放系数
 bounce_damp_scale = 0.50
-# 自由关节阻尼（空气阻力）
-bounce_joint_damping = np.array([0.00015, 0.00015])
-# 地面摩擦系数（滑动、扭转、滚动）——范围
-bounce_friction = np.array([[0.4, 0.04, 0.012], [0.7, 0.07, 0.025]])
-# 小球质量（kg）——范围
-bounce_mass = np.array([0.04, 0.06])
-# 小球半径（m）
-bounce_radius = np.array([0.04, 0.04])
-# 初始释放高度（m）——范围
-bounce_init_height = np.array([0.8, 1.0])
-# 初始水平速度（m/s）——范围
-bounce_init_speed = np.array([1.0, 1.3])
-# 初始竖直速度（m/s），负=向下——范围
-bounce_init_vz = np.array([-0.3, -0.1])
+# ---------- 随机化参数（Domain Randomization） ----------
+# 小球质量（kg）——随机 [0.03, 0.08]
+bounce_mass = np.array([0.03, 0.08])
+# 小球半径（m）——随机 [0.035, 0.045]
+bounce_radius = np.array([0.035, 0.045])
+# 自由关节阻尼（空气阻力）——随机
+bounce_joint_damping = np.array([0.0001, 0.0003])
+# 手部摩擦（滑动、扭转、滚动）——滑动摩擦随机 [1.5, 2.5]，其余固定
+bounce_hand_friction = np.array([[1.5, 0.5, 0.1], [2.5, 0.5, 0.1]])
 
 ## ==================== Throw_Bounce 模式专用参数 ====================
 # 抛+弹自适应：球从远处抛出，飞行→落地弹跳→车接住弹跳的球
@@ -172,7 +175,7 @@ throw_force_w_speed = 3.0     # 球初速度奖励
 throw_force_floor_z = 0.0
 throw_force_max_time = 3.0
 # 初始臂姿（恢复 XArm6 正常工作姿态，手部直接安装在 link6 上）
-throw_force_arm_joints = np.array([0.0051, 0.1469, -2.4870, 2.0097, 2.5877, -1.2363])
+throw_force_arm_joints = np.array([0.0, 0.1, -0.1, 1.8, 0.0, -1.5])
 
 ## ==================== Roll 模式专用参数 ====================
 ## Roll 模式采用"掌心朝上舀球"策略（palm-up scooping）：
@@ -364,8 +367,10 @@ basket_fail_dist = 2.5
 # 最大 episode 时长（s）
 basket_max_time = 4.0
 
-# 固定底座（True=只训练臂+手，False=底盘也参与）
-basket_fix_base = True
+# throw_basket 底座控制（False=底盘也参与瞄准篮筐）
+basket_fix_base = False
+# throw_force 底座控制（保持固定，扔球主要靠臂）
+throw_force_fix_base = True
 
 ## Define PID params for wheel drive and steering.
 # driving

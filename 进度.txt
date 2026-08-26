@@ -716,6 +716,29 @@ Xlib:  extension "NV-GLX" missing on display "��0��}".
 总结一下现在的思路：
 1.roll接住滚下的小球，思路是先预测并跟踪掉入点，等小球掉下再跟踪小球
 2.bounce测试训练完整的一版track跟catch，还有bounce_one
-3.throw_bounce问题；bounce跟throw的运动方式类似。。。。。。
-4.throw_basket
-5.throw_force
+3.throw_bounce问题；bounce跟throw的运动方式类似。。。。。。怎么区分
+4.throw_basket——扩大了球筐在训练
+5.throw_force——位姿上可能无法实现？
+
+在跑的：
+204：roll
+217：throw_basket + bounce_new_track
+
+把bounce任务变为固定的参数：
+  弹性 0.8、摩擦 [0.50,0.05,0.015]、质量 0.05、半径 0.04
+  高度 0.9、速度 1.0、竖直 -0.2
+
+  throw模型下的球形目标做了哪些泛化
+
+
+  throw_basket可以加入底座的移动，使得抛出更加自然
+
+1.roll问题
+2.throw_basket任务现在可以加入底座的移动，且保证抛出的动作更加自然（后续再说吧）
+3.bounce任务变为固定的参数完完整整的训练bounce的track跟catch
+
+1.throw_basket任务现在可以加入底座的移动了
+2.bounce任务变更为固定的参数，具体参数之前有记录在进度里：
+  弹性 0.8、摩擦 [0.50,0.05,0.015]、质量 0.05、半径 0.04
+  高度 0.9、速度 1.0、竖直 -0.2
+

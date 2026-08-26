@@ -1576,7 +1576,9 @@ class DcmmVecEnv(gym.Env):
                     # 球掉下来了：追球本身
                     curr_d_xy = np.linalg.norm(ee_world[0:2] - obj_world[0:2])
                 # 用独立变量维护上一步的目标距离（世界坐标，跟 curr 一致）
-                prev_d_xy = getattr(self, '_prev_roll_d', curr_d_xy)
+                prev_d_xy = getattr(self, '_prev_roll_d', None)
+                if prev_d_xy is None:
+                    prev_d_xy = curr_d_xy
                 self._prev_roll_d = curr_d_xy
             except Exception:
                 curr_d_xy = np.linalg.norm(self.info.get("ee_distance", 0.0))

@@ -6,6 +6,7 @@
 """
 import sys, os
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+os.environ['MUJOCO_GL'] = 'egl'  # 必须在 import gym_dcmm（内部 import mujoco）之前
 
 import gymnasium as gym
 import gym_dcmm

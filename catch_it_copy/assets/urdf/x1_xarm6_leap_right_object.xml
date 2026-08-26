@@ -206,12 +206,10 @@
                                     <!-- <geom type="mesh" mesh="p1_Link" /> -->
                                     <geom pos="0.00 -0.067 0.028" axisangle="1 0 0 0" type="mesh" contype="0" conaffinity="0" group="1" rgba="0.792157 0.819608 0.933333 1" mesh="Camera_Link" />
                                     <geom pos="0.00 -0.067 0.028" axisangle="1 0 0 0" type="mesh" rgba="0.792157 0.819608 0.933333 1" mesh="Camera_Link" />
-                                    <body name="hand_mount" pos="0 0.045 0.0325" quat="0 0 0 1">
-                                        <body name="hand_content" pos="0 -0.045 -0.0325">
-                                            <geom pos="0 0.045 0.0325" quat="0.500398 -0.499602 -0.5 -0.5" type="mesh" contype="0" conaffinity="0" group="1" rgba="0.2 0.2 0.2 1" mesh="hand_link" />
-                                            <geom pos="0 0.045 0.0325" quat="0.500398 -0.499602 -0.5 -0.5" type="mesh" rgba="0.2 0.2 0.2 1" mesh="hand_link" />
+                                    <geom pos="0 0.045 0.0325" quat="0.500398 -0.499602 -0.5 -0.5" type="mesh" contype="0" conaffinity="0" group="1" rgba="0.2 0.2 0.2 1" mesh="hand_link" />
+                                    <geom pos="0 0.045 0.0325" quat="0.500398 -0.499602 -0.5 -0.5" type="mesh" rgba="0.2 0.2 0.2 1" mesh="hand_link" />
                                     <!-- Leap Hand -->
-                                    <body name="mcp_joint" pos="0.0630634 0.0529529 0.0287337" quat="-0.707106 0.000281544 0.707107 -0.000844632">
+                                            <body name="mcp_joint" pos="0.0630634 0.0529529 0.0287337" quat="-0.707106 0.000281544 0.707107 -0.000844632">
                                         <inertial pos="0 0 0" quat="0.388585 0.626468 -0.324549 0.592628" mass="0.044" diaginertia="1.47756e-05 1.31982e-05 6.0802e-06" />
                                         <joint name="1" pos="0 0 0" axis="0 0 -1" limited="true" range="-0.314 2.23" />
                                         <geom name="mcp_joint" pos="0.0084069 0.00776624 0.0146574" type="mesh" contype="0" conaffinity="0" group="1" rgba="0.2 0.2 0.2 1" mesh="mcp_joint" />
@@ -312,8 +310,6 @@
                                         </body>
                                     </body>
                                 </body>
-                                        </body>
-                                    </body>
                             </body>
                         </body>
                     </body>

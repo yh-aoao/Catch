@@ -171,8 +171,8 @@ throw_force_w_speed = 3.0     # 球初速度奖励
 # 终止：球落地
 throw_force_floor_z = 0.0
 throw_force_max_time = 3.0
-# 初始臂姿（完整六关节协同调整，link6 Z 轴斜向下且避开机械臂/手部结构碰撞）
-throw_force_arm_joints = np.array([-0.0805, -0.1730, -0.6091, 3.6375, 0.1062, -2.2973])
+# 初始臂姿（恢复 XArm6 正常工作姿态，手部直接安装在 link6 上）
+throw_force_arm_joints = np.array([0.0051, 0.1469, -2.4870, 2.0097, 2.5877, -1.2363])
 
 ## ==================== Roll 模式专用参数 ====================
 ## Roll 模式采用"掌心朝上舀球"策略（palm-up scooping）：

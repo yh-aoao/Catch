@@ -1277,13 +1277,15 @@ class DcmmVecEnv(gym.Env):
             self.random_object_pose_throw_force()
             init_vel = np.zeros(6)
             mujoco.mj_forward(self.Dcmm.model, self.Dcmm.data)
-            ee_xpos = self.Dcmm.data.body("link6").xpos.copy()
-            ee_xmat = self.Dcmm.data.body("link6").xmat.copy().reshape(3, 3)
-            palm_normal = -ee_xmat[:, 1]
-            palm_up = ee_xmat[:, 2]
-            ball_radius = DcmmCfg.throw_force_radius
-            # 掌心朝下抓球：球在掌心正下方（palm_normal 方向偏移球半径+间隙）
-            palm_pos = ee_xpos + palm_normal * (ball_radius + 0.02)
+            mcp_center = np.mean([
+                self.Dcmm.data.body(name).xpos.copy()
+                for name in ("mcp_joint", "mcp_joint_2", "mcp_joint_3")
+            ], axis=0)
+            fingertip_center = np.mean([
+                self.Dcmm.data.body(name).xpos.copy()
+                for name in ("fingertip", "fingertip_2", "fingertip_3")
+            ], axis=0)
+            palm_pos = mcp_center + 0.60 * (fingertip_center - mcp_center)
             self.object_pos3d = palm_pos
             if self.print_info:
                 print(f"[DEBUG] _reset_simulation: THROW_FORCE mode, ball at palm={palm_pos}")
@@ -2286,26 +2288,27 @@ class DcmmVecEnv(gym.Env):
 
                 if elapsed < hold_duration:
                     # 持球阶段：球粘在掌心正下方
-                    ee_xpos = self.Dcmm.data.body("link6").xpos.copy()
-                    ee_xmat = self.Dcmm.data.body("link6").xmat.copy().reshape(3, 3)
-                    palm_normal = -ee_xmat[:, 1]
-                    ball_radius = DcmmCfg.throw_force_radius
-                    palm_pos = ee_xpos + palm_normal * (ball_radius + 0.02)
+                    mcp_center = np.mean([
+                        self.Dcmm.data.body(name).xpos.copy()
+                        for name in ("mcp_joint", "mcp_joint_2", "mcp_joint_3")
+                    ], axis=0)
+                    fingertip_center = np.mean([
+                        self.Dcmm.data.body(name).xpos.copy()
+                        for name in ("fingertip", "fingertip_2", "fingertip_3")
+                    ], axis=0)
+                    palm_pos = mcp_center + 0.60 * (fingertip_center - mcp_center)
                     self.Dcmm.set_throw_pos_vel(
                         pose=np.concatenate((palm_pos, self.object_q[:])),
                         velocity=np.zeros(6))
                     self.Dcmm.data.ctrl[-1] = self.random_mass * -self.Dcmm.model.opt.gravity[2]
                 elif not self.object_throw:
                     # 释放：球以手掌速度 + 大力抛掷加成飞出
-                    ee_xpos = self.Dcmm.data.body("link6").xpos.copy()
-                    ee_xmat = self.Dcmm.data.body("link6").xmat.copy().reshape(3, 3)
-                    palm_normal = -ee_xmat[:, 1]
                     palm_vel = self.Dcmm.data.body("link6").cvel.copy()
                     ee_lin_vel = palm_vel[3:6] if len(palm_vel) >= 6 else np.zeros(3)
                     throw_boost = DcmmCfg.throw_force_boost
                     release_vel = np.concatenate((ee_lin_vel[:3] + throw_boost, np.zeros(3)))
                     self.Dcmm.set_throw_pos_vel(
-                        pose=np.concatenate((ee_xpos + palm_normal * (DcmmCfg.throw_force_radius + 0.02), self.object_q[:])),
+                        pose=np.concatenate((self.Dcmm.data.body(self.object_name).xpos.copy(), self.object_q[:])),
                         velocity=release_vel)
                     self.Dcmm.data.ctrl[-1] = 0.0
                     self.object_throw = True
@@ -2580,8 +2583,23 @@ class DcmmVecEnv(gym.Env):
                         self.terminated = True
                         info['success'] = False
                         self.terminated_reason = 'failed_control'
-                elif info['ee_distance'] >= DcmmCfg.distance_thresh:
-                    self.terminated = True
+                elif self.object_motion == "throw":
+                    # throw 接球成功判定：球接触手 + 球速低 + 持续 N 步（对齐 roll/bounce 的 success 语义）
+                    obj_contacts = self.contacts.get('object_contacts', np.array([])).astype(int)
+                    contact_on_hand = np.any(obj_contacts >= self.hand_start_id)
+                    ball_speed = np.linalg.norm(obs['object']['v_lin_3d'])
+                    if contact_on_hand and ball_speed <= self.roll_catch_v_thresh:
+                        self.consecutive_low_vel += 1
+                    else:
+                        self.consecutive_low_vel = 0
+                    if self.consecutive_low_vel >= self.roll_catch_N_control:
+                        self.terminated = True
+                        info['success'] = True
+                        self.terminated_reason = 'catch_success'
+                    elif info['ee_distance'] >= DcmmCfg.distance_thresh:
+                        self.terminated = True
+                        info['success'] = False
+                        self.terminated_reason = 'ball_left'
 
         # ==================== throw_basket 终止判定 ====================
         if self.object_motion == "throw_basket" and not self.terminated:

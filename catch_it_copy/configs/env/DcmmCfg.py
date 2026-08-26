@@ -124,8 +124,8 @@ act_delay = {
 
 ## 弹跳模式物理参数（Domain Randomization：用范围让模型泛化物理参数）
 # 弹性系数 COR → dampratio = (1-COR)*damp_scale
-# 范围 [0.6, 0.95]：下限 0.6 保持有弹性，上限 0.95 弹很高
-bounce_restitution = np.array([0.6, 0.95])
+# 范围 [0.7, 0.85]：0.7 弹 3~4 次，0.85 弹 5~7 次，都在合理区间（不会变滚或弹飞）
+bounce_restitution = np.array([0.7, 0.85])
 # 接触时间常数（秒）
 bounce_solref_timeconst = np.array([0.008, 0.008])
 # solref 阻尼比缩放系数
@@ -133,17 +133,17 @@ bounce_damp_scale = 0.50
 # 自由关节阻尼（空气阻力）
 bounce_joint_damping = np.array([0.00015, 0.00015])
 # 地面摩擦系数（滑动、扭转、滚动）——范围
-bounce_friction = np.array([[0.3, 0.03, 0.01], [0.8, 0.08, 0.03]])
+bounce_friction = np.array([[0.4, 0.04, 0.012], [0.7, 0.07, 0.025]])
 # 小球质量（kg）——范围
-bounce_mass = np.array([0.03, 0.08])
+bounce_mass = np.array([0.04, 0.06])
 # 小球半径（m）
 bounce_radius = np.array([0.04, 0.04])
 # 初始释放高度（m）——范围
-bounce_init_height = np.array([0.7, 1.2])
+bounce_init_height = np.array([0.8, 1.0])
 # 初始水平速度（m/s）——范围
-bounce_init_speed = np.array([0.8, 1.5])
+bounce_init_speed = np.array([1.0, 1.3])
 # 初始竖直速度（m/s），负=向下——范围
-bounce_init_vz = np.array([-0.4, 0.0])
+bounce_init_vz = np.array([-0.3, -0.1])
 
 ## ==================== Throw_Bounce 模式专用参数 ====================
 # 抛+弹自适应：球从远处抛出，飞行→落地弹跳→车接住弹跳的球
@@ -171,8 +171,8 @@ throw_force_w_speed = 3.0     # 球初速度奖励
 # 终止：球落地
 throw_force_floor_z = 0.0
 throw_force_max_time = 3.0
-# 初始臂姿（手背朝上、掌心朝前下、手指朝下夹球；IK 网格搜索可达）
-throw_force_arm_joints = np.array([-0.3637, 0.1076, -0.3946, 3.8347, 0.2845, -2.3405])
+# 初始臂姿（完整六关节协同调整，link6 Z 轴斜向下且避开机械臂/手部结构碰撞）
+throw_force_arm_joints = np.array([-0.0805, -0.1730, -0.6091, 3.6375, 0.1062, -2.2973])
 
 ## ==================== Roll 模式专用参数 ====================
 ## Roll 模式采用"掌心朝上舀球"策略（palm-up scooping）：

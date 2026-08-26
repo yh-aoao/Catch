@@ -673,3 +673,49 @@ throw tracking 阶段奖励：
 手掌摩擦：bounce_hand_friction = [2.0, 0.5, 0.1]
   （默认 MuJoCo 是 [1.0, 0.005, 0.0001]，大幅提升，让球碰到手掌不弹飞）
   这确实会让球比较容易停在手上，是"软抓取"的一部分
+
+
+200：
+204：roll
+207：throw_bounce
+210：bounce_track_test
+211：throw_force
+214：
+216:
+217：throw_basket + bounce_one
+
+204：roll
+207：throw_bounce
+217：throw_basket + bounce_one + bounce_new_track
+
+需不需要改回来bounce的参数训练bounce_one？————bounce_one的效果就是很差，不用管
+
+
+1.roll现在的情况是：小车一直远离桌面，远离小球，奖励函数在两百多左右，成功率一直是0
+2.throw_bounce要不先放弃吧，
+3.修改了参数范围的bounce_track，目标小球要么是没到小车附件就不弹了靠近地面几乎变成滚，要么就是弹太高了超越过小车了，这个参数设置不合理
+4.catch_throw显示的：num_actors:  32
+actions_num:  20
+net_config:  {'actor_units': [256, 128], 'actions_num': 20, 'input_shape': (30,), 'separate_value_mlp': True}
+mlp_input_shape:  30
+RunningMeanStd:  (18,)
+RunningMeanStd:  (12,)
+RunningMeanStd:  (1,)
+### Start loading tracking model
+[checkpoint] Partially loaded resized tensors:
+   sigma_t: (6,) -> (8,)
+   mu_t.weight: (6, 128) -> (8, 128)
+   mu_t.bias: (6,) -> (8,)
+[接球] 提前结束，step=62
+Xlib:  extension "NV-GLX" missing on display "���F�}".
+Xlib:  extension "NV-GLX" missing on display "��0��}".
+接球失败，结束
+
+但是明明在viewer里面看接球是成功的
+
+总结一下现在的思路：
+1.roll接住滚下的小球，思路是先预测并跟踪掉入点，等小球掉下再跟踪小球
+2.bounce测试训练完整的一版track跟catch，还有bounce_one
+3.throw_bounce问题；bounce跟throw的运动方式类似。。。。。。
+4.throw_basket
+5.throw_force

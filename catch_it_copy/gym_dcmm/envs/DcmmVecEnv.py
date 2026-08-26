@@ -1279,7 +1279,7 @@ class DcmmVecEnv(gym.Env):
             mujoco.mj_forward(self.Dcmm.model, self.Dcmm.data)
             ee_xpos = self.Dcmm.data.body("link6").xpos.copy()
             ee_xmat = self.Dcmm.data.body("link6").xmat.copy().reshape(3, 3)
-            palm_normal = ee_xmat[:, 1]
+            palm_normal = -ee_xmat[:, 1]
             palm_up = ee_xmat[:, 2]
             ball_radius = DcmmCfg.throw_force_radius
             # 掌心朝下抓球：球在掌心正下方（palm_normal 方向偏移球半径+间隙）
@@ -1474,6 +1474,7 @@ class DcmmVecEnv(gym.Env):
         self.prev_d_basket = 2.0  # 重置上一步到篮筐距离（throw_basket 模式）
         self._release_rewarded = False  # 出手奖励是否已给（每回合重置）
         self._prev_basket_obj = None    # 上一策略步球位置（向前位移奖励用）
+        self._prev_roll_d = None        # 上一策略步 roll 目标距离（方案B' 用）
         self._throw_force_start = None  # 扔模式球初始位置（距离奖励用）
         self.consecutive_low_vel = 0
 
@@ -1568,7 +1569,9 @@ class DcmmVecEnv(gym.Env):
                 else:
                     # 球掉下来了：追球本身
                     curr_d_xy = np.linalg.norm(ee_world[0:2] - obj_world[0:2])
-                prev_d_xy = self.xy_dist_history[-1] if len(self.xy_dist_history) >= 1 else curr_d_xy
+                # 用独立变量维护上一步的目标距离（世界坐标，跟 curr 一致）
+                prev_d_xy = getattr(self, '_prev_roll_d', curr_d_xy)
+                self._prev_roll_d = curr_d_xy
             except Exception:
                 curr_d_xy = np.linalg.norm(self.info.get("ee_distance", 0.0))
                 prev_d_xy = curr_d_xy
@@ -2285,7 +2288,7 @@ class DcmmVecEnv(gym.Env):
                     # 持球阶段：球粘在掌心正下方
                     ee_xpos = self.Dcmm.data.body("link6").xpos.copy()
                     ee_xmat = self.Dcmm.data.body("link6").xmat.copy().reshape(3, 3)
-                    palm_normal = ee_xmat[:, 1]
+                    palm_normal = -ee_xmat[:, 1]
                     ball_radius = DcmmCfg.throw_force_radius
                     palm_pos = ee_xpos + palm_normal * (ball_radius + 0.02)
                     self.Dcmm.set_throw_pos_vel(
@@ -2296,7 +2299,7 @@ class DcmmVecEnv(gym.Env):
                     # 释放：球以手掌速度 + 大力抛掷加成飞出
                     ee_xpos = self.Dcmm.data.body("link6").xpos.copy()
                     ee_xmat = self.Dcmm.data.body("link6").xmat.copy().reshape(3, 3)
-                    palm_normal = ee_xmat[:, 1]
+                    palm_normal = -ee_xmat[:, 1]
                     palm_vel = self.Dcmm.data.body("link6").cvel.copy()
                     ee_lin_vel = palm_vel[3:6] if len(palm_vel) >= 6 else np.zeros(3)
                     throw_boost = DcmmCfg.throw_force_boost

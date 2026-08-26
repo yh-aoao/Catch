@@ -2429,8 +2429,8 @@ class DcmmVecEnv(gym.Env):
                         # roll 模式：只检查越界，不因手接触球而终止
                         self.terminated = out_of_bounds
                     else:
-                        # bounce 跟踪失败判定
-                        bad_object_contact = np.any(mask_coll) or np.any(mask_finger)
+                        # bounce 跟踪失败判定：碰手指也算成功（由 step_touch 处理），只有碰地面/障碍才算失败
+                        bad_object_contact = np.any(mask_coll)
                         if bad_object_contact:
                             self.terminated = True
                             self.terminated_reason = 'early_contact'

@@ -742,3 +742,48 @@ Xlib:  extension "NV-GLX" missing on display "��0��}".
   弹性 0.8、摩擦 [0.50,0.05,0.015]、质量 0.05、半径 0.04
   高度 0.9、速度 1.0、竖直 -0.2
 
+200：roll
+217：throw_basket + bounce_new_track
+
+## 推送 GitHub 的命令（git 仓库根 = F:\yjs\Catch）
+
+# 1. 查看改动
+git status --short
+
+# 2. 提交
+git add -A
+git commit -m "描述改动"
+
+# 3. 推送
+git push origin master
+
+# 若 push 报错 "Failed to connect to 127.0.0.1 port 7890"（代理软件 Clash/V2Ray 没开），
+# 改用下面这条绕过代理直接推：
+git -c http.proxy= -c https.proxy= push origin master
+
+
+(dcmm) yuhao2@moss:~/Catch/catch_it_copy$ grep MUJOCO_GL train_DCMM.py
+os.environ['MUJOCO_GL'] = 'egl'
+(dcmm) yuhao2@moss:~/Catch/catch_it_copy$
+[roll] 0:bash*       
+
+还是报错：
+Start Training/Testing the Agent
+Error executing job with overrides: ['test=False', 'task=Tracking', 'num_envs=32', 'object_motion=roll', 'device_id=4']
+Traceback (most recent call last):
+  File "train_DCMM.py", line 101, in main
+    agent.train()
+  File "/home/yuhao2/Catch/catch_it_copy/gym_dcmm/algs/ppo_dcmm/ppo_dcmm_track.py", line 175, in train
+    a_losses, c_losses, b_losses, entropies, kls = self.train_epoch()
+  File "/home/yuhao2/Catch/catch_it_copy/gym_dcmm/algs/ppo_dcmm/ppo_dcmm_track.py", line 293, in train_epoch
+    self.play_steps()
+  File "/home/yuhao2/Catch/catch_it_copy/gym_dcmm/algs/ppo_dcmm/ppo_dcmm_track.py", line 441, in play_steps
+    obs, r, terminates, truncates, infos = self.env.step(actions_dict)
+  File "/mnt/conda/yuhao2/miniconda3/envs/dcmm/lib/python3.8/site-packages/gymnasium/experimental/vector/async_vector_env.py", line 376, in step
+    return self.step_wait()
+  File "/mnt/conda/yuhao2/miniconda3/envs/dcmm/lib/python3.8/site-packages/gymnasium/experimental/vector/async_vector_env.py", line 338, in step_wait
+    obs, rew, terminated, truncated, info = result
+TypeError: cannot unpack non-iterable NoneType object
+
+Set the environment variable HYDRA_FULL_ERROR=1 for a complete stack trace.
+(dcmm) yuhao2@moss:~/Catch/catch_it_copy$                          

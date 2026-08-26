@@ -1,8 +1,11 @@
 from __future__ import annotations
 
+import os
+# 必须在 import gym_dcmm（内部 import mujoco）之前设置，否则 mujoco 用默认 GL 后端导致 gladLoadGL
+os.environ['MUJOCO_GL'] = 'egl'
+
 import hydra
 import torch
-import os
 import random
 import wandb
 from hydra.utils import to_absolute_path
@@ -16,7 +19,6 @@ import gymnasium as gym
 import gym_dcmm
 import datetime
 import pytz
-os.environ['MUJOCO_GL'] = 'egl'
 OmegaConf.register_new_resolver('resolve_default', lambda default, arg: default if arg=='' else arg)
 
 @hydra.main(config_name='config', config_path='configs')

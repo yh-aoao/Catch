@@ -2745,7 +2745,11 @@ class DcmmVecEnv(gym.Env):
         """
         imgs = np.zeros((0, self.img_size[0], self.img_size[1]))
         imgs_depth = np.zeros((0, self.img_size[0], self.img_size[1]))
-        
+
+        # 无头训练模式（无 viewer、无图像显示）跳过渲染，避免 headless 服务器上 GL/egl 初始化问题
+        if not self.imshow_cam and self.Dcmm.viewer is None:
+            return imgs
+
         # 遍历所有相机
         for camera_name in self.camera_name:
             if self.render_mode == "human":

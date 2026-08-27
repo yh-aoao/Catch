@@ -205,10 +205,13 @@ class DcmmVecEnv(gym.Env):
         # 设置相机配置（从DcmmCfg读取宽度/高度）
         self.Dcmm.model.vis.global_.offwidth = DcmmCfg.cam_config["width"]
         self.Dcmm.model.vis.global_.offheight = DcmmCfg.cam_config["height"]
-        # 初始化Mujoco渲染器
-        self.mujoco_renderer = MujocoRenderer(
-            self.Dcmm.model, self.Dcmm.data
-        )
+        # 初始化Mujoco渲染器（无头训练模式不创建，避免 spawn 多进程下 GL 上下文初始化崩溃）
+        if self.imshow_cam or self.Dcmm.open_viewer:
+            self.mujoco_renderer = MujocoRenderer(
+                self.Dcmm.model, self.Dcmm.data
+            )
+        else:
+            self.mujoco_renderer = None
         
         # 启动Mujoco可视化窗口（如果开启）
         if self.Dcmm.open_viewer:
@@ -2747,6 +2750,10 @@ class DcmmVecEnv(gym.Env):
         """
         imgs = np.zeros((0, self.img_size[0], self.img_size[1]))
         imgs_depth = np.zeros((0, self.img_size[0], self.img_size[1]))
+
+        # 无头训练模式（无 viewer、无图像显示）跳过渲染，避免 spawn 多进程下 GL 初始化崩溃
+        if not self.imshow_cam and self.Dcmm.viewer is None:
+            return imgs
 
         # 遍历所有相机
         for camera_name in self.camera_name:

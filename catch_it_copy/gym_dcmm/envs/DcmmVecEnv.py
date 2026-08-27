@@ -1746,9 +1746,60 @@ class DcmmVecEnv(gym.Env):
                     reward_forward = 0.0
             self._prev_basket_obj = obj_pos.copy()
 
+            # 8) 过顶奖励：球接近篮筐水平位置时，高度略高于篮筐（抛物线正确，从上方落入）
+            reward_apex = 0.0
+            if self.object_throw:
+                try:
+                    _horiz = float(np.linalg.norm((obj_pos - basket_center)[:2]))
+                    if _horiz < 0.4:
+                        _dz = float(obj_pos[2] - basket_center[2])
+                        w_apex = getattr(DcmmCfg, 'basket_w_apex', 4.0)
+                        reward_apex = w_apex * max(0.0, 1.0 - abs(_dz - 0.2) / 0.4)
+                except Exception:
+                    reward_apex = 0.0
+
+            # 9) 出手速度大小奖励：球速适中（约 3 m/s 能飞到篮筐，不过大过小）
+            reward_speed_ok = 0.0
+            if self.object_throw:
+                try:
+                    _vnorm = float(np.linalg.norm(obs['object']['v_lin_3d']))
+                    w_speed_ok = getattr(DcmmCfg, 'basket_w_speed_ok', 2.0)
+                    reward_speed_ok = w_speed_ok * max(0.0, 1.0 - abs(_vnorm - 3.0) / 2.0)
+                except Exception:
+                    reward_speed_ok = 0.0
+
+            # 10) 动作平滑奖励：惩罚 arm/base 动作突变（相邻步差分），让抛球动作更自然流畅
+            reward_smooth = 0.0
+            try:
+                _cur = np.concatenate([np.asarray(ctrl['base']).reshape(-1),
+                                       np.asarray(ctrl['arm']).reshape(-1)])
+                _prev = self.prev_ctrl[:_cur.size]
+                if _prev.shape == _cur.shape:
+                    w_smooth = getattr(DcmmCfg, 'basket_w_smooth', 0.5)
+                    reward_smooth = -w_smooth * float(np.linalg.norm(_cur - _prev))
+                self.prev_ctrl[:_cur.size] = _cur
+            except Exception:
+                reward_smooth = 0.0
+
+            # 11) 底座瞄准奖励：底座前进方向对准篮筐，鼓励底盘移动配合瞄准
+            reward_base_aim = 0.0
+            try:
+                base_pos = self.Dcmm.data.body("arm_base").xpos[0:2]
+                to_basket = basket_center[0:2] - base_pos
+                _d = float(np.linalg.norm(to_basket))
+                if _d > 0.1:
+                    base_yaw = quat2theta(self.Dcmm.data.body("base_link").xquat[0],
+                                          self.Dcmm.data.body("base_link").xquat[3])
+                    base_fwd = np.array([math.sin(base_yaw), math.cos(base_yaw)])
+                    w_base_aim = getattr(DcmmCfg, 'basket_w_base_aim', 1.0)
+                    reward_base_aim = w_base_aim * float(np.dot(base_fwd, to_basket / _d))
+            except Exception:
+                reward_base_aim = 0.0
+
             # 汇总位置相关奖励
             reward_pos_component = reward_basket_dist + reward_basket_approach + reward_score + reward_above \
-                                   + reward_release + reward_release_dir + reward_forward
+                                   + reward_release + reward_release_dir + reward_forward \
+                                   + reward_apex + reward_speed_ok + reward_smooth + reward_base_aim
             reward_height = 0.0
             reward_table_h = 0.0
             reward_palm_face = 0.0

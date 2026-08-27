@@ -138,15 +138,15 @@ bounce_init_speed = np.array([1.0, 1.0])
 bounce_init_vz = np.array([-0.2, -0.2])
 # solref 阻尼比缩放系数
 bounce_damp_scale = 0.50
-# ---------- 随机化参数（Domain Randomization） ----------
-# 小球质量（kg）——随机 [0.03, 0.08]
-bounce_mass = np.array([0.03, 0.08])
-# 小球半径（m）——随机 [0.035, 0.045]
-bounce_radius = np.array([0.035, 0.045])
-# 自由关节阻尼（空气阻力）——随机
-bounce_joint_damping = np.array([0.0001, 0.0003])
-# 手部摩擦（滑动、扭转、滚动）——滑动摩擦随机 [1.5, 2.5]，其余固定
-bounce_hand_friction = np.array([[1.5, 0.5, 0.1], [2.5, 0.5, 0.1]])
+# ---------- 随机化参数（Domain Randomization，范围收窄） ----------
+# 小球质量（kg）——随机 [0.04, 0.06]（基线 0.05）
+bounce_mass = np.array([0.04, 0.06])
+# 小球半径（m）——随机 [0.038, 0.042]（基线 0.04）
+bounce_radius = np.array([0.038, 0.042])
+# 自由关节阻尼（空气阻力）——随机 [0.00015, 0.00025]
+bounce_joint_damping = np.array([0.00015, 0.00025])
+# 手部摩擦（滑动、扭转、滚动）——滑动摩擦随机 [1.8, 2.2]，其余固定
+bounce_hand_friction = np.array([[1.8, 0.5, 0.1], [2.2, 0.5, 0.1]])
 
 ## ==================== Throw_Bounce 模式专用参数 ====================
 # 抛+弹自适应：球从远处抛出，飞行→落地弹跳→车接住弹跳的球

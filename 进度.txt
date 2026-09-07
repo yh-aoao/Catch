@@ -769,3 +769,54 @@ git -c http.proxy= -c https.proxy= push origin master
 4.throw_bounce的一些思考
 5.能否实现catch——throw？
 
+echo $DISPLAY显示“:1”
+
+
+1.roll还需要再跑一看看
+2.basket的话感觉抛的不是很准确，很多都没有抛入篮子里，而且不够动作自然？需要增加这方面的奖励函数
+3.bounce的参数泛化问题。要范围小一点？
+
+
+改动完成并验证通过。总结：
+
+本次 bounce 泛化改动
+固定参数（改回固定基线）
+参数	值
+弹性系数 COR	0.8
+地面摩擦	[0.50, 0.05, 0.015]
+初始高度	0.9
+初始水平速度	1.0
+初始竖直速度	-0.2
+接触时间常数	0.008（保持不变）
+
+随机化参数（domain randomization）
+参数	范围
+半径	[0.035, 0.045] m
+质量	[0.03, 0.08] kg
+空气阻尼	[0.0001, 0.0003]
+手部摩擦（滑动）	[1.5, 2.5]（扭转/滚动固定）
+
+参数泛化的要范围小一点？
+
+
+roll：想要追踪落点，现在是如何做的
+bounce：小球的运动太奇怪了
+basket：可以改变圆框位置，让小车学习先移动到目标正前方才方便后续的抛出，然后再抛
+
+
+下次进度汇报：
+1.roll能不能训出来一版接触滚下来的小球
+2.bounce设计泛化看看效果
+3.throw——basket加入底座的移动
+4.throw_bounce的一些思考
+5.能否实现catch——throw？
+
+1.
+2.bounce泛化后效果很差，还是
+3.basket：每次的训练/测试可以改变圆框位置，圆框随机出现，让小车学习先移动到目标正前方才方便后续的抛出，然后再抛
+4.throw_bounce的一些思考：throw就变成弹了
+5.catch——throw还没测试
+
+
+
+python3 train_DCMM.py test=False task=Tracking num_envs=32 object_motion=throw_basket

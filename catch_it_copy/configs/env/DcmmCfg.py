@@ -139,10 +139,10 @@ bounce_init_vz = np.array([-0.2, -0.2])
 # solref 阻尼比缩放系数
 bounce_damp_scale = 0.50
 # ---------- 随机化参数（Domain Randomization，范围收窄） ----------
-# 小球质量（kg）——随机 [0.04, 0.06]（基线 0.05）
-bounce_mass = np.array([0.04, 0.06])
-# 小球半径（m）——随机 [0.038, 0.042]（基线 0.04）
-bounce_radius = np.array([0.038, 0.042])
+# 小球质量（kg）——随机 [0.045, 0.055]（基线 0.05，收窄避免轻球弹不起来）
+bounce_mass = np.array([0.045, 0.055])
+# 小球半径（m）——随机 [0.039, 0.041]（基线 0.04）
+bounce_radius = np.array([0.039, 0.041])
 # 自由关节阻尼（空气阻力）——随机 [0.00015, 0.00025]
 bounce_joint_damping = np.array([0.00015, 0.00025])
 # 手部摩擦（滑动、扭转、滚动）——滑动摩擦随机 [1.8, 2.2]，其余固定
@@ -262,6 +262,8 @@ roll_fix_base = False
 roll_base_init_y = -0.8
 # 方案B'：球在桌面上时追"预测落点"，落点 Y 坐标（世界坐标，桌边下方等待位置）
 roll_landing_y = 0.7
+# 落点锁定阈值：球滚过此 y（接近桌边）后冻结 x_landing，避免预测落点持续漂移
+roll_lock_landing_y = 1.5
 
 # ---- 桌面高度奖励（新增）----
 # 桌面高度锚点（m），手在桌面上方这个高度范围内获得奖励
@@ -322,6 +324,8 @@ bounce_hand_action_scale = 0.3     # 跟踪阶段手指动作缩放系数（0=�
 # ---- 篮筐参数 ----
 # 篮筐中心世界坐标（m），从 arm_base 前方约 1.8m、高 0.9m 处
 basket_center = np.array([0.0, 2.2, 0.9])
+# 篮筐 x 轴（左右）随机范围（每 episode 采样，训练底座横向移动 + 先到正前方）
+basket_center_x_range = np.array([-0.3, 0.3])
 # 篮筐半径（m），定义一个圆形目标区域
 basket_radius = 0.20
 # 篮筐高度（m），从篮筐中心向下的深度
@@ -353,6 +357,10 @@ basket_w_above = 2.0
 basket_w_ctrl_base = 0.1
 basket_w_ctrl_arm = 0.5
 basket_w_ctrl_hand = 0.1
+# 底座到篮筐正前方的奖励权重（鼓励先移动到底座 x 对齐篮筐、y 停在理想距离）
+basket_w_base_front = 2.0
+# 底座到篮筐的理想 y 距离（m），停在这个距离处视为"正前方到位"
+basket_base_front_dist = 0.6
 
 # ---- 抛球入篮终止判定 ----
 # 球落地则判定失败

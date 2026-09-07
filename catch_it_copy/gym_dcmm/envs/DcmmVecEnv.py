@@ -374,6 +374,8 @@ class DcmmVecEnv(gym.Env):
             self.bounce_catch_wait_steps = getattr(DcmmCfg, 'bounce_catch_wait_steps', 20)
         self.consecutive_low_vel = 0
         self.terminated_reason = None
+        # 当前 episode 篮筐中心（y 每 episode 随机，_reset_simulation 里采样覆盖）
+        self.basket_center = DcmmCfg.basket_center.copy()
 
         # 环境信息字典（存储关键指标）
         self.info = {
@@ -597,7 +599,7 @@ class DcmmVecEnv(gym.Env):
         
         # 篮筐观测（仅 throw_basket 模式）
         if self.object_motion == "throw_basket":
-            _basket_rel = DcmmCfg.basket_center - self._get_relative_ee_pos3d()
+            _basket_rel = self.basket_center - self._get_relative_ee_pos3d()
             obs["basket"] = {
                 "rel_pos3d": _basket_rel + np.random.normal(0, self.k_obs_object, 3),
             }
@@ -1262,6 +1264,12 @@ class DcmmVecEnv(gym.Env):
             if self.print_info:
                 print(f"[DEBUG] _reset_simulation: BOUNCE mode, init_vel={init_vel}")
         elif self.object_motion == "throw_basket":
+            # 每 episode 随机篮筐 x（左右）位置（运行时改 body_pos，训练底座横向移动 + 先到正前方）
+            self.basket_center = DcmmCfg.basket_center.copy()
+            self.basket_center[0] = np.random.uniform(*DcmmCfg.basket_center_x_range)
+            _basket_bid = mujoco.mj_name2id(self.Dcmm.model, mujoco.mjtObj.mjOBJ_BODY, 'basket_target')
+            if _basket_bid >= 0:
+                self.Dcmm.model.body_pos[_basket_bid] = self.basket_center
             self.random_object_pose_throw_basket()
             init_vel = np.zeros(6)
             # 球放在手掌上方：计算 link6 位姿，沿掌心法线偏移
@@ -1361,6 +1369,18 @@ class DcmmVecEnv(gym.Env):
             # 随机化摩擦系数
             friction = np.random.uniform(*DcmmCfg.bounce_friction)
             self.Dcmm.model.geom_friction[self.object_id] = friction
+
+            # 质量/半径每 episode 随机（修复：之前只在模型加载时随机一次，训练中不变化）
+            _obj_body_id = mujoco.mj_name2id(self.Dcmm.model, mujoco.mjtObj.mjOBJ_BODY, 'object')
+            if _obj_body_id >= 0:
+                _m = np.random.uniform(*DcmmCfg.bounce_mass)
+                _r = np.random.uniform(*DcmmCfg.bounce_radius)
+                self.Dcmm.model.geom_size[self.object_id][0] = _r
+                # 实心球惯性 I = (2/5) m r²，质量/惯性需同步更新
+                _I = (2.0 / 5.0) * _m * _r * _r
+                self.Dcmm.model.body_mass[_obj_body_id] = _m
+                self.Dcmm.model.body_inertia[_obj_body_id] = np.eye(3) * _I
+                self.random_mass = _m
 
             # 随机化自由关节阻尼（空气阻力，值很小以保证多次弹跳）
             obj_joint_id = mujoco.mj_name2id(self.Dcmm.model, mujoco.mjtObj.mjOBJ_JOINT, 'object')
@@ -1481,6 +1501,7 @@ class DcmmVecEnv(gym.Env):
         self._release_rewarded = False  # 出手奖励是否已给（每回合重置）
         self._prev_basket_obj = None    # 上一策略步球位置（向前位移奖励用）
         self._prev_roll_d = None        # 上一策略步 roll 目标距离（方案B' 用）
+        self._locked_landing_x = None   # roll 锁定落点 x（球滚过阈值后冻结）
         self._throw_force_start = None  # 扔模式球初始位置（距离奖励用）
         self.consecutive_low_vel = 0
 
@@ -1555,7 +1576,7 @@ class DcmmVecEnv(gym.Env):
         reward_palm_face = 0.0
         reward_vel_match = 0.0
         if self.object_motion == "roll":
-            # 方案B'：球在桌面上时追"预测落点"，球掉下来后追球本身
+            # 方案B'：球在桌面上时追"预测落点"（滚近桌边后锁定），球掉下来后追球本身
             try:
                 obj_world = self.Dcmm.data.body(self.object_name).xpos.copy()
                 ee_world = self.Dcmm.data.body("link6").xpos.copy()
@@ -1570,11 +1591,20 @@ class DcmmVecEnv(gym.Env):
                         x_landing = obj_world[0] + vx * t
                     else:
                         x_landing = obj_world[0]
+                    # 落点锁定：球滚过阈值后冻结 x_landing，避免预测漂移导致手追"移动的虚目标"
+                    lock_y = getattr(DcmmCfg, 'roll_lock_landing_y', 1.5)
+                    if obj_world[1] <= lock_y:
+                        if self._locked_landing_x is None:
+                            self._locked_landing_x = x_landing  # 第一次过阈值时锁定
+                        x_landing = self._locked_landing_x
+                    else:
+                        self._locked_landing_x = None  # 球还远，预测未稳定，继续实时更新
                     target_xy = np.array([x_landing, getattr(DcmmCfg, 'roll_landing_y', 0.7)])
                     curr_d_xy = np.linalg.norm(ee_world[0:2] - target_xy)
                 else:
                     # 球掉下来了：追球本身
                     curr_d_xy = np.linalg.norm(ee_world[0:2] - obj_world[0:2])
+                    self._locked_landing_x = None  # 球已落下，清除锁定
                 # 用独立变量维护上一步的目标距离（世界坐标，跟 curr 一致）
                 prev_d_xy = getattr(self, '_prev_roll_d', None)
                 if prev_d_xy is None:
@@ -1685,7 +1715,7 @@ class DcmmVecEnv(gym.Env):
             # 核心：球离篮筐越近越好，入篮有大额奖励
             try:
                 obj_pos = obs['object']['pos3d']
-                basket_center = DcmmCfg.basket_center
+                basket_center = self.basket_center
                 curr_d_basket = np.linalg.norm(obj_pos - basket_center)
                 prev_d_basket = getattr(self, 'prev_d_basket', curr_d_basket)
             except Exception:
@@ -1709,7 +1739,7 @@ class DcmmVecEnv(gym.Env):
 
             # 4) 篮筐上方奖励（鼓励从上方接近）
             w_above = getattr(DcmmCfg, 'basket_w_above', 2.0)
-            dz = obj_pos[2] - DcmmCfg.basket_center[2]
+            dz = obj_pos[2] - self.basket_center[2]
             reward_above = w_above * max(0.0, dz) / (1.0 + abs(dz))
 
             # 5) 出手奖励：球刚离手给固定奖励，鼓励抛球而不是握着不放
@@ -1796,10 +1826,22 @@ class DcmmVecEnv(gym.Env):
             except Exception:
                 reward_base_aim = 0.0
 
+            # 12) 底座正前方奖励：底座 x 对齐篮筐 x、y 停在篮筐前方理想距离（先到位再抛）
+            reward_base_front = 0.0
+            try:
+                _base_xy = self.Dcmm.data.body("arm_base").xpos[0:2]
+                _dx = abs(_base_xy[0] - self.basket_center[0])
+                _dy = abs((self.basket_center[1] - _base_xy[1]) - DcmmCfg.basket_base_front_dist)
+                _w_front = getattr(DcmmCfg, 'basket_w_base_front', 2.0)
+                reward_base_front = _w_front * max(0.0, 1.0 - _dx / 0.5) * max(0.0, 1.0 - _dy / 0.5)
+            except Exception:
+                reward_base_front = 0.0
+
             # 汇总位置相关奖励
             reward_pos_component = reward_basket_dist + reward_basket_approach + reward_score + reward_above \
                                    + reward_release + reward_release_dir + reward_forward \
-                                   + reward_apex + reward_speed_ok + reward_smooth + reward_base_aim
+                                   + reward_apex + reward_speed_ok + reward_smooth + reward_base_aim \
+                                   + reward_base_front
             reward_height = 0.0
             reward_table_h = 0.0
             reward_palm_face = 0.0
@@ -1961,7 +2003,9 @@ class DcmmVecEnv(gym.Env):
 
         # 位置项合并：roll 使用 XY + approach；bounce 使用 3D + approach；throw_basket 使用距离+入篮；throw 保持原有基线项
         if self.object_motion == "roll":
-            reward_pos_component = reward_approach  # 只保留靠近增量（跟 throw 一致）
+            # 恢复绝对距离 + 靠近增量：reward_xy 提供"落点在哪、离多远"的方向引导，
+            # 避免纯增量奖励在目标漂移时退化成"跟随小球"
+            reward_pos_component = reward_xy + reward_approach
         elif self.object_motion in ("bounce", "throw_bounce"):
             # 绝对位置奖励 + 靠近增量（绝对奖励提供稠密信号，避免跟踪丢失）
             reward_pos_component = reward_3d_pos + reward_approach_3d
@@ -2662,7 +2706,7 @@ class DcmmVecEnv(gym.Env):
         # ==================== throw_basket 终止判定 ====================
         if self.object_motion == "throw_basket" and not self.terminated:
             obj_pos = obs['object']['pos3d']
-            basket_center = DcmmCfg.basket_center
+            basket_center = self.basket_center
             d_basket = np.linalg.norm(obj_pos - basket_center)
 
             # 篮筐平面法线（斜筐绕 X 轴倾斜，法线 = 局部 Z 轴）

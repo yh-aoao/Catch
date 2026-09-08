@@ -1377,9 +1377,10 @@ class DcmmVecEnv(gym.Env):
                 _r = np.random.uniform(*DcmmCfg.bounce_radius)
                 self.Dcmm.model.geom_size[self.object_id][0] = _r
                 # 实心球惯性 I = (2/5) m r²，质量/惯性需同步更新
+                # MuJoCo body_inertia 为 (nbody, 3) 对角惯性（Ixx, Iyy, Izz），球对称三者相等
                 _I = (2.0 / 5.0) * _m * _r * _r
                 self.Dcmm.model.body_mass[_obj_body_id] = _m
-                self.Dcmm.model.body_inertia[_obj_body_id] = np.eye(3) * _I
+                self.Dcmm.model.body_inertia[_obj_body_id] = np.full(3, _I)
                 self.random_mass = _m
 
             # 随机化自由关节阻尼（空气阻力，值很小以保证多次弹跳）

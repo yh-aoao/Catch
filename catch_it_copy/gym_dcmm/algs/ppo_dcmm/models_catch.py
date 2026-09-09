@@ -34,6 +34,8 @@ class ActorCritic(nn.Module):
         self.separate_value_mlp = separate_value_mlp
 
         actions_num = kwargs.pop('actions_num')
+        tracking_actions_num = kwargs.pop('tracking_actions_num', actions_num - 12)
+        catching_actions_num = actions_num - tracking_actions_num
         input_shape = kwargs.pop('input_shape')
         self.units = kwargs.pop('actor_units')
         mlp_input_shape = input_shape[0]
@@ -45,12 +47,12 @@ class ActorCritic(nn.Module):
         # if self.separate_value_mlp:
         self.value_mlp = MLP(units=self.units, input_size=mlp_input_shape)
         self.value = torch.nn.Linear(out_size, 1)
-        self.mu_t = torch.nn.Linear(out_size, actions_num-12)
-        self.mu_c = torch.nn.Linear(out_size, actions_num-8)
+        self.mu_t = torch.nn.Linear(out_size, tracking_actions_num)
+        self.mu_c = torch.nn.Linear(out_size, catching_actions_num)
         self.sigma_t = nn.Parameter(
-            torch.zeros(actions_num-12, requires_grad=True, dtype=torch.float32), requires_grad=True)
+            torch.zeros(tracking_actions_num, requires_grad=True, dtype=torch.float32), requires_grad=True)
         self.sigma_c = nn.Parameter(
-            torch.zeros(actions_num-8, requires_grad=True, dtype=torch.float32), requires_grad=True)
+            torch.zeros(catching_actions_num, requires_grad=True, dtype=torch.float32), requires_grad=True)
 
         for m in self.modules():
             if isinstance(m, nn.Conv2d) or isinstance(m, nn.Conv1d):

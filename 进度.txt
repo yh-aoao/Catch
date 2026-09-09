@@ -859,3 +859,15 @@ basket：感觉需要分为两阶段的训练？先是track移动底座到圆框
 
 接住弹得小球，本质方法还是强化学习，但是创新点在于sim2real：Zero-Shot Sim-to-Real Robot Learning: A Dexterous Manipulation Study on Reactive Catching
 人机交互接抛小球，纯规划 + 控制架构，不用强化学习：Catch, Throw, Repeat: Planning for Human–Robot Partner Juggling
+双臂多指机器人自主 3 球杂耍，真机中学习Rapid On-Robot Learning for Dynamic Manipulation Skills:Robot Juggling
+
+DRIS
+
+
+1.roll感觉学的还可以，需要多训练点时间，后续训练catch
+2.bounce，感觉这次的参数跟上次不一样？看看GitHub的记录
+3.basket太奇怪了，要不track就只有底座的移动？，移动到框中心的正前方，这里对应的应该是y轴？
+
+
+basket任务是分成两阶段的训练，但是目前训练的太奇怪了，要不改成track任务只有底座的移动？，移动到框中心的正前方，这里对应的应该是y轴？
+针对bounce任务，我感觉你帮我固定的参数跟我之前的固定参数不一样，我这个项目以及上传到GitHub上进行版本的保存了，上次修改参数固定的适合是在41f84160e31dc894f5edc40812f573697e546eee这一次左右，你可以查看这次修改任何比对一下仅仅针对bounce任务代码的参数以及一些逻辑有什么不同吗？然后告诉我

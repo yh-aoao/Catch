@@ -36,6 +36,7 @@ class PPO_Catch_TwoStage(object):
         net_config = {
             'actor_units': self.network_config.mlp.units,
             'actions_num': self.actions_num,
+            'tracking_actions_num': self.env.call("act_t_dim")[0],
             'input_shape': self.obs_shape,
             'separate_value_mlp': self.network_config.get('separate_value_mlp', True),
         }
@@ -140,6 +141,8 @@ class PPO_Catch_TwoStage(object):
         if checkpoint_catching or not checkpoint_tracking:
             return
         tracking_checkpoint = torch.load(checkpoint_tracking, map_location=self.device)
+        if self.model.mu_t.out_features == 2 and tracking_checkpoint['tracking_mu']['weight'].shape[0] != 2:
+            raise ValueError("Basket requires a newly trained base-only (2-action) Tracking checkpoint.")
         self.model.actor_mlp_t.load_state_dict(tracking_checkpoint['tracking_mlp'])
         self._load_compatible_module_state(self.model.mu_t, tracking_checkpoint['tracking_mu'], "tracking_mu")
         self._copy_compatible_parameter(self.model.sigma_t, tracking_checkpoint['tracking_sigma'], "tracking_sigma")
@@ -296,6 +299,8 @@ class PPO_Catch_TwoStage(object):
         self._load_compatible_model_state(checkpoint['model'])
 
     def _load_compatible_model_state(self, checkpoint_state):
+        if self.model.mu_t.out_features == 2 and checkpoint_state.get('mu_t.weight', torch.empty(0)).shape != self.model.mu_t.weight.shape:
+            raise ValueError("Old basket checkpoints use a different action split; retrain with base-only Tracking.")
         model_state = self.model.state_dict()
         loaded, expanded, skipped = [], [], []
         for name, value in checkpoint_state.items():
@@ -456,10 +461,11 @@ class PPO_Catch_TwoStage(object):
             obs["arm"]["ee_pos3d"], obs["arm"]["ee_quat"], obs["arm"]["ee_v_lin_3d"],
             obs["object"]["pos3d"], obs["object"]["v_lin_3d"],
         ]
-        if "hand" in obs:
-            _parts.append(obs["hand"])
         if "basket" in obs:
             _parts.append(obs["basket"]["rel_pos3d"])
+        # 前缀必须与第一阶段一致，最后 12 维专门用于手部归一化。
+        if "hand" in obs:
+            _parts.append(obs["hand"])
         obs_array = np.concatenate(tuple(_parts), axis=1)
         obs_tensor = torch.tensor(obs_array, dtype=torch.float32).to(self.device)
         return obs_tensor

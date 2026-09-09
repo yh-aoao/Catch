@@ -40,6 +40,12 @@ hydra:
 
 object_motion: "throw"
 
+# bounce only: legacy preserves existing DcmmCfg/random launch behavior.
+# Multiple IDs: bounce_physics='"P0,P1,P2"' (uniform choice each episode).
+bounce_physics: "legacy"
+bounce_launch: "legacy"  # L0-L4, gentle, legacy; comma-separated IDs also supported
+bounce_log: False        # print actual group/position/velocity each reset
+
 # catch→throw 顺序任务专用 checkpoint（catch_throw_demo.py 使用）
 catch_tracking: ''
 catch_catching: ''

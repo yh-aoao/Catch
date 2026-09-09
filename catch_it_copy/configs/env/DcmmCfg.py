@@ -123,6 +123,8 @@ act_delay = {
 }
 
 ## 弹跳模式物理参数（固定基线 + 部分随机化）
+# 可选 P0-P8 / L0-L4 参数组见 configs/env/bounce_presets.py。
+# 此处参数用于 bounce_physics=legacy / bounce_launch=legacy；用法见 BOUNCE_PRESETS.md。
 # ---------- 固定参数（基线，不随机） ----------
 # 弹性系数 COR → dampratio = (1-COR)*damp_scale
 bounce_restitution = np.array([0.8, 0.8])
@@ -138,13 +140,15 @@ bounce_init_speed = np.array([1.0, 1.0])
 bounce_init_vz = np.array([-0.2, -0.2])
 # solref 阻尼比缩放系数
 bounce_damp_scale = 0.50
-# ---------- 随机化参数（Domain Randomization，范围收窄） ----------
+# ---------- 旧固定基线（36bf535） ----------
 # 小球质量（kg）——固定 0.05（回到泛化前基线）
 bounce_mass = np.array([0.05, 0.05])
 # 小球半径（m）——固定 0.04（回到泛化前基线）
 bounce_radius = np.array([0.04, 0.04])
 # 自由关节阻尼（空气阻力）——固定
-bounce_joint_damping = np.array([0.0002, 0.0002])
+bounce_joint_damping = np.array([0.00015, 0.00015])
+# legacy bounce 保留旧 XML 的每轴转动惯量；None 表示按实心球重算。
+bounce_inertia = 7.33516e-05
 # 手部摩擦（滑动、扭转、滚动）——固定 [2.0, 0.5, 0.1]
 bounce_hand_friction = np.array([[2.0, 0.5, 0.1], [2.0, 0.5, 0.1]])
 

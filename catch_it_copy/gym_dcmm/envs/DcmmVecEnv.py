@@ -22,6 +22,7 @@ import math
 print(os.getcwd())  # 打印当前工作目录（调试用）
 print("sys.path:", sys.path[:5])  # 打印前 5 个路径
 import configs.env.DcmmCfg as DcmmCfg  # 导入环境配置参数（物理参数/奖励权重等）
+from configs.env.bounce_presets import PHYSICS_GROUPS, LAUNCH_GROUPS, parse_groups, episode_config
 import cv2 as cv  # 图像处理
 import numpy as np
 import mujoco  # Mujoco仿真核心库
@@ -135,7 +136,8 @@ class DcmmVecEnv(gym.Env):
         print_ctrl=False,
         print_info=False,
         print_contacts=False,
-        object_motion="throw" # 新增的参数用来判断物体运动类型（throw/roll）
+        object_motion="throw", # 新增的参数用来判断物体运动类型（throw/roll）
+        bounce_physics="legacy", bounce_launch="legacy", bounce_log=False,
     ):
         # 任务合法性检查（仅支持Tracking/Catching）
         if task not in ["Tracking", "Catching"]:
@@ -163,6 +165,14 @@ class DcmmVecEnv(gym.Env):
         self.print_bounce_info = False  # 弹跳模式：每个 episode 自动打印物理参数（默认关闭）
         motion_alias = {"弹": "bounce", "tan": "bounce", "bounce": "bounce", "roll": "roll", "throw": "throw", "basket": "throw_basket", "throw_basket": "throw_basket", "throw_bounce": "throw_bounce", "throw_force": "throw_force"}
         self.object_motion = motion_alias.get(object_motion, object_motion) # 初始化目标物体运动类型
+        self.bounce_physics_names = parse_groups(bounce_physics, PHYSICS_GROUPS)
+        self.bounce_launch_names = parse_groups(bounce_launch, LAUNCH_GROUPS)
+        if self.object_motion != "bounce" and (bounce_physics != "legacy" or bounce_launch != "legacy"):
+            raise ValueError("bounce_physics/bounce_launch presets require object_motion=bounce")
+        self.bounce_cfg = DcmmCfg
+        self.bounce_physics_group = "legacy"
+        self.bounce_launch_group = "legacy"
+        self.bounce_log = bounce_log
         
         # 初始化DCMM机器人Mujoco实例
         self.Dcmm = MJ_DCMM(viewer=viewer, object_name=object_name, object_eval=object_eval)
@@ -315,6 +325,8 @@ class DcmmVecEnv(gym.Env):
         self.act_dim = get_total_dimension(self.action_space)      # 总动作维度（20）
         self.obs_t_dim = self.obs_dim - 12 - 6  # 跟踪任务观测维度（18）
         self.act_t_dim = self.act_dim - 12      # 跟踪任务动作维度（8）
+        if self.object_motion == "throw_basket":
+            self.act_t_dim = 2  # 第一阶段只输出底座 x/y 速度；第二阶段学习臂和手。
         self.obs_c_dim = self.obs_dim - 6       # 抓取任务观测维度（30）
         self.act_c_dim = self.act_dim           # 抓取任务动作维度（20）
         print("##### Tracking Task \n obs_dim: {}, act_dim: {}".format(self.obs_t_dim, self.act_t_dim))
@@ -599,7 +611,7 @@ class DcmmVecEnv(gym.Env):
         
         # 篮筐观测（仅 throw_basket 模式）
         if self.object_motion == "throw_basket":
-            _basket_rel = self.basket_center - self._get_relative_ee_pos3d()
+            _basket_rel = self.basket_center - self.Dcmm.data.body("arm_base").xpos
             obs["basket"] = {
                 "rel_pos3d": _basket_rel + np.random.normal(0, self.k_obs_object, 3),
             }
@@ -653,12 +665,16 @@ class DcmmVecEnv(gym.Env):
             print("env_time: ", env_time)
             print("ee_distance: ", ee_distance)
             
-        return {
+        result = {
             "env_time": env_time,
             "ee_distance": ee_distance,
             "base_distance": base_distance,
             "success": False,  # 默认失败，抓取成功时在 step() 里改为 True
         }
+        if self.object_motion == "bounce":
+            result["bounce_physics_group"] = self.bounce_physics_group
+            result["bounce_launch_group"] = self.bounce_launch_group
+        return result
     
     def update_target_ctrl(self):
         """更新目标控制指令到延迟缓冲区（模拟硬件延迟）"""
@@ -877,13 +893,13 @@ class DcmmVecEnv(gym.Env):
             # ---- 质量随机化 ----
             inertial = object_body.find("inertial")
             if inertial is not None:
-                self.random_mass = np.random.uniform(*DcmmCfg.bounce_mass)
+                self.random_mass = np.random.uniform(*self.bounce_cfg.bounce_mass)
                 inertial.set("mass", str(self.random_mass))
 
             # ---- 自由关节参数 ----
             joint = object_body.find("joint")
             if joint is not None:
-                joint_damping = np.random.uniform(*DcmmCfg.bounce_joint_damping)
+                joint_damping = np.random.uniform(*self.bounce_cfg.bounce_joint_damping)
                 joint.set("damping", f"{joint_damping:.6f}")
                 joint.set("armature", "0.0001")
 
@@ -891,22 +907,22 @@ class DcmmVecEnv(gym.Env):
             geom = object_body.find(".//geom[@name='object']")
             if geom is not None:
                 geom.set("type", "sphere")
-                r = np.random.uniform(*DcmmCfg.bounce_radius)
+                r = np.random.uniform(*self.bounce_cfg.bounce_radius)
                 geom.set("size", f"{r:.4f}")
 
-                friction = np.random.uniform(*DcmmCfg.bounce_friction)
+                friction = np.random.uniform(*self.bounce_cfg.bounce_friction)
                 geom.set("friction", f"{friction[0]:.2f} {friction[1]:.3f} {friction[2]:.3f}")
 
                 # solimp: dmax 越接近 1 接触越硬，弹跳越明显
                 geom.set("solimp", "0.95 0.998 0.002")
 
                 # ---- 弹性系数与 solref 映射 ----
-                self.bounce_restitution = np.random.uniform(*DcmmCfg.bounce_restitution)
+                self.bounce_restitution = np.random.uniform(*self.bounce_cfg.bounce_restitution)
                 # dampratio = (1 - COR) * scale，直观线性映射
                 # COR=0.88 → dampratio≈0.042 ，COR=0.65 → dampratio≈0.12
-                dampratio = (1.0 - self.bounce_restitution) * DcmmCfg.bounce_damp_scale
+                dampratio = (1.0 - self.bounce_restitution) * self.bounce_cfg.bounce_damp_scale
                 dampratio = np.clip(dampratio, 0.02, 0.25)
-                timeconst = np.random.uniform(*DcmmCfg.bounce_solref_timeconst)
+                timeconst = np.random.uniform(*self.bounce_cfg.bounce_solref_timeconst)
                 geom.set("solref", f"{timeconst:.4f} {dampratio:.4f}")
 
                 if "mesh" in geom.attrib:
@@ -1069,27 +1085,31 @@ class DcmmVecEnv(gym.Env):
         3. 水平速度因摩擦逐渐减小
         4. 弹跳幅度持续衰减，最终过渡为贴地滚动
         """
-        x = np.random.uniform(-0.25, 0.25)
-        y = np.random.uniform(2.1, 2.7)
+        launch = self.bounce_launch_values
+        x = np.random.uniform(*launch['x'])
+        y = np.random.uniform(*launch['y'])
         radius = float(self.Dcmm.model.geom_size[self.object_id][0])
-        z = np.random.uniform(*DcmmCfg.bounce_init_height)
+        if self.bounce_physics_group != "legacy":
+            # Pose is generated before model parameters are updated later in reset.
+            radius = self.bounce_cfg.bounce_radius[0]
+        z = np.random.uniform(*launch['height'])
 
         # 水平速度：朝向机器人（-y方向）为主
-        speed = np.random.uniform(*DcmmCfg.bounce_init_speed)
-        angle_deg = np.random.uniform(-25.0, 25.0)
+        speed = np.random.uniform(*launch['speed'])
+        angle_deg = np.random.uniform(*launch['angle_deg'])
         heading = np.radians(angle_deg)
         vx = speed * math.sin(heading)
         vy = -speed * math.cos(heading)
 
         # 竖直速度：主要为向下（负），允许小幅向上（球可能还在上升阶段）
-        vz = np.random.uniform(*DcmmCfg.bounce_init_vz)
+        vz = np.random.uniform(*launch['vz'])
 
         # 角速度：匹配线速度的滚动分量 + 随机旋转
         # 弹跳中的旋转不严格满足 v=ωr，增加随机性模拟不规则弹跳
-        spin_factor = np.random.uniform(0.5, 1.5)
+        spin_factor = np.random.uniform(*launch['spin_factor'])
         wx = spin_factor * (-vy) / max(radius, 1e-4)
         wy = spin_factor * vx / max(radius, 1e-4)
-        wz = np.random.uniform(-3.0, 3.0)  # 绕竖直轴的随机旋转
+        wz = np.random.uniform(*launch['spin_z'])  # 绕竖直轴的随机旋转
 
         self.object_pos3d = np.array([x, y, z])
         self.object_vel6d = np.array([vx, vy, vz, wx, wy, wz])
@@ -1197,6 +1217,10 @@ class DcmmVecEnv(gym.Env):
         """
         重置Mujoco仿真状态
         """
+        if self.object_motion == "bounce":
+            (self.bounce_cfg, self.bounce_launch_values,
+             self.bounce_physics_group, self.bounce_launch_group) = episode_config(
+                DcmmCfg, self.bounce_physics_names, self.bounce_launch_names, np.random)
         # 重置仿真数据
         mujoco.mj_resetData(self.Dcmm.model, self.Dcmm.data)
         mujoco.mj_resetData(self.Dcmm.model_arm, self.Dcmm.data_arm)
@@ -1350,11 +1374,11 @@ class DcmmVecEnv(gym.Env):
         # ---------- 弹跳模式：每回合随机化弹性/摩擦/阻尼（运行时修改模型参数）----------
         if self.object_motion in ("bounce", "throw_bounce"):
             # 随机采样弹性系数
-            self.bounce_restitution = np.random.uniform(*DcmmCfg.bounce_restitution)
+            self.bounce_restitution = np.random.uniform(*self.bounce_cfg.bounce_restitution)
             # dampratio = (1 - COR) * scale，越小弹跳次数越多
-            dampratio = (1.0 - self.bounce_restitution) * DcmmCfg.bounce_damp_scale
+            dampratio = (1.0 - self.bounce_restitution) * self.bounce_cfg.bounce_damp_scale
             dampratio = np.clip(dampratio, 0.02, 0.25)
-            timeconst = np.random.uniform(*DcmmCfg.bounce_solref_timeconst)
+            timeconst = np.random.uniform(*self.bounce_cfg.bounce_solref_timeconst)
 
             # 直接修改 MuJoCo 模型中的接触参数（运行时生效，无需重建模型）
             self.Dcmm.model.geom_solref[self.object_id] = [timeconst, dampratio]
@@ -1367,18 +1391,22 @@ class DcmmVecEnv(gym.Env):
             self.Dcmm.model.geom_solimp[self.floor_id] = [0.95, 0.998, 0.002, 0.5, 2.0]
 
             # 随机化摩擦系数
-            friction = np.random.uniform(*DcmmCfg.bounce_friction)
+            friction = np.random.uniform(*self.bounce_cfg.bounce_friction)
             self.Dcmm.model.geom_friction[self.object_id] = friction
 
             # 质量/半径每 episode 随机（修复：之前只在模型加载时随机一次，训练中不变化）
             _obj_body_id = mujoco.mj_name2id(self.Dcmm.model, mujoco.mjtObj.mjOBJ_BODY, 'object')
             if _obj_body_id >= 0:
-                _m = np.random.uniform(*DcmmCfg.bounce_mass)
-                _r = np.random.uniform(*DcmmCfg.bounce_radius)
+                _m = np.random.uniform(*self.bounce_cfg.bounce_mass)
+                _r = np.random.uniform(*self.bounce_cfg.bounce_radius)
                 self.Dcmm.model.geom_size[self.object_id][0] = _r
                 # 实心球惯性 I = (2/5) m r²，质量/惯性需同步更新
                 # MuJoCo body_inertia 为 (nbody, 3) 对角惯性（Ixx, Iyy, Izz），球对称三者相等
                 _I = (2.0 / 5.0) * _m * _r * _r
+                if self.object_motion == "bounce":
+                    fixed_inertia = getattr(self.bounce_cfg, 'bounce_inertia', None)
+                    if fixed_inertia is not None:
+                        _I = fixed_inertia
                 self.Dcmm.model.body_mass[_obj_body_id] = _m
                 self.Dcmm.model.body_inertia[_obj_body_id] = np.full(3, _I)
                 self.random_mass = _m
@@ -1387,14 +1415,16 @@ class DcmmVecEnv(gym.Env):
             obj_joint_id = mujoco.mj_name2id(self.Dcmm.model, mujoco.mjtObj.mjOBJ_JOINT, 'object')
             if obj_joint_id >= 0:
                 dof_adr = self.Dcmm.model.jnt_dofadr[obj_joint_id]
-                joint_damping = np.random.uniform(*DcmmCfg.bounce_joint_damping)
+                joint_damping = np.random.uniform(*self.bounce_cfg.bounce_joint_damping)
+                if self.object_motion == "throw_bounce":
+                    joint_damping = 0.0002  # 保留该模式原来的固定阻尼。
                 for d in range(6):
                     self.Dcmm.model.dof_damping[dof_adr + d] = joint_damping
 
             # ★ 灵巧手加摩擦：减缓小球碰到手掌后弹开的速度
             # 遍历灵巧手所有碰撞几何体，设置更高的摩擦系数
             # 滑动摩擦随机 [1.5, 2.5]，扭转/滚动固定
-            hand_friction = np.random.uniform(*DcmmCfg.bounce_hand_friction)
+            hand_friction = np.random.uniform(*self.bounce_cfg.bounce_hand_friction)
             _hand_collision_geoms = [
                 'mcp_joint_', 'mcp_joint_2_', 'mcp_joint_3_',
                 'pip_', 'pip_2_', 'pip_3_', 'pip_4_',
@@ -1425,11 +1455,18 @@ class DcmmVecEnv(gym.Env):
                 print(f"    COR (弹性系数):        {self.bounce_restitution:.3f}")
                 print(f"    solref timeconst:      {timeconst:.4f} s  (越小越硬)")
                 print(f"    solref dampratio:      {dampratio:.4f}    (<0.07不稳定, >0.15不弹)")
-                print(f"    damp_scale:            {DcmmCfg.bounce_damp_scale}")
+                print(f"    damp_scale:            {self.bounce_cfg.bounce_damp_scale}")
                 print(f"  能量损耗:")
                 print(f"    关节阻尼:   {joint_damping:.6f}  (空气阻力)")
                 print(f"    地面摩擦:   [{friction[0]:.2f}, {friction[1]:.3f}, {friction[2]:.3f}]")
                 print(f"{'='*60}\n")
+
+        if self.object_motion == "bounce" and self.bounce_log:
+            print("[bounce] physics={} launch={} mass={} radius={} restitution_config={} "
+                  "pos={} vel6={}".format(
+                      self.bounce_physics_group, self.bounce_launch_group,
+                      self.random_mass, self.Dcmm.model.geom_size[self.object_id][0],
+                      self.bounce_restitution, self.object_pos3d.tolist(), self.object_vel6d.tolist()))
 
         # 随机化PID参数
         self.random_PID()
@@ -1853,7 +1890,10 @@ class DcmmVecEnv(gym.Env):
             # 汇总位置相关奖励
             if self.task == "Tracking":
                 # 阶段1（对准）：只奖励底座朝向 + 正前方到位，球在手里不抛
-                reward_pos_component = reward_base_aim + reward_base_front
+                # 全程距离信号：原乘积奖励在离目标超过 0.5m 时恒为零。
+                _target_xy = self.basket_center[:2] - np.array([0.0, DcmmCfg.basket_base_front_dist])
+                _distance = np.linalg.norm(self.Dcmm.data.body("arm_base").xpos[:2] - _target_xy)
+                reward_pos_component = -DcmmCfg.basket_w_base_front * _distance
             else:
                 # 阶段2（抛球）：完整抛球奖励
                 reward_pos_component = reward_basket_dist + reward_basket_approach + reward_score + reward_above \
@@ -2226,7 +2266,11 @@ class DcmmVecEnv(gym.Env):
                 rewards = reward_pos_component + reward_ctrl + reward_collision + reward_constraint + self.reward_touch
             elif self.object_motion in ("bounce", "throw_bounce"):
                 rewards = reward_pos_component + reward_ctrl + reward_collision + reward_constraint + self.reward_touch
-            elif self.object_motion in ("throw_basket", "throw_force"):
+            elif self.object_motion == "throw_basket":
+                rewards = (reward_pos_component
+                           - DcmmCfg.basket_w_ctrl_base * self.norm_ctrl(ctrl, {"base"})
+                           + reward_collision + reward_constraint)
+            elif self.object_motion == "throw_force":
                 w_ctrl_b = getattr(DcmmCfg, 'basket_w_ctrl_base', 0.1)
                 w_ctrl_a = getattr(DcmmCfg, 'basket_w_ctrl_arm', 0.5)
                 reward_ctrl_basket = - (w_ctrl_b * self.norm_ctrl(ctrl, {"base"})
@@ -2290,13 +2334,14 @@ class DcmmVecEnv(gym.Env):
             action_arm = np.concatenate((action_arm, np.zeros(6 - action_arm.size)))
         else:
             action_arm = action_arm[:6]
-        result_QP, _ = self.Dcmm.move_ee_pose(action_arm)
-        if result_QP[1]:
+        if self.object_motion == "throw_basket" and self.task == "Tracking":
             self.arm_limit = True
-            self.Dcmm.target_arm_qpos[:] = result_QP[0]
+            self.Dcmm.target_arm_qpos[:] = DcmmCfg.arm_joints
         else:
-            # print("IK Failed!!!")
-            self.arm_limit = False
+            result_QP, _ = self.Dcmm.move_ee_pose(action_arm)
+            self.arm_limit = bool(result_QP[1])
+            if self.arm_limit:
+                self.Dcmm.target_arm_qpos[:] = result_QP[0]
         
         ## 设置机械手目标关节角度
         # 跟踪阶段：throw/roll 保持手掌张开（零动作），避免手部随机动作导致手指变形
@@ -2314,7 +2359,6 @@ class DcmmVecEnv(gym.Env):
                 _cup[8] = 0.6; _cup[10] = 0.4; _cup[11] = 0.4
                 _cup[13] = 0.3; _cup[14] = 0.3; _cup[15] = 0.3
                 self.Dcmm.target_hand_qpos[:] = _cup
-                self.Dcmm.action_hand2qpos(action_dict["hand"] * 0.1)
 
         elif self.object_motion == "throw_force":
             # 抓紧球姿态（手指弯曲包裹球）
@@ -2728,7 +2772,8 @@ class DcmmVecEnv(gym.Env):
                 _base_xy = self.Dcmm.data.body("arm_base").xpos[0:2]
                 _dx = abs(_base_xy[0] - self.basket_center[0])
                 _dy = abs((self.basket_center[1] - _base_xy[1]) - DcmmCfg.basket_base_front_dist)
-                if _dx < 0.15 and _dy < 0.15:
+                _base_speed = np.linalg.norm(self.Dcmm.data.qvel[:2])
+                if _dx < 0.15 and _dy < 0.15 and _base_speed < 0.15:
                     self.terminated = True
                     info['success'] = True
                     self.terminated_reason = 'base_in_front'
@@ -3008,6 +3053,9 @@ if __name__ == "__main__":
     
     # 添加--object_motion命令行参数：物体运动类型（滚动/投掷）
     parser.add_argument('--object_motion', type=str, default="throw", help="object motion type (throw/roll/bounce/弹)")
+    parser.add_argument('--bounce_physics', default='legacy', help='P0-P8 or comma-separated IDs')
+    parser.add_argument('--bounce_launch', default='legacy', help='L0-L4, gentle, legacy or comma-separated IDs')
+    parser.add_argument('--bounce_log', action='store_true', help='print each bounce episode configuration')
     
     # 解析命令行传入的参数，将结果存储在args对象中
     args = parser.parse_args()
@@ -3039,7 +3087,8 @@ if __name__ == "__main__":
                     render_mode="rgb_array", imshow_cam=args.imshow_cam, 
                     viewer = args.viewer, object_eval=False,
                     env_time = 2.5, steps_per_policy=1,
-                    object_motion=args.object_motion)
+                    object_motion=args.object_motion, bounce_physics=args.bounce_physics,
+                    bounce_launch=args.bounce_launch, bounce_log=args.bounce_log)
     
     # 运行环境的测试模式（键盘手动控制机器人）
     # 该模式下可以通过键盘方向键/数字键控制机器人底盘、机械臂和机械手

@@ -15,6 +15,21 @@ from .utils import AverageScalarMeter, RunningMeanStd
 
 from tensorboardX import SummaryWriter
 
+
+def terminal_metrics(infos, dones, truncates):
+    """Use terminal info when vector autoreset replaces the top-level reset info."""
+    successes = np.asarray(infos.get('success', truncates), dtype=bool).copy()
+    reasons = np.full(len(dones), 'unspecified', dtype=object)
+    for i in np.flatnonzero(dones):
+        final = infos.get('final_info')
+        mask = infos.get('_final_info')
+        if final is not None and (mask is None or mask[i]) and isinstance(final[i], dict):
+            successes[i] = bool(final[i].get('success', successes[i]))
+            reasons[i] = final[i].get('terminated_reason', 'unspecified')
+        elif 'terminated_reason' in infos:
+            reasons[i] = infos['terminated_reason'][i]
+    return successes, reasons
+
 class PPO_Track(object):
     def __init__(self, env, output_dif, full_config):
         self.rank = -1
@@ -461,7 +476,8 @@ class PPO_Track(object):
             # print("done_indices: ", done_indices)
             self.episode_rewards.update(self.current_rewards[done_indices])
             self.episode_lengths.update(self.current_lengths[done_indices])
-            self.episode_success.update(torch.tensor(infos.get('success', truncates), dtype=torch.float32, device=self.device)[done_indices])
+            successes, _ = terminal_metrics(infos, dones, truncates)
+            self.episode_success.update(torch.tensor(successes, dtype=torch.float32, device=self.device)[done_indices])
             assert isinstance(infos, dict), 'Info Should be a Dict'
             # print("infos: ", infos)
             for k, v in infos.items():
@@ -493,6 +509,8 @@ class PPO_Track(object):
 
     def play_test_steps(self):
         for _ in range(self.horizon_length):
+            if self.test_steps + self.num_actors > self.max_test_steps:
+                break
             res_dict = self.model_act(self.obs, inference=True)
             # Do env step
             # Clamp the actions of the action space 
@@ -515,7 +533,16 @@ class PPO_Track(object):
             done_indices = self.dones.nonzero(as_tuple=False)
             self.episode_test_rewards.update(self.current_rewards[done_indices])
             self.episode_test_lengths.update(self.current_lengths[done_indices])
-            self.episode_test_success.update(torch.tensor(infos.get('success', truncates), dtype=torch.float32, device=self.device)[done_indices])
+            successes, reasons = terminal_metrics(infos, dones, truncates)
+            self.episode_test_success.update(torch.tensor(successes, dtype=torch.float32, device=self.device)[done_indices])
+            self.test_steps += self.num_actors
+            self.test_completed += int(np.count_nonzero(dones))
+            self.test_successes += int(np.count_nonzero(successes[dones]))
+            self.test_reward_sum += self.current_rewards[done_indices].sum().item()
+            self.test_length_sum += self.current_lengths[done_indices].sum().item()
+            for i in np.flatnonzero(dones):
+                reason = str(reasons[i])
+                self.test_reasons[reason] = self.test_reasons.get(reason, 0) + 1
             assert isinstance(infos, dict), 'Info Should be a Dict'
             for k, v in infos.items():
                 # only log scalars
@@ -527,22 +554,25 @@ class PPO_Track(object):
             self.current_rewards = self.current_rewards * not_dones.unsqueeze(1)
             self.current_lengths = self.current_lengths * not_dones
         
-        res_dict = self.model_act(self.obs)
-        self.agent_steps = (self.agent_steps + self.batch_size)
-
     def test(self):
         self.set_eval()
         reset_obs, _ = self.env.reset()
         self.obs = {'obs': self.obs2tensor(reset_obs)}
-        self.test_steps = self.batch_size
+        self.test_steps = 0
+        self.test_completed = self.test_successes = 0
+        self.test_reward_sum = self.test_length_sum = 0.0
+        self.test_reasons = {}
+        self.current_rewards.zero_()
+        self.current_lengths.zero_()
 
-        while self.test_steps < self.max_test_steps:
+        while self.test_steps + self.num_actors <= self.max_test_steps:
             self.play_test_steps()
             self.storage.data_dict = None
-            mean_rewards = self.episode_test_rewards.get_mean()
-            mean_lengths = self.episode_test_lengths.get_mean()
-            mean_success = self.episode_test_success.get_mean()
-            print("## Sample Length %d ##" % len(self.episode_test_rewards))
+            count = self.test_completed
+            mean_rewards = self.test_reward_sum / count if count else float('nan')
+            mean_lengths = self.test_length_sum / count if count else float('nan')
+            mean_success = self.test_successes / count if count else float('nan')
+            print("## Completed episodes %d | transitions %d ##" % (count, self.test_steps))
             print("mean_rewards: ", mean_rewards)
             print("mean_lengths: ", mean_lengths)
             print("mean_success: ", mean_success)
@@ -550,6 +580,12 @@ class PPO_Track(object):
             #     'metrics/episode_test_rewards': mean_rewards,
             #     'metrics/episode_test_lengths': mean_lengths,
             # }, step=self.agent_steps)
+
+        print("[test summary] transitions={} completed={} successes={} success_rate={} reasons={} "
+              "(unfinished episodes excluded)".format(
+                  self.test_steps, self.test_completed, self.test_successes,
+                  self.test_successes / self.test_completed if self.test_completed else float('nan'),
+                  self.test_reasons))
 
     def adjust_learning_rate_cos(self, epoch):
         lr = self.init_lr * 0.5 * (

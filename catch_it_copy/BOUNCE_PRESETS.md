@@ -1,5 +1,14 @@
 # Bounce 参数组使用说明
 
+## Tracking 测试统计
+
+bounce Tracking 的有效手部接触（掌心或手指）记为成功；同一步出现失败则失败优先，超时不算成功。
+本口径不要求先反弹，物理参数、奖励和回合结束条件保持不变。
+PPO Tracking 读取向量环境的 `final_info`（若存在），防止自动重置覆盖成功结果。
+测试输出累计完成回合数、成功数、成功率与结束原因；预算结束时未完成回合不计入分母。
+`train.ppo.max_test_steps=10000` 表示所有并行环境累计的策略转换数，不是回合数；
+以完整向量步执行，不超过预算。`test_num_episodes` 仍是窗口容量，不是停止条件。
+
 参数位于 `configs/env/bounce_presets.py`。P0–P8 是待验证候选，尚未证明可接。
 默认 `bounce_physics=legacy bounce_launch=legacy`，沿用 DcmmCfg 和原发球范围。
 以下训练／测试命令均在 `catch_it_copy` 目录执行。
@@ -71,6 +80,11 @@ Hydra 需要保留双引号，把逗号解释为字符串而非 sweep；上面�
 ```bash
 python3 train_DCMM.py test=True task=Tracking num_envs=1 viewer=True object_motion=bounce bounce_physics=P1 bounce_launch=L0 bounce_log=True checkpoint_tracking=/path/to/track.pth
 python3 train_DCMM.py test=True task=Catching_TwoStage num_envs=1 viewer=True object_motion=bounce bounce_physics=P1 bounce_launch=L0 bounce_log=True checkpoint_catching=/path/to/catch.pth
+
+python3 train_DCMM.py test=True task=Tracking num_envs=1 \
+  checkpoint_tracking=/home/isee/Catch/bounce_track_best_58.18.pth \
+  object_eval=false viewer=true imshow_cam=false \
+  object_motion=bounce bounce_physics=P1 bounce_launch=L0 bounce_log=true
 ```
 
 逐组测试时保持 checkpoint 相同，依次替换 P0、P1……；无头测试用 `viewer=False`。

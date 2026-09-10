@@ -871,3 +871,43 @@ DRIS
 
 basket任务是分成两阶段的训练，但是目前训练的太奇怪了，要不改成track任务只有底座的移动？，移动到框中心的正前方，这里对应的应该是y轴？
 针对bounce任务，我感觉你帮我固定的参数跟我之前的固定参数不一样，我这个项目以及上传到GitHub上进行版本的保存了，上次修改参数固定的适合是在41f84160e31dc894f5edc40812f573697e546eee这一次左右，你可以查看这次修改任何比对一下仅仅针对bounce任务代码的参数以及一些逻辑有什么不同吗？然后告诉我
+
+后续任务：
+1.roll和basket继续修改
+2.bounce必须要先找回来baseline
+3.用baseline测其他参数组的效果
+4.找到几组合适的参数组
+5.测试bounce的主表
+
+问题：
+(dcmm) isee\@isee-KUANGSHI-Series:\~/Catch/catch\_it\_copy$ python3 train\_DCMM.py test=True task=Tracking num\_envs=1   checkpoint\_tracking=/home/isee/Catch/bounce\_track\_best\_58.18.pth   object\_eval=false viewer=true imshow\_cam=false   object\_motion=bounce bounce\_physics=P1 bounce\_launch=L0 bounce\_log=true
+Start Building the Environment
+config.num\_envs:  1
+Error executing job with overrides: ['test=True', 'task=Tracking', 'num\_envs=1', 'checkpoint\_tracking=/home/isee/Catch/bounce\_track\_best\_58.18.pth', 'object\_eval=false', 'viewer=true', 'imshow\_cam=false', 'object\_motion=bounce', 'bounce\_physics=P1', 'bounce\_launch=L0', 'bounce\_log=true']
+Traceback (most recent call last):
+&#x20; File "/home/isee/Catch/catch\_it\_copy/train\_DCMM.py", line 58, in main
+&#x20;   env = gym.make\_vec(env\_name, num\_envs=int(config.num\_envs),
+&#x20; File "/home/isee/miniconda3/envs/dcmm/lib/python3.10/site-packages/gymnasium/envs/registration.py", line 961, in make\_vec
+&#x20;   env\_creator = load\_env\_creator(entry\_point)
+&#x20; File "/home/isee/miniconda3/envs/dcmm/lib/python3.10/site-packages/gymnasium/envs/registration.py", line 545, in load\_env\_creator
+&#x20;   mod = importlib.import\_module(mod\_name)
+&#x20; File "/home/isee/miniconda3/envs/dcmm/lib/python3.10/importlib/\_\_init\_\_.py", line 126, in import\_module
+&#x20;   return \_bootstrap.\_gcd\_import(name[level:], package, level)
+&#x20; File "\<frozen importlib.\_bootstrap>", line 1050, in \_gcd\_import
+&#x20; File "\<frozen importlib.\_bootstrap>", line 1027, in \_find\_and\_load
+&#x20; File "\<frozen importlib.\_bootstrap>", line 1006, in \_find\_and\_load\_unlocked
+&#x20; File "\<frozen importlib.\_bootstrap>", line 688, in \_load\_unlocked
+&#x20; File "\<frozen importlib.\_bootstrap\_external>", line 883, in exec\_module
+&#x20; File "\<frozen importlib.\_bootstrap>", line 241, in \_call\_with\_frames\_removed
+&#x20; File "/home/isee/Catch/catch\_it\_copy/gym\_dcmm/envs/\_\_init\_\_.py", line 1, in \<module>
+&#x20;   from gym\_dcmm.envs.DcmmVecEnv import DcmmVecEnv
+ValueError: source code string cannot contain null bytes
+
+Set the environment variable HYDRA\_FULL\_ERROR=1 for a complete stack trace.
+(dcmm) isee\@isee-KUANGSHI-Series:\~/Catch/catch\_it\_copy$
+
+1.把汇报的ppt做好
+   roll再测试接一下
+   bounce
+2.入党
+3.加课

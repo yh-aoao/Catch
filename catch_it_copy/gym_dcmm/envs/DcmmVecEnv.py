@@ -2513,6 +2513,8 @@ class DcmmVecEnv(gym.Env):
             ## 碰撞检测（底盘碰撞则终止）
             if self.contacts['base_contacts'].size != 0:
                 self.terminated = True
+                if self.object_motion == "bounce":
+                    self.terminated_reason = 'base_collision'
             
             ## 物体接触检测（判断是否成功抓取/跟踪）
             object_contacts = self.contacts['object_contacts'].astype(int)
@@ -2855,7 +2857,27 @@ class DcmmVecEnv(gym.Env):
         
         terminated = self.terminated
         done = terminated or truncated
-        
+        if self.object_motion == "bounce" and self.task == "Tracking":
+            # Preserve episode/reward semantics; a failure in this step takes priority.
+            info['success'] = bool(self.step_touch and not terminated)
+            if done:
+                if terminated:
+                    reason = self.terminated_reason or 'collision_or_failure'
+                elif self.step_touch:
+                    reason = 'track_success'
+                else:
+                    reason = 'timeout'
+                self.terminated_reason = reason
+                info['terminated_reason'] = reason
+
+        if self.object_motion == "bounce" and self.bounce_log and done:
+            success = bool(info.get('success', False))
+            reason = self.terminated_reason or ('timeout' if truncated else 'unspecified')
+            print(f"[bounce-end] task={self.task} success={success} reason={reason} "
+                  f"touch={bool(self.step_touch)} terminated={bool(terminated)} "
+                  f"truncated={bool(truncated)} steps={self.steps} "
+                  f"time={info['env_time']:.3f}s", flush=True)
+
         # 测试模式下完成后重置（注释掉则保持最终状态）
         if done:
             # self.reset()
@@ -3037,7 +3059,8 @@ class DcmmVecEnv(gym.Env):
 if __name__ == "__main__":
     # 切换工作目录到上上级目录
     # 解决不同层级目录下运行时的模块导入路径问题
-    os.chdir('../../')
+    # Resolve assets relative to this project, not the caller's working directory.
+    os.chdir(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
     
     # 创建命令行参数解析器，用于接收运行时的参数输入
     # description参数用于说明这个解析器的用途（DcmmVecEnv环境的参数配置）
@@ -3055,7 +3078,7 @@ if __name__ == "__main__":
     parser.add_argument('--object_motion', type=str, default="throw", help="object motion type (throw/roll/bounce/弹)")
     parser.add_argument('--bounce_physics', default='legacy', help='P0-P8 or comma-separated IDs')
     parser.add_argument('--bounce_launch', default='legacy', help='L0-L4, gentle, legacy or comma-separated IDs')
-    parser.add_argument('--bounce_log', action='store_true', help='print each bounce episode configuration')
+    parser.add_argument('--bounce_log', action='store_true', help='print bounce episode configuration and terminal outcome')
     
     # 解析命令行传入的参数，将结果存储在args对象中
     args = parser.parse_args()

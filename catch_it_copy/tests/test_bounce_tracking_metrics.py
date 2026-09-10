@@ -80,6 +80,32 @@ class MetricsTests(unittest.TestCase):
         self.assertEqual(agent.test_successes, 3)
         self.assertEqual(agent.test_reasons, dict(track_success=3, timeout=3))
 
+    def test_two_stage_training_and_test_terminal_success(self):
+        module = tree('gym_dcmm/algs/ppo_dcmm/ppo_dcmm_catch_two_stage.py')
+        cls = next(n for n in module.body if isinstance(n, ast.ClassDef))
+        for method_name, meter_name in [('play_steps', 'episode_success'),
+                                        ('play_test_steps', 'episode_test_success')]:
+            method = next(n for n in cls.body if isinstance(n, ast.FunctionDef)
+                          and n.name == method_name)
+            loop = next(n for n in method.body if isinstance(n, ast.For))
+            index = next(i for i, n in enumerate(loop.body)
+                         if isinstance(n, ast.Assign) and isinstance(n.value, ast.Call)
+                         and isinstance(n.value.func, ast.Name)
+                         and n.value.func.id == 'terminal_metrics')
+            received = []
+            agent = SimpleNamespace(device='cpu')
+            setattr(agent, meter_name, SimpleNamespace(update=lambda x: received.append(x.tolist())))
+            scope = dict(SCOPE, terminal_metrics=SCOPE['terminal_metrics'], self=agent,
+                         dones=np.array([True, True, False]),
+                         truncates=np.array([False, True, False]),
+                         done_indices=torch.tensor([[0], [1]]),
+                         infos={'success': np.array([False, False, False]),
+                                'final_info': [dict(success=True), dict(success=False), None],
+                                '_final_info': np.array([True, True, False])})
+            exec(compile(ast.Module(body=loop.body[index:index+2], type_ignores=[]),
+                         '<two-stage metrics>', 'exec'), scope)
+            self.assertEqual(received, [[[1.0], [0.0]]])
+
 
 if __name__ == '__main__':
     unittest.main()

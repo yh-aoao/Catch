@@ -2725,7 +2725,7 @@ class DcmmVecEnv(gym.Env):
                     if info['ee_distance'] < DcmmCfg.distance_thresh:
                         self.stage = "grasping"
             elif self.stage == "grasping":
-                if self.object_motion in ("roll", "bounce", "throw_bounce"):
+                if self.object_motion in ("roll", "throw_bounce"):
                     obj_contacts = self.contacts.get('object_contacts', np.array([])).astype(int)
                     obj_contacts = obj_contacts[(obj_contacts != self.floor_id) & (obj_contacts != self.table_geom_id)]
                     contact_on_palm = np.any(obj_contacts == self.hand_start_id)
@@ -2791,8 +2791,8 @@ class DcmmVecEnv(gym.Env):
                         self.terminated = True
                         info['success'] = False
                         self.terminated_reason = 'failed_control'
-                elif self.object_motion == "throw":
-                    # throw 接球成功判定：球接触手 + 球速低 + 持续 N 步（对齐 roll/bounce 的 success 语义）
+                elif self.object_motion in ("throw", "bounce"):
+                    # throw/bounce 接球成功判定：球接触手 + 球速低 + 持续 N 步（bounce 与 throw 完全一致）
                     obj_contacts = self.contacts.get('object_contacts', np.array([])).astype(int)
                     contact_on_hand = np.any(obj_contacts >= self.hand_start_id)
                     ball_speed = np.linalg.norm(obs['object']['v_lin_3d'])

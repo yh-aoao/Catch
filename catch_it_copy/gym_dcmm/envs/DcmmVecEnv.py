@@ -2650,6 +2650,7 @@ class DcmmVecEnv(gym.Env):
         obs = self._get_obs()
         info = self._get_info()
         
+        catch_diagnostics = None
         # 抓取任务阶段切换（跟踪→抓取）
         if self.task == 'Catching':
             if self.stage == "tracking":
@@ -2696,6 +2697,13 @@ class DcmmVecEnv(gym.Env):
                         palm_dot = 1.0
                     if d_3d < 0.12 and palm_dot > 0.7:
                         self.stage = "grasping"
+                    if self.object_motion == "bounce" and self.bounce_log:
+                        catch_diagnostics = dict(
+                            evaluated_stage='tracking', distance_3d=float(d_3d),
+                            palm_dot=float(palm_dot),
+                            unmet=[name for name, ok in (
+                                ('distance_3d<0.12', d_3d < 0.12),
+                                ('palm_dot>0.7', palm_dot > 0.7)) if not ok])
                 else:
                     if info['ee_distance'] < DcmmCfg.distance_thresh:
                         self.stage = "grasping"
@@ -2740,6 +2748,24 @@ class DcmmVecEnv(gym.Env):
                     # 球离地判定：球心高度高于阈值（接触地面后球会低到接近地面）
                     ball_off_ground = obs['object']['pos3d'][2] > 0.05
                     extra_ok = extra_ok and ball_off_ground
+
+                    if self.object_motion == "bounce" and self.bounce_log:
+                        catch_diagnostics = dict(
+                            evaluated_stage='grasping', palm_contact=bool(contact_on_palm),
+                            palm_contact_steps=int(self.palm_contact_steps),
+                            speed_base_relative=float(ball_speed), speed_limit=float(v_thresh),
+                            low_speed_steps=int(self.consecutive_low_vel), required_steps=int(n_control),
+                            distance_xy=float(dxy_grasp), xy_limit=float(xy_thresh),
+                            mcp_mean=float(mcp_flexion), mcp_limit=float(finger_thresh),
+                            height_base_relative=float(obs['object']['pos3d'][2]),
+                            height_world=float(self.Dcmm.data.body(self.object_name).xpos[2]),
+                            unmet=[name for name, ok in (
+                                ('palm_contact', contact_on_palm),
+                                ('speed', ball_speed <= v_thresh),
+                                ('low_speed_duration', self.consecutive_low_vel >= n_control),
+                                ('distance_xy', dxy_grasp <= xy_thresh),
+                                ('finger_closure', fingers_closed_enough),
+                                ('height_base_relative>0.05', ball_off_ground)) if not ok])
 
                     if self.consecutive_low_vel >= n_control and dxy_grasp <= xy_thresh and fingers_closed_enough and extra_ok:
                         self.terminated = True
@@ -2877,6 +2903,9 @@ class DcmmVecEnv(gym.Env):
                   f"touch={bool(self.step_touch)} terminated={bool(terminated)} "
                   f"truncated={bool(truncated)} steps={self.steps} "
                   f"time={info['env_time']:.3f}s", flush=True)
+            if self.task == "Catching":
+                print(f"[bounce-catch-check] stage={self.stage} checks={catch_diagnostics} "
+                      "(terminal-step checks; unmet is not an episode history)", flush=True)
 
         # 测试模式下完成后重置（注释掉则保持最终状态）
         if done:

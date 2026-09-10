@@ -2876,7 +2876,9 @@ class DcmmVecEnv(gym.Env):
             max_time = getattr(DcmmCfg, 'throw_force_max_time', 3.0)
             truncated = info["env_time"] > max_time
         elif self.task == "Catching":
-            truncated = info["env_time"] > self.env_time
+            max_time = (DcmmCfg.bounce_catch_max_time
+                        if self.object_motion == "bounce" else self.env_time)
+            truncated = info["env_time"] > max_time
         elif self.task == "Tracking":
             truncated = info["env_time"] > self.env_time or self.step_touch
         

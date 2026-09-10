@@ -314,6 +314,7 @@ bounce_no_approach_grace = 0.35    # 无靠近检测：宽限期（s）
 bounce_no_approach_eps = 0.002     # 无靠近检测：最小靠近量（m），基于 3D 距离
 
 # ---- Bounce 抓取阶段判定 ----
+bounce_catch_max_time = 4.0        # bounce Catching 回合时限（秒）
 bounce_catch_v_thresh = 0.05       # 抓取成功：球速低于此值（m/s）
 bounce_catch_N_control = 5         # 抓取成功：连续低速步数
 bounce_catch_wait_steps = 20       # 抓取失败：最大等待步数

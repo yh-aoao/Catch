@@ -135,7 +135,7 @@ class PPO_Track(object):
         self.agent_steps = 0
         self.max_agent_steps = self.ppo_config['max_agent_steps']
         self.max_test_steps = self.ppo_config['max_test_steps']
-        self.best_rewards = -10000
+        self.best_rewards = float('-inf')
         # ---- Timing
         self.data_collect_time = 0
         self.rl_train_time = 0
@@ -207,30 +207,30 @@ class PPO_Track(object):
 
             self.write_stats(a_losses, c_losses, b_losses, entropies, kls)
 
-            mean_rewards = self.episode_rewards.get_mean()
-            mean_lengths = self.episode_lengths.get_mean()
-            mean_success = self.episode_success.get_mean()
-            # print("mean_rewards: ", mean_rewards)
-            self.writer.add_scalar(
-                'metrics/episode_rewards_per_step', mean_rewards, self.agent_steps)
-            self.writer.add_scalar(
-                'metrics/episode_lengths_per_step', mean_lengths, self.agent_steps)
-            self.writer.add_scalar(
-                'metrics/episode_success_per_step', mean_success, self.agent_steps)
-            wandb.log({
-                'metrics/episode_rewards_per_step': mean_rewards,
-                'metrics/episode_lengths_per_step': mean_lengths,
-                'metrics/episode_success_per_step': mean_success,
-            }, step=self.agent_steps)
+            # A rollout can finish before the first episode does (e.g. basket
+            # parking). An empty meter reports 0, which is not an episode return
+            # and must not become an unbeatable best for negative rewards.
+            mean_rewards = None
+            if len(self.episode_rewards) > 0:
+                mean_rewards = self.episode_rewards.get_mean()
+                episode_metrics = {
+                    'metrics/episode_rewards_per_step': mean_rewards,
+                    'metrics/episode_lengths_per_step': self.episode_lengths.get_mean(),
+                    'metrics/episode_success_per_step': self.episode_success.get_mean(),
+                }
+                for name, value in episode_metrics.items():
+                    self.writer.add_scalar(name, value, self.agent_steps)
+                wandb.log(episode_metrics, step=self.agent_steps)
             ckpt_prefix = f"{self.env.call('object_motion')[0]}_track"
-            checkpoint_name = f'{ckpt_prefix}_ep_{self.epoch_num}_step_{int(self.agent_steps // 1e6):04}m_reward_{mean_rewards:.2f}'
+            score_label = 'unscored' if mean_rewards is None else f'reward_{mean_rewards:.2f}'
+            checkpoint_name = f'{ckpt_prefix}_ep_{self.epoch_num}_step_{int(self.agent_steps // 1e6):04}m_{score_label}'
 
             if self.save_freq > 0:
-                if (self.epoch_num % self.save_freq == 0) and (mean_rewards <= self.best_rewards):
+                if (self.epoch_num % self.save_freq == 0) and (mean_rewards is None or mean_rewards <= self.best_rewards):
                     self.save(os.path.join(self.nn_dir, checkpoint_name))
                 self.save(os.path.join(self.nn_dir, f'{ckpt_prefix}_last'))
 
-            if mean_rewards > self.best_rewards:
+            if mean_rewards is not None and mean_rewards > self.best_rewards:
                 print(f'save current best reward: {mean_rewards:.2f}')
                 # remove previous best file
                 prev_best_ckpt = os.path.join(self.nn_dir, f'{ckpt_prefix}_best_reward_{self.best_rewards:.2f}.pth')
@@ -272,6 +272,25 @@ class PPO_Track(object):
 
     def _load_compatible_model_state(self, checkpoint_state):
         model_state = self.model.state_dict()
+        if self.actions_num == 2:
+            # Basket Tracking has only base actions. Cropping an old base+arm
+            # policy can silently produce a runnable but invalid parking policy.
+            mismatches = []
+            for name, target in model_state.items():
+                value = checkpoint_state.get(name)
+                if value is None:
+                    mismatches.append(f'{name}: missing')
+                elif value.shape != target.shape:
+                    mismatches.append(f'{name}: {tuple(value.shape)} -> {tuple(target.shape)}')
+            mismatches.extend(f'{name}: unexpected' for name in checkpoint_state if name not in model_state)
+            if mismatches:
+                raise ValueError(
+                    'Basket base-only Tracking requires a matching 2-action checkpoint; '
+                    'old base+arm checkpoints cannot be partially loaded. Train a new '
+                    'Tracking policy or select a checkpoint with the current architecture. '
+                    'Incompatible tensors: ' + '; '.join(mismatches))
+            self.model.load_state_dict(checkpoint_state)
+            return
         loaded, expanded, skipped = [], [], []
         for name, value in checkpoint_state.items():
             if name not in model_state:
@@ -404,6 +423,7 @@ class PPO_Track(object):
             _parts.append(obs["hand"])
         if "basket" in obs:
             _parts.append(obs["basket"]["rel_pos3d"])
+            _parts.append(obs["basket"]["target_rel_pos2d"])
         obs_array = np.concatenate(tuple(_parts), axis=1)
         obs_tensor = torch.tensor(obs_array, dtype=torch.float32).to(self.device)
         return obs_tensor

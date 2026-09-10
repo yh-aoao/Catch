@@ -27,7 +27,7 @@ class MetricsTests(unittest.TestCase):
                     and any(isinstance(a, ast.Assign) and any(isinstance(t, ast.Subscript)
                             and isinstance(t.value, ast.Name) and t.value.id == 'info'
                             for t in a.targets) for a in n.body)
-                    and 'Tracking' in ast.unparse(n.test))
+                    and 'Tracking' in ast.unparse(n.test) and "'bounce'" in ast.unparse(n.test))
         code = compile(ast.Module(body=[node], type_ignores=[]), '<success>', 'exec')
         for touch, failed, done, expected, reason in [
             (True, False, True, True, 'track_success'),

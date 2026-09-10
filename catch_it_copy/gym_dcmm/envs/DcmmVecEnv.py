@@ -39,6 +39,7 @@ from gym_dcmm.utils.util import *  # 工具函数（如坐标转换/四元数处
 import xml.etree.ElementTree as ET  # XML解析（修改Mujoco模型）
 from scipy.spatial.transform import Rotation as R  # 旋转变换
 from collections import deque  # 双端队列（存储历史数据）
+from gym_dcmm.utils.basket_tracking import parking_state, parking_reward, limit_speed
 
 # os.environ['MUJOCO_GL'] = 'egl'  # 设置Mujoco渲染后端（注释掉则用默认）
 np.set_printoptions(precision=8)  # 设置numpy输出精度（8位小数）
@@ -138,6 +139,7 @@ class DcmmVecEnv(gym.Env):
         print_contacts=False,
         object_motion="throw", # 新增的参数用来判断物体运动类型（throw/roll）
         bounce_physics="legacy", bounce_launch="legacy", bounce_log=False,
+        basket_log=False,
     ):
         # 任务合法性检查（仅支持Tracking/Catching）
         if task not in ["Tracking", "Catching"]:
@@ -173,6 +175,7 @@ class DcmmVecEnv(gym.Env):
         self.bounce_physics_group = "legacy"
         self.bounce_launch_group = "legacy"
         self.bounce_log = bounce_log
+        self.basket_log = basket_log
         
         # 初始化DCMM机器人Mujoco实例
         self.Dcmm = MJ_DCMM(viewer=viewer, object_name=object_name, object_eval=object_eval)
@@ -272,6 +275,7 @@ class DcmmVecEnv(gym.Env):
         if self.object_motion == "throw_basket":
             self.observation_space.spaces["basket"] = spaces.Dict({
                 "rel_pos3d": spaces.Box(-10, 10, shape=(3,), dtype=np.float32),
+                "target_rel_pos2d": spaces.Box(-10, 10, shape=(2,), dtype=np.float32),
             })
         
         # ===================== 定义动作空间（gym.spaces.Dict）=====================
@@ -609,11 +613,14 @@ class DcmmVecEnv(gym.Env):
             },
         }
         
-        # 篮筐观测（仅 throw_basket 模式）
+        # 两阶段使用一致的停车目标观测，方向与底盘速度/动作同属车体坐标系。
         if self.object_motion == "throw_basket":
-            _basket_rel = self.basket_center - self.Dcmm.data.body("arm_base").xpos
+            _basket_rel = self._basket_parking_state()['observation']
             obs["basket"] = {
-                "rel_pos3d": _basket_rel + np.random.normal(0, self.k_obs_object, 3),
+                # 保留原篮筐中心世界坐标差，供第二阶段抛球使用。
+                "rel_pos3d": (self.basket_center - self.Dcmm.data.body("arm_base").xpos
+                              + np.random.normal(0, self.k_obs_object, 3)),
+                "target_rel_pos2d": _basket_rel[:2] + np.random.normal(0, self.k_obs_object, 2),
             }
 
         # 更新历史位置
@@ -625,6 +632,12 @@ class DcmmVecEnv(gym.Env):
             print("##### print obs: \n", obs)
             
         return obs
+
+    def _basket_parking_state(self):
+        rotation = self.Dcmm.data.body('base_link').xmat.reshape(3, 3)
+        yaw = np.arctan2(rotation[1, 0], rotation[0, 0])
+        return parking_state(self.Dcmm.data.body('arm_base').xpos,
+                             self.Dcmm.data.qvel[:2], yaw, self.basket_center, DcmmCfg)
 
     def _get_hand_obs(self):
         """
@@ -1544,6 +1557,9 @@ class DcmmVecEnv(gym.Env):
         self.consecutive_low_vel = 0
 
         # 重置信息字典
+        if self.object_motion == "throw_basket":
+            self.basket_settle_steps = 0
+            self.basket_previous_distance = self._basket_parking_state()['distance']
         self.info = {
             "ee_distance": np.linalg.norm(self.Dcmm.data.body("link6").xpos - 
                                        self.Dcmm.data.body(self.Dcmm.object_name).xpos[0:3]),
@@ -1595,6 +1611,16 @@ class DcmmVecEnv(gym.Env):
         - 约束惩罚（关节超出限位）
         - 控制惩罚（动作突变）
         '''
+        if self.object_motion == "throw_basket" and self.task == "Tracking":
+            state = self._basket_parking_state()
+            rewards, terms = parking_reward(
+                state, self.basket_previous_distance,
+                limit_speed(ctrl['base'], DcmmCfg.basket_track_max_speed),
+                bool(info['success']), self.terminated and not info['success'], DcmmCfg)
+            self.basket_previous_distance = state['distance']
+            info['basket_reward_terms'] = terms
+            return rewards
+
         rewards = 0.0
         
         ## 1. 位置/高度/姿态奖励（支持 roll 专用项）
@@ -1887,19 +1913,11 @@ class DcmmVecEnv(gym.Env):
             except Exception:
                 reward_base_front = 0.0
 
-            # 汇总位置相关奖励
-            if self.task == "Tracking":
-                # 阶段1（对准）：只奖励底座朝向 + 正前方到位，球在手里不抛
-                # 全程距离信号：原乘积奖励在离目标超过 0.5m 时恒为零。
-                _target_xy = self.basket_center[:2] - np.array([0.0, DcmmCfg.basket_base_front_dist])
-                _distance = np.linalg.norm(self.Dcmm.data.body("arm_base").xpos[:2] - _target_xy)
-                reward_pos_component = -DcmmCfg.basket_w_base_front * _distance
-            else:
-                # 阶段2（抛球）：完整抛球奖励
-                reward_pos_component = reward_basket_dist + reward_basket_approach + reward_score + reward_above \
-                                       + reward_release + reward_release_dir + reward_forward \
-                                       + reward_apex + reward_speed_ok + reward_smooth + reward_base_aim \
-                                       + reward_base_front
+            # 阶段2抛球奖励；Tracking 在本函数入口使用独立停车奖励。
+            reward_pos_component = reward_basket_dist + reward_basket_approach + reward_score + reward_above \
+                                   + reward_release + reward_release_dir + reward_forward \
+                                   + reward_apex + reward_speed_ok + reward_smooth + reward_base_aim \
+                                   + reward_base_front
             reward_height = 0.0
             reward_table_h = 0.0
             reward_palm_face = 0.0
@@ -2266,10 +2284,6 @@ class DcmmVecEnv(gym.Env):
                 rewards = reward_pos_component + reward_ctrl + reward_collision + reward_constraint + self.reward_touch
             elif self.object_motion in ("bounce", "throw_bounce"):
                 rewards = reward_pos_component + reward_ctrl + reward_collision + reward_constraint + self.reward_touch
-            elif self.object_motion == "throw_basket":
-                rewards = (reward_pos_component
-                           - DcmmCfg.basket_w_ctrl_base * self.norm_ctrl(ctrl, {"base"})
-                           + reward_collision + reward_constraint)
             elif self.object_motion == "throw_force":
                 w_ctrl_b = getattr(DcmmCfg, 'basket_w_ctrl_base', 0.1)
                 w_ctrl_a = getattr(DcmmCfg, 'basket_w_ctrl_arm', 0.5)
@@ -2327,6 +2341,9 @@ class DcmmVecEnv(gym.Env):
             self.Dcmm.target_base_vel[0:2] = np.zeros(2)
         else:
             self.Dcmm.target_base_vel[0:2] = action_dict['base']
+            if self.object_motion == "throw_basket":
+                self.Dcmm.target_base_vel[0:2] = limit_speed(
+                    action_dict['base'], DcmmCfg.basket_track_max_speed)
         
         ## 机械臂逆运动学求解（末端位置/姿态增量→关节角度）
         action_arm = np.asarray(action_dict["arm"], dtype=np.float64).reshape(-1)
@@ -2346,7 +2363,7 @@ class DcmmVecEnv(gym.Env):
         ## 设置机械手目标关节角度
         # 跟踪阶段：throw/roll 保持手掌张开（零动作），避免手部随机动作导致手指变形
         # bounce 模式特殊处理：手指预置为"半闭合"准备姿态，以便在短暂的接触窗口内快速抓取
-        # throw_basket 模式手部控制：Tracking=固定杯状只训臂，Catching=自由控手训手指
+        # throw_basket 手部控制：Tracking=固定杯状只训底座，Catching=自由控臂手
         if self.object_motion == "throw_basket":
             if (self.task == "Catching"):
                 # 第二阶段：手自由控制，模型学张开释放
@@ -2795,12 +2812,10 @@ class DcmmVecEnv(gym.Env):
         # ==================== throw_basket 终止判定 ====================
         if self.object_motion == "throw_basket" and not self.terminated:
             if self.task == "Tracking":
-                # 阶段1（对准）：底座到位（x 对齐 + y 停在理想距离）即成功，球一直持球不抛
-                _base_xy = self.Dcmm.data.body("arm_base").xpos[0:2]
-                _dx = abs(_base_xy[0] - self.basket_center[0])
-                _dy = abs((self.basket_center[1] - _base_xy[1]) - DcmmCfg.basket_base_front_dist)
-                _base_speed = np.linalg.norm(self.Dcmm.data.qvel[:2])
-                if _dx < 0.15 and _dy < 0.15 and _base_speed < 0.15:
+                # 必须在目标区连续停稳；高速经过目标不会成功。
+                parking = self._basket_parking_state()
+                self.basket_settle_steps = self.basket_settle_steps + 1 if parking['settled'] else 0
+                if self.basket_settle_steps >= DcmmCfg.basket_track_settle_steps:
                     self.terminated = True
                     info['success'] = True
                     self.terminated_reason = 'base_in_front'
@@ -2882,6 +2897,20 @@ class DcmmVecEnv(gym.Env):
         
         terminated = self.terminated
         done = terminated or truncated
+        if self.object_motion == "throw_basket" and self.task == "Tracking":
+            parking = self._basket_parking_state()
+            info['basket_distance'] = parking['distance']
+            info['basket_speed'] = parking['speed']
+            info['basket_settle_steps'] = self.basket_settle_steps
+            if done:
+                info['terminated_reason'] = (self.terminated_reason or
+                                            ('collision_or_failure' if terminated else 'timeout'))
+            if self.basket_log and (done or self.steps % DcmmCfg.basket_track_log_interval == 0):
+                print(f"[basket-track] step={self.steps} target_xy={parking['target'][:2].round(3).tolist()} "
+                      f"error_xy={parking['error_world'].round(3).tolist()} speed={parking['speed']:.3f} "
+                      f"settle={self.basket_settle_steps}/{DcmmCfg.basket_track_settle_steps} "
+                      f"reward={reward:.3f} terms={info['basket_reward_terms']} "
+                      f"success={info['success']} reason={info.get('terminated_reason', 'running')}", flush=True)
         if self.object_motion == "bounce" and self.task == "Tracking":
             # Preserve episode/reward semantics; a failure in this step takes priority.
             info['success'] = bool(self.step_touch and not terminated)

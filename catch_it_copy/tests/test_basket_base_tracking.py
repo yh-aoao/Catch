@@ -10,6 +10,17 @@ import torch
 ROOT = Path(__file__).resolve().parents[1]
 
 
+def load_file(name, relative_path):
+    spec = importlib.util.spec_from_file_location(name, ROOT / relative_path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+PARK = load_file('basket_parking', 'gym_dcmm/utils/basket_tracking.py')
+CFG = load_file('basket_cfg', 'configs/env/DcmmCfg.py')
+
+
 def method(path, cls, name):
     tree = ast.parse((ROOT / path).read_text(encoding='utf-8'))
     owner = next(n for n in tree.body if isinstance(n, ast.ClassDef) and n.name == cls)
@@ -28,23 +39,80 @@ class BasketTests(unittest.TestCase):
                     and isinstance(n.value, ast.Call) and isinstance(n.value.func, ast.Attribute)
                     and n.value.func.attr == 'update_target_ctrl')
         node.body = node.body[:stop]
-        cfg = SimpleNamespace(arm_joints=np.arange(6), basket_fix_base=False)
+        cfg = SimpleNamespace(arm_joints=np.arange(6), basket_fix_base=False, basket_track_max_speed=0.8)
         robot = SimpleNamespace(target_base_vel=np.zeros(3), target_arm_qpos=np.zeros(6),
                                 target_hand_qpos=np.zeros(16))
         env = SimpleNamespace(object_motion='throw_basket', task='Tracking', Dcmm=robot)
-        run = execute(node, dict(np=np, DcmmCfg=cfg))
+        run = execute(node, dict(np=np, DcmmCfg=cfg, limit_speed=PARK.limit_speed))
         run(env, dict(base=np.array([0.2, 0.4]), arm=np.ones(6), hand=np.ones(12)))
         np.testing.assert_allclose(robot.target_base_vel[:2], [0.2, 0.4])
         np.testing.assert_allclose(robot.target_arm_qpos, cfg.arm_joints)
         self.assertEqual(robot.target_hand_qpos[0], 0.6)
         self.assertTrue(env.arm_limit)
+        run(env, dict(base=np.array([1.5, 1.5]), arm=np.ones(6), hand=np.ones(12)))
+        self.assertAlmostEqual(np.linalg.norm(robot.target_base_vel[:2]), 0.8)
+
+    def test_rotated_parking_target_and_overshoot_direction(self):
+        state = PARK.parking_state(np.array([0., 0., 0.4]), [0., 0.8], np.pi / 2,
+                                   np.array([0., 2.2, .9]), CFG)
+        np.testing.assert_allclose(state['observation'], [1.6, 0., .5], atol=1e-8)
+        np.testing.assert_allclose(state['desired_velocity'], [.8, 0.], atol=1e-8)
+        overshot = PARK.parking_state(np.array([0., 1.8, .4]), [0., .4], 0.,
+                                      np.array([0., 2.2, .9]), CFG)
+        self.assertLess(overshot['desired_velocity'][1], 0.)
+
+    def test_reward_encourages_approach_then_braking(self):
+        def state(y, speed):
+            return PARK.parking_state(np.array([0., y, .4]), [0., speed], 0.,
+                                      np.array([0., 2.2, .9]), CFG)
+        def reward(s, previous, success=False):
+            return PARK.parking_reward(s, previous, np.zeros(2), success, False, CFG)[0]
+        self.assertLess(reward(state(0., 0.), 1.6), 0.)  # informative even far from goal
+        self.assertGreater(reward(state(.03, .8), 1.6), reward(state(0., 0.), 1.6))
+        self.assertGreater(reward(state(1.6, 0.), .02), reward(state(1.6, .8), .02))
+        self.assertGreater(reward(state(1.6, 0.), .02, True), 90.)
+
+    def test_actual_tracking_requires_consecutive_stopped_steps(self):
+        node = method('gym_dcmm/envs/DcmmVecEnv.py', 'DcmmVecEnv', 'step')
+        basket = next(n for n in node.body if isinstance(n, ast.If)
+                      and ast.unparse(n.test) == "self.object_motion == 'throw_basket' and (not self.terminated)")
+        code = compile(ast.Module(body=[basket], type_ignores=[]), '<basket termination>', 'exec')
+        env = SimpleNamespace(object_motion='throw_basket', task='Tracking', terminated=False,
+                              basket_settle_steps=0, _basket_parking_state=lambda: {'settled': True})
+        info = {'success': False}
+        scope = dict(self=env, info=info, DcmmCfg=CFG)
+        for _ in range(4):
+            exec(code, scope)
+            self.assertFalse(info['success'])
+        env._basket_parking_state = lambda: {'settled': False}
+        exec(code, scope)
+        self.assertEqual(env.basket_settle_steps, 0)
+        env._basket_parking_state = lambda: {'settled': True}
+        for _ in range(5):
+            exec(code, scope)
+        self.assertTrue(info['success'])
+        self.assertEqual(env.terminated_reason, 'base_in_front')
+
+    def test_actual_reward_bypasses_ball_rewards(self):
+        node = method('gym_dcmm/envs/DcmmVecEnv.py', 'DcmmVecEnv', 'compute_reward')
+        run = execute(node, dict(np=np, DcmmCfg=CFG, parking_reward=PARK.parking_reward,
+                                 limit_speed=PARK.limit_speed))
+        state = PARK.parking_state(np.array([0., 0., .4]), [0., 0.], 0.,
+                                   np.array([0., 2.2, .9]), CFG)
+        env = SimpleNamespace(object_motion='throw_basket', task='Tracking', terminated=False,
+                              basket_previous_distance=1.6, _basket_parking_state=lambda: state)
+        info = {'success': False}
+        value = run(env, {}, info, {'base': np.zeros(2)})
+        self.assertLess(value, 0.)
+        self.assertEqual(value, sum(info['basket_reward_terms'].values()))
 
     def test_observation_prefix_matches_tracking(self):
         obs = dict(base=dict(v_lin_2d=np.zeros((1, 2))),
                    arm=dict(ee_pos3d=np.zeros((1, 3)), ee_quat=np.zeros((1, 4)),
                             ee_v_lin_3d=np.zeros((1, 3))),
                    object=dict(pos3d=np.zeros((1, 3)), v_lin_3d=np.zeros((1, 3))),
-                   hand=np.full((1, 12), 7), basket=dict(rel_pos3d=np.full((1, 3), 9)))
+                   hand=np.full((1, 12), 7), basket=dict(rel_pos3d=np.full((1, 3), 9),
+                                                        target_rel_pos2d=np.full((1, 2), 11)))
         env = SimpleNamespace(device='cpu', env=SimpleNamespace(call=lambda _: ['Tracking']))
         values = []
         for filename, cls in [('ppo_dcmm_track.py', 'PPO_Track'),
@@ -61,7 +129,7 @@ class BasketTests(unittest.TestCase):
             module = importlib.util.module_from_spec(spec)
             spec.loader.exec_module(module)
             modules.append(module)
-        for tracking_dim, obs_dim in [(2, 33), (8, 30)]:
+        for tracking_dim, obs_dim in [(2, 35), (8, 30)]:
             common = dict(actor_units=[16, 16], separate_value_mlp=True)
             track = modules[0].ActorCritic(dict(common, actions_num=tracking_dim, input_shape=(obs_dim - 12,)))
             catch = modules[1].ActorCritic(dict(common, actions_num=20, tracking_actions_num=tracking_dim,

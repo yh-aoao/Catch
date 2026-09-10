@@ -395,6 +395,7 @@ class PPO_Catch_OneStage(object):
             _parts.append(obs["hand"])
         if "basket" in obs:
             _parts.append(obs["basket"]["rel_pos3d"])
+            _parts.append(obs["basket"]["target_rel_pos2d"])
         obs_array = np.concatenate(tuple(_parts), axis=1)
         obs_tensor = torch.tensor(obs_array, dtype=torch.float32).to(self.device)
         return obs_tensor

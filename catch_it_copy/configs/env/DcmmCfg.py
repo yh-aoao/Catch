@@ -370,6 +370,20 @@ basket_w_base_front = 2.0
 # 底座到篮筐的理想 y 距离（m），停在这个距离处视为"正前方到位"
 basket_base_front_dist = 0.6
 
+# 第一阶段停车：目标为 arm_base 的世界位置，不是车体几何中心。
+basket_track_max_speed = 0.8         # XY 合速度上限 (m/s)，两阶段保持一致
+basket_track_slowdown_gain = 1.5     # 奖励参考速度 = 位置误差 * gain，近目标逐渐减速
+basket_track_position_tolerance = 0.08  # x/y 各允许误差 (m)
+basket_track_speed_tolerance = 0.10  # 停稳速度阈值 (m/s)
+basket_track_settle_steps = 5        # 连续停稳策略步数，默认约 0.2s
+basket_track_w_distance = 1.0
+basket_track_w_progress = 20.0
+basket_track_w_velocity = 1.0
+basket_track_time_cost = 0.05
+basket_track_success_reward = 100.0
+basket_track_failure_cost = 100.0
+basket_track_log_interval = 25       # basket_log 开启时，每 N 步及回合结束打印
+
 # ---- 抛球入篮终止判定 ----
 # 球落地则判定失败
 basket_floor_z = 0.0

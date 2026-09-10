@@ -464,6 +464,7 @@ class PPO_Catch_TwoStage(object):
         ]
         if "basket" in obs:
             _parts.append(obs["basket"]["rel_pos3d"])
+            _parts.append(obs["basket"]["target_rel_pos2d"])
         # 前缀必须与第一阶段一致，最后 12 维专门用于手部归一化。
         if "hand" in obs:
             _parts.append(obs["hand"])

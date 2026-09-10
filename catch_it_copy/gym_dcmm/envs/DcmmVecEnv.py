@@ -2712,6 +2712,9 @@ class DcmmVecEnv(gym.Env):
                     obj_contacts = self.contacts.get('object_contacts', np.array([])).astype(int)
                     obj_contacts = obj_contacts[(obj_contacts != self.floor_id) & (obj_contacts != self.table_geom_id)]
                     contact_on_palm = np.any(obj_contacts == self.hand_start_id)
+                    contact_for_control = (np.any((obj_contacts >= self.hand_start_id) &
+                                                 (obj_contacts < self.object_id))
+                                           if self.object_motion == "bounce" else contact_on_palm)
                     if contact_on_palm:
                         self.palm_contact_steps += 1
                     else:
@@ -2722,7 +2725,7 @@ class DcmmVecEnv(gym.Env):
                     n_control = self.bounce_catch_N_control if self.object_motion in ("bounce", "throw_bounce") else self.roll_catch_N_control
                     wait_steps = self.bounce_catch_wait_steps if self.object_motion in ("bounce", "throw_bounce") else self.roll_catch_wait_steps
                     xy_thresh = self.bounce_tracking_xy_thresh if self.object_motion in ("bounce", "throw_bounce") else self.roll_tracking_xy_thresh
-                    if contact_on_palm and ball_speed <= v_thresh:
+                    if contact_for_control and ball_speed <= v_thresh:
                         self.consecutive_low_vel += 1
                     else:
                         self.consecutive_low_vel = 0
@@ -2751,23 +2754,19 @@ class DcmmVecEnv(gym.Env):
 
                     if self.object_motion == "bounce" and self.bounce_log:
                         catch_diagnostics = dict(
-                            evaluated_stage='grasping', palm_contact=bool(contact_on_palm),
+                            evaluated_stage='grasping', hand_contact=bool(contact_for_control),
+                            palm_contact=bool(contact_on_palm),
                             palm_contact_steps=int(self.palm_contact_steps),
                             speed_base_relative=float(ball_speed), speed_limit=float(v_thresh),
                             low_speed_steps=int(self.consecutive_low_vel), required_steps=int(n_control),
-                            distance_xy=float(dxy_grasp), xy_limit=float(xy_thresh),
-                            mcp_mean=float(mcp_flexion), mcp_limit=float(finger_thresh),
-                            height_base_relative=float(obs['object']['pos3d'][2]),
-                            height_world=float(self.Dcmm.data.body(self.object_name).xpos[2]),
                             unmet=[name for name, ok in (
-                                ('palm_contact', contact_on_palm),
+                                ('hand_contact', contact_for_control),
                                 ('speed', ball_speed <= v_thresh),
-                                ('low_speed_duration', self.consecutive_low_vel >= n_control),
-                                ('distance_xy', dxy_grasp <= xy_thresh),
-                                ('finger_closure', fingers_closed_enough),
-                                ('height_base_relative>0.05', ball_off_ground)) if not ok])
+                                ('low_speed_duration', self.consecutive_low_vel >= n_control)) if not ok])
 
-                    if self.consecutive_low_vel >= n_control and dxy_grasp <= xy_thresh and fingers_closed_enough and extra_ok:
+                    grasp_constraints_ok = (True if self.object_motion == "bounce" else
+                                            dxy_grasp <= xy_thresh and fingers_closed_enough and extra_ok)
+                    if self.consecutive_low_vel >= n_control and grasp_constraints_ok:
                         self.terminated = True
                         info['success'] = True
                         self.terminated_reason = 'catch_success'

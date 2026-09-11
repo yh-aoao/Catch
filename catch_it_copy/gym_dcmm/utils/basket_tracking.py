@@ -7,9 +7,15 @@ def limit_speed(velocity, maximum):
     return velocity * min(1.0, maximum / max(float(np.linalg.norm(velocity)), 1e-9))
 
 
-def parking_state(base_position, base_velocity, yaw, basket_center, cfg):
+def parking_state(base_position, base_velocity, yaw, basket_center, cfg, initial_position=None):
     target = np.asarray(basket_center, dtype=float).copy()
-    target[1] -= cfg.basket_base_front_dist
+    forward_offset = getattr(cfg, 'basket_track_forward_offset', None)
+    if forward_offset is None:
+        target[1] -= cfg.basket_base_front_dist
+    else:
+        if initial_position is None:
+            raise ValueError('Basket initial-position parking requires the episode initial arm_base position')
+        target[1] = float(initial_position[1]) + forward_offset
     delta = target - base_position
     c, s = np.cos(yaw), np.sin(yaw)
     rotation = np.array([[c, s], [-s, c]])

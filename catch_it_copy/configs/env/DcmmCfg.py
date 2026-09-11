@@ -202,7 +202,7 @@ roll_sigma_xy = 0.45
 # 靠近奖励权重（鼓励每一步更接近球）
 roll_w_approach = 5.0
 # 高度奖励权重（鼓励末端位于球同一高度，舀球策略不需要在上方）
-roll_w_h = 0.4
+roll_w_h = 2.0
 # 高度奖励的衰减参数（m）
 roll_sigma_h = 0.10
 # 高度偏移（m），舀球策略中手与球同高（0=球面高度）
@@ -260,6 +260,26 @@ roll_hand_ready_thumb = 0.3
 # 跟踪阶段手指动作缩放系数（0=完全固定，0.3=允许模型微调）
 roll_hand_action_scale = 0.3
 
+# 桌沿外侧、桌面下方拦截（世界坐标），不是机械臂基座相对高度。
+roll_wait_height = 0.30
+roll_intercept_ball_offset = 0.04  # 球心相对 link6 目标的高度差
+roll_table_clearance = 0.12       # link6 与桌子前沿的水平余量（软约束）
+roll_w_wait_speed = 0.3
+roll_w_above_wait = 5.0
+roll_w_table_clearance = 10.0
+roll_table_collision_penalty = -10.0
+# 手指奖励使用真实 16 维 qpos；仅靠近球/接触时奖励闭合，过度弯曲扣分。
+roll_hand_close_distance = 0.18
+roll_hand_ready_target = np.array([0.35, 0.20, 0.20])
+roll_hand_close_target = np.array([0.80, 0.60, 0.50])
+roll_hand_thumb_target = 0.4
+roll_hand_flex_max = 1.4
+roll_w_hand_pose = 0.5
+roll_w_hand_closure = 2.0
+roll_w_hand_sync = 1.0
+roll_w_hand_chain = 0.5
+roll_w_hand_limits = 2.0
+
 # roll 模式固定底座（True=固定底座只训臂；False=底座可动，车向前接球）
 roll_fix_base = False
 # roll 模式底盘初始 Y 位置（负=离桌面更远，给车更多前移空间）
@@ -271,7 +291,7 @@ roll_lock_landing_y = 1.5
 # roll 球初始速度范围（m/s，底座可动时球从远处滚来）
 roll_init_speed = np.array([0.8, 1.3])
 
-# ---- 桌面高度奖励（新增）----
+# ---- 历史参数（新 roll 奖励不再使用；使用上方 roll_wait_height 等参数）----
 # 桌面高度锚点（m），手在桌面上方这个高度范围内获得奖励
 roll_table_anchor_z = 0.50
 # 桌面高度奖励权重
@@ -370,6 +390,9 @@ basket_w_base_front = 2.0
 # arm_base 到篮筐中心的世界 Y 轴间距（m）；不是手掌/出手点到框的距离。
 # 停车目标 y = basket_y - 此值；增大后停车位置离框更远。
 basket_base_front_dist = 1.2
+# 默认只比本回合初始 arm_base 位置沿世界 +Y 前移 0.2m，X 仍对齐篮筐。
+# 设为 None 时恢复 basket_y - basket_base_front_dist 的固定间距模式。
+basket_track_forward_offset = 0.2
 
 # 第一阶段停车：目标为 arm_base 的世界位置，不是车体几何中心。
 basket_track_max_speed = 0.8         # XY 合速度上限 (m/s)，两阶段保持一致

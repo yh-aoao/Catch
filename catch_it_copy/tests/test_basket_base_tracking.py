@@ -19,6 +19,8 @@ def load_file(name, relative_path):
 
 PARK = load_file('basket_parking', 'gym_dcmm/utils/basket_tracking.py')
 CFG = load_file('basket_cfg', 'configs/env/DcmmCfg.py')
+# Existing geometry fixtures exercise the optional basket-relative parking mode.
+CFG.basket_track_forward_offset = None
 
 
 def method(path, cls, name):
@@ -33,6 +35,19 @@ def execute(node, scope):
 
 
 class BasketTests(unittest.TestCase):
+    def test_initial_position_target_is_fixed_as_robot_moves(self):
+        cfg = SimpleNamespace(**vars(CFG))
+        cfg.basket_track_forward_offset = .2
+        initial = np.array([0., .118, .4])
+        basket = np.array([.8, 2.2, .9])
+        first = PARK.parking_state(initial, [0., 0.], 0., basket, cfg, initial)
+        moved = PARK.parking_state(np.array([.8, .318, .4]), [0., 0.], 0., basket, cfg, initial)
+        np.testing.assert_allclose(first['target'], [.8, .318, .9])
+        np.testing.assert_allclose(first['target'], moved['target'])
+        self.assertTrue(moved['settled'])
+        with self.assertRaises(ValueError):
+            PARK.parking_state(initial, [0., 0.], 0., basket, cfg)
+
     def test_tracking_holds_arm_and_hand_despite_nonzero_actions(self):
         node = method('gym_dcmm/envs/DcmmVecEnv.py', 'DcmmVecEnv', '_step_mujoco_simulation')
         stop = next(i for i, n in enumerate(node.body) if isinstance(n, ast.Expr)

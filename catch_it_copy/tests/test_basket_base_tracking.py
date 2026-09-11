@@ -55,9 +55,10 @@ class BasketTests(unittest.TestCase):
     def test_rotated_parking_target_and_overshoot_direction(self):
         state = PARK.parking_state(np.array([0., 0., 0.4]), [0., 0.8], np.pi / 2,
                                    np.array([0., 2.2, .9]), CFG)
-        np.testing.assert_allclose(state['observation'], [1.6, 0., .5], atol=1e-8)
+        target_y = 2.2 - CFG.basket_base_front_dist
+        np.testing.assert_allclose(state['observation'], [target_y, 0., .5], atol=1e-8)
         np.testing.assert_allclose(state['desired_velocity'], [.8, 0.], atol=1e-8)
-        overshot = PARK.parking_state(np.array([0., 1.8, .4]), [0., .4], 0.,
+        overshot = PARK.parking_state(np.array([0., target_y + .2, .4]), [0., .4], 0.,
                                       np.array([0., 2.2, .9]), CFG)
         self.assertLess(overshot['desired_velocity'][1], 0.)
 
@@ -67,10 +68,11 @@ class BasketTests(unittest.TestCase):
                                       np.array([0., 2.2, .9]), CFG)
         def reward(s, previous, success=False):
             return PARK.parking_reward(s, previous, np.zeros(2), success, False, CFG)[0]
-        self.assertLess(reward(state(0., 0.), 1.6), 0.)  # informative even far from goal
-        self.assertGreater(reward(state(.03, .8), 1.6), reward(state(0., 0.), 1.6))
-        self.assertGreater(reward(state(1.6, 0.), .02), reward(state(1.6, .8), .02))
-        self.assertGreater(reward(state(1.6, 0.), .02, True), 90.)
+        target_y = 2.2 - CFG.basket_base_front_dist
+        self.assertLess(reward(state(0., 0.), target_y), 0.)  # informative even far from goal
+        self.assertGreater(reward(state(.03, .8), target_y), reward(state(0., 0.), target_y))
+        self.assertGreater(reward(state(target_y, 0.), .02), reward(state(target_y, .8), .02))
+        self.assertGreater(reward(state(target_y, 0.), .02, True), 90.)
 
     def test_actual_tracking_requires_consecutive_stopped_steps(self):
         node = method('gym_dcmm/envs/DcmmVecEnv.py', 'DcmmVecEnv', 'step')
@@ -100,7 +102,7 @@ class BasketTests(unittest.TestCase):
         state = PARK.parking_state(np.array([0., 0., .4]), [0., 0.], 0.,
                                    np.array([0., 2.2, .9]), CFG)
         env = SimpleNamespace(object_motion='throw_basket', task='Tracking', terminated=False,
-                              basket_previous_distance=1.6, _basket_parking_state=lambda: state)
+                              basket_previous_distance=state['distance'], _basket_parking_state=lambda: state)
         info = {'success': False}
         value = run(env, {}, info, {'base': np.zeros(2)})
         self.assertLess(value, 0.)

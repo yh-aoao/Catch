@@ -333,7 +333,7 @@ bounce_hand_action_scale = 0.3     # 跟踪阶段手指动作缩放系数（0=�
 # 篮筐中心世界坐标（m），从 arm_base 前方约 1.8m、高 0.9m 处
 basket_center = np.array([0.0, 2.2, 0.9])
 # 篮筐 x 轴（左右）随机范围（每 episode 采样，训练底座横向移动 + 先到正前方）
-basket_center_x_range = np.array([-0.3, 0.3])
+basket_center_x_range = np.array([-0.8, 0.8])
 # 篮筐半径（m），定义一个圆形目标区域
 basket_radius = 0.20
 # 篮筐高度（m），从篮筐中心向下的深度
@@ -367,8 +367,9 @@ basket_w_ctrl_arm = 0.5
 basket_w_ctrl_hand = 0.1
 # 底座到篮筐正前方的奖励权重（鼓励先移动到底座 x 对齐篮筐、y 停在理想距离）
 basket_w_base_front = 2.0
-# 底座到篮筐的理想 y 距离（m），停在这个距离处视为"正前方到位"
-basket_base_front_dist = 0.6
+# arm_base 到篮筐中心的世界 Y 轴间距（m）；不是手掌/出手点到框的距离。
+# 停车目标 y = basket_y - 此值；增大后停车位置离框更远。
+basket_base_front_dist = 1.2
 
 # 第一阶段停车：目标为 arm_base 的世界位置，不是车体几何中心。
 basket_track_max_speed = 0.8         # XY 合速度上限 (m/s)，两阶段保持一致

@@ -2,6 +2,14 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## 当前研究决策（2026-09-12，用户已确定）
+
+以**多任务移动操作**为主线：先获得 bounce、roll、basket 的可用模型，同时调研如何将
+多个强化学习策略整合为一个模型。当前工作为 bounce 参数泛化、roll/basket 效果改善、
+多任务强化学习策略整合文献调研。MoE 是候选，尚未确定最终方法。
+后续选题建议请先参考 [当前研究主线与决策记录](Codex_当前研究主线与决策记录.md)。
+此用户决策优先于旧研究文档中“优先专精 bounce”的建议。
+
 ## 工作空间总览
 
 本工作空间基于 ICRA 2025 论文 [*Catch It! Learning to Catch in Flight with Mobile Dexterous Hands*](https://github.com/hang0610/Catch_It) 的官方实现，包含两个并行实验分支：

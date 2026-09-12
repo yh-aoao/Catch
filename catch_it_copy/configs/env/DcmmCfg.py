@@ -261,9 +261,14 @@ roll_hand_ready_thumb = 0.3
 roll_hand_action_scale = 0.3
 
 # 桌沿外侧、桌面下方拦截（世界坐标），不是机械臂基座相对高度。
-roll_wait_height = 0.30
+roll_wait_height = 0.24           # 最大等待高度；手部包围界较高时再适当下调
+roll_min_wait_height = 0.14       # 低于此值不继续下调，日志提示几何余量不足
+roll_grasp_clearance = 0.03      # 整只手与桌板包围盒至少留 3cm 软余量
+roll_wait_lock_distance = 0.10   # 桌上阶段到位后锁定目标，避免继续追近桌边
+roll_w_workspace = 10.0
+roll_w_palm_up = 0.5             # 掌心朝上接落球的软奖励，不强制固定姿态
 roll_intercept_ball_offset = 0.04  # 球心相对 link6 目标的高度差
-roll_table_clearance = 0.12       # link6 与桌子前沿的水平余量（软约束）
+roll_table_clearance = 0.12       # 历史配置；改用整手三维 roll_grasp_clearance
 roll_w_wait_speed = 0.3
 roll_w_above_wait = 5.0
 roll_w_table_clearance = 10.0

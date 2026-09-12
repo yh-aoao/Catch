@@ -46,6 +46,7 @@ bounce_physics: "legacy"
 bounce_launch: "legacy"  # L0-L4, gentle, legacy; comma-separated IDs also supported
 bounce_log: False        # print actual group/position/velocity each reset
 basket_log: False        # print parking error, speed, reward terms and terminal reason
+roll_log: False          # print whole-hand clearance, waiting target and valid interception
 
 # catch→throw 顺序任务专用 checkpoint（catch_throw_demo.py 使用）
 catch_tracking: ''

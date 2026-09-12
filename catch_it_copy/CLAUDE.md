@@ -2,6 +2,14 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## 当前研究决策（2026-09-12）
+
+用户已确定走**多任务移动操作**：先训练出 bounce、roll、basket 的可用模型，
+同时调研将多个强化学习策略整合成一个模型的方法。当前推进 bounce 参数泛化、
+roll/basket 改善和多任务强化学习文献调研。MoE 尚未定案。
+后续讨论以 [当前研究主线与决策记录](../Codex_当前研究主线与决策记录.md) 为准，
+不要沿用旧文档把“专精 bounce”视为用户当前选题。
+
 ## 本仓库目标
 
 本仓库 fork 自 ICRA 2025 *"Catch It!"* 论文的官方实现。**核心任务：在保留原始 XArm6 机械臂的基础上，新增多种物体运动模式（throw / roll / bounce / basket）来训练和测试移动灵巧手抓取能力。**

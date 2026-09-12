@@ -68,7 +68,7 @@ def main(config: DictConfig):
                     env_time = 2.5, steps_per_policy = 20,object_motion=config.object_motion,
                     bounce_physics=config.bounce_physics,
                     bounce_launch=config.bounce_launch, bounce_log=config.bounce_log,
-                    basket_log=config.basket_log)
+                    basket_log=config.basket_log, roll_log=config.roll_log)
 
     output_dif = os.path.join('outputs', config.output_name)
     # Get the local date and time

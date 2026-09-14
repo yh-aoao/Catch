@@ -502,6 +502,18 @@ class DcmmVecEnv(gym.Env):
             "base_contacts": base_contacts
         }
 
+    def _base_contact_details(self):
+        """Identify the actual collider; base_collision alone is ambiguous."""
+        model, data = self.Dcmm.model, self.Dcmm.data
+        details = []
+        for contact in data.contact:
+            ids = (int(contact.geom1), int(contact.geom2))
+            if self.base_id not in ids:
+                continue
+            names = [model.geom(g).name or f'geom#{g}/body#{model.geom_bodyid[g]}' for g in ids]
+            details.append(dict(pair=names, distance=float(contact.dist)))
+        return details
+
     def _get_base_vel(self):
         """
         计算底盘的相对线速度（相对于底盘自身坐标系）
@@ -1628,6 +1640,7 @@ class DcmmVecEnv(gym.Env):
         self._release_rewarded = False  # 出手奖励是否已给（每回合重置）
         self._prev_basket_obj = None    # 上一策略步球位置（向前位移奖励用）
         self._prev_roll_d = None        # 上一策略步 roll 目标距离（方案B' 用）
+        self._roll_episode_reward_terms = {}
         self._roll_locked_wait_target = None
         self._locked_landing_x = None   # roll 锁定落点 x（球滚过阈值后冻结）
         self._throw_force_start = None  # 扔模式球初始位置（距离奖励用）
@@ -2118,7 +2131,22 @@ class DcmmVecEnv(gym.Env):
                 print("total reward: {:.3f}\n".format(rewards))
         else:
             raise ValueError("Invalid task: {}".format(self.task))
-        
+
+        if self.object_motion == 'roll':
+            # Report every component of the returned reward, not just shaping.
+            terms = info['roll_reward_terms']
+            terms.update(control=float(reward_ctrl), base_collision=float(reward_collision),
+                         constraint=float(reward_constraint), touch=float(self.reward_touch))
+            terms['orientation'] = float(reward_orient) if self.task == 'Catching' else 0.
+            grasping = self.task == 'Catching' and self.stage == 'grasping'
+            terms['stability'] = float(self.reward_stability) if grasping else 0.
+            terms['precision'] = (DcmmCfg.roll_catch_precision_weight * math.exp(-50 * info['ee_distance'] ** 2)
+                                  if grasping else 0.)
+            totals = getattr(self, '_roll_episode_reward_terms', {})
+            self._roll_episode_reward_terms = {key: totals.get(key, 0.) + float(value)
+                                               for key, value in terms.items()}
+            info['roll_episode_reward_terms'] = self._roll_episode_reward_terms.copy()
+
         return rewards
 
     def _step_mujoco_simulation(self, action_dict):
@@ -2424,6 +2452,8 @@ class DcmmVecEnv(gym.Env):
                     print(f"[early_term] step={self.steps} reason={self.terminated_reason} "
                           f"obj=({obj_pos[0]:.2f},{obj_pos[1]:.2f},{obj_pos[2]:.2f}) "
                           f"ee_z={ee_pos[2]:.2f}")
+                    if self.object_motion == 'roll' and self.terminated_reason == 'base_collision':
+                        print(f"[roll-base-contact] {self._base_contact_details()}", flush=True)
                 break
 
     def step(self, action):
@@ -2710,7 +2740,8 @@ class DcmmVecEnv(gym.Env):
                       f"raw_touch={info['roll_raw_touch']} valid_touch={self.step_touch} "
                       f"low_speed_steps={self.consecutive_low_vel}/{self.roll_catch_N_control} "
                       f"success={info['success']} reason={info.get('terminated_reason', 'running')} "
-                      f"terms={info['roll_reward_terms']}", flush=True)
+                      f"reward={reward:.3f} terms={info['roll_reward_terms']} "
+                      f"episode_terms={info['roll_episode_reward_terms']}", flush=True)
         if self.object_motion == "bounce" and self.bounce_log and done:
             success = bool(info.get('success', False))
             reason = self.terminated_reason or ('timeout' if truncated else 'unspecified')

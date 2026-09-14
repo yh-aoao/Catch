@@ -95,6 +95,31 @@ def reward(env, obs, ee_distance=.04):
 
 
 class RollTests(unittest.TestCase):
+    def test_full_reward_breakdown_sums_to_return_and_accumulates(self):
+        for task, stage in [('Tracking', 'tracking'), ('Catching', 'tracking'), ('Catching', 'grasping')]:
+            env, obs = fixture()
+            env.task, env.stage = task, stage
+            env.norm_ctrl = lambda *_: 2.5
+            env.contacts['base_contacts'] = np.array([7])
+            env.arm_limit = False
+            first, info = reward(env, obs)
+            self.assertAlmostEqual(first, sum(info['roll_reward_terms'].values()))
+            self.assertEqual(info['roll_reward_terms']['base_collision'], -10.)
+            second, info = reward(env, obs)
+            self.assertAlmostEqual(first + second, sum(info['roll_episode_reward_terms'].values()))
+
+    def test_collision_diagnostics_identify_both_orders_and_unnamed_geoms(self):
+        local = {}
+        exec(compile(ast.Module(body=[method('_base_contact_details')], type_ignores=[]), '<contacts>', 'exec'), local)
+        model = SimpleNamespace(geom=lambda g: SimpleNamespace(name={1: 'ranger_base', 2: 'table_surface'}.get(g, '')),
+                                geom_bodyid=np.array([0, 1, 2, 7]))
+        contacts = [SimpleNamespace(geom1=a, geom2=b, dist=-.001) for a, b in [(1, 2), (3, 1), (2, 3)]]
+        env = SimpleNamespace(base_id=1, Dcmm=SimpleNamespace(model=model, data=SimpleNamespace(contact=contacts)))
+        result = local['_base_contact_details'](env)
+        self.assertEqual(len(result), 2)
+        self.assertEqual(result[0]['pair'], ['ranger_base', 'table_surface'])
+        self.assertEqual(result[1]['pair'], ['geom#3/body#7', 'ranger_base'])
+
     def test_predicts_below_table_and_does_not_chase_high_ball_after_exit(self):
         target, waiting = R.interception_target([0., 2., .5], [.2, -1., 0.], .04, CFG)
         self.assertTrue(waiting)

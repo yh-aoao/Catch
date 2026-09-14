@@ -19,10 +19,11 @@ def load(name, path):
 
 C = load('basket_cfg_test', 'configs/env/DcmmCfg.py')
 B = load('basket_catching_test', 'gym_dcmm/utils/basket_catching.py')
+R = load('roll_geometry_test', 'gym_dcmm/utils/roll_rewards.py')
 P = load('basket_parking_test', 'gym_dcmm/utils/basket_tracking.py')
 M = load('basket_model_test', 'gym_dcmm/algs/ppo_dcmm/models_catch.py')
 tree = ast.parse((ROOT / 'gym_dcmm/envs/DcmmVecEnv.py').read_text(encoding='utf-8'))
-scope = dict(np=np, DcmmCfg=C, limit_speed=P.limit_speed,
+scope = dict(np=np, DcmmCfg=C, limit_speed=P.limit_speed, hand_collision_ids=R.hand_collision_ids,
              **{n: getattr(B, n) for n in ('hoop_crossing', 'flight_failure', 'predicted_miss', 'catching_reward')})
 for name in ('_basket_hold_and_release', '_basket_check_flight', 'compute_reward'):
     method = next(n for n in ast.walk(tree) if isinstance(n, ast.FunctionDef) and n.name == name)
@@ -31,15 +32,17 @@ for name in ('_basket_hold_and_release', '_basket_check_flight', 'compute_reward
 
 def fixture():
     ee = SimpleNamespace(xpos=np.array([0., .4, .45]), xmat=np.eye(3))
-    obj = SimpleNamespace(xpos=np.array([0., .4, .55]))
-    data = SimpleNamespace(time=0., ctrl=np.zeros(1), body=lambda n: obj if n == 'object' else ee)
+    qpos = np.zeros(44)
+    qpos[37:40] = [0., .4, .55]
+    obj = SimpleNamespace(xpos=qpos[37:40])
+    data = SimpleNamespace(time=0., ctrl=np.zeros(1), qpos=qpos, qvel=np.zeros(42), body=lambda n: obj if n == 'object' else ee)
     parking = dict(settled=False, in_position=False, distance=.2,
                    velocity=np.zeros(2), desired_velocity=np.zeros(2))
     calls = []
     env = SimpleNamespace(task='Catching', object_motion='throw_basket', object_name='object',
-        Dcmm=SimpleNamespace(data=data, model=SimpleNamespace(opt=SimpleNamespace(timestep=.01, gravity=np.array([0., 0., -9.81]))),
+        Dcmm=SimpleNamespace(data=data, model=SimpleNamespace(geom_bodyid=np.array([0, 1]), body_parentid=np.array([0, 0]), geom_contype=np.array([1, 1]), geom_conaffinity=np.array([1, 1]), opt=SimpleNamespace(timestep=.01, gravity=np.array([0., 0., -9.81]))),
                              set_throw_pos_vel=lambda **kw: calls.append(kw)),
-        object_throw=False, basket_phase='parking', basket_settled_time=0., basket_prepare_start=None,
+        object_throw=False, hand_start_id=1, basket_had_hand_contact=False, basket_phase='parking', basket_settled_time=0., basket_prepare_start=None,
         basket_hold_previous=None, basket_hold_velocity=np.zeros(3), object_q=np.array([1., 0., 0., 0.]),
         random_mass=.05, steps_per_policy=4, basket_center=np.array([0., 2.2, .9]),
         basket_previous_distance=.2, basket_previous_flight_distance=None,
@@ -62,6 +65,8 @@ class BasketTests(unittest.TestCase):
     def test_tilted_hoop_and_floor_failure_priority(self):
         env, _, _ = fixture()
         normal = np.array([0., -np.sin(np.radians(C.basket_tilt_deg)), np.cos(np.radians(C.basket_tilt_deg))])
+        env.basket_had_hand_contact = True
+        env.object_throw, env.basket_phase = True, 'flight'
         previous = env.basket_center + .2 * normal
         env.Dcmm.data.body('object').xpos[:] = env.basket_center - .2 * normal
         scope['_basket_check_flight'](env, previous)
@@ -70,7 +75,18 @@ class BasketTests(unittest.TestCase):
         scope['_basket_check_flight'](env, previous)
         self.assertEqual(env.terminated_reason, 'ball_on_floor')
 
-    def test_release_waits_for_parking_and_keeps_attachment_point(self):
+    def test_crossing_reads_integrated_position_even_when_body_pose_is_stale(self):
+        env, _, _ = fixture()
+        normal = np.array([0., -np.sin(np.radians(C.basket_tilt_deg)), np.cos(np.radians(C.basket_tilt_deg))])
+        previous = env.basket_center + .2 * normal
+        env.Dcmm.data.qpos[37:40] = env.basket_center - .2 * normal
+        original_body = env.Dcmm.data.body
+        env.Dcmm.data.body = lambda n: SimpleNamespace(xpos=previous) if n == 'object' else original_body(n)
+        env.object_throw, env.basket_phase, env.basket_had_hand_contact = True, 'flight', True
+        scope['_basket_check_flight'](env, previous)
+        self.assertEqual(env.terminated_reason, 'basket_score')
+
+    def test_parking_handoff_never_injects_velocity_or_reattaches(self):
         env, parking, calls = fixture()
         for i in range(100):
             env.Dcmm.data.time = i * .01
@@ -81,24 +97,34 @@ class BasketTests(unittest.TestCase):
             env.Dcmm.data.time += .01
             env.hold()
         self.assertEqual(env.basket_phase, 'preparing')
-        before = calls[-1]['pose'].copy()
-        env.Dcmm.data.time = env.basket_prepare_start + C.basket_hold_duration + .01
+        count = len(calls)
+        for t in (2., 3., 10.):
+            env.Dcmm.data.time = t
+            env.hold()
+        self.assertEqual(len(calls), count)
+        self.assertFalse(env.object_throw)  # Time alone cannot create a throw.
+        self.assertEqual(env.Dcmm.data.ctrl[-1], 0.)
+        self.assertTrue(all(np.all(c['velocity'] == 0.) for c in calls))
+        parking.update(in_position=False, settled=False)
         env.hold()
+        self.assertEqual(env.basket_phase, 'preparing')
+        self.assertEqual(len(calls), count)
+
+    def test_release_detection_uses_real_contact_and_preserves_ball_state(self):
+        env, _, calls = fixture()
+        env.basket_phase = 'preparing'
+        env.contacts['object_contacts'] = np.array([1])
+        pos = env.Dcmm.data.body('object').xpos.copy()
+        scope['_basket_check_flight'](env, pos)
+        self.assertTrue(env.basket_had_hand_contact)
+        self.assertFalse(env.object_throw)
+        env.contacts['object_contacts'] = np.array([])
+        env.Dcmm.data.qvel[36:39] = [0., 2., 3.]
+        scope['_basket_check_flight'](env, pos)
         self.assertTrue(env.object_throw)
         self.assertEqual(env.basket_phase, 'flight')
-        np.testing.assert_allclose(calls[-1]['pose'], before)
-        np.testing.assert_allclose(calls[-1]['velocity'][:3], C.basket_release_boost)
-        self.assertEqual(env.Dcmm.data.ctrl[-1], 0.)
-
-    def test_leaving_parking_resets_preparation(self):
-        env, parking, _ = fixture()
-        env.basket_phase = 'preparing'
-        env.basket_prepare_start = 0.
-        env.Dcmm.data.time = 1.
-        env.hold()
-        self.assertEqual(env.basket_phase, 'parking')
-        self.assertIsNone(env.basket_prepare_start)
-        self.assertFalse(env.object_throw)
+        np.testing.assert_allclose(env.Dcmm.data.qvel[36:39], [0., 2., 3.])
+        self.assertEqual(calls, [])
 
     def test_actual_reward_uses_world_position_and_cannot_farm_idle_flight(self):
         env, _, _ = fixture()

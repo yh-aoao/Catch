@@ -44,8 +44,8 @@ def catching_reward(phase, parking, previous_parking_distance, distance,
         terms['braking'] = -float(np.sum((parking['velocity'] - parking['desired_velocity']) ** 2))
     elif phase == 'preparing':
         terms['aim'] = -cfg.basket_catch_w_aim * predicted_error
-        terms['control'] = -cfg.basket_w_ctrl_arm * float(np.sum(np.asarray(controls['arm']) ** 2))
-        terms['control'] -= cfg.basket_w_ctrl_hand * float(np.sum(np.asarray(controls['hand']) ** 2))
+        terms['control'] = -cfg.basket_throw_ctrl_arm * float(np.sum(np.asarray(controls['arm']) ** 2))
+        terms['control'] -= cfg.basket_throw_ctrl_hand * float(np.sum(np.asarray(controls['hand']) ** 2))
     elif phase == 'flight' and previous_flight_distance is not None:
         terms['flight_progress'] = cfg.basket_w_approach * (previous_flight_distance - distance)
     return float(sum(terms.values())), terms

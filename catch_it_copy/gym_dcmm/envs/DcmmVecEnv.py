@@ -662,43 +662,34 @@ class DcmmVecEnv(gym.Env):
                              initial_position=self.basket_initial_arm_base_position)
 
     def _basket_hold_and_release(self):
+        # Scripted transport is confined to parking. Once parked, the ball is
+        # governed by gravity and hand contacts: never write its pose/velocity.
         data = self.Dcmm.data
         dt = float(self.Dcmm.model.opt.timestep)
-        now = float(data.time)
-        if self.task == 'Catching' and not self.object_throw:
+        if self.task == 'Catching' and self.basket_phase == 'parking':
             parking = self._basket_parking_state()
-            if self.basket_phase == 'parking':
-                self.basket_settled_time = self.basket_settled_time + dt if parking['settled'] else 0.
-                if self.basket_settled_time >= DcmmCfg.basket_track_settle_steps * self.steps_per_policy * dt:
-                    self.basket_phase = 'preparing'
-                    self.basket_prepare_start = now
-            elif not parking['in_position']:
-                self.basket_phase = 'parking'
-                self.basket_settled_time = 0.
-                self.basket_prepare_start = None
-        if self.object_throw:
+            self.basket_settled_time = self.basket_settled_time + dt if parking['settled'] else 0.
+            if self.basket_settled_time >= DcmmCfg.basket_track_settle_steps * self.steps_per_policy * dt:
+                self.basket_phase = 'preparing'
+        if self.task == 'Catching' and self.basket_phase != 'parking':
             data.ctrl[-1] = 0.
             return
         rotation = data.body('link6').xmat.reshape(3, 3)
         point = data.body('link6').xpos + rotation[:, 1] * .03 + rotation[:, 2] * (DcmmCfg.basket_ball_radius + .03)
-        self.basket_hold_velocity = (np.zeros(3) if self.basket_hold_previous is None else
-                                     (point - self.basket_hold_previous) / dt)
-        self.basket_hold_previous = point.copy()
-        release = (self.task == 'Catching' and self.basket_phase == 'preparing' and
-                   now - self.basket_prepare_start >= DcmmCfg.basket_hold_duration)
-        velocity = np.zeros(6)
-        if release:
-            velocity[:3] = limit_speed(self.basket_hold_velocity + DcmmCfg.basket_release_boost,
-                                       DcmmCfg.basket_max_release_speed)
-            self.object_throw = True
-            self.basket_phase = 'flight'
-            self.basket_previous_flight_distance = float(np.linalg.norm(point - self.basket_center))
-        # Same attachment point on both sides of release: no pose teleport.
-        self.Dcmm.set_throw_pos_vel(pose=np.r_[point, self.object_q], velocity=velocity)
-        data.ctrl[-1] = 0. if release else self.random_mass * -self.Dcmm.model.opt.gravity[2]
+        self.Dcmm.set_throw_pos_vel(pose=np.r_[point, self.object_q], velocity=np.zeros(6))
+        data.ctrl[-1] = self.random_mass * -self.Dcmm.model.opt.gravity[2]
 
     def _basket_check_flight(self, previous):
-        position = self.Dcmm.data.body(self.object_name).xpos.copy()
+        # mj_step integrates qpos; body.xpos may still describe pre-step kinematics.
+        position = self.Dcmm.data.qpos[37:40].copy()
+        hand_ids = hand_collision_ids(self.Dcmm.model, self.hand_start_id)
+        touching = bool(np.any(np.isin(self.contacts['object_contacts'], hand_ids)))
+        self.basket_had_hand_contact = self.basket_had_hand_contact or touching
+        if self.basket_phase == 'preparing' and self.basket_had_hand_contact and not touching:
+            if np.linalg.norm(position - self.Dcmm.data.body('link6').xpos) > 2 * DcmmCfg.basket_ball_radius:
+                self.object_throw = True
+                self.basket_phase = 'flight'
+                self.basket_previous_flight_distance = float(np.linalg.norm(position - self.basket_center))
         floor_contact = self.floor_id in self.contacts['object_contacts']
         failure = flight_failure(position, self.basket_center, DcmmCfg.basket_ball_radius,
                                  floor_contact, DcmmCfg)
@@ -707,7 +698,7 @@ class DcmmVecEnv(gym.Env):
                                           DcmmCfg.basket_ball_radius)
         if failure or crossed:
             self.terminated = True
-            self.terminated_reason = failure or ('basket_score' if scored else 'basket_miss')
+            self.terminated_reason = failure or ('basket_score' if scored and self.object_throw and not touching and self.basket_had_hand_contact else 'basket_miss')
 
     def _roll_interception_state(self):
         model, data = self.Dcmm.model, self.Dcmm.data
@@ -1653,9 +1644,7 @@ class DcmmVecEnv(gym.Env):
             self.basket_settle_steps = 0
             self.basket_phase = 'parking'
             self.basket_settled_time = 0.0
-            self.basket_prepare_start = None
-            self.basket_hold_previous = None
-            self.basket_hold_velocity = np.zeros(3)
+            self.basket_had_hand_contact = False
             self.basket_previous_flight_distance = None
             self.basket_initial_arm_base_position = self.Dcmm.data.body('arm_base').xpos.copy()
             self.basket_previous_distance = self._basket_parking_state()['distance']
@@ -1724,8 +1713,7 @@ class DcmmVecEnv(gym.Env):
             parking = self._basket_parking_state()
             position = self.Dcmm.data.body(self.object_name).xpos.copy()
             distance = float(np.linalg.norm(position - self.basket_center))
-            prediction = predicted_miss(position, limit_speed(
-                self.basket_hold_velocity + DcmmCfg.basket_release_boost, DcmmCfg.basket_max_release_speed),
+            prediction = predicted_miss(position, self.Dcmm.data.qvel[36:39],
                                         self.basket_center, self.Dcmm.model.opt.gravity)
             timed_out = info['env_time'] > DcmmCfg.basket_max_time
             value, terms = catching_reward(
@@ -2323,7 +2311,7 @@ class DcmmVecEnv(gym.Env):
 
             ## 更新接触信息
             self.contacts = self._get_contacts()
-            if self.object_motion == 'throw_basket' and self.task == 'Catching' and self.object_throw:
+            if self.object_motion == 'throw_basket' and self.task == 'Catching' and self.basket_phase != 'parking':
                 self._basket_check_flight(basket_previous_point)
 
             

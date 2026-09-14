@@ -375,10 +375,6 @@ basket_tilt_deg = 25.0
 basket_ball_radius = 0.04
 # 小球质量（kg）
 basket_ball_mass = 0.05
-# 底座连续停稳后的准备时长（s），之后执行辅助释放
-basket_hold_duration = 0.3
-basket_release_boost = np.array([0.0, 1.5, 2.0])  # 辅助释放基线；不是物理抓持学得的速度
-basket_max_release_speed = 8.0
 basket_catch_w_aim = 2.0
 basket_catch_time_cost = 0.05
 basket_catch_failure_cost = 20.0
@@ -469,3 +465,7 @@ hand_mask = np.array([1, 0, 1, 1,
                       1, 0, 1, 1,
                       1, 0, 1, 1,
                       0, 1, 1, 1])
+
+# Physical throwing control costs (parking weights remain unchanged).
+basket_throw_ctrl_arm = 0.02
+basket_throw_ctrl_hand = 0.01

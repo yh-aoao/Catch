@@ -1,5 +1,8 @@
 # Roll / Basket 奖励与控制修订
 
+> **最新 Basket 实现已改为物理接触投掷。** 本文下方的定时释放与速度补偿是被替换的历史设计。
+> 当前机制、训练命令和限制以 [BASKET_PHYSICAL_THROW.md](BASKET_PHYSICAL_THROW.md) 为准。
+
 日期：2026-09-14。对应本地 `catch_it_copy` 主环境，备用环境未修改。
 目标是恢复可学习的单任务策略，服务于后续多任务移动操作整合。
 

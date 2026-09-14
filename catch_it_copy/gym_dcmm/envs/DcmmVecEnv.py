@@ -42,7 +42,7 @@ from collections import deque  # 双端队列（存储历史数据）
 from gym_dcmm.utils.basket_tracking import parking_state, parking_reward, limit_speed
 from gym_dcmm.utils.basket_catching import hoop_crossing, flight_failure, predicted_miss, catching_reward
 from gym_dcmm.utils.roll_rewards import (interception_target, position_terms, hand_terms,
-                                        hand_workspace, capture_ready, wait_target)
+                                        hand_workspace, capture_ready, wait_target, hand_collision_ids)
 
 # os.environ['MUJOCO_GL'] = 'egl'  # 设置Mujoco渲染后端（注释掉则用默认）
 np.set_printoptions(precision=8)  # 设置numpy输出精度（8位小数）
@@ -463,6 +463,10 @@ class DcmmVecEnv(gym.Env):
         ## 获取机械手的接触点
         geom1_hand = np.where((geom1_ids < self.object_id) & (geom1_ids >= self.hand_start_id))[0]
         geom2_hand = np.where((geom2_ids < self.object_id) & (geom2_ids >= self.hand_start_id))[0]
+        if self.object_motion == 'roll':
+            hand_ids = hand_collision_ids(self.Dcmm.model, self.hand_start_id)
+            geom1_hand = np.flatnonzero(np.isin(geom1_ids, hand_ids))
+            geom2_hand = np.flatnonzero(np.isin(geom2_ids, hand_ids))
         contacts_geom1 = np.array([]); contacts_geom2 = np.array([])
         if geom1_hand.size != 0:
             contacts_geom1 = geom_ids[geom1_hand][:,1]
@@ -707,9 +711,7 @@ class DcmmVecEnv(gym.Env):
 
     def _roll_interception_state(self):
         model, data = self.Dcmm.model, self.Dcmm.data
-        hand_ids = np.arange(self.hand_start_id, self.object_id)
-        hand_ids = hand_ids[(model.geom_contype[hand_ids] != 0) |
-                            (model.geom_conaffinity[hand_ids] != 0)]
+        hand_ids = hand_collision_ids(model, self.hand_start_id)
         ee_position = data.body('link6').xpos.copy()
         workspace = hand_workspace(data.geom_xpos[hand_ids], model.geom_rbound[hand_ids],
                                    ee_position, DcmmCfg)

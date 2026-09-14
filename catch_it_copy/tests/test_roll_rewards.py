@@ -28,6 +28,7 @@ def method(name):
 
 
 SCOPE = dict(np=np, math=math, DcmmCfg=CFG, interception_target=R.interception_target,
+             hand_collision_ids=R.hand_collision_ids,
              position_terms=R.position_terms, hand_terms=R.hand_terms,
              hand_workspace=R.hand_workspace, capture_ready=R.capture_ready,
              wait_target=R.wait_target, quaternion_to_rotation_matrix=lambda _: np.eye(3))
@@ -58,6 +59,8 @@ def fixture():
                             geom_contype=np.array([1, 1, 0, 0, 1]),
                             geom_conaffinity=np.array([1, 0, 0, 1, 1]),
                             geom_rbound=np.array([2., .025, .5, .02, .04]),
+                            geom_bodyid=np.array([0, 1, 1, 2, 3]),
+                            body_parentid=np.array([0, 0, 1, 0]),
                             opt=SimpleNamespace(gravity=np.array([0., 0., -9.81])))
     data = SimpleNamespace(body=lambda name: obj if name == 'object' else ee,
                            geom_xpos=geom_xpos, qpos=np.zeros(44), qvel=np.zeros(42), time=1.)
@@ -95,6 +98,33 @@ def reward(env, obs, ee_distance=.04):
 
 
 class RollTests(unittest.TestCase):
+    def test_table_between_palm_and_object_is_not_part_of_hand(self):
+        env, _ = fixture()
+        model = env.Dcmm.model
+        # Put an enabled table geom inside the old [palm, object) interval.
+        model.geom_bodyid[2] = 0
+        model.geom_contype[2] = 1
+        model.geom_rbound[2] = np.linalg.norm(CFG.roll_table_size)
+        state = env._roll_interception_state()
+        np.testing.assert_array_equal(R.hand_collision_ids(model, env.hand_start_id), [1, 3])
+        self.assertGreater(state['clearance'], 0.)
+        old = R.hand_workspace(env.Dcmm.data.geom_xpos[1:4], model.geom_rbound[1:4],
+                               env.Dcmm.data.body('link6').xpos, CFG)
+        self.assertAlmostEqual(old['clearance'], -2.020099997500125, places=5)
+
+    def test_ball_table_contact_is_not_reported_as_hand_contact(self):
+        env, _ = fixture()
+        env.Dcmm.model.geom_bodyid[2] = 0
+        env.Dcmm.model.geom_contype[2] = 1
+        env.Dcmm.data.contact = SimpleNamespace(geom=np.array([[2, 4]]),
+                                               geom1=np.array([2]), geom2=np.array([4]))
+        env.base_id, env.print_contacts = 9, False
+        local = dict(SCOPE)
+        exec(compile(ast.Module(body=[method('_get_contacts')], type_ignores=[]), '<actual-contacts>', 'exec'), local)
+        contacts = local['_get_contacts'](env)
+        self.assertEqual(contacts['hand_contacts'].size, 0)
+        np.testing.assert_array_equal(contacts['object_contacts'], [2])
+
     def test_full_reward_breakdown_sums_to_return_and_accumulates(self):
         for task, stage in [('Tracking', 'tracking'), ('Catching', 'tracking'), ('Catching', 'grasping')]:
             env, obs = fixture()

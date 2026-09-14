@@ -2,6 +2,27 @@
 import numpy as np
 
 
+def hand_collision_ids(model, palm_id):
+    """Palm and finger descendants, independent of unrelated geometry ordering."""
+    root = int(model.geom_bodyid[palm_id])
+    if root == 0:
+        raise ValueError('Palm geometry must belong to a robot body')
+    selected = []
+    for geom_id, owner in enumerate(model.geom_bodyid):
+        if not (model.geom_contype[geom_id] or model.geom_conaffinity[geom_id]):
+            continue
+        body = int(owner)
+        if body == root:
+            if geom_id == palm_id:
+                selected.append(geom_id)
+            continue
+        while body != 0 and body != root:
+            body = int(model.body_parentid[body])
+        if body == root:
+            selected.append(geom_id)
+    return np.asarray(selected, dtype=int)
+
+
 def interception_target(position, velocity, radius, cfg, gravity=9.81, wait_height=None):
     position = np.asarray(position, dtype=float)
     velocity = np.asarray(velocity, dtype=float)

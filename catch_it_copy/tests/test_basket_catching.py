@@ -24,7 +24,7 @@ P = load('basket_parking_test', 'gym_dcmm/utils/basket_tracking.py')
 M = load('basket_model_test', 'gym_dcmm/algs/ppo_dcmm/models_catch.py')
 tree = ast.parse((ROOT / 'gym_dcmm/envs/DcmmVecEnv.py').read_text(encoding='utf-8'))
 scope = dict(np=np, DcmmCfg=C, limit_speed=P.limit_speed, hand_collision_ids=R.hand_collision_ids,
-             **{n: getattr(B, n) for n in ('hoop_crossing', 'flight_failure', 'predicted_miss', 'catching_reward')})
+             **{n: getattr(B, n) for n in ('hoop_crossing', 'flight_failure', 'predicted_miss', 'catching_reward', 'throw_quality')})
 for name in ('_basket_hold_and_release', '_basket_check_flight', 'compute_reward'):
     method = next(n for n in ast.walk(tree) if isinstance(n, ast.FunctionDef) and n.name == name)
     exec(compile(ast.Module(body=[method], type_ignores=[]), '<actual-basket>', 'exec'), scope)
@@ -53,6 +53,33 @@ def fixture():
 
 
 class BasketTests(unittest.TestCase):
+    def test_reference_velocity_reaches_center_on_descending_trajectory(self):
+        pos, center, gravity = np.array([0., .5, .5]), np.array([0., 2.2, .9]), np.array([0., 0., -9.81])
+        idle, reference = B.throw_quality(pos, np.zeros(3), center, gravity, C)
+        quality, _ = B.throw_quality(pos, reference, center, gravity, C)
+        self.assertAlmostEqual(quality, 1.)
+        self.assertGreater(quality, idle)
+        time = (center[1] - pos[1]) / reference[1]
+        np.testing.assert_allclose(pos + reference*time + .5*gravity*time*time, center)
+
+    def test_support_is_bounded_and_release_credit_is_consumed_once(self):
+        env, _, _ = fixture()
+        env.basket_phase = 'preparing'
+        env.contacts['object_contacts'] = np.array([1])
+        ctrl = dict(arm=np.zeros(6), hand=np.zeros(12))
+        total = 0.
+        for _ in range(20):
+            info = dict(success=False, env_time=1.)
+            scope['compute_reward'](env, {}, info, ctrl)
+            total += info['basket_reward_terms']['support']
+        self.assertAlmostEqual(total, C.basket_support_budget_seconds * C.basket_support_reward_rate)
+        env.basket_release_pending = .8
+        env.basket_phase = 'flight'
+        scope['compute_reward'](env, {}, info, ctrl)
+        self.assertAlmostEqual(info['basket_reward_terms']['valid_release'], .8 * C.basket_w_valid_release)
+        scope['compute_reward'](env, {}, info, ctrl)
+        self.assertEqual(info['basket_reward_terms']['valid_release'], 0.)
+
     def test_crossing_checks_direction_intersection_radius_and_translation(self):
         center = np.array([1., 2., .9])
         for offset in (np.zeros(3), np.array([4., -3., .2])):

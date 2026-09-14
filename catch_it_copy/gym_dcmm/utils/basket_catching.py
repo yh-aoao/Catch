@@ -49,3 +49,17 @@ def catching_reward(phase, parking, previous_parking_distance, distance,
     elif phase == 'flight' and previous_flight_distance is not None:
         terms['flight_progress'] = cfg.basket_w_approach * (previous_flight_distance - distance)
     return float(sum(terms.values())), terms
+
+
+def throw_quality(position, velocity, center, gravity, cfg):
+    times = np.linspace(.25, 1.5, 64)
+    velocities = (np.asarray(center) - position) / times[:, None] - .5 * times[:, None] * gravity
+    normal = np.array([0., -np.sin(np.radians(cfg.basket_tilt_deg)), np.cos(np.radians(cfg.basket_tilt_deg))])
+    descending = ((velocities + times[:, None] * gravity) @ normal) < 0.
+    allowed = descending & (np.linalg.norm(velocities, axis=1) <= cfg.basket_reference_max_speed)
+    if not np.any(allowed):
+        return 0., np.zeros(3)
+    candidates = velocities[allowed]
+    errors = np.sum((candidates - velocity) ** 2, axis=1)
+    index = int(np.argmin(errors))
+    return float(np.exp(-errors[index] / cfg.basket_velocity_sigma ** 2)), candidates[index]

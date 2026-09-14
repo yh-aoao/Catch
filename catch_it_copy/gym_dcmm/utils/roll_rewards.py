@@ -95,6 +95,8 @@ def position_terms(ee_position, ee_velocity, target, on_table, previous_distance
     terms = dict(
         xy=cfg.roll_w_xy / (1. + (xy / cfg.roll_sigma_xy) ** 2),
         height=cfg.roll_w_h / (1. + (delta[2] / cfg.roll_sigma_h) ** 2),
+        arrival=cfg.roll_w_arrival * np.exp(-(distance / .15) ** 2 -
+                 float(np.sum(np.asarray(ee_velocity) ** 2)) / .2 ** 2) if on_table else 0.,
         approach=cfg.roll_w_approach * (0. if previous_distance is None else
                                       previous_distance - distance),
         # Waiting near the target should not require moving continuously.
@@ -130,3 +132,12 @@ def hand_terms(qpos, distance, contact, cfg, allow_closure=True):
         hand_limits=-cfg.roll_w_hand_limits * float(np.mean(
             np.minimum(flex, 0.) ** 2 + np.maximum(flex - cfg.roll_hand_flex_max, 0.) ** 2)),
     )
+
+
+def reach_terms(base_position, base_velocity, target, cfg):
+    # Horizontal reach band, not a command to drive into the table.
+    radius = float(np.linalg.norm(np.asarray(target)[:2] - np.asarray(base_position)[:2]))
+    error = max(0., radius - cfg.roll_reach_max) + max(0., cfg.roll_reach_min - radius)
+    return dict(base_reach=-cfg.roll_w_reach * error,
+                base_settle=-cfg.roll_w_base_settle * float(np.sum(np.asarray(base_velocity) ** 2))
+                            if error == 0. else 0.)

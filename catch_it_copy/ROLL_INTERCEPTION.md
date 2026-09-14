@@ -1,5 +1,8 @@
 # Roll 桌沿下方拦截与抓取奖励
 
+后续已加入底座距离区间、到位等待奖励，并修正移动目标进展项，详见
+[Roll / Basket 最新塑形](ROLL_BASKET_REACH_THROW_UPDATE.md)。
+
 更新：2026-09-14，根据后续训练反馈调整；完整改动见 `ROLL_BASKET_REDESIGN_2026-09-14.md`。
 基于 `DcmmVecEnv.py`，不涉及备用的 `DcmmVecEnv_roll*.py`。
 视频约 4.26s 的关键帧可见手指伸入桌板下方、球贴近桌沿；不能仅凭视频确定每次失败原因。

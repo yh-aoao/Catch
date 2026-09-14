@@ -28,7 +28,7 @@ def method(name):
 
 
 SCOPE = dict(np=np, math=math, DcmmCfg=CFG, interception_target=R.interception_target,
-             hand_collision_ids=R.hand_collision_ids,
+             hand_collision_ids=R.hand_collision_ids, reach_terms=R.reach_terms,
              position_terms=R.position_terms, hand_terms=R.hand_terms,
              hand_workspace=R.hand_workspace, capture_ready=R.capture_ready,
              wait_target=R.wait_target, quaternion_to_rotation_matrix=lambda _: np.eye(3))
@@ -98,6 +98,20 @@ def reward(env, obs, ee_distance=.04):
 
 
 class RollTests(unittest.TestCase):
+    def test_target_motion_alone_gives_no_approach_credit(self):
+        env, obs = fixture()
+        reward(env, obs)
+        env.Dcmm.data.body('object').xpos[0] += .3
+        _, info = reward(env, obs)
+        self.assertAlmostEqual(info['roll_reward_terms']['approach'], 0.)
+
+    def test_reach_band_prefers_accessible_distance_and_stopping(self):
+        def value(y, speed=0.):
+            return sum(R.reach_terms([0., y, .4], [0., speed], [0., 1., .3], CFG).values())
+        self.assertGreater(value(.5), value(0.))
+        self.assertGreater(value(.5), value(.9))
+        self.assertGreater(value(.5), value(.5, .5))
+
     def test_table_between_palm_and_object_is_not_part_of_hand(self):
         env, _ = fixture()
         model = env.Dcmm.model

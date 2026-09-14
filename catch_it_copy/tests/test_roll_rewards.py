@@ -181,7 +181,7 @@ class RollTests(unittest.TestCase):
             self.assertGreater(info['roll_reward_terms']['height'], 0.)
             self.assertGreater(info['roll_reward_terms']['hand_closure'], 0.)
 
-    def test_contact_only_counts_after_whole_ball_and_hand_clear_table(self):
+    def test_ball_exit_gates_contact_but_geometric_margin_is_soft(self):
         cases = ('on_table', 'ball_overlaps_edge', 'still_table_contact', 'finger_too_close',
                  'clear', 'table_collision')
         for case in cases:
@@ -202,46 +202,43 @@ class RollTests(unittest.TestCase):
                 info = {}
                 exec(TRANSITION_CODE, dict(SCOPE, self=env, obs=obs, info=info))
                 self.assertTrue(info['roll_raw_touch'])
-                self.assertEqual(env.stage, 'grasping' if case == 'clear' else 'tracking')
-                if case not in ('clear', 'table_collision'):
+                self.assertEqual(env.stage, 'grasping' if case in ('clear', 'finger_too_close') else 'tracking')
+                if case not in ('clear', 'finger_too_close', 'table_collision'):
                     self.assertFalse(env.step_touch)
                     set_closed_hand(env)
                     _, evaluated = reward(env, obs)
-                    self.assertEqual(evaluated['roll_reward_terms']['hand_closure'], 0.)
+                    self.assertGreaterEqual(evaluated['roll_reward_terms']['hand_closure'], 0.)
                     self.assertEqual(env.reward_touch, 0.)
 
-    def test_locked_target_does_not_follow_ball_or_jump_on_grasping(self):
+    def test_target_updates_with_trajectory_and_is_shared_between_stages(self):
         env, obs = fixture()
         obj = env.Dcmm.data.body('object')
         obj.xpos[:] = [0., 1.5, .5]
         env.Dcmm.data.qvel[36:39] = [0., -1., 0.]
-        first = env._roll_interception_state()['target']
-        self.assertIsNone(env._roll_locked_wait_target)
+        first = env._roll_interception_state()['target'].copy()
         env.Dcmm.data.body('link6').xpos[:] = first
-        env.Dcmm.data.geom_xpos[1] = first + [0., 0., .02]
-        env.Dcmm.data.geom_xpos[3] = first + [0., .04, .05]
-        locked = env._roll_interception_state()
-        self.assertTrue(locked['target_locked'])
-        obj.xpos[:] = [0., .84, .43]
-        np.testing.assert_allclose(env._roll_interception_state()['target'], first)
+        self.assertFalse(env._roll_interception_state()['target_locked'])
+        obj.xpos[0] += .2
+        updated = env._roll_interception_state()['target']
+        self.assertGreater(updated[0], first[0])
+        self.assertAlmostEqual(updated[2], CFG.roll_wait_height)
         _, tracking_info = reward(env, obs)
         env.stage = 'grasping'
         _, grasping_info = reward(env, obs)
-        np.testing.assert_allclose(grasping_info['roll_target_world'], first)
         np.testing.assert_allclose(grasping_info['roll_target_world'], tracking_info['roll_target_world'])
-        grasping_info['roll_target_world'][1] = -99.
-        np.testing.assert_allclose(env._roll_locked_wait_target, first)
+        self.assertIsNone(env._roll_locked_wait_target)
 
-    def test_actual_grasp_reward_has_no_generic_wrist_ball_precision_bonus(self):
+    def test_grasp_precision_and_closure_keep_soft_workspace_penalty(self):
         env, obs = fixture()
         env.stage = 'grasping'
         far, _ = reward(env, obs, ee_distance=.7)
         near, _ = reward(env, obs, ee_distance=.001)
-        self.assertAlmostEqual(far, near)
+        self.assertGreater(near, far)
+        self.assertLessEqual(near - far, CFG.roll_catch_precision_weight)
         env.Dcmm.data.geom_xpos[3] = [0., .87, .44]
         unsafe, info = reward(env, obs, ee_distance=.001)
         self.assertLess(info['roll_reward_terms']['workspace'], 0.)
-        self.assertEqual(info['roll_reward_terms']['hand_closure'], 0.)
+        self.assertGreater(info['roll_reward_terms']['hand_closure'], 0.)
         self.assertLess(unsafe, near)
 
 

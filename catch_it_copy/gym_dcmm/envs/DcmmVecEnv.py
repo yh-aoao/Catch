@@ -40,6 +40,7 @@ import xml.etree.ElementTree as ET  # XML解析（修改Mujoco模型）
 from scipy.spatial.transform import Rotation as R  # 旋转变换
 from collections import deque  # 双端队列（存储历史数据）
 from gym_dcmm.utils.basket_tracking import parking_state, parking_reward, limit_speed
+from gym_dcmm.utils.basket_catching import hoop_crossing, flight_failure, predicted_miss, catching_reward
 from gym_dcmm.utils.roll_rewards import (interception_target, position_terms, hand_terms,
                                         hand_workspace, capture_ready, wait_target)
 
@@ -644,6 +645,54 @@ class DcmmVecEnv(gym.Env):
                              self.Dcmm.data.qvel[:2], yaw, self.basket_center, DcmmCfg,
                              initial_position=self.basket_initial_arm_base_position)
 
+    def _basket_hold_and_release(self):
+        data = self.Dcmm.data
+        dt = float(self.Dcmm.model.opt.timestep)
+        now = float(data.time)
+        if self.task == 'Catching' and not self.object_throw:
+            parking = self._basket_parking_state()
+            if self.basket_phase == 'parking':
+                self.basket_settled_time = self.basket_settled_time + dt if parking['settled'] else 0.
+                if self.basket_settled_time >= DcmmCfg.basket_track_settle_steps * self.steps_per_policy * dt:
+                    self.basket_phase = 'preparing'
+                    self.basket_prepare_start = now
+            elif not parking['in_position']:
+                self.basket_phase = 'parking'
+                self.basket_settled_time = 0.
+                self.basket_prepare_start = None
+        if self.object_throw:
+            data.ctrl[-1] = 0.
+            return
+        rotation = data.body('link6').xmat.reshape(3, 3)
+        point = data.body('link6').xpos + rotation[:, 1] * .03 + rotation[:, 2] * (DcmmCfg.basket_ball_radius + .03)
+        self.basket_hold_velocity = (np.zeros(3) if self.basket_hold_previous is None else
+                                     (point - self.basket_hold_previous) / dt)
+        self.basket_hold_previous = point.copy()
+        release = (self.task == 'Catching' and self.basket_phase == 'preparing' and
+                   now - self.basket_prepare_start >= DcmmCfg.basket_hold_duration)
+        velocity = np.zeros(6)
+        if release:
+            velocity[:3] = limit_speed(self.basket_hold_velocity + DcmmCfg.basket_release_boost,
+                                       DcmmCfg.basket_max_release_speed)
+            self.object_throw = True
+            self.basket_phase = 'flight'
+            self.basket_previous_flight_distance = float(np.linalg.norm(point - self.basket_center))
+        # Same attachment point on both sides of release: no pose teleport.
+        self.Dcmm.set_throw_pos_vel(pose=np.r_[point, self.object_q], velocity=velocity)
+        data.ctrl[-1] = 0. if release else self.random_mass * -self.Dcmm.model.opt.gravity[2]
+
+    def _basket_check_flight(self, previous):
+        position = self.Dcmm.data.body(self.object_name).xpos.copy()
+        floor_contact = self.floor_id in self.contacts['object_contacts']
+        failure = flight_failure(position, self.basket_center, DcmmCfg.basket_ball_radius,
+                                 floor_contact, DcmmCfg)
+        crossed, scored, _ = hoop_crossing(previous, position, self.basket_center,
+                                          DcmmCfg.basket_tilt_deg, DcmmCfg.basket_radius,
+                                          DcmmCfg.basket_ball_radius)
+        if failure or crossed:
+            self.terminated = True
+            self.terminated_reason = failure or ('basket_score' if scored else 'basket_miss')
+
     def _roll_interception_state(self):
         model, data = self.Dcmm.model, self.Dcmm.data
         hand_ids = np.arange(self.hand_start_id, self.object_id)
@@ -659,9 +708,10 @@ class DcmmVecEnv(gym.Env):
             workspace, DcmmCfg)
         candidate, on_table = interception_target(
             position, data.qvel[36:39], radius, DcmmCfg,
-            gravity=abs(float(model.opt.gravity[2])), wait_height=workspace['wait_height'])
-        target, self._roll_locked_wait_target = wait_target(
-            candidate, self._roll_locked_wait_target, ee_position, on_table, DcmmCfg)
+            gravity=abs(float(model.opt.gravity[2])), wait_height=(workspace['wait_height']
+                if DcmmCfg.roll_use_workspace_height else DcmmCfg.roll_wait_height))
+        target = candidate  # Update from the observed ball; do not freeze prediction errors.
+        self._roll_locked_wait_target = None
         return dict(workspace, target=target, on_table=on_table, ball_clear=ball_clear,
                     capture_ready=ready, target_locked=self._roll_locked_wait_target is not None)
 
@@ -1586,6 +1636,12 @@ class DcmmVecEnv(gym.Env):
         # 重置信息字典
         if self.object_motion == "throw_basket":
             self.basket_settle_steps = 0
+            self.basket_phase = 'parking'
+            self.basket_settled_time = 0.0
+            self.basket_prepare_start = None
+            self.basket_hold_previous = None
+            self.basket_hold_velocity = np.zeros(3)
+            self.basket_previous_flight_distance = None
             self.basket_initial_arm_base_position = self.Dcmm.data.body('arm_base').xpos.copy()
             self.basket_previous_distance = self._basket_parking_state()['distance']
         self.info = {
@@ -1649,6 +1705,26 @@ class DcmmVecEnv(gym.Env):
             info['basket_reward_terms'] = terms
             return rewards
 
+        if self.object_motion == "throw_basket":
+            parking = self._basket_parking_state()
+            position = self.Dcmm.data.body(self.object_name).xpos.copy()
+            distance = float(np.linalg.norm(position - self.basket_center))
+            prediction = predicted_miss(position, limit_speed(
+                self.basket_hold_velocity + DcmmCfg.basket_release_boost, DcmmCfg.basket_max_release_speed),
+                                        self.basket_center, self.Dcmm.model.opt.gravity)
+            timed_out = info['env_time'] > DcmmCfg.basket_max_time
+            value, terms = catching_reward(
+                self.basket_phase, parking, self.basket_previous_distance, distance,
+                self.basket_previous_flight_distance, prediction, ctrl, bool(info['success']),
+                self.terminated or timed_out, DcmmCfg)
+            self.basket_previous_distance = parking['distance']
+            if self.object_throw:
+                self.basket_previous_flight_distance = distance
+            info['basket_reward_terms'] = terms
+            info['basket_phase'] = self.basket_phase
+            info['basket_distance_world'] = distance
+            return value
+
         rewards = 0.0
         
         ## 1. 位置/高度/姿态奖励（支持 roll 专用项）
@@ -1689,152 +1765,13 @@ class DcmmVecEnv(gym.Env):
                 shaping = hand_terms(self.Dcmm.data.qpos[21:37],
                                      float(np.linalg.norm(obj_world - ee_world)),
                                      self.step_touch, DcmmCfg,
-                                     allow_closure=roll_state['capture_ready'])
+                                     allow_closure=True)
                 reward_roll_hand = sum(shaping.values())
                 roll_terms.update(shaping)
             info['roll_reward_terms'] = roll_terms
             info['roll_target_world'] = target.copy()
             info['roll_waiting'] = on_table
 
-        elif self.object_motion == "throw_basket":
-            # ==================== Throw_Basket 模式专用奖励 ====================
-            # 核心：球离篮筐越近越好，入篮有大额奖励
-            try:
-                obj_pos = obs['object']['pos3d']
-                basket_center = self.basket_center
-                curr_d_basket = np.linalg.norm(obj_pos - basket_center)
-                prev_d_basket = getattr(self, 'prev_d_basket', curr_d_basket)
-            except Exception:
-                curr_d_basket = 1.0
-                prev_d_basket = 2.0
-                obj_pos = np.zeros(3)
-
-            # 1) 球到篮筐距离奖励（高斯型）
-            w_dist = getattr(DcmmCfg, 'basket_w_dist', 10.0)
-            sigma_dist = getattr(DcmmCfg, 'basket_sigma_dist', 0.3)
-            reward_basket_dist = w_dist / (1.0 + (curr_d_basket / max(1e-6, sigma_dist))**2)
-
-            # 2) 靠近增量奖励
-            w_approach = getattr(DcmmCfg, 'basket_w_approach', 5.0)
-            reward_basket_approach = w_approach * max(0.0, prev_d_basket - curr_d_basket)
-            self.prev_d_basket = curr_d_basket
-
-            # 3) 入篮奖励（球进入篮筐半径范围内）
-            w_score = getattr(DcmmCfg, 'basket_w_score', 50.0)
-            reward_score = w_score if curr_d_basket < DcmmCfg.basket_radius else 0.0
-
-            # 4) 篮筐上方奖励（鼓励从上方接近）
-            w_above = getattr(DcmmCfg, 'basket_w_above', 2.0)
-            dz = obj_pos[2] - self.basket_center[2]
-            reward_above = w_above * max(0.0, dz) / (1.0 + abs(dz))
-
-            # 5) 出手奖励：球刚离手给固定奖励，鼓励抛球而不是握着不放
-            reward_release = 0.0
-            if self.object_throw and not getattr(self, '_release_rewarded', False):
-                reward_release = 5.0
-                self._release_rewarded = True
-
-            # 6) 出手方向奖励：球离手后速度方向朝篮筐
-            reward_release_dir = 0.0
-            if self.object_throw:
-                try:
-                    obj_vel = obs['object']['v_lin_3d']
-                    to_basket = basket_center - obj_pos
-                    _v_norm = np.linalg.norm(obj_vel)
-                    _b_norm = np.linalg.norm(to_basket)
-                    if _v_norm > 0.1 and _b_norm > 0.01:
-                        _dir_align = float(np.dot(obj_vel / _v_norm, to_basket / _b_norm))
-                        reward_release_dir = 3.0 * max(0.0, _dir_align)
-                except Exception:
-                    reward_release_dir = 0.0
-
-            # 7) 向前位移奖励：球水平方向朝篮筐移动
-            reward_forward = 0.0
-            if self.object_throw:
-                try:
-                    _prev_obj = getattr(self, '_prev_basket_obj', obj_pos.copy())
-                    _horiz_mov = (obj_pos - _prev_obj)[:2]
-                    _to_basket_h = (basket_center - _prev_obj)[:2]
-                    _bh_norm = np.linalg.norm(_to_basket_h)
-                    if _bh_norm > 0.01:
-                        reward_forward = 2.0 * float(np.dot(_horiz_mov, _to_basket_h / _bh_norm))
-                except Exception:
-                    reward_forward = 0.0
-            self._prev_basket_obj = obj_pos.copy()
-
-            # 8) 过顶奖励：球接近篮筐水平位置时，高度略高于篮筐（抛物线正确，从上方落入）
-            reward_apex = 0.0
-            if self.object_throw:
-                try:
-                    _horiz = float(np.linalg.norm((obj_pos - basket_center)[:2]))
-                    if _horiz < 0.4:
-                        _dz = float(obj_pos[2] - basket_center[2])
-                        w_apex = getattr(DcmmCfg, 'basket_w_apex', 4.0)
-                        reward_apex = w_apex * max(0.0, 1.0 - abs(_dz - 0.2) / 0.4)
-                except Exception:
-                    reward_apex = 0.0
-
-            # 9) 出手速度大小奖励：球速适中（约 3 m/s 能飞到篮筐，不过大过小）
-            reward_speed_ok = 0.0
-            if self.object_throw:
-                try:
-                    _vnorm = float(np.linalg.norm(obs['object']['v_lin_3d']))
-                    w_speed_ok = getattr(DcmmCfg, 'basket_w_speed_ok', 2.0)
-                    reward_speed_ok = w_speed_ok * max(0.0, 1.0 - abs(_vnorm - 3.0) / 2.0)
-                except Exception:
-                    reward_speed_ok = 0.0
-
-            # 10) 动作平滑奖励：惩罚 arm/base 动作突变（相邻步差分），让抛球动作更自然流畅
-            reward_smooth = 0.0
-            try:
-                _cur = np.concatenate([np.asarray(ctrl['base']).reshape(-1),
-                                       np.asarray(ctrl['arm']).reshape(-1)])
-                _prev = self.prev_ctrl[:_cur.size]
-                if _prev.shape == _cur.shape:
-                    w_smooth = getattr(DcmmCfg, 'basket_w_smooth', 0.5)
-                    reward_smooth = -w_smooth * float(np.linalg.norm(_cur - _prev))
-                self.prev_ctrl[:_cur.size] = _cur
-            except Exception:
-                reward_smooth = 0.0
-
-            # 11) 底座瞄准奖励：底座前进方向对准篮筐，鼓励底盘移动配合瞄准
-            reward_base_aim = 0.0
-            try:
-                base_pos = self.Dcmm.data.body("arm_base").xpos[0:2]
-                to_basket = basket_center[0:2] - base_pos
-                _d = float(np.linalg.norm(to_basket))
-                if _d > 0.1:
-                    base_yaw = quat2theta(self.Dcmm.data.body("base_link").xquat[0],
-                                          self.Dcmm.data.body("base_link").xquat[3])
-                    base_fwd = np.array([math.sin(base_yaw), math.cos(base_yaw)])
-                    w_base_aim = getattr(DcmmCfg, 'basket_w_base_aim', 1.0)
-                    reward_base_aim = w_base_aim * float(np.dot(base_fwd, to_basket / _d))
-            except Exception:
-                reward_base_aim = 0.0
-
-            # 12) 底座正前方奖励：底座 x 对齐篮筐 x、y 停在篮筐前方理想距离（先到位再抛）
-            reward_base_front = 0.0
-            try:
-                _dx, _dy = np.abs(self._basket_parking_state()['error_world'])
-                _w_front = getattr(DcmmCfg, 'basket_w_base_front', 2.0)
-                reward_base_front = _w_front * max(0.0, 1.0 - _dx / 0.5) * max(0.0, 1.0 - _dy / 0.5)
-            except Exception:
-                reward_base_front = 0.0
-
-            # 阶段2抛球奖励；Tracking 在本函数入口使用独立停车奖励。
-            reward_pos_component = reward_basket_dist + reward_basket_approach + reward_score + reward_above \
-                                   + reward_release + reward_release_dir + reward_forward \
-                                   + reward_apex + reward_speed_ok + reward_smooth + reward_base_aim \
-                                   + reward_base_front
-            reward_height = 0.0
-            reward_table_h = 0.0
-            reward_palm_face = 0.0
-            reward_finger_dir = 0.0
-            reward_vel_match = 0.0
-            reward_xy = 0.0
-            reward_approach = 0.0
-            reward_3d_pos = 0.0
-            reward_approach_3d = 0.0
         elif self.object_motion == "throw_force":
             # ==================== Throw_Force 模式专用奖励 ====================
             # 核心：球飞得越远/越快越好
@@ -2053,33 +1990,6 @@ class DcmmVecEnv(gym.Env):
                     except Exception:
                         pass
                     rewards = reward_pos_component + reward_orient + reward_finger_sync + reward_finger_dir_penalty + reward_finger_chain + reward_ctrl + reward_collision + reward_constraint + self.reward_touch
-                elif self.object_motion == "throw_basket":
-                    w_ctrl_b = getattr(DcmmCfg, 'basket_w_ctrl_base', 0.1)
-                    w_ctrl_a = getattr(DcmmCfg, 'basket_w_ctrl_arm', 0.5)
-                    w_ctrl_h = getattr(DcmmCfg, 'basket_w_ctrl_hand', 0.1)
-                    reward_ctrl_basket = - (w_ctrl_b * self.norm_ctrl(ctrl, {"base"})
-                                           + w_ctrl_a * self.norm_ctrl(ctrl, {"arm"})
-                                           + w_ctrl_h * self.norm_ctrl(ctrl, {"hand"}))
-                    # 释放后张开手指奖励（MCP 小 = 张开 = 高分）
-                    # 第二阶段（训练手指）时加入手指奖励
-                    reward_hand_extra = 0.0
-                    if (self.task == "Catching"):
-                        try:
-                            _hq = self.Dcmm.data.qpos[21:37]
-                            _mcp = float(np.mean([_hq[0], _hq[4], _hq[8], _hq[12]]))
-                            if self.object_throw:
-                                reward_hand_extra += 3.0 * max(0.0, 1.0 - _mcp)
-                            _mcv = float(np.var([_hq[0], _hq[4], _hq[8]]))
-                            reward_hand_extra += 2.0 * max(0.0, 0.3 - _mcv)
-                            for _j in [[0,2,3], [4,6,7], [8,10,11], [13,14,15]]:
-                                _vs = [_hq[j] for j in _j]
-                                if all(v >= 0.01 for v in _vs):
-                                    reward_hand_extra += 0.5 * sum(_vs)
-                                elif any(v > 0.01 for v in _vs) and any(v < -0.01 for v in _vs):
-                                    reward_hand_extra -= 1.0
-                        except Exception:
-                            reward_hand_extra = 0.0
-                    rewards = reward_pos_component + reward_hand_extra + reward_ctrl_basket + reward_collision + reward_constraint
                 else:
                     rewards = reward_pos_component + reward_orient + reward_ctrl + reward_collision + reward_constraint + self.reward_touch
 
@@ -2130,37 +2040,13 @@ class DcmmVecEnv(gym.Env):
 
                 # 总奖励（抓取阶段：位置项包含精度奖励 + roll/bounce 专用项）
                 if self.object_motion == "roll":
-                    # Keep the waiting target; the generic wrist-to-ball precision
-                    # reward would pull the hand back toward the table edge.
+                    # Keep interception shaping and add a weaker local grasp precision signal.
                     rewards = reward_pos_component + reward_orient + reward_ctrl + reward_collision + reward_constraint \
-                            + self.reward_touch + self.reward_stability + reward_roll_hand
+                            + self.reward_touch + self.reward_stability + reward_roll_hand \
+                            + DcmmCfg.roll_catch_precision_weight * math.exp(-50 * info["ee_distance"] ** 2)
                 elif self.object_motion in ("bounce", "throw_bounce"):
                     rewards = reward_pos_component + reward_ee_precision + reward_orient + reward_ctrl + reward_collision + reward_constraint \
                             + self.reward_touch + self.reward_stability + reward_finger_closure + reward_finger_chain
-                elif self.object_motion == "throw_basket":
-                    w_ctrl_b = getattr(DcmmCfg, 'basket_w_ctrl_base', 0.1)
-                    w_ctrl_a = getattr(DcmmCfg, 'basket_w_ctrl_arm', 0.5)
-                    reward_ctrl_basket = - (w_ctrl_b * self.norm_ctrl(ctrl, {"base"})
-                                           + w_ctrl_a * self.norm_ctrl(ctrl, {"arm"}))
-                    # 第二阶段（训练手指）时加入手指奖励
-                    reward_hand_extra = 0.0
-                    if (self.task == "Catching"):
-                        try:
-                            _hq = self.Dcmm.data.qpos[21:37]
-                            _mcp = float(np.mean([_hq[0], _hq[4], _hq[8], _hq[12]]))
-                            if self.object_throw:
-                                reward_hand_extra += 3.0 * max(0.0, 1.0 - _mcp)
-                            _mcv = float(np.var([_hq[0], _hq[4], _hq[8]]))
-                            reward_hand_extra += 2.0 * max(0.0, 0.3 - _mcv)
-                            for _j in [[0,2,3], [4,6,7], [8,10,11], [13,14,15]]:
-                                _vs = [_hq[j] for j in _j]
-                                if all(v >= 0.01 for v in _vs):
-                                    reward_hand_extra += 0.5 * sum(_vs)
-                                elif any(v > 0.01 for v in _vs) and any(v < -0.01 for v in _vs):
-                                    reward_hand_extra -= 1.0
-                        except Exception:
-                            reward_hand_extra = 0.0
-                    rewards = reward_pos_component + reward_hand_extra + reward_ctrl_basket + reward_collision + reward_constraint
                 else:
                     rewards = reward_base_pos + reward_ee_pos + reward_ee_precision + reward_orient + reward_ctrl + reward_collision + reward_constraint \
                             + self.reward_touch + self.reward_stability
@@ -2253,13 +2139,16 @@ class DcmmVecEnv(gym.Env):
                 self.Dcmm.target_base_vel[0:2] = limit_speed(
                     action_dict['base'], DcmmCfg.basket_track_max_speed)
         
+        if self.object_motion == 'throw_basket' and self.task == 'Catching' and self.basket_phase != 'parking':
+            self.Dcmm.target_base_vel[:] = 0.0
+
         ## 机械臂逆运动学求解（末端位置/姿态增量→关节角度）
         action_arm = np.asarray(action_dict["arm"], dtype=np.float64).reshape(-1)
         if action_arm.size < 6:
             action_arm = np.concatenate((action_arm, np.zeros(6 - action_arm.size)))
         else:
             action_arm = action_arm[:6]
-        if self.object_motion == "throw_basket" and self.task == "Tracking":
+        if self.object_motion == "throw_basket" and (self.task == "Tracking" or self.basket_phase == "parking"):
             self.arm_limit = True
             self.Dcmm.target_arm_qpos[:] = DcmmCfg.arm_joints
         else:
@@ -2273,8 +2162,8 @@ class DcmmVecEnv(gym.Env):
         # bounce 模式特殊处理：手指预置为"半闭合"准备姿态，以便在短暂的接触窗口内快速抓取
         # throw_basket 手部控制：Tracking=固定杯状只训底座，Catching=自由控臂手
         if self.object_motion == "throw_basket":
-            if (self.task == "Catching"):
-                # 第二阶段：手自由控制，模型学张开释放
+            if self.task == "Catching" and self.basket_phase != "parking":
+                # 准备/飞行阶段：手自由控制；当前释放时机仍由脚本计时决定。
                 self.Dcmm.action_hand2qpos(action_dict["hand"])
             else:
                 # 第一阶段：手固定杯状托球
@@ -2336,39 +2225,7 @@ class DcmmVecEnv(gym.Env):
                     self.object_throw = True
 
             elif self.object_motion == "throw_basket":
-                # ========== 抛球入篮模式：Tracking=持球对准（不抛），Catching=持球→抛球 ==========
-                hold_duration = getattr(DcmmCfg, 'basket_hold_duration', 0.3)
-                elapsed = self.Dcmm.data.time - self.start_time
-
-                if self.task == "Tracking" or elapsed < hold_duration:
-                    # 持球阶段：球粘在手掌上，用 FK 计算准确的掌心位置
-                    ee_xpos = self.Dcmm.data.body("link6").xpos.copy()
-                    ee_xmat = self.Dcmm.data.body("link6").xmat.copy().reshape(3, 3)
-                    palm_normal = ee_xmat[:, 1]  # link6 Y = 掌心方向
-                    palm_up = ee_xmat[:, 2]      # link6 Z = 手指方向
-                    ball_radius = DcmmCfg.basket_ball_radius
-                    palm_pos = ee_xpos + palm_normal * 0.03 + palm_up * (ball_radius + 0.03)
-                    self.Dcmm.set_throw_pos_vel(
-                        pose=np.concatenate((palm_pos, self.object_q[:])),
-                        velocity=np.zeros(6))
-                    self.Dcmm.data.ctrl[-1] = self.random_mass * -self.Dcmm.model.opt.gravity[2]
-                elif not self.object_throw:
-                    # 释放：球以当前手掌速度飞出
-                    ee_xpos = self.Dcmm.data.body("link6").xpos.copy()
-                    palm_vel = self.Dcmm.data.body("link6").cvel.copy()  # 6D velocity
-                    ee_lin_vel = palm_vel[3:6] if len(palm_vel) >= 6 else np.zeros(3)
-                    # 额外加一点向前上方的速度模拟抛掷
-                    throw_boost = np.array([0.0, 1.5, 2.0])
-                    release_vel = np.concatenate((ee_lin_vel[:3] + throw_boost, np.zeros(3)))
-                    self.Dcmm.set_throw_pos_vel(
-                        pose=np.concatenate((ee_xpos + np.array([0.0, 0.05, -0.05]), self.object_q[:])),
-                        velocity=release_vel)
-                    self.Dcmm.data.ctrl[-1] = 0.0
-                    self.object_throw = True
-                    if self.print_info:
-                        print(f"[throw_basket] Ball released! vel={release_vel}")
-                else:
-                    self.Dcmm.data.ctrl[-1] = 0.0
+                self._basket_hold_and_release()
 
             elif self.object_motion == "throw_force":
                 # ========== 扔模式：持球 → 用力甩出 ==========
@@ -2427,6 +2284,8 @@ class DcmmVecEnv(gym.Env):
             ## 执行 Mujoco 仿真步
             if self.print_info:
                 print(f"[DEBUG] Before mj_step - object qpos: {self.Dcmm.data.qpos[37:44]}, qvel: {self.Dcmm.data.qvel[36:42]}")
+            if self.object_motion == 'throw_basket':
+                basket_previous_point = self.Dcmm.data.qpos[37:40].copy()
             mujoco.mj_step(self.Dcmm.model, self.Dcmm.data)
             mujoco.mj_rnePostConstraint(self.Dcmm.model, self.Dcmm.data)
             if self.print_info:
@@ -2434,11 +2293,14 @@ class DcmmVecEnv(gym.Env):
 
             ## 更新接触信息
             self.contacts = self._get_contacts()
+            if self.object_motion == 'throw_basket' and self.task == 'Catching' and self.object_throw:
+                self._basket_check_flight(basket_previous_point)
+
             
             ## 碰撞检测（底盘碰撞则终止）
             if self.contacts['base_contacts'].size != 0:
                 self.terminated = True
-                if self.object_motion == "bounce":
+                if self.object_motion in ('bounce', 'roll', 'throw_basket'):
                     self.terminated_reason = 'base_collision'
             
             ## 物体接触检测（判断是否成功抓取/跟踪）
@@ -2489,6 +2351,8 @@ class DcmmVecEnv(gym.Env):
                     off_table_back = obj_y > 4.1
                     off_table_z = obj_z < 0.05  # 球落地（滚下后没接住）
                     out_of_bounds = off_table_x or off_table_back or off_table_z
+                elif self.object_motion == 'throw_basket':
+                    out_of_bounds = False  # Dedicated phase-aware flight checks above.
                 elif self.object_motion in ("bounce", "throw_bounce"):
                     out_left_right = abs(obj_x) > 1.2
                     if obj_rel is not None:
@@ -2586,7 +2450,7 @@ class DcmmVecEnv(gym.Env):
         
         catch_diagnostics = None
         # 抓取任务阶段切换（跟踪→抓取）
-        if self.task == 'Catching' and (self.object_motion != 'roll' or not self.terminated):
+        if self.task == 'Catching' and self.object_motion != 'throw_basket' and (self.object_motion != 'roll' or not self.terminated):
             if self.stage == "tracking":
                 # roll/bounce 模式使用更严格的 tracking-success 判定
                 if self.object_motion == "roll":
@@ -2735,6 +2599,8 @@ class DcmmVecEnv(gym.Env):
                         self.terminated_reason = 'ball_left'
 
         # ==================== throw_basket 终止判定 ====================
+        if self.object_motion == 'throw_basket' and self.task == 'Catching':
+            info['success'] = self.terminated_reason == 'basket_score'
         if self.object_motion == "throw_basket" and not self.terminated:
             if self.task == "Tracking":
                 # 必须在目标区连续停稳；高速经过目标不会成功。
@@ -2744,34 +2610,6 @@ class DcmmVecEnv(gym.Env):
                     self.terminated = True
                     info['success'] = True
                     self.terminated_reason = 'base_in_front'
-            else:
-                obj_pos = obs['object']['pos3d']
-                basket_center = self.basket_center
-                d_basket = np.linalg.norm(obj_pos - basket_center)
-
-                # 篮筐平面法线（斜筐绕 X 轴倾斜，法线 = 局部 Z 轴）
-                _tilt_rad = np.radians(getattr(DcmmCfg, 'basket_tilt_deg', 0.0))
-                _normal = np.array([0.0, -np.sin(_tilt_rad), np.cos(_tilt_rad)])
-                _rel = obj_pos - basket_center
-                _normal_proj = float(np.dot(_rel, _normal))          # 球沿法线方向到平面距离
-                _in_plane_dist = float(np.linalg.norm(_rel - _normal_proj * _normal))  # 平面内离中心距离
-
-                # 成功：球穿过篮筐平面（法线距离小）+ 平面内离中心 < 半径
-                if _in_plane_dist < DcmmCfg.basket_radius and abs(_normal_proj) < DcmmCfg.basket_ball_radius:
-                    self.terminated = True
-                    info['success'] = True
-                    self.terminated_reason = 'basket_score'
-                # 失败：球落地
-                elif obj_pos[2] < DcmmCfg.basket_floor_z:
-                    self.terminated = True
-                    info['success'] = False
-                    self.terminated_reason = 'ball_on_floor'
-                # 失败：球飞太远
-                elif d_basket > DcmmCfg.basket_fail_dist:
-                    self.terminated = True
-                    info['success'] = False
-                    self.terminated_reason = 'ball_too_far'
-
         # ==================== throw_force 终止判定 ====================
         if self.object_motion == "throw_force" and not self.terminated:
             obj_pos = obs['object']['pos3d']
@@ -2836,6 +2674,14 @@ class DcmmVecEnv(gym.Env):
                       f"settle={self.basket_settle_steps}/{DcmmCfg.basket_track_settle_steps} "
                       f"reward={reward:.3f} terms={info['basket_reward_terms']} "
                       f"success={info['success']} reason={info.get('terminated_reason', 'running')}", flush=True)
+        if self.object_motion == 'throw_basket' and self.task == 'Catching':
+            if done:
+                info['terminated_reason'] = self.terminated_reason or ('timeout' if truncated else 'failure')
+            if self.basket_log and (done or self.steps % DcmmCfg.basket_track_log_interval == 0):
+                print(f"[basket-catch] phase={self.basket_phase} released={self.object_throw} "
+                      f"time={info['env_time']:.3f} distance_world={info['basket_distance_world']:.3f} "
+                      f"success={info['success']} reason={info.get('terminated_reason', 'running')} "
+                      f"terms={info['basket_reward_terms']}", flush=True)
         if self.object_motion in ("bounce", "roll") and self.task == "Tracking":
             # Preserve episode/reward semantics; a failure in this step takes priority.
             info['success'] = bool(self.step_touch and not terminated)

@@ -48,8 +48,12 @@ python3 train_DCMM.py test=True task=Tracking num_envs=1 viewer=True object_moti
 ```
 
 第二阶段模型动作分工为底座分支 2 维 + 臂手分支 18 维。
-2026-09-12 复核纠正：当前优化器包含所有模型参数，Tracking 分支及其输入归一化
-也会更新；此前本文的“冻结底座”说法不准确。动作分支拆分不等于冻结参数。
+2026-09-14 更新：`Catching_TwoStage` 默认 `basket_freeze_tracking=true`，冻结
+Tracking 网络、输出层、标准差和输入归一化；采样时底座使用均值动作，PPO 只计算
+18 维臂手动作的概率与熵。此前版本确实会继续更新底座分支。
+新训练需提供 `checkpoint_tracking`；其他运动模式不启用此项冻结。
+第二阶段先连续停稳，再保持底座零速度指令并准备抛球。具体奖励和局限见
+`ROLL_BASKET_REDESIGN_2026-09-14.md`。
 同时修正了两阶段篮筐观测拼接顺序，确保 tracking 输入一致、最后 12 维为手关节。
 保留 `basket.rel_pos3d`（篮筐中心相对 arm_base 的世界坐标差），新增
 `basket.target_rel_pos2d`（停车目标在车体坐标系中的 XY 误差），让停车目标、

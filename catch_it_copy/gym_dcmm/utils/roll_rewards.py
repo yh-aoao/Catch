@@ -55,7 +55,7 @@ def capture_ready(position, radius, table_contact, workspace, cfg):
     edge = cfg.roll_table_pos[1] - cfg.roll_table_size[1]
     # Require the whole ball to clear the front edge, not just its center.
     ball_clear = bool(position[1] + radius < edge and not table_contact)
-    return ball_clear, bool(ball_clear and workspace['hand_clear'])
+    return ball_clear, ball_clear  # Geometry clearance is a soft reward, not a success gate.
 
 
 def wait_target(candidate, locked_target, ee_position, on_table, cfg):

@@ -261,12 +261,14 @@ roll_hand_ready_thumb = 0.3
 roll_hand_action_scale = 0.3
 
 # 桌沿外侧、桌面下方拦截（世界坐标），不是机械臂基座相对高度。
-roll_wait_height = 0.24           # 最大等待高度；手部包围界较高时再适当下调
+roll_wait_height = 0.30           # 最大等待高度；手部包围界较高时再适当下调
+roll_use_workspace_height = False  # 先恢复固定等待高度，几何余量只作软惩罚
 roll_min_wait_height = 0.14       # 低于此值不继续下调，日志提示几何余量不足
 roll_grasp_clearance = 0.03      # 整只手与桌板包围盒至少留 3cm 软余量
 roll_wait_lock_distance = 0.10   # 桌上阶段到位后锁定目标，避免继续追近桌边
 roll_w_workspace = 10.0
 roll_w_palm_up = 0.5             # 掌心朝上接落球的软奖励，不强制固定姿态
+roll_catch_precision_weight = 3.0  # 恢复接近真实球的抓取信号，弱于旧版的10
 roll_intercept_ball_offset = 0.04  # 球心相对 link6 目标的高度差
 roll_table_clearance = 0.12       # 历史配置；改用整手三维 roll_grasp_clearance
 roll_w_wait_speed = 0.3
@@ -373,14 +375,19 @@ basket_tilt_deg = 25.0
 basket_ball_radius = 0.04
 # 小球质量（kg）
 basket_ball_mass = 0.05
-# 持球时长（s），球在手中稳定后再抛出
+# 底座连续停稳后的准备时长（s），之后执行辅助释放
 basket_hold_duration = 0.3
+basket_release_boost = np.array([0.0, 1.5, 2.0])  # 辅助释放基线；不是物理抓持学得的速度
+basket_max_release_speed = 8.0
+basket_catch_w_aim = 2.0
+basket_catch_time_cost = 0.05
+basket_catch_failure_cost = 20.0
 # ---- 抛球入篮奖励权重 ----
-# 球到篮筐中心的 3D 距离奖励（高斯型）
+# 旧距离塑形参数（主环境 Basket Catching 已改为分阶段奖励）
 basket_w_dist = 10.0
 # 球到篮筐距离衰减参数（m）
 basket_sigma_dist = 0.3
-# 入篮成功奖励（球进入篮筐区域，即距离 < basket_radius）
+# 入篮奖励：沿框法向穿过平面且交点位于扣除球半径的有效圆孔
 basket_w_score = 100.0
 # 靠近奖励权重（鼓励球向篮筐移动）
 basket_w_approach = 5.0

@@ -34,7 +34,12 @@ class PPO_Catch_TwoStage(object):
         self.obs_t_shape = (self.env.call("obs_t_dim")[0],) # remove the hand part
         self.full_action_dim = self.env.call("act_c_dim")[0]
         # ---- Model ----
+        self.freeze_tracking = (self.env.call('act_t_dim')[0] == 2 and
+                                bool(full_config.get('basket_freeze_tracking', True)))
+        if self.freeze_tracking and not (full_config.checkpoint_tracking or full_config.checkpoint_catching or full_config.test):
+            raise ValueError('Frozen basket parking requires checkpoint_tracking or checkpoint_catching')
         net_config = {
+            'freeze_tracking': self.freeze_tracking,
             'actor_units': self.network_config.mlp.units,
             'actions_num': self.actions_num,
             'tracking_actions_num': self.env.call("act_t_dim")[0],
@@ -124,7 +129,7 @@ class PPO_Catch_TwoStage(object):
         self.agent_steps = 0
         self.max_agent_steps = self.ppo_config['max_agent_steps']
         self.max_test_steps = self.ppo_config['max_test_steps']
-        self.best_rewards = -10000
+        self.best_rewards = -float('inf')
         # ---- Timing
         self.data_collect_time = 0
         self.rl_train_time = 0
@@ -184,7 +189,7 @@ class PPO_Catch_TwoStage(object):
     def set_train(self):
         self.model.train()
         if self.normalize_input:
-            self.running_mean_std_track.train()
+            self.running_mean_std_track.train(not getattr(self, 'freeze_tracking', False))
             self.running_mean_std_hand.train()
         if self.normalize_value:
             self.value_mean_std.train()
@@ -223,18 +228,19 @@ class PPO_Catch_TwoStage(object):
             mean_lengths = self.episode_lengths.get_mean()
             mean_success = self.episode_success.get_mean()
 
-            self.writer.add_scalar(
-                'metrics/episode_rewards_per_step', mean_rewards, self.agent_steps)
-            self.writer.add_scalar(
-                'metrics/episode_lengths_per_step', mean_lengths, self.agent_steps)
-            self.writer.add_scalar(
-                'metrics/episode_success_per_step', mean_success, self.agent_steps)
+            if len(self.episode_rewards) > 0:
+                self.writer.add_scalar(
+                    'metrics/episode_rewards_per_step', mean_rewards, self.agent_steps)
+                self.writer.add_scalar(
+                    'metrics/episode_lengths_per_step', mean_lengths, self.agent_steps)
+                self.writer.add_scalar(
+                    'metrics/episode_success_per_step', mean_success, self.agent_steps)
             
-            wandb.log({
-                'metrics/episode_rewards_per_step': mean_rewards,
-                'metrics/episode_lengths_per_step': mean_lengths,
-                'metrics/episode_success_per_step': mean_success,
-            }, step=self.agent_steps)
+                wandb.log({
+                    'metrics/episode_rewards_per_step': mean_rewards,
+                    'metrics/episode_lengths_per_step': mean_lengths,
+                    'metrics/episode_success_per_step': mean_success,
+                }, step=self.agent_steps)
             ckpt_prefix = f"{self.env.call('object_motion')[0]}_catch"
             checkpoint_name = f'{ckpt_prefix}_ep_{self.epoch_num}_step_{int(self.agent_steps // 1e6):04}m_reward_{mean_rewards:.2f}'
 
@@ -243,7 +249,7 @@ class PPO_Catch_TwoStage(object):
                     self.save(os.path.join(self.nn_dir, checkpoint_name))
                 self.save(os.path.join(self.nn_dir, f'{ckpt_prefix}_last'))
 
-            if mean_rewards > self.best_rewards:
+            if len(self.episode_rewards) > 0 and mean_rewards > self.best_rewards:
                 print(f'save current best reward: {mean_rewards:.2f}')
                 # remove previous best file
                 prev_best_ckpt = os.path.join(self.nn_dir, f'{ckpt_prefix}_best_reward_{self.best_rewards:.2f}.pth')

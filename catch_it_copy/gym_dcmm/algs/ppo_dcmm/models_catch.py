@@ -30,6 +30,7 @@ class MLP(nn.Module):
 class ActorCritic(nn.Module):
     def __init__(self, kwargs):
         nn.Module.__init__(self)
+        self.freeze_tracking = kwargs.pop('freeze_tracking', False)
         separate_value_mlp = kwargs.pop('separate_value_mlp')
         self.separate_value_mlp = separate_value_mlp
 
@@ -70,6 +71,11 @@ class ActorCritic(nn.Module):
         torch.nn.init.orthogonal_(self.mu_t.weight, gain=0.01)
         torch.nn.init.orthogonal_(self.mu_c.weight, gain=0.01)
         torch.nn.init.orthogonal_(self.value.weight, gain=1.0)
+        if self.freeze_tracking:
+            self.actor_mlp_t.requires_grad_(False)
+            self.mu_t.requires_grad_(False)
+            self.sigma_t.requires_grad_(False)
+
 
     @torch.no_grad()
     def act(self, obs_dict):
@@ -79,8 +85,12 @@ class ActorCritic(nn.Module):
         sigma = torch.exp(logstd)
         distr = torch.distributions.Normal(mu, sigma)
         selected_action = distr.sample()
+        first = self.mu_t.out_features if self.freeze_tracking else 0
+        if self.freeze_tracking:
+            selected_action[:, :first] = mu[:, :first]
+
         result = {
-            'neglogpacs': -distr.log_prob(selected_action).sum(1),
+            'neglogpacs': -distr.log_prob(selected_action)[:, first:].sum(1),
             'values': value,
             'actions': selected_action,
             'mus': mu,
@@ -123,8 +133,9 @@ class ActorCritic(nn.Module):
         mu, logstd, value = self._actor_critic(input_dict)
         sigma = torch.exp(logstd)
         distr = torch.distributions.Normal(mu, sigma)
-        entropy = distr.entropy().sum(dim=-1)
-        prev_neglogp = -distr.log_prob(prev_actions).sum(1)
+        first = self.mu_t.out_features if self.freeze_tracking else 0
+        entropy = distr.entropy()[:, first:].sum(dim=-1)
+        prev_neglogp = -distr.log_prob(prev_actions)[:, first:].sum(1)
         result = {
             'prev_neglogp': torch.squeeze(prev_neglogp),
             'values': value,

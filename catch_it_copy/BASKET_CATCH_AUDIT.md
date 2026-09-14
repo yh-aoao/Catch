@@ -1,5 +1,9 @@
 # Basket Catching 检查记录
 
+> 2026-09-14：以下为修复前的历史审查。当前已修复持球越界、坐标混用、过早释放、
+> 释放位置跳变、奖励/成功事件不一致、手姿刷分、TwoStage 底座未冻结和空统计 best。
+> 当前机制和验证局限见 [本轮修改说明](ROLL_BASKET_REDESIGN_2026-09-14.md)。
+
 日期：2026-09-12。范围：当前 `throw_basket` 的 Catching / Catching_TwoStage。
 本轮按用户要求先检查，未修改 basket 奖励、释放机制、失败条件或训练分支。
 证据来自代码、执行实际代码分支的 CPU 验证及 XML 静态 FK；没有运行完整 MuJoCo 物理训练。

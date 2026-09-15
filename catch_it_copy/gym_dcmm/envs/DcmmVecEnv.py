@@ -515,8 +515,39 @@ class DcmmVecEnv(gym.Env):
             if self.base_id not in ids:
                 continue
             names = [model.geom(g).name or f'geom#{g}/body#{model.geom_bodyid[g]}' for g in ids]
+            for i, g in enumerate(ids):
+                if hasattr(model, 'body'):
+                    names[i] += f'/body={model.body(int(model.geom_bodyid[g])).name}'
             details.append(dict(pair=names, distance=float(contact.dist)))
         return details
+
+    def _roll_arm_target_safe(self, target):
+        model, data = self.Dcmm.model, self.Dcmm.data
+        if not hasattr(self, '_roll_guard_data'):
+            self._roll_guard_data = mujoco.MjData(model)
+            self._roll_guard_geoms = [g for g in range(model.ngeom)
+                if model.body(int(model.geom_bodyid[g])).name in ('link2', 'link3', 'link4', 'link5', 'link6')
+                and (model.geom_contype[g] or model.geom_conaffinity[g])]
+        probe = self._roll_guard_data
+        probe.qpos[:] = data.qpos
+        probe.qvel[:] = 0.
+        mujoco.mj_fwdPosition(model, probe)
+        margin = DcmmCfg.roll_arm_base_margin
+        def distances():
+            return np.array([mujoco.mj_geomDistance(model, probe, self.base_id, g, margin, None)
+                             for g in self._roll_guard_geoms])
+        initial = distances()
+        if not initial.size or not np.all(np.isfinite(initial)) or not np.all(np.isfinite(target)):
+            return False
+        current = data.qpos[15:21].copy()
+        count = max(2, int(np.ceil(np.max(np.abs(target - current)) / .03)))
+        for fraction in np.linspace(0., 1., count + 1)[1:]:
+            probe.qpos[15:21] = current + fraction * (target - current)
+            mujoco.mj_fwdPosition(model, probe)
+            gap = distances()
+            if not np.all(np.isfinite(gap)) or np.any(gap < np.minimum(initial, margin) - 1e-6):
+                return False
+        return True
 
     def _get_base_vel(self):
         """
@@ -1606,7 +1637,9 @@ class DcmmVecEnv(gym.Env):
 
         # 重置目标控制指令
         self.Dcmm.target_base_vel = np.array([0.0, 0.0, 0.0])
-        if self.object_motion == "throw_force":
+        if self.object_motion == "roll":
+            self.Dcmm.target_arm_qpos[:] = self.Dcmm.data.qpos[15:21]
+        elif self.object_motion == "throw_force":
             self.Dcmm.target_arm_qpos[:] = getattr(DcmmCfg, 'throw_force_arm_joints', DcmmCfg.arm_joints)[:]
         else:
             self.Dcmm.target_arm_qpos[:] = DcmmCfg.arm_joints[:]
@@ -2219,8 +2252,20 @@ class DcmmVecEnv(gym.Env):
             self.arm_limit = True
             self.Dcmm.target_arm_qpos[:] = DcmmCfg.arm_joints
         else:
+            if self.object_motion == 'roll':
+                # Start each IK solve from measured joints, not an unexecuted target.
+                self.Dcmm.data_arm.qpos[:6] = self.Dcmm.data.qpos[15:21]
+                mujoco.mj_fwdPosition(self.Dcmm.model_arm, self.Dcmm.data_arm)
+                self.roll_arm_guard_blocked = False
             result_QP, _ = self.Dcmm.move_ee_pose(action_arm)
             self.arm_limit = bool(result_QP[1])
+            if self.object_motion == 'roll':
+                self.roll_arm_guard_blocked = self.arm_limit and not self._roll_arm_target_safe(np.asarray(result_QP[0]))
+                self.arm_limit = self.arm_limit and not self.roll_arm_guard_blocked
+                if not self.arm_limit:
+                    self.Dcmm.target_arm_qpos[:] = self.Dcmm.data.qpos[15:21]
+                    self.Dcmm.data_arm.qpos[:6] = self.Dcmm.data.qpos[15:21]
+                    mujoco.mj_fwdPosition(self.Dcmm.model_arm, self.Dcmm.data_arm)
             if self.object_motion == 'throw_basket':
                 self.basket_arm_attempts = getattr(self, 'basket_arm_attempts', 0) + 1
                 self.basket_arm_ik_successes = getattr(self, 'basket_arm_ik_successes', 0) + int(self.arm_limit)
@@ -2779,7 +2824,7 @@ class DcmmVecEnv(gym.Env):
                       f"target={roll_status['target'].round(3).tolist()} locked={roll_status['target_locked']} "
                       f"ball_clear={roll_status['ball_clear']} hand_clearance={roll_status['clearance']:.3f}m "
                       f"required={DcmmCfg.roll_grasp_clearance:.3f}m height_feasible={roll_status['height_feasible']} "
-                      f"raw_touch={info['roll_raw_touch']} valid_touch={self.step_touch} "
+                      f"raw_touch={info['roll_raw_touch']} valid_touch={self.step_touch} guard_blocked={getattr(self, 'roll_arm_guard_blocked', False)} "
                       f"low_speed_steps={self.consecutive_low_vel}/{self.roll_catch_N_control} "
                       f"success={info['success']} reason={info.get('terminated_reason', 'running')} "
                       f"reward={reward:.3f} terms={info['roll_reward_terms']} "

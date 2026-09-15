@@ -98,6 +98,24 @@ def reward(env, obs, ee_distance=.04):
 
 
 class RollTests(unittest.TestCase):
+    def test_arm_guard_rejects_base_approach_without_mutating_live_state(self):
+        live = SimpleNamespace(qpos=np.zeros(44), qvel=np.zeros(42))
+        probe = SimpleNamespace(qpos=np.zeros(44), qvel=np.zeros(42))
+        env = SimpleNamespace(Dcmm=SimpleNamespace(model=object(), data=live),
+                              _roll_guard_data=probe, _roll_guard_geoms=[60], base_id=2)
+        mock = SimpleNamespace(mj_fwdPosition=lambda *_: None,
+            mj_geomDistance=lambda m, d, a, b, cutoff, segment: min(cutoff, .01 - d.qpos[15]))
+        local = dict(np=np, DcmmCfg=CFG, mujoco=mock)
+        exec(compile(ast.Module(body=[method('_roll_arm_target_safe')], type_ignores=[]), '<actual-guard>', 'exec'), local)
+        guard = local['_roll_arm_target_safe']
+        self.assertFalse(guard(env, np.array([.02, 0., 0., 0., 0., 0.])))
+        self.assertTrue(guard(env, np.array([-.02, 0., 0., 0., 0., 0.])))
+        np.testing.assert_array_equal(live.qpos, np.zeros(44))
+        # A state inside the margin can escape; it is not forced to remain stuck.
+        live.qpos[15] = .008
+        self.assertTrue(guard(env, np.zeros(6)))
+        self.assertFalse(guard(env, np.array([.009, 0., 0., 0., 0., 0.])))
+
     def test_target_motion_alone_gives_no_approach_credit(self):
         env, obs = fixture()
         reward(env, obs)

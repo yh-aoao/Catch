@@ -981,3 +981,13 @@ roll的track：小车往后走的，先是远离小球，然后再往前走的�
 bounce的track：好像还行
 roll的catch：我感觉好像还可以，但是基于的track模型太拉了，等track训练好看看
 basket：还是没学会怎么抛出小球，机械臂完全不动，灵巧手就动一小下，可以参考之前单阶段的basket的奖励函数是怎么设计的
+
+
+217：roll+basket_c
+211：bounce
+207：bounce_c
+
+再测试一下bounce的好模型的效果
+也许是成功判定的条件改为手指就可以，所以影响了
+
+回退到之前的版本训练bounce：git switch --detach 36bf535

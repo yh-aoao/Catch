@@ -818,12 +818,36 @@ class DcmmVecEnv(gym.Env):
         self.action_buffer["arm"].append(copy.deepcopy(self.Dcmm.target_arm_qpos[:]))
         self.action_buffer["hand"].append(copy.deepcopy(self.Dcmm.target_hand_qpos[:]))
 
+    def _roll_check_executing_targets(self):
+        """Recheck queued targets against measured joints before each physics step."""
+        arm = np.asarray(self.action_buffer['arm'][0])
+        hand = np.asarray(self.action_buffer['hand'][0])
+        if self._roll_arm_target_safe(arm, hand):
+            return
+        self.roll_arm_guard_blocked = True
+        self.roll_execution_guard_blocks = getattr(self, 'roll_execution_guard_blocks', 0) + 1
+        self.arm_limit = False
+        for name, joints in (('arm', slice(15, 21)), ('hand', slice(21, 37))):
+            measured = self.Dcmm.data.qpos[joints].copy()
+            getattr(self.Dcmm, 'target_' + name + '_qpos')[:] = measured
+            self.action_buffer[name].clear()
+            self.action_buffer[name].append(measured)
+            # Cancel accumulated error without changing randomized PID gains.
+            pid = getattr(self.Dcmm, name + '_pid')
+            pid.integral[:] = 0.
+            pid.e_prev[:] = 0.
+            pid.init = False
+        self.Dcmm.data_arm.qpos[:6] = self.Dcmm.data.qpos[15:21]
+        mujoco.mj_fwdPosition(self.Dcmm.model_arm, self.Dcmm.data_arm)
+
     def _get_ctrl(self):
         """
         将动作空间指令转换为Mujoco控制指令（带动作噪声）
         Returns:
             np.array: 30维控制指令（底盘转向4+驱动4+机械臂6+机械手16）
         """
+        if self.object_motion == 'roll':
+            self._roll_check_executing_targets()
         # 底盘速度控制
         mv_steer, mv_drive = self.Dcmm.move_base_vel(self.action_buffer["base"][0]) # 8维
         # 机械臂PID控制
@@ -1637,6 +1661,7 @@ class DcmmVecEnv(gym.Env):
         if self.print_info:
             print(f"[DEBUG] object_throw set to: {self.object_throw}")
         self.steps = 0
+        self.roll_execution_guard_blocks = 0
 
         # 重置时间
         self.start_time = self.Dcmm.data.time
@@ -2558,6 +2583,13 @@ class DcmmVecEnv(gym.Env):
                           f"ee_z={ee_pos[2]:.2f}")
                     if self.object_motion == 'roll' and self.terminated_reason == 'base_collision':
                         print(f"[roll-base-contact] {self._base_contact_details()}", flush=True)
+                        print(f"[roll-control-check] version=execution_guard_v1 "
+                              f"guard_blocked={getattr(self, 'roll_arm_guard_blocked', False)} "
+                              f"execution_blocks={getattr(self, 'roll_execution_guard_blocks', 0)} "
+                              f"arm_speed_max={np.max(np.abs(self.Dcmm.data.qvel[14:20])):.3f} "
+                              f"hand_speed_max={np.max(np.abs(self.Dcmm.data.qvel[20:36])):.3f} "
+                              f"arm_error_max={np.max(np.abs(self.action_buffer['arm'][0] - self.Dcmm.data.qpos[15:21])):.4f} "
+                              f"hand_error_max={np.max(np.abs(self.action_buffer['hand'][0] - self.Dcmm.data.qpos[21:37])):.4f}", flush=True)
                 break
 
     def step(self, action):

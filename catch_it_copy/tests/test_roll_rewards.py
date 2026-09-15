@@ -98,6 +98,38 @@ def reward(env, obs, ee_distance=.04):
 
 
 class RollTests(unittest.TestCase):
+    def test_execution_guard_cancels_queue_and_pid_history(self):
+        data = SimpleNamespace(qpos=np.arange(44, dtype=float))
+        robot = SimpleNamespace(data=data, data_arm=SimpleNamespace(qpos=np.zeros(6)),
+                                model_arm=object())
+        buffers = {'arm': [np.zeros(6)], 'hand': [np.zeros(16)]}
+        class Buffer(list):
+            pass
+        buffers = {k: Buffer(v) for k, v in buffers.items()}
+        for name, size in [('arm', 6), ('hand', 16)]:
+            setattr(robot, 'target_' + name + '_qpos', np.zeros(size))
+            setattr(robot, name + '_pid', SimpleNamespace(
+                integral=np.ones(size), e_prev=np.ones(size), init=True, Kp=17.))
+        env = SimpleNamespace(Dcmm=robot, action_buffer=buffers, arm_limit=True,
+                              _roll_arm_target_safe=lambda *args: True)
+        local = dict(np=np, mujoco=SimpleNamespace(mj_fwdPosition=lambda *_: None))
+        exec(compile(ast.Module(body=[method('_roll_check_executing_targets')], type_ignores=[]), '<actual-execution-guard>', 'exec'), local)
+        check = local['_roll_check_executing_targets']
+        check(env)
+        self.assertTrue(robot.arm_pid.init)
+        env._roll_arm_target_safe = lambda *args: False
+        check(env)
+        self.assertFalse(env.arm_limit)
+        self.assertEqual(env.roll_execution_guard_blocks, 1)
+        for name, joints in [('arm', slice(15, 21)), ('hand', slice(21, 37))]:
+            np.testing.assert_array_equal(buffers[name][0], data.qpos[joints])
+            np.testing.assert_array_equal(getattr(robot, 'target_' + name + '_qpos'), data.qpos[joints])
+            pid = getattr(robot, name + '_pid')
+            self.assertFalse(pid.init)
+            self.assertEqual(pid.Kp, 17.)
+            self.assertTrue(np.all(pid.integral == 0.))
+        np.testing.assert_array_equal(robot.data_arm.qpos, data.qpos[15:21])
+
     def test_arm_guard_rejects_base_approach_without_mutating_live_state(self):
         live = SimpleNamespace(qpos=np.zeros(44), qvel=np.zeros(42))
         probe = SimpleNamespace(qpos=np.zeros(44), qvel=np.zeros(42))

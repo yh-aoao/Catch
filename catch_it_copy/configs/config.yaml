@@ -40,11 +40,11 @@ hydra:
 
 object_motion: "throw"
 
-# bounce only: legacy preserves existing DcmmCfg/random launch behavior.
-# Multiple IDs: bounce_physics='"P0,P1,P2"' (uniform choice each episode).
+# Bounce uses the frozen 61709fc environment, config and PPO implementation.
+# Only legacy is accepted while reproducing this baseline; P/L overrides error.
 bounce_physics: "legacy"
-bounce_launch: "legacy"  # L0-L4, gentle, legacy; comma-separated IDs also supported
-bounce_log: False        # print actual group/position/velocity each reset
+bounce_launch: "legacy"
+bounce_log: False        # print baseline identity; no later outcome diagnostics
 basket_log: False        # print parking error, speed, reward terms and terminal reason
 basket_freeze_tracking: True # TwoStage basket: preserve pretrained parking actor and normalization
 roll_log: False          # print whole-hand clearance, waiting target and valid interception

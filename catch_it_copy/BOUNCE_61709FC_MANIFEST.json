@@ -26,7 +26,7 @@
       "source": "gym_dcmm/envs/DcmmVecEnv.py",
       "destination": "gym_dcmm/envs/DcmmVecEnv_bounce_61709fc.py",
       "source_sha256": "d653471820c53951c7612fc3711c735801b3fd3d4d773df1ea0d521feeec2667",
-      "restored_sha256": "f337a7c08d7adbac19b10dc62746b49f12316c1bd87f9c1c87deef74a924212d",
+      "restored_sha256": "b2ac1ce7fb7bad93beed3ad12368c113227b2bef55bcdab1ad6b502641b859cb",
       "replacements": [
         [
           "import configs.env.DcmmCfg as DcmmCfg",
@@ -37,7 +37,19 @@
           "from gym_dcmm.agents.MujocoDcmm_bounce_61709fc import MJ_DCMM"
         ]
       ],
-      "restored_lf_sha256": "f337a7c08d7adbac19b10dc62746b49f12316c1bd87f9c1c87deef74a924212d"
+      "restored_lf_sha256": "e4120256fc838e3f872fea9e76b7a53749ba8c6c416b1d2ccaa46e69b7b05763",
+      "compatibility_patches": [
+        {
+          "reason": "Skip OpenGL for state-only headless training",
+          "old": "        self.mujoco_renderer = MujocoRenderer(\n            self.Dcmm.model, self.Dcmm.data\n        )",
+          "new": "        # State-only training must not create an OpenGL renderer.\n        self.mujoco_renderer = None\n        if self.imshow_cam or self.Dcmm.open_viewer or self.render_per_step:\n            self.mujoco_renderer = MujocoRenderer(self.Dcmm.model, self.Dcmm.data)"
+        },
+        {
+          "reason": "Preserve empty image info without rendering",
+          "old": "        imgs = np.zeros((0, self.img_size[0], self.img_size[1]))",
+          "new": "        if self.mujoco_renderer is None:\n            return np.zeros((0, self.img_size[0], self.img_size[1]))\n        imgs = np.zeros((0, self.img_size[0], self.img_size[1]))"
+        }
+      ]
     },
     {
       "source": "gym_dcmm/algs/ppo_dcmm/__init__.py",

@@ -31,7 +31,7 @@ python3 train_DCMM.py test=False task=Catching_TwoStage num_envs=32 object_motio
 - 物理、奖励、阈值、随机化配置：`configs/env/DcmmCfg_bounce_61709fc.py`。
 - 机器人控制封装：`gym_dcmm/agents/MujocoDcmm_bounce_61709fc.py`。
 - PPO、网络、归一化、经验缓存：`gym_dcmm/algs/ppo_dcmm_61709fc/`。
-- 原始代码内容仅替换了私有配置和机器人模块的 import 路径，方法体未修改。
+- 原始代码调整了私有配置和机器人模块的 import 路径；另有下述无头渲染兼容修复。
 - 共用 IK、PID、工具、训练 YAML 与提交一致；共用机器人 XML 只有不影响语义的空白差异。
 - Roll、Basket 继续使用当前环境、配置和 PPO。
 
@@ -47,7 +47,7 @@ python3 train_DCMM.py test=False task=Catching_TwoStage num_envs=32 object_motio
   MCP 平均闭合角大于 0.3rad，以及旧观测相对高度大于 0.05m。
 - 连续手掌接触超过 20 步仍未成功，按旧代码 failed_control 结束。
 - 旧 Catching PPO 以 truncates 统计成功，超时可能被统计为成功；这不是实际抓取率。
-- 原来的最佳模型选择逻辑、旧渲染器创建行为也保留。
+- 原来的最佳模型选择逻辑保留；无头渲染行为按下述兼容修复处理。
 - P0–P8、L0–L4、gentle 等预设不属于该提交，现在传入会报错；删除这些覆盖参数即可。
 - bounce_log=true 只额外打印版本身份，不增加后来修改的末步成功/失败诊断。
 
@@ -60,3 +60,14 @@ CPU 测试检查源码完整性、Bounce 路由（含别名和位置参数）、
 
 本机没有完成 MuJoCo 训练验证。源码逻辑恢复不保证得到同一个 653.87 模型：
 还需对应的 Tracking checkpoint、训练命令、种子、软件版本和硬件执行条件。
+
+## 无头服务器 gladLoadGL 兼容修复
+
+旧环境在 reset/step 无条件渲染，导致服务器多进程训练时出现 gladLoadGL error。
+现在 viewer=False、imshow_cam=False、render_per_step=False 时不创建渲染器，
+render() 返回形状为 (0,H,W) 的空图像数组；info['imgs'] 保留，避免改变接口。
+任一画面开关开启时保留原渲染路径，仍需要可用的 OpenGL 环境。
+当前 PPO 状态输入不读取 imgs，因此奖励、物理、成功/失败终止和 PPO 优化不受此改动影响。
+该任务训练入口使用 rgb_array，跳过该渲染路径不增加或减少 NumPy 随机采样；
+若自行使用 depth_rgb_array，旧图像噪声预处理涉及随机数，不保证与其逐次随机序列相同。
+manifest 的 compatibility_patches 明确记录这两处修复，其余旧源码不变。

@@ -204,9 +204,10 @@ class DcmmVecEnv(gym.Env):
         self.Dcmm.model.vis.global_.offwidth = DcmmCfg.cam_config["width"]
         self.Dcmm.model.vis.global_.offheight = DcmmCfg.cam_config["height"]
         # 初始化Mujoco渲染器
-        self.mujoco_renderer = MujocoRenderer(
-            self.Dcmm.model, self.Dcmm.data
-        )
+        # State-only training must not create an OpenGL renderer.
+        self.mujoco_renderer = None
+        if self.imshow_cam or self.Dcmm.open_viewer or self.render_per_step:
+            self.mujoco_renderer = MujocoRenderer(self.Dcmm.model, self.Dcmm.data)
         
         # 启动Mujoco可视化窗口（如果开启）
         if self.Dcmm.open_viewer:
@@ -2467,6 +2468,8 @@ class DcmmVecEnv(gym.Env):
         Returns:
             np.array: 渲染图像数组
         """
+        if self.mujoco_renderer is None:
+            return np.zeros((0, self.img_size[0], self.img_size[1]))
         imgs = np.zeros((0, self.img_size[0], self.img_size[1]))
         imgs_depth = np.zeros((0, self.img_size[0], self.img_size[1]))
         

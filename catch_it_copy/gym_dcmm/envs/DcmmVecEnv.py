@@ -521,13 +521,15 @@ class DcmmVecEnv(gym.Env):
             details.append(dict(pair=names, distance=float(contact.dist)))
         return details
 
-    def _roll_arm_target_safe(self, target):
+    def _roll_arm_target_safe(self, target, hand_target=None):
         model, data = self.Dcmm.model, self.Dcmm.data
         if not hasattr(self, '_roll_guard_data'):
             self._roll_guard_data = mujoco.MjData(model)
             self._roll_guard_geoms = [g for g in range(model.ngeom)
                 if model.body(int(model.geom_bodyid[g])).name in ('link2', 'link3', 'link4', 'link5', 'link6')
                 and (model.geom_contype[g] or model.geom_conaffinity[g])]
+            self._roll_guard_geoms = sorted(set(self._roll_guard_geoms) |
+                set(hand_collision_ids(model, self.hand_start_id)))
         probe = self._roll_guard_data
         probe.qpos[:] = data.qpos
         probe.qvel[:] = 0.
@@ -539,10 +541,15 @@ class DcmmVecEnv(gym.Env):
         initial = distances()
         if not initial.size or not np.all(np.isfinite(initial)) or not np.all(np.isfinite(target)):
             return False
-        current = data.qpos[15:21].copy()
+        if hand_target is None:
+            hand_target = data.qpos[21:37]
+        target = np.concatenate((target, hand_target))
+        if target.shape != (22,) or not np.all(np.isfinite(target)):
+            return False
+        current = data.qpos[15:37].copy()
         count = max(2, int(np.ceil(np.max(np.abs(target - current)) / .03)))
         for fraction in np.linspace(0., 1., count + 1)[1:]:
-            probe.qpos[15:21] = current + fraction * (target - current)
+            probe.qpos[15:37] = current + fraction * (target - current)
             mujoco.mj_fwdPosition(model, probe)
             gap = distances()
             if not np.all(np.isfinite(gap)) or np.any(gap < np.minimum(initial, margin) - 1e-6):
@@ -2260,8 +2267,6 @@ class DcmmVecEnv(gym.Env):
             result_QP, _ = self.Dcmm.move_ee_pose(action_arm)
             self.arm_limit = bool(result_QP[1])
             if self.object_motion == 'roll':
-                self.roll_arm_guard_blocked = self.arm_limit and not self._roll_arm_target_safe(np.asarray(result_QP[0]))
-                self.arm_limit = self.arm_limit and not self.roll_arm_guard_blocked
                 if not self.arm_limit:
                     self.Dcmm.target_arm_qpos[:] = self.Dcmm.data.qpos[15:21]
                     self.Dcmm.data_arm.qpos[:6] = self.Dcmm.data.qpos[15:21]
@@ -2305,6 +2310,18 @@ class DcmmVecEnv(gym.Env):
         else:
             self.Dcmm.action_hand2qpos(action_dict["hand"])
         
+        # Check the complete proposed arm/hand motion before queuing controls.
+        if self.object_motion == 'roll':
+            self.roll_arm_guard_blocked = not self._roll_arm_target_safe(
+                np.asarray(self.Dcmm.target_arm_qpos),
+                np.asarray(self.Dcmm.target_hand_qpos))
+            if self.roll_arm_guard_blocked:
+                self.arm_limit = False
+                self.Dcmm.target_arm_qpos[:] = self.Dcmm.data.qpos[15:21]
+                self.Dcmm.target_hand_qpos[:] = self.Dcmm.data.qpos[21:37]
+                self.Dcmm.data_arm.qpos[:6] = self.Dcmm.data.qpos[15:21]
+                mujoco.mj_fwdPosition(self.Dcmm.model_arm, self.Dcmm.data_arm)
+
         ## 更新目标动作到延迟缓冲区
         self.update_target_ctrl()
         

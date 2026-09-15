@@ -116,6 +116,25 @@ class RollTests(unittest.TestCase):
         self.assertTrue(guard(env, np.zeros(6)))
         self.assertFalse(guard(env, np.array([.009, 0., 0., 0., 0., 0.])))
 
+    def test_guard_checks_finger_motion_with_stationary_arm(self):
+        live = SimpleNamespace(qpos=np.zeros(44), qvel=np.zeros(42))
+        probe = SimpleNamespace(qpos=np.zeros(44), qvel=np.zeros(42))
+        env = SimpleNamespace(Dcmm=SimpleNamespace(model=object(), data=live),
+                              _roll_guard_data=probe, _roll_guard_geoms=[70], base_id=2)
+        mock = SimpleNamespace(mj_fwdPosition=lambda *_: None,
+            mj_geomDistance=lambda m, d, a, b, cutoff, segment: min(cutoff, .01 - d.qpos[21]))
+        local = dict(np=np, DcmmCfg=CFG, mujoco=mock)
+        exec(compile(ast.Module(body=[method('_roll_arm_target_safe')], type_ignores=[]), '<actual-guard>', 'exec'), local)
+        guard = local['_roll_arm_target_safe']
+        hand = np.zeros(16)
+        hand[0] = .02
+        self.assertFalse(guard(env, np.zeros(6), hand))
+        hand[0] = -.02
+        self.assertTrue(guard(env, np.zeros(6), hand))
+        hand[0] = np.nan
+        self.assertFalse(guard(env, np.zeros(6), hand))
+        np.testing.assert_array_equal(live.qpos, np.zeros(44))
+
     def test_target_motion_alone_gives_no_approach_credit(self):
         env, obs = fixture()
         reward(env, obs)

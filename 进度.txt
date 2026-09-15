@@ -1001,12 +1001,4 @@ roll：还在训练，但是一直是负数，感觉效果很差，不行就先�
 
 basket：catch的任务感觉还是学不会
 
-Agent Steps: 0313K | FPS: 52.8 | Last FPS: 47.3 | Collect Time: 97.5 min | Train RL Time: 0.4 min | Current Best: -50.40
-Agent Steps: 0315K | FPS: 52.7 | Last FPS: 48.1 | Collect Time: 98.2 min | Train RL Time: 0.4 min | Current Best: -50.40
-save current best reward: -50.35
-Agent Steps: 0317K | FPS: 52.7 | Last FPS: 49.4 | Collect Time: 98.9 min | Train RL Time: 0.4 min | Current Best: -50.35
-Agent Steps: 0319K | FPS: 52.7 | Last FPS: 48.1 | Collect Time: 99.6 min | Train RL Time: 0.4 min | Current Best: -50.35
-Agent Steps: 0321K | FPS: 52.7 | Last FPS: 48.4 | Collect Time: 100.3 min | Train RL Time: 0.4 min | Current Best: -50.35
-[early_term] step=9 reason=base_collision obj=(0.22,1.93,0.49) ee_z=0.49
-[roll-base-contact] [{'pair': ['ranger_base/body=base_link', 'dip_/body=dip'], 'distance': -0.00014063846185373842}]
-[roll-control-check] version=execution_guard_v1 guard_blocked=False execution_blocks=0 arm_speed_max=1.603 hand_speed_max=5.415 arm_error_max=0.2796 hand_error_max=0.2074
+现在：回退了bounce跟roll

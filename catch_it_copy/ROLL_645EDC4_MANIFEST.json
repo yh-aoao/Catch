@@ -1,0 +1,85 @@
+{
+  "commit": "645edc4e21631683254fba51cc66b035b409518d",
+  "files": [
+    {
+      "source": "configs/env/DcmmCfg.py",
+      "destination": "configs/env/DcmmCfg_roll_645edc4.py",
+      "replacements": [],
+      "restored_lf_sha256": "c5c1de0af37083a050bdd8d5a35f1728c95948d91e2b6573a53586396fc9d197"
+    },
+    {
+      "source": "gym_dcmm/agents/MujocoDcmm.py",
+      "destination": "gym_dcmm/agents/MujocoDcmm_roll_645edc4.py",
+      "replacements": [
+        [
+          "import configs.env.DcmmCfg as DcmmCfg",
+          "import configs.env.DcmmCfg_roll_645edc4 as DcmmCfg"
+        ]
+      ],
+      "restored_lf_sha256": "0b189a7fcc4cf0b631e27ad2deb819bc25f23501349aaa3a29dcb0d6e69c2575"
+    },
+    {
+      "source": "gym_dcmm/envs/DcmmVecEnv.py",
+      "destination": "gym_dcmm/envs/DcmmVecEnv_roll_645edc4.py",
+      "replacements": [
+        [
+          "import configs.env.DcmmCfg as DcmmCfg",
+          "import configs.env.DcmmCfg_roll_645edc4 as DcmmCfg"
+        ],
+        [
+          "from gym_dcmm.agents.MujocoDcmm import MJ_DCMM",
+          "from gym_dcmm.agents.MujocoDcmm_roll_645edc4 import MJ_DCMM"
+        ]
+      ],
+      "restored_lf_sha256": "a95d2c90169136f3f1e3ff6db9c8e25d93e6b5d874f947a5940ceb9675fe3eda"
+    },
+    {
+      "source": "gym_dcmm/algs/ppo_dcmm/__init__.py",
+      "destination": "gym_dcmm/algs/ppo_dcmm_645edc4/__init__.py",
+      "replacements": [],
+      "restored_lf_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "gym_dcmm/algs/ppo_dcmm/experience.py",
+      "destination": "gym_dcmm/algs/ppo_dcmm_645edc4/experience.py",
+      "replacements": [],
+      "restored_lf_sha256": "a67f19b6aeeac134bd4b7a6afa7f63efee23a49bbcb85e8cddcadab16eff323a"
+    },
+    {
+      "source": "gym_dcmm/algs/ppo_dcmm/models_catch.py",
+      "destination": "gym_dcmm/algs/ppo_dcmm_645edc4/models_catch.py",
+      "replacements": [],
+      "restored_lf_sha256": "52836785dff94b7ec5a8aa91d9aae8f9f31d65beda85ee641e599ad9f12c5047"
+    },
+    {
+      "source": "gym_dcmm/algs/ppo_dcmm/models_track.py",
+      "destination": "gym_dcmm/algs/ppo_dcmm_645edc4/models_track.py",
+      "replacements": [],
+      "restored_lf_sha256": "1a1fb8b1bd658cbbdc608a775342d7039e8a6e5e0bca58b77ba570921e0d94e3"
+    },
+    {
+      "source": "gym_dcmm/algs/ppo_dcmm/ppo_dcmm_catch_one_stage.py",
+      "destination": "gym_dcmm/algs/ppo_dcmm_645edc4/ppo_dcmm_catch_one_stage.py",
+      "replacements": [],
+      "restored_lf_sha256": "2e307dfdba209d113c25712b6ea6d10c163e078d1f176d42b1f6c81304bf8061"
+    },
+    {
+      "source": "gym_dcmm/algs/ppo_dcmm/ppo_dcmm_catch_two_stage.py",
+      "destination": "gym_dcmm/algs/ppo_dcmm_645edc4/ppo_dcmm_catch_two_stage.py",
+      "replacements": [],
+      "restored_lf_sha256": "e93a09bdd849452cd7c121b07c0d598a3c66949db9dd82afa0b6e0e64a8d6df0"
+    },
+    {
+      "source": "gym_dcmm/algs/ppo_dcmm/ppo_dcmm_track.py",
+      "destination": "gym_dcmm/algs/ppo_dcmm_645edc4/ppo_dcmm_track.py",
+      "replacements": [],
+      "restored_lf_sha256": "38087b66aa838c90d91ce2409fc516ea8a65bc8aeca13e1d3a6bae4397257cdd"
+    },
+    {
+      "source": "gym_dcmm/algs/ppo_dcmm/utils.py",
+      "destination": "gym_dcmm/algs/ppo_dcmm_645edc4/utils.py",
+      "replacements": [],
+      "restored_lf_sha256": "4f7dac3a2c2ea83c884c3888dfed9804432b67d451e3c0c8f8f2d908ecc3d738"
+    }
+  ]
+}

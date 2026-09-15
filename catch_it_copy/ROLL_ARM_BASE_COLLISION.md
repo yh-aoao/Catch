@@ -1,5 +1,8 @@
 # Roll link5 与底盘碰撞修复（2026-09-15）
 
+> 当前 Roll 已恢复至 645edc4，下述后续检查不再由默认 Roll 入口执行。
+> 当前使用方式见 [恢复说明](ROLL_645EDC4_RESTORE.md)。
+
 用户日志为 `ranger_base` 对 `geom#60/body#15`，穿透约 0.6–1.5mm。
 当前主 XML 按 body/geom 顺序核对：body15=link5，geom60=link5 碰撞 mesh。
 这是机械臂自碰撞，不能通过放宽手桌距离、忽略底盘碰撞来解决。

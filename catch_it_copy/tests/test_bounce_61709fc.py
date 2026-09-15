@@ -38,19 +38,24 @@ class BaselineTests(unittest.TestCase):
         scope = {}
         stub = ModuleType('gym_dcmm.envs.bounce_compat')
         stub.make_bounce_61709fc = lambda parameters: SimpleNamespace(parameters=parameters)
-        with patch.dict(sys.modules, {'gym_dcmm.envs.bounce_compat': stub}):
+        roll_stub = ModuleType('gym_dcmm.envs.roll_compat')
+        roll_stub.make_roll_645edc4 = lambda parameters: SimpleNamespace(parameters=parameters)
+        with patch.dict(sys.modules, {'gym_dcmm.envs.bounce_compat': stub, roll_stub.__name__: roll_stub}):
             exec(compile(module, '<actual-constructor>', 'exec'), scope)
             cls = scope['DcmmVecEnv']
             for mode in ['bounce', 'tan', chr(0x5f39)]:
                 env = cls(task='Tracking', object_motion=mode)
                 self.assertEqual(env.parameters['object_motion'], mode)
-            for mode in ['roll', 'throw', 'throw_basket']:
+            self.assertEqual(cls(task='Tracking', object_motion='roll').parameters['object_motion'], 'roll')
+            for mode in ['throw', 'throw_basket']:
                 self.assertIsInstance(cls(task='Tracking', object_motion=mode), cls)
             import inspect
             values = [p.default for name, p in inspect.signature(cls.__init__).parameters.items() if name != 'self']
             names = list(inspect.signature(cls.__init__).parameters)[1:]
             values[names.index('object_motion')] = 'bounce'
             self.assertEqual(cls(*values).parameters['object_motion'], 'bounce')
+            values[names.index('object_motion')] = 'roll'
+            self.assertEqual(cls(*values).parameters['object_motion'], 'roll')
 
     def test_adapter_rejects_presets_and_preserves_old_arguments(self):
         scope = {}
@@ -74,14 +79,16 @@ class BaselineTests(unittest.TestCase):
         for suffix, symbol in [('track','PPO_Track'), ('catch_two_stage','PPO_Catch_TwoStage'), ('catch_one_stage','PPO_Catch_OneStage')]:
             name = 'gym_dcmm.algs.ppo_dcmm_61709fc.ppo_dcmm_' + suffix
             stub = ModuleType(name); setattr(stub, symbol, 'old_' + symbol); stubs[name] = stub
+            name = name.replace('61709fc', '645edc4')
+            stub = ModuleType(name); setattr(stub, symbol, 'roll_' + symbol); stubs[name] = stub
         code = compile(ast.Module(body=[selection], type_ignores=[]), '<actual-agent-selection>', 'exec')
         with patch.dict(sys.modules, stubs):
             for mode in ['bounce', 'roll', 'throw_basket']:
                 scope = dict(config=SimpleNamespace(object_motion=mode), print=lambda *a, **kw: None,
                              PPO_Track='track', PPO_Catch_TwoStage='two', PPO_Catch_OneStage='one')
                 exec(code, scope)
-                self.assertEqual(scope['TrackingAgent'], 'old_PPO_Track' if mode == 'bounce' else 'track')
-                self.assertEqual(scope['TwoStageAgent'], 'old_PPO_Catch_TwoStage' if mode == 'bounce' else 'two')
+                self.assertEqual(scope['TrackingAgent'], 'old_PPO_Track' if mode == 'bounce' else ('roll_PPO_Track' if mode == 'roll' else 'track'))
+                self.assertEqual(scope['TwoStageAgent'], 'old_PPO_Catch_TwoStage' if mode == 'bounce' else ('roll_PPO_Catch_TwoStage' if mode == 'roll' else 'two'))
 
 if __name__ == '__main__':
     unittest.main()

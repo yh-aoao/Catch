@@ -1816,15 +1816,18 @@ class DcmmVecEnv(gym.Env):
             velocity = self.Dcmm.data.qvel[36:39].copy()
             quality, reference = throw_quality(position, velocity, self.basket_center,
                                                self.Dcmm.model.opt.gravity, DcmmCfg)
+            touching = bool(np.any(np.isin(self.contacts['object_contacts'],
+                hand_collision_ids(self.Dcmm.model, self.hand_start_id))))
+            release_progress = float(np.clip(
+                1. - np.mean(self.Dcmm.data.qpos[21:37][[0, 4, 8]]) / 0.6, 0., 1.))
             value, terms = catching_reward(
                 self.basket_phase, parking, self.basket_previous_distance, distance,
                 self.basket_previous_flight_distance, prediction, ctrl, bool(info['success']),
                 self.terminated or timed_out, DcmmCfg,
-                holding=False, support_time=getattr(self, 'basket_support_time', 0.),
+                holding=touching, support_time=getattr(self, 'basket_support_time', 0.),
                 step_duration=0., launch_quality=quality,
-                launch_motion=float(np.linalg.norm(ctrl.get('arm', np.zeros(6)))))
-            touching = bool(np.any(np.isin(self.contacts['object_contacts'],
-                hand_collision_ids(self.Dcmm.model, self.hand_start_id))))
+                launch_motion=float(np.linalg.norm(ctrl.get('arm', np.zeros(6)))),
+                release_progress=release_progress)
             terms.update(velocity_progress=0., support=0., valid_release=0.)
             release_quality = float(getattr(self, 'basket_release_pending', 0.))
             if release_quality > 0.:

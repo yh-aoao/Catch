@@ -33,11 +33,12 @@ def predicted_miss(position, velocity, center, gravity):
 def catching_reward(phase, parking, previous_parking_distance, distance,
                     previous_flight_distance, predicted_error, controls,
               success, failed, cfg, holding=False, support_time=0.,
-          step_duration=0., launch_quality=0., launch_motion=0.):
+              step_duration=0., launch_quality=0., launch_motion=0.,
+              release_progress=0.):
     terms = dict(time=-cfg.basket_catch_time_cost, parking=0., parking_progress=0.,
                  braking=0., aim=0., flight_progress=0., control=0.,
                  release=0., release_dir=0., forward=0., launch_quality=0.,
-                 launch_motion=0., hold=0.,
+                 launch_motion=0., release_progress=0., hold=0.,
                  success=cfg.basket_w_score if success else 0.,
                  failure=-cfg.basket_catch_failure_cost if failed and not success else 0.)
     if phase == 'parking':
@@ -46,9 +47,11 @@ def catching_reward(phase, parking, previous_parking_distance, distance,
             previous_parking_distance - parking['distance'])
         terms['braking'] = -float(np.sum((parking['velocity'] - parking['desired_velocity']) ** 2))
     elif phase == 'preparing':
-        terms['aim'] = -cfg.basket_catch_w_aim * predicted_error
+        # Do not punish the landing point while the ball is still supported.
+        terms['aim'] = 0. if holding else -cfg.basket_catch_w_aim * predicted_error
         terms['launch_quality'] = cfg.basket_w_launch_quality * launch_quality
         terms['launch_motion'] = cfg.basket_w_launch_motion * launch_motion
+        terms['release_progress'] = 2.0 * float(np.clip(release_progress, 0., 1.))
         terms['control'] = -cfg.basket_throw_ctrl_arm * float(np.sum(np.asarray(controls['arm']) ** 2))
         terms['control'] -= cfg.basket_throw_ctrl_hand * float(np.sum(np.asarray(controls['hand']) ** 2))
         if holding and step_duration > 0.:

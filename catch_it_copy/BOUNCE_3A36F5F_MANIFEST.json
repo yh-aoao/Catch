@@ -1,0 +1,929 @@
+{
+  "commit": "3a36f5fb29c534db7639bfb9372458595b240edd",
+  "files": [
+    {
+      "source": "configs/env/DcmmCfg.py",
+      "destination": "configs/env/DcmmCfg_bounce_3a36f5f.py",
+      "replacements": [],
+      "compatibility_patches": [],
+      "restored_lf_sha256": "bbca7aa5e82c91654fc9d0b4ae80513daf44fe47a9246b6a040fa0eab980cedd"
+    },
+    {
+      "source": "gym_dcmm/agents/MujocoDcmm.py",
+      "destination": "gym_dcmm/agents/MujocoDcmm_bounce_3a36f5f.py",
+      "replacements": [
+        [
+          "import configs.env.DcmmCfg as DcmmCfg",
+          "import configs.env.DcmmCfg_bounce_3a36f5f as DcmmCfg"
+        ]
+      ],
+      "compatibility_patches": [],
+      "restored_lf_sha256": "bb3580cf65dcab77f3ad09261549c5cea22f6cade8358dc10eccb2f2915662f4"
+    },
+    {
+      "source": "gym_dcmm/envs/DcmmVecEnv.py",
+      "destination": "gym_dcmm/envs/DcmmVecEnv_bounce_3a36f5f.py",
+      "replacements": [
+        [
+          "import configs.env.DcmmCfg as DcmmCfg",
+          "import configs.env.DcmmCfg_bounce_3a36f5f as DcmmCfg"
+        ],
+        [
+          "from gym_dcmm.agents.MujocoDcmm import MJ_DCMM",
+          "from gym_dcmm.agents.MujocoDcmm_bounce_3a36f5f import MJ_DCMM"
+        ]
+      ],
+      "compatibility_patches": [
+        {
+          "reason": "Skip OpenGL for state-only headless training",
+          "old": "        self.mujoco_renderer = MujocoRenderer(\n            self.Dcmm.model, self.Dcmm.data\n        )",
+          "new": "        # State-only training must not create an OpenGL renderer.\n        self.mujoco_renderer = None\n        if self.imshow_cam or self.Dcmm.open_viewer or self.render_per_step:\n            self.mujoco_renderer = MujocoRenderer(self.Dcmm.model, self.Dcmm.data)"
+        },
+        {
+          "reason": "Preserve empty image info without rendering",
+          "old": "        imgs = np.zeros((0, self.img_size[0], self.img_size[1]))",
+          "new": "        if self.mujoco_renderer is None:\n            return np.zeros((0, self.img_size[0], self.img_size[1]))\n        imgs = np.zeros((0, self.img_size[0], self.img_size[1]))"
+        }
+      ],
+      "restored_lf_sha256": "e005d2d918e016e4bdc28e302585981272e6227af01c261f264a0fa8bd0e48b3"
+    },
+    {
+      "source": "gym_dcmm/algs/ppo_dcmm/__init__.py",
+      "destination": "gym_dcmm/algs/ppo_dcmm_3a36f5f/__init__.py",
+      "replacements": [],
+      "compatibility_patches": [],
+      "restored_lf_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "gym_dcmm/algs/ppo_dcmm/experience.py",
+      "destination": "gym_dcmm/algs/ppo_dcmm_3a36f5f/experience.py",
+      "replacements": [],
+      "compatibility_patches": [],
+      "restored_lf_sha256": "a67f19b6aeeac134bd4b7a6afa7f63efee23a49bbcb85e8cddcadab16eff323a"
+    },
+    {
+      "source": "gym_dcmm/algs/ppo_dcmm/models_catch.py",
+      "destination": "gym_dcmm/algs/ppo_dcmm_3a36f5f/models_catch.py",
+      "replacements": [],
+      "compatibility_patches": [],
+      "restored_lf_sha256": "42de90f24c40cef500fc2f223e4e9c643764c39ed0f329326e4d274ab6fbc520"
+    },
+    {
+      "source": "gym_dcmm/algs/ppo_dcmm/models_track.py",
+      "destination": "gym_dcmm/algs/ppo_dcmm_3a36f5f/models_track.py",
+      "replacements": [],
+      "compatibility_patches": [],
+      "restored_lf_sha256": "1a1fb8b1bd658cbbdc608a775342d7039e8a6e5e0bca58b77ba570921e0d94e3"
+    },
+    {
+      "source": "gym_dcmm/algs/ppo_dcmm/ppo_dcmm_catch_one_stage.py",
+      "destination": "gym_dcmm/algs/ppo_dcmm_3a36f5f/ppo_dcmm_catch_one_stage.py",
+      "replacements": [],
+      "compatibility_patches": [],
+      "restored_lf_sha256": "104b1ddaf9905f15a0653073723274609a77ec9359de64ba0c8926b4000635c0"
+    },
+    {
+      "source": "gym_dcmm/algs/ppo_dcmm/ppo_dcmm_catch_two_stage.py",
+      "destination": "gym_dcmm/algs/ppo_dcmm_3a36f5f/ppo_dcmm_catch_two_stage.py",
+      "replacements": [],
+      "compatibility_patches": [],
+      "restored_lf_sha256": "46fbed30330f9233ca8dbe2d4c557eb73759d169f23d0f27c3518b36bf75d6fc"
+    },
+    {
+      "source": "gym_dcmm/algs/ppo_dcmm/ppo_dcmm_track.py",
+      "destination": "gym_dcmm/algs/ppo_dcmm_3a36f5f/ppo_dcmm_track.py",
+      "replacements": [],
+      "compatibility_patches": [],
+      "restored_lf_sha256": "6e5bf4ec2fa601667a5b20bd61ea796112fad79f5b0e46dfe4e3e6d9495fb697"
+    },
+    {
+      "source": "gym_dcmm/algs/ppo_dcmm/utils.py",
+      "destination": "gym_dcmm/algs/ppo_dcmm_3a36f5f/utils.py",
+      "replacements": [],
+      "compatibility_patches": [],
+      "restored_lf_sha256": "4f7dac3a2c2ea83c884c3888dfed9804432b67d451e3c0c8f8f2d908ecc3d738"
+    }
+  ],
+  "shared_dependencies": [
+    {
+      "path": "assets/media/imgs/depth_screenshot.png",
+      "mode": "raw",
+      "sha256": "d45ffbbf484dfb2df27a0bfd84bcfe79e81889b8faafed0f700a1a996e701a9f"
+    },
+    {
+      "path": "assets/media/imgs/rbg_screenshot.png",
+      "mode": "raw",
+      "sha256": "2e1eddfc017116e1e5869bfc9362196c2f6edd7ba9bd1149253298b836c9a49e"
+    },
+    {
+      "path": "assets/media/imgs/real_robot.png",
+      "mode": "raw",
+      "sha256": "e15818ce805b4e5be4096f61cc8c3a1183a95d054a8f67fcbe0f9178381cd3f1"
+    },
+    {
+      "path": "assets/media/imgs/screenshot.png",
+      "mode": "raw",
+      "sha256": "bdf8d83f507cd0ec3173e101717368cfb590d2d09c8e94d5057558bd98aebc3d"
+    },
+    {
+      "path": "assets/media/videos/teaser.gif",
+      "mode": "raw",
+      "sha256": "bb8f8ca4708dbe5c571ce7d10366a264380b6e062ce357aee718a19e1ee05082"
+    },
+    {
+      "path": "assets/media/videos/train.gif",
+      "mode": "raw",
+      "sha256": "dce27dee860c3012a3eb892b7c6ec894b6e4783c9ece2a7c3fb326ccd79c7b62"
+    },
+    {
+      "path": "assets/meshes/Arm_base_Link.STL",
+      "mode": "raw",
+      "sha256": "93ed8900479bc0fdfcfd87f2306306117519a5b0845ce05d0bbc81232a20943d"
+    },
+    {
+      "path": "assets/meshes/Box_Link.STL",
+      "mode": "raw",
+      "sha256": "7655a1f586d2472cfe55f6ede714c434f5a1c05938b1240c3b54e7bdb7170bb5"
+    },
+    {
+      "path": "assets/meshes/Camera_Link.STL",
+      "mode": "raw",
+      "sha256": "297ff5cfa27c16cee74247452cd3bf65e2e9c05e2eafe5b7bb8f12b6cb35273c"
+    },
+    {
+      "path": "assets/meshes/Suspension1_Link.STL",
+      "mode": "raw",
+      "sha256": "5573edd118abb6eb75f24c841657978b04c1577f20255e16f449ecaf5689d3e3"
+    },
+    {
+      "path": "assets/meshes/Suspension2_Link.STL",
+      "mode": "raw",
+      "sha256": "c17d425ef9643796ab883287dc961f076c24580cc3dd3d08d6c9e3c41b012e2d"
+    },
+    {
+      "path": "assets/meshes/Suspension3_Link.STL",
+      "mode": "raw",
+      "sha256": "967cdd8ed90ba99c89ac11229934d8b5f7a13dcd4767af1c31d2009896b834d5"
+    },
+    {
+      "path": "assets/meshes/Suspension4_Link.STL",
+      "mode": "raw",
+      "sha256": "ffd89a418ce53e3d7e8ed736a0586d508a556b9ac8440c3d54be9bf1e0bceffc"
+    },
+    {
+      "path": "assets/meshes/Wheel1_Link.STL",
+      "mode": "raw",
+      "sha256": "77d31cb692e03983b5ffe752afd0db82bb59cd28b63d9f5e7a780fa603019e95"
+    },
+    {
+      "path": "assets/meshes/Wheel2_Link.STL",
+      "mode": "raw",
+      "sha256": "2ee7980fc98919d40d1f1e68e0d3c2b820fe2ef5287ee73144f1ad0e56188dcb"
+    },
+    {
+      "path": "assets/meshes/Wheel3_Link.STL",
+      "mode": "raw",
+      "sha256": "24adb1e616e0747e72285f29af889d85fac3f63b6d00347e9662a093003cda7f"
+    },
+    {
+      "path": "assets/meshes/Wheel4_Link.STL",
+      "mode": "raw",
+      "sha256": "6ad96eeb3c545a96f3115b15d5b7c6ead671b3d495eef8e7e48e795afb2251f9"
+    },
+    {
+      "path": "assets/meshes/a1_Link.STL",
+      "mode": "raw",
+      "sha256": "9cf7622723eb3e6f71ff9719e08d19aaa991df5ef252984c844b9bc61a621cd4"
+    },
+    {
+      "path": "assets/meshes/a2_Link.STL",
+      "mode": "raw",
+      "sha256": "a860755bb436bc3099e8b70821d436a8916f18a771d9fc1be2e1de9cf95201ce"
+    },
+    {
+      "path": "assets/meshes/a3_Link.STL",
+      "mode": "raw",
+      "sha256": "f44f19befe7fa8fc55178a1abbcce22cc1400a7d096e769c04b3bd96955eae4c"
+    },
+    {
+      "path": "assets/meshes/a4_Link.STL",
+      "mode": "raw",
+      "sha256": "ba51dc3efb21a494d67956209ba124021f091f5b8895f2acbfc13bba4930a35b"
+    },
+    {
+      "path": "assets/meshes/a5_Link.STL",
+      "mode": "raw",
+      "sha256": "4ebf2fa40b83710db2aca10e210bcbb4cf7eec321545f1da8bb7139fb52d3f1a"
+    },
+    {
+      "path": "assets/meshes/base.stl",
+      "mode": "raw",
+      "sha256": "d3d61f2888bc39eecb8583babc7dddccb92f2ccd55aa32cd6f1dce6193feb3b6"
+    },
+    {
+      "path": "assets/meshes/base_link copy.stl",
+      "mode": "raw",
+      "sha256": "a1e64740094f15966789040947911e54391eb1768fee4dc5f8aa5684b97a0653"
+    },
+    {
+      "path": "assets/meshes/base_link.STL",
+      "mode": "raw",
+      "sha256": "167471bd61c282b0d55a78b00bfa987a4ad188df460bce1e96d205ad47b5bdee"
+    },
+    {
+      "path": "assets/meshes/benchy.stl",
+      "mode": "raw",
+      "sha256": "2e711e21e3c5fe1b9b6d615c396c4e5b11edfca3d4dfceb9c072aad9a6499e17"
+    },
+    {
+      "path": "assets/meshes/bottle.msh",
+      "mode": "raw",
+      "sha256": "16203cc4564fe8dc2c1e5a6bdbd20ff87561f016f3b11a2fb6445e144cf80fa6"
+    },
+    {
+      "path": "assets/meshes/bottle.mtl",
+      "mode": "raw",
+      "sha256": "e427f17d7d05eb45adaf1e2bd7fd249bc3fe56437ba8e348cbdf147cd384b996"
+    },
+    {
+      "path": "assets/meshes/bottle.obj",
+      "mode": "raw",
+      "sha256": "92353bf012eaea33c1e0d78d391fa61e083d53c57325e68d3410b31649c43da9"
+    },
+    {
+      "path": "assets/meshes/bottle.stl",
+      "mode": "raw",
+      "sha256": "f2b6ca097b2d0d43b255fe3d605c8628117459b1d7369220ddf62ced5e84d962"
+    },
+    {
+      "path": "assets/meshes/bowl.stl",
+      "mode": "raw",
+      "sha256": "3106486a500b9ab1f8e4d158b2b009ea1938f6f09dcef332a6b54a2d8e4e99fe"
+    },
+    {
+      "path": "assets/meshes/bread.msh",
+      "mode": "raw",
+      "sha256": "befe24f2e5876b3bf7df07c92622c52691ec818d73c9594cb68b6fc43a1cb8d3"
+    },
+    {
+      "path": "assets/meshes/bread.mtl",
+      "mode": "raw",
+      "sha256": "d776116483420a01ef53fd8f941583255a56467f521768027bfcd0123b7be527"
+    },
+    {
+      "path": "assets/meshes/bread.obj",
+      "mode": "raw",
+      "sha256": "fb11db62e9da167ebf91ff4bed4d07a2f8d8210d5333df1bf01e18217a37cc1a"
+    },
+    {
+      "path": "assets/meshes/bread.stl",
+      "mode": "raw",
+      "sha256": "7c6646bcf9ec086d972d4d89141e8bb8081f14170306376bae59d3be59a6ace2"
+    },
+    {
+      "path": "assets/meshes/can.msh",
+      "mode": "raw",
+      "sha256": "3a0e736201604130d47abe6f93e9173b11b1d49df6e2f7093537a435c061cbb8"
+    },
+    {
+      "path": "assets/meshes/can.mtl",
+      "mode": "raw",
+      "sha256": "292e64f3385432e11d55dae641f29b6855e4fe4e2d1d48baf7e7ea218a5e9d85"
+    },
+    {
+      "path": "assets/meshes/can.obj",
+      "mode": "raw",
+      "sha256": "1904183501b49346131ed46bd1ee6fbf2c14f394c233ef9df048758c9a4b5118"
+    },
+    {
+      "path": "assets/meshes/can.stl",
+      "mode": "raw",
+      "sha256": "cb459d8f0dcfc855aadc91815462d69ba58b4f5bcc289631043f17eccbf937d3"
+    },
+    {
+      "path": "assets/meshes/car.STL",
+      "mode": "raw",
+      "sha256": "72e358c7fce6ad7d33a1c66f7e960c4fa3151cf4f5e7371ea7add6e0434f069f"
+    },
+    {
+      "path": "assets/meshes/cereal.msh",
+      "mode": "raw",
+      "sha256": "baee1abe4b11299a3cacab3db566273953f6444241c92a32ba3c8dcbf7fe8d5d"
+    },
+    {
+      "path": "assets/meshes/cereal.mtl",
+      "mode": "raw",
+      "sha256": "485789398b0ef6b1c147956be55419ea06396686e69a4fb244bdbcdededda341"
+    },
+    {
+      "path": "assets/meshes/cereal.obj",
+      "mode": "raw",
+      "sha256": "8377fc93fca888314fe6a47bfe392fc8eb6db8f5c0cb796ffce8f9e47f589bff"
+    },
+    {
+      "path": "assets/meshes/cereal.stl",
+      "mode": "raw",
+      "sha256": "fd415818056831cb6fa4b40112280f463de8624b06e23d188a7e0f83ae5be1df"
+    },
+    {
+      "path": "assets/meshes/cube.obj",
+      "mode": "raw",
+      "sha256": "56a9cb677cb4f267f49c879af58db1d24d0160688781c90498bdd6a879e87dd4"
+    },
+    {
+      "path": "assets/meshes/cup.stl",
+      "mode": "raw",
+      "sha256": "014f1627609f989db2081ebf64d3c13d97f44b63ec3cc35b86b51e193785e678"
+    },
+    {
+      "path": "assets/meshes/cylinder.msh",
+      "mode": "raw",
+      "sha256": "41061b9ceee866bcc115470d0e3fca91f013f2b1b93b5aa03f8357a9025c37a3"
+    },
+    {
+      "path": "assets/meshes/cylinder.obj",
+      "mode": "raw",
+      "sha256": "6d8c3cbd3c7e45f6fbb324c2c890a0fce966196813e2f4567356c814c053a56e"
+    },
+    {
+      "path": "assets/meshes/dip.stl",
+      "mode": "raw",
+      "sha256": "9222f0ee1fa0077c70a219f7952df6f4208b003ad06a608e006cd0d8057d4b1c"
+    },
+    {
+      "path": "assets/meshes/fingertip.stl",
+      "mode": "raw",
+      "sha256": "e149e01e395b58950332dc2e2bda4b51b5557328a73c80b990d184c2e84dcc53"
+    },
+    {
+      "path": "assets/meshes/hand_link.STL",
+      "mode": "raw",
+      "sha256": "4060e1ae52bca21367e15a1dfab16bc7c2e81849566631b7f55e2cf376b7bc85"
+    },
+    {
+      "path": "assets/meshes/hand_link_left.STL",
+      "mode": "raw",
+      "sha256": "9f66c1cb8d27b9f07e49101a7997a49c60d3cc3ccbc8de96065322df68f47a0b"
+    },
+    {
+      "path": "assets/meshes/handles.msh",
+      "mode": "raw",
+      "sha256": "84d98eb8a8e406de6745280af4461b13b9e4e1475451aa27674de3ae27c5a486"
+    },
+    {
+      "path": "assets/meshes/handles.mtl",
+      "mode": "raw",
+      "sha256": "e427f17d7d05eb45adaf1e2bd7fd249bc3fe56437ba8e348cbdf147cd384b996"
+    },
+    {
+      "path": "assets/meshes/handles.obj",
+      "mode": "raw",
+      "sha256": "a14962cb87de19cfa50bfc8d0fff4aab01d82f0bb7460b0894770cc635ff635d"
+    },
+    {
+      "path": "assets/meshes/handles.stl",
+      "mode": "raw",
+      "sha256": "e5564bb9bfc069a3834f87e6761c5e5797856fe8b932928aa19efebb1568625a"
+    },
+    {
+      "path": "assets/meshes/l1_Link.STL",
+      "mode": "raw",
+      "sha256": "1ca61dd3edbc564a2c8f2f74d9ef38166d39d2891e052a1f8f0a9992bfb3a08c"
+    },
+    {
+      "path": "assets/meshes/l2_Link.STL",
+      "mode": "raw",
+      "sha256": "34cff18a8ec794c37443164d2062befe6c42441a35a25f88450791de2085e213"
+    },
+    {
+      "path": "assets/meshes/l3_Link.STL",
+      "mode": "raw",
+      "sha256": "ed679cb1a7179abf959059f63c1447c17b65b620b897c4471be1d277830a6b31"
+    },
+    {
+      "path": "assets/meshes/l4_Link.STL",
+      "mode": "raw",
+      "sha256": "c043b060beb4d21fa534a7afc4ab6368487f9710b9f4368dd236dcb26add1126"
+    },
+    {
+      "path": "assets/meshes/l5_Link.STL",
+      "mode": "raw",
+      "sha256": "b753ba42872e181cc645ff5e4bbb32626ea0a226139e8a1ed8dc747c354f5df6"
+    },
+    {
+      "path": "assets/meshes/l6_Link.STL",
+      "mode": "raw",
+      "sha256": "48da6277ae7b7c2efdfe396a216e58ce21106a2a638a74f0ba6e70066e882652"
+    },
+    {
+      "path": "assets/meshes/l7_Link.STL",
+      "mode": "raw",
+      "sha256": "72846ad4e8fe7f253114b29a53e3713d8ed2ab6818b17a670e6668d71173ce27"
+    },
+    {
+      "path": "assets/meshes/lemon.msh",
+      "mode": "raw",
+      "sha256": "2a2dfa73cb1e6650180bdb67fe253c565c409cdc6d89f70937017afe5555780b"
+    },
+    {
+      "path": "assets/meshes/lemon.mtl",
+      "mode": "raw",
+      "sha256": "e4457f44c4aacbe345e57c7e73ed87656f06b3dfba225e32ed427d2b79c79d34"
+    },
+    {
+      "path": "assets/meshes/lemon.obj",
+      "mode": "raw",
+      "sha256": "97cbc7113211f9525427cfd9087b891fb32eef55a5f691b1227c4f498e5bd99e"
+    },
+    {
+      "path": "assets/meshes/lemon.stl",
+      "mode": "raw",
+      "sha256": "bcaa216283267fff9621f524d609b59aad279971dbb52cb263680f03fc1f79db"
+    },
+    {
+      "path": "assets/meshes/link1.stl",
+      "mode": "raw",
+      "sha256": "103a81f9f00c217247f8b6c8f19b3afcbc9288852082389044d88a4a321cd8cd"
+    },
+    {
+      "path": "assets/meshes/link2.stl",
+      "mode": "raw",
+      "sha256": "20ef55e34f8a63bb65108ed3134c4b22d911b55cd496ca5562b3978cba88ac77"
+    },
+    {
+      "path": "assets/meshes/link3.stl",
+      "mode": "raw",
+      "sha256": "f1503bc0c1fe8d39f4c509dba7288d9130954a35a1bcbaa0fca95d083fed3ffe"
+    },
+    {
+      "path": "assets/meshes/link4.stl",
+      "mode": "raw",
+      "sha256": "2a9952085fef91045380dac9825d9ad5a75867196933bc2cb1c3a635c23b0b7e"
+    },
+    {
+      "path": "assets/meshes/link5.stl",
+      "mode": "raw",
+      "sha256": "bfca01aae4255803ba2f5391c93836b91e1761e069275e38a9656ff2d53f45a4"
+    },
+    {
+      "path": "assets/meshes/link6.stl",
+      "mode": "raw",
+      "sha256": "b90cb1b373e65c035d7965bde92f4e2aedacdbbd57785a9018cd996b6b0b688e"
+    },
+    {
+      "path": "assets/meshes/link_0.0.STL",
+      "mode": "raw",
+      "sha256": "32b90a6744d472a6ffaee02cbf32eb8a5600b1da0944e86aeb9f53503a9f8ac9"
+    },
+    {
+      "path": "assets/meshes/link_1.0.STL",
+      "mode": "raw",
+      "sha256": "e3dfb35b6682f62f18ca6ed0b39cb94ff627b68e0e3373cf7212390574604680"
+    },
+    {
+      "path": "assets/meshes/link_12.0_left.STL",
+      "mode": "raw",
+      "sha256": "1749ba567bf36729a81eaecf384bc4f5483be8c496af54d230500b96f1d81dcc"
+    },
+    {
+      "path": "assets/meshes/link_12.0_right.STL",
+      "mode": "raw",
+      "sha256": "c5418fc127311eefee1d8ee69dfcfde2157d038286900bee91608d2701b00f13"
+    },
+    {
+      "path": "assets/meshes/link_13.0.STL",
+      "mode": "raw",
+      "sha256": "e906896afc078a12c9c377e3a2b07f375583d3b869581f9962030cabc888be29"
+    },
+    {
+      "path": "assets/meshes/link_14.0.STL",
+      "mode": "raw",
+      "sha256": "a9e4983e4bff7fc7d868b4965c9865edb2669b946434095703766202b5de01ff"
+    },
+    {
+      "path": "assets/meshes/link_15.0.STL",
+      "mode": "raw",
+      "sha256": "bf963adb775b79b27649f4f5dff4ced58ef676ce86cc677de49d3810382d11e0"
+    },
+    {
+      "path": "assets/meshes/link_2.0.STL",
+      "mode": "raw",
+      "sha256": "9c98477c65b45f5a3de1df0e1b54281da2385f4eafd057d103ab40893771c2d0"
+    },
+    {
+      "path": "assets/meshes/link_3.0.STL",
+      "mode": "raw",
+      "sha256": "fe333088176395aa7d8a913aa953d3cd649c4c77753224239b78b2c99e3e314c"
+    },
+    {
+      "path": "assets/meshes/mcp_joint.stl",
+      "mode": "raw",
+      "sha256": "56af82c57b469d491f544d6de12e2696b4284b50e89ca271502aaa0631f04b59"
+    },
+    {
+      "path": "assets/meshes/milk.msh",
+      "mode": "raw",
+      "sha256": "92dbdf689a2fc2a46ddf3d5390cac3bde7fba9bfec642e6693acf205a201a40d"
+    },
+    {
+      "path": "assets/meshes/milk.mtl",
+      "mode": "raw",
+      "sha256": "e3a9c63bea5ebf37805dcd187627773757d056bf82fed26e4c0298c99c3b21ef"
+    },
+    {
+      "path": "assets/meshes/milk.obj",
+      "mode": "raw",
+      "sha256": "15f99744f9c5a73e50750f1f3e44208d084bff5686f96281349ed73ab38666c8"
+    },
+    {
+      "path": "assets/meshes/milk.stl",
+      "mode": "raw",
+      "sha256": "e7880b8da658d7612990cbafa83fb8d358005319a5cab7be6db6993b4b830b6b"
+    },
+    {
+      "path": "assets/meshes/modified_tip.STL",
+      "mode": "raw",
+      "sha256": "1f7fceaec59d0f5b61651b53ca5da0546442602cf5898cfc4a546717e7a47188"
+    },
+    {
+      "path": "assets/meshes/p1_Link.STL",
+      "mode": "raw",
+      "sha256": "8b83aef41f2b9ffc7c122a2ba980f3acb6d508dde301c03c1f291d41ef0f2519"
+    },
+    {
+      "path": "assets/meshes/palm_lower.stl",
+      "mode": "raw",
+      "sha256": "eae47756f1a1978b255a36c0b75c24c0af886d10026c2950a2b0acef66f09c8c"
+    },
+    {
+      "path": "assets/meshes/pip.stl",
+      "mode": "raw",
+      "sha256": "b778405c95127023c8b110e6e2f5a181ad8a46dadc2ac98d3f038debae52ef33"
+    },
+    {
+      "path": "assets/meshes/simple_base_link.stl",
+      "mode": "raw",
+      "sha256": "100ac27ed0c46ac9ed175eed151849af9c129853839071d9d77fcd5e6a5ab172"
+    },
+    {
+      "path": "assets/meshes/sphere8.obj",
+      "mode": "raw",
+      "sha256": "114f2371259557ac546250c63690045bf9fb9dd89171c56124a2df9374d120fb"
+    },
+    {
+      "path": "assets/meshes/suspension_1_1.stl",
+      "mode": "raw",
+      "sha256": "54eb01f72d59ef76b525188def050f092018f9fe5101649a6fce95ad34d20ae0"
+    },
+    {
+      "path": "assets/meshes/suspension_2_1.stl",
+      "mode": "raw",
+      "sha256": "21e95ca28dfa58c0687b43f2ca572bedeab4d29a7ca5bac57f74b6123df9d842"
+    },
+    {
+      "path": "assets/meshes/suspension_3_1.stl",
+      "mode": "raw",
+      "sha256": "be1c255a981ffa761fbdab62bec6ec914007a7f32a374ef6782f2b4c63ef52c6"
+    },
+    {
+      "path": "assets/meshes/suspension_4_1.stl",
+      "mode": "raw",
+      "sha256": "b493102d1f5635ec049406a43e09a1ca4de96c1ba03413201650775c5a20f30c"
+    },
+    {
+      "path": "assets/meshes/table_leg.STL",
+      "mode": "raw",
+      "sha256": "f9a096d285eb9ca863380f1760b5e659c6ee6e1a43641907bf70bbf12863d2cf"
+    },
+    {
+      "path": "assets/meshes/table_top.STL",
+      "mode": "raw",
+      "sha256": "badff3fe8c00e2ba4b4e53cf06c69b7112de7d69b092db8d710fc31367e6813b"
+    },
+    {
+      "path": "assets/meshes/thumb_dip.stl",
+      "mode": "raw",
+      "sha256": "7261cf99cd44ae42360dc72a417c2526a73ec8ff4c446858042d6d0675b4f2bf"
+    },
+    {
+      "path": "assets/meshes/thumb_fingertip.stl",
+      "mode": "raw",
+      "sha256": "b43c5a13cf67a25da5ea64afafdcae2179b53971f940375c94656919d717dfb0"
+    },
+    {
+      "path": "assets/meshes/thumb_pip.stl",
+      "mode": "raw",
+      "sha256": "40532d5d555e150748f8563fb378ab3d0839b9221eb5ef108e86fde01a98dfe0"
+    },
+    {
+      "path": "assets/meshes/ufo.stl",
+      "mode": "raw",
+      "sha256": "bab935f0cddde7976a67b72789d9c04f397a8311118de60b61153614b7320fdc"
+    },
+    {
+      "path": "assets/meshes/wheel_1_1.stl",
+      "mode": "raw",
+      "sha256": "92d21986907defd2af426160d473cfe55ac042b7e9f558e81a138943c664369a"
+    },
+    {
+      "path": "assets/meshes/wheel_2_1.stl",
+      "mode": "raw",
+      "sha256": "5e3003354e250bdd1f39c9e4ed8f5eb32772aee64aada92686a99b4013e1a77f"
+    },
+    {
+      "path": "assets/meshes/wheel_3_1.stl",
+      "mode": "raw",
+      "sha256": "b2fdf965c9f07ec2caf04486b72c0ce83c57ce71da24f149fa30be63c22adf39"
+    },
+    {
+      "path": "assets/meshes/wheel_4_1.stl",
+      "mode": "raw",
+      "sha256": "478266e88575f09ef9a537044595eb90a0cd282bc49b60cff3f25b7413bcb238"
+    },
+    {
+      "path": "assets/meshes/winnercup.stl",
+      "mode": "raw",
+      "sha256": "7cabb652bc692bf6c7de729f8d181b633a63c1e7baf390f3476e416e46d8417e"
+    },
+    {
+      "path": "assets/objects/bottle.stl",
+      "mode": "raw",
+      "sha256": "f2b6ca097b2d0d43b255fe3d605c8628117459b1d7369220ddf62ced5e84d962"
+    },
+    {
+      "path": "assets/objects/bowl.stl",
+      "mode": "raw",
+      "sha256": "3106486a500b9ab1f8e4d158b2b009ea1938f6f09dcef332a6b54a2d8e4e99fe"
+    },
+    {
+      "path": "assets/objects/bread.stl",
+      "mode": "raw",
+      "sha256": "7c6646bcf9ec086d972d4d89141e8bb8081f14170306376bae59d3be59a6ace2"
+    },
+    {
+      "path": "assets/objects/cup.stl",
+      "mode": "raw",
+      "sha256": "014f1627609f989db2081ebf64d3c13d97f44b63ec3cc35b86b51e193785e678"
+    },
+    {
+      "path": "assets/objects/lemon.stl",
+      "mode": "raw",
+      "sha256": "bcaa216283267fff9621f524d609b59aad279971dbb52cb263680f03fc1f79db"
+    },
+    {
+      "path": "assets/objects/milk.stl",
+      "mode": "raw",
+      "sha256": "e7880b8da658d7612990cbafa83fb8d358005319a5cab7be6db6993b4b830b6b"
+    },
+    {
+      "path": "assets/objects/winnercup.stl",
+      "mode": "raw",
+      "sha256": "7cabb652bc692bf6c7de729f8d181b633a63c1e7baf390f3476e416e46d8417e"
+    },
+    {
+      "path": "assets/textures/background_texture_metal_rust.jpg",
+      "mode": "raw",
+      "sha256": "3b84efccaea73fc9801a05e40b61f14967d6e73bf8867d91597cab3c383a3489"
+    },
+    {
+      "path": "assets/textures/blue-wood.png",
+      "mode": "raw",
+      "sha256": "9b1eab21395a05d7463751f9075b16bc4fba8fd4be42938bda25ea634a345884"
+    },
+    {
+      "path": "assets/textures/brass-ambra.png",
+      "mode": "raw",
+      "sha256": "246007818045b92276631294bb61d797806f2381d7044e98b6e3c4465f8e085c"
+    },
+    {
+      "path": "assets/textures/bread.png",
+      "mode": "raw",
+      "sha256": "22814a06ae3c7dc097801887e6aec97f830b7368b611cab56d1c4ad5ae57bddc"
+    },
+    {
+      "path": "assets/textures/can.png",
+      "mode": "raw",
+      "sha256": "9d1b29ff348a4425f84bb0de6b46139446b7e950058348d52fced0a707558e02"
+    },
+    {
+      "path": "assets/textures/ceramic.png",
+      "mode": "raw",
+      "sha256": "beef464a2aa9143ba6a25a44adcbfd1f1aff16c5969edbf08019b61025388402"
+    },
+    {
+      "path": "assets/textures/cereal.png",
+      "mode": "raw",
+      "sha256": "aa0be8e701b41b3a7284bcd1e6e18adb541d007d00b2dbfe69772620bea790c8"
+    },
+    {
+      "path": "assets/textures/clay.png",
+      "mode": "raw",
+      "sha256": "0ea2ced7f0f07996292314e3f3f5df68c4d8c5b2cbf2180c899ed269906fdcd2"
+    },
+    {
+      "path": "assets/textures/cream-plaster.png",
+      "mode": "raw",
+      "sha256": "5f989033f089158b2c8f0f1f7881f6922b018a5b154558b2edcc9f41a21ab983"
+    },
+    {
+      "path": "assets/textures/dark-wood.png",
+      "mode": "raw",
+      "sha256": "5da8dbf7af06ecd251840aceec25fedcfa98267041cea289b2829c982e008dc3"
+    },
+    {
+      "path": "assets/textures/dirt.png",
+      "mode": "raw",
+      "sha256": "b410966a8e0c1d52e2847bdb61aa51c6291efcd7e92839923637d0dcdb91e973"
+    },
+    {
+      "path": "assets/textures/glass.png",
+      "mode": "raw",
+      "sha256": "9e12c4e1ed663ba3b690a701626e80189be02228f6d29c985273f15da4de423a"
+    },
+    {
+      "path": "assets/textures/gray-felt.png",
+      "mode": "raw",
+      "sha256": "04c1b483f04be0bd3d26a42ca530c05244cf4b52c0ccb027dbb8fc2bee41ca05"
+    },
+    {
+      "path": "assets/textures/gray-plaster.png",
+      "mode": "raw",
+      "sha256": "7ee7520ebf6118051ced809cb9754983e7537a40f8d5271d5cb2fabdd71c33bd"
+    },
+    {
+      "path": "assets/textures/gray-woodgrain.png",
+      "mode": "raw",
+      "sha256": "b9e65c147f2683dbcfe6279b359db649aef0cb40ef8b1e3ed5ba6f29fab6b3d0"
+    },
+    {
+      "path": "assets/textures/green-wood.png",
+      "mode": "raw",
+      "sha256": "e4fd42ec6dea58f46aa96fc1d78d57c52450a6497dcad887ae8e2ff8c4af3797"
+    },
+    {
+      "path": "assets/textures/lemon.png",
+      "mode": "raw",
+      "sha256": "93a21938e5fe8d62a042c5591b13b9bec75d94791f7d08f375beb60fce523610"
+    },
+    {
+      "path": "assets/textures/light-gray-floor-tile.png",
+      "mode": "raw",
+      "sha256": "a2aae4ba3b38c3ab9851eca9ad6e76cef9357ef75b3e9a4b280f694ca30acbc5"
+    },
+    {
+      "path": "assets/textures/light-gray-plaster.png",
+      "mode": "raw",
+      "sha256": "d0bdaf13b44ab6ef3122451f6b3853e40bdf20bb9be7662649683ba525dfe191"
+    },
+    {
+      "path": "assets/textures/light-wood.png",
+      "mode": "raw",
+      "sha256": "967be64bdb170d36283bc43c2ae5d525ec88f78bc837dc7d0efc9a28d68caad1"
+    },
+    {
+      "path": "assets/textures/metal.png",
+      "mode": "raw",
+      "sha256": "93784216a66b52be9c8ccc3732e50f511815291e32f34f97bd139ed7229061fa"
+    },
+    {
+      "path": "assets/textures/metal_wall_iron_fence.jpg",
+      "mode": "raw",
+      "sha256": "d723f6b9afd4d7744d7ea37356725bb0c8279f7eab099fb113fdc182f4b93d2d"
+    },
+    {
+      "path": "assets/textures/particle_board_paint_aged.jpg",
+      "mode": "raw",
+      "sha256": "c3e1ca8a547fc998c779d50b6716dd193ffe166db2fbb27b2acfb84ef192ff1b"
+    },
+    {
+      "path": "assets/textures/pebble_stone_texture_nature.jpg",
+      "mode": "raw",
+      "sha256": "0dccb2530bad54214853d821aff983ea682b382d7a3ae4a3ad95be4cfff178c8"
+    },
+    {
+      "path": "assets/textures/pink-plaster.png",
+      "mode": "raw",
+      "sha256": "c6f8435c8aec555fa89ee72d472d652f31ce1afc0e07372e9857b0aa50f6e029"
+    },
+    {
+      "path": "assets/textures/plaster-wall-4k.jpg",
+      "mode": "raw",
+      "sha256": "595a1d35d6a5c3dcf0a706e845d95c54b76bd29723edbd328fae82c49a27f9c3"
+    },
+    {
+      "path": "assets/textures/plywood-4k.jpg",
+      "mode": "raw",
+      "sha256": "0d7d907a23739763ea23e27791693df2708a3abfc8b2dc83c911ac7ea497a6e2"
+    },
+    {
+      "path": "assets/textures/red-wood.png",
+      "mode": "raw",
+      "sha256": "d42411e594d6be26c4876ada623b163af6621402462b244d86eaf6e72aca6494"
+    },
+    {
+      "path": "assets/textures/soda.png",
+      "mode": "raw",
+      "sha256": "2774d29c6c16e1a3b3156e6679897a1695127ec59463d2de1a7ffd7f11b41b4d"
+    },
+    {
+      "path": "assets/textures/steel-brushed.png",
+      "mode": "raw",
+      "sha256": "43f30e7a2d0e8085aa15f58623b1753a003f93e5fe336eeaf65c146f955a81d5"
+    },
+    {
+      "path": "assets/textures/steel-scratched.png",
+      "mode": "raw",
+      "sha256": "7e22a111d516cc84addde9b2b18353d8a6ec521b9b79ec5e9c169e2d9000d3fe"
+    },
+    {
+      "path": "assets/textures/texture_background_wall_paint_2.jpg",
+      "mode": "raw",
+      "sha256": "1f0ec9ba199ed73eecbed76db369beb4319bfef8cb7099ec8c33a6213b98daef"
+    },
+    {
+      "path": "assets/textures/texture_background_wall_paint_3.jpg",
+      "mode": "raw",
+      "sha256": "2c7b1c0a02f477ec5a54481be69d2b0bc90b85b4df8aa8309588074612bd89c8"
+    },
+    {
+      "path": "assets/textures/texture_stone_stone_texture_0.jpg",
+      "mode": "raw",
+      "sha256": "4ae44d4542d98f85f079db9a57aa7d8da4b0b68665062a40f6e037f1a72de8a1"
+    },
+    {
+      "path": "assets/textures/texture_wood_brown_1033760.jpg",
+      "mode": "raw",
+      "sha256": "67da5cb3ffdc9fdce39372969cfe11ff1c7ad7b97f33fc1de82fea7585d718d0"
+    },
+    {
+      "path": "assets/textures/white-bricks.png",
+      "mode": "raw",
+      "sha256": "864e2bfb462939212c4141a060eb4c3f34c891b6909873797b08f8c4185433d1"
+    },
+    {
+      "path": "assets/textures/white-plaster.png",
+      "mode": "raw",
+      "sha256": "a35c03edcef74c940400dd39e2384d05169d1d15ac247166b3b7a930acd70f03"
+    },
+    {
+      "path": "assets/textures/wood-tiles.png",
+      "mode": "raw",
+      "sha256": "18d87069529422d832559ce969858576dd46f83efc3dfd9e5ffbf26d740be123"
+    },
+    {
+      "path": "assets/textures/wood-varnished-panels.png",
+      "mode": "raw",
+      "sha256": "67b48dc99b89004d98cb0811f170d39993e7e205cc8d5bd3d01a4be137e33a85"
+    },
+    {
+      "path": "assets/textures/yellow-plaster.png",
+      "mode": "raw",
+      "sha256": "7f98027e5dd4ad845a1a20f302b183c62b8e8fab54799634c5143c1dde0d0362"
+    },
+    {
+      "path": "assets/urdf/tmpca4ng016.xml",
+      "mode": "xml",
+      "sha256": "6151c81c485d00a3a2a3a9c0d03c4a3821d85cb8a0337dc5136d2cd41d4dc52e"
+    },
+    {
+      "path": "assets/urdf/x1_xarm6_leap_right_object.xml",
+      "mode": "xml",
+      "sha256": "b742f7d4b2fcfc55f1da2c647daa36de21a0092b208860238435bde123b0ab93"
+    },
+    {
+      "path": "assets/urdf/x1_xarm6_leap_right_unseen_object.xml",
+      "mode": "xml",
+      "sha256": "ba4d80617542d01249b181a28ba82ae3814fd1026a4f3d82f8d159219794b4e1"
+    },
+    {
+      "path": "assets/urdf/xarm6_right.xml",
+      "mode": "xml",
+      "sha256": "5994866995ccd10910815ef4eba5b14b4fce863a01a50b22289598cc83d63469"
+    },
+    {
+      "path": "configs/train/DcmmPPO.yaml",
+      "mode": "lf",
+      "sha256": "24b38442bdddc431f3a6ab9e6b52d9f30c0a49933eebeeb5e8ea13494ac736ee"
+    },
+    {
+      "path": "gym_dcmm/utils/ik_pkg/ik_arm.py",
+      "mode": "lf",
+      "sha256": "a45dec306d1291b081e2667c7f48cafcbd61e421f8d65993eb4109e331b5d6aa"
+    },
+    {
+      "path": "gym_dcmm/utils/ik_pkg/ik_base.py",
+      "mode": "lf",
+      "sha256": "00c07fac30ce01fbb05f6470f61adfd2865a3e1e4a480965d00f33684c6ce6ac"
+    },
+    {
+      "path": "gym_dcmm/utils/pid.py",
+      "mode": "lf",
+      "sha256": "43a0390ddf368a920a252152748a30f52cecc605a6f0963e8cbf81cdbcd47f8e"
+    },
+    {
+      "path": "gym_dcmm/utils/util.py",
+      "mode": "lf",
+      "sha256": "e42a59ced936931d5fe07231b0e6ea82265082678f4dae91d5d3644ae783c659"
+    }
+  ]
+}

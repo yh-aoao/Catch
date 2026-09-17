@@ -1,8 +1,6 @@
-> ??????? Bounce ??? 3a36f5f?? [??????](BOUNCE_3A36F5F_RESTORE.md)?
+# Bounce 恢复到 3a36f5f
 
-# Bounce 恢复到 61709fc
-
-目标提交：`61709fc82bb4e48aa6a95fb722874ddf7ab483d0`。
+目标提交：`3a36f5fb29c534db7639bfb9372458595b240edd`。
 在当前项目内隔离保存旧源码，直接提交这些文件到 GitHub，服务器拉取后按原命令训练。
 不需要另一个 worktree，不需要服务器保留旧 Git 历史来动态提取文件。
 
@@ -13,7 +11,7 @@
 启动训练时应看到：
 
 ```text
-[bounce-baseline] commit=61709fc82bb4e48aa6a95fb722874ddf7ab483d0 environment/config/PPO=original
+[bounce-baseline] commit=3a36f5fb29c534db7639bfb9372458595b240edd environment/config/PPO=original
 ```
 
 ```bash
@@ -29,10 +27,10 @@ python3 train_DCMM.py test=False task=Catching_TwoStage num_envs=32 object_motio
 
 ## 恢复范围与存放位置
 
-- 环境：`gym_dcmm/envs/DcmmVecEnv_bounce_61709fc.py`。
-- 物理、奖励、阈值、随机化配置：`configs/env/DcmmCfg_bounce_61709fc.py`。
-- 机器人控制封装：`gym_dcmm/agents/MujocoDcmm_bounce_61709fc.py`。
-- PPO、网络、归一化、经验缓存：`gym_dcmm/algs/ppo_dcmm_61709fc/`。
+- 环境：`gym_dcmm/envs/DcmmVecEnv_bounce_3a36f5f.py`。
+- 物理、奖励、阈值、随机化配置：`configs/env/DcmmCfg_bounce_3a36f5f.py`。
+- 机器人控制封装：`gym_dcmm/agents/MujocoDcmm_bounce_3a36f5f.py`。
+- PPO、网络、归一化、经验缓存：`gym_dcmm/algs/ppo_dcmm_3a36f5f/`。
 - 原始代码调整了私有配置和机器人模块的 import 路径；另有下述无头渲染兼容修复。
 - 共用 IK、PID、工具、训练 YAML 与提交一致；共用机器人 XML 只有不影响语义的空白差异。
 - Roll、Basket 继续使用当前环境、配置和 PPO。
@@ -55,7 +53,7 @@ python3 train_DCMM.py test=False task=Catching_TwoStage num_envs=32 object_motio
 
 ## 验证与边界
 
-`BOUNCE_61709FC_MANIFEST.json` 记录目标提交、源码哈希、唯一允许的 import 替换，
+`BOUNCE_3A36F5F_MANIFEST.json` 记录目标提交、源码哈希、唯一允许的 import 替换，
 以及共用依赖哈希。代码换行差异已归一化，XML 以规范化内容校验。
 CPU 测试检查源码完整性、Bounce 路由（含别名和位置参数）、旧 PPO 选择、
 预设拒绝，以及 Roll/Basket 仍走原入口。

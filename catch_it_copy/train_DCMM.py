@@ -22,10 +22,10 @@ OmegaConf.register_new_resolver('resolve_default', lambda default, arg: default 
 @hydra.main(config_name='config', config_path='configs')
 def main(config: DictConfig):
     if config.object_motion in ('bounce', 'tan', '\u5f39'):
-        from gym_dcmm.algs.ppo_dcmm_61709fc.ppo_dcmm_track import PPO_Track as TrackingAgent
-        from gym_dcmm.algs.ppo_dcmm_61709fc.ppo_dcmm_catch_two_stage import PPO_Catch_TwoStage as TwoStageAgent
-        from gym_dcmm.algs.ppo_dcmm_61709fc.ppo_dcmm_catch_one_stage import PPO_Catch_OneStage as OneStageAgent
-        print('[bounce-baseline] commit=61709fc82bb4e48aa6a95fb722874ddf7ab483d0 '
+        from gym_dcmm.algs.ppo_dcmm_3a36f5f.ppo_dcmm_track import PPO_Track as TrackingAgent
+        from gym_dcmm.algs.ppo_dcmm_3a36f5f.ppo_dcmm_catch_two_stage import PPO_Catch_TwoStage as TwoStageAgent
+        from gym_dcmm.algs.ppo_dcmm_3a36f5f.ppo_dcmm_catch_one_stage import PPO_Catch_OneStage as OneStageAgent
+        print('[bounce-baseline] commit=3a36f5fb29c534db7639bfb9372458595b240edd '
               'environment/config/PPO=original', flush=True)
     elif config.object_motion == 'roll':
         from gym_dcmm.algs.ppo_dcmm_645edc4.ppo_dcmm_track import PPO_Track as TrackingAgent

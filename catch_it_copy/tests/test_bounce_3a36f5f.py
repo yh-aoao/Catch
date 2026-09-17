@@ -13,7 +13,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 class BaselineTests(unittest.TestCase):
     def test_frozen_sources_and_shared_dependencies(self):
-        manifest = json.loads((ROOT / 'BOUNCE_61709FC_MANIFEST.json').read_text())
+        manifest = json.loads((ROOT / 'BOUNCE_3A36F5F_MANIFEST.json').read_text())
         for item in manifest['files']:
             content = (ROOT / item['destination']).read_bytes().replace(b'\r\n', b'\n')
             self.assertEqual(hashlib.sha256(content).hexdigest(), item['restored_lf_sha256'], item['destination'])

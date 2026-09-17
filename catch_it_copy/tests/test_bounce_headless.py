@@ -5,7 +5,7 @@ import unittest
 import numpy as np
 
 ROOT = Path(__file__).resolve().parents[1]
-TREE = ast.parse((ROOT / 'gym_dcmm/envs/DcmmVecEnv_bounce_61709fc.py').read_text(encoding='utf-8'))
+TREE = ast.parse((ROOT / 'gym_dcmm/envs/DcmmVecEnv_bounce_3a36f5f.py').read_text(encoding='utf-8'))
 CLASS = next(n for n in TREE.body if isinstance(n, ast.ClassDef) and n.name == 'DcmmVecEnv')
 
 class HeadlessTests(unittest.TestCase):

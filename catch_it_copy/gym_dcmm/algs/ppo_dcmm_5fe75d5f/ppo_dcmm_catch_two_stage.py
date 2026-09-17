@@ -10,12 +10,12 @@ import wandb
 import numpy as np
 
 from .experience import ExperienceBuffer
-from .models_track import ActorCritic
+from .models_catch import ActorCritic
 from .utils import AverageScalarMeter, RunningMeanStd
 
 from tensorboardX import SummaryWriter
 
-class PPO_Catch_OneStage(object):
+class PPO_Catch_TwoStage(object):
     def __init__(self, env, output_dif, full_config):
         self.rank = -1
         self.device = full_config['rl_device']
@@ -24,10 +24,13 @@ class PPO_Catch_OneStage(object):
         # ---- build environment ----
         self.env = env
         self.num_actors = int(self.ppo_config['num_actors'])
+        print("num_actors: ", self.num_actors)
         self.actions_num = self.env.call("act_c_dim")[0]
+        print("actions_num: ", self.actions_num)
         self.actions_low = self.env.call("actions_low")[0]
         self.actions_high = self.env.call("actions_high")[0]
         self.obs_shape = (self.env.call("obs_c_dim")[0],)
+        self.obs_t_shape = (self.env.call("obs_t_dim")[0],) # remove the hand part
         self.full_action_dim = self.env.call("act_c_dim")[0]
         # ---- Model ----
         net_config = {
@@ -39,8 +42,12 @@ class PPO_Catch_OneStage(object):
         print("net_config: ", net_config)
         self.model = ActorCritic(net_config)
         self.model.to(self.device)
-        self.running_mean_std = RunningMeanStd(self.obs_shape).to(self.device)
+        self.running_mean_std_track = RunningMeanStd(self.obs_t_shape).to(self.device)
+        self.running_mean_std_hand = RunningMeanStd((12,)).to(self.device)
         self.value_mean_std = RunningMeanStd((1,)).to(self.device)
+        # print("### Start loading tracking model")
+        self.load_tracking_model(full_config.checkpoint_tracking, full_config.checkpoint_catching)
+        # print("### Done loading tracking model")
         # ---- Output Dir ----
         # allows us to specify a folder where all experiments will reside
         self.output_dir = output_dif
@@ -121,6 +128,25 @@ class PPO_Catch_OneStage(object):
         self.rl_train_time = 0
         self.all_time = 0
 
+        self.hard_case = False
+
+    def load_tracking_model(self, checkpoint_tracking, checkpoint_catching):
+        """
+        Save actor and critic model parameters to files.
+
+        actor_path: Path to save actor model parameters.
+        """
+        print("### Start loading tracking model")
+        if checkpoint_catching or not checkpoint_tracking:
+            return
+        tracking_checkpoint = torch.load(checkpoint_tracking, map_location=self.device)
+        self.model.actor_mlp_t.load_state_dict(tracking_checkpoint['tracking_mlp'])
+        self._load_compatible_module_state(self.model.mu_t, tracking_checkpoint['tracking_mu'], "tracking_mu")
+        self._copy_compatible_parameter(self.model.sigma_t, tracking_checkpoint['tracking_sigma'], "tracking_sigma")
+        print("self.model.sigma_t.data: ", self.model.sigma_t.data)
+        self.running_mean_std_track.load_state_dict(tracking_checkpoint['running_mean_std'])
+        print("### Done loading tracking model")
+
     def write_stats(self, a_losses, c_losses, b_losses, entropies, kls):
         log_dict = {
             'performance/RLTrainFPS': self.agent_steps / self.rl_train_time,
@@ -146,14 +172,16 @@ class PPO_Catch_OneStage(object):
     def set_eval(self):
         self.model.eval()
         if self.normalize_input:
-            self.running_mean_std.eval()
+            self.running_mean_std_track.eval()
+            self.running_mean_std_hand.eval()
         if self.normalize_value:
             self.value_mean_std.eval()
 
     def set_train(self):
         self.model.train()
         if self.normalize_input:
-            self.running_mean_std.train()
+            self.running_mean_std_track.train()
+            self.running_mean_std_hand.train()
         if self.normalize_value:
             self.value_mean_std.train()
 
@@ -190,13 +218,14 @@ class PPO_Catch_OneStage(object):
             mean_rewards = self.episode_rewards.get_mean()
             mean_lengths = self.episode_lengths.get_mean()
             mean_success = self.episode_success.get_mean()
-            # print("mean_rewards: ", mean_rewards)
+
             self.writer.add_scalar(
                 'metrics/episode_rewards_per_step', mean_rewards, self.agent_steps)
             self.writer.add_scalar(
                 'metrics/episode_lengths_per_step', mean_lengths, self.agent_steps)
             self.writer.add_scalar(
                 'metrics/episode_success_per_step', mean_success, self.agent_steps)
+            
             wandb.log({
                 'metrics/episode_rewards_per_step': mean_rewards,
                 'metrics/episode_lengths_per_step': mean_lengths,
@@ -227,12 +256,11 @@ class PPO_Catch_OneStage(object):
     def save(self, name):
         weights = {
             'model': self.model.state_dict(),
-            'tracking_mlp': self.model.actor_mlp.state_dict(),
-            'tracking_mu': self.model.mu.state_dict(),
-            'tracking_sigma': self.model.sigma.data
         }
-        if self.running_mean_std:
-            weights['running_mean_std'] = self.running_mean_std.state_dict()
+        if self.running_mean_std_track:
+            weights['running_mean_std_track'] = self.running_mean_std_track.state_dict()
+        if self.running_mean_std_hand:
+            weights['running_mean_std_hand'] = self.running_mean_std_hand.state_dict()
         if self.value_mean_std:
             weights['value_mean_std'] = self.value_mean_std.state_dict()
         torch.save(weights, f'{name}.pth')
@@ -242,25 +270,30 @@ class PPO_Catch_OneStage(object):
             return
         checkpoint = torch.load(fn, map_location = self.device)
         self._load_compatible_model_state(checkpoint['model'])
-        self._load_compatible_running_stats(checkpoint)
+        # 兼容 OneStage checkpoint（只有 running_mean_std）和 TwoStage checkpoint
+        if 'running_mean_std_track' in checkpoint:
+            self.running_mean_std_track.load_state_dict(checkpoint['running_mean_std_track'])
+        else:
+            print("[checkpoint] running_mean_std_track not found, using fresh stats")
+        if 'running_mean_std_hand' in checkpoint:
+            self.running_mean_std_hand.load_state_dict(checkpoint['running_mean_std_hand'])
+        else:
+            print("[checkpoint] running_mean_std_hand not found, using fresh stats")
 
     def restore_test(self, fn):
         checkpoint = torch.load(fn, map_location = self.device)
-        self._load_compatible_model_state(checkpoint['model'])
         if self.normalize_input:
-            self._load_compatible_running_stats(checkpoint)
-
-    def _load_compatible_running_stats(self, checkpoint):
-        """兼容 Tracking checkpoint (18维) 和 Catching checkpoint (30维) 的 running_mean_std"""
-        if 'running_mean_std' not in checkpoint:
-            print("[checkpoint] running_mean_std not found, using fresh stats")
+            if 'running_mean_std_track' in checkpoint:
+                self.running_mean_std_track.load_state_dict(checkpoint['running_mean_std_track'])
+            else:
+                print("[checkpoint] running_mean_std_track not found, using fresh stats")
+            if 'running_mean_std_hand' in checkpoint:
+                self.running_mean_std_hand.load_state_dict(checkpoint['running_mean_std_hand'])
+            else:
+                print("[checkpoint] running_mean_std_hand not found, using fresh stats")
+        if not fn:
             return
-        ckpt_shape = checkpoint['running_mean_std']['running_mean'].shape
-        curr_shape = self.running_mean_std.running_mean.shape
-        if ckpt_shape == curr_shape:
-            self.running_mean_std.load_state_dict(checkpoint['running_mean_std'])
-        else:
-            print(f"[checkpoint] running_mean_std shape mismatch: checkpoint {ckpt_shape} vs model {curr_shape}, using fresh stats")
+        self._load_compatible_model_state(checkpoint['model'])
 
     def _load_compatible_model_state(self, checkpoint_state):
         model_state = self.model.state_dict()
@@ -293,6 +326,34 @@ class PPO_Catch_OneStage(object):
             for item in skipped:
                 print("  ", item)
 
+    def _load_compatible_module_state(self, module, checkpoint_state, label):
+        module_state = module.state_dict()
+        for name, value in checkpoint_state.items():
+            if name not in module_state:
+                continue
+            target = module_state[name]
+            if value.shape == target.shape:
+                module_state[name] = value
+            elif value.ndim == target.ndim and value.ndim > 0 and value.shape[1:] == target.shape[1:]:
+                merged = target.clone()
+                n = min(value.shape[0], target.shape[0])
+                merged[:n] = value[:n]
+                module_state[name] = merged
+                print(f"[checkpoint] Partially loaded {label}.{name}: {tuple(value.shape)} -> {tuple(target.shape)}")
+            else:
+                print(f"[checkpoint] Skipped {label}.{name}: {tuple(value.shape)} -> {tuple(target.shape)}")
+        module.load_state_dict(module_state)
+
+    def _copy_compatible_parameter(self, parameter, value, label):
+        if value.shape == parameter.data.shape:
+            parameter.data.copy_(value)
+        elif value.ndim == parameter.data.ndim and value.shape[1:] == parameter.data.shape[1:]:
+            n = min(value.shape[0], parameter.data.shape[0])
+            parameter.data[:n].copy_(value[:n])
+            print(f"[checkpoint] Partially loaded {label}: {tuple(value.shape)} -> {tuple(parameter.data.shape)}")
+        else:
+            print(f"[checkpoint] Skipped {label}: {tuple(value.shape)} -> {tuple(parameter.data.shape)}")
+
     def train_epoch(self):
         # collect minibatch data
         _t = time.time()
@@ -310,10 +371,14 @@ class PPO_Catch_OneStage(object):
                 value_preds, old_action_log_probs, advantage, old_mu, old_sigma, \
                     returns, actions, obs = self.storage[i]
 
-                obs = self.running_mean_std(obs)
+                obs_track = self.running_mean_std_track(obs[:,:-12])
+                obs_hand = self.running_mean_std_hand(obs[:,-12:])
+                obs = torch.cat((obs_track, obs_hand), dim=1)
                 batch_dict = {
                     'prev_actions': actions,
                     'obs': obs,
+                    'obs_t': obs[:,:-12],
+                    'obs_c': obs[:,2:],
                 }
                 res_dict = self.model(batch_dict)
                 action_log_probs = res_dict['prev_neglogp']
@@ -384,7 +449,7 @@ class PPO_Catch_OneStage(object):
         self.rl_train_time += (time.time() - _t)
         return a_losses, c_losses, b_losses, entropies, kls
     
-    def obs2tensor(self, obs):
+    def obs2tensor(self, obs, task=''):
         # Map the step result to tensor
         _parts = [
             obs["base"]["v_lin_2d"],
@@ -416,11 +481,15 @@ class PPO_Catch_OneStage(object):
             'hand': hand_tensor
         }
         return actions_dict
-    
+
     def model_act(self, obs_dict, inference=False):
-        processed_obs = self.running_mean_std(obs_dict['obs'])
+        processed_obs_track = self.running_mean_std_track(obs_dict['obs'][:, :-12])
+        processed_obs_hand = self.running_mean_std_hand(obs_dict['obs'][:, -12:])
+        processed_obs = torch.cat((processed_obs_track, processed_obs_hand), dim=1)
         input_dict = {
             'obs': processed_obs,
+            'obs_t': processed_obs[:,:-12],
+            'obs_c': processed_obs[:,2:],
         }
         if not inference:
             res_dict = self.model.act(input_dict)
@@ -429,7 +498,7 @@ class PPO_Catch_OneStage(object):
             res_dict = {}
             res_dict['actions'] = self.model.act_inference(input_dict)
         return res_dict
-
+    
     def play_steps(self):
         for n in range(self.horizon_length):
             res_dict = self.model_act(self.obs)
@@ -438,11 +507,12 @@ class PPO_Catch_OneStage(object):
             for k in ['actions', 'neglogpacs', 'values', 'mus', 'sigmas']:
                 self.storage.update_data(k, n, res_dict[k])
             # Do env step
-            # Clamp the actions of the action space
+            # Clamp the actions of the action space 
             actions = res_dict['actions']
             actions[:,:] = torch.clamp(actions[:,:], -1, 1)
             actions = torch.nn.functional.pad(actions, (0, self.full_action_dim-actions.size(1)), value=0)
             actions_dict = self.action2dict(actions)
+            # print("actions_dict: ", actions_dict)
             obs, r, terminates, truncates, infos = self.env.step(actions_dict)
             # Map the obs
             self.obs = {'obs': self.obs2tensor(obs)}
@@ -461,13 +531,11 @@ class PPO_Catch_OneStage(object):
 
             self.current_rewards += rewards
             self.current_lengths += 1
-            # print("self.dones: ", self.dones)
             done_indices = self.dones.nonzero(as_tuple=False)
             # print("done_indices: ", done_indices)
             self.episode_rewards.update(self.current_rewards[done_indices])
             self.episode_lengths.update(self.current_lengths[done_indices])
-            success = torch.as_tensor(infos['success'], dtype=torch.float32, device=self.device)
-            self.episode_success.update(success[done_indices])
+            self.episode_success.update(torch.tensor(truncates, dtype=torch.float32, device=self.device)[done_indices])
             assert isinstance(infos, dict), 'Info Should be a Dict'
             # print("infos: ", infos)
             for k, v in infos.items():
@@ -516,13 +584,13 @@ class PPO_Catch_OneStage(object):
             dones = terminates | truncates
             self.dones = torch.tensor(dones, dtype=torch.uint8).to(self.device)
             # Update dones and rewards after env step
+
             self.current_rewards += rewards
             self.current_lengths += 1
             done_indices = self.dones.nonzero(as_tuple=False)
             self.episode_test_rewards.update(self.current_rewards[done_indices])
             self.episode_test_lengths.update(self.current_lengths[done_indices])
-            success = torch.as_tensor(infos['success'], dtype=torch.float32, device=self.device)
-            self.episode_test_success.update(success[done_indices])
+            self.episode_test_success.update(torch.tensor(truncates, dtype=torch.float32, device=self.device)[done_indices])
             assert isinstance(infos, dict), 'Info Should be a Dict'
             for k, v in infos.items():
                 # only log scalars
@@ -557,7 +625,6 @@ class PPO_Catch_OneStage(object):
             #     'metrics/episode_test_rewards': mean_rewards,
             #     'metrics/episode_test_lengths': mean_lengths,
             # }, step=self.agent_steps)
-    
 
     def adjust_learning_rate_cos(self, epoch):
         lr = self.init_lr * 0.5 * (

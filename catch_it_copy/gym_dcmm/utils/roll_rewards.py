@@ -68,8 +68,14 @@ def hand_workspace(centers, radii, ee_position, cfg):
     top_offset = float(np.max(centers[:, 2] + radii) - ee_position[2])
     ceiling = cfg.roll_table_pos[2] - cfg.roll_table_size[2] - cfg.roll_grasp_clearance - top_offset
     wait_height = float(np.clip(ceiling, cfg.roll_min_wait_height, cfg.roll_wait_height))
+    footprint = np.all(np.abs(centers[:, :2] - cfg.roll_table_pos[:2]) <= cfg.roll_table_size[:2], axis=1)
+    table_bottom = cfg.roll_table_pos[2] - cfg.roll_table_size[2]
+    above_table = float(np.max(np.maximum(
+        centers[footprint, 2] + radii[footprint] - table_bottom, 0.
+    ))) if np.any(footprint) else 0.
     return dict(clearance=clearance, hand_clear=clearance >= cfg.roll_grasp_clearance,
-                wait_height=wait_height, height_feasible=ceiling >= cfg.roll_min_wait_height)
+                wait_height=wait_height, height_feasible=ceiling >= cfg.roll_min_wait_height,
+                above_table=above_table)
 
 
 def capture_ready(position, radius, table_contact, workspace, cfg):

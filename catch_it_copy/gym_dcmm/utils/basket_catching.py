@@ -36,7 +36,7 @@ def catching_reward(phase, parking, previous_parking_distance, distance,
               step_duration=0.):
     terms = dict(time=-cfg.basket_catch_time_cost, parking=0., parking_progress=0.,
                  braking=0., aim=0., flight_progress=0., control=0.,
-             hold=0.,
+                 release=0., release_dir=0., forward=0., hold=0.,
                  success=cfg.basket_w_score if success else 0.,
                  failure=-cfg.basket_catch_failure_cost if failed and not success else 0.)
     if phase == 'parking':

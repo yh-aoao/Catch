@@ -461,7 +461,8 @@ class PPO_Track(object):
             # print("done_indices: ", done_indices)
             self.episode_rewards.update(self.current_rewards[done_indices])
             self.episode_lengths.update(self.current_lengths[done_indices])
-            self.episode_success.update(torch.tensor(truncates, dtype=torch.float32, device=self.device)[done_indices])
+            success = torch.as_tensor(infos['success'], dtype=torch.float32, device=self.device)
+            self.episode_success.update(success[done_indices])
             assert isinstance(infos, dict), 'Info Should be a Dict'
             # print("infos: ", infos)
             for k, v in infos.items():
@@ -515,7 +516,8 @@ class PPO_Track(object):
             done_indices = self.dones.nonzero(as_tuple=False)
             self.episode_test_rewards.update(self.current_rewards[done_indices])
             self.episode_test_lengths.update(self.current_lengths[done_indices])
-            self.episode_test_success.update(torch.tensor(truncates, dtype=torch.float32, device=self.device)[done_indices])
+            success = torch.as_tensor(infos['success'], dtype=torch.float32, device=self.device)
+            self.episode_test_success.update(success[done_indices])
             assert isinstance(infos, dict), 'Info Should be a Dict'
             for k, v in infos.items():
                 # only log scalars

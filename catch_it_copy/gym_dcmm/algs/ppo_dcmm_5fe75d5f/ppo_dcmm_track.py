@@ -15,7 +15,7 @@ from .utils import AverageScalarMeter, RunningMeanStd
 
 from tensorboardX import SummaryWriter
 
-class PPO_Catch_OneStage(object):
+class PPO_Track(object):
     def __init__(self, env, output_dif, full_config):
         self.rank = -1
         self.device = full_config['rl_device']
@@ -24,10 +24,13 @@ class PPO_Catch_OneStage(object):
         # ---- build environment ----
         self.env = env
         self.num_actors = int(self.ppo_config['num_actors'])
-        self.actions_num = self.env.call("act_c_dim")[0]
+        print("num_actors: ", self.num_actors)
+        self.actions_num = self.env.call("act_t_dim")[0]
+        print("actions_num: ", self.actions_num)
         self.actions_low = self.env.call("actions_low")[0]
         self.actions_high = self.env.call("actions_high")[0]
-        self.obs_shape = (self.env.call("obs_c_dim")[0],)
+        # self.obs_shape = self.env.observation_space.shape
+        self.obs_shape = (self.env.call("obs_t_dim")[0],)
         self.full_action_dim = self.env.call("act_c_dim")[0]
         # ---- Model ----
         net_config = {
@@ -100,8 +103,10 @@ class PPO_Catch_OneStage(object):
         self.episode_test_rewards = AverageScalarMeter(self.ppo_config['test_num_episodes'])
         self.episode_test_lengths = AverageScalarMeter(self.ppo_config['test_num_episodes'])
         self.episode_test_success = AverageScalarMeter(self.ppo_config['test_num_episodes'])
+
         self.obs = None
         self.epoch_num = 0
+        # print("self.obs_shape[0]: ", type(self.obs_shape[0]))
         self.storage = ExperienceBuffer(
             self.num_actors, self.horizon_length, self.batch_size, self.minibatch_size,
             self.obs_shape[0], self.actions_num, self.device,
@@ -172,10 +177,10 @@ class PPO_Catch_OneStage(object):
 
             if self.lr_schedule == 'linear':
                 self.last_lr = self.scheduler.update(self.agent_steps)
-
+            
             all_fps = self.agent_steps / (time.time() - _t)
             last_fps = (
-                self.batch_size) \
+                self.batch_size ) \
                 / (time.time() - _last_t)
             _last_t = time.time()
             info_string = f'Agent Steps: {int(self.agent_steps // 1e3):04}K | FPS: {all_fps:.1f} | ' \
@@ -202,7 +207,7 @@ class PPO_Catch_OneStage(object):
                 'metrics/episode_lengths_per_step': mean_lengths,
                 'metrics/episode_success_per_step': mean_success,
             }, step=self.agent_steps)
-            ckpt_prefix = f"{self.env.call('object_motion')[0]}_catch"
+            ckpt_prefix = f"{self.env.call('object_motion')[0]}_track"
             checkpoint_name = f'{ckpt_prefix}_ep_{self.epoch_num}_step_{int(self.agent_steps // 1e6):04}m_reward_{mean_rewards:.2f}'
 
             if self.save_freq > 0:
@@ -242,25 +247,13 @@ class PPO_Catch_OneStage(object):
             return
         checkpoint = torch.load(fn, map_location = self.device)
         self._load_compatible_model_state(checkpoint['model'])
-        self._load_compatible_running_stats(checkpoint)
+        self.running_mean_std.load_state_dict(checkpoint['running_mean_std'])
 
     def restore_test(self, fn):
         checkpoint = torch.load(fn, map_location = self.device)
         self._load_compatible_model_state(checkpoint['model'])
         if self.normalize_input:
-            self._load_compatible_running_stats(checkpoint)
-
-    def _load_compatible_running_stats(self, checkpoint):
-        """兼容 Tracking checkpoint (18维) 和 Catching checkpoint (30维) 的 running_mean_std"""
-        if 'running_mean_std' not in checkpoint:
-            print("[checkpoint] running_mean_std not found, using fresh stats")
-            return
-        ckpt_shape = checkpoint['running_mean_std']['running_mean'].shape
-        curr_shape = self.running_mean_std.running_mean.shape
-        if ckpt_shape == curr_shape:
             self.running_mean_std.load_state_dict(checkpoint['running_mean_std'])
-        else:
-            print(f"[checkpoint] running_mean_std shape mismatch: checkpoint {ckpt_shape} vs model {curr_shape}, using fresh stats")
 
     def _load_compatible_model_state(self, checkpoint_state):
         model_state = self.model.state_dict()
@@ -379,7 +372,7 @@ class PPO_Catch_OneStage(object):
                 self.last_lr = self.adjust_learning_rate_cos(mini_ep)
 
             for param_group in self.optimizer.param_groups:
-                    param_group['lr'] = self.last_lr
+                param_group['lr'] = self.last_lr
 
         self.rl_train_time += (time.time() - _t)
         return a_losses, c_losses, b_losses, entropies, kls
@@ -391,7 +384,8 @@ class PPO_Catch_OneStage(object):
             obs["arm"]["ee_pos3d"], obs["arm"]["ee_quat"], obs["arm"]["ee_v_lin_3d"],
             obs["object"]["pos3d"], obs["object"]["v_lin_3d"],
         ]
-        if "hand" in obs:
+        # hand 只在 Catching 任务加入（Tracking 不含 hand）
+        if self.env.call('task')[0] == 'Catching':
             _parts.append(obs["hand"])
         if "basket" in obs:
             _parts.append(obs["basket"]["rel_pos3d"])
@@ -416,7 +410,7 @@ class PPO_Catch_OneStage(object):
             'hand': hand_tensor
         }
         return actions_dict
-    
+
     def model_act(self, obs_dict, inference=False):
         processed_obs = self.running_mean_std(obs_dict['obs'])
         input_dict = {
@@ -443,6 +437,7 @@ class PPO_Catch_OneStage(object):
             actions[:,:] = torch.clamp(actions[:,:], -1, 1)
             actions = torch.nn.functional.pad(actions, (0, self.full_action_dim-actions.size(1)), value=0)
             actions_dict = self.action2dict(actions)
+            # print("actions_dict: ", actions_dict)
             obs, r, terminates, truncates, infos = self.env.step(actions_dict)
             # Map the obs
             self.obs = {'obs': self.obs2tensor(obs)}
@@ -466,8 +461,7 @@ class PPO_Catch_OneStage(object):
             # print("done_indices: ", done_indices)
             self.episode_rewards.update(self.current_rewards[done_indices])
             self.episode_lengths.update(self.current_lengths[done_indices])
-            success = torch.as_tensor(infos['success'], dtype=torch.float32, device=self.device)
-            self.episode_success.update(success[done_indices])
+            self.episode_success.update(torch.tensor(truncates, dtype=torch.float32, device=self.device)[done_indices])
             assert isinstance(infos, dict), 'Info Should be a Dict'
             # print("infos: ", infos)
             for k, v in infos.items():
@@ -521,8 +515,7 @@ class PPO_Catch_OneStage(object):
             done_indices = self.dones.nonzero(as_tuple=False)
             self.episode_test_rewards.update(self.current_rewards[done_indices])
             self.episode_test_lengths.update(self.current_lengths[done_indices])
-            success = torch.as_tensor(infos['success'], dtype=torch.float32, device=self.device)
-            self.episode_test_success.update(success[done_indices])
+            self.episode_test_success.update(torch.tensor(truncates, dtype=torch.float32, device=self.device)[done_indices])
             assert isinstance(infos, dict), 'Info Should be a Dict'
             for k, v in infos.items():
                 # only log scalars
@@ -557,7 +550,6 @@ class PPO_Catch_OneStage(object):
             #     'metrics/episode_test_rewards': mean_rewards,
             #     'metrics/episode_test_lengths': mean_lengths,
             # }, step=self.agent_steps)
-    
 
     def adjust_learning_rate_cos(self, epoch):
         lr = self.init_lr * 0.5 * (
@@ -574,7 +566,6 @@ def policy_kl(p0_mu, p0_sigma, p1_mu, p1_sigma):
     kl = kl.sum(dim=-1)  # returning mean between all steps of sum between all actions
     return kl.mean()
 
-
 class AdaptiveScheduler(object):
     def __init__(self, kl_threshold=0.008):
         super().__init__()
@@ -589,7 +580,6 @@ class AdaptiveScheduler(object):
         if kl_dist < (0.5 * self.kl_threshold):
             lr = min(current_lr * 1.5, self.max_lr)
         return lr
-
 
 class LinearScheduler:
     def __init__(self, start_lr, max_steps=1000000):

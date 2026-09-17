@@ -96,8 +96,6 @@ k_hand = np.array([0.75, 1.25])
 ## Object Shape and Size
 object_shape = ["box", "cylinder", "sphere", "ellipsoid", "capsule"]
 object_mesh = ["bottle_mesh", "bread_mesh", "bowl_mesh", "cup_mesh", "winnercup_mesh"]
-# 训练时限制物体形状（None=全部形状；["sphere"]=只小球）。catch_throw 时设为 ["sphere"]
-train_object_filter = None
 object_size = {
     "sphere": np.array([[0.035, 0.045]]),
     "capsule": np.array([[0.025, 0.035], [0.025, 0.04]]),
@@ -122,64 +120,28 @@ act_delay = {
     'hand': [1,],
 }
 
-## 弹跳模式物理参数（固定基线 + 部分随机化）
-# 可选 P0-P8 / L0-L4 参数组见 configs/env/bounce_presets.py。
-# 此处参数用于 bounce_physics=legacy / bounce_launch=legacy；用法见 BOUNCE_PRESETS.md。
-# ---------- 固定参数（基线，不随机） ----------
+## 弹跳模式物理参数
 # 弹性系数 COR → dampratio = (1-COR)*damp_scale
+# COR=0.80 → dampratio=0.10, 弹跳 5~6 次
 bounce_restitution = np.array([0.8, 0.8])
 # 接触时间常数（秒）
 bounce_solref_timeconst = np.array([0.008, 0.008])
-# 地面摩擦系数（滑动、扭转、滚动）——固定 [0.50, 0.05, 0.015]
-bounce_friction = np.array([[0.50, 0.05, 0.015], [0.50, 0.05, 0.015]])
-# 初始释放高度（m）——固定 0.9
-bounce_init_height = np.array([0.9, 0.9])
-# 初始水平速度（m/s）——固定 1.0
-bounce_init_speed = np.array([1.0, 1.0])
-# 初始竖直速度（m/s），负=向下——固定 -0.2
-bounce_init_vz = np.array([-0.2, -0.2])
 # solref 阻尼比缩放系数
 bounce_damp_scale = 0.50
-# ---------- 旧固定基线（36bf535） ----------
-# 小球质量（kg）——固定 0.05（回到泛化前基线）
-bounce_mass = np.array([0.05, 0.05])
-# 小球半径（m）——固定 0.04（回到泛化前基线）
-bounce_radius = np.array([0.04, 0.04])
-# 自由关节阻尼（空气阻力）——固定
+# 自由关节阻尼（空气阻力）
 bounce_joint_damping = np.array([0.00015, 0.00015])
-# legacy bounce 保留旧 XML 的每轴转动惯量；None 表示按实心球重算。
-bounce_inertia = 7.33516e-05
-# 手部摩擦（滑动、扭转、滚动）——固定 [2.0, 0.5, 0.1]
-bounce_hand_friction = np.array([[2.0, 0.5, 0.1], [2.0, 0.5, 0.1]])
-
-## ==================== Throw_Bounce 模式专用参数 ====================
-# 抛+弹自适应：球从远处抛出，飞行→落地弹跳→车接住弹跳的球
-# 初始位置（远处，车来不及接）——固定轨迹降低随机性
-throw_bounce_init_y = np.array([3.2, 3.2])
-throw_bounce_init_z = np.array([1.2, 1.2])
-# 初始速度（朝小车方向，水平速度快；竖直向上让球"抛"起来）——固定
-throw_bounce_speed = np.array([2.5, 2.5])
-throw_bounce_vz = np.array([1.5, 1.5])
-# 飞行宽容期（秒）：球还在飞行时，不惩罚追不上（球飞行约0.7秒）
-throw_bounce_grace = 1.0
-
-## ==================== Throw_Force 模式专用参数 ====================
-# "扔"模式：抓紧球用力甩出去（无篮筐目标，奖励=扔得远/快）
-# 持球时长（秒）
-throw_force_hold = 0.3
-# 小球半径/质量
-throw_force_radius = 0.04
-throw_force_mass = 0.05
-# 抛掷初速度加成（释放时给球加的额外速度）
-throw_force_boost = np.array([0.0, 2.0, 3.0])
-# 奖励权重
-throw_force_w_dist = 5.0      # 球飞出的水平距离奖励
-throw_force_w_speed = 3.0     # 球初速度奖励
-# 终止：球落地
-throw_force_floor_z = 0.0
-throw_force_max_time = 3.0
-# 初始臂姿（恢复 XArm6 正常工作姿态，手部直接安装在 link6 上）
-throw_force_arm_joints = np.array([0.0, 0.1, -0.1, 1.8, 0.0, -1.5])
+# 地面摩擦系数（滑动、扭转、滚动）
+bounce_friction = np.array([[0.50, 0.05, 0.015], [0.50, 0.05, 0.015]])
+# 小球质量（kg）
+bounce_mass = np.array([0.05, 0.05])
+# 小球半径（m）
+bounce_radius = np.array([0.04, 0.04])
+# 初始释放高度（m）
+bounce_init_height = np.array([0.90, 0.90])
+# 初始水平速度（m/s）
+bounce_init_speed = np.array([1.0, 1.0])
+# 初始竖直速度（m/s），负=向下
+bounce_init_vz = np.array([-0.2, -0.2])
 
 ## ==================== Roll 模式专用参数 ====================
 ## Roll 模式采用"掌心朝上舀球"策略（palm-up scooping）：
@@ -202,7 +164,7 @@ roll_sigma_xy = 0.45
 # 靠近奖励权重（鼓励每一步更接近球）
 roll_w_approach = 5.0
 # 高度奖励权重（鼓励末端位于球同一高度，舀球策略不需要在上方）
-roll_w_h = 2.0
+roll_w_h = 0.4
 # 高度奖励的衰减参数（m）
 roll_sigma_h = 0.10
 # 高度偏移（m），舀球策略中手与球同高（0=球面高度）
@@ -260,46 +222,10 @@ roll_hand_ready_thumb = 0.3
 # 跟踪阶段手指动作缩放系数（0=完全固定，0.3=允许模型微调）
 roll_hand_action_scale = 0.3
 
-# 桌沿外侧、桌面下方拦截（世界坐标），不是机械臂基座相对高度。
-roll_wait_height = 0.30           # 最大等待高度；手部包围界较高时再适当下调
-roll_use_workspace_height = False  # 先恢复固定等待高度，几何余量只作软惩罚
-roll_min_wait_height = 0.14       # 低于此值不继续下调，日志提示几何余量不足
-roll_grasp_clearance = 0.03      # 整只手与桌板包围盒至少留 3cm 软余量
-roll_wait_lock_distance = 0.10   # 桌上阶段到位后锁定目标，避免继续追近桌边
-roll_w_workspace = 10.0
-roll_w_palm_up = 0.5             # 掌心朝上接落球的软奖励，不强制固定姿态
-roll_catch_precision_weight = 3.0  # 恢复接近真实球的抓取信号，弱于旧版的10
-roll_intercept_ball_offset = 0.04  # 球心相对 link6 目标的高度差
-roll_table_clearance = 0.12       # 历史配置；改用整手三维 roll_grasp_clearance
-roll_w_wait_speed = 0.3
-roll_w_above_wait = 5.0
-roll_w_table_clearance = 10.0
-roll_w_table_above = 25.0
-roll_table_collision_penalty = -10.0
-# 手指奖励使用真实 16 维 qpos；仅靠近球/接触时奖励闭合，过度弯曲扣分。
-roll_hand_close_distance = 0.18
-roll_hand_ready_target = np.array([0.35, 0.20, 0.20])
-roll_hand_close_target = np.array([0.80, 0.60, 0.50])
-roll_hand_thumb_target = 0.4
-roll_hand_flex_max = 1.4
-roll_w_hand_pose = 0.5
-roll_w_hand_closure = 2.0
-roll_w_hand_sync = 1.0
-roll_w_hand_chain = 0.5
-roll_w_hand_limits = 2.0
+# roll 模式固定底座（仅训练臂+手，排除底座协同问题）
+roll_fix_base = True
 
-# roll 模式固定底座（True=固定底座只训臂；False=底座可动，车向前接球）
-roll_fix_base = False
-# roll 模式底盘初始 Y 位置（负=离桌面更远，给车更多前移空间）
-roll_base_init_y = -0.8
-# 方案B'：球在桌面上时追"预测落点"，落点 Y 坐标（世界坐标，桌边下方等待位置）
-roll_landing_y = 0.7
-# 落点锁定阈值：球滚过此 y（接近桌边）后冻结 x_landing，避免预测落点持续漂移
-roll_lock_landing_y = 1.5
-# roll 球初始速度范围（m/s，底座可动时球从远处滚来）
-roll_init_speed = np.array([0.8, 1.3])
-
-# ---- 历史参数（新 roll 奖励不再使用；使用上方 roll_wait_height 等参数）----
+# ---- 桌面高度奖励（新增）----
 # 桌面高度锚点（m），手在桌面上方这个高度范围内获得奖励
 roll_table_anchor_z = 0.50
 # 桌面高度奖励权重
@@ -308,8 +234,6 @@ roll_w_table_h = 2.0
 roll_sigma_table_h = 0.08
 # 桌面下方惩罚权重（手绝不能穿到桌面下方）
 roll_w_below_table_penalty = -5.0
-# 手碰/穿桌板惩罚权重（手在桌板水平投影内且低于桌板顶部时触发）
-roll_w_table_penalty = -5.0
 
 # =============================================================================
 # Bounce 模式专用参数
@@ -352,6 +276,11 @@ bounce_hand_ready_dip = 0.2        # 跟踪阶段手指预置 DIP/指尖屈曲�
 bounce_hand_ready_thumb = 0.2      # 跟踪阶段拇指预置屈曲角（rad）
 bounce_hand_action_scale = 0.3     # 跟踪阶段手指动作缩放系数（0=完全固定）
 
+# 灵巧手碰撞几何体摩擦系数（减缓小球弹开）
+# [滑动摩擦, 扭转摩擦, 滚动摩擦]，默认 MuJoCo 为 [1.0, 0.005, 0.0001]
+# 增大滑动摩擦可让小球接触手掌时消耗更多动能，减少弹飞
+bounce_hand_friction = np.array([2.0, 0.5, 0.1])
+
 # =============================================================================
 # Throw_Basket 模式专用参数（抛球入篮）
 # 小球初始在手掌中，机械臂执行抛掷动作将球投向篮筐。
@@ -360,31 +289,26 @@ bounce_hand_action_scale = 0.3     # 跟踪阶段手指动作缩放系数（0=�
 # ---- 篮筐参数 ----
 # 篮筐中心世界坐标（m），从 arm_base 前方约 1.8m、高 0.9m 处
 basket_center = np.array([0.0, 2.2, 0.9])
-# 篮筐 x 轴（左右）随机范围（每 episode 采样，训练底座横向移动 + 先到正前方）
-basket_center_x_range = np.array([-0.8, 0.8])
 # 篮筐半径（m），定义一个圆形目标区域
-basket_radius = 0.20
+basket_radius = 0.15
 # 篮筐高度（m），从篮筐中心向下的深度
 basket_depth = 0.3
 # 篮筐颜色 RGBA
 basket_rgba = [1.0, 0.4, 0.0, 0.7]
-# 篮筐倾斜角度（度），绕 X 轴旋转，让开口朝斜方向（朝小车）。0=水平朝上
-basket_tilt_deg = 25.0
 
 # ---- 抛球物理参数 ----
 # 小球半径（m）
 basket_ball_radius = 0.04
 # 小球质量（kg）
 basket_ball_mass = 0.05
-basket_catch_w_aim = 2.0
-basket_catch_time_cost = 0.05
-basket_catch_failure_cost = 20.0
+# 持球时长（s），球在手中稳定后再抛出
+basket_hold_duration = 0.3
 # ---- 抛球入篮奖励权重 ----
-# 旧距离塑形参数（主环境 Basket Catching 已改为分阶段奖励）
+# 球到篮筐中心的 3D 距离奖励（高斯型）
 basket_w_dist = 10.0
 # 球到篮筐距离衰减参数（m）
 basket_sigma_dist = 0.3
-# 入篮奖励：沿框法向穿过平面且交点位于扣除球半径的有效圆孔
+# 入篮成功奖励（球进入篮筐区域，即距离 < basket_radius）
 basket_w_score = 100.0
 # 靠近奖励权重（鼓励球向篮筐移动）
 basket_w_approach = 5.0
@@ -394,28 +318,6 @@ basket_w_above = 2.0
 basket_w_ctrl_base = 0.1
 basket_w_ctrl_arm = 0.5
 basket_w_ctrl_hand = 0.1
-# 底座到篮筐正前方的奖励权重（鼓励先移动到底座 x 对齐篮筐、y 停在理想距离）
-basket_w_base_front = 2.0
-# arm_base 到篮筐中心的世界 Y 轴间距（m）；不是手掌/出手点到框的距离。
-# 停车目标 y = basket_y - 此值；增大后停车位置离框更远。
-basket_base_front_dist = 1.2
-# 默认只比本回合初始 arm_base 位置沿世界 +Y 前移 0.2m，X 仍对齐篮筐。
-# 设为 None 时恢复 basket_y - basket_base_front_dist 的固定间距模式。
-basket_track_forward_offset = 0.2
-
-# 第一阶段停车：目标为 arm_base 的世界位置，不是车体几何中心。
-basket_track_max_speed = 0.8         # XY 合速度上限 (m/s)，两阶段保持一致
-basket_track_slowdown_gain = 1.5     # 奖励参考速度 = 位置误差 * gain，近目标逐渐减速
-basket_track_position_tolerance = 0.08  # x/y 各允许误差 (m)
-basket_track_speed_tolerance = 0.10  # 停稳速度阈值 (m/s)
-basket_track_settle_steps = 5        # 连续停稳策略步数，默认约 0.2s
-basket_track_w_distance = 1.0
-basket_track_w_progress = 20.0
-basket_track_w_velocity = 1.0
-basket_track_time_cost = 0.05
-basket_track_success_reward = 100.0
-basket_track_failure_cost = 100.0
-basket_track_log_interval = 25       # basket_log 开启时，每 N 步及回合结束打印
 
 # ---- 抛球入篮终止判定 ----
 # 球落地则判定失败
@@ -425,10 +327,8 @@ basket_fail_dist = 2.5
 # 最大 episode 时长（s）
 basket_max_time = 4.0
 
-# throw_basket 底座控制（False=底盘也参与瞄准篮筐）
-basket_fix_base = False
-# throw_force 底座控制（保持固定，扔球主要靠臂）
-throw_force_fix_base = True
+# 固定底座（True=只训练臂+手，False=底盘也参与）
+basket_fix_base = True
 
 ## Define PID params for wheel drive and steering.
 # driving
@@ -466,25 +366,3 @@ hand_mask = np.array([1, 0, 1, 1,
                       1, 0, 1, 1,
                       1, 0, 1, 1,
                       0, 1, 1, 1])
-
-# Physical throwing control costs (parking weights remain unchanged).
-basket_throw_ctrl_arm = 0.02
-basket_throw_ctrl_hand = 0.01
-
-# Reach band is an initial horizontal heuristic, not a full IK feasibility model.
-roll_reach_min = 0.35
-roll_reach_max = 0.65
-roll_w_reach = 2.0
-roll_w_base_settle = 0.1
-roll_w_arrival = 0.5
-basket_reference_max_speed = 6.0
-basket_velocity_sigma = 1.5
-basket_w_velocity_progress = 5.0
-basket_w_valid_release = 5.0
-basket_release_quality_min = 0.4
-basket_support_budget_seconds = 0.2
-basket_support_reward_rate = 1.0
-basket_hold_penalty_rate = 2.0
-
-# Roll IK candidate clearance from arm links to ranger_base (m).
-roll_arm_base_margin = 0.005

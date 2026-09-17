@@ -37,7 +37,7 @@ class BaselineTests(unittest.TestCase):
         module = ast.fix_missing_locations(ast.Module(body=[node], type_ignores=[]))
         scope = {}
         stub = ModuleType('gym_dcmm.envs.bounce_compat')
-        stub.make_bounce_3a36f5f = lambda parameters: SimpleNamespace(parameters=parameters)
+        stub.make_bounce_5fe75d5f = lambda parameters: SimpleNamespace(parameters=parameters)
         roll_stub = ModuleType('gym_dcmm.envs.roll_compat')
         roll_stub.make_roll_645edc4 = lambda parameters: SimpleNamespace(parameters=parameters)
         with patch.dict(sys.modules, {'gym_dcmm.envs.bounce_compat': stub, roll_stub.__name__: roll_stub}):
@@ -60,11 +60,11 @@ class BaselineTests(unittest.TestCase):
     def test_adapter_rejects_presets_and_preserves_old_arguments(self):
         scope = {}
         exec(compile((ROOT / 'gym_dcmm/envs/bounce_compat.py').read_text(), '<adapter>', 'exec'), scope)
-        factory = scope['make_bounce_3a36f5f']
+        factory = scope['make_bounce_5fe75d5f']
         for key in ['bounce_physics', 'bounce_launch']:
             with self.assertRaises(ValueError):
                 factory({key: 'P0' if key.endswith('physics') else 'L0'})
-        stub = ModuleType('gym_dcmm.envs.DcmmVecEnv_bounce_3a36f5f')
+        stub = ModuleType('gym_dcmm.envs.DcmmVecEnv_bounce_5fe75d5f')
         stub.DcmmVecEnv = lambda **kwargs: kwargs
         with patch.dict(sys.modules, {stub.__name__: stub}):
             result = factory(dict(task='Catching', object_motion='tan', bounce_physics='legacy',
@@ -77,9 +77,9 @@ class BaselineTests(unittest.TestCase):
         selection = main.body[0]
         stubs = {}
         for suffix, symbol in [('track','PPO_Track'), ('catch_two_stage','PPO_Catch_TwoStage'), ('catch_one_stage','PPO_Catch_OneStage')]:
-            name = 'gym_dcmm.algs.ppo_dcmm_3a36f5f.ppo_dcmm_' + suffix
+            name = 'gym_dcmm.algs.ppo_dcmm_5fe75d5f.ppo_dcmm_' + suffix
             stub = ModuleType(name); setattr(stub, symbol, 'old_' + symbol); stubs[name] = stub
-            name = name.replace('3a36f5f', '645edc4')
+            name = name.replace('5fe75d5f', '645edc4')
             stub = ModuleType(name); setattr(stub, symbol, 'roll_' + symbol); stubs[name] = stub
         code = compile(ast.Module(body=[selection], type_ignores=[]), '<actual-agent-selection>', 'exec')
         with patch.dict(sys.modules, stubs):

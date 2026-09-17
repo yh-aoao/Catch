@@ -728,6 +728,25 @@ class DcmmVecEnv(gym.Env):
                 self.basket_phase = 'preparing'
         if self.task == 'Catching' and self.basket_phase != 'parking':
             data.ctrl[-1] = 0.
+            if self.basket_phase == 'preparing' and not self.object_throw:
+                elapsed = self.Dcmm.data.time - getattr(self, 'start_time', self.Dcmm.data.time)
+                prepare_duration = getattr(DcmmCfg, 'basket_prepare_duration', 0.6)
+                if elapsed >= prepare_duration:
+                    position = data.qpos[37:40].copy()
+                    velocity = data.body('link6').cvel[3:6].copy()
+                    quality, reference = throw_quality(
+                        position, velocity, self.basket_center,
+                        self.Dcmm.model.opt.gravity, DcmmCfg)
+                    release_velocity = velocity if np.linalg.norm(velocity) > 0.05 else reference
+                    self.Dcmm.set_throw_pos_vel(
+                        pose=np.r_[position, self.object_q],
+                        velocity=np.r_[release_velocity, np.zeros(3)])
+                    self.object_throw = True
+                    self.basket_release_quality = quality
+                    self.basket_release_pending = quality
+                    self.basket_phase = 'flight'
+                    self.basket_previous_flight_distance = float(
+                        np.linalg.norm(position - self.basket_center))
             return
         rotation = data.body('link6').xmat.reshape(3, 3)
         point = data.body('link6').xpos + rotation[:, 1] * .03 + rotation[:, 2] * (DcmmCfg.basket_ball_radius + .03)
@@ -1813,17 +1832,18 @@ class DcmmVecEnv(gym.Env):
             prediction = predicted_miss(position, self.Dcmm.data.qvel[36:39],
                                         self.basket_center, self.Dcmm.model.opt.gravity)
             timed_out = info['env_time'] > DcmmCfg.basket_max_time
+            velocity = self.Dcmm.data.qvel[36:39].copy()
+            quality, reference = throw_quality(position, velocity, self.basket_center,
+                                               self.Dcmm.model.opt.gravity, DcmmCfg)
             value, terms = catching_reward(
                 self.basket_phase, parking, self.basket_previous_distance, distance,
                 self.basket_previous_flight_distance, prediction, ctrl, bool(info['success']),
                 self.terminated or timed_out, DcmmCfg,
                 holding=False, support_time=getattr(self, 'basket_support_time', 0.),
-                step_duration=0.)
-            velocity = self.Dcmm.data.qvel[36:39].copy()
+                step_duration=0., launch_quality=quality,
+                launch_motion=float(np.linalg.norm(ctrl.get('arm', np.zeros(6)))))
             touching = bool(np.any(np.isin(self.contacts['object_contacts'],
                 hand_collision_ids(self.Dcmm.model, self.hand_start_id))))
-            quality, reference = throw_quality(position, velocity, self.basket_center,
-                                               self.Dcmm.model.opt.gravity, DcmmCfg)
             terms.update(velocity_progress=0., support=0., valid_release=0.)
             release_quality = float(getattr(self, 'basket_release_pending', 0.))
             if release_quality > 0.:

@@ -196,11 +196,11 @@ roll_table_pos = np.array([0.0, 2.5, 0.44])   # 台面中心世界坐标 (z=0.44
 
 # ---- 跟踪阶段（Tracking）奖励权重 ----
 # XY 即时奖励权重（高斯型，距离越近分越高）
-roll_w_xy = 1.0
+roll_w_xy = 3.0
 # XY 奖励的衰减参数（m），距离超过此值奖励下降明显
-roll_sigma_xy = 0.45
+roll_sigma_xy = 0.35
 # 靠近奖励权重（鼓励每一步更接近球）
-roll_w_approach = 5.0
+roll_w_approach = 8.0
 # 高度奖励权重（鼓励末端位于球同一高度，舀球策略不需要在上方）
 roll_w_h = 2.0
 # 高度奖励的衰减参数（m）
@@ -481,6 +481,9 @@ basket_reference_max_speed = 6.0
 basket_velocity_sigma = 1.5
 basket_w_velocity_progress = 5.0
 basket_w_valid_release = 5.0
+basket_w_launch_quality = 8.0
+basket_w_launch_motion = 0.05
+basket_prepare_duration = 0.6
 basket_release_quality_min = 0.4
 basket_support_budget_seconds = 0.2
 basket_support_reward_rate = 1.0

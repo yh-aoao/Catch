@@ -5,7 +5,7 @@
       "source": "configs/env/DcmmCfg.py",
       "destination": "configs/env/DcmmCfg_roll_645edc4.py",
       "replacements": [],
-      "restored_lf_sha256": "c5c1de0af37083a050bdd8d5a35f1728c95948d91e2b6573a53586396fc9d197"
+      "restored_lf_sha256": "1a7bf4c6685c6334aa574b76230f73d7c7eff74ddc88c07d681c29b980512dd0"
     },
     {
       "source": "gym_dcmm/agents/MujocoDcmm.py",
@@ -31,7 +31,7 @@
           "from gym_dcmm.agents.MujocoDcmm_roll_645edc4 import MJ_DCMM"
         ]
       ],
-      "restored_lf_sha256": "a95d2c90169136f3f1e3ff6db9c8e25d93e6b5d874f947a5940ceb9675fe3eda"
+      "restored_lf_sha256": "793956821a3df7e20b854cff49433cd7a64f0ccf4d0cc9844c4447e8ef993b2e"
     },
     {
       "source": "gym_dcmm/algs/ppo_dcmm/__init__.py",
@@ -81,5 +81,9 @@
       "replacements": [],
       "restored_lf_sha256": "4f7dac3a2c2ea83c884c3888dfed9804432b67d451e3c0c8f8f2d908ecc3d738"
     }
+  ],
+  "active_revision": "645edc4 + XY waiting experiment 2026-09-17",
+  "behavior_changes": [
+    "Table top 0.70m; XY fall target; height band; bounded hand-front penalty; allow waiting before no_approach."
   ]
 }

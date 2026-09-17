@@ -245,6 +245,24 @@ class RollTests(unittest.TestCase):
         target, _ = R.interception_target([0., .5, .2], [0., -1., -1.], .04, CFG)
         self.assertLess(target[2], CFG.roll_wait_height)
 
+    def test_waiting_position_reward_is_xy_only(self):
+        target = np.array([0.2, 0.7, CFG.roll_wait_height])
+        low_terms, _ = R.position_terms(
+            np.array([0.0, 0.7, 0.20]), np.zeros(3), target, True, None, CFG)
+        high_terms, _ = R.position_terms(
+            np.array([0.0, 0.7, 0.55]), np.zeros(3), target, True, None, CFG)
+        self.assertEqual(low_terms['height'], 0.0)
+        self.assertEqual(high_terms['height'], 0.0)
+        self.assertEqual(low_terms['xy'], high_terms['xy'])
+
+    def test_waiting_progress_ignores_z_only_motion(self):
+        target = np.array([0.2, 0.7, CFG.roll_wait_height])
+        previous = np.array([0.0, 0.7, 0.20])
+        current = np.array([0.0, 0.7, 0.55])
+        terms, _ = R.position_terms(current, np.zeros(3), target, True,
+                                     np.linalg.norm(target[:2] - previous[:2]), CFG)
+        self.assertEqual(terms['approach'], 0.0)
+
     def test_slow_ball_target_stays_on_ballistic_path_without_horizontal_clamp(self):
         edge_y = CFG.roll_table_pos[1] - CFG.roll_table_size[1]
         target, _ = R.interception_target([0., 1.1, .5], [0., -.1, 0.], .04, CFG)

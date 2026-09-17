@@ -483,6 +483,7 @@ basket_w_valid_release = 5.0
 basket_release_quality_min = 0.4
 basket_support_budget_seconds = 0.2
 basket_support_reward_rate = 1.0
+basket_hold_penalty_rate = 2.0
 
 # Roll IK candidate clearance from arm links to ranger_base (m).
 roll_arm_base_margin = 0.005

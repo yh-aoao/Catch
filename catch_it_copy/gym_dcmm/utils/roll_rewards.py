@@ -92,20 +92,22 @@ def position_terms(ee_position, ee_velocity, target, on_table, previous_distance
     delta = np.asarray(target) - ee
     distance = float(np.linalg.norm(delta))
     xy = float(np.linalg.norm(delta[:2]))
+    tracking_distance = xy if on_table else distance
+    previous_tracking_distance = None if previous_distance is None else previous_distance
     terms = dict(
         xy=cfg.roll_w_xy / (1. + (xy / cfg.roll_sigma_xy) ** 2),
-        height=cfg.roll_w_h / (1. + (delta[2] / cfg.roll_sigma_h) ** 2),
-        arrival=cfg.roll_w_arrival * np.exp(-(distance / .15) ** 2 -
+        height=0. if on_table else cfg.roll_w_h / (1. + (delta[2] / cfg.roll_sigma_h) ** 2),
+        arrival=cfg.roll_w_arrival * np.exp(-(tracking_distance / .15) ** 2 -
                  float(np.sum(np.asarray(ee_velocity) ** 2)) / .2 ** 2) if on_table else 0.,
-        approach=cfg.roll_w_approach * (0. if previous_distance is None else
-                                      previous_distance - distance),
+        approach=cfg.roll_w_approach * (0. if previous_tracking_distance is None else
+                                      previous_tracking_distance - tracking_distance),
         # Waiting near the target should not require moving continuously.
         waiting=-cfg.roll_w_wait_speed * float(np.sum(np.asarray(ee_velocity) ** 2))
-                * np.exp(-(distance / .15) ** 2) if on_table else 0.,
+                * np.exp(-(tracking_distance / .15) ** 2) if on_table else 0.,
         above_wait=-cfg.roll_w_above_wait * max(0., ee[2] - cfg.roll_wait_height)
                    if on_table else 0.,
     )
-    return terms, distance
+    return terms, tracking_distance
 
 
 def hand_terms(qpos, distance, contact, cfg, allow_closure=True):

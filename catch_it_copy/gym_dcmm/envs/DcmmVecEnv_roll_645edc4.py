@@ -38,7 +38,9 @@ from gymnasium.envs.mujoco.mujoco_rendering import MujocoRenderer  # Mujoco渲�
 from gym_dcmm.utils.util import *  # 工具函数（如坐标转换/四元数处理）
 import xml.etree.ElementTree as ET  # XML解析（修改Mujoco模型）
 from scipy.spatial.transform import Rotation as R  # 旋转变换
-from collections import deque  # 双端队列（存储历史数据）
+from collections import deque
+from gym_dcmm.utils.roll_waiting import target as roll_wait_target, shaping as roll_wait_shaping
+from gym_dcmm.utils.roll_rewards import hand_collision_ids  # 双端队列（存储历史数据）
 from gym_dcmm.utils.basket_tracking import parking_state, parking_reward, limit_speed
 
 # os.environ['MUJOCO_GL'] = 'egl'  # 设置Mujoco渲染后端（注释掉则用默认）
@@ -1551,6 +1553,7 @@ class DcmmVecEnv(gym.Env):
         self.prev_d_basket = 2.0  # 重置上一步到篮筐距离（throw_basket 模式）
         self._release_rewarded = False  # 出手奖励是否已给（每回合重置）
         self._prev_basket_obj = None    # 上一策略步球位置（向前位移奖励用）
+        self._roll_wait_previous_ee = None
         self._prev_roll_d = None        # 上一策略步 roll 目标距离（方案B' 用）
         self._locked_landing_x = None   # roll 锁定落点 x（球滚过阈值后冻结）
         self._throw_force_start = None  # 扔模式球初始位置（距离奖励用）
@@ -1641,93 +1644,24 @@ class DcmmVecEnv(gym.Env):
         reward_vel_match = 0.0
         if self.object_motion == "roll":
             # 方案B'：球在桌面上时追"预测落点"（滚近桌边后锁定），球掉下来后追球本身
-            try:
-                obj_world = self.Dcmm.data.body(self.object_name).xpos.copy()
-                ee_world = self.Dcmm.data.body("link6").xpos.copy()
-                obj_vel = self.Dcmm.data.body(self.object_name).cvel[3:6].copy()
+            ee_world = self.Dcmm.data.body("link6").xpos.copy()
+            goal, waiting = roll_wait_target(self.Dcmm.data.qpos[37:40], self.Dcmm.data.qvel[36:39],
+                float(self.Dcmm.model.geom_size[self.object_id][0]), DcmmCfg,
+                abs(float(self.Dcmm.model.opt.gravity[2])))
+            reward_xy, reward_approach, reward_height = roll_wait_shaping(
+                ee_world, getattr(self, '_roll_wait_previous_ee', None), goal, waiting, DcmmCfg)
+            self._roll_wait_previous_ee = ee_world.copy()
+            hand_ids = hand_collision_ids(self.Dcmm.model, self.hand_start_id)
+            edge = DcmmCfg.roll_table_pos[1] - DcmmCfg.roll_table_size[1]
+            front = np.max(self.Dcmm.data.geom_xpos[hand_ids, 1] + self.Dcmm.model.geom_rbound[hand_ids])
+            reward_table_penalty = -DcmmCfg.roll_wait_w_hand * np.clip(
+                (DcmmCfg.roll_wait_hand_margin - (edge-front)) / .15, 0., 1.) if waiting else 0.
+            reward_table_h = 0.
+            info['roll_wait_target'] = goal
+            info['roll_waiting'] = waiting
+            info['roll_wait_terms'] = dict(xy=reward_xy, progress=reward_approach,
+                height=reward_height, hand_clearance=float(reward_table_penalty))
 
-                if obj_world[2] > DcmmCfg.roll_table_height:
-                    # 球还在桌面上：预测球滚到桌边(前缘 y=0.9)时的落点 x
-                    vy = obj_vel[1]
-                    vx = obj_vel[0]
-                    if abs(vy) > 0.01:
-                        t = max(0.0, (obj_world[1] - 0.9) / abs(vy))
-                        x_landing = obj_world[0] + vx * t
-                    else:
-                        x_landing = obj_world[0]
-                    # 落点锁定：球滚过阈值后冻结 x_landing，避免预测漂移导致手追"移动的虚目标"
-                    lock_y = getattr(DcmmCfg, 'roll_lock_landing_y', 1.5)
-                    if obj_world[1] <= lock_y:
-                        if self._locked_landing_x is None:
-                            self._locked_landing_x = x_landing  # 第一次过阈值时锁定
-                        x_landing = self._locked_landing_x
-                    else:
-                        self._locked_landing_x = None  # 球还远，预测未稳定，继续实时更新
-                    target_xy = np.array([x_landing, getattr(DcmmCfg, 'roll_landing_y', 0.7)])
-                    curr_d_xy = np.linalg.norm(ee_world[0:2] - target_xy)
-                else:
-                    # 球掉下来了：追球本身
-                    curr_d_xy = np.linalg.norm(ee_world[0:2] - obj_world[0:2])
-                    self._locked_landing_x = None  # 球已落下，清除锁定
-                # 用独立变量维护上一步的目标距离（世界坐标，跟 curr 一致）
-                prev_d_xy = getattr(self, '_prev_roll_d', None)
-                if prev_d_xy is None:
-                    prev_d_xy = curr_d_xy
-                self._prev_roll_d = curr_d_xy
-            except Exception:
-                curr_d_xy = np.linalg.norm(self.info.get("ee_distance", 0.0))
-                prev_d_xy = curr_d_xy
-
-            # 参数（从配置读取或使用默认值）
-            w_xy = getattr(DcmmCfg, 'roll_w_xy', 1.0)
-            sigma_xy = getattr(DcmmCfg, 'roll_sigma_xy', 0.45)
-            w_approach = getattr(DcmmCfg, 'roll_w_approach', 5.0)
-
-            # 即时 XY 奖励（距离越小越好）。倒数型比窄高斯更不稀疏，远距离也有学习信号。
-            reward_xy = w_xy / (1.0 + (curr_d_xy / max(1e-6, sigma_xy))**2)
-            # 靠近奖励（鼓励最近一步更靠近目标）
-            reward_approach = w_approach * max(0.0, prev_d_xy - curr_d_xy)
-
-            # 高度奖励：舀球策略中手与球同高（offset=0），手放在地面上等球滚过来
-            height_offset = getattr(DcmmCfg, 'roll_height_offset', 0.0)
-            sigma_h = getattr(DcmmCfg, 'roll_sigma_h', 0.10)
-            w_h = getattr(DcmmCfg, 'roll_w_h', 0.4)
-            try:
-                d_h = abs(ee_pos[2] - (obj_pos[2] + height_offset))
-                reward_height = w_h / (1.0 + (d_h / max(1e-6, sigma_h))**2)
-            except Exception:
-                reward_height = 0.0
-
-            # ★ 桌面高度奖励（新增）：鼓励手在桌面高度附近，防止手悬浮太高或穿到桌面下方
-            reward_table_h = 0.0
-            try:
-                table_anchor = getattr(DcmmCfg, 'roll_table_anchor_z', 0.42)
-                sigma_table_h = getattr(DcmmCfg, 'roll_sigma_table_h', 0.08)
-                w_table_h = getattr(DcmmCfg, 'roll_w_table_h', 2.0)
-                d_table = abs(ee_pos[2] - table_anchor)
-                reward_table_h = w_table_h / (1.0 + (d_table / max(1e-6, sigma_table_h))**2)
-
-                # 手在桌面下方惩罚
-                w_below = getattr(DcmmCfg, 'roll_w_below_table_penalty', -5.0)
-                if ee_pos[2] < DcmmCfg.roll_table_height:
-                    reward_table_h += w_below * (DcmmCfg.roll_table_height - ee_pos[2])
-            except Exception:
-                reward_table_h = 0.0
-
-            # 手碰/穿桌板惩罚：手在桌板水平投影内且低于桌板顶部（撞桌/穿桌）
-            reward_table_penalty = 0.0
-            try:
-                _ee_w = self.Dcmm.data.body("link6").xpos.copy()
-                _table_h = DcmmCfg.roll_table_height
-                _table_y_min = DcmmCfg.roll_table_pos[1] - DcmmCfg.roll_table_size[1]
-                _table_x_half = DcmmCfg.roll_table_size[0]
-                if (_table_y_min <= _ee_w[1]) and (abs(_ee_w[0]) <= _table_x_half) and (_ee_w[2] < _table_h):
-                    reward_table_penalty = getattr(DcmmCfg, 'roll_w_table_penalty', -5.0)
-            except Exception:
-                reward_table_penalty = 0.0
-
-            # 掌心朝向球体奖励（与 bounce 模式统一逻辑）
-            # 掌心法线（link6 Y）应对准球的方向，形成拦截滚球的"挡板"
             try:
                 rot = quaternion_to_rotation_matrix(obs['arm']['ee_quat'])
                 palm_normal_world = rot[:, 1]  # link6 Y = 掌心法线
@@ -2081,7 +2015,7 @@ class DcmmVecEnv(gym.Env):
         if self.object_motion == "roll":
             # 恢复绝对距离 + 靠近增量：reward_xy 提供"落点在哪、离多远"的方向引导，
             # 避免纯增量奖励在目标漂移时退化成"跟随小球"；加手碰/穿桌板惩罚
-            reward_pos_component = reward_xy + reward_approach + reward_table_penalty
+            reward_pos_component = reward_xy + reward_approach + reward_table_penalty + reward_height
         elif self.object_motion in ("bounce", "throw_bounce"):
             # 绝对位置奖励 + 靠近增量（绝对奖励提供稠密信号，避免跟踪丢失）
             reward_pos_component = reward_3d_pos + reward_approach_3d
@@ -2634,7 +2568,10 @@ class DcmmVecEnv(gym.Env):
                         elif self.object_motion != "bounce" and d_xy is not None \
                                 and len(self.xy_dist_history) == self.xy_dist_history.maxlen:
                             enough_time = (self.Dcmm.data.time - self.start_time) >= self.roll_no_approach_grace
-                            if enough_time and (self.xy_dist_history[0] - d_xy) <= self.roll_no_approach_eps:
+                            _, waiting_for_fall = roll_wait_target(
+                                self.Dcmm.data.qpos[37:40], self.Dcmm.data.qvel[36:39],
+                                float(self.Dcmm.model.geom_size[self.object_id][0]), DcmmCfg)
+                            if enough_time and not waiting_for_fall and (self.xy_dist_history[0] - d_xy) <= self.roll_no_approach_eps:
                                 self.terminated = True
                                 self.terminated_reason = 'no_approach'
 

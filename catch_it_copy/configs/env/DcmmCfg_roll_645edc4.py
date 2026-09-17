@@ -190,9 +190,9 @@ throw_force_arm_joints = np.array([0.0, 0.1, -0.1, 1.8, 0.0, -1.5])
 # ---- 台面参数 ----
 # 台面顶部高度（m），球心 = roll_table_height + radius + 0.002
 # arm_base 在 z≈0.40，台面提高到 0.65 让球在臂的舒适工作区间内（比肩高 ~29cm）
-roll_table_height = 0.46
+roll_table_height = 0.70
 roll_table_size = np.array([1.2, 1.6, 0.02])  # 半尺寸: x, y, z (宽 2.4m, 长 3.2m, 厚 4cm)
-roll_table_pos = np.array([0.0, 2.5, 0.44])   # 台面中心世界坐标 (z=0.44, 顶部=0.46)
+roll_table_pos = np.array([0.0, 2.5, roll_table_height - roll_table_size[2]])   # 台面中心世界坐标 (z=0.44, 顶部=0.46)
 
 # ---- 跟踪阶段（Tracking）奖励权重 ----
 # XY 即时奖励权重（高斯型，距离越近分越高）
@@ -434,3 +434,11 @@ hand_mask = np.array([1, 0, 1, 1,
                       1, 0, 1, 1,
                       1, 0, 1, 1,
                       0, 1, 1, 1])
+
+# XY interception experiment based on 645edc4 (2026-09-17).
+roll_wait_z = 0.50
+roll_wait_z_band = 0.06
+roll_wait_edge_margin = 0.20
+roll_wait_w_height = 1.0
+roll_wait_hand_margin = 0.03
+roll_wait_w_hand = 2.0

@@ -32,9 +32,11 @@ def predicted_miss(position, velocity, center, gravity):
 
 def catching_reward(phase, parking, previous_parking_distance, distance,
                     previous_flight_distance, predicted_error, controls,
-                    success, failed, cfg):
+              success, failed, cfg, holding=False, support_time=0.,
+              step_duration=0.):
     terms = dict(time=-cfg.basket_catch_time_cost, parking=0., parking_progress=0.,
                  braking=0., aim=0., flight_progress=0., control=0.,
+             hold=0.,
                  success=cfg.basket_w_score if success else 0.,
                  failure=-cfg.basket_catch_failure_cost if failed and not success else 0.)
     if phase == 'parking':
@@ -46,6 +48,10 @@ def catching_reward(phase, parking, previous_parking_distance, distance,
         terms['aim'] = -cfg.basket_catch_w_aim * predicted_error
         terms['control'] = -cfg.basket_throw_ctrl_arm * float(np.sum(np.asarray(controls['arm']) ** 2))
         terms['control'] -= cfg.basket_throw_ctrl_hand * float(np.sum(np.asarray(controls['hand']) ** 2))
+        if holding and step_duration > 0.:
+            terms['hold'] = -cfg.basket_hold_penalty_rate * min(
+                step_duration, max(0., support_time + step_duration -
+                                   cfg.basket_support_budget_seconds))
     elif phase == 'flight' and previous_flight_distance is not None:
         terms['flight_progress'] = cfg.basket_w_approach * (previous_flight_distance - distance)
     return float(sum(terms.values())), terms

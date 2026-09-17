@@ -1812,7 +1812,9 @@ class DcmmVecEnv(gym.Env):
             value, terms = catching_reward(
                 self.basket_phase, parking, self.basket_previous_distance, distance,
                 self.basket_previous_flight_distance, prediction, ctrl, bool(info['success']),
-                self.terminated or timed_out, DcmmCfg)
+                self.terminated or timed_out, DcmmCfg,
+                holding=False, support_time=getattr(self, 'basket_support_time', 0.),
+                step_duration=0.)
             velocity = self.Dcmm.data.qvel[36:39].copy()
             touching = bool(np.any(np.isin(self.contacts['object_contacts'],
                 hand_collision_ids(self.Dcmm.model, self.hand_start_id))))
@@ -1826,11 +1828,18 @@ class DcmmVecEnv(gym.Env):
                                                         self.Dcmm.model.opt.gravity, DcmmCfg)
                     terms['velocity_progress'] = DcmmCfg.basket_w_velocity_progress * (quality - previous_quality)
                 supported = getattr(self, 'basket_support_time', 0.)
-                if touching and np.linalg.norm(velocity) < .3:
-                    duration = min(max(0., DcmmCfg.basket_support_budget_seconds - supported),
-                                   self.steps_per_policy * self.Dcmm.model.opt.timestep)
-                    terms['support'] = DcmmCfg.basket_support_reward_rate * duration
-                    self.basket_support_time = supported + duration
+                step_duration = self.steps_per_policy * self.Dcmm.model.opt.timestep
+                if touching:
+                    stable_duration = step_duration if np.linalg.norm(velocity) < .3 else 0.
+                    reward_duration = min(stable_duration,
+                                          max(0., DcmmCfg.basket_support_budget_seconds - supported))
+                    terms['support'] = DcmmCfg.basket_support_reward_rate * reward_duration
+                    self.basket_support_time = supported + step_duration
+                if touching:
+                    excess_support = max(0., getattr(self, 'basket_support_time', 0.) -
+                                         DcmmCfg.basket_support_budget_seconds)
+                    terms['hold'] = -DcmmCfg.basket_hold_penalty_rate * min(
+                        step_duration, excess_support)
             if not (self.terminated and not info['success']):
                 terms['valid_release'] = DcmmCfg.basket_w_valid_release * getattr(self, 'basket_release_pending', 0.)
             self.basket_release_pending = 0.
@@ -1879,7 +1888,9 @@ class DcmmVecEnv(gym.Env):
                 ee_world, ee_velocity, target, on_table, self._prev_roll_d, DcmmCfg)
             previous_ee = getattr(self, '_prev_roll_ee', None)
             roll_terms['approach'] = (0. if previous_ee is None else DcmmCfg.roll_w_approach *
-                (np.linalg.norm(target - previous_ee) - np.linalg.norm(target - ee_world)))
+                (np.linalg.norm(target[:2] - previous_ee[:2]) -
+                 np.linalg.norm(target[:2] - ee_world[:2]) if on_table else
+                 np.linalg.norm(target - previous_ee) - np.linalg.norm(target - ee_world)))
             self._prev_roll_ee = ee_world.copy()
             roll_terms.update(reach_terms(self.Dcmm.data.body('arm_base').xpos,
                                          self.Dcmm.data.qvel[:2], target, DcmmCfg))

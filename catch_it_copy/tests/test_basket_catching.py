@@ -177,6 +177,16 @@ class BasketTests(unittest.TestCase):
         self.assertGreater(value(.1), value(1.))
         self.assertLess(value(.1), 0.)
 
+    def test_preparation_penalizes_holding_after_support_budget(self):
+        env, parking, _ = fixture()
+        controls = dict(arm=np.zeros(6), hand=np.zeros(12))
+        reward, terms = B.catching_reward(
+            'preparing', parking, .2, 1., None, 1., controls, False, False, C,
+            holding=True, support_time=C.basket_support_budget_seconds,
+            step_duration=.04)
+        self.assertLess(terms['hold'], 0.)
+        self.assertLess(reward, -C.basket_catch_time_cost)
+
     def test_frozen_base_actions_and_likelihood_match_training(self):
         model = M.ActorCritic(dict(separate_value_mlp=True, actions_num=20,
             tracking_actions_num=2, input_shape=(35,), actor_units=[16], freeze_tracking=True))

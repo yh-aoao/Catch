@@ -406,9 +406,9 @@ basket_track_forward_offset = 0.2
 # 第一阶段停车：目标为 arm_base 的世界位置，不是车体几何中心。
 basket_track_max_speed = 0.8         # XY 合速度上限 (m/s)，两阶段保持一致
 basket_track_slowdown_gain = 1.5     # 奖励参考速度 = 位置误差 * gain，近目标逐渐减速
-basket_track_position_tolerance = 0.08  # x/y 各允许误差 (m)
-basket_track_speed_tolerance = 0.10  # 停稳速度阈值 (m/s)
-basket_track_settle_steps = 5        # 连续停稳策略步数，默认约 0.2s
+basket_track_position_tolerance = 0.15  # x/y 各允许误差 (m)，放宽避免卡在停车进不了抛球阶段
+basket_track_speed_tolerance = 0.15  # 停稳速度阈值 (m/s)
+basket_track_settle_steps = 3        # 连续停稳策略步数，默认约 0.2s
 basket_track_w_distance = 1.0
 basket_track_w_progress = 20.0
 basket_track_w_velocity = 1.0

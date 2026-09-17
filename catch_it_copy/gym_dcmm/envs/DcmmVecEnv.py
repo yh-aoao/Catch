@@ -2140,16 +2140,16 @@ class DcmmVecEnv(gym.Env):
                     try:
                         hand_qpos = self.Dcmm.data.qpos[21:37]
                         _mcp_vals = [hand_qpos[0], hand_qpos[4], hand_qpos[8]]
-                        reward_finger_sync = 5.0 * max(0.0, 0.3 - float(np.var(_mcp_vals)))
+                        reward_finger_sync = 8.0 * max(0.0, 0.3 - float(np.var(_mcp_vals)))
                         _all_flex = [hand_qpos[j] for j in [0,2,3,4,6,7,8,10,11]]
                         if any(v > 0.05 for v in _all_flex) and any(v < -0.05 for v in _all_flex):
                             reward_finger_dir_penalty = -3.0
                         for _j in [[0,2,3], [4,6,7], [8,10,11], [13,14,15]]:
                             _vs = [hand_qpos[j] for j in _j]
                             if all(v >= 0.01 for v in _vs):
-                                reward_finger_chain += 1.0 * sum(_vs)
+                                reward_finger_chain += 1.5 * sum(_vs)
                             elif any(v > 0.01 for v in _vs) and any(v < -0.01 for v in _vs):
-                                reward_finger_chain -= 2.0
+                                reward_finger_chain -= 3.0
                     except Exception:
                         pass
                     rewards = reward_pos_component + reward_orient + reward_finger_sync + reward_finger_dir_penalty + reward_finger_chain + reward_ctrl + reward_collision + reward_constraint + self.reward_touch
@@ -2188,15 +2188,15 @@ class DcmmVecEnv(gym.Env):
                         mcp_flex = float(np.mean([hand_qpos[0], hand_qpos[4],
                                                    hand_qpos[8], hand_qpos[12]]))
                         # 奖励与屈曲程度成正比，最大奖励约 5.0（MCP 接近上限 ~2.2 rad）
-                        reward_finger_closure = 3.0 * mcp_flex
+                        reward_finger_closure = 5.0 * mcp_flex
                         # 单指关节链协同：同指 MCP/PIP/DIP 应同向弯曲，提高权重
                         reward_finger_chain = 0.0
                         for _j in [[0,2,3], [4,6,7], [8,10,11], [13,14,15]]:
                             _vs = [hand_qpos[j] for j in _j]
                             if all(v >= 0.01 for v in _vs):
-                                reward_finger_chain += 1.0 * sum(_vs)
+                                reward_finger_chain += 1.5 * sum(_vs)
                             elif any(v > 0.01 for v in _vs) and any(v < -0.01 for v in _vs):
-                                reward_finger_chain -= 2.0
+                                reward_finger_chain -= 3.0
                     except Exception:
                         reward_finger_closure = 0.0
                         reward_finger_chain = 0.0

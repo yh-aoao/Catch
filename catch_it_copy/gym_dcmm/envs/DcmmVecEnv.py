@@ -728,25 +728,6 @@ class DcmmVecEnv(gym.Env):
                 self.basket_phase = 'preparing'
         if self.task == 'Catching' and self.basket_phase != 'parking':
             data.ctrl[-1] = 0.
-            if self.basket_phase == 'preparing' and not self.object_throw:
-                elapsed = self.Dcmm.data.time - getattr(self, 'start_time', self.Dcmm.data.time)
-                prepare_duration = getattr(DcmmCfg, 'basket_prepare_duration', 0.6)
-                if elapsed >= prepare_duration:
-                    position = data.qpos[37:40].copy()
-                    velocity = data.body('link6').cvel[3:6].copy()
-                    quality, reference = throw_quality(
-                        position, velocity, self.basket_center,
-                        self.Dcmm.model.opt.gravity, DcmmCfg)
-                    release_velocity = velocity if np.linalg.norm(velocity) > 0.05 else reference
-                    self.Dcmm.set_throw_pos_vel(
-                        pose=np.r_[position, self.object_q],
-                        velocity=np.r_[release_velocity, np.zeros(3)])
-                    self.object_throw = True
-                    self.basket_release_quality = quality
-                    self.basket_release_pending = quality
-                    self.basket_phase = 'flight'
-                    self.basket_previous_flight_distance = float(
-                        np.linalg.norm(position - self.basket_center))
             return
         rotation = data.body('link6').xmat.reshape(3, 3)
         point = data.body('link6').xpos + rotation[:, 1] * .03 + rotation[:, 2] * (DcmmCfg.basket_ball_radius + .03)

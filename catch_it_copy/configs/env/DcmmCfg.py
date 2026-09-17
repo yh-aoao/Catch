@@ -483,7 +483,6 @@ basket_w_velocity_progress = 5.0
 basket_w_valid_release = 5.0
 basket_w_launch_quality = 8.0
 basket_w_launch_motion = 0.05
-basket_prepare_duration = 0.6
 basket_release_quality_min = 0.4
 basket_support_budget_seconds = 0.2
 basket_support_reward_rate = 1.0

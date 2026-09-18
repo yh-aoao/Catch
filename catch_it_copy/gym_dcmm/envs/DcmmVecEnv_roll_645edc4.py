@@ -1549,6 +1549,7 @@ class DcmmVecEnv(gym.Env):
             self.dist_3d_history.clear()
         self.palm_contact_steps = 0
         self.prev_palm_dot = -1.0  # 重置上一步手掌朝向
+        self._prev_palm_up = None  # 重置上一步掌心朝上分量（舀水姿态增量奖励用）
         self.prev_finger_dot = -1.0  # 重置上一步手指方向
         self.prev_d_basket = 2.0  # 重置上一步到篮筐距离（throw_basket 模式）
         self._release_rewarded = False  # 出手奖励是否已给（每回合重置）
@@ -2047,8 +2048,17 @@ class DcmmVecEnv(gym.Env):
             try:
                 _xmat = self.Dcmm.data.body('link6').xmat.reshape(3, 3)
                 _palm_up = float(_xmat[2, 1])  # link6 Y 轴朝上分量：1=掌心完全朝上（舀水）
-                # 掌心朝上：两个阶段都保持（舀水/兜球姿态）
-                reward_roll_scoop = DcmmCfg.roll_w_scoop_palm * max(0.0, _palm_up)
+                # 掌心朝上：用平方非线性 + 改善增量。
+                # 默认姿态下 _palm_up 为负，max(0,·) 会梯度为零、模型学不动（项目历史教训）
+                _palm_align = 0.25 * (_palm_up + 1.0) ** 2
+                _prev_up = getattr(self, '_prev_palm_up', None)
+                if _prev_up is None:
+                    _prev_up = _palm_up
+                _delta_up = _palm_up - _prev_up
+                self._prev_palm_up = _palm_up
+                reward_roll_scoop = DcmmCfg.roll_w_scoop_palm * _palm_align
+                if _delta_up > 0:
+                    reward_roll_scoop += DcmmCfg.roll_w_scoop_palm * 2.0 * _delta_up
                 if self.stage == "tracking":
                     # 跟踪阶段：手指轻弯（过度弯曲会挡球）+ 不乱动
                     # 抓取阶段不加这两项，否则会与快速闭合的需求打架

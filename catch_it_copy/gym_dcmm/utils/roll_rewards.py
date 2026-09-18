@@ -122,7 +122,7 @@ def hand_terms(qpos, distance, contact, cfg, allow_closure=True):
     fingers = qpos[[0, 2, 3, 4, 6, 7, 8, 10, 11]].reshape(3, 3)
     thumb = qpos[[13, 14, 15]]
     flex = np.r_[fingers.ravel(), thumb]
-    gate = 1. if contact else float(np.clip(1. - distance / cfg.roll_hand_close_distance, 0., 1.))
+    gate = 1. if contact else 0.  # 接触驱动：触碰前保持 ready（轻微弯曲，避免弹开球），接触后才大幅闭合
     if not allow_closure:
         gate = 0.
     ready = np.asarray(cfg.roll_hand_ready_target)

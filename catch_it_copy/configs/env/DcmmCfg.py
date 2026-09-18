@@ -481,6 +481,8 @@ basket_reference_max_speed = 6.0
 basket_velocity_sigma = 1.5
 basket_w_velocity_progress = 8.0
 basket_w_valid_release = 8.0
+# 抛球水平速度引导（线性，低速也有梯度）：持球时手水平速度朝篮筐方向
+basket_w_launch_speed = 3.0
 basket_w_launch_quality = 8.0
 basket_w_launch_motion = 1.0
 basket_release_quality_min = 0.25

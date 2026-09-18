@@ -442,3 +442,9 @@ roll_wait_edge_margin = 0.20
 roll_wait_w_height = 1.0
 roll_wait_hand_margin = 0.03
 roll_wait_w_hand = 2.0
+
+# 舀水接球手势塑形（2026-09-18）：掌心朝上 + 手指轻弯 + 手指稳定不乱动
+roll_w_scoop_palm = 3.0      # 掌心朝上奖励权重
+roll_scoop_mcp = 0.35        # 手指轻弯目标（MCP），过大挡球、过小抓不住
+roll_w_scoop_finger = 2.0    # 手指偏离目标弯曲度的惩罚权重
+roll_w_scoop_still = 0.3     # 手指关节速度惩罚（抑制上下乱动）

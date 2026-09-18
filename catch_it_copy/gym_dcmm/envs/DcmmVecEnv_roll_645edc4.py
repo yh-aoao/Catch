@@ -2041,6 +2041,24 @@ class DcmmVecEnv(gym.Env):
         else:
             self.reward_touch = 0
 
+        ## 4.5 舀水接球手势塑形（roll 专用）
+        reward_roll_scoop = 0.0
+        if self.object_motion == "roll":
+            try:
+                _xmat = self.Dcmm.data.body('link6').xmat.reshape(3, 3)
+                _palm_up = float(_xmat[2, 1])  # link6 Y 轴朝上分量：1=掌心完全朝上（舀水）
+                # 掌心朝上：两个阶段都保持（舀水/兜球姿态）
+                reward_roll_scoop = DcmmCfg.roll_w_scoop_palm * max(0.0, _palm_up)
+                if self.stage == "tracking":
+                    # 跟踪阶段：手指轻弯（过度弯曲会挡球）+ 不乱动
+                    # 抓取阶段不加这两项，否则会与快速闭合的需求打架
+                    _hq = self.Dcmm.data.qpos[21:37]
+                    _mcp = float(np.mean([_hq[0], _hq[4], _hq[8], _hq[12]]))
+                    reward_roll_scoop -= DcmmCfg.roll_w_scoop_finger * (_mcp - DcmmCfg.roll_scoop_mcp) ** 2
+                    reward_roll_scoop -= DcmmCfg.roll_w_scoop_still * float(np.sum(self.Dcmm.data.qvel[20:36] ** 2))
+            except Exception:
+                reward_roll_scoop = 0.0
+
         ## 5. 分任务/分阶段计算总奖励
         if self.task == "Catching":
             reward_orient = 0
@@ -2058,8 +2076,8 @@ class DcmmVecEnv(gym.Env):
                     reward_orient = abs(cos_angle_between_vectors(local_velocity_vector, hand_z_axis)) * DcmmCfg.reward_weights["r_orient"]
                 # 总奖励（若为 roll/bounce，则替换位置项为专用奖励）
                 if self.object_motion == "roll":
-                    # 跟 throw 完全一致的奖励结构
-                    rewards = reward_pos_component + reward_ctrl + reward_collision + reward_constraint + self.reward_touch
+                    # 跟 throw 完全一致的奖励结构 + 舀水手势塑形
+                    rewards = reward_pos_component + reward_roll_scoop + reward_ctrl + reward_collision + reward_constraint + self.reward_touch
                 elif self.object_motion in ("bounce", "throw_bounce"):
                     # 手指协同奖励（tracking 阶段）：三指同步 + 方向一致 + 单指关节链
                     reward_finger_sync = 0.0
@@ -2159,7 +2177,7 @@ class DcmmVecEnv(gym.Env):
                 # 总奖励（抓取阶段：位置项包含精度奖励 + roll/bounce 专用项）
                 if self.object_motion == "roll":
                     rewards = reward_pos_component + reward_ee_precision + reward_orient + reward_ctrl + reward_collision + reward_constraint \
-                            + self.reward_touch + self.reward_stability + reward_finger_closure
+                            + self.reward_touch + self.reward_stability + reward_finger_closure + reward_roll_scoop
                 elif self.object_motion in ("bounce", "throw_bounce"):
                     rewards = reward_pos_component + reward_ee_precision + reward_orient + reward_ctrl + reward_collision + reward_constraint \
                             + self.reward_touch + self.reward_stability + reward_finger_closure + reward_finger_chain
@@ -2214,8 +2232,8 @@ class DcmmVecEnv(gym.Env):
                 reward_orient = abs(cos_angle_between_vectors(local_velocity_vector, hand_z_axis)) * DcmmCfg.reward_weights["r_orient"]
             ## 总奖励（Tracking 任务只关心位置，不加朝向奖励，让策略专注追踪）
             if self.object_motion == "roll":
-                # 跟 throw 完全一致的奖励结构
-                rewards = reward_pos_component + reward_ctrl + reward_collision + reward_constraint + self.reward_touch
+                # 跟 throw 完全一致的奖励结构 + 舀水手势塑形
+                rewards = reward_pos_component + reward_roll_scoop + reward_ctrl + reward_collision + reward_constraint + self.reward_touch
             elif self.object_motion in ("bounce", "throw_bounce"):
                 rewards = reward_pos_component + reward_ctrl + reward_collision + reward_constraint + self.reward_touch
             elif self.object_motion == "throw_force":

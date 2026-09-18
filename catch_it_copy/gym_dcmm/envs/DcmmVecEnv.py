@@ -111,14 +111,10 @@ class DcmmVecEnv(gym.Env):
             import inspect
             bound = inspect.signature(cls.__init__).bind(None, *args, **kwargs)
             if bound.arguments.get('object_motion', 'throw') in ('bounce', 'tan', '\u5f39'):
-                # \u6307\u5b9a P/L \u9884\u8bbe\uff08\u975e legacy\uff09\u65f6\u8d70\u65b0\u7248\u73af\u5883\uff08\u652f\u6301\u53c2\u6570\u7ec4\uff09\uff1b\u9ed8\u8ba4 legacy \u4ecd\u8d70\u65e7\u7248 baseline
-                use_presets = (bound.arguments.get('bounce_physics', 'legacy') != 'legacy'
-                               or bound.arguments.get('bounce_launch', 'legacy') != 'legacy')
-                if not use_presets:
-                    from gym_dcmm.envs.bounce_compat import make_bounce_5fe75d5f
-                    parameters = dict(bound.arguments)
-                    parameters.pop('self')
-                    return make_bounce_5fe75d5f(parameters)
+                from gym_dcmm.envs.bounce_compat import make_bounce_5fe75d5f
+                parameters = dict(bound.arguments)
+                parameters.pop('self')
+                return make_bounce_5fe75d5f(parameters)
             if bound.arguments.get('object_motion', 'throw') == 'roll':
                 from gym_dcmm.envs.roll_compat import make_roll_645edc4
                 parameters = dict(bound.arguments)
@@ -1830,7 +1826,7 @@ class DcmmVecEnv(gym.Env):
                 self.terminated or timed_out, DcmmCfg,
                 holding=touching, support_time=getattr(self, 'basket_support_time', 0.),
                 step_duration=0., launch_quality=quality,
-                launch_motion=float(np.linalg.norm(self.Dcmm.data.qvel[14:20])),
+                launch_motion=float(np.linalg.norm(ctrl.get('arm', np.zeros(6)))),
                 release_progress=release_progress)
             terms.update(velocity_progress=0., support=0., valid_release=0.)
             release_quality = float(getattr(self, 'basket_release_pending', 0.))
@@ -1845,6 +1841,13 @@ class DcmmVecEnv(gym.Env):
                     terms['forward'] = 2.0 * max(
                         0., float(np.dot(horizontal, to_hoop / norm)))
             if self.basket_phase == 'preparing':
+                # 抛球速度引导（线性，低速也有梯度）：持球时水平速度朝篮筐方向甩
+                # launch_quality 用 exp() 在低速时梯度极小，此项补充连续信号
+                _to_hoop = self.basket_center[:2] - position[:2]
+                _th_norm = float(np.linalg.norm(_to_hoop))
+                if touching and _th_norm > 1e-6:
+                    terms['launch_speed'] = DcmmCfg.basket_w_launch_speed * max(
+                        0., float(np.dot(velocity[:2], _to_hoop / _th_norm)))
                 previous_velocity = getattr(self, 'basket_previous_velocity', None)
                 if touching and previous_velocity is not None:
                     previous_quality, _ = throw_quality(position, previous_velocity, self.basket_center,
@@ -2144,16 +2147,16 @@ class DcmmVecEnv(gym.Env):
                     try:
                         hand_qpos = self.Dcmm.data.qpos[21:37]
                         _mcp_vals = [hand_qpos[0], hand_qpos[4], hand_qpos[8]]
-                        reward_finger_sync = 8.0 * max(0.0, 0.3 - float(np.var(_mcp_vals)))
+                        reward_finger_sync = 5.0 * max(0.0, 0.3 - float(np.var(_mcp_vals)))
                         _all_flex = [hand_qpos[j] for j in [0,2,3,4,6,7,8,10,11]]
                         if any(v > 0.05 for v in _all_flex) and any(v < -0.05 for v in _all_flex):
                             reward_finger_dir_penalty = -3.0
                         for _j in [[0,2,3], [4,6,7], [8,10,11], [13,14,15]]:
                             _vs = [hand_qpos[j] for j in _j]
                             if all(v >= 0.01 for v in _vs):
-                                reward_finger_chain += 1.5 * sum(_vs)
+                                reward_finger_chain += 1.0 * sum(_vs)
                             elif any(v > 0.01 for v in _vs) and any(v < -0.01 for v in _vs):
-                                reward_finger_chain -= 3.0
+                                reward_finger_chain -= 2.0
                     except Exception:
                         pass
                     rewards = reward_pos_component + reward_orient + reward_finger_sync + reward_finger_dir_penalty + reward_finger_chain + reward_ctrl + reward_collision + reward_constraint + self.reward_touch
@@ -2192,15 +2195,15 @@ class DcmmVecEnv(gym.Env):
                         mcp_flex = float(np.mean([hand_qpos[0], hand_qpos[4],
                                                    hand_qpos[8], hand_qpos[12]]))
                         # 奖励与屈曲程度成正比，最大奖励约 5.0（MCP 接近上限 ~2.2 rad）
-                        reward_finger_closure = 5.0 * mcp_flex
+                        reward_finger_closure = 3.0 * mcp_flex
                         # 单指关节链协同：同指 MCP/PIP/DIP 应同向弯曲，提高权重
                         reward_finger_chain = 0.0
                         for _j in [[0,2,3], [4,6,7], [8,10,11], [13,14,15]]:
                             _vs = [hand_qpos[j] for j in _j]
                             if all(v >= 0.01 for v in _vs):
-                                reward_finger_chain += 1.5 * sum(_vs)
+                                reward_finger_chain += 1.0 * sum(_vs)
                             elif any(v > 0.01 for v in _vs) and any(v < -0.01 for v in _vs):
-                                reward_finger_chain -= 3.0
+                                reward_finger_chain -= 2.0
                     except Exception:
                         reward_finger_closure = 0.0
                         reward_finger_chain = 0.0

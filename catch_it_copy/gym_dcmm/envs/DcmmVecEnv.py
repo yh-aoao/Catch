@@ -1826,7 +1826,7 @@ class DcmmVecEnv(gym.Env):
                 self.terminated or timed_out, DcmmCfg,
                 holding=touching, support_time=getattr(self, 'basket_support_time', 0.),
                 step_duration=0., launch_quality=quality,
-                launch_motion=float(np.linalg.norm(ctrl.get('arm', np.zeros(6)))),
+                launch_motion=float(np.linalg.norm(self.Dcmm.data.qvel[14:20])),
                 release_progress=release_progress)
             terms.update(velocity_progress=0., support=0., valid_release=0.)
             release_quality = float(getattr(self, 'basket_release_pending', 0.))

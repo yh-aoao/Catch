@@ -251,12 +251,12 @@ roll_catch_N_control = 5
 roll_catch_wait_steps = 20
 # 抓取成功：MCP 关节平均屈曲超过此值才算真正抓取（rad），防止球停在手掌上就算成功
 roll_catch_finger_thresh = 0.3
-# 跟踪阶段手指预置 MCP 屈曲角（rad），0=全开，0.6=半闭合形成"栅栏"
-roll_hand_ready_mcp = 0.6
+# 跟踪阶段手指预置 MCP 屈曲角（rad），0=全开；舀水接球姿态，手指伸展微弯，避免挡住球
+roll_hand_ready_mcp = 0.15
 # 跟踪阶段手指预置 DIP/指尖屈曲角（rad）
-roll_hand_ready_dip = 0.3
+roll_hand_ready_dip = 0.1
 # 跟踪阶段拇指预置屈曲角（rad）
-roll_hand_ready_thumb = 0.3
+roll_hand_ready_thumb = 0.1
 # 跟踪阶段手指动作缩放系数（0=完全固定，0.3=允许模型微调）
 roll_hand_action_scale = 0.3
 

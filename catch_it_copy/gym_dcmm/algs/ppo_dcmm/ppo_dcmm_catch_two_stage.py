@@ -307,7 +307,7 @@ class PPO_Catch_TwoStage(object):
 
     def _load_compatible_model_state(self, checkpoint_state):
         if self.model.mu_t.out_features == 2 and checkpoint_state.get('mu_t.weight', torch.empty(0)).shape != self.model.mu_t.weight.shape:
-            raise ValueError("Old basket checkpoints use a different action split; retrain with base-only Tracking.")
+            raise ValueError("Incompatible action split: Basket requires an 8-action base+arm Tracking checkpoint.")
         model_state = self.model.state_dict()
         loaded, expanded, skipped = [], [], []
         for name, value in checkpoint_state.items():

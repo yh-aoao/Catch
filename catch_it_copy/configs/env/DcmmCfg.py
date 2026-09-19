@@ -470,6 +470,7 @@ hand_mask = np.array([1, 0, 1, 1,
 # Physical throwing control costs (parking weights remain unchanged).
 basket_throw_ctrl_arm = 0.02
 basket_throw_ctrl_hand = 0.01
+basket_joint_smooth_weight = 0.01  # action-change cost for controllable joints
 
 # Reach band is an initial horizontal heuristic, not a full IK feasibility model.
 roll_reach_min = 0.35

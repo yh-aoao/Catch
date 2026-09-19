@@ -24,7 +24,7 @@ P = load('basket_parking_test', 'gym_dcmm/utils/basket_tracking.py')
 M = load('basket_model_test', 'gym_dcmm/algs/ppo_dcmm/models_catch.py')
 tree = ast.parse((ROOT / 'gym_dcmm/envs/DcmmVecEnv.py').read_text(encoding='utf-8'))
 scope = dict(np=np, DcmmCfg=C, limit_speed=P.limit_speed, hand_collision_ids=R.hand_collision_ids,
-             **{n: getattr(B, n) for n in ('hoop_crossing', 'flight_failure', 'predicted_miss', 'catching_reward', 'throw_quality')})
+             **{n: getattr(B, n) for n in ('hoop_crossing', 'flight_failure', 'predicted_miss', 'catching_reward', 'throw_quality', 'joint_throw_reward')})
 for name in ('_basket_hold_and_release', '_basket_check_flight', 'compute_reward'):
     method = next(n for n in ast.walk(tree) if isinstance(n, ast.FunctionDef) and n.name == name)
     exec(compile(ast.Module(body=[method], type_ignores=[]), '<actual-basket>', 'exec'), scope)
@@ -53,6 +53,23 @@ def fixture():
 
 
 class BasketTests(unittest.TestCase):
+    def test_joint_reward_cannot_farm_oscillation_or_finger_pose(self):
+        state = {}
+        def reward(v, task='Tracking', hand=0.):
+            return B.joint_throw_reward(task, 'preparing', np.array(v), np.array([0., 2., 3.]),
+                True, 0., 2., None, dict(hand=np.ones(12)*hand), False, False,
+                .04, state, C)[1]
+        first = reward([0., 1., 1.5])
+        self.assertGreater(first['velocity_progress'], 0.)
+        reward([0., 0., 0.])
+        self.assertEqual(reward([0., 1., 1.5])['velocity_progress'], 0.)
+        self.assertEqual(reward([0., 1., 1.5], hand=100.)['control'], 0.)
+        self.assertLess(reward([0., 1., 1.5], task='Catching', hand=1.)['control'], 0.)
+        for _ in range(20):
+            last = reward([0., 1., 1.5])
+        self.assertEqual(last['support'], 0.)
+        self.assertEqual(last['velocity_progress'], 0.)
+
     def test_reference_velocity_reaches_center_on_descending_trajectory(self):
         pos, center, gravity = np.array([0., .5, .5]), np.array([0., 2.2, .9]), np.array([0., 0., -9.81])
         idle, reference = B.throw_quality(pos, np.zeros(3), center, gravity, C)
@@ -113,29 +130,31 @@ class BasketTests(unittest.TestCase):
         scope['_basket_check_flight'](env, previous)
         self.assertEqual(env.terminated_reason, 'basket_score')
 
-    def test_parking_handoff_never_injects_velocity_or_reattaches(self):
-        env, parking, calls = fixture()
-        for i in range(100):
-            env.Dcmm.data.time = i * .01
-            env.hold()
-        self.assertFalse(env.object_throw)
-        parking.update(settled=True, in_position=True)
-        for i in range(20):
-            env.Dcmm.data.time += .01
-            env.hold()
-        self.assertEqual(env.basket_phase, 'preparing')
-        count = len(calls)
-        for t in (2., 3., 10.):
-            env.Dcmm.data.time = t
-            env.hold()
-        self.assertEqual(len(calls), count)
-        self.assertFalse(env.object_throw)  # Time alone cannot create a throw.
-        self.assertEqual(env.Dcmm.data.ctrl[-1], 0.)
-        self.assertTrue(all(np.all(c['velocity'] == 0.) for c in calls))
-        parking.update(in_position=False, settled=False)
-        env.hold()
-        self.assertEqual(env.basket_phase, 'preparing')
-        self.assertEqual(len(calls), count)
+    def test_no_assistance_in_either_training_stage(self):
+        for task in ('Tracking', 'Catching'):
+            env, parking, calls = fixture()
+            env.task = task
+            env.basket_phase = 'preparing'
+            original = env.Dcmm.data.qpos.copy()
+            env.Dcmm.data.qvel[36:39] = [1., 2., 3.]
+            for _ in range(20):
+                env.hold()
+            self.assertEqual(calls, [])
+            np.testing.assert_array_equal(env.Dcmm.data.qpos, original)
+            np.testing.assert_array_equal(env.Dcmm.data.qvel[36:39], [1., 2., 3.])
+            self.assertEqual(env.Dcmm.data.ctrl[-1], 0.)
+
+    def test_joint_policy_has_trainable_base_arm_and_hand(self):
+        model = M.ActorCritic(dict(separate_value_mlp=True, actions_num=20,
+            tracking_actions_num=8, input_shape=(35,), actor_units=[16], freeze_tracking=False))
+        self.assertEqual(model.mu_t.out_features, 8)
+        self.assertEqual(model.mu_c.out_features, 12)
+        obs = dict(obs=torch.randn(3, 35), obs_t=torch.randn(3, 23), obs_c=torch.randn(3, 33))
+        mu, _, _ = model._actor_critic(obs)
+        mu.sum().backward()
+        for layer in (model.mu_t, model.mu_c):
+            self.assertIsNotNone(layer.weight.grad)
+            self.assertGreater(layer.weight.grad.abs().sum().item(), 0.)
 
     def test_release_detection_uses_real_contact_and_preserves_ball_state(self):
         env, _, calls = fixture()

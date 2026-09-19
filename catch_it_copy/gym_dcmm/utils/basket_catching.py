@@ -49,9 +49,11 @@ def catching_reward(phase, parking, previous_parking_distance, distance,
     elif phase == 'preparing':
         # Do not punish the landing point while the ball is still supported.
         terms['aim'] = 0. if holding else -cfg.basket_catch_w_aim * predicted_error
-        terms['launch_quality'] = cfg.basket_w_launch_quality * launch_quality
-        terms['launch_motion'] = cfg.basket_w_launch_motion * launch_motion
-        terms['release_progress'] = 2.0 * float(np.clip(release_progress, 0., 1.))
+        terms['launch_quality'] = cfg.basket_w_launch_quality * launch_quality if holding else 0.
+        # Action magnitude alone rewards flailing, not acceleration of the ball.
+        terms['launch_motion'] = 0.
+        terms['release_progress'] = (2.0 * float(np.clip(release_progress, 0., 1.))
+                                     * launch_quality if holding else 0.)
         terms['control'] = -cfg.basket_throw_ctrl_arm * float(np.sum(np.asarray(controls['arm']) ** 2))
         terms['control'] -= cfg.basket_throw_ctrl_hand * float(np.sum(np.asarray(controls['hand']) ** 2))
         if holding and step_duration > 0.:

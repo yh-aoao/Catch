@@ -1846,8 +1846,12 @@ class DcmmVecEnv(gym.Env):
                 _to_hoop = self.basket_center[:2] - position[:2]
                 _th_norm = float(np.linalg.norm(_to_hoop))
                 if touching and _th_norm > 1e-6:
-                    terms['launch_speed'] = DcmmCfg.basket_w_launch_speed * max(
-                        0., float(np.dot(velocity[:2], _to_hoop / _th_norm)))
+                    # Bounded 3-D velocity-error improvement over a stationary ball.
+                    # Includes upward speed; horizontal-only pushes can fall short.
+                    ref_norm = float(np.linalg.norm(reference))
+                    terms['launch_speed'] = DcmmCfg.basket_w_launch_speed * float(np.clip(
+                        1. - np.linalg.norm(velocity - reference) / max(ref_norm, 1e-6),
+                        -1., 1.)) if touching and ref_norm > 1e-6 else 0.
                 previous_velocity = getattr(self, 'basket_previous_velocity', None)
                 if touching and previous_velocity is not None:
                     previous_quality, _ = throw_quality(position, previous_velocity, self.basket_center,

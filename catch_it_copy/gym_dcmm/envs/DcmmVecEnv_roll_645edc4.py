@@ -40,6 +40,7 @@ import xml.etree.ElementTree as ET  # XML解析（修改Mujoco模型）
 from scipy.spatial.transform import Rotation as R  # 旋转变换
 from collections import deque
 from gym_dcmm.utils.roll_waiting import target as roll_wait_target, shaping as roll_wait_shaping
+from gym_dcmm.utils.roll_grasp import grasp_terms
 from gym_dcmm.utils.roll_rewards import hand_collision_ids  # 双端队列（存储历史数据）
 from gym_dcmm.utils.basket_tracking import parking_state, parking_reward, limit_speed
 
@@ -2059,7 +2060,7 @@ class DcmmVecEnv(gym.Env):
                 reward_roll_scoop = DcmmCfg.roll_w_scoop_palm * _palm_align
                 if _delta_up > 0:
                     reward_roll_scoop += DcmmCfg.roll_w_scoop_palm * 2.0 * _delta_up
-                if self.stage == "tracking":
+                if self.stage == "tracking" and self.task != "Catching":
                     # 跟踪阶段：手指轻弯（过度弯曲会挡球）+ 不乱动
                     # 抓取阶段不加这两项，否则会与快速闭合的需求打架
                     _hq = self.Dcmm.data.qpos[21:37]
@@ -2068,6 +2069,18 @@ class DcmmVecEnv(gym.Env):
                     reward_roll_scoop -= DcmmCfg.roll_w_scoop_still * float(np.sum(self.Dcmm.data.qvel[20:36] ** 2))
             except Exception:
                 reward_roll_scoop = 0.0
+
+        if self.object_motion == 'roll' and self.task == 'Catching':
+            palm = self.Dcmm.data.body('link6')
+            local_ball = palm.xmat.reshape(3, 3).T @ (
+                self.Dcmm.data.qpos[37:40] - palm.xpos)
+            hand_ids = hand_collision_ids(self.Dcmm.model, self.hand_start_id)
+            touching = bool(np.any(np.isin(self.contacts['object_contacts'], hand_ids)))
+            ready, finger_terms = grasp_terms(
+                self.Dcmm.data.qpos[21:37], local_ball, touching, DcmmCfg)
+            reward_roll_scoop += sum(finger_terms.values())
+            info['roll_grasp'] = dict(ready=ready, contact=touching,
+                                     local_ball=local_ball.tolist(), terms=finger_terms)
 
         ## 5. 分任务/分阶段计算总奖励
         if self.task == "Catching":
@@ -2164,7 +2177,7 @@ class DcmmVecEnv(gym.Env):
                     self.reward_stability = 0.0
                 # bounce/roll 模式抓取阶段：手指闭合奖励（鼓励手指合拢包裹球体）
                 reward_finger_closure = 0.0
-                if self.object_motion in ("roll", "bounce", "throw_bounce"):
+                if self.object_motion in ("bounce", "throw_bounce"):
                     try:
                         hand_qpos = obs['hand']['joints']
                         # MCP 关节屈曲均值（索引 0,4,8,12），正方向 = 闭合
@@ -2659,7 +2672,8 @@ class DcmmVecEnv(gym.Env):
                     obj_contacts = obj_contacts[(obj_contacts != self.floor_id) & (obj_contacts != self.table_geom_id)]
                     no_contact = obj_contacts.size == 0
                     in_front = obj_pos[1] > 0.0
-                    if dxy <= self.roll_tracking_xy_thresh and dz <= self.roll_tracking_z_thresh and palm_face_ball and no_contact and in_front:
+                    palm_contact = self.hand_start_id in obj_contacts
+                    if dxy <= self.roll_tracking_xy_thresh and dz <= self.roll_tracking_z_thresh and palm_face_ball and in_front and (no_contact or palm_contact):
                         self.stage = "grasping"
                 elif self.object_motion in ("bounce", "throw_bounce"):
                     # bounce 独立切换：3D距离 < 0.10m 且掌心朝向球（不要求 no_contact）

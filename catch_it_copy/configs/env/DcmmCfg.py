@@ -499,3 +499,6 @@ basket_min_release_distance = 0.8
 basket_min_flight_time = 0.15
 basket_min_flight_travel = 0.5
 basket_near_hoop_cost = 2.0
+
+basket_base_min_distance = 1.4
+basket_base_near_cost = 3.0

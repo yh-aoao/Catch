@@ -7,6 +7,7 @@ def make_roll_645edc4(parameters):
     parameters['object_motion'] = 'roll'
     from gym_dcmm.envs.DcmmVecEnv_roll_645edc4 import DcmmVecEnv
     env = DcmmVecEnv(**parameters)
+    env.roll_log = verbose
     if verbose:
         import inspect
         import configs.env.DcmmCfg_roll_645edc4 as cfg

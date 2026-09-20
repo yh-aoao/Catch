@@ -1814,13 +1814,17 @@ class DcmmVecEnv(gym.Env):
                 hand_collision_ids(self.Dcmm.model, self.hand_start_id))))
             if not hasattr(self, 'basket_reward_state'):
                 self.basket_reward_state = {}
+            base_distance = float(np.linalg.norm(self.Dcmm.data.body('arm_base').xpos[:2] - self.basket_center[:2]))
+            stand_ok = base_distance >= DcmmCfg.basket_base_min_distance
+            ball_far = np.linalg.norm(position[:2] - self.basket_center[:2]) >= DcmmCfg.basket_min_release_distance
             value, terms = joint_throw_reward(
-                self.task, self.basket_phase, velocity, reference, touching,
+                self.task, self.basket_phase, velocity, reference, touching and stand_ok and ball_far,
                 float(getattr(self, 'basket_release_pending', 0.)), distance,
                 self.basket_previous_flight_distance, ctrl, bool(info['success']),
                 self.terminated or timed_out,
                 self.steps_per_policy * self.Dcmm.model.opt.timestep,
                 self.basket_reward_state, DcmmCfg)
+            terms['base_too_close'] = -DcmmCfg.basket_base_near_cost * max(0., 1. - base_distance / DcmmCfg.basket_base_min_distance)
             horizontal_distance = float(np.linalg.norm(position[:2] - self.basket_center[:2]))
             terms['too_close'] = (-DcmmCfg.basket_near_hoop_cost * max(0., 1. - horizontal_distance / DcmmCfg.basket_min_release_distance)
                                   if self.basket_phase == 'preparing' else 0.)
@@ -1834,7 +1838,7 @@ class DcmmVecEnv(gym.Env):
                 ik_attempts=attempts, ik_successes=getattr(self, 'basket_arm_ik_successes', 0),
                 release_quality=getattr(self, 'basket_release_quality', 0.),
                 throw_valid=getattr(self, 'basket_throw_valid', False),
-                horizontal_distance=horizontal_distance)
+                horizontal_distance=horizontal_distance, base_distance=base_distance, stand_ok=stand_ok)
             self.basket_previous_distance = parking['distance']
             if self.object_throw:
                 self.basket_previous_flight_distance = distance

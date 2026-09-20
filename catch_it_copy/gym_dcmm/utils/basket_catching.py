@@ -116,10 +116,22 @@ def throw_quality(position, velocity, center, gravity, cfg):
     velocities = (np.asarray(center) - position) / times[:, None] - .5 * times[:, None] * gravity
     normal = np.array([0., -np.sin(np.radians(cfg.basket_tilt_deg)), np.cos(np.radians(cfg.basket_tilt_deg))])
     descending = ((velocities + times[:, None] * gravity) @ normal) < 0.
-    allowed = descending & (np.linalg.norm(velocities, axis=1) <= cfg.basket_reference_max_speed)
+    allowed = descending & (velocities[:, 2] >= cfg.basket_min_upward_release_speed) & (np.linalg.norm(velocities, axis=1) <= cfg.basket_reference_max_speed)
     if not np.any(allowed):
         return 0., np.zeros(3)
     candidates = velocities[allowed]
     errors = np.sum((candidates - velocity) ** 2, axis=1)
     index = int(np.argmin(errors))
     return float(np.exp(-errors[index] / cfg.basket_velocity_sigma ** 2)), candidates[index]
+
+
+def underhand_geometry(palm, base, ball, center, velocity, cfg):
+    reach = float(np.linalg.norm(np.asarray(palm)[:2] - np.asarray(base)[:2]))
+    direction = np.asarray(center)[:2] - np.asarray(ball)[:2]
+    forward = float(np.dot(np.asarray(velocity)[:2], direction / max(np.linalg.norm(direction), 1e-6)))
+    upward = float(velocity[2])
+    valid = (reach <= cfg.basket_arm_horizontal_reach and
+             forward >= cfg.basket_min_forward_release_speed and
+             upward >= cfg.basket_min_upward_release_speed)
+    cost = -cfg.basket_arm_reach_cost * min(4., (max(0., reach-cfg.basket_arm_horizontal_reach) / .15)**2)
+    return valid, cost, reach, forward, upward

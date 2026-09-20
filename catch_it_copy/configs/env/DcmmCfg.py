@@ -502,3 +502,9 @@ basket_near_hoop_cost = 2.0
 
 basket_base_min_distance = 1.4
 basket_base_near_cost = 3.0
+
+# Soft workspace envelope, tune against the actual robot geometry.
+basket_arm_horizontal_reach = 0.65
+basket_arm_reach_cost = 3.0
+basket_min_upward_release_speed = 0.5
+basket_min_forward_release_speed = 0.5

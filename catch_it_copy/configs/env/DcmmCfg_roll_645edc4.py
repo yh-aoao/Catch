@@ -462,3 +462,6 @@ roll_grasp_switch_distance = 0.20
 roll_drop_distance = 0.25
 roll_drop_grace_seconds = 0.20
 roll_hold_reward_weight = 2.0
+
+roll_hand_speed_weight = 0.4
+roll_hand_accel_weight = 0.2

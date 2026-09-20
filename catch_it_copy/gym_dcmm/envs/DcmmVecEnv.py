@@ -40,7 +40,7 @@ import xml.etree.ElementTree as ET  # XML解析（修改Mujoco模型）
 from scipy.spatial.transform import Rotation as R  # 旋转变换
 from collections import deque  # 双端队列（存储历史数据）
 from gym_dcmm.utils.basket_tracking import parking_state, parking_reward, limit_speed
-from gym_dcmm.utils.basket_catching import joint_throw_reward
+from gym_dcmm.utils.basket_catching import joint_throw_reward, underhand_geometry
 from gym_dcmm.utils.basket_catching import hoop_crossing, flight_failure, predicted_miss, catching_reward, throw_quality
 from gym_dcmm.utils.roll_rewards import (interception_target, position_terms, hand_terms,
                                         hand_workspace, capture_ready, wait_target, hand_collision_ids, reach_terms)
@@ -734,6 +734,10 @@ class DcmmVecEnv(gym.Env):
                 self.basket_release_position = position.copy()
                 self.basket_release_time = float(self.Dcmm.data.time)
                 self.basket_throw_valid = bool(np.linalg.norm(position[:2] - self.basket_center[:2]) >= DcmmCfg.basket_min_release_distance)
+                underhand, _, _, _, _ = underhand_geometry(
+                    self.Dcmm.data.body('link6').xpos, self.Dcmm.data.body('arm_base').xpos,
+                    position, self.basket_center, self.Dcmm.data.qvel[36:39], DcmmCfg)
+                self.basket_throw_valid = self.basket_throw_valid and underhand
                 quality = quality if self.basket_throw_valid else 0.
                 self.basket_release_quality = quality
                 self.basket_release_pending = quality if quality >= DcmmCfg.basket_release_quality_min else 0.
@@ -1817,13 +1821,17 @@ class DcmmVecEnv(gym.Env):
             base_distance = float(np.linalg.norm(self.Dcmm.data.body('arm_base').xpos[:2] - self.basket_center[:2]))
             stand_ok = base_distance >= DcmmCfg.basket_base_min_distance
             ball_far = np.linalg.norm(position[:2] - self.basket_center[:2]) >= DcmmCfg.basket_min_release_distance
+            underhand, reach_cost, arm_reach, forward_speed, upward_speed = underhand_geometry(
+                self.Dcmm.data.body('link6').xpos, self.Dcmm.data.body('arm_base').xpos,
+                position, self.basket_center, velocity, DcmmCfg)
             value, terms = joint_throw_reward(
-                self.task, self.basket_phase, velocity, reference, touching and stand_ok and ball_far,
+                self.task, self.basket_phase, velocity, reference, touching and stand_ok and ball_far and arm_reach <= DcmmCfg.basket_arm_horizontal_reach,
                 float(getattr(self, 'basket_release_pending', 0.)), distance,
                 self.basket_previous_flight_distance, ctrl, bool(info['success']),
                 self.terminated or timed_out,
                 self.steps_per_policy * self.Dcmm.model.opt.timestep,
                 self.basket_reward_state, DcmmCfg)
+            terms['arm_overreach'] = reach_cost
             terms['base_too_close'] = -DcmmCfg.basket_base_near_cost * max(0., 1. - base_distance / DcmmCfg.basket_base_min_distance)
             horizontal_distance = float(np.linalg.norm(position[:2] - self.basket_center[:2]))
             terms['too_close'] = (-DcmmCfg.basket_near_hoop_cost * max(0., 1. - horizontal_distance / DcmmCfg.basket_min_release_distance)
@@ -1838,7 +1846,7 @@ class DcmmVecEnv(gym.Env):
                 ik_attempts=attempts, ik_successes=getattr(self, 'basket_arm_ik_successes', 0),
                 release_quality=getattr(self, 'basket_release_quality', 0.),
                 throw_valid=getattr(self, 'basket_throw_valid', False),
-                horizontal_distance=horizontal_distance, base_distance=base_distance, stand_ok=stand_ok)
+                horizontal_distance=horizontal_distance, base_distance=base_distance, stand_ok=stand_ok, arm_reach=arm_reach, forward_speed=forward_speed, upward_speed=upward_speed)
             self.basket_previous_distance = parking['distance']
             if self.object_throw:
                 self.basket_previous_flight_distance = distance

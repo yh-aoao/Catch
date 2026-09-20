@@ -40,7 +40,7 @@ import xml.etree.ElementTree as ET  # XML解析（修改Mujoco模型）
 from scipy.spatial.transform import Rotation as R  # 旋转变换
 from collections import deque
 from gym_dcmm.utils.roll_waiting import target as roll_wait_target, shaping as roll_wait_shaping
-from gym_dcmm.utils.roll_grasp import grasp_terms
+from gym_dcmm.utils.roll_grasp import grasp_terms, hand_stability_terms
 from gym_dcmm.utils.roll_rewards import hand_collision_ids  # 双端队列（存储历史数据）
 from gym_dcmm.utils.basket_tracking import parking_state, parking_reward, limit_speed
 
@@ -1568,6 +1568,7 @@ class DcmmVecEnv(gym.Env):
         self.prev_palm_dot = -1.0  # 重置上一步手掌朝向
         self._prev_palm_up = None  # 重置上一步掌心朝上分量（舀水姿态增量奖励用）
         self.prev_finger_dot = -1.0  # 重置上一步手指方向
+        self.roll_previous_hand_speed = None
         self.roll_had_contact = False
         self.roll_lost_time = 0.
         self.prev_d_basket = 2.0  # 重置上一步到篮筐距离（throw_basket 模式）
@@ -2096,6 +2097,13 @@ class DcmmVecEnv(gym.Env):
             touching = bool(np.any(np.isin(self.contacts['object_contacts'], hand_ids)))
             ready, finger_terms = grasp_terms(
                 self.Dcmm.data.qpos[21:37], local_ball, touching, DcmmCfg)
+            hand, clear, relative_speed, distance = self._roll_hold_state()
+            joint_speed = self.Dcmm.data.qvel[20:36].copy()
+            finger_terms.update(hand_stability_terms(joint_speed,
+                getattr(self, 'roll_previous_hand_speed', None),
+                self.steps_per_policy * self.Dcmm.model.opt.timestep,
+                hand and clear and relative_speed < .15, DcmmCfg))
+            self.roll_previous_hand_speed = joint_speed
             reward_roll_scoop += sum(finger_terms.values())
             info['roll_grasp'] = dict(ready=ready, contact=touching,
                                      local_ball=local_ball.tolist(), terms=finger_terms)

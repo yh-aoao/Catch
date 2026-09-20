@@ -24,7 +24,7 @@ P = load('basket_parking_test', 'gym_dcmm/utils/basket_tracking.py')
 M = load('basket_model_test', 'gym_dcmm/algs/ppo_dcmm/models_catch.py')
 tree = ast.parse((ROOT / 'gym_dcmm/envs/DcmmVecEnv.py').read_text(encoding='utf-8'))
 scope = dict(np=np, DcmmCfg=C, limit_speed=P.limit_speed, hand_collision_ids=R.hand_collision_ids,
-             **{n: getattr(B, n) for n in ('hoop_crossing', 'flight_failure', 'predicted_miss', 'catching_reward', 'throw_quality', 'joint_throw_reward')})
+             **{n: getattr(B, n) for n in ('hoop_crossing', 'flight_failure', 'predicted_miss', 'catching_reward', 'throw_quality', 'joint_throw_reward', 'underhand_geometry')})
 for name in ('_basket_hold_and_release', '_basket_check_flight', 'compute_reward'):
     method = next(n for n in ast.walk(tree) if isinstance(n, ast.FunctionDef) and n.name == name)
     exec(compile(ast.Module(body=[method], type_ignores=[]), '<actual-basket>', 'exec'), scope)
@@ -69,6 +69,15 @@ class BasketTests(unittest.TestCase):
             last = reward([0., 1., 1.5])
         self.assertEqual(last['support'], 0.)
         self.assertEqual(last['velocity_progress'], 0.)
+
+    def test_underhand_release_rejects_reaching_and_flat_delivery(self):
+        def check(palm, velocity):
+            return B.underhand_geometry(np.array(palm), np.zeros(3), np.array([0., .5, .5]),
+                                       np.array([0., 2., .9]), np.array(velocity), C)
+        self.assertTrue(check([0., .5, .5], [0., 2., 2.])[0])
+        self.assertFalse(check([0., .8, .5], [0., 2., 2.])[0])
+        self.assertLess(check([0., .8, .5], [0., 2., 2.])[1], 0.)
+        self.assertFalse(check([0., .5, .5], [0., 2., 0.])[0])
 
     def test_reference_velocity_reaches_center_on_descending_trajectory(self):
         pos, center, gravity = np.array([0., .5, .5]), np.array([0., 2.2, .9]), np.array([0., 0., -9.81])

@@ -4,7 +4,7 @@ import numpy as np
 # Catching-only shaping; Tracking reward and termination are unchanged.
 roll_grasp_entry_radius = 0.09
 roll_grasp_entry_depth = 0.12
-roll_grasp_open_target = 0.15
+roll_grasp_open_target = 0.45
 roll_grasp_closed_target = 0.8
 roll_grasp_posture_weight = 2.0
 roll_grasp_chain_weight = 0.5

@@ -493,3 +493,9 @@ basket_hold_penalty_rate = 2.0
 
 # Roll IK candidate clearance from arm links to ranger_base (m).
 roll_arm_base_margin = 0.005
+
+# Require a real airborne throw, not placing the ball into the hoop.
+basket_min_release_distance = 0.8
+basket_min_flight_time = 0.15
+basket_min_flight_travel = 0.5
+basket_near_hoop_cost = 2.0

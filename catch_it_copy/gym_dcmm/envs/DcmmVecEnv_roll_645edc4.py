@@ -1278,6 +1278,8 @@ class DcmmVecEnv(gym.Env):
             self.Dcmm.data.qpos[21:37] = _grip
         else:
             self.Dcmm.data.qpos[21:37] = DcmmCfg.hand_joints[:]
+        if self.object_motion == 'roll' and self.task == 'Catching':
+            self.Dcmm.data.qpos[21 + np.array([0, 2, 3, 4, 6, 7, 8, 10, 11, 13, 14, 15])] = DcmmCfg.roll_grasp_open_target
 
         # 设置物体初始位置（默认）
         #self.Dcmm.data.body("object").xpos[0:3] = np.array([2, 2, 1])
@@ -1537,6 +1539,8 @@ class DcmmVecEnv(gym.Env):
             self.Dcmm.target_hand_qpos[:] = _grip
         else:
             self.Dcmm.target_hand_qpos[:] = DcmmCfg.hand_joints[:]
+        if self.object_motion == 'roll' and self.task == 'Catching':
+            self.Dcmm.target_hand_qpos[np.array([0, 2, 3, 4, 6, 7, 8, 10, 11, 13, 14, 15])] = DcmmCfg.roll_grasp_open_target
 
         # 重置奖励和阶段
         self.stage = "tracking"

@@ -111,6 +111,10 @@ class BasketTests(unittest.TestCase):
         normal = np.array([0., -np.sin(np.radians(C.basket_tilt_deg)), np.cos(np.radians(C.basket_tilt_deg))])
         env.basket_had_hand_contact = True
         env.object_throw, env.basket_phase = True, 'flight'
+        env.basket_throw_valid = True
+        env.basket_release_time = 0.
+        env.Dcmm.data.time = .5
+        env.basket_release_position = env.basket_center - np.array([0., 1., 0.])
         previous = env.basket_center + .2 * normal
         env.Dcmm.data.body('object').xpos[:] = env.basket_center - .2 * normal
         scope['_basket_check_flight'](env, previous)
@@ -127,8 +131,22 @@ class BasketTests(unittest.TestCase):
         original_body = env.Dcmm.data.body
         env.Dcmm.data.body = lambda n: SimpleNamespace(xpos=previous) if n == 'object' else original_body(n)
         env.object_throw, env.basket_phase, env.basket_had_hand_contact = True, 'flight', True
+        env.basket_throw_valid = True
+        env.basket_release_time = 0.
+        env.Dcmm.data.time = .5
+        env.basket_release_position = env.basket_center - np.array([0., 1., 0.])
         scope['_basket_check_flight'](env, previous)
         self.assertEqual(env.terminated_reason, 'basket_score')
+
+    def test_placing_into_hoop_is_not_success(self):
+        env, _, _ = fixture()
+        env.object_throw, env.basket_phase, env.basket_had_hand_contact = True, 'flight', True
+        env.basket_throw_valid = False
+        normal = np.array([0., -np.sin(np.radians(C.basket_tilt_deg)), np.cos(np.radians(C.basket_tilt_deg))])
+        previous = env.basket_center + .2*normal
+        env.Dcmm.data.qpos[37:40] = env.basket_center - .2*normal
+        scope['_basket_check_flight'](env, previous)
+        self.assertEqual(env.terminated_reason, 'not_a_throw')
 
     def test_no_assistance_in_either_training_stage(self):
         for task in ('Tracking', 'Catching'):

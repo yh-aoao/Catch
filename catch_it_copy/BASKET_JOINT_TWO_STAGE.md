@@ -1,5 +1,13 @@
 # Basket 两阶段联合投掷
 
+## 2026-09-20：防止贴框放球
+
+默认出手点到框中心水平距离至少 0.8 m；过框前自由飞行至少 0.15 s、从出手点水平位移至少 0.5 m。飞行期间再次接触手使该次投掷失效。贴框放入记为 not_a_throw，不获得入框成功奖励。持球准备期间，小于最小出手距离产生逐步增大的 too_close 惩罚，最大每步 2。
+
+配置位于 DcmmCfg.py：basket_min_release_distance、basket_min_flight_time、basket_min_flight_travel、basket_near_hoop_cost。日志增加 throw_valid 和 horizontal_distance。阈值是初始实验设置，仍需实际训练验证。
+
+同次 Roll Catch 调整：roll_grasp_open_target 从 0.15 改为 0.45 rad，reset 实际关节和控制目标同步预弯，仅修改 12 个可控屈曲关节；掌内目标仍 0.8 rad。Roll Tracking 初始姿态保持原样。
+
 ## 新奖励（覆盖旧 Catch 奖励组合）
 
 实际入口 joint_throw_reward，供两个训练阶段共用。

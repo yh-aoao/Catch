@@ -731,17 +731,29 @@ class DcmmVecEnv(gym.Env):
             if np.linalg.norm(position - self.Dcmm.data.body('link6').xpos) > 2 * DcmmCfg.basket_ball_radius:
                 quality, reference = throw_quality(position, self.Dcmm.data.qvel[36:39],
                                                     self.basket_center, self.Dcmm.model.opt.gravity, DcmmCfg)
+                self.basket_release_position = position.copy()
+                self.basket_release_time = float(self.Dcmm.data.time)
+                self.basket_throw_valid = bool(np.linalg.norm(position[:2] - self.basket_center[:2]) >= DcmmCfg.basket_min_release_distance)
+                quality = quality if self.basket_throw_valid else 0.
                 self.basket_release_quality = quality
                 self.basket_release_pending = quality if quality >= DcmmCfg.basket_release_quality_min else 0.
                 self.object_throw = True
                 self.basket_phase = 'flight'
                 self.basket_previous_flight_distance = float(np.linalg.norm(position - self.basket_center))
+        if self.basket_phase == 'flight' and touching:
+            self.basket_throw_valid = False
         floor_contact = self.floor_id in self.contacts['object_contacts']
         failure = flight_failure(position, self.basket_center, DcmmCfg.basket_ball_radius,
                                  floor_contact, DcmmCfg)
         crossed, scored, _ = hoop_crossing(previous, position, self.basket_center,
                                           DcmmCfg.basket_tilt_deg, DcmmCfg.basket_radius,
                                           DcmmCfg.basket_ball_radius)
+        release_pos = getattr(self, 'basket_release_position', position)
+        airborne = (getattr(self, 'basket_throw_valid', False)
+                    and self.Dcmm.data.time - getattr(self, 'basket_release_time', self.Dcmm.data.time) >= DcmmCfg.basket_min_flight_time
+                    and np.linalg.norm(position[:2] - release_pos[:2]) >= DcmmCfg.basket_min_flight_travel)
+        if crossed and scored and not airborne:
+            failure = failure or 'not_a_throw'
         if failure or crossed:
             self.terminated = True
             self.terminated_reason = failure or ('basket_score' if scored and self.object_throw and not touching and self.basket_had_hand_contact else 'basket_miss')
@@ -1726,6 +1738,9 @@ class DcmmVecEnv(gym.Env):
             self.basket_previous_velocity = None
             self.basket_release_pending = 0.
             self.basket_release_quality = 0.
+            self.basket_throw_valid = False
+            self.basket_release_position = self.Dcmm.data.qpos[37:40].copy()
+            self.basket_release_time = float(self.Dcmm.data.time)
             self.basket_support_time = 0.
             self.basket_reward_state = {}
             self.basket_reward_totals = {}
@@ -1806,6 +1821,10 @@ class DcmmVecEnv(gym.Env):
                 self.terminated or timed_out,
                 self.steps_per_policy * self.Dcmm.model.opt.timestep,
                 self.basket_reward_state, DcmmCfg)
+            horizontal_distance = float(np.linalg.norm(position[:2] - self.basket_center[:2]))
+            terms['too_close'] = (-DcmmCfg.basket_near_hoop_cost * max(0., 1. - horizontal_distance / DcmmCfg.basket_min_release_distance)
+                                  if self.basket_phase == 'preparing' else 0.)
+            value = float(sum(terms.values()))
             self.basket_release_pending = 0.
             attempts = getattr(self, 'basket_arm_attempts', 0)
             info['basket_control'] = dict(hand_contact=touching, quality=quality,
@@ -1813,7 +1832,9 @@ class DcmmVecEnv(gym.Env):
                 arm_joint_speed=float(np.linalg.norm(self.Dcmm.data.qvel[14:20])),
                 arm_action_norm=getattr(self, 'basket_arm_action_norm', 0.),
                 ik_attempts=attempts, ik_successes=getattr(self, 'basket_arm_ik_successes', 0),
-                release_quality=getattr(self, 'basket_release_quality', 0.))
+                release_quality=getattr(self, 'basket_release_quality', 0.),
+                throw_valid=getattr(self, 'basket_throw_valid', False),
+                horizontal_distance=horizontal_distance)
             self.basket_previous_distance = parking['distance']
             if self.object_throw:
                 self.basket_previous_flight_distance = distance

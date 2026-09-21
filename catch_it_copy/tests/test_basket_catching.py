@@ -157,6 +157,34 @@ class BasketTests(unittest.TestCase):
         scope['_basket_check_flight'](env, previous)
         self.assertEqual(env.terminated_reason, 'not_a_throw')
 
+    def test_remote_plane_crossing_does_not_end_episode(self):
+        env, _, _ = fixture()
+        normal = np.array([0., -np.sin(np.radians(C.basket_tilt_deg)), np.cos(np.radians(C.basket_tilt_deg))])
+        remote = env.basket_center + np.array([.8, 0., 0.])
+        previous = remote + .1*normal
+        env.Dcmm.data.qpos[37:40] = remote - .1*normal
+        scope['_basket_check_flight'](env, previous)
+        self.assertFalse(env.terminated)
+        env.contacts['object_contacts'] = np.array([env.floor_id])
+        scope['_basket_check_flight'](env, previous)
+        self.assertEqual(env.terminated_reason, 'ball_on_floor')
+
+    def test_release_snapshot_keeps_contact_and_detection_velocities(self):
+        env, _, _ = fixture()
+        env.basket_phase = 'preparing'
+        env.contacts['object_contacts'] = np.array([1])
+        env.Dcmm.data.qvel[36:39] = [0., 1., 2.]
+        scope['_basket_check_flight'](env, env.Dcmm.data.qpos[37:40].copy())
+        env.contacts['object_contacts'] = np.array([])
+        env.Dcmm.data.qvel[36:39] = [0., 2., 3.]
+        scope['_basket_check_flight'](env, env.Dcmm.data.qpos[37:40].copy())
+        snapshot = env.basket_release_snapshot
+        self.assertEqual(snapshot['last_contact']['velocity'], [0., 1., 2.])
+        self.assertEqual(snapshot['velocity'], [0., 2., 3.])
+        self.assertAlmostEqual(snapshot['contact_total_seconds'], .01)
+        env.Dcmm.data.qvel[36:39] = 0.
+        self.assertEqual(snapshot['velocity'], [0., 2., 3.])
+
     def test_no_assistance_in_either_training_stage(self):
         for task in ('Tracking', 'Catching'):
             env, parking, calls = fixture()

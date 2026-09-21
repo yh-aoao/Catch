@@ -727,6 +727,15 @@ class DcmmVecEnv(gym.Env):
         position = self.Dcmm.data.qpos[37:40].copy()
         hand_ids = hand_collision_ids(self.Dcmm.model, self.hand_start_id)
         touching = bool(np.any(np.isin(self.contacts['object_contacts'], hand_ids)))
+        dt = float(self.Dcmm.model.opt.timestep)
+        if touching:
+            self.basket_contact_total = getattr(self, 'basket_contact_total', 0.) + dt
+            self.basket_contact_run = getattr(self, 'basket_contact_run', 0.) + dt
+            self.basket_last_contact = dict(time=float(self.Dcmm.data.time),
+                position=position.tolist(), velocity=self.Dcmm.data.qvel[36:39].tolist(),
+                continuous_seconds=self.basket_contact_run)
+        else:
+            self.basket_contact_run = 0.
         self.basket_had_hand_contact = self.basket_had_hand_contact or touching
         if self.basket_phase == 'preparing' and self.basket_had_hand_contact and not touching:
             if np.linalg.norm(position - self.Dcmm.data.body('link6').xpos) > 2 * DcmmCfg.basket_ball_radius:
@@ -745,6 +754,16 @@ class DcmmVecEnv(gym.Env):
                 self.object_throw = True
                 self.basket_phase = 'flight'
                 self.basket_previous_flight_distance = float(np.linalg.norm(position - self.basket_center))
+                self.basket_release_snapshot = dict(
+                    detection_time=float(self.Dcmm.data.time), position=position.tolist(),
+                    velocity=self.Dcmm.data.qvel[36:39].tolist(), reference_velocity=reference.tolist(),
+                    horizontal_distance=float(np.linalg.norm(position[:2]-self.basket_center[:2])),
+                    contact_total_seconds=getattr(self, 'basket_contact_total', 0.),
+                    last_contact=getattr(self, 'basket_last_contact', None),
+                    quality=float(quality), throw_valid=bool(self.basket_throw_valid))
+                if getattr(self, 'basket_log', False):
+                    print(f"[basket-release] {self.basket_release_snapshot}", flush=True)
+
         if self.basket_phase == 'flight' and touching:
             self.basket_throw_valid = False
         floor_contact = self.floor_id in self.contacts['object_contacts']
@@ -759,7 +778,8 @@ class DcmmVecEnv(gym.Env):
                     and np.linalg.norm(position[:2] - release_pos[:2]) >= DcmmCfg.basket_min_flight_travel)
         if crossed and scored and not airborne:
             failure = failure or 'not_a_throw'
-        if failure or crossed:
+        # Crossing the infinite plane outside the opening is not a terminal event.
+        if failure or (crossed and scored):
             self.terminated = True
             self.terminated_reason = failure or ('basket_score' if scored and self.object_throw and not touching and self.basket_had_hand_contact else 'basket_miss')
 
@@ -1742,6 +1762,10 @@ class DcmmVecEnv(gym.Env):
             self.basket_had_hand_contact = False
             self.basket_previous_velocity = None
             self.basket_release_pending = 0.
+            self.basket_contact_total = 0.
+            self.basket_contact_run = 0.
+            self.basket_last_contact = None
+            self.basket_release_snapshot = None
             self.basket_release_quality = 0.
             self.basket_throw_valid = False
             self.basket_release_position = self.Dcmm.data.qpos[37:40].copy()
@@ -1840,6 +1864,7 @@ class DcmmVecEnv(gym.Env):
             value = float(sum(terms.values()))
             self.basket_release_pending = 0.
             attempts = getattr(self, 'basket_arm_attempts', 0)
+            info['basket_release'] = getattr(self, 'basket_release_snapshot', None)
             info['basket_control'] = dict(hand_contact=touching, quality=quality,
                 reference_velocity=reference.tolist(), ball_velocity=velocity.tolist(),
                 arm_joint_speed=float(np.linalg.norm(self.Dcmm.data.qvel[14:20])),

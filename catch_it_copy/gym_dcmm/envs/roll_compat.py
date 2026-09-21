@@ -7,7 +7,8 @@ def make_roll_645edc4(parameters):
     parameters['object_motion'] = 'roll'
     tracking = parameters.get('task') == 'Tracking'
     if tracking:
-        from gym_dcmm.envs.DcmmVecEnv_roll_track_07c176f import DcmmVecEnv
+        from gym_dcmm.envs.DcmmVecEnv import _make_main_roll_track
+        return _make_main_roll_track(dict(parameters, roll_log=verbose))
     else:
         from gym_dcmm.envs.DcmmVecEnv_roll_645edc4 import DcmmVecEnv
     env = DcmmVecEnv(**parameters)

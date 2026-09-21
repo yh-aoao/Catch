@@ -30,13 +30,13 @@ def main(config: DictConfig):
         from gym_dcmm.algs.ppo_dcmm_5fe75d5f.ppo_dcmm_catch_two_stage import PPO_Catch_TwoStage as TwoStageAgent
         from gym_dcmm.algs.ppo_dcmm_5fe75d5f.ppo_dcmm_catch_one_stage import PPO_Catch_OneStage as OneStageAgent
         print('[bounce-baseline] commit=5fe75d5f1e151c1fdc686fbf8f104db3870b2844 '
-              'environment/config/PPO=original', flush=True)
+              'environment=DcmmVecEnv.py::BounceEnv config/PPO=original', flush=True)
     elif config.object_motion == 'roll':
         from gym_dcmm.algs.ppo_dcmm_645edc4.ppo_dcmm_track import PPO_Track as TrackingAgent
         from gym_dcmm.algs.ppo_dcmm_645edc4.ppo_dcmm_catch_two_stage import PPO_Catch_TwoStage as TwoStageAgent
         from gym_dcmm.algs.ppo_dcmm_645edc4.ppo_dcmm_catch_one_stage import PPO_Catch_OneStage as OneStageAgent
         print('[roll-baseline] task={} environment/config={} PPO=645edc4 (unchanged since 07c176f)'.format(
-            config.task, '07c176f' if config.task == 'Tracking' else 'current_catching'), flush=True)
+            config.task, 'DcmmVecEnv.py::RollTrackingEnv (07c176f)' if config.task == 'Tracking' else 'current_catching'), flush=True)
     else:
         TrackingAgent, TwoStageAgent, OneStageAgent = PPO_Track, PPO_Catch_TwoStage, PPO_Catch_OneStage
     if str(config.basket_control_probe) != 'off' and (not config.test or config.object_motion not in ('basket', 'throw_basket')):

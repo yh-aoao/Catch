@@ -1,5 +1,17 @@
 # 抓取保持和投掷站位调整
 
+## 2026-09-21：持续保持与纯物理投掷对照
+
+Roll 接球点改为掌碰撞几何中心加球半径法向偏移，替代 link6 原点；该点是基于模型的参考点，仍需 viewer 校准，不是完整掌面接触重建。等待奖励、抓取局部坐标和脱手距离统一使用此点。稳定成功改为连续 15 步（默认约 0.6 s），总时限保持 2.5 s。保持模式可跨过 0.12 s 的小扰动；接触桌地或相对速度超过 0.4 m/s 时立即退出，避免反复切换快慢控制。缓冲不放宽成功所需的真实连续接触。
+
+Basket 增加 basket_fixed_base_training=true：固定底座指令为零、目标 x=0，其余物理、投掷要求不变，无助推或持球辅助。建议先联合训练手臂和手指：
+
+```bash
+python3 train_DCMM.py test=False task=Catching_OneStage num_envs=32 object_motion=throw_basket basket_fixed_base_training=true basket_log=true
+```
+
+该命令不需要 Track checkpoint。OneStage checkpoint 与 TwoStage 网络结构不同，不能直接当成 TwoStage Track 权重加载；先用于验证纯物理投掷是否可学，成功后可在同一 OneStage 架构关闭固定底座开关继续探索移动任务。固定底座使用零速度控制，不是焊死机器人关节。
+
 ## 2026-09-21：Roll 策略目标稳定
 
 Roll Catch 手指策略输出是关节目标增量。新增增量限速和平滑：捕获时 3 rad/s、alpha=0.8；有效接触且相对速度低于 0.15 m/s 时 1 rad/s、alpha=0.3。目标变化惩罚同时约束滤波前的反向跳变，防止仅掩盖策略抖动。状态在 reset 清空。接稳后姿态奖励缩为 20%，包裹项不再追逐固定角度；PID、时限、成功标准不变。

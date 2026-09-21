@@ -254,7 +254,7 @@ roll_no_approach_eps = 0.002
 # 抓取成功：球的线速度低于此阈值视为"稳定"（m/s）
 roll_catch_v_thresh = 0.05
 # 抓取成功：连续低速的控制步数累加到该值即判定成功
-roll_catch_N_control = 5
+roll_catch_N_control = 15
 # 抓取失败：手掌接触球的最大等待步数，超时即判定失败
 roll_catch_wait_steps = 20
 # 抓取成功：MCP 关节平均屈曲超过此值才算真正抓取（rad），防止球停在手掌上就算成功
@@ -472,3 +472,5 @@ roll_target_capture_alpha = 0.8
 roll_target_hold_alpha = 0.3
 roll_target_motion_weight = 0.03
 roll_target_change_weight = 0.15
+
+roll_hold_hysteresis_seconds = 0.12

@@ -642,6 +642,20 @@ class DcmmVecEnv(gym.Env):
         return parking_state(self.Dcmm.data.body('arm_base').xpos,
                              self.Dcmm.data.qvel[:2], yaw, self.basket_center, DcmmCfg)
 
+    def _roll_capture_point(self):
+        # Physical palm mesh center, offset outward by the ball radius.
+        normal = self.Dcmm.data.body('link6').xmat.reshape(3, 3)[:, 1]
+        return (self.Dcmm.data.geom_xpos[self.hand_start_id].copy()
+                + normal * float(self.Dcmm.model.geom_size[self.object_id][0]))
+
+    def _roll_settled_mode(self, hand, clear, speed):
+        now = float(self.Dcmm.data.time)
+        if hand and clear and speed < .15:
+            self.roll_hold_until = now + DcmmCfg.roll_hold_hysteresis_seconds
+        if not clear or speed > .4:
+            self.roll_hold_until = -1.
+        return now < getattr(self, 'roll_hold_until', -1.)
+
     def _roll_hold_state(self):
         palm = self.Dcmm.data.body('link6')
         position = self.Dcmm.data.qpos[37:40]
@@ -652,7 +666,7 @@ class DcmmVecEnv(gym.Env):
         contacts = self.contacts['object_contacts']
         hand = bool(np.any(np.isin(contacts, hand_collision_ids(self.Dcmm.model, self.hand_start_id))))
         clear = self.table_geom_id not in contacts and self.floor_id not in contacts
-        return hand, clear, float(np.linalg.norm(velocity)), float(np.linalg.norm(position-palm.xpos))
+        return hand, clear, float(np.linalg.norm(velocity)), float(np.linalg.norm(position-self._roll_capture_point()))
 
     def _get_hand_obs(self):
         """
@@ -1568,6 +1582,7 @@ class DcmmVecEnv(gym.Env):
         self.prev_palm_dot = -1.0  # 重置上一步手掌朝向
         self._prev_palm_up = None  # 重置上一步掌心朝上分量（舀水姿态增量奖励用）
         self.prev_finger_dot = -1.0  # 重置上一步手指方向
+        self.roll_hold_until = -1.
         self.roll_previous_target_delta = None
         self.roll_target_terms = {}
         self.roll_previous_hand_speed = None
@@ -1667,7 +1682,7 @@ class DcmmVecEnv(gym.Env):
         reward_vel_match = 0.0
         if self.object_motion == "roll":
             # 方案B'：球在桌面上时追"预测落点"（滚近桌边后锁定），球掉下来后追球本身
-            ee_world = self.Dcmm.data.body("link6").xpos.copy()
+            ee_world = self._roll_capture_point()
             goal, waiting = roll_wait_target(self.Dcmm.data.qpos[37:40], self.Dcmm.data.qvel[36:39],
                 float(self.Dcmm.model.geom_size[self.object_id][0]), DcmmCfg,
                 abs(float(self.Dcmm.model.opt.gravity[2])))
@@ -2094,7 +2109,7 @@ class DcmmVecEnv(gym.Env):
         if self.object_motion == 'roll' and self.task == 'Catching':
             palm = self.Dcmm.data.body('link6')
             local_ball = palm.xmat.reshape(3, 3).T @ (
-                self.Dcmm.data.qpos[37:40] - palm.xpos)
+                self.Dcmm.data.qpos[37:40] - self._roll_capture_point())
             hand_ids = hand_collision_ids(self.Dcmm.model, self.hand_start_id)
             touching = bool(np.any(np.isin(self.contacts['object_contacts'], hand_ids)))
             ready, finger_terms = grasp_terms(
@@ -2104,8 +2119,8 @@ class DcmmVecEnv(gym.Env):
             finger_terms.update(hand_stability_terms(joint_speed,
                 getattr(self, 'roll_previous_hand_speed', None),
                 self.steps_per_policy * self.Dcmm.model.opt.timestep,
-                hand and clear and relative_speed < .15, DcmmCfg))
-            if hand and clear and relative_speed < .15:
+                self._roll_settled_mode(hand, clear, relative_speed), DcmmCfg))
+            if self._roll_settled_mode(hand, clear, relative_speed):
                 # A held ball should not be squeezed toward an arbitrary angle.
                 finger_terms['posture'] *= .2
                 finger_terms['enclosure'] = 1.
@@ -2404,7 +2419,7 @@ class DcmmVecEnv(gym.Env):
             applied, self.roll_target_terms = smooth_target_delta(
                 action_dict['hand'], getattr(self, 'roll_previous_target_delta', None),
                 self.steps_per_policy * self.Dcmm.model.opt.timestep,
-                hand and clear and speed < .15, DcmmCfg)
+                self._roll_settled_mode(hand, clear, speed), DcmmCfg)
             self.roll_previous_target_delta = applied.copy()
             self.Dcmm.action_hand2qpos(applied)
         elif self.task == "Catching" and self.stage == "tracking":

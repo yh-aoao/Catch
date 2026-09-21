@@ -49,6 +49,19 @@ class GraspTests(unittest.TestCase):
         self.assertTrue(waiting)
         self.assertLessEqual(point[1], .8)
 
+    def test_hold_mode_survives_brief_contact_gap_but_not_large_slip(self):
+        import ast
+        tree = ast.parse((root / 'gym_dcmm/envs/DcmmVecEnv_roll_645edc4.py').read_text(encoding='utf-8'))
+        method = next(n for n in ast.walk(tree) if isinstance(n, ast.FunctionDef) and n.name == '_roll_settled_mode')
+        scope = dict(DcmmCfg=SimpleNamespace(roll_hold_hysteresis_seconds=.12))
+        exec(compile(ast.Module(body=[method], type_ignores=[]), '<hold>', 'exec'), scope)
+        env = SimpleNamespace(Dcmm=SimpleNamespace(data=SimpleNamespace(time=1.)))
+        hold = scope['_roll_settled_mode']
+        self.assertTrue(hold(env, True, True, .1))
+        env.Dcmm.data.time = 1.05
+        self.assertTrue(hold(env, False, True, .2))
+        self.assertFalse(hold(env, True, True, .5))
+
     def test_open_before_arrival_even_if_finger_touched(self):
         self.assertFalse(self.reward(.8, [.2, .05, 0], True)[0])
         self.assertGreater(self.reward(.15, [0, .3, 0])[1], self.reward(.8, [0, .3, 0])[1])

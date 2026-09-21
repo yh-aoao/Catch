@@ -160,7 +160,7 @@ class DcmmVecEnv(gym.Env):
         print_contacts=False,
         object_motion="throw", # 新增的参数用来判断物体运动类型（throw/roll）
         bounce_physics="legacy", bounce_launch="legacy", bounce_log=False,
-        basket_log=False, roll_log=False,
+        basket_log=False, roll_log=False, basket_fixed_base_training=False,
     ):
         # 任务合法性检查（仅支持Tracking/Catching）
         if task not in ["Tracking", "Catching"]:
@@ -169,6 +169,7 @@ class DcmmVecEnv(gym.Env):
         assert render_mode is None or render_mode in self.metadata["render_modes"]
         
         # 基础配置赋值
+        self.basket_fixed_base_training = bool(basket_fixed_base_training)
         self.render_mode = render_mode
         self.camera_name = camera_name
         self.object_name = object_name
@@ -1474,7 +1475,7 @@ class DcmmVecEnv(gym.Env):
         elif self.object_motion == "throw_basket":
             # 每 episode 随机篮筐 x（左右）位置（运行时改 body_pos，训练底座横向移动 + 先到正前方）
             self.basket_center = DcmmCfg.basket_center.copy()
-            self.basket_center[0] = np.random.uniform(*DcmmCfg.basket_center_x_range)
+            self.basket_center[0] = 0. if self.basket_fixed_base_training else np.random.uniform(*DcmmCfg.basket_center_x_range)
             _basket_bid = mujoco.mj_name2id(self.Dcmm.model, mujoco.mjtObj.mjOBJ_BODY, 'basket_target')
             if _basket_bid >= 0:
                 self.Dcmm.model.body_pos[_basket_bid] = self.basket_center
@@ -2289,7 +2290,7 @@ class DcmmVecEnv(gym.Env):
         ## 设置底盘目标速度
         # roll/throw_basket/throw_force 模式可选固定底座
         if (self.object_motion == "roll" and getattr(DcmmCfg, 'roll_fix_base', False)) or \
-           (self.object_motion == "throw_basket" and getattr(DcmmCfg, 'basket_fix_base', False)) or \
+           (self.object_motion == "throw_basket" and (getattr(DcmmCfg, 'basket_fix_base', False) or self.basket_fixed_base_training)) or \
            (self.object_motion == "throw_force" and getattr(DcmmCfg, 'throw_force_fix_base', True)):
             self.Dcmm.target_base_vel[0:2] = np.zeros(2)
         else:

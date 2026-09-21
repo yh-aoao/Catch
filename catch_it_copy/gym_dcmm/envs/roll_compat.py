@@ -7,7 +7,7 @@ def make_roll_645edc4(parameters):
     parameters['object_motion'] = 'roll'
     tracking = parameters.get('task') == 'Tracking'
     if tracking:
-        from gym_dcmm.envs.DcmmVecEnv_roll_track_b66666c import DcmmVecEnv
+        from gym_dcmm.envs.DcmmVecEnv_roll_track_07c176f import DcmmVecEnv
     else:
         from gym_dcmm.envs.DcmmVecEnv_roll_645edc4 import DcmmVecEnv
     env = DcmmVecEnv(**parameters)
@@ -15,11 +15,11 @@ def make_roll_645edc4(parameters):
     if verbose:
         import inspect
         if tracking:
-            import configs.env.DcmmCfg_roll_track_b66666c as cfg
+            import configs.env.DcmmCfg_roll_track_07c176f as cfg
         else:
             import configs.env.DcmmCfg_roll_645edc4 as cfg
         print('[roll-baseline] task={} revision={}'.format(
-            parameters.get('task'), 'b66666c' if tracking else 'current_catching'), flush=True)
+            parameters.get('task'), '07c176f' if tracking else 'current_catching'), flush=True)
         print('[roll-baseline-source] environment={} config={}'.format(
             inspect.getfile(DcmmVecEnv), cfg.__file__), flush=True)
     return env

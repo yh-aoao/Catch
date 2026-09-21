@@ -1,0 +1,42 @@
+{
+  "commit": "07c176fc374709e8ce2721f55e721342671760b3",
+  "scope": "Independent Roll Tracking only",
+  "import_replacements": {
+    "configs.env.DcmmCfg_roll_645edc4": "configs.env.DcmmCfg_roll_track_07c176f",
+    "gym_dcmm.agents.MujocoDcmm_roll_645edc4": "gym_dcmm.agents.MujocoDcmm_roll_track_07c176f",
+    "gym_dcmm.utils.roll_waiting import": "gym_dcmm.utils.roll_waiting_07c176f import",
+    "gym_dcmm.utils.roll_rewards import": "gym_dcmm.utils.roll_rewards_07c176f import"
+  },
+  "files": [
+    {
+      "source": "configs/env/DcmmCfg_roll_645edc4.py",
+      "destination": "configs/env/DcmmCfg_roll_track_07c176f.py",
+      "source_sha256": "1a7bf4c6685c6334aa574b76230f73d7c7eff74ddc88c07d681c29b980512dd0",
+      "restored_sha256": "1a7bf4c6685c6334aa574b76230f73d7c7eff74ddc88c07d681c29b980512dd0"
+    },
+    {
+      "source": "gym_dcmm/agents/MujocoDcmm_roll_645edc4.py",
+      "destination": "gym_dcmm/agents/MujocoDcmm_roll_track_07c176f.py",
+      "source_sha256": "0b189a7fcc4cf0b631e27ad2deb819bc25f23501349aaa3a29dcb0d6e69c2575",
+      "restored_sha256": "bacd80289d7c1d87372f50a2b52b34f3bee302ad6b235ea6b5ab874216682c83"
+    },
+    {
+      "source": "gym_dcmm/envs/DcmmVecEnv_roll_645edc4.py",
+      "destination": "gym_dcmm/envs/DcmmVecEnv_roll_track_07c176f.py",
+      "source_sha256": "793956821a3df7e20b854cff49433cd7a64f0ccf4d0cc9844c4447e8ef993b2e",
+      "restored_sha256": "35fd04de31f0a77a338c6bfd9ed898e43d012ce8bc12b7dce0e2dcf568b8b711"
+    },
+    {
+      "source": "gym_dcmm/utils/roll_waiting.py",
+      "destination": "gym_dcmm/utils/roll_waiting_07c176f.py",
+      "source_sha256": "1502f518a5d849150a090b02c74fde2d73cbe1cf8cae07e4d8bcbd73f89870a2",
+      "restored_sha256": "1502f518a5d849150a090b02c74fde2d73cbe1cf8cae07e4d8bcbd73f89870a2"
+    },
+    {
+      "source": "gym_dcmm/utils/roll_rewards.py",
+      "destination": "gym_dcmm/utils/roll_rewards_07c176f.py",
+      "source_sha256": "edeaebeb24f7651cb9420d75330a339eb8c5370fd0964f6f14a7f4c6036a1db7",
+      "restored_sha256": "edeaebeb24f7651cb9420d75330a339eb8c5370fd0964f6f14a7f4c6036a1db7"
+    }
+  ]
+}

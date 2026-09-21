@@ -12,6 +12,7 @@ import numpy as np
 from .experience import ExperienceBuffer
 from .models_track import ActorCritic
 from .utils import AverageScalarMeter, RunningMeanStd
+from .ppo_dcmm_track import terminal_metrics
 
 from tensorboardX import SummaryWriter
 
@@ -29,6 +30,11 @@ class PPO_Catch_OneStage(object):
         self.actions_high = self.env.call("actions_high")[0]
         self.obs_shape = (self.env.call("obs_c_dim")[0],)
         self.full_action_dim = self.env.call("act_c_dim")[0]
+        self.fixed_basket = (full_config.get('object_motion') in ('basket', 'throw_basket')
+                             and bool(full_config.get('basket_fixed_base_training', False)))
+        if self.fixed_basket:
+            # Learn only arm + hand; insert the two zero base commands at execution.
+            self.actions_num = self.full_action_dim - 2
         # ---- Model ----
         net_config = {
             'actor_units': self.network_config.mlp.units,
@@ -235,6 +241,7 @@ class PPO_Catch_OneStage(object):
             weights['running_mean_std'] = self.running_mean_std.state_dict()
         if self.value_mean_std:
             weights['value_mean_std'] = self.value_mean_std.state_dict()
+        weights['action_layout'] = 'arm6_hand12' if self.fixed_basket else 'base2_arm6_hand12'
         torch.save(weights, f'{name}.pth')
 
     def restore_train(self, fn):
@@ -263,6 +270,10 @@ class PPO_Catch_OneStage(object):
             print(f"[checkpoint] running_mean_std shape mismatch: checkpoint {ckpt_shape} vs model {curr_shape}, using fresh stats")
 
     def _load_compatible_model_state(self, checkpoint_state):
+        if self.fixed_basket:
+            # Partial row copying would reinterpret old base actions as arm actions.
+            self.model.load_state_dict(checkpoint_state, strict=True)
+            return
         model_state = self.model.state_dict()
         loaded, expanded, skipped = [], [], []
         for name, value in checkpoint_state.items():
@@ -402,6 +413,11 @@ class PPO_Catch_OneStage(object):
 
     def action2dict(self, actions):
         actions = actions.cpu().numpy()
+        if self.fixed_basket:
+            # Rollout code pads to the environment width on the right; ignore padding.
+            return dict(base=np.zeros((len(actions), 2), dtype=actions.dtype),
+                        arm=actions[:, :6] * self.action_catch_denorm[1],
+                        hand=actions[:, 6:18] * self.action_catch_denorm[2])
         # De-normalize the actions
         if self.env.call('task')[0] == 'Tracking':
             base_tensor = actions[:, :2] * self.action_track_denorm[0]
@@ -467,7 +483,8 @@ class PPO_Catch_OneStage(object):
             # print("done_indices: ", done_indices)
             self.episode_rewards.update(self.current_rewards[done_indices])
             self.episode_lengths.update(self.current_lengths[done_indices])
-            self.episode_success.update(torch.tensor(infos.get('success', truncates), dtype=torch.float32, device=self.device)[done_indices])
+            successes, _ = terminal_metrics(infos, dones, truncates)
+            self.episode_success.update(torch.tensor(successes, dtype=torch.float32, device=self.device)[done_indices])
             assert isinstance(infos, dict), 'Info Should be a Dict'
             # print("infos: ", infos)
             for k, v in infos.items():
@@ -521,7 +538,8 @@ class PPO_Catch_OneStage(object):
             done_indices = self.dones.nonzero(as_tuple=False)
             self.episode_test_rewards.update(self.current_rewards[done_indices])
             self.episode_test_lengths.update(self.current_lengths[done_indices])
-            self.episode_test_success.update(torch.tensor(infos.get('success', truncates), dtype=torch.float32, device=self.device)[done_indices])
+            successes, _ = terminal_metrics(infos, dones, truncates)
+            self.episode_test_success.update(torch.tensor(successes, dtype=torch.float32, device=self.device)[done_indices])
             assert isinstance(infos, dict), 'Info Should be a Dict'
             for k, v in infos.items():
                 # only log scalars

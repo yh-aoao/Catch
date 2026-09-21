@@ -21,6 +21,10 @@ OmegaConf.register_new_resolver('resolve_default', lambda default, arg: default 
 
 @hydra.main(config_name='config', config_path='configs')
 def main(config: DictConfig):
+    if config.object_motion in ('basket', 'throw_basket') and config.basket_fixed_base_training:
+        if config.task != 'Catching_OneStage' or config.checkpoint_tracking:
+            raise ValueError('Fixed Basket baseline requires Catching_OneStage and no checkpoint_tracking')
+        print('[basket-baseline] fixed base command, fixed target, policy=arm6+hand12; reward=joint_throw', flush=True)
     if config.object_motion in ('bounce', 'tan', '\u5f39'):
         from gym_dcmm.algs.ppo_dcmm_5fe75d5f.ppo_dcmm_track import PPO_Track as TrackingAgent
         from gym_dcmm.algs.ppo_dcmm_5fe75d5f.ppo_dcmm_catch_two_stage import PPO_Catch_TwoStage as TwoStageAgent
@@ -95,6 +99,7 @@ def main(config: DictConfig):
     current_datetime_str = current_datetime.strftime("%Y-%m-%d/%H:%M:%S")
     output_dif = os.path.join(output_dif, current_datetime_str)
     os.makedirs(output_dif, exist_ok=True)
+    OmegaConf.save(config, os.path.join(output_dif, 'resolved_config.yaml'), resolve=True)
 
     PPO = TrackingAgent if config.task == 'Tracking' else \
           TwoStageAgent if config.task == 'Catching_TwoStage' else \

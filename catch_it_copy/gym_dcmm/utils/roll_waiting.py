@@ -7,7 +7,8 @@ def target(position, velocity, radius, cfg, gravity=9.81):
     v = np.asarray(velocity, dtype=float)
     edge = cfg.roll_table_pos[1] - cfg.roll_table_size[1]
     plane = cfg.roll_wait_z + radius
-    waiting = p[2] > plane
+    on_table_side = p[1] + radius >= edge
+    waiting = on_table_side or p[2] > plane
     result = p.copy()
     if waiting:
         exit_time = max(0., (edge - p[1]) / v[1]) if v[1] < -.01 and p[1] > edge else 0.

@@ -27,6 +27,28 @@ class GraspTests(unittest.TestCase):
         far = self.reward(.5, [.09+1e-6, .05, 0])[1]
         self.assertLess(abs(near-far), .001)
 
+    def test_target_filter_is_bounded_and_faster_before_capture(self):
+        c = SimpleNamespace(roll_target_capture_rate=3., roll_target_hold_rate=1.,
+            roll_target_capture_alpha=.8, roll_target_hold_alpha=.3,
+            roll_target_motion_weight=.03, roll_target_change_weight=.15)
+        fast, _ = g.smooth_target_delta(np.ones(12), None, .04, False, c)
+        slow, _ = g.smooth_target_delta(np.ones(12), None, .04, True, c)
+        self.assertTrue(np.all(fast > slow))
+        self.assertTrue(np.all(slow <= .04))
+        reverse, terms = g.smooth_target_delta(-np.ones(12), slow, .04, True, c)
+        self.assertTrue(np.all(np.abs(reverse) <= .04))
+        self.assertLess(terms['target_change'], 0.)
+
+    def test_wait_target_stays_outside_table_even_for_low_ball(self):
+        spec = importlib.util.spec_from_file_location('waiting', root / 'gym_dcmm/utils/roll_waiting.py')
+        w = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(w)
+        c = SimpleNamespace(roll_table_pos=[0, 2., .4], roll_table_size=[1, 1., .1],
+            roll_wait_z=.5, roll_table_height=.4, roll_wait_edge_margin=.2)
+        point, waiting = w.target([0, 1.2, .45], [0, -1., 0], .04, c)
+        self.assertTrue(waiting)
+        self.assertLessEqual(point[1], .8)
+
     def test_open_before_arrival_even_if_finger_touched(self):
         self.assertFalse(self.reward(.8, [.2, .05, 0], True)[0])
         self.assertGreater(self.reward(.15, [0, .3, 0])[1], self.reward(.8, [0, .3, 0])[1])

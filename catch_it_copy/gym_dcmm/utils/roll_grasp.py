@@ -34,3 +34,18 @@ def hand_stability_terms(velocity, previous_velocity, dt, settled, cfg):
         delta = (velocity - previous_velocity) / max(dt, 1e-6)
         acceleration = -cfg.roll_hand_accel_weight * float(np.mean(np.minimum((delta / 50.)**2, 4.)))
     return dict(hand_speed=speed, hand_acceleration=acceleration)
+
+
+def smooth_target_delta(delta, previous, dt, settled, cfg):
+    """Filter policy joint-target increments, preserving faster capture motion."""
+    delta = np.asarray(delta, dtype=float)
+    previous = np.zeros_like(delta) if previous is None else np.asarray(previous)
+    rate = cfg.roll_target_hold_rate if settled else cfg.roll_target_capture_rate
+    limit = rate * dt
+    desired = np.clip(delta, -limit, limit)
+    alpha = cfg.roll_target_hold_alpha if settled else cfg.roll_target_capture_alpha
+    applied = np.clip(alpha*desired + (1-alpha)*previous, -limit, limit)
+    scale = max(limit, 1e-6)
+    terms = dict(target_motion=-cfg.roll_target_motion_weight * float(np.mean((applied/scale)**2)),
+                 target_change=-cfg.roll_target_change_weight * float(np.mean(np.minimum(((desired-previous)/scale)**2, 4.))))
+    return applied, terms

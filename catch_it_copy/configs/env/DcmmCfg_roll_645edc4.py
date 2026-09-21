@@ -465,3 +465,10 @@ roll_hold_reward_weight = 2.0
 
 roll_hand_speed_weight = 0.4
 roll_hand_accel_weight = 0.2
+
+roll_target_capture_rate = 3.0  # rad/s
+roll_target_hold_rate = 1.0
+roll_target_capture_alpha = 0.8
+roll_target_hold_alpha = 0.3
+roll_target_motion_weight = 0.03
+roll_target_change_weight = 0.15

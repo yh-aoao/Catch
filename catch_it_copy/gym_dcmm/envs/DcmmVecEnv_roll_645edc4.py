@@ -40,7 +40,7 @@ import xml.etree.ElementTree as ET  # XML解析（修改Mujoco模型）
 from scipy.spatial.transform import Rotation as R  # 旋转变换
 from collections import deque
 from gym_dcmm.utils.roll_waiting import target as roll_wait_target, shaping as roll_wait_shaping
-from gym_dcmm.utils.roll_grasp import grasp_terms, hand_stability_terms
+from gym_dcmm.utils.roll_grasp import grasp_terms, hand_stability_terms, smooth_target_delta
 from gym_dcmm.utils.roll_rewards import hand_collision_ids  # 双端队列（存储历史数据）
 from gym_dcmm.utils.basket_tracking import parking_state, parking_reward, limit_speed
 
@@ -1568,6 +1568,8 @@ class DcmmVecEnv(gym.Env):
         self.prev_palm_dot = -1.0  # 重置上一步手掌朝向
         self._prev_palm_up = None  # 重置上一步掌心朝上分量（舀水姿态增量奖励用）
         self.prev_finger_dot = -1.0  # 重置上一步手指方向
+        self.roll_previous_target_delta = None
+        self.roll_target_terms = {}
         self.roll_previous_hand_speed = None
         self.roll_had_contact = False
         self.roll_lost_time = 0.
@@ -2103,6 +2105,11 @@ class DcmmVecEnv(gym.Env):
                 getattr(self, 'roll_previous_hand_speed', None),
                 self.steps_per_policy * self.Dcmm.model.opt.timestep,
                 hand and clear and relative_speed < .15, DcmmCfg))
+            if hand and clear and relative_speed < .15:
+                # A held ball should not be squeezed toward an arbitrary angle.
+                finger_terms['posture'] *= .2
+                finger_terms['enclosure'] = 1.
+            finger_terms.update(getattr(self, 'roll_target_terms', {}))
             self.roll_previous_hand_speed = joint_speed
             reward_roll_scoop += sum(finger_terms.values())
             info['roll_grasp'] = dict(ready=ready, contact=touching,
@@ -2392,6 +2399,14 @@ class DcmmVecEnv(gym.Env):
             self.Dcmm.target_hand_qpos[:] = _grip
             self.Dcmm.action_hand2qpos(action_dict["hand"] * 0.1)
 
+        elif self.object_motion == 'roll' and self.task == 'Catching':
+            hand, clear, speed, distance = self._roll_hold_state()
+            applied, self.roll_target_terms = smooth_target_delta(
+                action_dict['hand'], getattr(self, 'roll_previous_target_delta', None),
+                self.steps_per_policy * self.Dcmm.model.opt.timestep,
+                hand and clear and speed < .15, DcmmCfg)
+            self.roll_previous_target_delta = applied.copy()
+            self.Dcmm.action_hand2qpos(applied)
         elif self.task == "Catching" and self.stage == "tracking":
             # 所有模式统一：不重置 target，让模型自由控制手指
             self.Dcmm.action_hand2qpos(action_dict["hand"])

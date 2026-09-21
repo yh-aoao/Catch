@@ -35,8 +35,8 @@ def main(config: DictConfig):
         from gym_dcmm.algs.ppo_dcmm_645edc4.ppo_dcmm_track import PPO_Track as TrackingAgent
         from gym_dcmm.algs.ppo_dcmm_645edc4.ppo_dcmm_catch_two_stage import PPO_Catch_TwoStage as TwoStageAgent
         from gym_dcmm.algs.ppo_dcmm_645edc4.ppo_dcmm_catch_one_stage import PPO_Catch_OneStage as OneStageAgent
-        print('[roll-baseline] revision=xy_wait_20260917 base=645edc4e21631683254fba51cc66b035b409518d '
-              'environment/config/PPO=original', flush=True)
+        print('[roll-baseline] task={} environment/config={} PPO=645edc4 (unchanged since b66666c)'.format(
+            config.task, 'b66666c' if config.task == 'Tracking' else 'current_catching'), flush=True)
     else:
         TrackingAgent, TwoStageAgent, OneStageAgent = PPO_Track, PPO_Catch_TwoStage, PPO_Catch_OneStage
     if str(config.basket_control_probe) != 'off' and (not config.test or config.object_motion not in ('basket', 'throw_basket')):

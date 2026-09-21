@@ -1,0 +1,35 @@
+{
+  "commit": "b66666cb9cf918d858cda2c8c0c84f789bb67f3e",
+  "scope": "Roll task=Tracking only; import names are the only source edits",
+  "import_replacements": {
+    "configs.env.DcmmCfg_roll_645edc4": "configs.env.DcmmCfg_roll_track_b66666c",
+    "gym_dcmm.agents.MujocoDcmm_roll_645edc4": "gym_dcmm.agents.MujocoDcmm_roll_track_b66666c",
+    "gym_dcmm.utils.roll_waiting import": "gym_dcmm.utils.roll_waiting_b66666c import"
+  },
+  "files": [
+    {
+      "source": "configs/env/DcmmCfg_roll_645edc4.py",
+      "destination": "configs/env/DcmmCfg_roll_track_b66666c.py",
+      "source_sha256": "1a06197982f4ff740c35d6e5442dc43bcdc268d176e3fdec463ad9fc5a2a1599",
+      "restored_sha256": "1a06197982f4ff740c35d6e5442dc43bcdc268d176e3fdec463ad9fc5a2a1599"
+    },
+    {
+      "source": "gym_dcmm/agents/MujocoDcmm_roll_645edc4.py",
+      "destination": "gym_dcmm/agents/MujocoDcmm_roll_track_b66666c.py",
+      "source_sha256": "0b189a7fcc4cf0b631e27ad2deb819bc25f23501349aaa3a29dcb0d6e69c2575",
+      "restored_sha256": "325a66ccc6271e5b116722fa6f29004138476233458d66a133d7340151431074"
+    },
+    {
+      "source": "gym_dcmm/envs/DcmmVecEnv_roll_645edc4.py",
+      "destination": "gym_dcmm/envs/DcmmVecEnv_roll_track_b66666c.py",
+      "source_sha256": "40329258cd5702d8d4380f70728912a092776fdde49a901850fc9df046c336d8",
+      "restored_sha256": "e2a2adc77ebaf2f3df4be7773034bce50b8eaecac86656780dc4576656ba2064"
+    },
+    {
+      "source": "gym_dcmm/utils/roll_waiting.py",
+      "destination": "gym_dcmm/utils/roll_waiting_b66666c.py",
+      "source_sha256": "1502f518a5d849150a090b02c74fde2d73cbe1cf8cae07e4d8bcbd73f89870a2",
+      "restored_sha256": "1502f518a5d849150a090b02c74fde2d73cbe1cf8cae07e4d8bcbd73f89870a2"
+    }
+  ]
+}

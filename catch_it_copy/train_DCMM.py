@@ -35,6 +35,8 @@ def main(config: DictConfig):
               'environment/config/PPO=original', flush=True)
     else:
         TrackingAgent, TwoStageAgent, OneStageAgent = PPO_Track, PPO_Catch_TwoStage, PPO_Catch_OneStage
+    if str(config.basket_control_probe) != 'off' and (not config.test or config.object_motion not in ('basket', 'throw_basket')):
+        raise ValueError('basket_control_probe is only for Basket test=True, never policy training')
     torch.multiprocessing.set_start_method('spawn')
     config.test = config.test
     model_path = None
@@ -83,7 +85,7 @@ def main(config: DictConfig):
                     bounce_physics=config.bounce_physics,
                     bounce_launch=config.bounce_launch, bounce_log=config.bounce_log,
                     basket_log=config.basket_log, roll_log=config.roll_log,
-                    **({'basket_fixed_base_training': config.basket_fixed_base_training}
+                    **({'basket_fixed_base_training': config.basket_fixed_base_training, 'basket_control_probe': str(config.basket_control_probe)}
                        if config.object_motion in ('basket', 'throw_basket') else {}))
 
     output_dif = os.path.join('outputs', config.output_name)

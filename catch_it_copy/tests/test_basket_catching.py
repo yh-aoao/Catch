@@ -176,6 +176,7 @@ class BasketTests(unittest.TestCase):
         env.Dcmm.data.qvel[36:39] = [0., 1., 2.]
         scope['_basket_check_flight'](env, env.Dcmm.data.qpos[37:40].copy())
         env.contacts['object_contacts'] = np.array([])
+        env.basket_no_contact_seconds = C.basket_release_debounce_seconds
         env.Dcmm.data.qvel[36:39] = [0., 2., 3.]
         scope['_basket_check_flight'](env, env.Dcmm.data.qpos[37:40].copy())
         snapshot = env.basket_release_snapshot
@@ -184,6 +185,20 @@ class BasketTests(unittest.TestCase):
         self.assertAlmostEqual(snapshot['contact_total_seconds'], .01)
         env.Dcmm.data.qvel[36:39] = 0.
         self.assertEqual(snapshot['velocity'], [0., 2., 3.])
+
+    def test_brief_contact_loss_does_not_commit_release(self):
+        env, _, _ = fixture()
+        env.basket_phase = 'preparing'
+        env.contacts['object_contacts'] = np.array([1])
+        point = env.Dcmm.data.qpos[37:40].copy()
+        scope['_basket_check_flight'](env, point)
+        env.contacts['object_contacts'] = np.array([])
+        scope['_basket_check_flight'](env, point)
+        self.assertFalse(env.object_throw)
+        env.contacts['object_contacts'] = np.array([1])
+        scope['_basket_check_flight'](env, point)
+        self.assertEqual(env.basket_no_contact_seconds, 0.)
+        self.assertEqual(env.basket_phase, 'preparing')
 
     def test_no_assistance_in_either_training_stage(self):
         for task in ('Tracking', 'Catching'):
@@ -220,6 +235,7 @@ class BasketTests(unittest.TestCase):
         self.assertTrue(env.basket_had_hand_contact)
         self.assertFalse(env.object_throw)
         env.contacts['object_contacts'] = np.array([])
+        env.basket_no_contact_seconds = C.basket_release_debounce_seconds
         env.Dcmm.data.qvel[36:39] = [0., 2., 3.]
         scope['_basket_check_flight'](env, pos)
         self.assertTrue(env.object_throw)

@@ -508,3 +508,5 @@ basket_arm_horizontal_reach = 0.65
 basket_arm_reach_cost = 3.0
 basket_min_upward_release_speed = 0.5
 basket_min_forward_release_speed = 0.5
+
+basket_release_debounce_seconds = 0.03  # reject momentary contact loss

@@ -160,7 +160,7 @@ class DcmmVecEnv(gym.Env):
         print_contacts=False,
         object_motion="throw", # 新增的参数用来判断物体运动类型（throw/roll）
         bounce_physics="legacy", bounce_launch="legacy", bounce_log=False,
-        basket_log=False, roll_log=False, basket_fixed_base_training=False,
+        basket_log=False, roll_log=False, basket_fixed_base_training=False, basket_control_probe="off",
     ):
         # 任务合法性检查（仅支持Tracking/Catching）
         if task not in ["Tracking", "Catching"]:
@@ -169,6 +169,9 @@ class DcmmVecEnv(gym.Env):
         assert render_mode is None or render_mode in self.metadata["render_modes"]
         
         # 基础配置赋值
+        if basket_control_probe not in ('off', 'hold', 'arm', 'hand'):
+            raise ValueError('basket_control_probe must be off/hold/arm/hand')
+        self.basket_control_probe = basket_control_probe
         self.basket_fixed_base_training = bool(basket_fixed_base_training)
         self.render_mode = render_mode
         self.camera_name = camera_name
@@ -729,24 +732,31 @@ class DcmmVecEnv(gym.Env):
         touching = bool(np.any(np.isin(self.contacts['object_contacts'], hand_ids)))
         dt = float(self.Dcmm.model.opt.timestep)
         if touching:
+            self.basket_no_contact_seconds = 0.
             self.basket_contact_total = getattr(self, 'basket_contact_total', 0.) + dt
             self.basket_contact_run = getattr(self, 'basket_contact_run', 0.) + dt
             self.basket_last_contact = dict(time=float(self.Dcmm.data.time),
                 position=position.tolist(), velocity=self.Dcmm.data.qvel[36:39].tolist(),
                 continuous_seconds=self.basket_contact_run)
         else:
+            self.basket_no_contact_seconds = getattr(self, 'basket_no_contact_seconds', 0.) + dt
             self.basket_contact_run = 0.
         self.basket_had_hand_contact = self.basket_had_hand_contact or touching
-        if self.basket_phase == 'preparing' and self.basket_had_hand_contact and not touching:
+        if (self.basket_phase == 'preparing' and self.basket_had_hand_contact and not touching
+                and self.basket_no_contact_seconds >= DcmmCfg.basket_release_debounce_seconds):
             if np.linalg.norm(position - self.Dcmm.data.body('link6').xpos) > 2 * DcmmCfg.basket_ball_radius:
-                quality, reference = throw_quality(position, self.Dcmm.data.qvel[36:39],
+                # Evaluate release at last contact, not after debounce gravity loss.
+                last = self.basket_last_contact
+                release_position = np.asarray(last['position'])
+                release_velocity = np.asarray(last['velocity'])
+                quality, reference = throw_quality(release_position, release_velocity,
                                                     self.basket_center, self.Dcmm.model.opt.gravity, DcmmCfg)
-                self.basket_release_position = position.copy()
-                self.basket_release_time = float(self.Dcmm.data.time)
-                self.basket_throw_valid = bool(np.linalg.norm(position[:2] - self.basket_center[:2]) >= DcmmCfg.basket_min_release_distance)
+                self.basket_release_position = release_position.copy()
+                self.basket_release_time = float(last['time'])
+                self.basket_throw_valid = bool(np.linalg.norm(release_position[:2] - self.basket_center[:2]) >= DcmmCfg.basket_min_release_distance)
                 underhand, _, _, _, _ = underhand_geometry(
                     self.Dcmm.data.body('link6').xpos, self.Dcmm.data.body('arm_base').xpos,
-                    position, self.basket_center, self.Dcmm.data.qvel[36:39], DcmmCfg)
+                    release_position, self.basket_center, release_velocity, DcmmCfg)
                 self.basket_throw_valid = self.basket_throw_valid and underhand
                 quality = quality if self.basket_throw_valid else 0.
                 self.basket_release_quality = quality
@@ -1762,6 +1772,7 @@ class DcmmVecEnv(gym.Env):
             self.basket_had_hand_contact = False
             self.basket_previous_velocity = None
             self.basket_release_pending = 0.
+            self.basket_no_contact_seconds = 0.
             self.basket_contact_total = 0.
             self.basket_contact_run = 0.
             self.basket_last_contact = None
@@ -1872,6 +1883,9 @@ class DcmmVecEnv(gym.Env):
                 ik_attempts=attempts, ik_successes=getattr(self, 'basket_arm_ik_successes', 0),
                 release_quality=getattr(self, 'basket_release_quality', 0.),
                 throw_valid=getattr(self, 'basket_throw_valid', False),
+                contact_total_seconds=getattr(self, 'basket_contact_total', 0.),
+                no_contact_seconds=getattr(self, 'basket_no_contact_seconds', 0.),
+                probe=getattr(self, 'basket_control_probe', 'off'),
                 horizontal_distance=horizontal_distance, base_distance=base_distance, stand_ok=stand_ok, arm_reach=arm_reach, forward_speed=forward_speed, upward_speed=upward_speed)
             self.basket_previous_distance = parking['distance']
             if self.object_throw:
@@ -2314,6 +2328,14 @@ class DcmmVecEnv(gym.Env):
         """
         ## 设置底盘目标速度
         # roll/throw_basket/throw_force 模式可选固定底座
+        if self.object_motion == 'throw_basket' and self.basket_control_probe != 'off':
+            # Diagnostic only: zero increments retain the physical joint targets.
+            action_dict = {k: np.array(v, copy=True) for k, v in action_dict.items()}
+            action_dict['base'][:] = 0.
+            if self.basket_control_probe in ('hold', 'hand'):
+                action_dict['arm'][:] = 0.
+            if self.basket_control_probe in ('hold', 'arm'):
+                action_dict['hand'][:] = 0.
         if (self.object_motion == "roll" and getattr(DcmmCfg, 'roll_fix_base', False)) or \
            (self.object_motion == "throw_basket" and (getattr(DcmmCfg, 'basket_fix_base', False) or self.basket_fixed_base_training)) or \
            (self.object_motion == "throw_force" and getattr(DcmmCfg, 'throw_force_fix_base', True)):

@@ -51,24 +51,32 @@ class MJ_DCMM(object):
     - open_viewer: whether to open the viewer initially
 
     """
-    def __init__(self, 
-                 model=None, 
-                 model_arm=None, 
-                 viewer=True, 
+    def __init__(self,
+                 model=None,
+                 model_arm=None,
+                 viewer=True,
                  object_name='object',
-                 object_eval=False, 
-                 timestep=0.002):
+                 object_eval=False,
+                 timestep=0.002,
+                 xml_object_path=None,
+                 xml_unseen_object_path=None,
+                 xml_arm_path=None):
         self.viewer = None
         self.open_viewer = viewer
         # Load the MuJoCo model
         if model is None:
-            if not object_eval: model_path = os.path.join(DcmmCfg.ASSET_PATH, DcmmCfg.XML_DCMM_LEAP_OBJECT_PATH)
-            else: model_path = os.path.join(DcmmCfg.ASSET_PATH, DcmmCfg.XML_DCMM_LEAP_UNSEEN_OBJECT_PATH)
+            if not object_eval:
+                _obj_path = xml_object_path if xml_object_path is not None else DcmmCfg.XML_DCMM_LEAP_OBJECT_PATH
+                model_path = os.path.join(DcmmCfg.ASSET_PATH, _obj_path)
+            else:
+                _obj_path = xml_unseen_object_path if xml_unseen_object_path is not None else DcmmCfg.XML_DCMM_LEAP_UNSEEN_OBJECT_PATH
+                model_path = os.path.join(DcmmCfg.ASSET_PATH, _obj_path)
             self.model_xml_string = xml_to_string(model_path)
         else:
             self.model = model
         if model_arm is None:
-            model_arm_path = os.path.join(DcmmCfg.ASSET_PATH, DcmmCfg.XML_ARM_PATH)
+            _arm_path = xml_arm_path if xml_arm_path is not None else DcmmCfg.XML_ARM_PATH
+            model_arm_path = os.path.join(DcmmCfg.ASSET_PATH, _arm_path)
             self.model_arm = mujoco.MjModel.from_xml_path(model_arm_path)
         else:
             self.model_arm = model_arm

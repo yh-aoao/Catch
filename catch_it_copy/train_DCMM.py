@@ -26,11 +26,17 @@ def main(config: DictConfig):
             raise ValueError('Fixed Basket baseline requires Catching_OneStage and no checkpoint_tracking')
         print('[basket-baseline] fixed base command, fixed target, policy=arm6+hand12; reward=joint_throw', flush=True)
     if config.object_motion in ('bounce', 'tan', '\u5f39'):
-        from gym_dcmm.algs.ppo_dcmm_5fe75d5f.ppo_dcmm_track import PPO_Track as TrackingAgent
+        # Catching \u7528 GitHub 5fe75d5f\uff1bTracking \u7528\u672c\u5730 2026-07-22 (58.18)
         from gym_dcmm.algs.ppo_dcmm_5fe75d5f.ppo_dcmm_catch_two_stage import PPO_Catch_TwoStage as TwoStageAgent
         from gym_dcmm.algs.ppo_dcmm_5fe75d5f.ppo_dcmm_catch_one_stage import PPO_Catch_OneStage as OneStageAgent
-        print('[bounce-baseline] commit=5fe75d5f1e151c1fdc686fbf8f104db3870b2844 '
-              'environment=DcmmVecEnv.py::BounceEnv config/PPO=original', flush=True)
+        if config.task == 'Tracking':
+            from gym_dcmm.algs.ppo_dcmm_july22.ppo_dcmm_track import PPO_Track as TrackingAgent
+            print('[bounce-track-baseline] snapshot=2026-07-22 (58.18) '
+                  'environment=DcmmVecEnv_bounce_july22.py PPO=ppo_dcmm_july22.track; catch=5fe75d5f', flush=True)
+        else:
+            from gym_dcmm.algs.ppo_dcmm_5fe75d5f.ppo_dcmm_track import PPO_Track as TrackingAgent
+            print('[bounce-catch-baseline] commit=5fe75d5f1e151c1fdc686fbf8f104db3870b2844 '
+                  'environment=DcmmVecEnv.py::BounceEnv config/PPO=original', flush=True)
     elif config.object_motion == 'roll':
         from gym_dcmm.algs.ppo_dcmm_645edc4.ppo_dcmm_track import PPO_Track as TrackingAgent
         from gym_dcmm.algs.ppo_dcmm_645edc4.ppo_dcmm_catch_two_stage import PPO_Catch_TwoStage as TwoStageAgent

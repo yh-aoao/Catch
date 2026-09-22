@@ -123,6 +123,10 @@ class DcmmVecEnv(gym.Env):
             if bound.arguments.get('object_motion', 'throw') in ('bounce', 'tan', '\u5f39'):
                 parameters = dict(bound.arguments)
                 parameters.pop('self')
+                # Tracking \u2192 \u672c\u5730 2026-07-22 (58.18) \u51bb\u7ed3\u7248\uff1bCatching \u2192 GitHub 5fe75d5f (BounceEnv)
+                if parameters.get('task') == 'Tracking':
+                    from gym_dcmm.envs.bounce_compat import make_bounce_july22
+                    return make_bounce_july22(parameters)
                 return _make_main_bounce(parameters)
             if bound.arguments.get('object_motion', 'throw') == 'roll':
                 from gym_dcmm.envs.roll_compat import make_roll_645edc4

@@ -8,6 +8,7 @@ import torch.distributed as dist
 import wandb
 
 import numpy as np
+from gym_dcmm.utils.roll_evaluation import report as report_roll_evaluation
 
 from .experience import ExperienceBuffer
 from .models_track import ActorCritic
@@ -24,10 +25,13 @@ def terminal_metrics(infos, dones, truncates):
         final = infos.get('final_info')
         mask = infos.get('_final_info')
         if final is not None and (mask is None or mask[i]) and isinstance(final[i], dict):
-            successes[i] = bool(final[i].get('success', successes[i]))
+            successes[i] = bool(final[i].get('roll_eval_success', final[i].get('success', successes[i])))
             reasons[i] = final[i].get('terminated_reason', 'unspecified')
-        elif 'terminated_reason' in infos:
-            reasons[i] = infos['terminated_reason'][i]
+        else:
+            if 'roll_eval_success' in infos:
+                successes[i] = bool(infos['roll_eval_success'][i])
+            if 'terminated_reason' in infos:
+                reasons[i] = infos['terminated_reason'][i]
     return successes, reasons
 
 class PPO_Track(object):
@@ -493,6 +497,7 @@ class PPO_Track(object):
             self.current_lengths += 1
             # print("self.dones: ", self.dones)
             done_indices = self.dones.nonzero(as_tuple=False)
+            report_roll_evaluation(self, infos, dones, testing=False)
             # print("done_indices: ", done_indices)
             self.episode_rewards.update(self.current_rewards[done_indices])
             self.episode_lengths.update(self.current_lengths[done_indices])
@@ -551,6 +556,7 @@ class PPO_Track(object):
             self.current_rewards += rewards
             self.current_lengths += 1
             done_indices = self.dones.nonzero(as_tuple=False)
+            report_roll_evaluation(self, infos, dones, testing=True)
             self.episode_test_rewards.update(self.current_rewards[done_indices])
             self.episode_test_lengths.update(self.current_lengths[done_indices])
             successes, reasons = terminal_metrics(infos, dones, truncates)

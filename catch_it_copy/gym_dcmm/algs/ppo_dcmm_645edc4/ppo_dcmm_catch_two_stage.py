@@ -8,6 +8,7 @@ import torch.distributed as dist
 import wandb
 
 import numpy as np
+from gym_dcmm.utils.roll_evaluation import report as report_roll_evaluation
 
 from .experience import ExperienceBuffer
 from .models_catch import ActorCritic
@@ -540,6 +541,7 @@ class PPO_Catch_TwoStage(object):
             self.current_rewards += rewards
             self.current_lengths += 1
             done_indices = self.dones.nonzero(as_tuple=False)
+            report_roll_evaluation(self, infos, dones, testing=False)
             # print("done_indices: ", done_indices)
             self.episode_rewards.update(self.current_rewards[done_indices])
             self.episode_lengths.update(self.current_lengths[done_indices])
@@ -597,6 +599,7 @@ class PPO_Catch_TwoStage(object):
             self.current_rewards += rewards
             self.current_lengths += 1
             done_indices = self.dones.nonzero(as_tuple=False)
+            report_roll_evaluation(self, infos, dones, testing=True)
             self.episode_test_rewards.update(self.current_rewards[done_indices])
             self.episode_test_lengths.update(self.current_lengths[done_indices])
             successes, _ = terminal_metrics(infos, dones, truncates)

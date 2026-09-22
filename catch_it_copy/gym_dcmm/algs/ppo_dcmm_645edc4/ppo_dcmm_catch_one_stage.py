@@ -8,10 +8,12 @@ import torch.distributed as dist
 import wandb
 
 import numpy as np
+from gym_dcmm.utils.roll_evaluation import report as report_roll_evaluation
 
 from .experience import ExperienceBuffer
 from .models_track import ActorCritic
 from .utils import AverageScalarMeter, RunningMeanStd
+from .ppo_dcmm_track import terminal_metrics
 
 from tensorboardX import SummaryWriter
 
@@ -464,10 +466,12 @@ class PPO_Catch_OneStage(object):
             self.current_lengths += 1
             # print("self.dones: ", self.dones)
             done_indices = self.dones.nonzero(as_tuple=False)
+            report_roll_evaluation(self, infos, dones, testing=False)
             # print("done_indices: ", done_indices)
             self.episode_rewards.update(self.current_rewards[done_indices])
             self.episode_lengths.update(self.current_lengths[done_indices])
-            self.episode_success.update(torch.tensor(infos.get('success', truncates), dtype=torch.float32, device=self.device)[done_indices])
+            successes, _ = terminal_metrics(infos, dones, truncates)
+            self.episode_success.update(torch.tensor(successes, dtype=torch.float32, device=self.device)[done_indices])
             assert isinstance(infos, dict), 'Info Should be a Dict'
             # print("infos: ", infos)
             for k, v in infos.items():
@@ -519,9 +523,11 @@ class PPO_Catch_OneStage(object):
             self.current_rewards += rewards
             self.current_lengths += 1
             done_indices = self.dones.nonzero(as_tuple=False)
+            report_roll_evaluation(self, infos, dones, testing=True)
             self.episode_test_rewards.update(self.current_rewards[done_indices])
             self.episode_test_lengths.update(self.current_lengths[done_indices])
-            self.episode_test_success.update(torch.tensor(infos.get('success', truncates), dtype=torch.float32, device=self.device)[done_indices])
+            successes, _ = terminal_metrics(infos, dones, truncates)
+            self.episode_test_success.update(torch.tensor(successes, dtype=torch.float32, device=self.device)[done_indices])
             assert isinstance(infos, dict), 'Info Should be a Dict'
             for k, v in infos.items():
                 # only log scalars

@@ -18,6 +18,7 @@ import os, sys
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))  # 添加到项目根目录
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))  # 添加到 gym_dcmm 目录
 import argparse
+from gym_dcmm.utils import roll_evaluation
 import math
 print(os.getcwd())  # 打印当前工作目录（调试用）
 print("sys.path:", sys.path[:5])  # 打印前 5 个路径
@@ -1528,6 +1529,7 @@ class DcmmVecEnv(gym.Env):
         Returns:
             tuple: (observation, info) 初始观测和信息
         """
+        self._roll_eval = {}
         if self.print_info:
             print("\n" + "="*80)
             print("[DEBUG] RESET called!")
@@ -2561,6 +2563,7 @@ class DcmmVecEnv(gym.Env):
 
             ## 更新接触信息
             self.contacts = self._get_contacts()
+            roll_evaluation.observe(self, DcmmCfg)
             
             ## 碰撞检测（底盘碰撞则终止）
             if self.contacts['base_contacts'].size != 0:
@@ -2976,6 +2979,7 @@ class DcmmVecEnv(gym.Env):
             # self.reset()
             pass
         
+        roll_evaluation.publish(self, info, terminated, truncated)
         return obs, reward, terminated, truncated, info
 
     def preprocess_depth_with_mask(self, rgb_img, depth_img, 

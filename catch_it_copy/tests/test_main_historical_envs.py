@@ -20,7 +20,19 @@ class Rename(ast.NodeTransformer):
         return self.generic_visit(node)
 
 
+class RemoveEvaluationHooks(ast.NodeTransformer):
+    def visit_Expr(self, node):
+        if isinstance(node.value, ast.Call) and isinstance(node.value.func, ast.Attribute) and isinstance(node.value.func.value, ast.Name) and node.value.func.value.id == 'roll_evaluation':
+            return None
+        return self.generic_visit(node)
+    def visit_Assign(self, node):
+        if any(isinstance(t, ast.Attribute) and t.attr == '_roll_eval' for t in node.targets):
+            return None
+        return self.generic_visit(node)
+
+
 def normalize_docstrings(node):
+    node = RemoveEvaluationHooks().visit(node)
     # Migration removes trailing whitespace, including explanatory docstrings.
     # Do not normalize executable string literals.
     for item in ast.walk(node):

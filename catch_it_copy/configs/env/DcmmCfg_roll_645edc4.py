@@ -474,3 +474,13 @@ roll_target_motion_weight = 0.03
 roll_target_change_weight = 0.15
 
 roll_hold_hysteresis_seconds = 0.12
+
+# Catch-only waiting/capture/retention shaping (2026-09-23).
+roll_capture_distance = 0.22
+roll_target_wait_rate = 0.6
+roll_target_wait_alpha = 0.3
+roll_policy_reversal_weight = 0.3
+roll_retention_horizon = 0.6
+roll_retention_progress_weight = 8.0
+roll_hold_tracking_scale = 0.2
+roll_hold_arm_motion_weight = 0.2

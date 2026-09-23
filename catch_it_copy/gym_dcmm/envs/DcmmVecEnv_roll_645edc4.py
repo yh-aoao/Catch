@@ -40,8 +40,8 @@ from gym_dcmm.utils.util import *  # 工具函数（如坐标转换/四元数处
 import xml.etree.ElementTree as ET  # XML解析（修改Mujoco模型）
 from scipy.spatial.transform import Rotation as R  # 旋转变换
 from collections import deque
-from gym_dcmm.utils.roll_waiting import target as roll_wait_target, shaping as roll_wait_shaping
-from gym_dcmm.utils.roll_grasp import grasp_terms, hand_stability_terms, smooth_target_delta
+from gym_dcmm.utils.roll_waiting_07c176f import target as roll_wait_target, shaping as roll_wait_shaping
+from gym_dcmm.utils.roll_grasp import grasp_terms, hand_stability_terms, smooth_target_delta, catch_phase, retention_terms
 from gym_dcmm.utils.roll_rewards import hand_collision_ids  # 双端队列（存储历史数据）
 from gym_dcmm.utils.basket_tracking import parking_state, parking_reward, limit_speed
 
@@ -1585,6 +1585,7 @@ class DcmmVecEnv(gym.Env):
         self._prev_palm_up = None  # 重置上一步掌心朝上分量（舀水姿态增量奖励用）
         self.prev_finger_dot = -1.0  # 重置上一步手指方向
         self.roll_hold_until = -1.
+        self.roll_retention_state = {}
         self.roll_previous_target_delta = None
         self.roll_target_terms = {}
         self.roll_previous_hand_speed = None
@@ -1684,7 +1685,7 @@ class DcmmVecEnv(gym.Env):
         reward_vel_match = 0.0
         if self.object_motion == "roll":
             # 方案B'：球在桌面上时追"预测落点"（滚近桌边后锁定），球掉下来后追球本身
-            ee_world = self._roll_capture_point()
+            ee_world = self.Dcmm.data.body("link6").xpos.copy()
             goal, waiting = roll_wait_target(self.Dcmm.data.qpos[37:40], self.Dcmm.data.qvel[36:39],
                 float(self.Dcmm.model.geom_size[self.object_id][0]), DcmmCfg,
                 abs(float(self.Dcmm.model.opt.gravity[2])))
@@ -2122,14 +2123,25 @@ class DcmmVecEnv(gym.Env):
                 getattr(self, 'roll_previous_hand_speed', None),
                 self.steps_per_policy * self.Dcmm.model.opt.timestep,
                 self._roll_settled_mode(hand, clear, relative_speed), DcmmCfg))
-            if self._roll_settled_mode(hand, clear, relative_speed):
+            phase = catch_phase(distance, hand, clear, self._roll_settled_mode(hand, clear, relative_speed), DcmmCfg)
+            if phase == 'holding':
                 # A held ball should not be squeezed toward an arbitrary angle.
                 finger_terms['posture'] *= .2
-                finger_terms['enclosure'] = 1.
+                finger_terms['enclosure'] = float(hand and clear) * np.exp(-(relative_speed / .15)**2)
+                reward_pos_component *= DcmmCfg.roll_hold_tracking_scale
+                finger_terms['arm_hold_motion'] = -DcmmCfg.roll_hold_arm_motion_weight * float(
+                    np.mean(np.minimum((self.Dcmm.data.qvel[14:20] / 2.)**2, 4.)))
+            if phase == 'waiting':
+                # Full velocity penalty while waiting; capturing retains fast closure.
+                extra = hand_stability_terms(joint_speed, None,
+                    self.steps_per_policy * self.Dcmm.model.opt.timestep, True, DcmmCfg)
+                finger_terms['hand_speed'] = extra['hand_speed']
+            finger_terms.update(retention_terms(self.roll_retention_state, hand, clear, relative_speed,
+                self.steps_per_policy * self.Dcmm.model.opt.timestep, DcmmCfg))
             finger_terms.update(getattr(self, 'roll_target_terms', {}))
             self.roll_previous_hand_speed = joint_speed
             reward_roll_scoop += sum(finger_terms.values())
-            info['roll_grasp'] = dict(ready=ready, contact=touching,
+            info['roll_grasp'] = dict(phase=phase, hold_duration=self.roll_retention_state['duration'], ready=ready, contact=touching,
                                      local_ball=local_ball.tolist(), terms=finger_terms)
 
         ## 5. 分任务/分阶段计算总奖励
@@ -2418,10 +2430,12 @@ class DcmmVecEnv(gym.Env):
 
         elif self.object_motion == 'roll' and self.task == 'Catching':
             hand, clear, speed, distance = self._roll_hold_state()
+            settled = self._roll_settled_mode(hand, clear, speed)
+            phase = catch_phase(distance, hand, clear, settled, DcmmCfg)
             applied, self.roll_target_terms = smooth_target_delta(
                 action_dict['hand'], getattr(self, 'roll_previous_target_delta', None),
                 self.steps_per_policy * self.Dcmm.model.opt.timestep,
-                self._roll_settled_mode(hand, clear, speed), DcmmCfg)
+                settled, DcmmCfg, phase=phase)
             self.roll_previous_target_delta = applied.copy()
             roll_evaluation.record_action(self, action_dict['hand'], applied)
             self.Dcmm.action_hand2qpos(applied)

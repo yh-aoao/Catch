@@ -36,16 +36,43 @@ def hand_stability_terms(velocity, previous_velocity, dt, settled, cfg):
     return dict(hand_speed=speed, hand_acceleration=acceleration)
 
 
-def smooth_target_delta(delta, previous, dt, settled, cfg):
+def smooth_target_delta(delta, previous, dt, settled, cfg, phase=None):
     """Filter policy joint-target increments, preserving faster capture motion."""
     delta = np.asarray(delta, dtype=float)
     previous = np.zeros_like(delta) if previous is None else np.asarray(previous)
     rate = cfg.roll_target_hold_rate if settled else cfg.roll_target_capture_rate
+    if phase == 'waiting':
+        rate = cfg.roll_target_wait_rate
     limit = rate * dt
     desired = np.clip(delta, -limit, limit)
     alpha = cfg.roll_target_hold_alpha if settled else cfg.roll_target_capture_alpha
+    if phase == 'waiting':
+        alpha = cfg.roll_target_wait_alpha
     applied = np.clip(alpha*desired + (1-alpha)*previous, -limit, limit)
     scale = max(limit, 1e-6)
     terms = dict(target_motion=-cfg.roll_target_motion_weight * float(np.mean((applied/scale)**2)),
                  target_change=-cfg.roll_target_change_weight * float(np.mean(np.minimum(((desired-previous)/scale)**2, 4.))))
+    if phase in ('waiting', 'holding'):
+        # Penalize the requested reversal even if the rate limiter hides it.
+        raw_scale = max(cfg.roll_target_capture_rate * dt, 1e-6)
+        terms['policy_reversal'] = -cfg.roll_policy_reversal_weight * float(
+            np.mean(np.minimum(((delta-previous)/raw_scale)**2, 4.)))
     return applied, terms
+
+
+def catch_phase(distance, contact, clear, settled, cfg):
+    if settled and clear:
+        return 'holding'
+    if (contact and clear) or distance <= cfg.roll_capture_distance:
+        return 'capturing'
+    return 'waiting'
+
+
+def retention_terms(state, contact, clear, speed, dt, cfg):
+    stable = contact and clear and speed <= .15
+    state['duration'] = state.get('duration', 0.) + dt if stable else 0.
+    credit = min(state['duration'], cfg.roll_retention_horizon)
+    best = state.get('best', 0.)
+    progress = cfg.roll_retention_progress_weight * max(0., credit-best)
+    state['best'] = max(best, credit)
+    return dict(retention_progress=progress)

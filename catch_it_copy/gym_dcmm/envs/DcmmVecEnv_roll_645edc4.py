@@ -2423,6 +2423,7 @@ class DcmmVecEnv(gym.Env):
                 self.steps_per_policy * self.Dcmm.model.opt.timestep,
                 self._roll_settled_mode(hand, clear, speed), DcmmCfg)
             self.roll_previous_target_delta = applied.copy()
+            roll_evaluation.record_action(self, action_dict['hand'], applied)
             self.Dcmm.action_hand2qpos(applied)
         elif self.task == "Catching" and self.stage == "tracking":
             # 所有模式统一：不重置 target，让模型自由控制手指

@@ -1,5 +1,15 @@
 # Roll 评估与训练解耦
 
+## 2026-09-23 修正
+
+Catch 首次完全越过桌沿且无桌地接触后，记录 departed=True。此后回到桌沿下方不再仅因位置清零；真实桌地接触、速度超限、离手区域和过长接触间隙仍会打断保持。Track 的桌沿外拦截口径不变。
+
+终局 checks 新增 max_duration（本回合最长有效保持秒数）、first_contact_time（首次手部接触的累计物理时间）、reset_counts / last_reset_reason。计数仅记录有保持进度被清零的事件。outside_edge、departed、table_contact、floor_contact 分别显示位置与真实接触，避免混淆。
+
+Catch 记录滤波前手指动作的 raw_delta_rms_max、raw_sign_flips（幅值超过 0.001 rad 的反向分量次数）、action_samples，以及滤波后 applied_rms_max。这些是物理缩放后的目标增量统计，并非网络输出或实际关节振动的直接测量；只能为策略抖动提供线索，不能单凭它们排除控制器问题。
+
+本次不修改奖励、控制器、动作滤波、时限和终止条件。用户认为抖动来自策略，后续优先依据诊断检查策略接触后反复开合的问题。
+
 ## 评估口径
 
 `mean_success` 现在优先统计 `roll_eval_success`：

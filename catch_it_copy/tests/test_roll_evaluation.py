@@ -12,6 +12,37 @@ spec.loader.exec_module(E)
 
 
 class RollEvaluationTests(unittest.TestCase):
+    def test_departure_stays_latched_but_real_contacts_block_holding(self):
+        state = {}
+        self.assertFalse(E.departure(state, False, False, False))
+        self.assertTrue(E.departure(state, True, False, False))
+        self.assertTrue(E.departure(state, False, False, False))
+        self.assertFalse(E.departure(state, False, True, False))
+        self.assertFalse(E.departure(state, True, False, True))
+        self.assertTrue(E.departure(state, False, False, False))
+        self.assertFalse(E.departure({}, False, False, False))
+
+    def test_peak_duration_and_reset_reason_are_retained(self):
+        state = {}
+        E.advance(state, True, True, True, .1, .2)
+        E.advance(state, True, True, True, .4, .002)
+        self.assertEqual(state['max_duration'], .2)
+        self.assertEqual(state['reset_counts'], {'relative_speed': 1})
+        self.assertEqual(state['first_contact_time'], .2)
+        E.advance(state, True, True, True, .4, .002)
+        self.assertEqual(state['reset_counts']['relative_speed'], 1)
+
+    def test_policy_reversals_are_logged_without_modifying_actions(self):
+        env = SimpleNamespace(_roll_eval={})
+        raw = np.full(12, .1)
+        applied = np.full(12, .02)
+        E.record_action(env, raw, applied)
+        E.record_action(env, -raw, applied)
+        np.testing.assert_allclose(raw, .1)
+        np.testing.assert_allclose(applied, .02)
+        self.assertEqual(env._roll_eval['raw_sign_flips'], 12)
+        self.assertAlmostEqual(env._roll_eval['raw_delta_rms_max'], .2)
+
     def test_hold_requires_duration_and_tracks_later_drop(self):
         state = {}
         for _ in range(149): E.advance(state, True, True, True, .1, .002)

@@ -41,7 +41,7 @@ import xml.etree.ElementTree as ET  # XML解析（修改Mujoco模型）
 from scipy.spatial.transform import Rotation as R  # 旋转变换
 from collections import deque  # 双端队列（存储历史数据）
 from gym_dcmm.utils.basket_tracking import parking_state, parking_reward, limit_speed
-from gym_dcmm.utils.basket_catching import joint_throw_reward, underhand_geometry
+from gym_dcmm.utils.basket_catching import joint_throw_reward, underhand_geometry, release_phase, ballistic_quality
 from gym_dcmm.utils.basket_catching import hoop_crossing, flight_failure, predicted_miss, catching_reward, throw_quality
 from gym_dcmm.utils.roll_rewards import (interception_target, position_terms, hand_terms,
                                         hand_workspace, capture_ready, wait_target, hand_collision_ids, reach_terms)
@@ -756,40 +756,51 @@ class DcmmVecEnv(gym.Env):
             self.basket_no_contact_seconds = getattr(self, 'basket_no_contact_seconds', 0.) + dt
             self.basket_contact_run = 0.
         self.basket_had_hand_contact = self.basket_had_hand_contact or touching
-        if (self.basket_phase == 'preparing' and self.basket_had_hand_contact and not touching
-                and self.basket_no_contact_seconds >= DcmmCfg.basket_release_debounce_seconds):
-            if np.linalg.norm(position - self.Dcmm.data.body('link6').xpos) > 2 * DcmmCfg.basket_ball_radius:
-                # Evaluate release at last contact, not after debounce gravity loss.
-                last = self.basket_last_contact
-                release_position = np.asarray(last['position'])
-                release_velocity = np.asarray(last['velocity'])
-                quality, reference = throw_quality(release_position, release_velocity,
-                                                    self.basket_center, self.Dcmm.model.opt.gravity, DcmmCfg)
-                self.basket_release_position = release_position.copy()
-                self.basket_release_time = float(last['time'])
-                self.basket_throw_valid = bool(np.linalg.norm(release_position[:2] - self.basket_center[:2]) >= DcmmCfg.basket_min_release_distance)
-                underhand, _, _, _, _ = underhand_geometry(
-                    self.Dcmm.data.body('link6').xpos, self.Dcmm.data.body('arm_base').xpos,
-                    release_position, self.basket_center, release_velocity, DcmmCfg)
-                self.basket_throw_valid = self.basket_throw_valid and underhand
-                quality = quality if self.basket_throw_valid else 0.
-                self.basket_release_quality = quality
-                self.basket_release_pending = quality if quality >= DcmmCfg.basket_release_quality_min else 0.
-                self.object_throw = True
-                self.basket_phase = 'flight'
-                self.basket_previous_flight_distance = float(np.linalg.norm(position - self.basket_center))
-                self.basket_release_snapshot = dict(
-                    detection_time=float(self.Dcmm.data.time), position=position.tolist(),
-                    velocity=self.Dcmm.data.qvel[36:39].tolist(), reference_velocity=reference.tolist(),
-                    horizontal_distance=float(np.linalg.norm(position[:2]-self.basket_center[:2])),
-                    contact_total_seconds=getattr(self, 'basket_contact_total', 0.),
-                    last_contact=getattr(self, 'basket_last_contact', None),
-                    quality=float(quality), throw_valid=bool(self.basket_throw_valid))
-                if getattr(self, 'basket_log', False):
-                    print(f"[basket-release] {self.basket_release_snapshot}", flush=True)
-
-        if self.basket_phase == 'flight' and touching:
+        old_phase = self.basket_phase
+        # Exact collision-geometry surface distance, not distance to the wrist/link6.
+        clearance = 0. if touching else (1.0 if old_phase == 'flight' else min((mujoco.mj_geomDistance(
+            self.Dcmm.model, self.Dcmm.data, int(self.object_id), int(gid),
+            1.0, None) for gid in hand_ids), default=1.0))
+        self.basket_hand_clearance = float(clearance)
+        self.basket_phase = release_phase(old_phase, touching,
+            self.basket_had_hand_contact, self.basket_no_contact_seconds,
+            self.basket_contact_run, clearance, DcmmCfg)
+        if touching and old_phase != 'preparing':
             self.basket_throw_valid = False
+            self.object_throw = False
+            self.basket_release_pending = 0.
+            self.basket_previous_flight_distance = None
+        if self.basket_phase == 'preparing' and old_phase != 'preparing':
+            self.basket_regrasp_count += 1
+            if self.basket_log:
+                print(f"[basket-regrasp] time={self.Dcmm.data.time:.3f} count={self.basket_regrasp_count}", flush=True)
+        if self.basket_phase == 'flight' and old_phase != 'flight':
+            last = self.basket_last_contact
+            release_position = np.asarray(last['position'])
+            release_velocity = np.asarray(last['velocity'])
+            quality, error, predicted_crossing = ballistic_quality(
+                release_position, release_velocity, self.basket_center,
+                self.Dcmm.model.opt.gravity, DcmmCfg)
+            self.basket_release_position = release_position.copy()
+            self.basket_release_time = float(last['time'])
+            # Validity concerns free flight, not a prescribed throwing style/speed.
+            self.basket_throw_valid = bool(np.linalg.norm(
+                release_position[:2]-self.basket_center[:2]) >= DcmmCfg.basket_min_release_distance)
+            self.basket_release_quality = quality
+            self.basket_release_pending = max(self.basket_release_pending,
+                quality if self.basket_throw_valid else 0.)
+            self.object_throw = True
+            self.basket_release_count += 1
+            self.basket_release_snapshot = dict(
+                detection_time=float(self.Dcmm.data.time), last_contact=last.copy(),
+                contact_total_seconds=self.basket_contact_total,
+                position=position.tolist(), velocity=self.Dcmm.data.qvel[36:39].tolist(),
+                clearance=float(clearance), quality=quality, predicted_error=error,
+                predicted_crossing=predicted_crossing, throw_valid=self.basket_throw_valid,
+                release_count=self.basket_release_count)
+            if self.basket_log:
+                print(f"[basket-release] {self.basket_release_snapshot}", flush=True)
+
         floor_contact = self.floor_id in self.contacts['object_contacts']
         failure = flight_failure(position, self.basket_center, DcmmCfg.basket_ball_radius,
                                  floor_contact, DcmmCfg)
@@ -1791,6 +1802,9 @@ class DcmmVecEnv(gym.Env):
             self.basket_contact_run = 0.
             self.basket_last_contact = None
             self.basket_release_snapshot = None
+            self.basket_release_count = 0
+            self.basket_regrasp_count = 0
+            self.basket_hand_clearance = 0.
             self.basket_release_quality = 0.
             self.basket_throw_valid = False
             self.basket_release_position = self.Dcmm.data.qpos[37:40].copy()
@@ -1864,6 +1878,8 @@ class DcmmVecEnv(gym.Env):
             velocity = self.Dcmm.data.qvel[36:39].copy()
             quality, reference = throw_quality(position, velocity, self.basket_center,
                                                self.Dcmm.model.opt.gravity, DcmmCfg)
+            quality, ballistic_error, predicted_crossing = ballistic_quality(
+                position, velocity, self.basket_center, self.Dcmm.model.opt.gravity, DcmmCfg)
             touching = bool(np.any(np.isin(self.contacts['object_contacts'],
                 hand_collision_ids(self.Dcmm.model, self.hand_start_id))))
             if not hasattr(self, 'basket_reward_state'):
@@ -1880,7 +1896,7 @@ class DcmmVecEnv(gym.Env):
                 self.basket_previous_flight_distance, ctrl, bool(info['success']),
                 self.terminated or timed_out,
                 self.steps_per_policy * self.Dcmm.model.opt.timestep,
-                self.basket_reward_state, DcmmCfg)
+                self.basket_reward_state, DcmmCfg, launch_quality=quality)
             terms['arm_overreach'] = reach_cost
             terms['base_too_close'] = -DcmmCfg.basket_base_near_cost * max(0., 1. - base_distance / DcmmCfg.basket_base_min_distance)
             horizontal_distance = float(np.linalg.norm(position[:2] - self.basket_center[:2]))
@@ -1891,6 +1907,11 @@ class DcmmVecEnv(gym.Env):
             attempts = getattr(self, 'basket_arm_attempts', 0)
             info['basket_release'] = getattr(self, 'basket_release_snapshot', None)
             info['basket_control'] = dict(hand_contact=touching, quality=quality,
+                reward_version='ballistic_v2', predicted_error=ballistic_error,
+                predicted_crossing=predicted_crossing,
+                release_count=getattr(self, 'basket_release_count', 0),
+                regrasp_count=getattr(self, 'basket_regrasp_count', 0),
+                hand_clearance=getattr(self, 'basket_hand_clearance', 0.),
                 reference_velocity=reference.tolist(), ball_velocity=velocity.tolist(),
                 arm_joint_speed=float(np.linalg.norm(self.Dcmm.data.qvel[14:20])),
                 arm_action_norm=getattr(self, 'basket_arm_action_norm', 0.),

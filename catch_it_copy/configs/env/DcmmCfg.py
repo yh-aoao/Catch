@@ -510,3 +510,10 @@ basket_min_upward_release_speed = 0.5
 basket_min_forward_release_speed = 0.5
 
 basket_release_debounce_seconds = 0.03  # reject momentary contact loss
+
+# Basket physical release / ballistic quality (2026-09-24).
+basket_release_clearance = 0.025  # ball-to-hand surface gap, metres
+basket_regrasp_seconds = 0.02    # stable contact before preparation resumes
+basket_prediction_horizon = 2.0
+basket_quality_sigma = 0.6       # broad initial near-miss feedback, metres
+basket_near_miss_cap = 0.5

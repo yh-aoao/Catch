@@ -23,8 +23,8 @@ R = load('roll_geometry_test', 'gym_dcmm/utils/roll_rewards.py')
 P = load('basket_parking_test', 'gym_dcmm/utils/basket_tracking.py')
 M = load('basket_model_test', 'gym_dcmm/algs/ppo_dcmm/models_catch.py')
 tree = ast.parse((ROOT / 'gym_dcmm/envs/DcmmVecEnv.py').read_text(encoding='utf-8'))
-scope = dict(np=np, DcmmCfg=C, limit_speed=P.limit_speed, hand_collision_ids=R.hand_collision_ids,
-             **{n: getattr(B, n) for n in ('hoop_crossing', 'flight_failure', 'predicted_miss', 'catching_reward', 'throw_quality', 'joint_throw_reward', 'underhand_geometry')})
+scope = dict(mujoco=SimpleNamespace(mj_geomDistance=lambda *args: .05), np=np, DcmmCfg=C, limit_speed=P.limit_speed, hand_collision_ids=R.hand_collision_ids,
+             **{n: getattr(B, n) for n in ('hoop_crossing', 'flight_failure', 'predicted_miss', 'catching_reward', 'throw_quality', 'joint_throw_reward', 'underhand_geometry', 'release_phase', 'ballistic_quality')})
 for name in ('_basket_hold_and_release', '_basket_check_flight', 'compute_reward'):
     method = next(n for n in ast.walk(tree) if isinstance(n, ast.FunctionDef) and n.name == name)
     exec(compile(ast.Module(body=[method], type_ignores=[]), '<actual-basket>', 'exec'), scope)
@@ -42,7 +42,7 @@ def fixture():
     env = SimpleNamespace(task='Catching', object_motion='throw_basket', object_name='object',
         Dcmm=SimpleNamespace(data=data, model=SimpleNamespace(geom_bodyid=np.array([0, 1]), body_parentid=np.array([0, 0]), geom_contype=np.array([1, 1]), geom_conaffinity=np.array([1, 1]), opt=SimpleNamespace(timestep=.01, gravity=np.array([0., 0., -9.81]))),
                              set_throw_pos_vel=lambda **kw: calls.append(kw)),
-        object_throw=False, hand_start_id=1, basket_had_hand_contact=False, basket_phase='parking', basket_settled_time=0., basket_prepare_start=None,
+        object_throw=False, object_id=0, basket_log=False, basket_regrasp_count=0, basket_release_count=0, basket_release_pending=0., hand_start_id=1, basket_had_hand_contact=False, basket_phase='parking', basket_settled_time=0., basket_prepare_start=None,
         basket_hold_previous=None, basket_hold_velocity=np.zeros(3), object_q=np.array([1., 0., 0., 0.]),
         random_mass=.05, steps_per_policy=4, basket_center=np.array([0., 2.2, .9]),
         basket_previous_distance=.2, basket_previous_flight_distance=None,
@@ -58,7 +58,8 @@ class BasketTests(unittest.TestCase):
         def reward(v, task='Tracking', hand=0.):
             return B.joint_throw_reward(task, 'preparing', np.array(v), np.array([0., 2., 3.]),
                 True, 0., 2., None, dict(hand=np.ones(12)*hand), False, False,
-                .04, state, C)[1]
+                .04, state, C, launch_quality=float(np.linalg.norm(v))/4.)[1]
+        reward([0., 0., 0.])
         first = reward([0., 1., 1.5])
         self.assertGreater(first['velocity_progress'], 0.)
         reward([0., 0., 0.])
@@ -69,6 +70,51 @@ class BasketTests(unittest.TestCase):
             last = reward([0., 1., 1.5])
         self.assertEqual(last['support'], 0.)
         self.assertEqual(last['velocity_progress'], 0.)
+
+    def test_regrasp_can_release_again_and_earn_only_quality_improvement(self):
+        env, _, _ = fixture()
+        env.basket_phase = 'preparing'
+        point = env.Dcmm.data.qpos[37:40].copy()
+        for attempt in range(2):
+            env.contacts['object_contacts'] = np.array([1])
+            for _ in range(3):
+                scope['_basket_check_flight'](env, point)
+            self.assertEqual(env.basket_phase, 'preparing')
+            env.contacts['object_contacts'] = np.array([])
+            for _ in range(4):
+                scope['_basket_check_flight'](env, point)
+            self.assertEqual(env.basket_phase, 'flight')
+            self.assertEqual(env.basket_release_count, attempt+1)
+        self.assertEqual(env.basket_regrasp_count, 1)
+        state = {}
+        credit = []
+        for q in [.2, .2, .1, .8, .5, 1.]:
+            _, terms = B.joint_throw_reward('Catching', 'flight', np.zeros(3),
+                np.zeros(3), False, q, 1., 2., {}, False, False, .04, state, C)
+            credit.append(terms['valid_release'])
+            self.assertEqual(terms['flight_progress'], 0.)
+        self.assertAlmostEqual(sum(credit), C.basket_w_valid_release)
+        self.assertEqual(credit[1], 0.)
+
+    def test_ballistic_quality_hit_near_miss_and_unreachable(self):
+        p = np.array([0., .5, .5])
+        center = np.array([0., 2.2, .9])
+        g = np.array([0., 0., -9.81])
+        t = .7
+        velocity = (center-p)/t-.5*g*t
+        hit, error, crossing = B.ballistic_quality(p, velocity, center, g, C)
+        self.assertTrue(crossing)
+        self.assertAlmostEqual(hit, 1.)
+        self.assertLess(error, 1e-8)
+        miss, _, _ = B.ballistic_quality(p, velocity+[2., 0., 0.], center, g, C)
+        idle, _, _ = B.ballistic_quality(p, np.zeros(3), center, g, C)
+        self.assertGreater(hit, miss)
+        self.assertGreater(idle, 0.)
+        # A trajectory crossing the target only after hitting the floor cannot score quality=1.
+        below = center.copy(); below[2] = -1.
+        quality, _, crosses = B.ballistic_quality(p, np.zeros(3), below, g, C)
+        self.assertFalse(crosses)
+        self.assertLessEqual(quality, C.basket_near_miss_cap)
 
     def test_underhand_release_rejects_reaching_and_flat_delivery(self):
         def check(palm, velocity):
@@ -198,6 +244,8 @@ class BasketTests(unittest.TestCase):
         env.contacts['object_contacts'] = np.array([1])
         scope['_basket_check_flight'](env, point)
         self.assertEqual(env.basket_no_contact_seconds, 0.)
+        self.assertEqual(env.basket_phase, 'recovering')
+        scope['_basket_check_flight'](env, point)
         self.assertEqual(env.basket_phase, 'preparing')
 
     def test_no_assistance_in_either_training_stage(self):

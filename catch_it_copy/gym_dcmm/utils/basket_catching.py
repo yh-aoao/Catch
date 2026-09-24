@@ -4,7 +4,7 @@ import numpy as np
 
 def joint_throw_reward(task, phase, velocity, reference, holding, release_quality,
                        distance, previous_distance, controls, success, failed,
-                       dt, state, cfg):
+                       dt, state, cfg, launch_quality=None):
     """Episode-bounded preparation credit; release and score are events.
 
     state belongs to one environment and is cleared on reset. No ball actuation.
@@ -17,18 +17,18 @@ def joint_throw_reward(task, phase, velocity, reference, holding, release_qualit
         duration = min(dt, max(0., cfg.basket_support_budget_seconds - state.get('support', 0.)))
         terms['support'] = cfg.basket_support_reward_rate * duration
         state['support'] = state.get('support', 0.) + duration
-        norm = float(np.linalg.norm(reference))
-        readiness = float(np.clip(1. - np.linalg.norm(velocity-reference) / norm, 0., 1.)) if norm > 1e-6 else 0.
-        # Only a new best earns credit: oscillations/recontacts cannot farm it.
-        best = state.get('best_readiness', 0.)
+        # Credit only new episode-best ballistic quality; recontacts cannot farm it.
+        readiness = float(np.clip(launch_quality or 0., 0., 1.))
+        if 'best_readiness' not in state:
+            state['best_readiness'] = readiness  # no credit for the reset pose
+        best = state['best_readiness']
         terms['velocity_progress'] = cfg.basket_w_velocity_progress * max(0., readiness-best)
         state['best_readiness'] = max(best, readiness)
-    if release_quality > 0. and not state.get('released', False):
-        if not (failed and not success):
-            terms['valid_release'] = cfg.basket_w_valid_release * float(np.clip(release_quality, 0., 1.))
-        state['released'] = True
-    if phase == 'flight' and previous_distance is not None:
-        terms['flight_progress'] = cfg.basket_w_approach * (previous_distance-distance)
+    quality = float(np.clip(release_quality, 0., 1.))
+    best_release = state.get('best_release', 0.)
+    terms['valid_release'] = cfg.basket_w_valid_release * max(0., quality-best_release)
+    state['best_release'] = max(best_release, quality)
+    # No distance-to-basket reward: carrying/recontact must not earn flight credit.
     # Track has no hand action cost or hand-pose credit.
     keys = ('base', 'arm', 'hand') if task == 'Catching' else ('base', 'arm')
     for key in keys:
@@ -135,3 +135,58 @@ def underhand_geometry(palm, base, ball, center, velocity, cfg):
              upward >= cfg.basket_min_upward_release_speed)
     cost = -cfg.basket_arm_reach_cost * min(4., (max(0., reach-cfg.basket_arm_horizontal_reach) / .15)**2)
     return valid, cost, reach, forward, upward
+
+
+def release_phase(phase, touching, had_contact, no_contact_seconds,
+                  contact_seconds, clearance, cfg):
+    """Pure physics-step transition; contact flicker is not a terminal release."""
+    if touching:
+        if phase == 'preparing' or contact_seconds >= cfg.basket_regrasp_seconds:
+            return 'preparing'
+        return 'recovering'
+    if not had_contact:
+        return 'preparing'
+    if phase == 'flight':
+        return 'flight'
+    if (no_contact_seconds >= cfg.basket_release_debounce_seconds
+            and clearance >= cfg.basket_release_clearance):
+        return 'flight'
+    return 'release_pending'
+
+
+def ballistic_quality(position, velocity, center, gravity, cfg):
+    """Correct-direction hoop-plane error; continuous near-miss fallback before floor.
+
+    Exact quadratic plane roots avoid missing the opening between samples.
+    Fallback quality is capped below a true crossing and never defines success.
+    """
+    p, v, c, g = map(lambda x: np.asarray(x, dtype=float),
+                      (position, velocity, center, gravity))
+    horizon = cfg.basket_prediction_horizon
+    ground = cfg.basket_floor_z + cfg.basket_ball_radius
+    def roots(a, b, d):
+        if abs(a) < 1e-10:
+            return [] if abs(b) < 1e-10 else [-d/b]
+        disc = b*b - 4*a*d
+        if disc < 0.:
+            return []
+        return [(-b-np.sqrt(disc))/(2*a), (-b+np.sqrt(disc))/(2*a)]
+    floor_times = [t for t in roots(.5*g[2], v[2], p[2]-ground)
+                   if t > 1e-8 and v[2]+g[2]*t < 0.]
+    if floor_times:
+        horizon = min(horizon, min(floor_times))
+    normal = np.array([0., -np.sin(np.radians(cfg.basket_tilt_deg)),
+                       np.cos(np.radians(cfg.basket_tilt_deg))])
+    times = [t for t in roots(.5*np.dot(g, normal), np.dot(v, normal),
+                              np.dot(p-c, normal))
+             if 1e-8 < t <= horizon and np.dot(v+g*t, normal) < 0.]
+    if times:
+        error = min(float(np.linalg.norm(p+v*t+.5*g*t*t-c)) for t in times)
+        quality = 1. / (1. + (error/cfg.basket_quality_sigma)**2)
+        return float(quality), error, True
+    times = np.linspace(0., max(0., horizon), 96)
+    path = p + times[:, None]*v + .5*times[:, None]**2*g
+    error = float(np.min(np.linalg.norm(path-c, axis=1)))
+    quality = min(cfg.basket_near_miss_cap,
+                  1. / (1. + (error/cfg.basket_quality_sigma)**2))
+    return float(quality), error, False

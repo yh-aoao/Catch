@@ -40,7 +40,7 @@ def fixture():
                    velocity=np.zeros(2), desired_velocity=np.zeros(2))
     calls = []
     env = SimpleNamespace(task='Catching', object_motion='throw_basket', object_name='object',
-        Dcmm=SimpleNamespace(data=data, model=SimpleNamespace(geom_bodyid=np.array([0, 1]), body_parentid=np.array([0, 0]), geom_contype=np.array([1, 1]), geom_conaffinity=np.array([1, 1]), opt=SimpleNamespace(timestep=.01, gravity=np.array([0., 0., -9.81]))),
+        Dcmm=SimpleNamespace(data=data, target_arm_qpos=qpos[15:21].copy(), model=SimpleNamespace(geom_bodyid=np.array([0, 1]), body_parentid=np.array([0, 0]), geom_contype=np.array([1, 1]), geom_conaffinity=np.array([1, 1]), opt=SimpleNamespace(timestep=.01, gravity=np.array([0., 0., -9.81]))),
                              set_throw_pos_vel=lambda **kw: calls.append(kw)),
         object_throw=False, object_id=0, basket_log=False, basket_regrasp_count=0, basket_release_count=0, basket_release_pending=0., hand_start_id=1, basket_had_hand_contact=False, basket_phase='parking', basket_settled_time=0., basket_prepare_start=None,
         basket_hold_previous=None, basket_hold_velocity=np.zeros(3), object_q=np.array([1., 0., 0., 0.]),

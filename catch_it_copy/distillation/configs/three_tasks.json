@@ -1,0 +1,56 @@
+{
+  "seed": 123,
+  "device": "cuda:0",
+  "hidden": [256, 256, 128],
+  "learning_rate": 0.0003,
+  "num_envs_per_task": 2,
+  "iterations": 1000,
+  "rollout_steps": 64,
+  "updates_per_iteration": 32,
+  "batch_per_task": 256,
+  "capacity_per_task": 100000,
+  "calibration_steps": 256,
+  "beta_start": 0.0,
+  "beta_decay_iterations": 100,
+  "eval_every": 25,
+  "eval_episodes": 30,
+  "baseline_episodes": 30,
+  "max_eval_steps": 100000,
+  "tasks": {
+    "throw": {
+      "checkpoint": "best_model/catch_two_stage.pth",
+      "sha256": "81585772adf9b368e299875a3dce29247e23c641d8294295bec07dfb6450aaf6",
+      "family": "ppo_dcmm",
+      "action_indices": null,
+      "action_scales": [1.5, 0.025, 0.15],
+      "success_metric": "success",
+      "interface_note": "BLOCKED: original 18D throw arm semantics/environment must be recovered before joint training. Do not guess the missing axes."
+    },
+    "roll": {
+      "checkpoint": "best_model/roll_catch_best_reward_252.54.pth",
+      "sha256": "40020e1b13a29ad49de9e9b6ad2e6316678f418bdd8712be898b7a257af3d0ba",
+      "family": "ppo_dcmm_645edc4",
+      "action_indices": [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19],
+      "action_scales": [1.5, 0.025, 0.15],
+      "success_metric": "roll_eval_success"
+    },
+    "bounce": {
+      "checkpoint": "best_model/bounce_catch_best_reward_653.87.pth",
+      "sha256": "f3ff1fe5aa34a8d4384dda6915b6749847002447d2816f18e72b661c6254a09c",
+      "family": "ppo_dcmm_5fe75d5f",
+      "action_indices": [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19],
+      "action_scales": [1.5, 0.025, 0.15],
+      "success_metric": "success"
+    }
+  },
+  "env_kwargs": {
+    "camera_name": ["top"], "render_per_step": false,
+    "render_mode": "rgb_array", "object_name": "object",
+    "img_size": [112,112], "imshow_cam": false,
+    "print_obs": false, "print_info": false, "print_reward": false,
+    "print_ctrl": false, "print_contacts": false, "object_eval": false,
+    "env_time": 2.5, "steps_per_policy": 20,
+    "bounce_physics": "legacy", "bounce_launch": "legacy",
+    "bounce_log": false, "basket_log": false, "roll_log": false
+  }
+}

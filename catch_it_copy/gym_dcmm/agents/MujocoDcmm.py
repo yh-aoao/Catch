@@ -252,7 +252,7 @@ class MJ_DCMM(object):
         
         return mv_steer, mv_drive
     
-    def move_ee_pose(self, delta_pose):
+    def move_ee_pose(self, delta_pose, measured_state=False):
         """
         Move the end-effector to the target pose.
         delta_pose[0:3]: delta x,y,z
@@ -261,16 +261,26 @@ class MJ_DCMM(object):
         Return:
         - The target joint positions of the arm
         """
+        if measured_state:
+            self.data_arm.qpos[:6] = self.data.qpos[15:21]
+            mujoco.mj_fwdPosition(self.model_arm, self.data_arm)
         self.current_ee_pos[:] = self.data_arm.body("link6").xpos[:]
         self.current_ee_quat[:] = self.data_arm.body("link6").xquat[:]
         target_pos = self.current_ee_pos + delta_pose[0:3]
         r_delta = R.from_euler('zxy', delta_pose[3:6])
-        r_current = R.from_quat(self.current_ee_quat)
+        # MuJoCo / calculate_arm_Te use wxyz; scipy defaults to xyzw.
+        current = self.current_ee_quat[[1, 2, 3, 0]] if measured_state else self.current_ee_quat
+        r_current = R.from_quat(current)
         target_quat = (r_delta * r_current).as_quat()
+        if measured_state:
+            target_quat = target_quat[[3, 0, 1, 2]]
         result_QP = self.ik_arm_solve(target_pos, target_quat)
         if DEBUG_ARM: print("result_QP: ", result_QP)
         # Update the qpos of the arm with the IK solution
-        self.data_arm.qpos[0:6] = result_QP[0]
+        if measured_state and (not result_QP[1] or not np.all(np.isfinite(result_QP[0]))):
+            self.data_arm.qpos[:6] = self.data.qpos[15:21]
+        else:
+            self.data_arm.qpos[0:6] = result_QP[0]
         mujoco.mj_fwdPosition(self.model_arm, self.data_arm)
         
         # Compute the ee_length

@@ -1914,6 +1914,8 @@ class DcmmVecEnv(gym.Env):
                 hand_clearance=getattr(self, 'basket_hand_clearance', 0.),
                 reference_velocity=reference.tolist(), ball_velocity=velocity.tolist(),
                 arm_joint_speed=float(np.linalg.norm(self.Dcmm.data.qvel[14:20])),
+                arm_target_error=float(np.max(np.abs(self.Dcmm.target_arm_qpos-self.Dcmm.data.qpos[15:21]))),
+                control_version='basket_measured_ik_v1',
                 arm_action_norm=getattr(self, 'basket_arm_action_norm', 0.),
                 ik_attempts=attempts, ik_successes=getattr(self, 'basket_arm_ik_successes', 0),
                 release_quality=getattr(self, 'basket_release_quality', 0.),
@@ -2395,14 +2397,24 @@ class DcmmVecEnv(gym.Env):
             self.Dcmm.data_arm.qpos[:6] = self.Dcmm.data.qpos[15:21]
             mujoco.mj_fwdPosition(self.Dcmm.model_arm, self.Dcmm.data_arm)
             self.roll_arm_guard_blocked = False
-        result_QP, _ = self.Dcmm.move_ee_pose(action_arm)
-        self.arm_limit = bool(result_QP[1])
+        if self.object_motion == 'throw_basket':
+            probe_target = getattr(self, '_basket_joint_probe_target', None)
+            if probe_target is not None:
+                # Only the standalone diagnostic sets this; normal PPO never does.
+                result_QP = (np.asarray(probe_target).copy(), True)
+            else:
+                result_QP, _ = self.Dcmm.move_ee_pose(action_arm, measured_state=True)
+        else:
+            result_QP, _ = self.Dcmm.move_ee_pose(action_arm)
+        self.arm_limit = bool(result_QP[1]) and bool(np.all(np.isfinite(result_QP[0])))
         if self.object_motion == 'roll':
             if not self.arm_limit:
                 self.Dcmm.target_arm_qpos[:] = self.Dcmm.data.qpos[15:21]
                 self.Dcmm.data_arm.qpos[:6] = self.Dcmm.data.qpos[15:21]
                 mujoco.mj_fwdPosition(self.Dcmm.model_arm, self.Dcmm.data_arm)
         if self.object_motion == 'throw_basket':
+            if not self.arm_limit:
+                self.Dcmm.target_arm_qpos[:] = self.Dcmm.data.qpos[15:21]
             self.basket_arm_attempts = getattr(self, 'basket_arm_attempts', 0) + 1
             self.basket_arm_ik_successes = getattr(self, 'basket_arm_ik_successes', 0) + int(self.arm_limit)
         if self.arm_limit:

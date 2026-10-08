@@ -6700,6 +6700,8 @@ class BounceEnv(gym.Env):
             "env_time": env_time,
             "ee_distance": ee_distance,
             "base_distance": base_distance,
+            # All paths publish this flag; step() sets True only on explicit success.
+            "success": False,
         }
 
     def update_target_ctrl(self):

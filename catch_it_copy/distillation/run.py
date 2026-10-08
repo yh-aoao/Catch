@@ -11,6 +11,7 @@ import torch
 from .core import (ActionAdapter, Replay, SCHEMA, TASK_IDS, Student,
                    imitation_loss, observation_array, student_input)
 from .teachers import ROOT, Teacher, original_method, sha256
+from .metrics import terminal_diagnostics, summarize
 
 
 def seed_all(seed):
@@ -104,13 +105,20 @@ def wilson(successes, count):
 
 
 @torch.no_grad()
-def evaluate(config, adapters, student=None, teachers=None, episodes=None, viewer=False):
+def evaluate(config, adapters, student=None, teachers=None, episodes=None, viewer=False, output_file=None):
     from .environments import Pool, terminal_success
     episodes = episodes or config['eval_episodes']
     results = {}
+    if output_file is not None:
+        output_file = Path(output_file)
+        save_json(output_file, results)
+        output_file.with_suffix('.episodes.jsonl').write_text('', encoding='utf-8')
     if student is not None:
         student.eval()
     for task, adapter in adapters.items():
+        started = time.monotonic()
+        metric = config['tasks'][task]['success_metric']
+        print('[eval] task={} episodes={} metric={} starting'.format(task, episodes, metric), flush=True)
         pool = Pool(task, env_config(config, task), 1,
                     config['seed'] + 1000000 + TASK_IDS[task] * 10000, viewer)
         previous = np.zeros((1, 20), np.float32)
@@ -129,11 +137,29 @@ def evaluate(config, adapters, student=None, teachers=None, episodes=None, viewe
                 length += 1
                 if done[0]:
                     info = infos[0]
-                    rows.append({'success': terminal_success(info, config['tasks'][task]['success_metric']),
-                                 'environment_success': bool(info.get('success', False)),
+                    diagnostics = terminal_diagnostics(info)
+                    # Raw terminal diagnostics survive even a missing metric exception.
+                    if output_file is not None:
+                        with output_file.with_suffix('.episodes.jsonl').open('a', encoding='utf-8') as log:
+                            log.write(json.dumps({'task': task, 'episode': len(rows)+1,
+                                                  'diagnostics': diagnostics}) + '\n')
+                    rows.append({'success': terminal_success(info, metric),
+                                 'environment_success': bool(info['success']) if 'success' in info else None,
                                  'legacy_truncated': bool(info['_truncated']),
                                  'reward': total_reward, 'length': length,
+                                 'diagnostics': diagnostics,
                                  'reason': str(info.get('terminated_reason', 'unspecified'))})
+                    results[task] = summarize(rows, metric, episodes)
+                    results[task]['wilson_95'] = wilson(results[task]['successes'], len(rows))
+                    if output_file is not None:
+                        save_json(output_file, results)
+                    if len(rows) == 1 or len(rows) % 10 == 0 or len(rows) == episodes:
+                        print('[eval] {} {}/{} {}={}/{} elapsed={:.1f}s end={} flags={}'.format(
+                            task, len(rows), episodes, metric, results[task]['successes'], len(rows),
+                            time.monotonic()-started, rows[-1]['reason'],
+                            results[task]['auxiliary_metrics']), flush=True)
+                        if 'roll_eval' in diagnostics:
+                            print('[roll-diagnostics] ' + json.dumps(diagnostics), flush=True)
                     total_reward, length = 0., 0
                     previous.fill(0)
                     if len(rows) == episodes:
@@ -142,13 +168,7 @@ def evaluate(config, adapters, student=None, teachers=None, episodes=None, viewe
                 raise RuntimeError('Evaluation step budget exhausted before requested episodes completed')
         finally:
             pool.close()
-        n = sum(r['success'] for r in rows)
-        results[task] = {'success_metric': config['tasks'][task]['success_metric'],
-                         'successes': n, 'episodes': episodes, 'success_rate': n / episodes,
-                         'wilson_95': wilson(n, episodes),
-                         'legacy_truncated_rate': np.mean([r['legacy_truncated'] for r in rows]).item(),
-                         'mean_reward': np.mean([r['reward'] for r in rows]).item(), 'records': rows}
-        print(task, 'evaluation:', n, '/', episodes, flush=True)
+        print(task, 'evaluation:', results[task]['successes'], '/', episodes, flush=True)
     return results
 
 
@@ -189,10 +209,15 @@ def train(config, teachers, adapters, output, resume=None):
         random.setstate(saved['python_rng'])
         print('Resuming optimizer/replay/RNG; simulator episodes restart (not bitwise continuation).', flush=True)
     if baseline is None:
-        baseline = evaluate(config, adapters, teachers=teachers, episodes=config['baseline_episodes'])
+        baseline = evaluate(config, adapters, teachers=teachers, episodes=config['baseline_episodes'],
+                            output_file=output / 'teacher_baseline.json')
         save_json(output / 'teacher_baseline.json', baseline)
-        if any(row['successes'] == 0 for row in baseline.values()):
-            raise RuntimeError('At least one teacher has zero measured success; inspect baseline before distillation')
+    zero_tasks = [task for task, row in baseline.items() if row['successes'] == 0]
+    if zero_tasks:
+        message = 'Zero measured teacher success for {}. Inspect auxiliary metrics/terminal diagnostics.'.format(zero_tasks)
+        if not config.get('allow_zero_teacher_success', False):
+            raise RuntimeError(message + ' For a pipeline smoke test only, pass --allow-zero-teacher-success.')
+        print('[baseline-warning] ' + message + ' Continuing by explicit option; success-based best checkpoint is provisional.', flush=True)
     pools, previous = {}, {}
     try:
         for task in config['tasks']:
@@ -244,7 +269,8 @@ def train(config, teachers, adapters, output, resume=None):
             if iteration % config['eval_every'] == 0 or iteration == config['iterations']:
                 # Evaluation must not advance the training RNG stream.
                 rng = (torch.get_rng_state(), np.random.get_state(), random.getstate())
-                results = evaluate(config, adapters, student=student)
+                results = evaluate(config, adapters, student=student,
+                                   output_file=output / ('eval_%06d.json' % iteration))
                 torch.set_rng_state(rng[0]); np.random.set_state(rng[1]); random.setstate(rng[2])
                 save_json(output / ('eval_%06d.json' % iteration), results)
                 # Maximize worst task difference from its teacher, not average reward.
@@ -283,6 +309,8 @@ def main():
     parser.add_argument('--iterations', type=int)
     parser.add_argument('--num-envs', type=int)
     parser.add_argument('--viewer', action='store_true', help='Evaluation only')
+    parser.add_argument('--allow-zero-teacher-success', action='store_true',
+                        help='Train despite zero baseline success while diagnosing metrics; does not change success definitions')
     args = parser.parse_args()
     config = json.loads(Path(args.config).read_text(encoding='utf-8-sig'))
     package = None
@@ -293,6 +321,10 @@ def main():
         if package['schema'] != SCHEMA:
             raise ValueError('Unknown student schema')
         config = copy.deepcopy(package['config'])
+    if args.allow_zero_teacher_success:
+        if args.command != 'train':
+            parser.error('--allow-zero-teacher-success is train only')
+        config['allow_zero_teacher_success'] = True
     if args.tasks:
         if any(t not in config['tasks'] for t in args.tasks):
             raise ValueError('Requested task was not trained/configured')
@@ -332,7 +364,8 @@ def main():
         student = Student(config['hidden']).to(config['device'])
         student.load_state_dict(package['student'], strict=True)
         results = evaluate(config, make_adapters(config), student=student,
-                           episodes=args.episodes, viewer=args.viewer)
+                           episodes=args.episodes, viewer=args.viewer,
+                           output_file=output / 'student_evaluation.json')
         save_json(output / 'student_evaluation.json', results)
         return
     teachers = make_teachers(config)
@@ -346,7 +379,8 @@ def main():
     adapters = make_adapters(config)  # Fail before creating any simulator if mapping unresolved.
     if args.command == 'teacher-eval':
         results = evaluate(config, adapters, teachers=teachers,
-                           episodes=args.episodes, viewer=args.viewer)
+                           episodes=args.episodes, viewer=args.viewer,
+                           output_file=output / 'teacher_baseline.json')
         save_json(output / 'teacher_baseline.json', results)
         return
     if (output / 'student_last.pth').exists() and not args.resume:

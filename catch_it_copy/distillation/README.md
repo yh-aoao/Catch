@@ -4,6 +4,27 @@
 
 **当前状态：训练链路和 CPU 测试已实现；本机 MuJoCo 导入仍报 WinError 1114，尚未完成真实仿真闭环验证。roll/bounce 可在原先能正常训练的机器上先验证。三任务入口因 throw 18D 动作映射未确认而有意停止，不能宣称三任务已经可训练。**
 
+
+## 2026-10-08：评估接口修复与 roll 指标排查
+
+bounce 实际路由到 BounceEnv。其 _get_info() 缺少默认 success，只有部分 step 分支写入该键。现在已在该具体类中补齐 success=False，明确成功分支仍覆盖为 True。奖励、控制和终止条件不变，未将超时当接球成功。同步服务器时，必须同时更新 gym_dcmm/envs/DcmmVecEnv.py 和 distillation 目录（含新增 metrics.py）。
+
+roll_eval_success 是额外严格指标：手部接触、球离开桌面/地面、位于手部区域、相对速度不超过 0.15 m/s，并持续 0.30 s（短接触间隙容忍 0.04 s）。它与原环境成功分支不同。当前保留定义，同时记录 success、roll_legacy_success、roll_eval_success、roll_final_hold、roll_eval.max_duration、reset_counts 和 roll_eval_unmet，先定位统计偏差再校准。
+
+评估在第 1、每 10 个和最终回合显示进度；每回合更新 JSON，并追加同名 .episodes.jsonl 终止诊断。后一个任务异常仍保留前一个任务结果。complete、requested_episodes、episodes 用于区分完整与部分结果。其他缺失字段仍报错，不静默把未知当失败。
+
+先运行 10 回合诊断：
+
+    python -m distillation.run teacher-eval --tasks roll bounce --device cuda:2 --episodes 10 --output distillation/runs/rb_teacher_diagnostic
+
+需要先验证 5 轮流程时，显式允许零基准继续：
+
+    python -m distillation.run train --tasks roll bounce --device cuda:2 --iterations 5 --num-envs 2 --allow-zero-teacher-success --output distillation/runs/rb_smoke_metrics_fix
+
+--allow-zero-teacher-success 只解除零基准阻断，仍评估教师，不改写成功数、不跳过缺失字段错误，并将选项保存到配置。成功指标未校准时，student_best.pth 的成功率排序只能视为暂定，不能用于证明效果达标。正常非零基准无需该选项。
+
+本次验证：11 项 CPU/模拟环境回归测试通过，包含实际 BounceEnv 方法的默认字段、原成功赋值保留、后续任务异常仍保留已完成结果、零指标显式试训。本机未完成真实 MuJoCo 教师效果验证。
+
 ## 设计和范围
 
 - 教师：严格恢复完整 TwoStage Catch checkpoint 和各自的 18D/12D normalizer，调用原 `ActorCritic.act_inference`；不实例化 PPO，不加载旧优化器。缺失键、形状不匹配、hash 不符均报错。

@@ -18,13 +18,14 @@
   "max_eval_steps": 100000,
   "tasks": {
     "throw": {
-      "checkpoint": "best_model/catch_two_stage.pth",
-      "sha256": "81585772adf9b368e299875a3dce29247e23c641d8294295bec07dfb6450aaf6",
+      "checkpoint": "best_model/throw_catch_best_reward_497.09.pth",
+      "sha256": null,
+      "expected_action_dim": 20,
       "family": "ppo_dcmm",
-      "action_indices": null,
+      "action_indices": [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19],
       "action_scales": [1.5, 0.025, 0.15],
       "success_metric": "success",
-      "interface_note": "BLOCKED: original 18D throw arm semantics/environment must be recovered before joint training. Do not guess the missing axes."
+      "interface_note": "New server teacher: require 8 tracking + 12 hand outputs. SHA256 is computed on load and recorded; pin it after server check. Verify closed-loop behavior before full training."
     },
     "roll": {
       "checkpoint": "best_model/roll_catch_best_reward_252.54.pth",

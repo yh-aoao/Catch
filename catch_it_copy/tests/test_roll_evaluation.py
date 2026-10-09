@@ -12,6 +12,41 @@ spec.loader.exec_module(E)
 
 
 class RollEvaluationTests(unittest.TestCase):
+    def test_catch_retention_accepts_motion_but_reports_stability_separately(self):
+        state = {}
+        for _ in range(250): E.advance_catch(state, True, True, True, .4, .002)
+        self.assertTrue(state['caught_once'])
+        self.assertTrue(state['held_now'])
+        self.assertFalse(state['stable_once'])
+        for _ in range(150): E.advance_catch(state, True, True, True, .1, .002)
+        self.assertTrue(state['stable_now'])
+        E.advance_catch(state, False, False, False, 1., .002)
+        self.assertTrue(state['caught_once'])
+        self.assertFalse(state['held_now'])
+        self.assertFalse(state['stable_now'])
+
+    def test_catch_gap_preserves_hold_without_earning_time(self):
+        state = {}
+        E.advance_catch(state, True, True, True, .1, .5)
+        E.advance_catch(state, False, True, True, .4, .08)
+        self.assertAlmostEqual(state['duration'], .5)
+        self.assertTrue(state['held_now'])
+        E.advance_catch(state, False, True, True, .1, .002)
+        self.assertFalse(state['held_now'])
+        self.assertEqual(state['duration'], 0.)
+        self.assertEqual(state['last_reset_reason'], 'contact_gap')
+
+    def test_catch_table_or_outside_region_never_passes(self):
+        for clear, near in [(False, True), (True, False)]:
+            state = E.advance_catch({}, True, clear, near, .01, 1.)
+            self.assertFalse(state['caught_once'])
+        self.assertFalse(E.advance_catch({}, True, True, True, .01, .49)['caught_once'])
+
+    def test_below_table_alternative_still_rejects_support_contacts(self):
+        self.assertTrue(E.departure({}, False, False, False, below_table=True))
+        self.assertFalse(E.departure({}, False, True, False, below_table=True))
+        self.assertFalse(E.departure({}, False, False, True, below_table=True))
+
     def test_departure_stays_latched_but_real_contacts_block_holding(self):
         state = {}
         self.assertFalse(E.departure(state, False, False, False))

@@ -50,8 +50,9 @@ class DistillationTests(unittest.TestCase):
         cls.config = json.loads((ROOT / 'distillation/configs/three_tasks.json').read_text())
 
     def test_unknown_mapping_rejected_and_hand_not_shifted(self):
+        unresolved = dict(self.config['tasks']['throw'], action_indices=None)
         with self.assertRaisesRegex(ValueError, 'Unresolved'):
-            ActionAdapter(self.config['tasks']['throw'])
+            ActionAdapter(unresolved)
         cfg = copy.deepcopy(self.config['tasks']['roll'])
         # Synthetic mapping tests the mechanism, NOT a claim about real throw axes.
         cfg['action_indices'] = [0, 1, 2, 3, 4, 7] + list(range(8, 20))
@@ -118,7 +119,8 @@ class DistillationTests(unittest.TestCase):
             pool.close()
 
     def test_real_teacher_strict_and_frozen(self):
-        for cfg in self.config['tasks'].values():
+        for task in ('roll', 'bounce'):
+            cfg = self.config['tasks'][task]
             teacher = Teacher(cfg)
             before = {k: v.clone() for k, v in teacher.track.state_dict().items()}
             self.assertLessEqual(teacher.parity_check(np.zeros((4, 30), np.float32)), 1e-5)
@@ -126,9 +128,31 @@ class DistillationTests(unittest.TestCase):
             for k, v in teacher.track.state_dict().items():
                 torch.testing.assert_close(before[k], v)
 
+    def test_new_throw_checkpoint_when_available(self):
+        cfg = self.config['tasks']['throw']
+        if not (ROOT / cfg['checkpoint']).is_file():
+            self.skipTest('New throw checkpoint is server-only; actual weight validation must run there')
+        teacher = Teacher(cfg)
+        self.assertEqual(teacher.action_dim, 20)
+        self.assertLessEqual(teacher.parity_check(np.zeros((4, 30), np.float32)), 1e-5)
+        ActionAdapter(cfg).canonical(teacher.predict(np.zeros((4, 30), np.float32)))
+
+    def test_throw_rejects_old_18d_checkpoint(self):
+        cfg = dict(self.config['tasks']['throw'], checkpoint='best_model/catch_two_stage.pth', sha256=None)
+        with self.assertRaisesRegex(ValueError, 'expected 20, got 18'):
+            Teacher(cfg)
+
+    def test_throw_20d_adapter_with_fixture(self):
+        # Roll weights provide a 20D shape fixture only, not verification of server throw weights.
+        cfg = dict(self.config['tasks']['throw'],
+                   checkpoint=self.config['tasks']['roll']['checkpoint'], sha256=None)
+        teacher = Teacher(cfg)
+        self.assertEqual(teacher.action_dim, 20)
+        self.assertEqual(ActionAdapter(cfg).indices, list(range(20)))
+        self.assertEqual(teacher.parity_check(np.zeros((4, 30), np.float32)), 0.)
+
     def test_online_train_resume_and_student_only_eval(self):
         cfg = copy.deepcopy(self.config)
-        cfg['tasks'].pop('throw')
         cfg.update(device='cpu', hidden=[16], iterations=2, num_envs_per_task=2,
                    rollout_steps=2, calibration_steps=2, updates_per_iteration=2,
                    batch_per_task=4, capacity_per_task=32, eval_every=1,

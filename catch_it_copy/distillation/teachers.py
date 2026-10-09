@@ -40,12 +40,19 @@ class Teacher:
     def __init__(self, config, device='cpu'):
         self.device = torch.device(device)
         path = ROOT / config['checkpoint']
+        if not path.is_file():
+            raise FileNotFoundError('Teacher checkpoint not found: {}. Copy the configured teacher '
+                                    'to this machine or run on the training server; no fallback to old weights.'.format(path))
         self.hash = sha256(path)
         if config.get('sha256') and self.hash != config['sha256']:
             raise ValueError('Teacher checkpoint hash mismatch: ' + str(path))
         checkpoint = torch.load(path, map_location='cpu', weights_only=True)
         state = checkpoint['model']
         self.action_dim = state['mu_t.weight'].shape[0] + state['mu_c.weight'].shape[0]
+        expected = config.get('expected_action_dim')
+        if expected is not None and self.action_dim != expected:
+            raise ValueError('Teacher action dimension mismatch: expected {}, got {} in {}'.format(
+                expected, self.action_dim, path))
         if state['mu_c.weight'].shape[0] != 12:
             raise ValueError('Only full TwoStage Catch teachers with twelve hand outputs are supported')
         family = ROOT / 'gym_dcmm' / 'algs' / config['family']

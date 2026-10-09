@@ -29,7 +29,7 @@ class ZeroPool(FakePool):
     def step(self, actions):
         obs, reward, done, infos = super().step(actions)
         for info in infos:
-            info.update(success=False, roll_eval_success=False)
+            info.update(success=False, roll_eval_success=False, _truncated=False)
         return obs, reward, done, infos
 
 
@@ -64,6 +64,7 @@ class EvaluationMetricsTests(unittest.TestCase):
 
     def test_completed_task_survives_later_metric_error(self):
         cfg = self.config()
+        cfg['tasks']['bounce']['success_metric'] = 'success'
         teachers = {t: FakeTeacher() for t in cfg['tasks']}
         with tempfile.TemporaryDirectory() as folder, patch('distillation.environments.Pool', MissingMetricPool):
             target = Path(folder) / 'baseline.json'
@@ -75,6 +76,16 @@ class EvaluationMetricsTests(unittest.TestCase):
             records = [json.loads(line) for line in target.with_suffix('.episodes.jsonl').read_text().splitlines()]
             self.assertEqual(records[-1]['task'], 'bounce')
             self.assertNotIn('success', records[-1]['diagnostics'])
+
+    def test_bounce_default_uses_original_timeout_metric(self):
+        cfg = self.config()
+        cfg['tasks'].pop('roll')
+        self.assertEqual(cfg['tasks']['bounce']['success_metric'], 'legacy_truncated')
+        # Legacy test counts truncated even without an environment success field.
+        with patch('distillation.environments.Pool', MissingMetricPool):
+            result = evaluate(cfg, make_adapters(cfg), teachers={'bounce': FakeTeacher()})
+        self.assertEqual(result['bounce']['success_rate'], 1.)
+        self.assertIsNone(result['bounce']['records'][0]['environment_success'])
 
     def test_zero_baseline_requires_explicit_option_and_can_train(self):
         cfg = self.config()

@@ -31,7 +31,7 @@ class FakePool:
         self.steps += 1
         done = np.full(self.n, self.steps % 2 == 0)
         infos = [{'success': True, 'roll_eval_success': True,
-                  '_truncated': False, '_terminated': bool(d)} for d in done]
+                  '_truncated': bool(d), '_terminated': False} for d in done]
         return self.obs, np.ones(self.n), done, infos
     def close(self):
         pass

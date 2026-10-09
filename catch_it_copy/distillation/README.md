@@ -27,6 +27,10 @@ roll_eval_success 是额外严格指标：手部接触、球离开桌面/地面�
 
 ## 设计和范围
 
+当前 bounce 主评估指标按用户要求改为 `legacy_truncated`，与原 5fe75d5f PPO 测试逐回合统计 `truncates` 的逻辑一致。教师基准、学生评估和最佳模型选择均使用此口径；环境 `success` 仍保存在辅助指标中。throw/roll 指标不变。以上历史记录中 bounce 使用 `success` 的描述是修改前状态。
+
+同步新的 `configs/three_tasks.json` 后，用新输出目录启动训练。旧 checkpoint 内嵌旧配置，独立 `eval --checkpoint ...` 仍使用其原指标，修改默认 JSON 不会改写旧模型；也不能把旧口径的 resume 直接续到新配置。自定义 --config 文件需自行将 bounce.success_metric 改为 legacy_truncated。
+
 - 教师：严格恢复完整 TwoStage Catch checkpoint 和各自的 18D/12D normalizer，调用原 `ActorCritic.act_inference`；不实例化 PPO，不加载旧优化器。缺失键、形状不匹配、hash 不符均报错。
 - 学生输入 53D：原始状态 30D＋上一实际发送的归一化命令 20D＋固定任务 one-hot 3D。状态顺序与原 `obs2tensor` 对照检查；不改变原坐标系。
 - 单个共享动作头输出 20D：base2、arm6、hand12，tanh 有界。每任务保留原动作缩放和控制器；这是任务条件化单网络，不是统一底层控制，也不自主识别任务。
@@ -131,7 +135,7 @@ python -m distillation.run train --tasks throw roll bounce --device cuda:2 --ite
 - `student_best.pth`：按“最差任务相对其教师的成功率差”选出；`student_last.pth` 每轮保存。均只含学生参数、归一化、任务和控制配置、来源信息，没有教师网络。
 - `resume_last.pth`：每次评估或最终轮保存，额外含 optimizer、replay、RNG。默认 25 轮评估一次，所以故障续训可能损失最近不到 25 轮。
 
-默认 roll 使用原评估优先使用的 `roll_eval_success`；bounce 使用环境 `info.success`。同时保存 `environment_success` 和 `legacy_truncated_rate`。旧 bounce PPO 测试把 `truncated` 当成功，和实际接球成功不等价，不能直接比较两个不同口径的百分比。保留原终止与奖励，不为统计修改环境。
+默认 roll 使用 `roll_eval_success`；bounce 使用 `legacy_truncated`，与原 bounce PPO 测试一致。环境抓取标记另外记录为 `environment_success` 和辅助指标，`legacy_truncated_rate` 与 bounce 主成功率一致。保留原终止与奖励，不为统计修改环境。
 
 当前未添加新的公共持球/掉球测量，不能声称已经验证这些指标；正式验收还应结合视频和持球质量。30 回合评估适合调试，最终至少每任务 300 回合，最好 3 个训练种子。达到每项比教师下降不超过 5 个百分点仅是候选目标。
 

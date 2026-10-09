@@ -47,16 +47,21 @@ def advance_catch(state, contact, clear, near, speed, dt):
     if contact and 'first_contact_time' not in state:
         state['first_contact_time'] = state['elapsed']
     good = bool(contact and clear and near)
-    gap_ok = bool(clear and near and not contact)
     if good:
+        state['retention_started'] = True
+    retained = bool(state.get('retention_started', False) and clear and near)
+    state['gap'] = 0. if contact else state.get('gap', 0.) + dt
+    state['max_gap'] = max(state.get('max_gap', 0.), state['gap'])
+    gap_ok = bool(retained and not contact)
+    if retained:
         state['duration'] = previous + dt
-        state['gap'] = 0.
-    elif gap_ok:
-        state['gap'] = state.get('gap', 0.) + dt
-        if state['gap'] > CATCH_GAP_SECONDS + 1e-9:
-            state['duration'] = 0.
+        state['contact_duration'] = state.get('contact_duration', 0.) + (dt if contact else 0.)
     else:
-        state['duration'], state['gap'] = 0., 0.
+        state['duration'] = 0.
+        state['contact_duration'] = 0.
+        state['retention_started'] = False  # re-entry needs a new physical contact
+    state['contact_fraction'] = state['contact_duration'] / max(state['duration'], 1e-9)
+    state['holding_at_end'] = retained
     if previous > 0 and state.get('duration', 0.) == 0:
         reason = 'not_clear' if not clear else 'outside_hand_region' if not near else 'contact_gap'
         counts = state.setdefault('reset_counts', {})
@@ -70,8 +75,7 @@ def advance_catch(state, contact, clear, near, speed, dt):
         if state.get('stable_duration', 0.) > 0:
             state['stable_reset_count'] = state.get('stable_reset_count', 0) + 1
         state['stable_duration'] = 0.
-    held = bool(clear and near and (contact or state.get('gap', 0.) <= CATCH_GAP_SECONDS + 1e-9)
-                and state.get('duration', 0.) >= CATCH_HOLD_SECONDS - 1e-9)
+    held = bool(retained and state.get('duration', 0.) >= CATCH_HOLD_SECONDS - 1e-9)
     state['caught_once'] = state.get('caught_once', False) or held
     state['held_now'] = held
     state['stable_now'] = bool(held and state.get('stable_duration', 0.) >= HOLD_SECONDS - 1e-9)
@@ -79,8 +83,24 @@ def advance_catch(state, contact, clear, near, speed, dt):
     state['max_duration'] = max(state.get('max_duration', 0.), state.get('duration', 0.))
     state['max_stable_duration'] = max(state.get('max_stable_duration', 0.), state.get('stable_duration', 0.))
     state.update(contact=bool(contact), clear=bool(clear), near=bool(near), speed=float(speed),
-                 evaluation_version='retention_v2')
+                 evaluation_version='retention_v3')
     return state
+
+
+def catch_region(position, point, rotation):
+    """Coordinates relative to the palm capture point; local +y is palm normal.
+
+    Bounds are evaluation parameters, not collision geometry or a grasp proof.
+    """
+    local = np.asarray(rotation).reshape(3, 3).T @ (np.asarray(position)-point)
+    finite = bool(np.all(np.isfinite(local)))
+    lateral = float(np.linalg.norm(local[[0, 2]]))
+    normal = float(local[1])
+    inside = finite and lateral <= .12 and -.02 <= normal <= .12
+    reason = ('invalid_position' if not finite else 'below_palm' if normal < -.02
+              else 'above_hand_region' if normal > .12 else 'outside_lateral_region'
+              if lateral > .12 else '')
+    return bool(inside), local.tolist(), reason
 
 
 def departure(state, outside_edge, table_contact, floor_contact, below_table=False):
@@ -128,9 +148,13 @@ def observe(env, cfg):
                                    cfg.roll_table_pos[2] + cfg.roll_table_size[2] - .005))
     if env.task == 'Tracking':
         clear = clear and bool(position[1] + radius < edge)
-    evaluator = advance_catch if env.task == 'Catching' else advance
-    env._roll_eval = evaluator(state, hand, clear, np.linalg.norm(position-point) <= REGION_RADIUS,
-                            np.linalg.norm(relative), model.opt.timestep)
+    if env.task == 'Catching':
+        near, local, reason = catch_region(position, point, palm.xmat)
+        state.update(ball_palm_local=local, region_unmet=reason)
+        env._roll_eval = advance_catch(state, hand, clear, near, np.linalg.norm(relative), model.opt.timestep)
+    else:
+        env._roll_eval = advance(state, hand, clear, np.linalg.norm(position-point) <= REGION_RADIUS,
+                                 np.linalg.norm(relative), model.opt.timestep)
 
 
 def publish(env, info, terminated, truncated):
@@ -145,6 +169,7 @@ def publish(env, info, terminated, truncated):
     info['roll_legacy_success'] = legacy
     info['roll_eval_success'] = bool(state.get('intercepted' if env.task == 'Tracking' else 'caught_once', False))
     info['roll_final_hold'] = bool(state.get('held_now', False))
+    info['roll_holding_at_end'] = bool(state.get('holding_at_end', False))
     info['roll_stable_hold'] = bool(state.get('stable_once', False))
     info['roll_stable_now'] = bool(state.get('stable_now', False))
     diagnostics = {k: v for k, v in state.items() if not k.startswith('_')}
@@ -152,10 +177,11 @@ def publish(env, info, terminated, truncated):
     unmet = []
     for key, label in [('clear', 'ball_not_clear_of_table_or_floor'), ('contact', 'no_hand_contact')]:
         if not state.get(key, False):
-            if key != 'contact' or state.get('gap', float('inf')) > CATCH_GAP_SECONDS + 1e-9:
+            if key != 'contact' or (env.task != 'Catching' and state.get('gap', float('inf')) > GAP_SECONDS + 1e-9):
                 unmet.append(label)
     if env.task == 'Catching':
-        if not state.get('near', False): unmet.append('outside_hand_region')
+        if not state.get('retention_started', False): unmet.append('no_active_retention')
+        if not state.get('near', False): unmet.append(state.get('region_unmet') or 'outside_hand_region')
         if state.get('duration', 0.) < CATCH_HOLD_SECONDS - 1e-9: unmet.append('hold_duration')
     info['roll_eval_unmet'] = ','.join(unmet)
     if terminated or truncated:
@@ -163,8 +189,8 @@ def publish(env, info, terminated, truncated):
         if env.task == 'Tracking' and env.step_touch and not terminated:
             info['terminated_reason'] = 'track_touch'
         if getattr(env, 'roll_log', False):
-            print('[roll-eval] task={} legacy={} success={} final_hold={} stable_hold={} end={} checks={} unmet={}'.format(
-                env.task, legacy, info['roll_eval_success'], info['roll_final_hold'], info['roll_stable_hold'],
+            print('[roll-eval] task={} legacy={} success={} final_hold={} stable_hold={} holding_at_end={} end={} checks={} unmet={}'.format(
+                env.task, legacy, info['roll_eval_success'], info['roll_final_hold'], info['roll_stable_hold'], info['roll_holding_at_end'],
                 info['terminated_reason'], diagnostics, unmet), flush=True)
 
 
@@ -178,15 +204,16 @@ def report(agent, infos, dones, testing):
         if final is not None and (mask is None or mask[i]) and isinstance(final[i], dict):
             record = final[i]
         else:
-            record = {k: np.asarray(infos[k])[i] for k in ('roll_eval_success', 'roll_final_hold', 'roll_stable_hold', 'roll_legacy_success') if k in infos}
+            record = {k: np.asarray(infos[k])[i] for k in ('roll_eval_success', 'roll_final_hold', 'roll_stable_hold', 'roll_holding_at_end', 'roll_legacy_success') if k in infos}
         if 'roll_eval_success' not in record: continue
         totals['episodes'] += 1
         totals['success'] += int(record['roll_eval_success'])
         totals['final_hold'] += int(record.get('roll_final_hold', False))
         totals['stable_hold'] = totals.get('stable_hold', 0) + int(record.get('roll_stable_hold', False))
+        totals['holding_at_end'] = totals.get('holding_at_end', 0) + int(record.get('roll_holding_at_end', False))
         totals['legacy'] += int(record.get('roll_legacy_success', False))
         if totals['episodes'] == 1 or totals['episodes'] % 20 == 0:
             n = totals['episodes']
-            print('[roll-summary] mode={} episodes={} eval_success={:.3f} final_hold={:.3f} stable_hold={:.3f} legacy_success={:.3f}'.format(
-                'test' if testing else 'train', n, totals['success']/n, totals['final_hold']/n, totals['stable_hold']/n, totals['legacy']/n), flush=True)
+            print('[roll-summary] mode={} episodes={} eval_success={:.3f} final_hold={:.3f} stable_hold={:.3f} holding_at_end={:.3f} legacy_success={:.3f}'.format(
+                'test' if testing else 'train', n, totals['success']/n, totals['final_hold']/n, totals['stable_hold']/n, totals['holding_at_end']/n, totals['legacy']/n), flush=True)
     setattr(agent, key, totals)

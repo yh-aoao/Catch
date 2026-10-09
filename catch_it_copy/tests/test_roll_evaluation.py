@@ -25,16 +25,29 @@ class RollEvaluationTests(unittest.TestCase):
         self.assertFalse(state['held_now'])
         self.assertFalse(state['stable_now'])
 
-    def test_catch_gap_preserves_hold_without_earning_time(self):
+    def test_retention_counts_noncontact_only_after_contact_until_exit(self):
         state = {}
-        E.advance_catch(state, True, True, True, .1, .5)
-        E.advance_catch(state, False, True, True, .4, .08)
-        self.assertAlmostEqual(state['duration'], .5)
-        self.assertTrue(state['held_now'])
-        E.advance_catch(state, False, True, True, .1, .002)
+        E.advance_catch(state, False, True, True, .3, 1.)
+        self.assertFalse(state['caught_once'])
+        E.advance_catch(state, True, True, True, .3, .1)
+        E.advance_catch(state, False, True, True, .3, .4)
+        self.assertTrue(state['caught_once'])
+        self.assertTrue(state['holding_at_end'])
+        self.assertAlmostEqual(state['contact_fraction'], .2)
+        E.advance_catch(state, False, True, False, .3, .01)
         self.assertFalse(state['held_now'])
+        E.advance_catch(state, False, True, True, .3, 1.)
+        self.assertFalse(state['holding_at_end'])
         self.assertEqual(state['duration'], 0.)
-        self.assertEqual(state['last_reset_reason'], 'contact_gap')
+
+    def test_local_region_rotates_and_rejects_under_palm(self):
+        point = np.array([1., 2., 3.])
+        rotation = np.array([[0., -1., 0.], [1., 0., 0.], [0., 0., 1.]])
+        for local, expected in [([0., .05, 0.], True), ([0., -.03, 0.], False),
+                                ([0., .13, 0.], False), ([.13, 0., 0.], False)]:
+            inside, measured, _ = E.catch_region(point+rotation@local, point, rotation)
+            self.assertEqual(inside, expected)
+            np.testing.assert_allclose(measured, local, atol=1e-12)
 
     def test_catch_table_or_outside_region_never_passes(self):
         for clear, near in [(False, True), (True, False)]:

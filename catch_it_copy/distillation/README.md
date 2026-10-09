@@ -2,7 +2,7 @@
 
 实现日期：2026-10-02。第一版使用一个学生 MLP `[256,256,128]`，直接在线 DAgger，默认 `beta_start=0`，不包含离线 BC 预热、PPO 微调或 GRU。只训练学生，不更新教师和原环境。
 
-**当前状态：训练链路和 CPU 测试已实现；本机 MuJoCo 导入仍报 WinError 1114，尚未完成真实仿真闭环验证。roll/bounce 可在原先能正常训练的机器上先验证。三任务入口因 throw 18D 动作映射未确认而有意停止，不能宣称三任务已经可训练。**
+**2026-10-09 当前状态：默认 throw 教师已切换为服务器上的 throw_catch_best_reward_497.09.pth，配置要求 8+12=20 维动作，使用完整的一一映射。新权重本地无副本，实际形状、推理一致性及闭环表现需在服务器验证；不再使用旧 18 维 catch_two_stage.pth。roll/bounce 的成功指标校准问题仍保留。**
 
 
 ## 2026-10-08：评估接口修复与 roll 指标排查
@@ -46,7 +46,7 @@ roll_eval_success 是额外严格指标：手部接触、球离开桌面/地面�
 python -m distillation.run check --device cpu --output distillation/runs/interface_check
 ```
 
-当前期望：三个教师严格恢复、观测和推理对照通过；roll/bounce 动作转换对照通过；throw 显示 `interface_ready=false`，进程非零退出。报告在 `teacher_check.json`，这个退出不是训练代码崩溃。
+在服务器执行后，应检查三个教师均为 `native_action_dim=20`、`interface_ready=true`，且观测、动作和推理对照通过。报告在 `teacher_check.json`。缺少新文件或动作维度不符会明确停止，不会回退到旧 throw 权重。接口检查通过仍不等于接球效果复现。
 
 ## 在训练机器上先跑 roll/bounce
 
@@ -90,23 +90,34 @@ python -m distillation.run train --tasks roll bounce --device cuda:0 --iteration
 python -m distillation.run eval --checkpoint distillation/runs/rb_mlp_seed123/student_best.pth --device cuda:0 --episodes 300 --output distillation/runs/rb_final_eval
 ```
 
-## 三任务训练尚需解决的 throw 接口
+## 三任务训练：接入新的 throw 教师（2026-10-09）
 
-配置为 `configs/three_tasks.json`。三个模型位置和 SHA256 已填好，无需重新提供路径。
+配置为 `configs/three_tasks.json`。throw 路径使用项目相对路径 `best_model/throw_catch_best_reward_497.09.pth`，对应服务器 `/home/yuhao2/Catch/catch_it_copy/best_model/throw_catch_best_reward_497.09.pth`。其 SHA256 暂为 null，因为本地没有该文件；加载时始终计算真实 hash，记录到检查报告和训练 checkpoint，恢复训练时比较实际 hash。服务器 check 后可把报告中的 hash 填入配置固定权重（应在开始正式训练前固定，恢复训练要求配置一致）。roll/bounce 继续使用原固定 hash。
 
-throw 输出为 `6+12=18`，roll/bounce 为 `8+12=20`。当前代码的机械臂动作是 xyz 位移＋zxy 三个旋转增量，但旧 throw 的四个机械臂通道具体定义未核实。**禁止尾部补两个零，禁止部分恢复到 8D 跟踪头。**
+新 throw 配置要求输出 `8+12=20`，其中底盘2、机械臂6、手指12，动作缩放沿当前主 PPO 配置 `[1.5, 0.025, 0.15]`，并在 check 中对照原 action2dict。未根据文件名推断实际形状：Teacher 加载时强制校验 expected_action_dim=20；误放旧 18 维模型会报错。教师仍需与实际训练的环境、动作缩放一致。
 
-必须找到训练该 throw checkpoint 时的 `action2dict()`、`move_ee_pose()` 及环境配置，并复现原测试效果。用户目前提供的是 `test=False ... checkpoint_tracking=... object_motion=throw/roll` 训练模板，无法识别这个旧模型的执行接口。
+任务路由不变：throw 使用主 PPO/环境，roll 使用 645edc4，bounce Catch 使用 5fe75d5f。三个任务独立采样，等量 minibatch 更新同一个 53→20 MLP；不必修改 DAgger 算法或给学生增加维度。
 
-确认后，`action_indices` 按“旧输出每一列对应哪个公共动作通道”填写，手指必须映射到 8..19；不受控通道设置明确默认值并屏蔽监督和执行。若旧旋转参数不能简单逐列映射，必须扩展适配器，不能只填索引。必要时通过 `env_factory` 使用经验证的兼容环境（该工厂对外应提供 20D 动作/30D 状态接口）。只填写 mapping 并不能证明动力学兼容。
+同步代码到服务器，在 catch_it_copy 下先检查、再单独评估新 throw：
+
+```bash
+python -m distillation.run check --device cpu --output distillation/runs/three_teacher_check
+python -m distillation.run teacher-eval --tasks throw --device cuda:2 --episodes 10 --output distillation/runs/throw497_teacher
+```
+
+先验证三任务 5 轮流程（roll/bounce 指标待校准，显式允许零基准）：
+
+```bash
+python -m distillation.run train --tasks throw roll bounce --device cuda:2 --iterations 5 --num-envs 2 --allow-zero-teacher-success --output distillation/runs/trb497_smoke
+```
 
 三个教师在各自对应环境中复现后，完整训练命令为：
 
 ```bash
-python -m distillation.run train --device cuda:0 --output distillation/runs/three_tasks_mlp
+python -m distillation.run train --tasks throw roll bounce --device cuda:2 --iterations 1000 --num-envs 2 --output distillation/runs/trb497_mlp
 ```
 
-**此命令在当前默认配置下会提前报 unresolved action mapping；目前不要用它启动长训练。** 两任务学生仍保留三维任务标签，但未训练 throw，不能用作 throw 策略，也不能直接作为三任务 resume。
+默认不写 --tasks 也会训练全部三个任务。以上正式命令保留零基准检查；指标未校准前不要把通过试训当成效果达标。每任务2个环境共6个采样进程，每次更新总 batch=768。请使用新输出目录：不能把此前两任务 resume 直接作为三任务续训，任务集合、缓存和配置都不同。历史交接文件关于旧18维 throw 的阻断已由本节取代，仅作为旧模型记录保留。
 
 ## 参数与日志
 

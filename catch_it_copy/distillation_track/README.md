@@ -25,11 +25,11 @@
 
 ## 成功判定
 
-沿用当前各自原 Track 测试程序的口径，而非 Catch 的统一指标：
+roll、bounce 沿用各自原 Track 测试程序口径；throw 使用有效接触指标，修复当前原程序读取默认 false 的问题：
 
 - roll：`roll_eval_success`，Tracking 的拦截判定，不是 Catch 的持续持球判定。
 - bounce：july22 PPO_Track 使用 `truncated`；包含接触触发结束与超时，因此不能把100%解释为100%有效接触。
-- throw：沿用当前 PPO_Track 的 `success`，同时记录接触成功辅助指标；请先核实教师闭环结果。
+- throw：`track_contact_success = step_touch and not terminated`。主环境 Throw Tracking 没有更新默认 `success=False`，不能用该字段评估教师；仅超时不算成功，同步失败终止优先。原始 `success` 保留为辅助诊断，因此两者可能不同。
 
 所有任务额外记录 `track_touch`、`track_contact_success = step_touch and not terminated`、原始 `success`（若有）、终止原因及超时标志。这些是诊断信息，不改写环境奖励或主指标。结果保存在 JSON 与逐回合 `.episodes.jsonl` 中。教师主指标为零时默认停止训练；确实要排查流程时才用 `--allow-zero-teacher-success`，该选项不会修正或提升成功率。
 

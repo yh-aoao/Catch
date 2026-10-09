@@ -205,7 +205,7 @@ class DcmmVecEnv(gym.Env):
         # 初始化Mujoco渲染器
         self.mujoco_renderer = MujocoRenderer(
             self.Dcmm.model, self.Dcmm.data
-        )
+        ) if self.render_mode is not None else None
         
         # 启动Mujoco可视化窗口（如果开启）
         if self.Dcmm.open_viewer:
@@ -2038,6 +2038,11 @@ class DcmmVecEnv(gym.Env):
         Returns:
             np.array: 渲染图像数组
         """
+        # State-only policies do not need an offscreen OpenGL context.
+        if self.render_mode is None:
+            if self.Dcmm.viewer is not None:
+                self.Dcmm.viewer.sync()
+            return np.zeros((0, self.img_size[0], self.img_size[1]))
         imgs = np.zeros((0, self.img_size[0], self.img_size[1]))
         imgs_depth = np.zeros((0, self.img_size[0], self.img_size[1]))
         

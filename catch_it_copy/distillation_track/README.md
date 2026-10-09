@@ -69,3 +69,10 @@ python -m unittest discover -s distillation_track/tests -v
 ```
 
 测试覆盖真实教师的严格恢复与推理一致性、动作缩放、零手指指令、掩码损失、跨回合动作重置、真实教师加模拟环境的训练/续训/学生独立评估，以及独立进程的环境错误与终止信息传播。模拟环境测试不代表 MuJoCo 闭环成功率。真实闭环与CUDA训练需在项目可运行的服务器环境验证。
+
+
+## 无显示服务器的 bounce 渲染
+
+Track 学生只使用18维状态，不读取相机图像。配置中的 `tasks.bounce.env_kwargs.render_mode: null` 让 July22 环境跳过离屏渲染器创建和相机渲染，避免无可用 OpenGL 上下文时出现 `gladLoadGL error`。显式选择 RGB/深度模式时仍保留原渲染路径；`--viewer` 仍需要服务器具备图形显示条件。
+
+更新时同时同步配置和 `gym_dcmm/envs/DcmmVecEnv_bounce_july22.py`。先运行一次三任务教师评估，再启动5000轮训练。若此前在初始化阶段失败、输出目录没有学生 checkpoint，可重用该目录；已开始训练的旧断点因配置/源码变化不能直接续训，应使用新目录。此修复不改变动力学、奖励、动作或成功判定。

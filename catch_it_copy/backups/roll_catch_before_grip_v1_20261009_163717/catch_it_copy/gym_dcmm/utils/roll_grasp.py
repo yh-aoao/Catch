@@ -36,77 +36,16 @@ def hand_stability_terms(velocity, previous_velocity, dt, settled, cfg):
     return dict(hand_speed=speed, hand_acceleration=acceleration)
 
 
-def smooth_target_delta(delta, previous, dt, settled, cfg, phase=None):
+def smooth_target_delta(delta, previous, dt, settled, cfg):
     """Filter policy joint-target increments, preserving faster capture motion."""
     delta = np.asarray(delta, dtype=float)
     previous = np.zeros_like(delta) if previous is None else np.asarray(previous)
     rate = cfg.roll_target_hold_rate if settled else cfg.roll_target_capture_rate
-    if phase == "capturing":
-        rate = cfg.roll_grip_capture_rate
     limit = rate * dt
     desired = np.clip(delta, -limit, limit)
     alpha = cfg.roll_target_hold_alpha if settled else cfg.roll_target_capture_alpha
-    if phase == "capturing":
-        alpha = cfg.roll_grip_capture_alpha
     applied = np.clip(alpha*desired + (1-alpha)*previous, -limit, limit)
     scale = max(limit, 1e-6)
     terms = dict(target_motion=-cfg.roll_target_motion_weight * float(np.mean((applied/scale)**2)),
                  target_change=-cfg.roll_target_change_weight * float(np.mean(np.minimum(((desired-previous)/scale)**2, 4.))))
-    if phase == "capturing":
-        terms = {key: value * cfg.roll_grip_capture_regularization for key, value in terms.items()}
     return applied, terms
-
-
-def grip_phase(state, contact, clear, speed, now, cfg):
-    if contact and clear:
-        if state.get('first_contact') is None:
-            state['first_contact'] = now
-        state['last_contact'] = now
-    last = state.get('last_contact', -float('inf'))
-    active = clear and now-last <= cfg.roll_grip_contact_grace
-    if not active:
-        state['first_contact'] = None
-        return 'waiting'
-    age = now-state['first_contact']
-    return ('holding' if age >= cfg.roll_grip_capture_seconds and speed <= .25
-            else 'capturing')
-
-
-def finger_contact_count(model, contacts, palm_geom, hand_ids):
-    """Count contacted finger kinematic branches, not collision mesh count."""
-    root = int(model.geom_bodyid[palm_geom])
-    branches = set()
-    for geom in set(map(int, contacts)).intersection(map(int, hand_ids)):
-        body = int(model.geom_bodyid[geom])
-        if body == root:
-            continue
-        while body and int(model.body_parentid[body]) != root:
-            body = int(model.body_parentid[body])
-        if body and int(model.body_parentid[body]) == root:
-            branches.add(body)
-    return len(branches)
-
-
-def grip_feedback(state, contact, clear, distance, speed, fingers, dt, cfg):
-    retained = bool(contact and clear and distance <= cfg.roll_drop_distance)
-    previous = state.get('duration', 0.)
-    state['duration'] = previous+dt if retained else 0.
-    if retained:
-        state['lost'] = 0.
-        state['had_retention'] = True
-    elif state.get('had_retention', False):
-        state['lost'] = state.get('lost', 0.)+dt
-    credit = min(state['duration'], cfg.roll_grip_retention_seconds)
-    best = state.get('best_duration', 0.)
-    progress = cfg.roll_grip_retention_weight*max(0., credit-best)
-    state['best_duration'] = max(best, credit)
-    dropped = (state.get('had_retention', False) and
-               state.get('lost', 0.) >= cfg.roll_grip_contact_grace and
-               not state.get('drop_penalized', False))
-    if dropped:
-        state['drop_penalized'] = True
-    # Continuous contact quality: no exact closed-angle requirement.
-    enclosure = (cfg.roll_grip_enclosure_weight*min(fingers/2., 1.)*
-                 np.exp(-(speed/.35)**2) if retained else 0.)
-    return dict(finger_contact=enclosure, retention_progress=progress,
-                slip=-cfg.roll_grip_drop_cost if dropped else 0.)

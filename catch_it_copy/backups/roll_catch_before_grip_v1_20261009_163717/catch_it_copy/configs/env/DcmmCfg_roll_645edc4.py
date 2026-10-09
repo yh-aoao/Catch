@@ -474,14 +474,3 @@ roll_target_motion_weight = 0.03
 roll_target_change_weight = 0.15
 
 roll_hold_hysteresis_seconds = 0.12
-
-# Roll Catch grip experiment v1 (baseline backed up before editing).
-roll_grip_capture_seconds = 0.25
-roll_grip_contact_grace = 0.20
-roll_grip_capture_rate = 4.0
-roll_grip_capture_alpha = 0.95
-roll_grip_capture_regularization = 0.25
-roll_grip_enclosure_weight = 2.0
-roll_grip_retention_seconds = 0.8
-roll_grip_retention_weight = 8.0
-roll_grip_drop_cost = 3.0

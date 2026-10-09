@@ -14,41 +14,6 @@ cfg = SimpleNamespace(roll_grasp_entry_radius=.09, roll_grasp_entry_depth=.12,
 
 
 class GraspTests(unittest.TestCase):
-    def grip_cfg(self):
-        return SimpleNamespace(roll_drop_distance=.25, roll_grip_contact_grace=.2, roll_grip_capture_seconds=.25,
-            roll_grip_capture_rate=4., roll_grip_capture_alpha=.95,
-            roll_grip_capture_regularization=.25, roll_target_capture_rate=3.,
-            roll_target_hold_rate=1., roll_target_capture_alpha=.8, roll_target_hold_alpha=.3,
-            roll_target_motion_weight=.03, roll_target_change_weight=.15,
-            roll_grip_retention_seconds=.8, roll_grip_retention_weight=8.,
-            roll_grip_drop_cost=3., roll_grip_enclosure_weight=2.)
-
-    def test_initial_low_speed_contact_still_allows_fast_capture(self):
-        c, state = self.grip_cfg(), {}
-        self.assertEqual(g.grip_phase(state, True, True, .01, 1., c), 'capturing')
-        fast, cost = g.smooth_target_delta(np.ones(12), None, .04, False, c, phase='capturing')
-        held, _ = g.smooth_target_delta(np.ones(12), None, .04, True, c, phase='holding')
-        self.assertTrue(np.all(fast > held))
-        self.assertEqual(g.grip_phase(state, True, True, .01, 1.3, c), 'holding')
-        self.assertEqual(g.grip_phase(state, False, True, .01, 1.6, c), 'waiting')
-        self.assertEqual(g.grip_phase(state, True, True, .01, 1.7, c), 'capturing')
-
-    def test_retention_credit_capped_and_slip_penalty_once(self):
-        c, state = self.grip_cfg(), {}
-        earned = sum(g.grip_feedback(state, True, True, .1, .1, 2, .04, c)['retention_progress']
-                     for _ in range(30))
-        self.assertAlmostEqual(earned, .8*8.)
-        slips = [g.grip_feedback(state, False, True, .3, 1., 0, .04, c)['slip'] for _ in range(10)]
-        self.assertEqual(sum(slips), -3.)
-        for _ in range(30):
-            self.assertEqual(g.grip_feedback(state, True, True, .1, .1, 2, .04, c)['retention_progress'], 0.)
-
-    def test_multiple_meshes_on_same_finger_count_once(self):
-        model = SimpleNamespace(geom_bodyid=np.array([1,2,3,4,5]),
-                                body_parentid=np.array([0,0,1,2,1,4]))
-        self.assertEqual(g.finger_contact_count(model, [0,1,2,3,4], 0, [0,1,2,3,4]), 2)
-        self.assertEqual(g.finger_contact_count(model, [0], 0, [0,1,2,3,4]), 0)
-
     def reward(self, angle, point, contact=False):
         ready, terms = g.grasp_terms(np.full(16, angle), point, contact, cfg)
         return ready, sum(terms.values())

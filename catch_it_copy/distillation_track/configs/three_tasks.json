@@ -1,0 +1,109 @@
+{
+  "seed": 123,
+  "device": "cuda:0",
+  "hidden": [
+    256,
+    256,
+    128
+  ],
+  "learning_rate": 0.0003,
+  "num_envs_per_task": 2,
+  "iterations": 1000,
+  "rollout_steps": 64,
+  "updates_per_iteration": 32,
+  "batch_per_task": 256,
+  "capacity_per_task": 100000,
+  "calibration_steps": 256,
+  "beta_start": 0.0,
+  "beta_decay_iterations": 100,
+  "eval_every": 25,
+  "eval_episodes": 30,
+  "baseline_episodes": 30,
+  "max_eval_steps": 100000,
+  "tasks": {
+    "throw": {
+      "checkpoint": "best_model_track/track.pth",
+      "sha256": "4e14f6f4e5909171d6e8b28e0a8f104d867d2355d1e75c747ed3c4e92ea32992",
+      "family": "ppo_dcmm",
+      "expected_action_dim": 6,
+      "action_indices": null,
+      "action_scales": [
+        1.5,
+        0.025,
+        0.01
+      ],
+      "success_metric": "success",
+      "interface_note": "6D legacy teacher: action mapping/environment not established. check can inspect weights; execution is blocked until the original controller is recovered."
+    },
+    "roll": {
+      "checkpoint": "best_model_track/roll_track_best_reward_33.28.pth",
+      "sha256": "5321af46bbd12e2c8edcd79f09e4aa8630a6664233828659b41c334c70882efc",
+      "family": "ppo_dcmm_645edc4",
+      "expected_action_dim": 8,
+      "action_indices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "action_scales": [
+        1.5,
+        0.025,
+        0.01
+      ],
+      "success_metric": "roll_eval_success"
+    },
+    "bounce": {
+      "checkpoint": "best_model_track/bounce_track_best_58.18.pth",
+      "sha256": "57e0a230e7388d9d2ee7eb849c44d1a0f9a7f6532e898e849d1c5eba861b62da",
+      "family": "ppo_dcmm_july22",
+      "expected_action_dim": 8,
+      "action_indices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "action_scales": [
+        1.5,
+        0.025,
+        0.01
+      ],
+      "success_metric": "legacy_truncated"
+    }
+  },
+  "env_kwargs": {
+    "camera_name": [
+      "top"
+    ],
+    "render_per_step": false,
+    "render_mode": "rgb_array",
+    "object_name": "object",
+    "img_size": [
+      112,
+      112
+    ],
+    "imshow_cam": false,
+    "print_obs": false,
+    "print_info": false,
+    "print_reward": false,
+    "print_ctrl": false,
+    "print_contacts": false,
+    "object_eval": false,
+    "env_time": 2.5,
+    "steps_per_policy": 20,
+    "bounce_physics": "legacy",
+    "bounce_launch": "legacy",
+    "bounce_log": false,
+    "basket_log": false,
+    "roll_log": false
+  }
+}

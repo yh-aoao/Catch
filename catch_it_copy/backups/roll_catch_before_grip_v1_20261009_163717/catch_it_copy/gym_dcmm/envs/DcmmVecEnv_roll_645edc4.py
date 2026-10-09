@@ -41,7 +41,7 @@ import xml.etree.ElementTree as ET  # XML解析（修改Mujoco模型）
 from scipy.spatial.transform import Rotation as R  # 旋转变换
 from collections import deque
 from gym_dcmm.utils.roll_waiting import target as roll_wait_target, shaping as roll_wait_shaping
-from gym_dcmm.utils.roll_grasp import grasp_terms, hand_stability_terms, smooth_target_delta, grip_phase, grip_feedback, finger_contact_count
+from gym_dcmm.utils.roll_grasp import grasp_terms, hand_stability_terms, smooth_target_delta
 from gym_dcmm.utils.roll_rewards import hand_collision_ids  # 双端队列（存储历史数据）
 from gym_dcmm.utils.basket_tracking import parking_state, parking_reward, limit_speed
 
@@ -1585,9 +1585,6 @@ class DcmmVecEnv(gym.Env):
         self._prev_palm_up = None  # 重置上一步掌心朝上分量（舀水姿态增量奖励用）
         self.prev_finger_dot = -1.0  # 重置上一步手指方向
         self.roll_hold_until = -1.
-        self.roll_grip_state = {}
-        self.roll_grip_feedback_state = {}
-        self.roll_grip_diagnostics = {}
         self.roll_previous_target_delta = None
         self.roll_target_terms = {}
         self.roll_previous_hand_speed = None
@@ -2117,40 +2114,22 @@ class DcmmVecEnv(gym.Env):
                 self.Dcmm.data.qpos[37:40] - self._roll_capture_point())
             hand_ids = hand_collision_ids(self.Dcmm.model, self.hand_start_id)
             touching = bool(np.any(np.isin(self.contacts['object_contacts'], hand_ids)))
-            hand, clear, relative_speed, distance = self._roll_hold_state()
-            phase = grip_phase(self.roll_grip_state, hand, clear, relative_speed,
-                               float(self.Dcmm.data.time), DcmmCfg)
-            # Contact bypasses the unverified palm-normal gate only for Catch shaping.
-            # There is no prescribed closed-angle target after contact.
             ready, finger_terms = grasp_terms(
-                self.Dcmm.data.qpos[21:37], local_ball, False, DcmmCfg)
-            if phase != 'waiting':
-                ready = True
-                finger_terms['posture'] = 0.
-                finger_terms['coordination'] = 0.
-                finger_terms['enclosure'] = 0.
+                self.Dcmm.data.qpos[21:37], local_ball, touching, DcmmCfg)
+            hand, clear, relative_speed, distance = self._roll_hold_state()
             joint_speed = self.Dcmm.data.qvel[20:36].copy()
-            stability = hand_stability_terms(joint_speed,
+            finger_terms.update(hand_stability_terms(joint_speed,
                 getattr(self, 'roll_previous_hand_speed', None),
                 self.steps_per_policy * self.Dcmm.model.opt.timestep,
-                phase == 'holding', DcmmCfg)
-            if phase == 'capturing':
-                stability = {key: amount*DcmmCfg.roll_grip_capture_regularization
-                             for key, amount in stability.items()}
-            finger_terms.update(stability)
-            finger_count = finger_contact_count(self.Dcmm.model,
-                self.contacts['object_contacts'], self.hand_start_id, hand_ids)
-            finger_terms.update(grip_feedback(self.roll_grip_feedback_state,
-                hand, clear, distance, relative_speed, finger_count,
-                self.steps_per_policy*self.Dcmm.model.opt.timestep, DcmmCfg))
+                self._roll_settled_mode(hand, clear, relative_speed), DcmmCfg))
+            if self._roll_settled_mode(hand, clear, relative_speed):
+                # A held ball should not be squeezed toward an arbitrary angle.
+                finger_terms['posture'] *= .2
+                finger_terms['enclosure'] = 1.
             finger_terms.update(getattr(self, 'roll_target_terms', {}))
             self.roll_previous_hand_speed = joint_speed
             reward_roll_scoop += sum(finger_terms.values())
-            info['roll_grasp'] = dict(version='grip_v1', phase=phase,
-                                     finger_contacts=finger_count,
-                                     retention=self.roll_grip_feedback_state.copy(),
-                                     control=getattr(self, 'roll_grip_diagnostics', {}),
-                                     ready=ready, contact=touching,
+            info['roll_grasp'] = dict(ready=ready, contact=touching,
                                      local_ball=local_ball.tolist(), terms=finger_terms)
 
         ## 5. 分任务/分阶段计算总奖励
@@ -2439,16 +2418,10 @@ class DcmmVecEnv(gym.Env):
 
         elif self.object_motion == 'roll' and self.task == 'Catching':
             hand, clear, speed, distance = self._roll_hold_state()
-            phase = grip_phase(self.roll_grip_state, hand, clear, speed,
-                               float(self.Dcmm.data.time), DcmmCfg)
             applied, self.roll_target_terms = smooth_target_delta(
                 action_dict['hand'], getattr(self, 'roll_previous_target_delta', None),
                 self.steps_per_policy * self.Dcmm.model.opt.timestep,
-                phase == 'holding', DcmmCfg, phase=phase)
-            self.roll_grip_diagnostics = dict(phase=phase,
-                requested=np.asarray(action_dict['hand']).tolist(), applied=applied.tolist(),
-                joint_speed=self.Dcmm.data.qvel[20:36].tolist(),
-                target_error=float(np.max(np.abs(self.Dcmm.target_hand_qpos-self.Dcmm.data.qpos[21:37]))))
+                self._roll_settled_mode(hand, clear, speed), DcmmCfg)
             self.roll_previous_target_delta = applied.copy()
             roll_evaluation.record_action(self, action_dict['hand'], applied)
             self.Dcmm.action_hand2qpos(applied)
@@ -3007,8 +2980,6 @@ class DcmmVecEnv(gym.Env):
             # self.reset()
             pass
         
-        if self.object_motion == 'roll' and self.task == 'Catching' and self.roll_log and (terminated or truncated):
-            print(f"[roll-grip] {info.get('roll_grasp', {})}", flush=True)
         roll_evaluation.publish(self, info, terminated, truncated)
         return obs, reward, terminated, truncated, info
 

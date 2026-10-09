@@ -57,14 +57,13 @@ class TrackingTests(unittest.TestCase):
             for key, value in teacher.rms.state_dict().items():
                 torch.testing.assert_close(value, before[key])
             self.assertFalse(any(p.requires_grad for p in teacher.model.parameters()))
-        self.assertFalse(report['throw']['interface_ready'])
-        for task in ('roll', 'bounce'):
+        for task in ('throw', 'roll', 'bounce'):
             self.assertTrue(report[task]['action_parity'])
             self.assertTrue(report[task]['interface_ready'])
 
     def test_unresolved_throw_and_wrong_checkpoint_rejected(self):
         with self.assertRaisesRegex(ValueError, 'Unresolved'):
-            ActionAdapter(self.config['tasks']['throw'])
+            ActionAdapter(dict(self.config['tasks']['throw'], action_indices=None))
         cfg = dict(self.config['tasks']['roll'], expected_action_dim=6)
         with self.assertRaisesRegex(ValueError, 'action dimension'):
             Teacher(cfg)
@@ -77,7 +76,7 @@ class TrackingTests(unittest.TestCase):
         self.assertEqual(x.shape, (2, 29))
         np.testing.assert_array_equal(x[:, -3:], [[0, 0, 1]] * 2)
         # Synthetic mapping exercises masking; it does not establish throw semantics.
-        adapter = ActionAdapter(dict(self.config['tasks']['throw'], action_indices=[0, 1, 2, 3, 4, 7]))
+        adapter = ActionAdapter(dict(self.config['tasks']['throw'], expected_action_dim=6, action_indices=[0, 1, 2, 3, 4, 7]))
         y = adapter.canonical(np.full((2, 6), .5, np.float32))
         np.testing.assert_array_equal(y[:, 5:7], 0)
         np.testing.assert_array_equal(adapter.executable(np.ones((2, 8)))[:, 5:7], 0)
@@ -98,7 +97,6 @@ class TrackingTests(unittest.TestCase):
 
     def test_real_teachers_train_resume_and_student_only_evaluation(self):
         cfg = copy.deepcopy(self.config)
-        cfg['tasks'].pop('throw')
         cfg.update(device='cpu', hidden=[16], iterations=2, num_envs_per_task=2,
                    rollout_steps=2, calibration_steps=2, updates_per_iteration=2,
                    batch_per_task=4, capacity_per_task=32, eval_every=1,

@@ -22,18 +22,27 @@
   "max_eval_steps": 100000,
   "tasks": {
     "throw": {
-      "checkpoint": "best_model_track/track.pth",
-      "sha256": "4e14f6f4e5909171d6e8b28e0a8f104d867d2355d1e75c747ed3c4e92ea32992",
+      "checkpoint": "best_model_track/throw_track_best_reward_54.78.pth",
+      "sha256": "82131d0a8e86e2f3ed096897a2e7a85a73ce703a9dae747fba13fd8e42460788",
       "family": "ppo_dcmm",
-      "expected_action_dim": 6,
-      "action_indices": null,
+      "expected_action_dim": 8,
+      "action_indices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
       "action_scales": [
         1.5,
         0.025,
         0.01
       ],
       "success_metric": "success",
-      "interface_note": "6D legacy teacher: action mapping/environment not established. check can inspect weights; execution is blocked until the original controller is recovered."
+      "interface_note": "8D Track teacher: base2 + arm6. Verify closed-loop performance in the original Tracking environment before full training."
     },
     "roll": {
       "checkpoint": "best_model_track/roll_track_best_reward_33.28.pth",

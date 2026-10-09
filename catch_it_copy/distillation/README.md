@@ -27,6 +27,14 @@ roll_eval_success 是额外严格指标：手部接触、球离开桌面/地面�
 
 ## 设计和范围
 
+### Throw 统一使用球体
+
+共享环境配置 `configs/env/DcmmCfg.py` 的 `throw_object_shape = "sphere"` 使普通 throw PPO 训练/测试、蒸馏教师评估、学生采样和评估都生成球体，包括原 `object_eval=True` 网格分支。球半径仍按现有 `[0.035, 0.045]` 米范围随机，发射位置和速度等仍沿用原设置；这里固定的是形状，不是所有物理参数和轨迹。roll/bounce 沿用各自环境。
+
+此前 throw 默认会随机抽取 box/cylinder/sphere/ellipsoid/capsule，旧教师的多形状评估结果不能直接与现在的小球评估结果比较，应重新跑教师基准。把 `throw_object_shape` 设为 `None` 可恢复旧形状选择。
+
+同步时需包含 `configs/env/DcmmCfg.py` 和 `gym_dcmm/envs/DcmmVecEnv.py`。此次改变了环境分布，应使用新输出目录开始实验；旧断点的环境 hash 不匹配会被拒绝恢复。教师 checkpoint 可以继续作为教师使用，但其小球闭环表现需重新评估。
+
 当前 bounce 主评估指标按用户要求改为 `legacy_truncated`，与原 5fe75d5f PPO 测试逐回合统计 `truncates` 的逻辑一致。教师基准、学生评估和最佳模型选择均使用此口径；环境 `success` 仍保存在辅助指标中。throw/roll 指标不变。以上历史记录中 bounce 使用 `success` 的描述是修改前状态。
 
 同步新的 `configs/three_tasks.json` 后，用新输出目录启动训练。旧 checkpoint 内嵌旧配置，独立 `eval --checkpoint ...` 仍使用其原指标，修改默认 JSON 不会改写旧模型；也不能把旧口径的 resume 直接续到新配置。自定义 --config 文件需自行将 bounce.success_metric 改为 legacy_truncated。

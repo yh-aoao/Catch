@@ -975,6 +975,17 @@ class DcmmVecEnv(gym.Env):
             # 随机化物体形状/尺寸（训练模式）或网格模型（评估模式）
             geom = object_body.find(".//geom[@name='object']")
             if geom is not None:
+                # The main throw task uses the same sphere in PPO and distillation,
+                # including object_eval mesh mode. Other motion modes keep their reset.
+                fixed_shape = getattr(DcmmCfg, 'throw_object_shape', None) if self.object_motion == 'throw' else None
+                if fixed_shape is not None:
+                    if fixed_shape != 'sphere':
+                        raise ValueError('throw_object_shape must be sphere or None')
+                    geom.attrib.pop('mesh', None)
+                    geom.set('type', 'sphere')
+                    low, high = DcmmCfg.object_size['sphere'][0]
+                    geom.set('size', str(np.random.uniform(low, high)))
+                    return ET.tostring(root, encoding='unicode')
                 # 根据 train_object_filter 过滤可选形状
                 _tf = getattr(DcmmCfg, 'train_object_filter', None)
                 if _tf is not None:

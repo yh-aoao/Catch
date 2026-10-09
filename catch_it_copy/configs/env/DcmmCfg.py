@@ -96,6 +96,8 @@ k_hand = np.array([0.75, 1.25])
 ## Object Shape and Size
 object_shape = ["box", "cylinder", "sphere", "ellipsoid", "capsule"]
 object_mesh = ["bottle_mesh", "bread_mesh", "bowl_mesh", "cup_mesh", "winnercup_mesh"]
+# Shared by ordinary throw training/testing and distillation. None restores legacy shapes.
+throw_object_shape = "sphere"
 # 训练时限制物体形状（None=全部形状；["sphere"]=只小球）。catch_throw 时设为 ["sphere"]
 train_object_filter = None
 object_size = {

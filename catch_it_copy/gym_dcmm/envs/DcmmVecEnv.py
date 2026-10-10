@@ -2953,7 +2953,7 @@ class DcmmVecEnv(gym.Env):
                       f"time={info['env_time']:.3f} distance_world={info['basket_distance_world']:.3f} "
                       f"success={info['success']} reason={info.get('terminated_reason', 'running')} "
                       f"terms={info['basket_reward_terms']} totals={info['basket_reward_totals']} control={info.get('basket_control', {})}", flush=True)
-        if self.object_motion in ("bounce", "roll") and self.task == "Tracking":
+        if self.object_motion in ("throw", "bounce", "roll") and self.task == "Tracking":
             # Preserve episode/reward semantics; a failure in this step takes priority.
             info['success'] = bool(self.step_touch and not terminated)
             if done:

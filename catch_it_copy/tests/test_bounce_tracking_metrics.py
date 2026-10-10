@@ -29,13 +29,14 @@ class MetricsTests(unittest.TestCase):
                             for t in a.targets) for a in n.body)
                     and 'Tracking' in ast.unparse(n.test) and "'bounce'" in ast.unparse(n.test))
         code = compile(ast.Module(body=[node], type_ignores=[]), '<success>', 'exec')
-        for touch, failed, done, expected, reason in [
+        for motion, touch, failed, done, expected, reason in [
+            (motion, *case) for motion in ('throw', 'bounce', 'roll') for case in [
             (True, False, True, True, 'track_success'),
             (False, False, True, False, 'timeout'),
             (True, True, True, False, 'out_of_bounds'),
             (False, False, False, False, None),
-        ]:
-            env = SimpleNamespace(object_motion='bounce', task='Tracking', step_touch=touch,
+        ]]:
+            env = SimpleNamespace(object_motion=motion, task='Tracking', step_touch=touch,
                                   terminated_reason='out_of_bounds' if failed else None)
             info = {}
             exec(code, dict(self=env, info=info, terminated=failed, done=done))

@@ -40,4 +40,29 @@ class SuccessTests(unittest.TestCase):
             run(node,SimpleNamespace(task='Tracking',step_touch=touch,terminated=failed),info)
             self.assertEqual(info['success'],expected)
 
+class BounceRevisionTests(unittest.TestCase):
+    def test_catch_stage_and_timeout_match_throw(self):
+        nodes=step_nodes('gym_dcmm/envs/DcmmVecEnv.py','BounceEnv')
+        node=next(n for n in nodes if isinstance(n,ast.If) and ast.unparse(n.test)=="self.task == 'Catching' and self.object_motion == 'bounce'")
+        env=SimpleNamespace(task='Catching',object_motion='bounce',stage='tracking',terminated=False)
+        run(node,env,dict(ee_distance=.24))
+        self.assertEqual(env.stage,'grasping')
+        run(node,env,dict(ee_distance=.25))
+        self.assertTrue(env.terminated)
+        success_node=next(n for n in nodes if isinstance(n,ast.If) and 'bounce_throw_official' in ast.unparse(n))
+        for timeout in (False,True):
+            info={}
+            exec(compile(ast.Module(body=[success_node],type_ignores=[]),'<success>','exec'),dict(self=env,info=info,truncated=timeout))
+            self.assertEqual(info['success'],timeout)
+
+    def test_tracking_finger_contact(self):
+        import numpy as np
+        tree=ast.parse((ROOT/'gym_dcmm/envs/DcmmVecEnv_bounce_july22.py').read_text(encoding='utf-8'))
+        node=next(n for n in ast.walk(tree) if isinstance(n,ast.If) and ast.unparse(n.test)=='self.step_touch == False')
+        for hand,palm,expected in [(True,False,True),(True,True,True),(False,False,False)]:
+            env=SimpleNamespace(task='Tracking',object_motion='bounce',step_touch=False)
+            scope=dict(self=env,np=np,mask_hand=np.array([hand]),mask_palm=np.array([palm]))
+            exec(compile(ast.Module(body=[node],type_ignores=[]),'<contact>','exec'),scope)
+            self.assertEqual(env.step_touch,expected)
+
 if __name__=='__main__': unittest.main()

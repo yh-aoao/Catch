@@ -32,3 +32,11 @@ Catch 保留回溯基线要求：grasping阶段手掌接触且观测球速<=0.05
 
 test_roll_evaluation.py 13项、test_bounce_tracking_metrics.py 4项、test_success_criteria_revision.py 3项通过；修改Python语法检查通过。
 未运行MuJoCo真实轨迹或重新训练；需在服务器用已有checkpoint复测。原有成功率与新口径不可直接混比。
+
+## 后续按用户要求更新 Bounce
+
+Track（July22实际入口）：手掌或手指接触均触发 step_touch；无接触超时不算成功，同步失败仍优先。
+Catch（BounceEnv实际入口）：改用当前Throw的官方抓取阶段逻辑，link6距离<0.25m进入grasping，随后>=0.25m则ball_left；超过env_time时info.success=truncated，与Throw一致（包括同步失败/截断边界）。原低速、MCP、XY、高度与failed_control分支不再用于Bounce Catch。
+保留Bounce自身的落地反弹、越界及底座碰撞等仿真条件，非将整套Throw物理复制过来。Roll未修改。
+该修改影响Bounce的结束时刻/阶段切换，因此可能改变新训练回报；已有模型可直接测试。
+新增手指接触、Catch阶段切换和超时统计测试，success_criteria_revision共5项通过；未运行MuJoCo实测。

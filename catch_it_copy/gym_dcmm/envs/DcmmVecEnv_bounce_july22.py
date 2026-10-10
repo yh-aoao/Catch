@@ -1726,7 +1726,7 @@ class DcmmVecEnv(gym.Env):
             if self.step_touch == False:
                 if self.task == "Catching" and np.any(mask_hand):
                     self.step_touch = True
-                elif self.task == "Tracking" and np.any(mask_palm):
+                elif self.task == "Tracking" and np.any(mask_hand if self.object_motion == "bounce" else mask_palm):
                     self.step_touch = True
             # 更新相对位置/距离历史（用于 no-approach 检测）
             try:

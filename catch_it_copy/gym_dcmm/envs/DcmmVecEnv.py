@@ -8290,7 +8290,14 @@ class BounceEnv(gym.Env):
         info = self._get_info()
 
         # 抓取任务阶段切换（跟踪→抓取）
-        if self.task == 'Catching':
+        if self.task == 'Catching' and self.object_motion == 'bounce':
+            # Same catch-stage criterion as official Throw; ground bounces remain allowed.
+            if info['ee_distance'] < 0.25 and self.stage == 'tracking':
+                self.stage = 'grasping'
+            elif info['ee_distance'] >= 0.25 and self.stage == 'grasping':
+                self.terminated = True
+                self.terminated_reason = 'ball_left'
+        elif self.task == 'Catching':
             if self.stage == "tracking":
                 # roll/bounce 模式使用更严格的 tracking-success 判定
                 if self.object_motion == "roll":
@@ -8449,6 +8456,10 @@ class BounceEnv(gym.Env):
         elif self.task == "Tracking":
             truncated = info["env_time"] > self.env_time or self.step_touch
 
+        if self.task == 'Catching' and self.object_motion == 'bounce':
+            # Match current Throw's official truncation-based success semantics.
+            info['success'] = bool(truncated)
+            info['success_version'] = 'bounce_throw_official'
         terminated = self.terminated
         done = terminated or truncated
 

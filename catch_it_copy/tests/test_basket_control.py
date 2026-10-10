@@ -62,5 +62,45 @@ class BasketControlTests(unittest.TestCase):
         self.assertEqual(probe.smooth_segment(-1., .1), 0.)
         self.assertEqual(probe.smooth_segment(2., .1), 1.)
 
+    def test_zero_back_time_skips_nonzero_back_offset_without_jump(self):
+        back, forward = np.array([-.1, -.02]), np.array([.16, .12])
+        np.testing.assert_allclose(probe.trajectory(.5,.5,0.,.4,back,forward), [0.,0.])
+        np.testing.assert_allclose(probe.trajectory(.7,.5,0.,.4,back,forward), forward*.5)
+        np.testing.assert_allclose(probe.trajectory(.9,.5,0.,.4,back,forward), forward)
+
+    def test_scan_covers_cells_and_repeats_each(self):
+        args = SimpleNamespace(scan=True, scan_swing_times=[.3,.6],
+            scan_release_fractions=[.3,.5,.7], episodes=2)
+        trials = probe.trial_settings(args)
+        self.assertEqual(len(trials), 12)
+        self.assertEqual(len(set(trials)), 6)
+        self.assertTrue(all(trials.count(pair) == 2 for pair in set(trials)))
+
+    def test_release_diagnostic_does_not_call_downward_drop_a_throw(self):
+        snapshot = dict(last_contact=dict(time=10.73, velocity=[0.,.5,-1.2]))
+        result = probe.release_diagnostic(snapshot, 10., 1., 1.315, np.array([0.,1.]))
+        self.assertEqual(result['status'], 'lost_before_forward_swing')
+        self.assertFalse(result['upward_forward_flight'])
+        snapshot['last_contact'] = dict(time=11.4, velocity=[0.,2.,3.])
+        result = probe.release_diagnostic(snapshot, 10., 1., 1.315, np.array([0.,1.]))
+        self.assertTrue(result['upward_forward_flight'])
+        self.assertEqual(result['status'], 'released_after_planned_open')
+        self.assertEqual(probe.release_diagnostic(None, 0., .5, .7, np.array([0.,1.]))['status'],
+                         'no_free_flight_detected')
+
+    def test_joint_direction_report_restores_internal_kinematics(self):
+        robot, _, _ = self.fixture()
+        robot.model = SimpleNamespace(jnt_limited=np.ones(6, dtype=bool),
+                                      jnt_range=np.tile([-1.,1.], (6,1)))
+        body = SimpleNamespace(xpos=np.zeros(3), xmat=np.eye(3).reshape(-1))
+        robot.data_arm.body = lambda n: body
+        saved = robot.data_arm.qpos.copy()
+        def forward(model, data):
+            body.xpos[:] = data.qpos[:3]
+        rows = probe.joint_direction_report(robot, SimpleNamespace(mj_fwdPosition=forward), range(6), .1)
+        self.assertEqual(len(rows), 12)
+        np.testing.assert_allclose(rows[0]['ee_delta_arm_frame'], [-.1,0.,0.])
+        np.testing.assert_allclose(robot.data_arm.qpos, saved)
+
 if __name__ == '__main__':
     unittest.main()

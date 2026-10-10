@@ -25,20 +25,19 @@ class RollEvaluationTests(unittest.TestCase):
         self.assertFalse(state['held_now'])
         self.assertFalse(state['stable_now'])
 
-    def test_retention_counts_noncontact_only_after_contact_until_exit(self):
-        state = {}
-        E.advance_catch(state, False, True, True, .3, 1.)
-        self.assertFalse(state['caught_once'])
-        E.advance_catch(state, True, True, True, .3, .1)
-        E.advance_catch(state, False, True, True, .3, .4)
-        self.assertTrue(state['caught_once'])
-        self.assertTrue(state['holding_at_end'])
-        self.assertAlmostEqual(state['contact_fraction'], .2)
-        E.advance_catch(state, False, True, False, .3, .01)
+    def test_catch_gap_is_bounded_and_requires_recontact(self):
+        state = E.advance_catch({}, True, True, True, .3, .5)
+        E.advance_catch(state, False, True, True, .3, .08)
+        self.assertTrue(state['held_now'])
+        E.advance_catch(state, False, True, True, .3, .002)
         self.assertFalse(state['held_now'])
+        self.assertEqual(state['duration'], 0.)
         E.advance_catch(state, False, True, True, .3, 1.)
         self.assertFalse(state['holding_at_end'])
-        self.assertEqual(state['duration'], 0.)
+        E.advance_catch(state, True, True, True, .3, .49)
+        self.assertFalse(state['held_now'])
+        E.advance_catch(state, True, True, True, .3, .01)
+        self.assertTrue(state['held_now'])
 
     def test_local_region_rotates_and_rejects_under_palm(self):
         point = np.array([1., 2., 3.])
@@ -126,7 +125,7 @@ class RollEvaluationTests(unittest.TestCase):
             info = dict(success=False)
             E.publish(env, info, False, True)
             self.assertEqual(env.__dict__, before)
-            self.assertTrue(info['roll_eval_success'])
+            self.assertEqual(info['roll_eval_success'], task == 'Tracking')
             self.assertFalse(info['roll_final_hold'])
             self.assertEqual(info['success'], task == 'Tracking')
 

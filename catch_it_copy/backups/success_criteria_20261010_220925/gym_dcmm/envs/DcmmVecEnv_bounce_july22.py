@@ -1975,9 +1975,6 @@ class DcmmVecEnv(gym.Env):
         elif self.task == "Tracking":
             truncated = info["env_time"] > self.env_time or self.step_touch
         
-        if self.task == 'Tracking':
-            info['success'] = bool(self.step_touch and not self.terminated)
-            info['success_version'] = 'bounce_touch_v1'
         terminated = self.terminated
         done = terminated or truncated
         

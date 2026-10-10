@@ -2743,17 +2743,9 @@ class DcmmVecEnv(gym.Env):
             info['roll_raw_touch'] = bool(self.step_touch)
             self.step_touch = bool(self.step_touch and roll_status['capture_ready'])
         
-        # Official Catch_It Throw: survive to timeout; no low-speed early success.
-        if self.task == 'Catching' and self.object_motion == 'throw':
-            if info['ee_distance'] < 0.25 and self.stage == 'tracking':
-                self.stage = 'grasping'
-            elif info['ee_distance'] >= 0.25 and self.stage == 'grasping':
-                self.terminated = True
-                self.terminated_reason = 'ball_left'
-
         catch_diagnostics = None
         # 抓取任务阶段切换（跟踪→抓取）
-        if self.task == 'Catching' and self.object_motion not in ('throw_basket', 'throw') and (self.object_motion != 'roll' or not self.terminated):
+        if self.task == 'Catching' and self.object_motion != 'throw_basket' and (self.object_motion != 'roll' or not self.terminated):
             if self.stage == "tracking":
                 # roll/bounce 模式使用更严格的 tracking-success 判定
                 if self.object_motion == "roll":
@@ -2883,8 +2875,8 @@ class DcmmVecEnv(gym.Env):
                         self.terminated = True
                         info['success'] = False
                         self.terminated_reason = 'failed_control'
-                elif self.object_motion == "bounce":
-                    # Legacy fallback: throw/bounce 接球成功判定：球接触手 + 球速低 + 持续 N 步（bounce 与 throw 完全一致）
+                elif self.object_motion in ("throw", "bounce"):
+                    # throw/bounce 接球成功判定：球接触手 + 球速低 + 持续 N 步（bounce 与 throw 完全一致）
                     obj_contacts = self.contacts.get('object_contacts', np.array([])).astype(int)
                     contact_on_hand = np.any(obj_contacts >= self.hand_start_id)
                     ball_speed = np.linalg.norm(obs['object']['v_lin_3d'])
@@ -2949,13 +2941,8 @@ class DcmmVecEnv(gym.Env):
         elif self.task == "Catching":
             truncated = info["env_time"] > self.env_time
         elif self.task == "Tracking":
-            truncated = (self.step_touch if self.object_motion == 'throw'
-                         else info["env_time"] > self.env_time or self.step_touch)
+            truncated = info["env_time"] > self.env_time or self.step_touch
         
-        if self.object_motion == 'throw':
-            # Match upstream PPO semantics, including simultaneous failure/truncation.
-            info['success'] = bool(truncated)
-            info['success_version'] = 'throw_official'
         terminated = self.terminated
         done = terminated or truncated
         if self.object_motion == 'throw_basket':
@@ -2966,7 +2953,7 @@ class DcmmVecEnv(gym.Env):
                       f"time={info['env_time']:.3f} distance_world={info['basket_distance_world']:.3f} "
                       f"success={info['success']} reason={info.get('terminated_reason', 'running')} "
                       f"terms={info['basket_reward_terms']} totals={info['basket_reward_totals']} control={info.get('basket_control', {})}", flush=True)
-        if self.object_motion in ("bounce", "roll") and self.task == "Tracking":
+        if self.object_motion in ("throw", "bounce", "roll") and self.task == "Tracking":
             # Preserve episode/reward semantics; a failure in this step takes priority.
             info['success'] = bool(self.step_touch and not terminated)
             if done:

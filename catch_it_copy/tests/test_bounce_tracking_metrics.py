@@ -30,7 +30,7 @@ class MetricsTests(unittest.TestCase):
                     and 'Tracking' in ast.unparse(n.test) and "'bounce'" in ast.unparse(n.test))
         code = compile(ast.Module(body=[node], type_ignores=[]), '<success>', 'exec')
         for motion, touch, failed, done, expected, reason in [
-            (motion, *case) for motion in ('throw', 'bounce', 'roll') for case in [
+            (motion, *case) for motion in ('bounce', 'roll') for case in [
             (True, False, True, True, 'track_success'),
             (False, False, True, False, 'timeout'),
             (True, True, True, False, 'out_of_bounds'),

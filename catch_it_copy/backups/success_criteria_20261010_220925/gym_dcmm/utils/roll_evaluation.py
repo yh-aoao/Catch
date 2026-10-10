@@ -49,9 +49,8 @@ def advance_catch(state, contact, clear, near, speed, dt):
     good = bool(contact and clear and near)
     if good:
         state['retention_started'] = True
+    retained = bool(state.get('retention_started', False) and clear and near)
     state['gap'] = 0. if contact else state.get('gap', 0.) + dt
-    retained = bool(state.get('retention_started', False) and clear and near
-                    and state['gap'] <= CATCH_GAP_SECONDS + 1e-9)
     state['max_gap'] = max(state.get('max_gap', 0.), state['gap'])
     gap_ok = bool(retained and not contact)
     if retained:
@@ -84,7 +83,7 @@ def advance_catch(state, contact, clear, near, speed, dt):
     state['max_duration'] = max(state.get('max_duration', 0.), state.get('duration', 0.))
     state['max_stable_duration'] = max(state.get('max_stable_duration', 0.), state.get('stable_duration', 0.))
     state.update(contact=bool(contact), clear=bool(clear), near=bool(near), speed=float(speed),
-                 evaluation_version='retention_v4_final')
+                 evaluation_version='retention_v3')
     return state
 
 
@@ -168,10 +167,7 @@ def publish(env, info, terminated, truncated):
         info['success'] = bool(env.step_touch and not terminated)
         legacy = info['success']
     info['roll_legacy_success'] = legacy
-    info['roll_eval_success'] = bool(state.get('intercepted' if env.task == 'Tracking' else 'held_now', False))
-    info['roll_caught_once'] = bool(state.get('caught_once', False))
-    if env.task == 'Catching' and terminated and env.terminated_reason != 'catch_success':
-        info['roll_eval_success'] = False
+    info['roll_eval_success'] = bool(state.get('intercepted' if env.task == 'Tracking' else 'caught_once', False))
     info['roll_final_hold'] = bool(state.get('held_now', False))
     info['roll_holding_at_end'] = bool(state.get('holding_at_end', False))
     info['roll_stable_hold'] = bool(state.get('stable_once', False))

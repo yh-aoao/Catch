@@ -81,7 +81,10 @@ def solve_absolute_probe_pose(robot, mujoco, position, quaternion, previous_targ
     try:
         robot.data_arm.qpos[:6] = measured
         mujoco.mj_fwdPosition(robot.model_arm, robot.data_arm)
-        solution, success = robot.ik_arm_solve(position.copy(), quaternion.copy())
+        # IKArm returns (q, success, iterations, error, joint_limit_valid, time).
+        # Read the first two fields as the production environment does.
+        result = robot.ik_arm_solve(position.copy(), quaternion.copy())
+        solution, success = result[0], result[1]
         solution = np.asarray(solution, dtype=float)
         valid = bool(success) and solution.shape == (6,) and bool(np.all(np.isfinite(solution)))
         if valid:

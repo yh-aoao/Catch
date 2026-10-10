@@ -23,7 +23,7 @@ class BasketControlTests(unittest.TestCase):
         def solve(p, quat):
             captured['quat'] = quat.copy()
             captured['seed'] = robot.data_arm.qpos.copy()
-            return np.ones(6)*2, ok
+            return np.ones(6)*2, ok, 4, .001, True, .002
         robot = SimpleNamespace(data=SimpleNamespace(qpos=np.arange(40.)/100),
             data_arm=SimpleNamespace(qpos=np.zeros(6), body=lambda n: body),
             model_arm=None, current_ee_pos=np.zeros(3), current_ee_quat=np.zeros(4),
@@ -112,7 +112,7 @@ class BasketControlTests(unittest.TestCase):
         def solve(position, quaternion):
             captured_positions.append(position.copy())
             np.testing.assert_allclose(quaternion, q)
-            return np.ones(6)*.2, True
+            return np.ones(6)*.2, True, 4, .001, True, .002
         robot.ik_arm_solve = solve
         for drift in [0., -.15]:
             robot.data.qpos[15:21] += drift
@@ -127,7 +127,7 @@ class BasketControlTests(unittest.TestCase):
                                       jnt_range=np.tile([-1.,1.], (6,1)))
         previous = np.ones(6)*.3
         for solution, success in [(np.ones(6),False), (np.full(6,np.nan),True), (np.ones(6)*2,True)]:
-            robot.ik_arm_solve = lambda p, quat, s=solution, ok=success: (s, ok)
+            robot.ik_arm_solve = lambda p, quat, s=solution, ok=success: (s, ok, 4, .001, True, .002)
             result, ok = probe.solve_absolute_probe_pose(robot, scope['mujoco'], np.zeros(3), q, previous, range(6))
             self.assertFalse(ok)
             np.testing.assert_allclose(result, previous)

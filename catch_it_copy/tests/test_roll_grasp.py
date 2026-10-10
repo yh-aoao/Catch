@@ -33,6 +33,19 @@ class GraspTests(unittest.TestCase):
         self.assertEqual(g.grip_phase(state, False, True, .01, 1.6, c), 'waiting')
         self.assertEqual(g.grip_phase(state, True, True, .01, 1.7, c), 'capturing')
 
+    def test_clear_recovery_requires_new_contact(self):
+        c, state = self.grip_cfg(), {}
+        self.assertEqual(g.grip_phase(state, True, True, .1, 1., c), 'capturing')
+        self.assertEqual(g.grip_phase(state, False, False, .1, 1.02, c), 'waiting')
+        self.assertEqual(g.grip_phase(state, False, True, .1, 1.04, c), 'waiting')
+        self.assertEqual(g.grip_phase(state, True, True, .1, 1.06, c), 'capturing')
+        self.assertEqual(state['first_contact'], 1.06)
+        self.assertEqual(g.grip_phase(state, False, True, .1, 1.08, c), 'capturing')
+
+    def test_stale_contact_timestamp_cannot_restart_capture(self):
+        state = {'first_contact': None, 'last_contact': 1.}
+        self.assertEqual(g.grip_phase(state, False, True, .1, 1.02, self.grip_cfg()), 'waiting')
+
     def test_retention_credit_capped_and_slip_penalty_once(self):
         c, state = self.grip_cfg(), {}
         earned = sum(g.grip_feedback(state, True, True, .1, .1, 2, .04, c)['retention_progress']

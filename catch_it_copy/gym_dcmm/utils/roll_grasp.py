@@ -63,9 +63,12 @@ def grip_phase(state, contact, clear, speed, now, cfg):
             state['first_contact'] = now
         state['last_contact'] = now
     last = state.get('last_contact', -float('inf'))
-    active = clear and now-last <= cfg.roll_grip_contact_grace
+    active = (clear and state.get('first_contact') is not None
+              and now-last <= cfg.roll_grip_contact_grace)
     if not active:
         state['first_contact'] = None
+        # Invalidate the grace window too: clear can recover before a new contact.
+        state.pop('last_contact', None)
         return 'waiting'
     age = now-state['first_contact']
     return ('holding' if age >= cfg.roll_grip_capture_seconds and speed <= .25

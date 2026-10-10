@@ -75,6 +75,25 @@ def joint_direction_report(robot, mujoco, joint_ids, amplitude):
     return records
 
 
+def solve_absolute_probe_pose(robot, mujoco, position, quaternion, previous_target, joint_ids):
+    """Measured IK seed, but fixed absolute pose goal; retain target on failure."""
+    measured = robot.data.qpos[15:21].copy()
+    try:
+        robot.data_arm.qpos[:6] = measured
+        mujoco.mj_fwdPosition(robot.model_arm, robot.data_arm)
+        solution, success = robot.ik_arm_solve(position.copy(), quaternion.copy())
+        solution = np.asarray(solution, dtype=float)
+        valid = bool(success) and solution.shape == (6,) and bool(np.all(np.isfinite(solution)))
+        if valid:
+            valid = all(not robot.model.jnt_limited[jid] or
+                robot.model.jnt_range[jid,0] <= solution[j] <= robot.model.jnt_range[jid,1]
+                for j, jid in enumerate(joint_ids))
+        return (solution.copy() if valid else previous_target.copy()), valid
+    finally:
+        robot.data_arm.qpos[:6] = measured
+        mujoco.mj_fwdPosition(robot.model_arm, robot.data_arm)
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--viewer', action='store_true')
@@ -85,6 +104,7 @@ def main():
     parser.add_argument('--swing-time', type=float, default=.45)
     parser.add_argument('--release-fraction', type=float, default=.5)
     parser.add_argument('--open-time', type=float, default=.12)
+    parser.add_argument('--no-release', action='store_true', help='swing with initial hand target; no scripted opening')
     parser.add_argument('--back-y', type=float, default=-.08)
     parser.add_argument('--forward-y', type=float, default=.16)
     parser.add_argument('--up-z', type=float, default=.12)
@@ -126,6 +146,10 @@ def main():
                 env.Dcmm.data_arm.qpos[:6] = q0
                 mujoco.mj_fwdPosition(env.Dcmm.model_arm, env.Dcmm.data_arm)
                 p0 = env.Dcmm.data_arm.body('link6').xpos.copy()
+                quat0 = env.Dcmm.data_arm.body('link6').xquat.copy()
+                pose_command = p0.copy()
+                joint_command = q0.copy()
+                probe_ik_attempts = probe_ik_successes = 0
                 # Joint addresses are queried for clipping, not guessed from geom ids.
                 joint_ids = [int(np.where(env.Dcmm.model.jnt_qposadr == i)[0][0]) for i in range(15,21)]
                 if args.calibrate_joints:
@@ -156,17 +180,32 @@ def main():
                     t = float(env.Dcmm.data.time)-start
                     offset = trajectory(t+dt, args.hold, args.back_time, swing_time, back, forward)
                     arm = np.zeros(6)
-                    if args.mode == 'joint':
+                    probe_ik_ok = None
+                    if args.mode == 'hold' or t+dt <= args.hold:
+                        # Zero Cartesian increments would re-anchor the joint target
+                        # to each new measured pose. Keep the ORIGINAL target instead.
+                        joint_command = q0.copy()
+                        pose_command = p0.copy()
+                    elif args.mode == 'joint':
                         target = q0 + offset
                         for j, jid in enumerate(joint_ids):
                             if env.Dcmm.model.jnt_limited[jid]:
                                 target[j] = np.clip(target[j], *env.Dcmm.model.jnt_range[jid])
-                        env._basket_joint_probe_target = target
+                        joint_command = target
                     elif args.mode == 'cartesian':
-                        env.Dcmm.data_arm.qpos[:6] = env.Dcmm.data.qpos[15:21]
-                        mujoco.mj_fwdPosition(env.Dcmm.model_arm, env.Dcmm.data_arm)
-                        arm[:3] = np.clip(p0+offset-env.Dcmm.data_arm.body('link6').xpos, -.025, .025)
-                    fraction = 0. if args.mode == 'hold' else smooth_segment(t+dt-release_time, args.open_time)
+                        # Rate-limit the commanded path, not the error from a sagging
+                        # measured pose. Hold the initial orientation throughout.
+                        candidate_pose = pose_command + np.clip(p0+offset-pose_command, -.025, .025)
+                        joint_command, probe_ik_ok = solve_absolute_probe_pose(env.Dcmm,
+                            mujoco, candidate_pose, quat0, joint_command, joint_ids)
+                        probe_ik_attempts += 1
+                        probe_ik_successes += int(probe_ik_ok)
+                        if probe_ik_ok:
+                            pose_command = candidate_pose
+                    # Existing diagnostic hook still uses the physical PID/contacts;
+                    # PPO never sets this attribute. All probe modes now use it.
+                    env._basket_joint_probe_target = joint_command.copy()
+                    fraction = 0. if args.mode == 'hold' or args.no_release else smooth_segment(t+dt-release_time, args.open_time)
                     desired_hand = (1.-fraction)*h0
                     hand = np.clip((desired_hand-env.Dcmm.target_hand_qpos)[hand_indices], -.15, .15)
                     _, reward, terminated, truncated, info = env.step(dict(base=np.zeros(2), arm=arm, hand=hand))
@@ -178,6 +217,11 @@ def main():
                     ee_velocity = (ee-previous_ee)/max(actual_time-previous_time, 1.e-9)
                     normal = body.xmat.reshape(3,3)[:,1].copy()
                     ball_velocity = env.Dcmm.data.qvel[36:39].copy()
+                    env.Dcmm.data_arm.qpos[:6] = env.Dcmm.data.qpos[15:21]
+                    mujoco.mj_fwdPosition(env.Dcmm.model_arm, env.Dcmm.data_arm)
+                    ee_arm = env.Dcmm.data_arm.body('link6').xpos.copy()
+                    actual_quat = env.Dcmm.data_arm.body('link6').xquat.copy()
+                    orientation_error = 2.*np.arccos(np.clip(abs(float(np.dot(actual_quat, quat0))), 0., 1.))
                     max_ee_forward = max(max_ee_forward, float(np.dot(ee_velocity[:2], direction)))
                     max_ee_up = max(max_ee_up, float(ee_velocity[2]))
                     max_ball_forward = max(max_ball_forward, float(np.dot(ball_velocity[:2], direction)))
@@ -188,6 +232,15 @@ def main():
                         reason=env.terminated_reason, phase=env.basket_phase,
                         arm_q=env.Dcmm.data.qpos[15:21].tolist(),
                         arm_target=env.Dcmm.target_arm_qpos.tolist(),
+                        probe_control_version='absolute_pose_v2',
+                        ee_goal_arm_frame=(p0+offset if args.mode == 'cartesian' else p0).tolist() if args.mode != 'joint' else None,
+                        ee_command_arm_frame=pose_command.tolist() if args.mode != 'joint' else None,
+                        orientation_goal_wxyz=quat0.tolist() if args.mode != 'joint' else None,
+                        probe_ik_ok=probe_ik_ok, probe_ik_attempts=probe_ik_attempts,
+                        probe_ik_successes=probe_ik_successes,
+                        ee_actual_arm_frame=ee_arm.tolist(),
+                        ee_command_error=float(np.linalg.norm(ee_arm-pose_command)) if args.mode != 'joint' else None,
+                        orientation_error_rad=float(orientation_error),
                         ee_position_world=ee.tolist(), ee_velocity_world=ee_velocity.tolist(),
                         ee_displacement_world=(ee-initial_ee).tolist(),
                         link6_y_world=normal.tolist(), palm_up_cos=float(normal[2]),
@@ -201,6 +254,8 @@ def main():
                         summary = dict(type='summary', episode=episode, swing_time=swing_time,
                             release_fraction=release_fraction, reason=env.terminated_reason,
                             success=bool(info.get('success', False)),
+                            no_release=args.no_release, probe_control_version='absolute_pose_v2',
+                            probe_ik_attempts=probe_ik_attempts, probe_ik_successes=probe_ik_successes,
                             max_ee_forward_speed=max_ee_forward, max_ee_upward_speed=max_ee_up,
                             max_ball_forward_speed=max_ball_forward, max_ball_upward_speed=max_ball_up,
                             release=release_diagnostic(info.get('basket_release'), start,

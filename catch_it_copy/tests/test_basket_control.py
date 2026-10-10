@@ -102,5 +102,35 @@ class BasketControlTests(unittest.TestCase):
         np.testing.assert_allclose(rows[0]['ee_delta_arm_frame'], [-.1,0.,0.])
         np.testing.assert_allclose(robot.data_arm.qpos, saved)
 
+    def test_absolute_probe_goal_does_not_follow_measured_sag(self):
+        robot, q, capture = self.fixture()
+        robot.model = SimpleNamespace(jnt_limited=np.ones(6, dtype=bool),
+                                      jnt_range=np.tile([-3.,3.], (6,1)))
+        # Supply a nontrivial fixed pose while actual joints change between calls.
+        target = np.array([.1,.3,.5])
+        captured_positions = []
+        def solve(position, quaternion):
+            captured_positions.append(position.copy())
+            np.testing.assert_allclose(quaternion, q)
+            return np.ones(6)*.2, True
+        robot.ik_arm_solve = solve
+        for drift in [0., -.15]:
+            robot.data.qpos[15:21] += drift
+            result, ok = probe.solve_absolute_probe_pose(robot, scope['mujoco'], target, q, np.zeros(6), range(6))
+            self.assertTrue(ok)
+            np.testing.assert_allclose(robot.data_arm.qpos, robot.data.qpos[15:21])
+        np.testing.assert_allclose(captured_positions, [target,target])
+
+    def test_absolute_probe_failure_retains_previous_joint_command(self):
+        robot, q, _ = self.fixture(False)
+        robot.model = SimpleNamespace(jnt_limited=np.ones(6, dtype=bool),
+                                      jnt_range=np.tile([-1.,1.], (6,1)))
+        previous = np.ones(6)*.3
+        for solution, success in [(np.ones(6),False), (np.full(6,np.nan),True), (np.ones(6)*2,True)]:
+            robot.ik_arm_solve = lambda p, quat, s=solution, ok=success: (s, ok)
+            result, ok = probe.solve_absolute_probe_pose(robot, scope['mujoco'], np.zeros(3), q, previous, range(6))
+            self.assertFalse(ok)
+            np.testing.assert_allclose(result, previous)
+
 if __name__ == '__main__':
     unittest.main()

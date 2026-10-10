@@ -2,6 +2,26 @@
 
 本次先完成执行层修正和物理挥臂诊断；低维策略学习、示范预训练尚未实现。保留现有固定底座单阶段 PPO 和弹道奖励。
 
+## 2026-10-10：绝对目标修正（当前版本）
+
+日志标记 `probe_control_version=absolute_pose_v2`。等待阶段保持初始关节目标 q0，避免零位移 IK 每步把目标重置为实际下沉姿态。Cartesian 前挥使用以初始位置为锚点的连续绝对位置目标，同时保持初始末端四元数，避免目标朝向跟随实际姿态漂移。IK 仍以实际关节状态为种子，但不以实际姿态重置目标；求解失败、非有限解或超关节范围时保留上一条有效关节目标。目标位置相对上一条有效命令最多变化 0.025 m/轴。
+
+脚本通过已有诊断关节目标入口将结果送给原 PID 与物理接触控制，不绑定球、不给球加力。普通 PPO 控制与奖励不变。当前尚不能仅凭已有摘要确认回缩的全部原因，修正后需要动态验证。
+
+按顺序验证静态保持、挥臂不开手、正常松手：
+
+```bash
+python3 basket_throw_probe.py --viewer --mode hold --episodes 1 --log-file outputs/probe_hold_v2.jsonl
+python3 basket_throw_probe.py --viewer --mode cartesian --no-release --episodes 3 --log-file outputs/probe_swing_closed_v2.jsonl
+python3 basket_throw_probe.py --viewer --mode cartesian --episodes 3 --log-file outputs/probe_release_v2.jsonl
+```
+
+`--no-release` 仅保持初始手指目标，不会阻止球自然脱手。静态也回缩/掉球时查 PID、延迟及持球初态；静态稳定、挥臂失球时查目标跟随、手掌方向与接触。保持初始朝向也不保证所有位置目标可达。
+
+新增 `ee_goal_arm_frame`（原始轨迹目标）、`ee_command_arm_frame`（限速后有效目标）、`ee_actual_arm_frame`（实际关节 FK）、`ee_command_error`、`orientation_error_rad`。前三者使用同一个机械臂模型坐标系。`probe_ik_attempts/successes` 是本版脚本的真实 IK 次数；环境 basket_control 的 ik 计数此时仅是诊断关节目标的接受次数，不能解释为 IK 性能。Joint 模式无位置目标，相应目标与误差为 null。
+
+本轮 11 项控制测试、语法及 CLI 检查通过；本机未完成 MuJoCo 动态投掷验证。以下此前说明中的 probe 目标执行方式，以本节 absolute_pose_v2 为准。
+
 ## 修正
 
 Basket 调用 move_ee_pose(measured_state=True)：实际关节状态作为 IK 种子，MuJoCo wxyz 与 SciPy xyzw 显式转换，IK 失败或非有限解时恢复内部实际状态，环境关节目标退回实际位置。其他任务使用原默认路径。日志新增 control_version=basket_measured_ik_v1、arm_target_error。

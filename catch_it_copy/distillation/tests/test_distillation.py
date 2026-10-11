@@ -130,7 +130,7 @@ class DistillationTests(unittest.TestCase):
 
     def test_new_throw_checkpoint_when_available(self):
         cfg = self.config['tasks']['throw']
-        if not (ROOT / cfg['checkpoint']).is_file():
+        if not (ROOT / cfg['checkpoint']).is_file() or not (ROOT / cfg['checkpoint']).stat().st_size:
             self.skipTest('New throw checkpoint is server-only; actual weight validation must run there')
         teacher = Teacher(cfg)
         self.assertEqual(teacher.action_dim, 20)
@@ -139,6 +139,8 @@ class DistillationTests(unittest.TestCase):
 
     def test_throw_rejects_old_18d_checkpoint(self):
         cfg = dict(self.config['tasks']['throw'], checkpoint='best_model/catch_two_stage.pth', sha256=None)
+        if not (ROOT / cfg['checkpoint']).is_file():
+            self.skipTest('Historical 18D fixture is not present')
         with self.assertRaisesRegex(ValueError, 'expected 20, got 18'):
             Teacher(cfg)
 

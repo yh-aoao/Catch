@@ -43,6 +43,8 @@ class Teacher:
         if not path.is_file():
             raise FileNotFoundError('Teacher checkpoint not found: {}. Copy the configured teacher '
                                     'to this machine or run on the training server; no fallback to old weights.'.format(path))
+        if path.stat().st_size == 0:
+            raise ValueError('Teacher checkpoint is empty (0 bytes): {}. Copy the actual trained weights; do not use a placeholder.'.format(path))
         self.hash = sha256(path)
         if config.get('sha256') and self.hash != config['sha256']:
             raise ValueError('Teacher checkpoint hash mismatch: ' + str(path))

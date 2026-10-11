@@ -19,7 +19,7 @@ def json_value(value):
 
 
 def terminal_diagnostics(info):
-    keys = ('track_touch', 'track_contact_success', 'success', 'roll_eval_success', 'roll_legacy_success', 'roll_final_hold',
+    keys = ('success_version', 'failure_diagnostic', 'roll_caught_once', 'roll_stable_hold', 'roll_holding_at_end', 'track_touch', 'track_contact_success', 'success', 'roll_eval_success', 'roll_legacy_success', 'roll_final_hold',
             'roll_eval', 'roll_eval_unmet', 'roll_hold', 'env_time', 'ee_distance',
             'terminated_reason', '_terminated', '_truncated')
     return {k: json_value(info[k]) for k in keys if k in info}

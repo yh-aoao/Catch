@@ -77,15 +77,13 @@ class EvaluationMetricsTests(unittest.TestCase):
             self.assertEqual(records[-1]['task'], 'bounce')
             self.assertNotIn('success', records[-1]['diagnostics'])
 
-    def test_bounce_default_uses_original_timeout_metric(self):
+    def test_bounce_default_requires_environment_success(self):
         cfg = self.config()
         cfg['tasks'].pop('roll')
-        self.assertEqual(cfg['tasks']['bounce']['success_metric'], 'legacy_truncated')
-        # Legacy test counts truncated even without an environment success field.
+        self.assertEqual(cfg['tasks']['bounce']['success_metric'], 'success')
         with patch('distillation.environments.Pool', MissingMetricPool):
-            result = evaluate(cfg, make_adapters(cfg), teachers={'bounce': FakeTeacher()})
-        self.assertEqual(result['bounce']['success_rate'], 1.)
-        self.assertIsNone(result['bounce']['records'][0]['environment_success'])
+            with self.assertRaisesRegex(ValueError, 'Missing configured'):
+                evaluate(cfg, make_adapters(cfg), teachers={'bounce': FakeTeacher()})
 
     def test_zero_baseline_requires_explicit_option_and_can_train(self):
         cfg = self.config()

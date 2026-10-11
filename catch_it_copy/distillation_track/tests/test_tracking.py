@@ -34,7 +34,7 @@ class FakePool:
         np.testing.assert_array_equal(actions['hand'], np.zeros((self.n, 12)))
         self.steps += 1
         done = np.full(self.n, self.steps % 2 == 0)
-        infos = [{'success': False, 'track_contact_success': True, 'roll_eval_success': True,
+        infos = [{'success': True, 'track_contact_success': True, 'roll_eval_success': True,
                   '_truncated': bool(d), '_terminated': False} for d in done]
         return self.obs, np.ones(self.n), done, infos
 
@@ -88,17 +88,12 @@ class TrackingTests(unittest.TestCase):
         self.assertAlmostEqual(pred.grad[:, :2].abs().sum().item(), pred.grad[:, 2:].abs().sum().item())
 
     def test_metrics_match_selected_original_tests(self):
-        self.assertEqual(self.config['tasks']['throw']['success_metric'], 'track_contact_success')
-        self.assertTrue(terminal_success({'success': False, 'track_contact_success': True},
-                                         self.config['tasks']['throw']['success_metric']))
-        self.assertFalse(terminal_success({'success': False, 'track_contact_success': False,
-                                          '_truncated': True}, 'track_contact_success'))
+        for task in ('throw', 'bounce'):
+            metric = self.config['tasks'][task]['success_metric']
+            self.assertEqual(metric, 'success')
+            self.assertFalse(terminal_success({'success': False, '_truncated': True}, metric))
+            self.assertTrue(terminal_success({'success': True, 'track_contact_success': False}, metric))
         self.assertEqual(self.config['tasks']['roll']['success_metric'], 'roll_eval_success')
-        self.assertEqual(self.config['tasks']['bounce']['success_metric'], 'legacy_truncated')
-        info = {'success': False, 'roll_eval_success': True, '_truncated': True}
-        self.assertFalse(terminal_success(info, 'success'))
-        self.assertTrue(terminal_success(info, 'roll_eval_success'))
-        self.assertTrue(terminal_success(info, 'legacy_truncated'))
 
     def test_real_teachers_train_resume_and_student_only_evaluation(self):
         cfg = copy.deepcopy(self.config)

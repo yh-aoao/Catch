@@ -1,3 +1,5 @@
+> 当前模型与成功判定已于2026-10-11更新，请以 [新版设计](../DISTILLATION_UPDATE_2026-10-11.md) 和 configs/three_tasks.json 为准。下文早期指标说明保留为历史记录，不适用于新实验。
+
 # Track 在线蒸馏
 
 从 `catch_it_copy` 目录运行 `python -m distillation_track.run`。这是独立的 Tracking 学生；与 `distillation` 的 Catch 学生使用不同的输入、输出和 checkpoint schema，不能互相续训，也尚未实现 Track 学生到 Catch 学生的权重迁移。

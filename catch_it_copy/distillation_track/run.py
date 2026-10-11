@@ -150,6 +150,9 @@ def evaluate(config, adapters, student=None, teachers=None, episodes=None, viewe
                                  'diagnostics': diagnostics,
                                  'reason': str(info.get('terminated_reason', 'unspecified'))})
                     results[task] = summarize(rows, metric, episodes)
+                    results[task]['policy_role'] = 'teacher' if student is None else 'student'
+                    results[task]['success_definition'] = config['tasks'][task].get('success_definition', 'legacy_unspecified')
+                    results[task]['evaluation_revision'] = config.get('evaluation_revision', 'legacy_unspecified')
                     results[task]['wilson_95'] = wilson(results[task]['successes'], len(rows))
                     if output_file is not None:
                         save_json(output_file, results)

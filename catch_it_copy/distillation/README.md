@@ -1,3 +1,5 @@
+> 当前模型与成功判定已于2026-10-11更新，请以 [新版设计](../DISTILLATION_UPDATE_2026-10-11.md) 和 configs/three_tasks.json 为准。下文早期指标说明保留为历史记录，不适用于新实验。
+
 # Throw / Roll / Bounce：共享 MLP 在线 DAgger
 
 实现日期：2026-10-02。第一版使用一个学生 MLP `[256,256,128]`，直接在线 DAgger，默认 `beta_start=0`，不包含离线 BC 预热、PPO 微调或 GRU。只训练学生，不更新教师和原环境。

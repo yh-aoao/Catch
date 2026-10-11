@@ -50,8 +50,7 @@ def advance_catch(state, contact, clear, near, speed, dt):
     if good:
         state['retention_started'] = True
     state['gap'] = 0. if contact else state.get('gap', 0.) + dt
-    retained = bool(state.get('retention_started', False) and clear and near
-                    and state['gap'] <= CATCH_GAP_SECONDS + 1e-9)
+    retained = bool(state.get('retention_started', False) and clear and near)
     state['max_gap'] = max(state.get('max_gap', 0.), state['gap'])
     gap_ok = bool(retained and not contact)
     if retained:
@@ -76,7 +75,7 @@ def advance_catch(state, contact, clear, near, speed, dt):
         if state.get('stable_duration', 0.) > 0:
             state['stable_reset_count'] = state.get('stable_reset_count', 0) + 1
         state['stable_duration'] = 0.
-    held = bool(retained and state.get('duration', 0.) >= CATCH_HOLD_SECONDS - 1e-9)
+    held = retained
     state['caught_once'] = state.get('caught_once', False) or held
     state['held_now'] = held
     state['stable_now'] = bool(held and state.get('stable_duration', 0.) >= HOLD_SECONDS - 1e-9)
@@ -84,24 +83,26 @@ def advance_catch(state, contact, clear, near, speed, dt):
     state['max_duration'] = max(state.get('max_duration', 0.), state.get('duration', 0.))
     state['max_stable_duration'] = max(state.get('max_stable_duration', 0.), state.get('stable_duration', 0.))
     state.update(contact=bool(contact), clear=bool(clear), near=bool(near), speed=float(speed),
-                 evaluation_version='retention_v4_final')
+                 evaluation_version='region_retention_v5')
     return state
 
 
-def catch_region(position, point, rotation):
-    """Coordinates relative to the palm capture point; local +y is palm normal.
+def catch_region(position, point, rotation=None, radius=0.):
+    """World-vertical region about the actual palm geom centre (not link6 axes).
 
-    Bounds are evaluation parameters, not collision geometry or a grasp proof.
+    Ball centre must stay above palm-centre height minus 2cm tolerance;
+    the upper bound allows one ball radius plus 12cm. XY radius is 12cm.
     """
-    local = np.asarray(rotation).reshape(3, 3).T @ (np.asarray(position)-point)
-    finite = bool(np.all(np.isfinite(local)))
-    lateral = float(np.linalg.norm(local[[0, 2]]))
-    normal = float(local[1])
-    inside = finite and lateral <= .12 and -.02 <= normal <= .12
-    reason = ('invalid_position' if not finite else 'below_palm' if normal < -.02
-              else 'above_hand_region' if normal > .12 else 'outside_lateral_region'
+    delta = np.asarray(position) - np.asarray(point)
+    finite = bool(np.all(np.isfinite(delta)))
+    lateral = float(np.linalg.norm(delta[:2]))
+    height = float(delta[2])
+    upper = float(radius) + .12
+    inside = finite and lateral <= .12 and -.02 <= height <= upper
+    reason = ('invalid_position' if not finite else 'below_palm' if height < -.02
+              else 'above_hand_region' if height > upper else 'outside_lateral_region'
               if lateral > .12 else '')
-    return bool(inside), local.tolist(), reason
+    return bool(inside), delta.tolist(), reason
 
 
 def departure(state, outside_edge, table_contact, floor_contact, below_table=False):
@@ -150,8 +151,8 @@ def observe(env, cfg):
     if env.task == 'Tracking':
         clear = clear and bool(position[1] + radius < edge)
     if env.task == 'Catching':
-        near, local, reason = catch_region(position, point, palm.xmat)
-        state.update(ball_palm_local=local, region_unmet=reason)
+        near, local, reason = catch_region(position, data.geom_xpos[env.hand_start_id], radius=radius)
+        state.update(ball_palm_world_delta=local, region_unmet=reason)
         env._roll_eval = advance_catch(state, hand, clear, near, np.linalg.norm(relative), model.opt.timestep)
     else:
         env._roll_eval = advance(state, hand, clear, np.linalg.norm(position-point) <= REGION_RADIUS,
@@ -186,7 +187,7 @@ def publish(env, info, terminated, truncated):
     if env.task == 'Catching':
         if not state.get('retention_started', False): unmet.append('no_active_retention')
         if not state.get('near', False): unmet.append(state.get('region_unmet') or 'outside_hand_region')
-        if state.get('duration', 0.) < CATCH_HOLD_SECONDS - 1e-9: unmet.append('hold_duration')
+        if not state.get('held_now', False): unmet.append('not_retained_at_end')
     info['roll_eval_unmet'] = ','.join(unmet)
     if terminated or truncated:
         info['terminated_reason'] = env.terminated_reason or ('collision_or_failure' if terminated else 'timeout')
@@ -195,16 +196,15 @@ def publish(env, info, terminated, truncated):
         if env.task == 'Catching':
             import json
             reasons = list(unmet)
-            if state.get('gap', 0.) > CATCH_GAP_SECONDS + 1e-9: reasons.append('contact_gap_exceeded')
             if terminated and env.terminated_reason != 'catch_success': reasons.append('failure_overrides_hold')
             info['failure_diagnostic'] = json.dumps(dict(
                 task='roll_catch', success=info['roll_eval_success'], end=info['terminated_reason'],
-                unmet=reasons, duration=state.get('duration', 0.), required_duration=CATCH_HOLD_SECONDS,
-                gap=state.get('gap', 0.), allowed_gap=CATCH_GAP_SECONDS,
+                unmet=reasons, duration=state.get('duration', 0.), required_duration=0.0,
+                gap=state.get('gap', 0.), allowed_gap=None,
                 max_duration=state.get('max_duration', 0.), first_contact_time=state.get('first_contact_time'),
                 elapsed=state.get('elapsed', 0.), contact=state.get('contact', False),
                 near=state.get('near', False), clear=state.get('clear', False),
-                ball_palm_local=state.get('ball_palm_local'), reset_counts=state.get('reset_counts', {}),
+                ball_palm_world_delta=state.get('ball_palm_world_delta'), reset_counts=state.get('reset_counts', {}),
                 last_reset_reason=state.get('last_reset_reason'), caught_once=state.get('caught_once', False),
                 held_now=state.get('held_now', False), terminated=bool(terminated), truncated=bool(truncated)))
         if getattr(env, 'roll_log', False):

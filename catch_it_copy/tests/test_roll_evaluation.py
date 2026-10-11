@@ -25,34 +25,34 @@ class RollEvaluationTests(unittest.TestCase):
         self.assertFalse(state['held_now'])
         self.assertFalse(state['stable_now'])
 
-    def test_catch_gap_is_bounded_and_requires_recontact(self):
-        state = E.advance_catch({}, True, True, True, .3, .5)
-        E.advance_catch(state, False, True, True, .3, .08)
+    def test_catch_region_retention_without_duration_or_gap_gate(self):
+        state = E.advance_catch({}, False, True, True, .3, 1.)
+        self.assertFalse(state['held_now'])
+        E.advance_catch(state, True, True, True, .3, .002)
         self.assertTrue(state['held_now'])
-        E.advance_catch(state, False, True, True, .3, .002)
-        self.assertFalse(state['held_now'])
-        self.assertEqual(state['duration'], 0.)
         E.advance_catch(state, False, True, True, .3, 1.)
-        self.assertFalse(state['holding_at_end'])
-        E.advance_catch(state, True, True, True, .3, .49)
+        self.assertTrue(state['held_now'])
+        E.advance_catch(state, False, True, False, .3, .002)
         self.assertFalse(state['held_now'])
-        E.advance_catch(state, True, True, True, .3, .01)
+        E.advance_catch(state, False, True, True, .3, 1.)
+        self.assertFalse(state['held_now'])
+        E.advance_catch(state, True, True, True, .3, .002)
         self.assertTrue(state['held_now'])
 
-    def test_local_region_rotates_and_rejects_under_palm(self):
-        point = np.array([1., 2., 3.])
-        rotation = np.array([[0., -1., 0.], [1., 0., 0.], [0., 0., 1.]])
-        for local, expected in [([0., .05, 0.], True), ([0., -.03, 0.], False),
-                                ([0., .13, 0.], False), ([.13, 0., 0.], False)]:
-            inside, measured, _ = E.catch_region(point+rotation@local, point, rotation)
-            self.assertEqual(inside, expected)
-            np.testing.assert_allclose(measured, local, atol=1e-12)
+    def test_region_uses_world_vertical_not_link6_orientation(self):
+        point=np.array([1.,2.,3.])
+        rotation=np.array([[0.,0.,1.],[1.,0.,0.],[0.,1.,0.]])
+        for delta, expected in [([0.,0.,.04],True),([0.,0.,-.03],False),
+                                ([.13,0.,.04],False),([0.,0.,.17],False)]:
+            inside, measured, _=E.catch_region(point+delta,point,rotation,radius=.04)
+            self.assertEqual(inside,expected)
+            np.testing.assert_allclose(measured,delta,atol=1e-12)
 
     def test_catch_table_or_outside_region_never_passes(self):
         for clear, near in [(False, True), (True, False)]:
             state = E.advance_catch({}, True, clear, near, .01, 1.)
             self.assertFalse(state['caught_once'])
-        self.assertFalse(E.advance_catch({}, True, True, True, .01, .49)['caught_once'])
+        self.assertTrue(E.advance_catch({}, True, True, True, .01, .002)['held_now'])
 
     def test_below_table_alternative_still_rejects_support_contacts(self):
         self.assertTrue(E.departure({}, False, False, False, below_table=True))

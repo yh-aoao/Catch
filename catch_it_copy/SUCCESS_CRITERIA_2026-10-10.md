@@ -48,3 +48,11 @@ end_counts：失败回合的结束原因（互斥）；unmet_counts：失败回�
 Roll Catch记录duration、max_duration、gap、first_contact_time、reset_counts、last_reset_reason、球相对掌心位置、caught_once/held_now。评估标准和训练结束条件不变。
 Bounce补记接触geom ID、手掌/手指接触、底座碰撞、距离和终止标志。修复此前遗漏：手指接触虽设置step_touch，但旧bad_object_contact同时把手指接触判early_contact；现Bounce排除这项矛盾，其他碰撞失败仍有效。
 20项相关测试通过，未运行MuJoCo实测。使用原测试命令（test=True）即可。输出的contact字段为终止时快照，touch为当前控制步内接触标记。
+
+## 2026-10-11 Roll Catch 按用户要求改为区域持有（region_retention_v5）
+
+先实际接触手掌/手指、离桌离地且在接球区域，启动持有；之后只要仍在区域且不碰桌地，即使无接触也保留。取消0.5秒门槛和0.08秒接触中断限制；离开区域/落下清零，重新进入需新接触。主成功取结束时held_now，既有失败终止仍优先。
+区域改为掌部geom中心的世界坐标参考：球心水平距离<=12cm，球心高度不低于掌部geom中心减2cm，上限为掌部geom中心+球半径+12cm。这里是明确的几何中心近似，不声称精确掌面表面；日志ball_palm_world_delta可用于验证。避免误用link6局部Y轴为重力方向。
+低速稳定率仍是辅助指标；Roll Track、奖励、控制、时限和终止条件未改。旧模型可直接复测，不需因评估变化重训。
+备份：backups/roll_eval_before_region_20261011_115724.py。
+13项Roll评估测试、2项失败统计测试通过；未运行MuJoCo实测。

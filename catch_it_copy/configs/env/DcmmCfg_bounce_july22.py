@@ -252,7 +252,8 @@ bounce_palm_face_cos_stage = 0.90  # 掌心朝向球体余弦阈值（阶段切�
 
 # ---- Bounce 终止判定 ----
 bounce_no_approach_K = 10          # 无靠近检测：最近 K 个策略步
-bounce_no_approach_grace = 0.35    # 无靠近检测：宽限期（s）
+# bounce_no_approach_grace = 0.35    # 无靠近检测：宽限期（s）
+bounce_no_approach_grace = float('inf')
 bounce_no_approach_eps = 0.002     # 无靠近检测：最小靠近量（m），基于 3D 距离
 
 # ---- Bounce 抓取阶段判定 ----

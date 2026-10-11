@@ -192,6 +192,21 @@ def publish(env, info, terminated, truncated):
         info['terminated_reason'] = env.terminated_reason or ('collision_or_failure' if terminated else 'timeout')
         if env.task == 'Tracking' and env.step_touch and not terminated:
             info['terminated_reason'] = 'track_touch'
+        if env.task == 'Catching':
+            import json
+            reasons = list(unmet)
+            if state.get('gap', 0.) > CATCH_GAP_SECONDS + 1e-9: reasons.append('contact_gap_exceeded')
+            if terminated and env.terminated_reason != 'catch_success': reasons.append('failure_overrides_hold')
+            info['failure_diagnostic'] = json.dumps(dict(
+                task='roll_catch', success=info['roll_eval_success'], end=info['terminated_reason'],
+                unmet=reasons, duration=state.get('duration', 0.), required_duration=CATCH_HOLD_SECONDS,
+                gap=state.get('gap', 0.), allowed_gap=CATCH_GAP_SECONDS,
+                max_duration=state.get('max_duration', 0.), first_contact_time=state.get('first_contact_time'),
+                elapsed=state.get('elapsed', 0.), contact=state.get('contact', False),
+                near=state.get('near', False), clear=state.get('clear', False),
+                ball_palm_local=state.get('ball_palm_local'), reset_counts=state.get('reset_counts', {}),
+                last_reset_reason=state.get('last_reset_reason'), caught_once=state.get('caught_once', False),
+                held_now=state.get('held_now', False), terminated=bool(terminated), truncated=bool(truncated)))
         if getattr(env, 'roll_log', False):
             print('[roll-eval] task={} legacy={} success={} final_hold={} stable_hold={} holding_at_end={} end={} checks={} unmet={}'.format(
                 env.task, legacy, info['roll_eval_success'], info['roll_final_hold'], info['roll_stable_hold'], info['roll_holding_at_end'],
@@ -200,6 +215,9 @@ def publish(env, info, terminated, truncated):
 
 def report(agent, infos, dones, testing):
     """Aggregate terminal metrics separately from reward-based checkpoint selection."""
+    if testing:
+        from gym_dcmm.utils.failure_diagnostics import report as report_failures
+        report_failures(agent, infos, dones)
     key = '_roll_eval_test_totals' if testing else '_roll_eval_train_totals'
     totals = getattr(agent, key, dict(episodes=0, success=0, final_hold=0, stable_hold=0, legacy=0))
     for i in np.flatnonzero(dones):

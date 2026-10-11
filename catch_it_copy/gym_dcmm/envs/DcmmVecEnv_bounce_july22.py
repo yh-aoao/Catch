@@ -1784,7 +1784,7 @@ class DcmmVecEnv(gym.Env):
                     else:
                         # 滚动模式下的跟踪失败判定（更严格）
                         # 1) 提前接触：忽略正常地面接触；掌面接触由 step_touch 作为成功截断处理。
-                        bad_object_contact = np.any(mask_coll) or np.any(mask_finger)
+                        bad_object_contact = np.any(mask_coll) or (self.object_motion != "bounce" and np.any(mask_finger))
                         if bad_object_contact:
                             self.terminated = True
                             self.terminated_reason = 'early_contact'
@@ -1980,6 +1980,22 @@ class DcmmVecEnv(gym.Env):
             info['success_version'] = 'bounce_touch_v1'
         terminated = self.terminated
         done = terminated or truncated
+        if done and self.task == 'Tracking' and self.object_motion == 'bounce':
+            import json
+            contacts = self.contacts['object_contacts'].astype(int)
+            base_collision = bool(self.contacts['base_contacts'].size)
+            reason = ('base_collision' if base_collision else self.terminated_reason or
+                      ('collision_or_failure' if terminated else 'track_touch' if self.step_touch else 'timeout'))
+            info['terminated_reason'] = reason
+            unmet = ([] if self.step_touch else ['no_hand_touch'])
+            if terminated: unmet.append('failure_overrides_touch')
+            info['failure_diagnostic'] = json.dumps(dict(
+                task='bounce_track', success=bool(info['success']), end=reason, unmet=unmet,
+                steps=int(self.steps), time=float(info['env_time']), touch=bool(self.step_touch),
+                palm_contact=bool(np.any(contacts == self.hand_start_id)),
+                finger_contact=bool(np.any((contacts > self.hand_start_id) & (contacts < self.object_id))),
+                contact_geom_ids=contacts.tolist(), base_contact_ids=self.contacts['base_contacts'].astype(int).tolist(),
+                ee_distance=float(info['ee_distance']), terminated=bool(terminated), truncated=bool(truncated)))
         
         # 测试模式下完成后重置（注释掉则保持最终状态）
         if done:

@@ -1,3 +1,4 @@
+from gym_dcmm.utils.failure_diagnostics import report as report_failures
 from gym_dcmm.algs.ppo_dcmm.ppo_dcmm_track import terminal_metrics
 import os, sys
 sys.path.append(os.path.abspath('../gym_dcmm'))
@@ -520,6 +521,7 @@ class PPO_Track(object):
             self.episode_test_rewards.update(self.current_rewards[done_indices])
             self.episode_test_lengths.update(self.current_lengths[done_indices])
             self.episode_test_success.update(torch.tensor(terminal_metrics(infos, dones, truncates)[0], dtype=torch.float32, device=self.device)[done_indices])
+            report_failures(self, infos, dones)
             assert isinstance(infos, dict), 'Info Should be a Dict'
             for k, v in infos.items():
                 # only log scalars

@@ -10,7 +10,17 @@ import torch
 from torch import nn
 from torch.nn import functional as F
 
-SCHEMA = 'depth_proprio_previous_gru_no_task_no_object_v1'
+SCHEMA = 'multiview_depth_independent_cnn_gru_no_task_no_object_v2'
+
+
+def camera_specs(vision):
+    specs = vision.get('cameras', [{'name': vision['camera'], 'near': vision['near'], 'far': vision['far']}])
+    names = [s['name'] for s in specs]
+    if not names or len(set(names)) != len(names):
+        raise ValueError('Camera names must be nonempty and unique; order defines input channels')
+    if any(not 0 < s['near'] < s['far'] for s in specs):
+        raise ValueError('Each camera requires 0 < near < far')
+    return specs
 
 
 def dimensions(stage):
@@ -44,21 +54,24 @@ class Student(nn.Module):
     def __init__(self, stage, vision, model):
         super().__init__()
         self.proprio_dim, self.action_dim = dimensions(stage)
-        self.image_shape = (1, vision['height'], vision['width'])
+        self.camera_names = [s['name'] for s in camera_specs(vision)]
+        self.image_shape = (len(self.camera_names), vision['height'], vision['width'])
         self.hidden_dim = model['gru_hidden']
         self.register_buffer('mean', torch.zeros(self.proprio_dim))
         self.register_buffer('std', torch.ones(self.proprio_dim))
         self.register_buffer('normalizer_fitted', torch.tensor(False))
-        layers, channels = [], 1
-        for out, kernel, stride in zip(model['cnn_channels'], model['cnn_kernels'], model['cnn_strides']):
-            layers += [nn.Conv2d(channels, out, kernel, stride), nn.ELU()]
-            channels = out
-        layers += [nn.MaxPool2d(2), nn.Flatten()]
-        self.cnn = nn.Sequential(*layers)
-        with torch.no_grad():
-            flattened = self.cnn(torch.zeros(1, *self.image_shape)).shape[-1]
-        self.embedding = nn.Sequential(nn.Linear(flattened, model['embedding']), nn.ELU())
-        self.gru = nn.GRU(model['embedding'] + self.proprio_dim + self.action_dim,
+        self.encoders = nn.ModuleList()
+        for _ in self.camera_names:
+            layers, channels = [], 1
+            for out, kernel, stride in zip(model['cnn_channels'], model['cnn_kernels'], model['cnn_strides']):
+                layers += [nn.Conv2d(channels, out, kernel, stride), nn.ELU()]
+                channels = out
+            layers += [nn.MaxPool2d(2), nn.Flatten()]
+            cnn = nn.Sequential(*layers)
+            with torch.no_grad():
+                flattened = cnn(torch.zeros(1, 1, *self.image_shape[1:])).shape[-1]
+            self.encoders.append(nn.Sequential(cnn, nn.Linear(flattened, model['embedding']), nn.ELU()))
+        self.gru = nn.GRU(len(self.camera_names)*model['embedding'] + self.proprio_dim + self.action_dim,
                           self.hidden_dim, batch_first=True)
         head, width = [], self.hidden_dim
         for out in model['mlp_hidden']:
@@ -88,7 +101,8 @@ class Student(nn.Module):
             raise ValueError('Image shape differs from checkpoint camera contract')
         if proprio.shape != (b, t, self.proprio_dim) or previous.shape != (b, t, self.action_dim):
             raise ValueError('Student accepts only robot proprioception and previous actions')
-        features = self.embedding(self.cnn(depth.reshape(b*t, *self.image_shape).float()))
+        frames = depth.reshape(b*t, *self.image_shape).float()
+        features = torch.cat([encoder(frames[:, i:i+1]) for i, encoder in enumerate(self.encoders)], -1)
         features = features.reshape(b, t, -1)
         state = ((proprio.float() - self.mean) / self.std).clamp(-5, 5)
         recurrent, hidden = self.gru(torch.cat([features, state, previous.float()], -1), hidden)

@@ -12,7 +12,7 @@ import numpy as np
 import torch
 from distillation.run import atomic_save, save_json, seed_all, wilson
 from distillation.teachers import ROOT, sha256
-from .core import SCHEMA, Student, EpisodeReplay, dimensions, proprioception, sequence_loss
+from .core import SCHEMA, Student, EpisodeReplay, dimensions, proprioception, sequence_loss, camera_specs
 from .environments import Pool, terminal_success
 
 TASK_IDS = {'throw': 0, 'roll': 1, 'bounce': 2}  # Scheduling/seeds only, never a network input.
@@ -333,11 +333,14 @@ def camera_check(config, teachers, adapters, output, steps):
         finally:
             pool.close()
         array = np.stack(frames)
+        specs = camera_specs(config['vision'])
         np.savez_compressed(output / (task + '_depth.npz'), depth_normalized=array,
-                            done=np.asarray(ends), near=config['vision']['near'], far=config['vision']['far'])
+                            done=np.asarray(ends), camera_names=np.array([s['name'] for s in specs]),
+                            near=np.array([s['near'] for s in specs]), far=np.array([s['far'] for s in specs]))
         # Ordinary PNG contact sheet; no matplotlib/PIL dependency in training.
         indices = np.linspace(0, len(array)-1, min(12, len(array)), dtype=int)
-        tiles = [(255*(1-array[i, 0].astype(np.float32))).astype(np.uint8) for i in indices]
+        tiles = [np.concatenate([(255*(1-view.astype(np.float32))).astype(np.uint8)
+                                 for view in array[i]], axis=1) for i in indices]
         columns = 4
         while len(tiles) % columns:
             tiles.append(np.zeros_like(tiles[0]))
@@ -345,6 +348,7 @@ def camera_check(config, teachers, adapters, output, steps):
                                 for i in range(0, len(tiles), columns)], axis=0)
         write_gray_png(output / (task + '_depth.png'), sheet)
         report[task] = {'frames': len(array), 'shape': list(array.shape),
+                        'cameras_left_to_right': specs,
                         'min_normalized': float(array.min()), 'max_normalized': float(array.max()),
                         'frame_std_mean': float(array.astype(np.float32).std(axis=(-2, -1)).mean()),
                         'note': 'Inspect contact sheet/sequence for ball visibility; statistics alone do not prove visibility.'}
@@ -373,6 +377,7 @@ def validate(config):
         if not np.array_equal(adapter.scale, reference.scale) or not np.all(adapter.mask == 1):
             raise ValueError('Label-free control requires the same physical scales and full action mapping for all tasks')
     v, m = config['vision'], config['model']
+    camera_specs(v)
     if not 0 < v['near'] < v['far'] or min(v['height'], v['width']) < 48:
         raise ValueError('Invalid depth range/image size')
     if not (len(m['cnn_channels']) == len(m['cnn_kernels']) == len(m['cnn_strides']) == 3):
@@ -410,7 +415,7 @@ def main():
             p.error('eval requires --checkpoint')
         saved = torch.load(path, map_location='cpu', weights_only=True)
         if saved.get('schema') != SCHEMA:
-            raise ValueError('Use a visual student checkpoint, not the previous MLP/PPO model')
+            raise ValueError('Expected v2 multiview student checkpoint; v1 single-camera/MLP/PPO weights cannot be resumed directly')
         config = copy.deepcopy(saved['config'])
     else:
         path = Path(args.config) if args.config else ROOT / 'distillation_visual/configs' / (args.stage + '.json')
@@ -464,8 +469,8 @@ def main():
         raise ValueError('Teacher interface verification failed')
     if args.command == 'check':
         student = make_student(config)
-        print('Visual student: {} proprio + {} previous + depth {} -> CNN128 -> GRU256 -> {} actions; no task/object input'.format(
-            student.proprio_dim, student.action_dim, student.image_shape, student.action_dim), flush=True)
+        print('Visual student: {} proprio + {} previous + depth {} cameras={} -> independent CNNs -> GRU -> {} actions; no task/object input'.format(
+            student.proprio_dim, student.action_dim, student.image_shape, student.camera_names, student.action_dim), flush=True)
     elif args.command == 'camera-check':
         camera_check(config, teachers, adapters, output, args.camera_steps)
     elif args.command == 'teacher-eval':

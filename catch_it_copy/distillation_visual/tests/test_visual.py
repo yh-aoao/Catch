@@ -47,7 +47,7 @@ class FakePool:
     def packet(self):
         v = self.cfg['vision']
         depth = np.broadcast_to(self.steps[:, None, None, None] / 10,
-                                 (self.count, 1, v['height'], v['width'])).astype(np.float16).copy()
+                                 (self.count, 2, v['height'], v['width'])).astype(np.float16).copy()
         return {'teacher_obs': observation(self.count), 'depth': depth}
 
     def step(self, actions):
@@ -97,7 +97,7 @@ class VisualTests(unittest.TestCase):
     def test_recurrent_sequence_matches_stepwise_and_reset(self):
         c = config()
         s = Student(c['stage'], c['vision'], c['model']).eval()
-        depth = torch.rand(2, 4, 1, 64, 64)
+        depth = torch.rand(2, 4, 2, 64, 64)
         prop = torch.rand(2, 4, 24)
         previous = torch.rand(2, 4, 20)
         whole, _, _ = s(depth, prop, previous)
@@ -133,7 +133,7 @@ class VisualTests(unittest.TestCase):
     def test_replay_evicts_whole_episodes_and_roundtrips(self):
         replay = EpisodeReplay(['throw'], 5)
         for length in (2, 3, 4):
-            rows = [{'depth': np.zeros((1, 64, 64), np.float16), 'proprio': np.zeros(12, np.float32),
+            rows = [{'depth': np.zeros((2, 64, 64), np.float16), 'proprio': np.zeros(12, np.float32),
                      'previous': np.zeros(8, np.float32), 'target': np.ones(8, np.float32)} for _ in range(length)]
             replay.add('throw', rows)
         self.assertEqual(replay.sizes['throw'], 4)
@@ -155,7 +155,8 @@ class VisualTests(unittest.TestCase):
             run.camera_check(c, teachers, run.validate(c), Path(directory), 4)
             with np.load(Path(directory) / 'throw_depth.npz') as data:
                 np.testing.assert_array_equal(data['done'], [False, True, False, True])
-                self.assertEqual(data['depth_normalized'].shape, (4, 1, 64, 64))
+                self.assertEqual(data['depth_normalized'].shape, (4, 2, 64, 64))
+                np.testing.assert_array_equal(data['camera_names'], ['top', 'wrist'])
             self.assertEqual((Path(directory) / 'throw_depth.png').read_bytes()[:8], b'\x89PNG\r\n\x1a\n')
 
     def test_worker_pairs_reset_depth_with_reset_state(self):
@@ -230,7 +231,11 @@ class VisualTests(unittest.TestCase):
         self.assertTrue(info['track_contact_success'])
         self.assertEqual(initial['teacher_obs']['object']['pos3d'][0], 1)
         self.assertEqual(next_packet['teacher_obs']['object']['pos3d'][0], 2)
-        self.assertAlmostEqual(float(next_packet['depth'][0, 0, 0]), .2, places=3)
+        self.assertEqual(next_packet['depth'].shape, (2, 64, 64))
+        self.assertAlmostEqual(float(next_packet['depth'][0, 0, 0]), (.2-.1)/4.9, places=3)
+        self.assertAlmostEqual(float(next_packet['depth'][1, 0, 0]), (.2-.01)/1.49, places=3)
+        self.assertNotIn('camera_depth_metres', next_packet)
+        captured.clear()
 
         c['inspection_cameras'] = ['top', 'wrist']
         pipe = Pipe()
@@ -242,6 +247,23 @@ class VisualTests(unittest.TestCase):
         packet = pipe.messages[1][1][0]
         self.assertEqual(packet['episode_id'], 2)
         self.assertAlmostEqual(float(packet['camera_depth_metres']['wrist'][0, 0]), .2)
+
+    def test_both_independent_encoders_receive_gradients(self):
+        c = config('catch')
+        student = run.make_student(c)
+        self.assertEqual(student.camera_names, ['top', 'wrist'])
+        self.assertEqual(student.gru.input_size, 2*c['model']['embedding']+24+20)
+        first = next(student.encoders[0].parameters())
+        second = next(student.encoders[1].parameters())
+        self.assertNotEqual(first.data_ptr(), second.data_ptr())
+        depth = torch.rand(2, 3, 2, 64, 64, requires_grad=True)
+        _, _, logits = student(depth, torch.zeros(2, 3, 24), torch.zeros(2, 3, 20))
+        sequence_loss(logits, torch.ones_like(logits)*.3, torch.ones(2, 3)).backward()
+        for i, encoder in enumerate(student.encoders):
+            self.assertGreater(sum(p.grad.abs().sum().item() for p in encoder.parameters()), 0)
+            self.assertGreater(depth.grad[:, :, i].abs().sum().item(), 0)
+        with self.assertRaisesRegex(ValueError, 'Image shape'):
+            student(depth[:, :, :1], torch.zeros(2, 3, 24), torch.zeros(2, 3, 20))
 
     def test_synchronized_export_preserves_close_range_metres(self):
         class PairPool(FakePool):

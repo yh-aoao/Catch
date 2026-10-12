@@ -14,7 +14,7 @@ import traceback
 import numpy as np
 from distillation.teachers import ROOT
 from distillation.environments import Pool as BasePool, stack_tree, terminal_success
-from .core import encode_depth
+from .core import encode_depth, camera_specs
 
 
 class DepthCamera:
@@ -49,7 +49,7 @@ class DepthCamera:
 
 
 def _worker(pipe, task, config, seed, viewer):
-    env, camera, window = None, None, None
+    env, window = None, None
     inspection_cameras = {}
     try:
         # Set before any MuJoCo/OpenGL import inside this spawned process.
@@ -74,24 +74,26 @@ def _worker(pipe, task, config, seed, viewer):
         actual = (env.act_t_dim, env.obs_t_dim) if config['stage'] == 'track' else (env.act_c_dim, env.obs_c_dim)
         if actual != expected:
             raise ValueError('Environment observation/action dimensions changed')
-        camera = DepthCamera(env, config['vision'])
-        for name in config.get('inspection_cameras', []):
+        specs = camera_specs(config['vision'])
+        names = list(dict.fromkeys([s['name'] for s in specs] + config.get('inspection_cameras', [])))
+        for name in names:
             inspection_cameras[name] = DepthCamera(env, dict(config['vision'], camera=name))
         episode = 0
 
         def packet(obs):
-            if not inspection_cameras:
-                return {'teacher_obs': obs, 'depth': camera.capture()}
             before = float(env.Dcmm.data.time)
             # No env.step(), reset(), mj_step() or viewer synchronization between views.
             images = {name: sensor.capture_metres() for name, sensor in inspection_cameras.items()}
             after = float(env.Dcmm.data.time)
             if after != before:
                 raise RuntimeError('Simulation advanced between camera captures')
-            primary = images[config['vision']['camera']]
-            return {'teacher_obs': obs,
-                    'depth': encode_depth(primary, config['vision']['near'], config['vision']['far']),
-                    'camera_depth_metres': images, 'sim_time': before, 'episode_id': episode}
+            result = {'teacher_obs': obs,
+                      'depth': np.concatenate([encode_depth(images[s['name']], s['near'], s['far'])
+                                               for s in specs], axis=0),
+                      'sim_time': before, 'episode_id': episode}
+            if config.get('inspection_cameras'):
+                result['camera_depth_metres'] = images
+            return result
 
         def reset():
             nonlocal episode
@@ -137,8 +139,6 @@ def _worker(pipe, task, config, seed, viewer):
     finally:
         if window is not None:
             window.close()
-        if camera is not None:
-            camera.close()
         for sensor in inspection_cameras.values():
             sensor.close()
         if env is not None:

@@ -41,7 +41,7 @@ class SuccessTests(unittest.TestCase):
             self.assertEqual(info['success'],expected)
 
 class BounceRevisionTests(unittest.TestCase):
-    def test_catch_stage_and_timeout_match_throw(self):
+    def test_catch_requires_grasp_stage_near_ball_and_no_failure(self):
         nodes=step_nodes('gym_dcmm/envs/DcmmVecEnv.py','BounceEnv')
         node=next(n for n in nodes if isinstance(n,ast.If) and ast.unparse(n.test)=="self.task == 'Catching' and self.object_motion == 'bounce'")
         env=SimpleNamespace(task='Catching',object_motion='bounce',stage='tracking',terminated=False)
@@ -49,11 +49,59 @@ class BounceRevisionTests(unittest.TestCase):
         self.assertEqual(env.stage,'grasping')
         run(node,env,dict(ee_distance=.25))
         self.assertTrue(env.terminated)
-        success_node=next(n for n in nodes if isinstance(n,ast.If) and 'bounce_throw_official' in ast.unparse(n))
-        for timeout in (False,True):
-            info={}
-            exec(compile(ast.Module(body=[success_node],type_ignores=[]),'<success>','exec'),dict(self=env,info=info,truncated=timeout))
-            self.assertEqual(info['success'],timeout)
+        success_node=next(n for n in nodes if isinstance(n,ast.If) and 'bounce_catch_proximity_v2' in ast.unparse(n))
+        import numpy as np
+        cases = [('tracking',1.0417,False,True,False),
+                 ('tracking',1.2164,False,True,False),
+                 ('tracking',.1,False,True,False),
+                 ('grasping',.24,False,True,True),
+                 ('grasping',.25,False,True,False),
+                 ('grasping',.1,True,True,False),
+                 ('grasping',.1,False,False,False),
+                 ('grasping',float('nan'),False,True,False)]
+        for stage,distance,failed,timeout,expected in cases:
+            with self.subTest(stage=stage,distance=distance,failed=failed,timeout=timeout):
+                env=SimpleNamespace(task='Catching',object_motion='bounce',stage=stage,
+                                    terminated=failed,terminated_reason='ball_left' if failed else None)
+                info={'ee_distance':distance}
+                exec(compile(ast.Module(body=[success_node],type_ignores=[]),'<success>','exec'),
+                     dict(self=env,info=info,truncated=timeout,np=np))
+                self.assertEqual(info['success'],expected)
+                self.assertEqual(info['bounce_legacy_timeout_success'],timeout)
+
+    def test_actual_dispatch_separates_catch_from_track(self):
+        import copy
+        import sys
+        from types import ModuleType
+        from unittest.mock import patch
+        tree=ast.parse((ROOT/'gym_dcmm/envs/DcmmVecEnv.py').read_text(encoding='utf-8'))
+        cls=next(n for n in tree.body if isinstance(n,ast.ClassDef) and n.name=='DcmmVecEnv')
+        route=copy.deepcopy(next(n for n in cls.body if isinstance(n,ast.FunctionDef) and n.name=='__new__'))
+        stub=ast.parse("class DcmmVecEnv:\n def __init__(self, task='Tracking', object_motion='throw'): pass\n").body[0]
+        stub.body.append(route)
+        factory=next(n for n in tree.body if isinstance(n,ast.FunctionDef) and n.name=='_make_main_bounce')
+        scope={'BounceEnv':lambda **kw: SimpleNamespace(route='5fe75d5f',parameters=kw)}
+        exec(compile(ast.fix_missing_locations(ast.Module(body=[factory,stub],type_ignores=[])),'<route>','exec'),scope)
+        compat=ModuleType('gym_dcmm.envs.bounce_compat')
+        compat.make_bounce_july22=lambda kw: SimpleNamespace(route='july22')
+        with patch.dict(sys.modules,{compat.__name__:compat}):
+            for alias in ('bounce','tan','弹'):
+                env=scope['DcmmVecEnv'](task='Catching',object_motion=alias)
+                self.assertEqual(env.route,'5fe75d5f')
+                self.assertEqual(env.parameters['object_motion'],'bounce')
+                self.assertEqual(scope['DcmmVecEnv'](task='Tracking',object_motion=alias).route,'july22')
+
+    def test_original_ppo_uses_false_success_in_terminal_info(self):
+        import numpy as np
+        tree=ast.parse((ROOT/'gym_dcmm/algs/ppo_dcmm/ppo_dcmm_track.py').read_text(encoding='utf-8'))
+        node=next(n for n in tree.body if isinstance(n,ast.FunctionDef) and n.name=='terminal_metrics')
+        scope={'np':np}
+        exec(compile(ast.Module(body=[node],type_ignores=[]),'<ppo metrics>','exec'),scope)
+        success,reasons=scope['terminal_metrics'](
+            {'final_info':[{'success':False,'terminated_reason':'timeout_not_caught'}]},
+            np.array([True]),np.array([True]))
+        self.assertFalse(success[0])
+        self.assertEqual(reasons[0],'timeout_not_caught')
 
     def test_tracking_finger_contact(self):
         import numpy as np

@@ -8457,9 +8457,30 @@ class BounceEnv(gym.Env):
             truncated = info["env_time"] > self.env_time or self.step_touch
 
         if self.task == 'Catching' and self.object_motion == 'bounce':
-            # Match current Throw's official truncation-based success semantics.
-            info['success'] = bool(truncated)
-            info['success_version'] = 'bounce_throw_official'
+            # Timeout is an evaluation horizon, not evidence of catching. Keep
+            # the existing 0.25m grasp-stage contract and reject failure+timeout.
+            near_at_end = bool(np.isfinite(info['ee_distance']) and 0 <= info['ee_distance'] < 0.25)
+            info['success'] = bool(truncated and not self.terminated
+                                   and self.stage == 'grasping' and near_at_end)
+            info['success_version'] = 'bounce_catch_proximity_v2'
+            info['bounce_legacy_timeout_success'] = bool(truncated)
+            if self.terminated or truncated:
+                unmet = []
+                if self.stage != 'grasping':
+                    unmet.append('never_entered_grasping')
+                if not near_at_end:
+                    unmet.append('outside_catch_distance')
+                if self.terminated:
+                    unmet.append('failure_termination')
+                if not truncated:
+                    unmet.append('horizon_not_reached')
+                info['failure_diagnostic'] = {
+                    'task': 'bounce_catch', 'stage': self.stage,
+                    'ee_distance': float(info['ee_distance']),
+                    'distance_threshold': 0.25, 'unmet': unmet,
+                    'legacy_timeout_success': bool(truncated)}
+                info['terminated_reason'] = ((self.terminated_reason or 'failure_unspecified')
+                    if self.terminated else ('catch_success' if info['success'] else 'timeout_not_caught'))
         terminated = self.terminated
         done = terminated or truncated
 

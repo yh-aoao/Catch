@@ -1246,3 +1246,31 @@ bounce_no_approach_grace = float('inf')
 
 
 现在我把我的模型跟三个任务的成功评定标准更新了一遍
+
+——————————————————————————————————————————————————————————————————————————10-11——————————————————————————————————————————————————————————————————————————————————————————
+目前进度：
+三个任务的模型和评定标准都重新更新了一下，现在比较差的就是roll的catch模型
+目前正在进行蒸馏，目前蒸馏有效果，但是效果不是特别好，可能模型方面还需要改进
+还需要改进的小问题：
+1.bounce的泛化
+2.roll的catch模型的优化
+3.basket任务（阅读一下别的论文的basket是怎么做的，目前的basket连固定基座先抛出去都不会）
+
+
+——————————————————————————————————————————————————————————————————————————10-12————————————————————————————————————————————————————————————————————————————————————
+蒸馏测试命令：
+python -m distillation_track.run eval \
+  --checkpoint distillation_track/runs/trb_v2_5000/student_best.pth \
+  --tasks throw \
+  --device cuda:0 \
+  --episodes 10 \
+  --viewer \
+  --output distillation_track/runs/view_throw
+
+  python -m distillation.run eval \
+  --checkpoint distillation/runs/trb_v2_5000/student_best.pth \
+  --tasks roll \
+  --device cuda:0 \
+  --episodes 10 \
+  --viewer \
+  --output distillation/runs/view_roll

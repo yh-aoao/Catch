@@ -125,6 +125,19 @@ python -m distillation_visual.run train --resume distillation_visual/runs/catch_
 
 ## 验证记录与限制
 
+### top / wrist 同步深度检查
+
+```bash
+python -m distillation_visual.camera_pair --stage catch --tasks throw roll bounce --device cuda:0 --gl-backend egl --steps 200 --output distillation_visual/runs/camera_pair_catch
+```
+
+Track 改为 `--stage track`，并使用另一输出目录。采集由原教师控制机器人。
+每个任务子目录下有 `top_left_wrist_right.png` 拼图、`frames/` 中每一步的并排PNG（左top、右wrist）、`synchronized_depth.npz` 和 `metadata.json`。
+两台相机渲染之间不推进物理，采集后才执行教师动作；每对图有相同的仿真时间及回合编号。
+NPZ 的 `top_depth_m` / `wrist_depth_m` 是未做应用层裁剪的float32米制深度，形状 `[帧数,H,W]`，`sim_time` / `episode_id` 用于对齐，`done_after_action` 表示本帧之后的动作是否结束回合。
+PNG仅用于预览：top默认0.1～5米，wrist默认0.01～1.5米（可用 `--wrist-near` / `--wrist-far` 调整）；两路灰度不能直接当作相同距离比较。MuJoCo自身的近远裁剪仍然生效，预览范围不能恢复渲染器已裁剪掉的几何。
+此命令只增加诊断数据，不把第二路相机接入学生训练。
+
 - 本机六个教师全部通过原推理、观测、动作一致性检查，最大推理误差0。
 - `python -m unittest discover -s distillation_visual/tests -v`：覆盖无真值泄漏、GRU逐帧一致性/重置、padding梯度屏蔽、BCE稳定性、完整回放、不同任务动作缩放拒绝、相机序列导出与回合图像对齐、Track/Catch模拟训练-评估-续训。
 - 本机真实相机命令在加载 MuJoCo DLL 时失败（Windows `WinError 1114`），尚未完成实际仿真渲染或接球闭环验证。需要在原 Linux dcmm 环境执行相机检查和smoke命令；不能将模拟测试的成功率当成真实接球结果。

@@ -9,6 +9,7 @@ import numpy as np
 import torch
 from distillation_visual import run
 from distillation_visual import environments
+from distillation_visual import camera_pair
 from distillation_visual.core import (Student, EpisodeReplay, encode_depth, proprioception,
                                       sequence_loss, SCHEMA)
 
@@ -158,15 +159,18 @@ class VisualTests(unittest.TestCase):
             self.assertEqual((Path(directory) / 'throw_depth.png').read_bytes()[:8], b'\x89PNG\r\n\x1a\n')
 
     def test_worker_pairs_reset_depth_with_reset_state(self):
+        captured = []
         class Environment:
             act_t_dim, obs_t_dim = 8, 18
 
             def __init__(self, **kwargs):
                 self.episode = 0
                 self.step_touch = False
+                self.Dcmm = types.SimpleNamespace(data=types.SimpleNamespace(time=0.))
 
             def reset(self):
                 self.episode += 1
+                self.Dcmm.data.time = 0.
                 self.render()  # Must be the disabled legacy renderer, not camera.
                 obs = observation(1)
                 obs = {k: {a: b[0] for a, b in v.items()} if isinstance(v, dict) else v[0]
@@ -176,6 +180,7 @@ class VisualTests(unittest.TestCase):
 
             def step(self, action):
                 self.step_touch = True
+                self.Dcmm.data.time += .04
                 return None, 1., False, True, {'success': True}
 
             def close(self):
@@ -184,9 +189,14 @@ class VisualTests(unittest.TestCase):
         class Camera:
             def __init__(self, env, config):
                 self.env = env
+                self.name = config['camera']
 
             def capture(self):
                 return np.full((1, 64, 64), self.env.episode / 10, np.float16)
+
+            def capture_metres(self):
+                captured.append((self.name, self.env.episode, self.env.Dcmm.data.time))
+                return np.full((64, 64), self.env.episode / 10, np.float32)
 
             def close(self):
                 pass
@@ -221,6 +231,36 @@ class VisualTests(unittest.TestCase):
         self.assertEqual(initial['teacher_obs']['object']['pos3d'][0], 1)
         self.assertEqual(next_packet['teacher_obs']['object']['pos3d'][0], 2)
         self.assertAlmostEqual(float(next_packet['depth'][0, 0, 0]), .2, places=3)
+
+        c['inspection_cameras'] = ['top', 'wrist']
+        pipe = Pipe()
+        with patch.dict('sys.modules', {'fake_visual_worker': module}), \
+                patch.object(environments, 'DepthCamera', Camera), patch.dict('os.environ', {}):
+            environments._worker(pipe, 'throw', c, 1, False)
+        self.assertTrue(all(status == 'ok' for status, _ in pipe.messages))
+        self.assertEqual(captured, [('top', 1, 0.), ('wrist', 1, 0.), ('top', 2, 0.), ('wrist', 2, 0.)])
+        packet = pipe.messages[1][1][0]
+        self.assertEqual(packet['episode_id'], 2)
+        self.assertAlmostEqual(float(packet['camera_depth_metres']['wrist'][0, 0]), .2)
+
+    def test_synchronized_export_preserves_close_range_metres(self):
+        class PairPool(FakePool):
+            def packet(self):
+                packet = super().packet()
+                shape = (self.count, self.cfg['vision']['height'], self.cfg['vision']['width'])
+                packet.update(camera_depth_metres={'top': np.full(shape, 2., np.float32),
+                                                  'wrist': np.full(shape, .025, np.float32)},
+                              sim_time=self.steps*.04, episode_id=np.ones(self.count, dtype=int))
+                return packet
+        c = config('track')
+        c['tasks'] = {'throw': c['tasks']['throw']}
+        with tempfile.TemporaryDirectory() as directory, patch.object(camera_pair, 'Pool', PairPool):
+            camera_pair.export(c, {'throw': FakeTeacher(8)}, run.validate(c), Path(directory), 3)
+            with np.load(Path(directory) / 'throw/synchronized_depth.npz') as data:
+                self.assertEqual(data['wrist_depth_m'].shape, (3, 64, 64))
+                np.testing.assert_allclose(data['wrist_depth_m'], .025)
+                np.testing.assert_array_equal(data['done_after_action'], [False, True, False])
+            self.assertEqual(len(list((Path(directory) / 'throw/frames').glob('*.png'))), 3)
 
     def test_collector_reset_and_hidden_refresh(self):
         c = config('track')

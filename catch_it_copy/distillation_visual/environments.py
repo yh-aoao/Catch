@@ -24,6 +24,9 @@ class DepthCamera:
         self.renderer, self.model = None, None
 
     def capture(self):
+        return encode_depth(self.capture_metres(), self.config['near'], self.config['far'])
+
+    def capture_metres(self):
         model, data = self.env.Dcmm.model, self.env.Dcmm.data
         if model is not self.model:
             self.close()
@@ -34,7 +37,10 @@ class DepthCamera:
             self.renderer.enable_depth_rendering()
             self.model = model
         self.renderer.update_scene(data, camera=self.config['camera'])
-        return encode_depth(self.renderer.render(), self.config['near'], self.config['far'])
+        depth = np.asarray(self.renderer.render(), dtype=np.float32).copy()
+        if depth.ndim != 2 or not np.isfinite(depth).all() or (depth < 0).any():
+            raise ValueError('Invalid metric depth from renderer')
+        return depth
 
     def close(self):
         if self.renderer is not None:
@@ -44,6 +50,7 @@ class DepthCamera:
 
 def _worker(pipe, task, config, seed, viewer):
     env, camera, window = None, None, None
+    inspection_cameras = {}
     try:
         # Set before any MuJoCo/OpenGL import inside this spawned process.
         backend = config['vision']['gl_backend']
@@ -68,7 +75,23 @@ def _worker(pipe, task, config, seed, viewer):
         if actual != expected:
             raise ValueError('Environment observation/action dimensions changed')
         camera = DepthCamera(env, config['vision'])
+        for name in config.get('inspection_cameras', []):
+            inspection_cameras[name] = DepthCamera(env, dict(config['vision'], camera=name))
         episode = 0
+
+        def packet(obs):
+            if not inspection_cameras:
+                return {'teacher_obs': obs, 'depth': camera.capture()}
+            before = float(env.Dcmm.data.time)
+            # No env.step(), reset(), mj_step() or viewer synchronization between views.
+            images = {name: sensor.capture_metres() for name, sensor in inspection_cameras.items()}
+            after = float(env.Dcmm.data.time)
+            if after != before:
+                raise RuntimeError('Simulation advanced between camera captures')
+            primary = images[config['vision']['camera']]
+            return {'teacher_obs': obs,
+                    'depth': encode_depth(primary, config['vision']['near'], config['vision']['far']),
+                    'camera_depth_metres': images, 'sim_time': before, 'episode_id': episode}
 
         def reset():
             nonlocal episode
@@ -81,7 +104,7 @@ def _worker(pipe, task, config, seed, viewer):
         if viewer:
             import mujoco.viewer
             window = mujoco.viewer.launch_passive(env.Dcmm.model, env.Dcmm.data)
-        pipe.send(('ok', {'teacher_obs': obs, 'depth': camera.capture()}))
+        pipe.send(('ok', packet(obs)))
         while True:
             command, payload = pipe.recv()
             if command == 'close':
@@ -102,8 +125,7 @@ def _worker(pipe, task, config, seed, viewer):
                 window.sync()
             if done:
                 obs = reset()
-            packet = {'teacher_obs': obs, 'depth': camera.capture()}
-            pipe.send(('ok', (packet, float(reward), done, info)))
+            pipe.send(('ok', (packet(obs), float(reward), done, info)))
     except (EOFError, BrokenPipeError):
         pass
     except BaseException:
@@ -117,6 +139,8 @@ def _worker(pipe, task, config, seed, viewer):
             window.close()
         if camera is not None:
             camera.close()
+        for sensor in inspection_cameras.values():
+            sensor.close()
         if env is not None:
             env.close()
         pipe.close()

@@ -147,3 +147,35 @@ PNG仅用于预览：top默认0.1～5米，wrist默认0.01～1.5米（可用 `--
 - `python -m unittest discover -s distillation_visual/tests -v`：覆盖无真值泄漏、GRU逐帧一致性/重置、padding梯度屏蔽、BCE稳定性、完整回放、不同任务动作缩放拒绝、相机序列导出与回合图像对齐、Track/Catch模拟训练-评估-续训。
 - 本机真实相机命令在加载 MuJoCo DLL 时失败（Windows `WinError 1114`），尚未完成实际仿真渲染或接球闭环验证。需要在原 Linux dcmm 环境执行相机检查和smoke命令；不能将模拟测试的成功率当成真实接球结果。
 - 当前是仿真双相机视觉蒸馏版；没有完成相机噪声/遮挡/延迟增强或真机视觉接口适配，不承诺仅因原项目做过真机就能直接部署。
+
+
+## 160×160 双相机对照版本
+
+新增 `configs/track_160.json` 和 `configs/catch_160.json`，使用同一训练入口。
+相对于对应的 112 配置，仅修改 vision.height、vision.width 和 env_kwargs.img_size；
+实际两路深度渲染均使用 160×160。教师、成功标准、相机姿态、深度范围、训练参数保持一致。
+没有加入辅助预测、任务标签或小球真值输入。
+CNN 自动根据分辨率计算展平尺寸，GRU 与动作头维度不变；CNN 全连接参数量会增加，
+因此这是分辨率及其自然计算开销的对照，并非严格等参数量比较。
+图像缓存像素量约为原来的 2.04 倍。
+
+从 catch_it_copy 运行（先验证 5 轮，再新建目录正式训练）：
+
+```bash
+python -m distillation_visual.run train --config distillation_visual/configs/catch_160.json --tasks throw roll bounce --device cuda:0 --gl-backend egl --iterations 5 --num-envs 2 --baseline-episodes 3 --episodes 3 --eval-every 5 --output distillation_visual/runs/catch_dualcam160_smoke
+python -m distillation_visual.run train --config distillation_visual/configs/track_160.json --tasks throw roll bounce --device cuda:0 --gl-backend egl --iterations 5 --num-envs 2 --baseline-episodes 3 --episodes 3 --eval-every 5 --output distillation_visual/runs/track_dualcam160_smoke
+
+python -m distillation_visual.run train --config distillation_visual/configs/catch_160.json --tasks throw roll bounce --device cuda:0 --gl-backend egl --iterations 5000 --num-envs 8 --baseline-episodes 200 --episodes 200 --eval-every 500 --output distillation_visual/runs/catch_dualcam160_5000
+python -m distillation_visual.run train --config distillation_visual/configs/track_160.json --tasks throw roll bounce --device cuda:0 --gl-backend egl --iterations 5000 --num-envs 8 --baseline-episodes 200 --episodes 200 --eval-every 500 --output distillation_visual/runs/track_dualcam160_5000
+```
+
+评估自动从 checkpoint 读取分辨率与阶段：
+
+```bash
+python -m distillation_visual.run eval --checkpoint distillation_visual/runs/catch_dualcam160_5000/student_best.pth --tasks throw roll bounce --device cuda:0 --gl-backend glfw --viewer --episodes 10 --output distillation_visual/runs/catch_dualcam160_view
+```
+
+160 模型应从头训练；不能用 112 checkpoint 的 --resume 改分辨率，resume 会继续使用旧配置。
+请保留旧实验对应代码版本：当前 source/assets 严格校验包含配置文件，新增配置也会改变来源清单，
+旧 checkpoint 在新代码版本下可能被拒绝。请在旧代码副本评估/续训旧模型，不要绕过校验。
+本地网络验证不替代服务器上的真实 MuJoCo 双相机测试。

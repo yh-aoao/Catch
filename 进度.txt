@@ -1274,3 +1274,24 @@ python -m distillation_track.run eval \
   --episodes 10 \
   --viewer \
   --output distillation/runs/view_roll
+  
+
+我现在要实现去掉任务标签并且增加视觉输入，让学生模型依靠视觉观测来学习，我现在有两个想法：
+1.仿照上面说到的那篇论文，直接去掉任务标签，只有训练程序知道目前的任务然后选择正确的教师，并且给学生模型增加视觉观测，让他结合视觉输入和其他输入学会正确的动作
+2.增加一个运动模式的识别器和物理数据的获取器，依靠视觉输入来获取当前小球的运动数据（原来的小球六维输入：位置+速度），并且分辨出当前的运动模式，把这些数据传给现在训练好的学生模
+
+
+160*160深度相机的训练：
+python -m distillation_visual.run train \
+  --config distillation_visual/configs/catch_160.json \
+  --tasks throw roll bounce --device cuda:0 --gl-backend egl \
+  --iterations 5000 --num-envs 8 \
+  --baseline-episodes 200 --episodes 200 --eval-every 500 \
+  --output distillation_visual/runs/catch_dualcam160_5000
+
+python -m distillation_visual.run train \
+  --config distillation_visual/configs/track_160.json \
+  --tasks throw roll bounce --device cuda:0 --gl-backend egl \
+  --iterations 5000 --num-envs 8 \
+  --baseline-episodes 200 --episodes 200 --eval-every 500 \
+  --output distillation_visual/runs/track_dualcam160_5000

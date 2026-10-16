@@ -5,6 +5,7 @@ for depth noise. Disable that diagnostic path only on this environment instance.
 Render the current simulation state once per policy observation, without advancing
 physics or consuming the physics RNG. No object-centred camera or segmentation.
 """
+import faulthandler
 import importlib
 import multiprocessing as mp
 import os
@@ -52,6 +53,7 @@ def _worker(pipe, task, config, seed, viewer):
     env, window = None, None
     inspection_cameras = {}
     try:
+        faulthandler.enable()
         # Set before any MuJoCo/OpenGL import inside this spawned process.
         backend = config['vision']['gl_backend']
         if backend == 'auto':
@@ -164,9 +166,14 @@ def _worker(pipe, task, config, seed, viewer):
 class Pool(BasePool):
     def __init__(self, task, config, count, seed, viewer=False):
         self.pipes, self.processes = [], []
+        self.task = task
         self.timeout = config.get('worker_timeout_seconds', 180)
         try:
+            # Inherited before child imports NumPy/Torch; respect explicit settings.
+            for name in ('OMP_NUM_THREADS', 'OPENBLAS_NUM_THREADS', 'MKL_NUM_THREADS'):
+                os.environ.setdefault(name, '1')
             context = mp.get_context('spawn')
+            observations = []
             for i in range(count):
                 parent, child = context.Pipe()
                 process = context.Process(target=_worker,
@@ -175,7 +182,35 @@ class Pool(BasePool):
                 child.close()
                 self.pipes.append(parent)
                 self.processes.append(process)
-            self.obs = stack_tree([self._receive(p) for p in self.pipes])
+                # Avoid simultaneous MuJoCo/EGL initialization spikes. Runtime stays parallel.
+                observations.append(self._receive(parent))
+            self.obs = stack_tree(observations)
         except BaseException:
             self.close()
             raise
+
+
+    def _receive(self, pipe):
+        index = self.pipes.index(pipe)
+        process = self.processes[index]
+        try:
+            if not pipe.poll(self.timeout):
+                raise TimeoutError('Environment worker timed out: task={} worker={} pid={} exitcode={}'.format(
+                    self.task, index, process.pid, process.exitcode))
+            status, payload = pipe.recv()
+        except (EOFError, OSError) as error:
+            process.join(timeout=0.5)
+            raise RuntimeError(
+                'Environment worker exited without a response: task={} worker={} pid={} exitcode={}. '
+                'On Linux -9 means SIGKILL (check host/container RAM limits and OOM logs; '
+                'it does not alone prove OOM); -11 means SIGSEGV; -6 means SIGABRT. '
+                'Inspect preceding child stderr for MuJoCo/EGL errors. '
+                'Retry with --num-envs 1 --gl-backend egl and a new output directory. '
+                'num-envs is PER TASK, so 8 means 24 workers across three tasks.'
+                .format(self.task, index, process.pid, process.exitcode)) from error
+        if status == 'error':
+            raise RuntimeError('Environment worker failed: task={} worker={} pid={}\n{}'.format(
+                self.task, index, process.pid, payload))
+        if status != 'ok':
+            raise RuntimeError('Unknown environment worker response: ' + str(status))
+        return payload

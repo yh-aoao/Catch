@@ -1280,6 +1280,7 @@ python -m distillation_track.run eval \
 1.仿照上面说到的那篇论文，直接去掉任务标签，只有训练程序知道目前的任务然后选择正确的教师，并且给学生模型增加视觉观测，让他结合视觉输入和其他输入学会正确的动作
 2.增加一个运动模式的识别器和物理数据的获取器，依靠视觉输入来获取当前小球的运动数据（原来的小球六维输入：位置+速度），并且分辨出当前的运动模式，把这些数据传给现在训练好的学生模
 
+——————————————————————————————————————————————————————————————————————————10-16————————————————————————————————————————————————————————————————————————
 
 160*160深度相机的训练：
 python -m distillation_visual.run train \
@@ -1295,3 +1296,24 @@ python -m distillation_visual.run train \
   --iterations 5000 --num-envs 8 \
   --baseline-episodes 200 --episodes 200 --eval-every 500 \
   --output distillation_visual/runs/track_dualcam160_5000
+
+辅助预测（小球位置）模块蒸馏的训练：
+python -m distillation_visual_aux.run train \
+  --stage catch \
+  --device cuda:0 --gl-backend egl \
+  --iterations 5000 --num-envs 8 \
+  --baseline-episodes 200 --episodes 200 --eval-every 500 \
+  --output distillation_visual_aux/runs/catch_position_5000
+
+python -m distillation_visual_aux.run train \
+  --stage track \
+  --device cuda:0 --gl-backend egl \
+  --iterations 5000 --num-envs 8 \
+  --baseline-episodes 200 --episodes 200 --eval-every 500 \
+  --output distillation_visual_aux/runs/track_position_5000
+
+如需位置＋速度版本，增加对应配置参数，并更换输出目录：
+--config distillation_visual_aux/configs/catch_position_velocity.json
+
+217:深度相机
+504：辅助预测

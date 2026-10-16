@@ -180,4 +180,16 @@ class Tests(unittest.TestCase):
         self.assertAlmostEqual(float(packet['camera_depth_metres']['wrist'][0, 0]), .2)
 
 
+    def test_worker_eof_reports_task_pid_and_exit_code(self):
+        from unittest.mock import Mock
+        pool = environments.Pool.__new__(environments.Pool)
+        pipe = Mock()
+        pipe.poll.return_value = True
+        pipe.recv.side_effect = EOFError
+        process = Mock(pid=1234, exitcode=-9)
+        pool.pipes, pool.processes = [pipe], [process]
+        pool.task, pool.timeout = 'bounce', 1
+        with self.assertRaisesRegex(RuntimeError, 'task=bounce worker=0 pid=1234 exitcode=-9'):
+            pool._receive(pipe)
+
 if __name__=='__main__': unittest.main()

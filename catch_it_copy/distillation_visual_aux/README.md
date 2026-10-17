@@ -67,3 +67,12 @@ python -m distillation_visual_aux.run train --resume distillation_visual_aux/run
 分块损失、环境reset标签配对、Track/Catch模拟训练/评估/续训。
 运行 python -m unittest discover -s distillation_visual_aux/tests -v。
 这些是CPU网络和替身环境验证，真实MuJoCo相机、服务器显存和学习收益需要实测。
+
+## 渲染器初始化段错误排查
+
+双相机现在共用每个环境内的一个MuJoCo Renderer，切换相机依次采集且不推进物理时间。
+减少独立GL上下文数量，保留两路真实深度及其原深度范围，不降低分辨率。
+初始化打印backend、EGL设备选择、输出与离屏缓冲尺寸。原生崩溃仍需服务器验证。
+先用 --num-envs 1 --gl-backend egl 排查，再逐步增大；三个任务仍为三个环境。
+--device cuda:0仅选择Torch设备，不自动选择EGL设备；不要假设CUDA与EGL编号一致。
+请同步源码后使用新的输出目录；旧checkpoint的源码校验不会被绕过。

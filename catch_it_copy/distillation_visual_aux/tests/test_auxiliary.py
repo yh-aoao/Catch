@@ -124,8 +124,8 @@ class Tests(unittest.TestCase):
             def capture(self):
                 return np.full((1, 64, 64), self.env.episode / 10, np.float16)
 
-            def capture_metres(self):
-                captured.append((self.name, self.env.episode, self.env.Dcmm.data.time))
+            def capture_metres(self, camera=None):
+                captured.append((camera or self.name, self.env.episode, self.env.Dcmm.data.time))
                 return np.full((64, 64), self.env.episode / 10, np.float32)
 
             def close(self):
@@ -191,5 +191,31 @@ class Tests(unittest.TestCase):
         pool.task, pool.timeout = 'bounce', 1
         with self.assertRaisesRegex(RuntimeError, 'task=bounce worker=0 pid=1234 exitcode=-9'):
             pool._receive(pipe)
+
+    def test_shared_renderer_switches_views_and_recreates_on_model_change(self):
+        from unittest.mock import Mock
+        mj = types.ModuleType('mujoco')
+        mj.mjtObj = types.SimpleNamespace(mjOBJ_CAMERA=1)
+        mj.mj_name2id = lambda *args: 1
+        made=[]
+        def factory(*args, **kwargs):
+            renderer=Mock()
+            renderer.render.return_value=np.ones((160,160),np.float32)
+            made.append(renderer)
+            return renderer
+        mj.Renderer=factory
+        def model():
+            return types.SimpleNamespace(vis=types.SimpleNamespace(global_=types.SimpleNamespace(offwidth=640,offheight=480)))
+        env=types.SimpleNamespace(Dcmm=types.SimpleNamespace(model=model(),data=object()))
+        with patch.dict('sys.modules', {'mujoco':mj}):
+            sensor=environments.DepthCamera(env,dict(camera='top',height=160,width=160))
+            first=sensor.capture_metres('top');sensor.capture_metres('wrist')
+            self.assertEqual(len(made),1)
+            self.assertEqual([c.kwargs['camera'] for c in made[0].update_scene.call_args_list],['top','wrist'])
+            first[:]=0
+            self.assertTrue(sensor.capture_metres('top').all())
+            env.Dcmm.model=model();sensor.capture_metres('wrist')
+            self.assertEqual(len(made),2);made[0].close.assert_called_once()
+            sensor.close();sensor.close();made[1].close.assert_called_once()
 
 if __name__=='__main__': unittest.main()

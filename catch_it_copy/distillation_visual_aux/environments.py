@@ -27,17 +27,21 @@ class DepthCamera:
     def capture(self):
         return encode_depth(self.capture_metres(), self.config['near'], self.config['far'])
 
-    def capture_metres(self):
+    def capture_metres(self, camera=None):
+        camera = camera or self.config['camera']
         model, data = self.env.Dcmm.model, self.env.Dcmm.data
+        if self.mujoco.mj_name2id(model, self.mujoco.mjtObj.mjOBJ_CAMERA, camera) < 0:
+            raise ValueError('Camera not found in environment: ' + camera)
         if model is not self.model:
             self.close()
-            camera = self.config['camera']
-            if self.mujoco.mj_name2id(model, self.mujoco.mjtObj.mjOBJ_CAMERA, camera) < 0:
-                raise ValueError('Camera not found in environment: ' + camera)
+            print('[depth-renderer] pid={} backend={} EGL_DEVICE={} size={}x{} offscreen={}x{}'.format(
+                os.getpid(), os.environ.get('MUJOCO_GL'), os.environ.get('MUJOCO_EGL_DEVICE_ID', 'default'),
+                self.config['width'], self.config['height'],
+                model.vis.global_.offwidth, model.vis.global_.offheight), flush=True)
             self.renderer = self.mujoco.Renderer(model, height=self.config['height'], width=self.config['width'])
             self.renderer.enable_depth_rendering()
             self.model = model
-        self.renderer.update_scene(data, camera=self.config['camera'])
+        self.renderer.update_scene(data, camera=camera)
         depth = np.asarray(self.renderer.render(), dtype=np.float32).copy()
         if depth.ndim != 2 or not np.isfinite(depth).all() or (depth < 0).any():
             raise ValueError('Invalid metric depth from renderer')
@@ -51,7 +55,7 @@ class DepthCamera:
 
 def _worker(pipe, task, config, seed, viewer):
     env, window = None, None
-    inspection_cameras = {}
+    sensor = None
     try:
         faulthandler.enable()
         # Set before any MuJoCo/OpenGL import inside this spawned process.
@@ -78,8 +82,8 @@ def _worker(pipe, task, config, seed, viewer):
             raise ValueError('Environment observation/action dimensions changed')
         specs = camera_specs(config['vision'])
         names = list(dict.fromkeys([s['name'] for s in specs] + config.get('inspection_cameras', [])))
-        for name in names:
-            inspection_cameras[name] = DepthCamera(env, dict(config['vision'], camera=name))
+        # One GL context per environment; views are rendered sequentially without stepping.
+        sensor = DepthCamera(env, dict(config['vision'], camera=names[0]))
         episode = 0
         previous_object = None
         previous_time = None
@@ -88,7 +92,7 @@ def _worker(pipe, task, config, seed, viewer):
             nonlocal previous_object, previous_time
             before = float(env.Dcmm.data.time)
             # No env.step(), reset(), mj_step() or viewer synchronization between views.
-            images = {name: sensor.capture_metres() for name, sensor in inspection_cameras.items()}
+            images = {name: sensor.capture_metres(camera=name) for name in names}
             after = float(env.Dcmm.data.time)
             if after != before:
                 raise RuntimeError('Simulation advanced between camera captures')
@@ -156,7 +160,7 @@ def _worker(pipe, task, config, seed, viewer):
     finally:
         if window is not None:
             window.close()
-        for sensor in inspection_cameras.values():
+        if sensor is not None:
             sensor.close()
         if env is not None:
             env.close()

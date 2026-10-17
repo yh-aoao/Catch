@@ -1,0 +1,183 @@
+{
+  "seed": 123,
+  "device": "cuda:0",
+  "learning_rate": 0.0003,
+  "num_envs_per_task": 2,
+  "iterations": 1000,
+  "rollout_steps": 64,
+  "updates_per_iteration": 8,
+  "calibration_steps": 128,
+  "eval_every": 200,
+  "eval_episodes": 100,
+  "baseline_episodes": 100,
+  "max_eval_steps": 100000,
+  "tasks": {
+    "throw": {
+      "checkpoint": "best_model_track/throw_track_best_reward_58.56.pth",
+      "sha256": "f8383b17022025112eb5de2cd87a9be0c8d2b038b45481fd3279e73b57b235fc",
+      "family": "ppo_dcmm",
+      "expected_action_dim": 8,
+      "action_indices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "action_scales": [
+        1.5,
+        0.025,
+        0.01
+      ],
+      "success_metric": "success",
+      "interface_note": "8D Track teacher: base2 + arm6. Verify closed-loop performance in the original Tracking environment before full training.",
+      "success_definition": "throw_official"
+    },
+    "roll": {
+      "checkpoint": "best_model_track/roll_track_best_reward_33.45.pth",
+      "sha256": "ef84885b9bf0247f243dce6b7b7665253e348d182d1529f4f436583a56af00b7",
+      "family": "ppo_dcmm_645edc4",
+      "expected_action_dim": 8,
+      "action_indices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "action_scales": [
+        1.5,
+        0.025,
+        0.01
+      ],
+      "success_metric": "roll_eval_success",
+      "success_definition": "roll_track_intercept"
+    },
+    "bounce": {
+      "checkpoint": "best_model_track/bounce_track_best_58.18.pth",
+      "sha256": "57e0a230e7388d9d2ee7eb849c44d1a0f9a7f6532e898e849d1c5eba861b62da",
+      "family": "ppo_dcmm_july22",
+      "expected_action_dim": 8,
+      "action_indices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "action_scales": [
+        1.5,
+        0.025,
+        0.01
+      ],
+      "success_metric": "success",
+      "env_kwargs": {
+        "render_mode": null
+      },
+      "success_definition": "bounce_track_contact_no_failure"
+    }
+  },
+  "env_kwargs": {
+    "camera_name": [
+      "top"
+    ],
+    "render_per_step": false,
+    "render_mode": "rgb_array",
+    "object_name": "object",
+    "img_size": [
+      160,
+      160
+    ],
+    "imshow_cam": false,
+    "print_obs": false,
+    "print_info": false,
+    "print_reward": false,
+    "print_ctrl": false,
+    "print_contacts": false,
+    "object_eval": false,
+    "env_time": 2.5,
+    "steps_per_policy": 20,
+    "bounce_physics": "legacy",
+    "bounce_launch": "legacy",
+    "bounce_log": false,
+    "basket_log": false,
+    "roll_log": false
+  },
+  "evaluation_revision": "2026-10-11",
+  "stage": "track",
+  "save_every": 200,
+  "batch_episodes_per_task": 2,
+  "capacity_frames_per_task": 8192,
+  "max_episode_steps": 512,
+  "bptt_steps": 16,
+  "loss": "bce",
+  "model": {
+    "cnn_channels": [
+      16,
+      32,
+      32
+    ],
+    "cnn_kernels": [
+      5,
+      4,
+      3
+    ],
+    "cnn_strides": [
+      2,
+      2,
+      1
+    ],
+    "embedding": 128,
+    "gru_hidden": 256,
+    "mlp_hidden": [
+      512,
+      256,
+      128
+    ],
+    "branch_hidden": [
+      128,
+      64
+    ]
+  },
+  "vision": {
+    "camera": "top",
+    "height": 160,
+    "width": 160,
+    "near": 0.1,
+    "far": 5.0,
+    "gl_backend": "auto",
+    "cameras": [
+      {
+        "name": "top",
+        "near": 0.1,
+        "far": 5.0
+      },
+      {
+        "name": "wrist",
+        "near": 0.01,
+        "far": 1.5
+      }
+    ]
+  },
+  "auxiliary": {
+    "position_weight": 0.0,
+    "velocity_weight": 0.0,
+    "scales": [
+      1.0,
+      1.0,
+      1.0,
+      5.0,
+      5.0,
+      5.0
+    ]
+  }
+}

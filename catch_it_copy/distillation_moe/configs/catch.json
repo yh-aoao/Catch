@@ -1,0 +1,215 @@
+{
+  "seed": 123,
+  "device": "cuda:0",
+  "learning_rate": 0.0003,
+  "num_envs_per_task": 2,
+  "iterations": 1000,
+  "rollout_steps": 64,
+  "updates_per_iteration": 8,
+  "calibration_steps": 128,
+  "eval_every": 200,
+  "eval_episodes": 100,
+  "baseline_episodes": 100,
+  "max_eval_steps": 100000,
+  "tasks": {
+    "throw": {
+      "checkpoint": "best_model/throw_catch_best_reward_497.09.pth",
+      "sha256": "fcfebd624e282d8b171284fab65f3fe70a195f850db381fc6ee5197139e7f735",
+      "expected_action_dim": 20,
+      "family": "ppo_dcmm",
+      "action_indices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19
+      ],
+      "action_scales": [
+        1.5,
+        0.025,
+        0.15
+      ],
+      "success_metric": "success",
+      "interface_note": "New server teacher: require 8 tracking + 12 hand outputs. SHA256 is computed on load and recorded; pin it after server check. Verify closed-loop behavior before full training.",
+      "success_definition": "throw_official"
+    },
+    "roll": {
+      "checkpoint": "best_model/roll_catch_best_reward_252.54.pth",
+      "sha256": "40020e1b13a29ad49de9e9b6ad2e6316678f418bdd8712be898b7a257af3d0ba",
+      "family": "ppo_dcmm_645edc4",
+      "action_indices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19
+      ],
+      "action_scales": [
+        1.5,
+        0.025,
+        0.15
+      ],
+      "success_metric": "roll_eval_success",
+      "success_definition": "region_retention_v5",
+      "expected_action_dim": 20
+    },
+    "bounce": {
+      "checkpoint": "best_model/bounce_catch_best_reward_653.87.pth",
+      "sha256": "f3ff1fe5aa34a8d4384dda6915b6749847002447d2816f18e72b661c6254a09c",
+      "family": "ppo_dcmm_5fe75d5f",
+      "action_indices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19
+      ],
+      "action_scales": [
+        1.5,
+        0.025,
+        0.15
+      ],
+      "success_metric": "success",
+      "success_definition": "bounce_catch_proximity_v2",
+      "expected_action_dim": 20
+    }
+  },
+  "env_kwargs": {
+    "camera_name": [
+      "top"
+    ],
+    "render_per_step": false,
+    "render_mode": "rgb_array",
+    "object_name": "object",
+    "img_size": [
+      160,
+      160
+    ],
+    "imshow_cam": false,
+    "print_obs": false,
+    "print_info": false,
+    "print_reward": false,
+    "print_ctrl": false,
+    "print_contacts": false,
+    "object_eval": false,
+    "env_time": 2.5,
+    "steps_per_policy": 20,
+    "bounce_physics": "legacy",
+    "bounce_launch": "legacy",
+    "bounce_log": false,
+    "basket_log": false,
+    "roll_log": false
+  },
+  "evaluation_revision": "2026-10-12-bounce-catch-v2",
+  "stage": "catch",
+  "save_every": 200,
+  "batch_episodes_per_task": 2,
+  "capacity_frames_per_task": 8192,
+  "max_episode_steps": 512,
+  "bptt_steps": 16,
+  "loss": "bce",
+  "model": {
+    "cnn_channels": [
+      16,
+      32,
+      32
+    ],
+    "cnn_kernels": [
+      5,
+      4,
+      3
+    ],
+    "cnn_strides": [
+      2,
+      2,
+      1
+    ],
+    "embedding": 128,
+    "gru_hidden": 256,
+    "mlp_hidden": [
+      512,
+      256,
+      128
+    ],
+    "expert_count": 3,
+    "expert_width": 128,
+    "balance_weight": 0.01
+  },
+  "vision": {
+    "camera": "top",
+    "height": 160,
+    "width": 160,
+    "near": 0.1,
+    "far": 5.0,
+    "gl_backend": "auto",
+    "cameras": [
+      {
+        "name": "top",
+        "near": 0.1,
+        "far": 5.0
+      },
+      {
+        "name": "wrist",
+        "near": 0.01,
+        "far": 1.5
+      }
+    ]
+  },
+  "auxiliary": {
+    "position_weight": 0.0,
+    "velocity_weight": 0.0,
+    "scales": [
+      1.0,
+      1.0,
+      1.0,
+      5.0,
+      5.0,
+      5.0
+    ]
+  }
+}

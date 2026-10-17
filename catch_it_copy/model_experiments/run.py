@@ -23,7 +23,7 @@ def main():
     parser.add_argument('--variants', nargs='+', choices=list(PACKAGES), default=list(PACKAGES))
     parser.add_argument('--seed', type=int, default=123)
     parser.add_argument('--device', default='cuda:0')
-    parser.add_argument('--num-envs', type=int, default=1, help='Workers per motion task')
+    parser.add_argument('--num-envs', type=int, default=8, help='Workers per motion task')
     parser.add_argument('--iterations', type=int, default=1000)
     parser.add_argument('--gl-backend', choices=['auto', 'egl', 'glfw', 'osmesa'], default='auto')
     parser.add_argument('--dry-run', action='store_true')

@@ -1356,3 +1356,55 @@ RSI指递归自我改进/自进化，不是参考状态初始化。失败场景�
 已通过CPU合成训练流程检查和真实教师接口/特征读取；这不是实际机器人训练结果。本机无CUDA，MuJoCo加载WinError1114，真实短训及正式训练尚未完成。
 统一顺序执行入口：catch_it_copy/model_experiments/run.py；详细命令和完成范围：catch_it_copy/MODEL_EXPERIMENTS_2026-10-17.md。
 原有任务环境、奖励、成功判定及原蒸馏代码未修改。斜坡滑落、主动投掷完善、多物体形态仍待实施/验证；没有标记为完成。
+
+TRACK：
+# B0 基线
+python -m model_experiments.run train --stage track --variants baseline --device cuda:0 --gl-backend egl --iterations 1000
+
+# B1 事件分层动作蒸馏
+python -m model_experiments.run train --stage track --variants event --device cuda:0 --gl-backend egl --iterations 1000
+
+# B2 特征蒸馏
+python -m model_experiments.run train --stage track --variants feature --device cuda:0 --gl-backend egl --iterations 1000
+
+# B3 双相机门控
+python -m model_experiments.run train --stage track --variants camera_gate --device cuda:0 --gl-backend egl --iterations 1000
+
+# B4 分支动作头
+python -m model_experiments.run train --stage track --variants action_heads --device cuda:0 --gl-backend egl --iterations 1000
+
+# B5 MoE C
+python -m model_experiments.run train --stage track --variants moe --device cuda:0 --gl-backend egl --iterations 1000
+
+CATCH：
+# B0 基线
+python -m model_experiments.run train --stage catch --variants baseline --device cuda:0 --gl-backend egl --iterations 1000
+
+# B1 事件分层动作蒸馏
+python -m model_experiments.run train --stage catch --variants event --device cuda:0 --gl-backend egl --iterations 1000
+
+# B2 特征蒸馏
+python -m model_experiments.run train --stage catch --variants feature --device cuda:0 --gl-backend egl --iterations 1000
+
+# B3 双相机门控
+python -m model_experiments.run train --stage catch --variants camera_gate --device cuda:0 --gl-backend egl --iterations 1000
+
+# B4 分支动作头
+python -m model_experiments.run train --stage catch --variants action_heads --device cuda:0 --gl-backend egl --iterations 1000
+
+# B5 MoE C
+python -m model_experiments.run train --stage catch --variants moe --device cuda:0 --gl-backend egl --iterations 1000
+
+d_aux:214
+d_event：211
+d_feature:207
+d_camera_gate:207
+d_action_heads:217
+d_moe:217
+【2026-10-17 运动模式实现更新】
+1. 新增独立 motion_slide 斜坡滑落环境，object_motion=slide。默认20度斜坡、静止释放小方块，靠重力滑落；Track奖励预测落点XY对齐，Catch增加接触保持。没有给物体注入发射速度。原throw/roll/bounce路由不变。
+2. Basket新增可选 basket_arm_control=joint_velocity，先用固定底座Catching_OneStage训练机械臂+手。六维机械臂动作转换为受限关节位置目标，增加物理子步持球加速进展奖励（每回合最多6分），实际自由飞行入框仍为成功标准。保留原cartesian默认模式；新模式必须从头训练，不能加载旧控制模式模型。
+3. 新增6项检查通过，Basket抓取/投掷22项、控制11项、固定策略3项检查通过，语法检查通过。旧base-only Tracking的3项测试在修改前也失败。当前Windows MuJoCo DLL不可加载，尚未实际运行新场景/训练；服务器需先做probe再训练，不能视为已验证学习成功。
+4. 斜坡检查命令：python -m motion_slide.probe --episodes 3 （加 --viewer 可观察）
+5. 完整训练/测试命令及配置见 catch_it_copy/motion_slide/README.md 与 catch_it_copy/BASKET_LAUNCH_V3.md。
+6. 蒸馏任务使用源代码哈希检查，正在训练的蒸馏目录保持原代码；建议独立目录验证本轮运动模式改动。

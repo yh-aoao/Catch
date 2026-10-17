@@ -58,3 +58,6 @@ basket_tracking: ''
 basket_fixed_base_training: false
 
 basket_control_probe: "off" # test-only: off/hold/arm/hand
+basket_arm_control: "cartesian" # joint_velocity for NEW throwing policies; incompatible with old arm action semantics
+slide_config: null # optional absolute/project-relative JSON path
+slide_log: false

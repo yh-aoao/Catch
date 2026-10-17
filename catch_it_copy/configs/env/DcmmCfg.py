@@ -519,3 +519,9 @@ basket_regrasp_seconds = 0.02    # stable contact before preparation resumes
 basket_prediction_horizon = 2.0
 basket_quality_sigma = 0.6       # broad initial near-miss feedback, metres
 basket_near_miss_cap = 0.5
+
+# Opt-in joint_velocity throwing baseline. Do not reinterpret old Cartesian policies.
+basket_arm_action_scale = 0.025  # PPO's existing de-normalization factor
+basket_joint_speed_limits = np.array([2., 3., 3., 3., 3., 3.])  # rad/s targets, not measured guarantees
+basket_hand_action_gain = 1.0    # Catch PPO already supplies up to .15 rad/step; do not multiply it again
+basket_w_held_acceleration = 6.0 # maximum total acceleration credit per episode

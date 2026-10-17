@@ -32,6 +32,7 @@ class PPO_Catch_OneStage(object):
         self.full_action_dim = self.env.call("act_c_dim")[0]
         self.fixed_basket = (full_config.get('object_motion') in ('basket', 'throw_basket')
                              and bool(full_config.get('basket_fixed_base_training', False)))
+        self.basket_arm_control = str(full_config.get('basket_arm_control', 'cartesian'))
         if self.fixed_basket:
             # Learn only arm + hand; insert the two zero base commands at execution.
             self.actions_num = self.full_action_dim - 2
@@ -242,17 +243,23 @@ class PPO_Catch_OneStage(object):
         if self.value_mean_std:
             weights['value_mean_std'] = self.value_mean_std.state_dict()
         weights['action_layout'] = 'arm6_hand12' if self.fixed_basket else 'base2_arm6_hand12'
+        if self.fixed_basket:
+            weights['basket_arm_control'] = getattr(self, 'basket_arm_control', 'cartesian')
         torch.save(weights, f'{name}.pth')
 
     def restore_train(self, fn):
         if not fn:
             return
         checkpoint = torch.load(fn, map_location = self.device)
+        if self.fixed_basket and checkpoint.get('basket_arm_control', 'cartesian') != self.basket_arm_control:
+            raise ValueError('Basket checkpoint action semantics differ: Cartesian and joint-velocity policies cannot be interchanged')
         self._load_compatible_model_state(checkpoint['model'])
         self._load_compatible_running_stats(checkpoint)
 
     def restore_test(self, fn):
         checkpoint = torch.load(fn, map_location = self.device)
+        if self.fixed_basket and checkpoint.get('basket_arm_control', 'cartesian') != self.basket_arm_control:
+            raise ValueError('Basket checkpoint action semantics differ: Cartesian and joint-velocity policies cannot be interchanged')
         self._load_compatible_model_state(checkpoint['model'])
         if self.normalize_input:
             self._load_compatible_running_stats(checkpoint)

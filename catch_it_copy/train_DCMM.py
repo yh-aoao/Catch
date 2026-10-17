@@ -21,6 +21,11 @@ OmegaConf.register_new_resolver('resolve_default', lambda default, arg: default 
 
 @hydra.main(config_name='config', config_path='configs')
 def main(config: DictConfig):
+    if config.object_motion in ('basket', 'throw_basket') and config.basket_arm_control == 'joint_velocity':
+        if not config.basket_fixed_base_training or config.task != 'Catching_OneStage':
+            raise ValueError('Joint-velocity throw v3 currently requires fixed-base Catching_OneStage')
+        if abs(float(config.train.ppo.action_catch_denorm[1]) - .025) > 1e-9:
+            raise ValueError('Joint-velocity throw expects arm action de-normalization .025')
     if config.object_motion in ('basket', 'throw_basket') and config.basket_fixed_base_training:
         if config.task != 'Catching_OneStage' or config.checkpoint_tracking:
             raise ValueError('Fixed Basket baseline requires Catching_OneStage and no checkpoint_tracking')
@@ -78,7 +83,7 @@ def main(config: DictConfig):
 
     cprint('Start Building the Environment', 'green', attrs=['bold'])
     # Create and wrap the environment
-    env_name = 'gym_dcmm/DcmmVecWorld-v0'
+    env_name = 'gym_dcmm/SlideWorld-v0' if config.object_motion == 'slide' else 'gym_dcmm/DcmmVecWorld-v0'
     task = 'Tracking' if config.task == 'Tracking' else 'Catching'
     print("config.num_envs: ", config.num_envs)
     env = gym.make_vec(env_name, num_envs=int(config.num_envs), 
@@ -91,12 +96,15 @@ def main(config: DictConfig):
                     print_obs = False, print_info = False,
                     print_reward = False, print_ctrl = False,
                     print_contacts = False, object_eval = config.object_eval,
-                    env_time = 2.5, steps_per_policy = 20,object_motion=config.object_motion,
+                    env_time = 5.0 if config.object_motion == 'slide' else 2.5, steps_per_policy = 20,object_motion=config.object_motion,
                     bounce_physics=config.bounce_physics,
                     bounce_launch=config.bounce_launch, bounce_log=config.bounce_log,
                     basket_log=config.basket_log, roll_log=config.roll_log,
-                    **({'basket_fixed_base_training': config.basket_fixed_base_training, 'basket_control_probe': str(config.basket_control_probe)}
-                       if config.object_motion in ('basket', 'throw_basket') else {}))
+                    **({'basket_fixed_base_training': config.basket_fixed_base_training, 'basket_control_probe': str(config.basket_control_probe),
+                        'basket_arm_control': str(config.basket_arm_control)}
+                       if config.object_motion in ('basket', 'throw_basket') else {}),
+                    **({'slide_config': to_absolute_path(config.slide_config) if config.slide_config else None,
+                        'slide_log': config.slide_log} if config.object_motion == 'slide' else {}))
 
     output_dif = os.path.join('outputs', config.output_name)
     # Get the local date and time

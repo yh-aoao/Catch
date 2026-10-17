@@ -43,6 +43,7 @@ from collections import deque  # 双端队列（存储历史数据）
 from gym_dcmm.utils.basket_tracking import parking_state, parking_reward, limit_speed
 from gym_dcmm.utils.basket_catching import joint_throw_reward, underhand_geometry, release_phase, ballistic_quality
 from gym_dcmm.utils.basket_catching import hoop_crossing, flight_failure, predicted_miss, catching_reward, throw_quality
+from gym_dcmm.utils.basket_launch import joint_velocity_target, acceleration_readiness, best_progress
 from gym_dcmm.utils.roll_rewards import (interception_target, position_terms, hand_terms,
                                         hand_workspace, capture_ready, wait_target, hand_collision_ids, reach_terms)
 
@@ -174,7 +175,7 @@ class DcmmVecEnv(gym.Env):
         print_contacts=False,
         object_motion="throw", # 新增的参数用来判断物体运动类型（throw/roll）
         bounce_physics="legacy", bounce_launch="legacy", bounce_log=False,
-        basket_log=False, roll_log=False, basket_fixed_base_training=False, basket_control_probe="off",
+        basket_log=False, roll_log=False, basket_fixed_base_training=False, basket_control_probe="off", basket_arm_control="cartesian",
     ):
         # 任务合法性检查（仅支持Tracking/Catching）
         if task not in ["Tracking", "Catching"]:
@@ -187,6 +188,9 @@ class DcmmVecEnv(gym.Env):
             raise ValueError('basket_control_probe must be off/hold/arm/hand')
         self.basket_control_probe = basket_control_probe
         self.basket_fixed_base_training = bool(basket_fixed_base_training)
+        if basket_arm_control not in ('cartesian', 'joint_velocity'):
+            raise ValueError('basket_arm_control must be cartesian or joint_velocity')
+        self.basket_arm_control = basket_arm_control
         self.render_mode = render_mode
         self.camera_name = camera_name
         self.object_name = object_name
@@ -752,6 +756,17 @@ class DcmmVecEnv(gym.Env):
             self.basket_last_contact = dict(time=float(self.Dcmm.data.time),
                 position=position.tolist(), velocity=self.Dcmm.data.qvel[36:39].tolist(),
                 continuous_seconds=self.basket_contact_run)
+            if getattr(self, 'basket_arm_control', 'cartesian') == 'joint_velocity':
+                velocity = self.Dcmm.data.qvel[36:39].copy()
+                _, reference = throw_quality(position, velocity, self.basket_center,
+                                             self.Dcmm.model.opt.gravity, DcmmCfg)
+                base = self.Dcmm.data.body('arm_base').xpos
+                palm = self.Dcmm.data.body('link6').xpos
+                eligible = (np.linalg.norm(base[:2]-self.basket_center[:2]) >= DcmmCfg.basket_base_min_distance
+                            and np.linalg.norm(position[:2]-self.basket_center[:2]) >= DcmmCfg.basket_min_release_distance
+                            and np.linalg.norm(palm[:2]-base[:2]) <= DcmmCfg.basket_arm_horizontal_reach)
+                readiness = acceleration_readiness(velocity, reference, position, self.basket_center) if eligible else 0.
+                self.basket_acceleration_pending += best_progress(self.basket_reward_state, 'best_acceleration', readiness)
         else:
             self.basket_no_contact_seconds = getattr(self, 'basket_no_contact_seconds', 0.) + dt
             self.basket_contact_run = 0.
@@ -786,6 +801,13 @@ class DcmmVecEnv(gym.Env):
             # Validity concerns free flight, not a prescribed throwing style/speed.
             self.basket_throw_valid = bool(np.linalg.norm(
                 release_position[:2]-self.basket_center[:2]) >= DcmmCfg.basket_min_release_distance)
+            if getattr(self, 'basket_arm_control', 'cartesian') == 'joint_velocity':
+                _, _, _, forward, upward = underhand_geometry(
+                    self.Dcmm.data.body('link6').xpos, self.Dcmm.data.body('arm_base').xpos,
+                    release_position, self.basket_center, release_velocity, DcmmCfg)
+                self.basket_throw_valid = bool(self.basket_throw_valid and
+                    forward >= DcmmCfg.basket_min_forward_release_speed and
+                    upward >= DcmmCfg.basket_min_upward_release_speed)
             self.basket_release_quality = quality
             self.basket_release_pending = max(self.basket_release_pending,
                 quality if self.basket_throw_valid else 0.)
@@ -1822,6 +1844,7 @@ class DcmmVecEnv(gym.Env):
             self.basket_release_time = float(self.Dcmm.data.time)
             self.basket_support_time = 0.
             self.basket_reward_state = {}
+            self.basket_acceleration_pending = 0.
             self.basket_reward_totals = {}
             self.basket_arm_attempts = 0
             self.basket_arm_ik_successes = 0
@@ -1909,6 +1932,9 @@ class DcmmVecEnv(gym.Env):
                 self.steps_per_policy * self.Dcmm.model.opt.timestep,
                 self.basket_reward_state, DcmmCfg, launch_quality=quality)
             terms['arm_overreach'] = reach_cost
+            if getattr(self, 'basket_arm_control', 'cartesian') == 'joint_velocity':
+                terms['held_acceleration'] = DcmmCfg.basket_w_held_acceleration * self.basket_acceleration_pending
+                self.basket_acceleration_pending = 0.
             terms['base_too_close'] = -DcmmCfg.basket_base_near_cost * max(0., 1. - base_distance / DcmmCfg.basket_base_min_distance)
             horizontal_distance = float(np.linalg.norm(position[:2] - self.basket_center[:2]))
             terms['too_close'] = (-DcmmCfg.basket_near_hoop_cost * max(0., 1. - horizontal_distance / DcmmCfg.basket_min_release_distance)
@@ -1918,7 +1944,7 @@ class DcmmVecEnv(gym.Env):
             attempts = getattr(self, 'basket_arm_attempts', 0)
             info['basket_release'] = getattr(self, 'basket_release_snapshot', None)
             info['basket_control'] = dict(hand_contact=touching, quality=quality,
-                reward_version='ballistic_v2', predicted_error=ballistic_error,
+                reward_version=('launch_v3' if getattr(self, 'basket_arm_control', 'cartesian') == 'joint_velocity' else 'ballistic_v2'), predicted_error=ballistic_error,
                 predicted_crossing=predicted_crossing,
                 release_count=getattr(self, 'basket_release_count', 0),
                 regrasp_count=getattr(self, 'basket_regrasp_count', 0),
@@ -1926,7 +1952,7 @@ class DcmmVecEnv(gym.Env):
                 reference_velocity=reference.tolist(), ball_velocity=velocity.tolist(),
                 arm_joint_speed=float(np.linalg.norm(self.Dcmm.data.qvel[14:20])),
                 arm_target_error=float(np.max(np.abs(self.Dcmm.target_arm_qpos-self.Dcmm.data.qpos[15:21]))),
-                control_version='basket_measured_ik_v1',
+                control_version=getattr(self, 'basket_arm_control', 'cartesian'),
                 arm_action_norm=getattr(self, 'basket_arm_action_norm', 0.),
                 ik_attempts=attempts, ik_successes=getattr(self, 'basket_arm_ik_successes', 0),
                 release_quality=getattr(self, 'basket_release_quality', 0.),
@@ -2413,6 +2439,16 @@ class DcmmVecEnv(gym.Env):
             if probe_target is not None:
                 # Only the standalone diagnostic sets this; normal PPO never does.
                 result_QP = (np.asarray(probe_target).copy(), True)
+            elif getattr(self, 'basket_arm_control', 'cartesian') == 'joint_velocity':
+                joint_ids = [int(np.flatnonzero(self.Dcmm.model.jnt_qposadr == i)[0]) for i in range(15, 21)]
+                limits = self.Dcmm.model.jnt_range[joint_ids].copy()
+                for i, jid in enumerate(joint_ids):
+                    if not self.Dcmm.model.jnt_limited[jid]:
+                        limits[i] = [-2*np.pi, 2*np.pi]
+                target = joint_velocity_target(self.Dcmm.data.qpos[15:21], action_arm,
+                    DcmmCfg.basket_arm_action_scale, DcmmCfg.basket_joint_speed_limits,
+                    self.steps_per_policy*self.Dcmm.model.opt.timestep, limits)
+                result_QP = (target, True)
             else:
                 result_QP, _ = self.Dcmm.move_ee_pose(action_arm, measured_state=True)
         else:
@@ -2437,8 +2473,14 @@ class DcmmVecEnv(gym.Env):
         # throw_basket 手部控制：Tracking=固定杯状只训底座，Catching=自由控臂手
         if self.object_motion == "throw_basket":
             if self.task == "Catching":
-                # 准备/飞行阶段：手自由控制；当前释放时机仍由脚本计时决定。
-                self.Dcmm.action_hand2qpos(action_dict["hand"])
+                # Policy controls finger opening; contact loss defines release.
+                gain = DcmmCfg.basket_hand_action_gain if getattr(self, 'basket_arm_control', 'cartesian') == 'joint_velocity' else 1.
+                self.Dcmm.action_hand2qpos(action_dict["hand"] * gain)
+                if getattr(self, 'basket_arm_control', 'cartesian') == 'joint_velocity':
+                    for i in range(21, 37):
+                        jid = int(np.flatnonzero(self.Dcmm.model.jnt_qposadr == i)[0])
+                        if self.Dcmm.model.jnt_limited[jid]:
+                            self.Dcmm.target_hand_qpos[i-21] = np.clip(self.Dcmm.target_hand_qpos[i-21], *self.Dcmm.model.jnt_range[jid])
             else:
                 # 第一阶段：手固定杯状托球
                 _cup = np.zeros(16)

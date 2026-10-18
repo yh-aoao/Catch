@@ -272,10 +272,15 @@ def train(config, teachers, adapters, output, resume=None):
         print('Resuming model/optimizer/replay; simulator episodes restart.', flush=True)
     if start >= config['iterations']:
         raise ValueError('iterations must exceed the resumed iteration')
+    if baseline is None and config.get('skip_teacher_baseline'):
+        baseline = {task: {'successes': 0, 'episodes': 0, 'success_rate': 0.0}
+                    for task in config['tasks']}
     if baseline is None:
         baseline = evaluate(config, adapters, teachers=teachers, episodes=config['baseline_episodes'],
                             output_file=output / 'teacher_baseline.json')
-    if any(r['successes'] == 0 for r in baseline.values()) and not config.get('allow_zero_teacher_success'):
+    if (not config.get('skip_teacher_baseline')
+            and any(r['successes'] == 0 for r in baseline.values())
+            and not config.get('allow_zero_teacher_success')):
         raise RuntimeError('Zero teacher success: inspect baseline. For smoke tests only use --allow-zero-teacher-success')
     collector = Collector(config, student, teachers, adapters, replay, start)
     try:
@@ -435,6 +440,8 @@ def main():
     p.add_argument('--gl-backend', choices=['auto', 'egl', 'glfw', 'osmesa'])
     p.add_argument('--viewer', action='store_true')
     p.add_argument('--allow-zero-teacher-success', action='store_true')
+    p.add_argument('--skip-teacher-baseline', action='store_true',
+                   help='Skip the initial teacher success-rate evaluation; score against a 0%% baseline')
     args = p.parse_args()
     saved = None
     if args.command == 'eval' or args.resume:
@@ -466,6 +473,8 @@ def main():
         p.error('--camera-steps must be positive')
     if args.allow_zero_teacher_success:
         config['allow_zero_teacher_success'] = True
+    if args.skip_teacher_baseline:
+        config['skip_teacher_baseline'] = True
     if args.gl_backend:
         config['vision']['gl_backend'] = args.gl_backend
     config['device'] = args.device or ('cpu' if args.command == 'check' else config['device'])

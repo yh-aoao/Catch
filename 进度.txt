@@ -1381,19 +1381,19 @@ CATCH：
 python -m model_experiments.run train --stage catch --variants baseline --device cuda:0 --gl-backend egl --iterations 1000
 
 # B1 事件分层动作蒸馏
-python -m model_experiments.run train --stage catch --variants event --device cuda:0 --gl-backend egl --iterations 1000
+python -m model_experiments.run train --stage catch --variants event --device cuda:0 --gl-backend egl --iterations 5000 --eval-every 1000 --episodes 200 --skip-teacher-baseline --tag 5000it_e1000ep200
 
 # B2 特征蒸馏
-python -m model_experiments.run train --stage catch --variants feature --device cuda:0 --gl-backend egl --iterations 1000
+python -m model_experiments.run train --stage catch --variants feature --device cuda:0 --gl-backend egl --iterations 5000 --eval-every 1000 --episodes 200 --skip-teacher-baseline --tag 5000it_e1000ep200
 
 # B3 双相机门控
-python -m model_experiments.run train --stage catch --variants camera_gate --device cuda:0 --gl-backend egl --iterations 1000
+python -m model_experiments.run train --stage catch --variants camera_gate --device cuda:0 --gl-backend egl --iterations 5000 --eval-every 1000 --episodes 200 --skip-teacher-baseline --tag 5000it_e1000ep200
 
 # B4 分支动作头
-python -m model_experiments.run train --stage catch --variants action_heads --device cuda:0 --gl-backend egl --iterations 1000
+python -m model_experiments.run train --stage catch --variants action_heads --device cuda:0 --gl-backend egl --iterations 5000 --eval-every 1000 --episodes 200 --skip-teacher-baseline --tag 5000it_e1000ep200
 
 # B5 MoE C
-python -m model_experiments.run train --stage catch --variants moe --device cuda:0 --gl-backend egl --iterations 1000
+python -m model_experiments.run train --stage catch --variants moe --device cuda:0 --gl-backend egl --iterations 5000 --eval-every 1000 --episodes 200 --skip-teacher-baseline --tag 5000it_e1000ep200
 
 d_aux:214
 d_event：211
@@ -1401,6 +1401,8 @@ d_feature:207
 d_camera_gate:207
 d_action_heads:217
 d_moe:217
+basket：204
+
 【2026-10-17 运动模式实现更新】
 1. 新增独立 motion_slide 斜坡滑落环境，object_motion=slide。默认20度斜坡、静止释放小方块，靠重力滑落；Track奖励预测落点XY对齐，Catch增加接触保持。没有给物体注入发射速度。原throw/roll/bounce路由不变。
 2. Basket新增可选 basket_arm_control=joint_velocity，先用固定底座Catching_OneStage训练机械臂+手。六维机械臂动作转换为受限关节位置目标，增加物理子步持球加速进展奖励（每回合最多6分），实际自由飞行入框仍为成功标准。保留原cartesian默认模式；新模式必须从头训练，不能加载旧控制模式模型。

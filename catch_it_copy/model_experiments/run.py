@@ -25,15 +25,23 @@ def main():
     parser.add_argument('--device', default='cuda:0')
     parser.add_argument('--num-envs', type=int, default=8, help='Workers per motion task')
     parser.add_argument('--iterations', type=int, default=1000)
+    parser.add_argument('--eval-every', type=int, default=1000, help='Evaluate every N iterations')
+    parser.add_argument('--episodes', type=int, default=200, help='Evaluation episodes per task')
+    parser.add_argument('--tag', default='', help='Suffix for the output directory (keeps existing runs)')
+    parser.add_argument('--skip-teacher-baseline', action='store_true',
+                        help='Skip the initial teacher success-rate evaluation')
     parser.add_argument('--gl-backend', choices=['auto', 'egl', 'glfw', 'osmesa'], default='auto')
     parser.add_argument('--dry-run', action='store_true')
     args = parser.parse_args()
-    if args.num_envs < 1 or args.iterations < 1:
-        parser.error('num-envs and iterations must be positive')
+    if args.num_envs < 1 or args.iterations < 1 or args.eval_every < 1 or args.episodes < 1:
+        parser.error('num-envs, iterations, eval-every and episodes must be positive')
     for variant in args.variants:
         package = PACKAGES[variant]
         config = ROOT / package / 'configs' / (args.stage + ('_baseline' if variant == 'baseline' else '') + '.json')
-        output = ROOT / package / 'runs' / (variant + '_' + args.stage + '_' + args.mode + '_seed' + str(args.seed))
+        name = variant + '_' + args.stage + '_' + args.mode + '_seed' + str(args.seed)
+        if args.tag:
+            name += '_' + args.tag
+        output = ROOT / package / 'runs' / name
         command = [sys.executable, '-m', package + '.run', 'check' if args.mode == 'check' else 'train',
                    '--config', str(config), '--output', str(output), '--seed', str(args.seed),
                    '--device', 'cpu' if args.mode == 'check' else args.device,
@@ -42,7 +50,10 @@ def main():
             command += ['--iterations', '2', '--baseline-episodes', '1', '--episodes', '2',
                         '--eval-every', '1', '--allow-zero-teacher-success']
         elif args.mode == 'train':
-            command += ['--iterations', str(args.iterations)]
+            command += ['--iterations', str(args.iterations), '--eval-every', str(args.eval_every),
+                        '--episodes', str(args.episodes)]
+            if args.skip_teacher_baseline:
+                command += ['--skip-teacher-baseline']
         print(json.dumps({'variant': variant, 'command': command}, ensure_ascii=False), flush=True)
         if not args.dry_run:
             # check=True prevents starting subsequent expensive jobs after an error.

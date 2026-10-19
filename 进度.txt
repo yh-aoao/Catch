@@ -1424,3 +1424,7 @@ basket：204
 【2026-10-19 多形态测试入口】
 新增test_object=default/sphere/tennis_ball/pingpong_ball/box/cylinder/ellipsoid/capsule，仅用于train_DCMM.py test=True，支持throw/roll/bounce的Track/Catch实际类路由；默认不改变原任务。每次reset保留预设尺寸质量惯量。使用object_eval=false。
 详见catch_it_copy/TEST_OBJECTS.md。网球/乒乓球是尺寸质量近似、接触材料未标定，YCB未接入；非球体的既有成功判定仍含球体近似，暂作探索性测试。7预设XML与路由/语法检查通过，服务器真实仿真待验证。蒸馏学生独立CLI本轮未扩展。
+
+【2026-10-19 YCB接入】
+新增test_object=ycb:tennis_ball / ycb:baseball / ycb:tomato_soup_can。已下载3个物体真实外观、凸分解碰撞网格、纹理和许可证（约6.7MB），记录上游commit与SHA256。多部件接触映射接入测试工厂，默认环境不变。
+运行和更多资源下载见catch_it_copy/YCB_TESTING.md。惯量采用部件均分质量近似并由MuJoCo计算，材料参数沿用任务；旧成功判定仍含包围球近似，非球体结果暂为探索性。3项资源/接触/路径测试及语法检查通过；本机DLL限制，真实MuJoCo编译和运行仍需服务器验证。蒸馏学生CLI未扩展。

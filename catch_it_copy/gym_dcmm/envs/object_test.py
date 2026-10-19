@@ -6,7 +6,13 @@ from gym_dcmm.utils.test_objects import PRESETS, object_xml
 
 
 def make_object_test(test_object, **kwargs):
-    if test_object not in PRESETS:
+    ycb = test_object.startswith('ycb:')
+    resource = None
+    if ycb:
+        from ycb_objects.loader import load, compose
+        resource = load(test_object[4:])
+    preset = ('ycb_mesh', (resource[2],), resource[1]) if ycb else PRESETS.get(test_object)
+    if preset is None:
         raise ValueError('Unknown test_object: ' + str(test_object))
     if kwargs.get('object_eval', False):
         raise ValueError('test_object requires object_eval=false')
@@ -32,8 +38,8 @@ def make_object_test(test_object, **kwargs):
         method = '_reset_object_throw'
     original = getattr(base, method)
     def build(self):
-        xml = object_xml(original(self), test_object)
-        self.random_mass = PRESETS[test_object][2]
+        xml = compose(original(self), resource) if ycb else object_xml(original(self), test_object)
+        self.random_mass = preset[2]
         return xml
     def reset_sim(self):
         base._reset_simulation(self)
@@ -44,7 +50,11 @@ def make_object_test(test_object, **kwargs):
         bid = int(model.geom_bodyid[gid])
         for name, value in self._test_object_constants.items():
             getattr(model, name)[gid if name.startswith('geom_') else bid] = value
-        self.random_mass = PRESETS[test_object][2]
+        self.random_mass = preset[2]
+        if ycb:
+            ids = np.flatnonzero((model.geom_bodyid == bid) & (np.arange(model.ngeom) != gid))
+            for name in ('geom_friction', 'geom_solref', 'geom_solimp'):
+                getattr(model, name)[ids] = getattr(model, name)[gid]
         mujoco.mj_setConst(model, data)
         mujoco.mj_forward(model, data)
     def reset(self, *args, **kw):
@@ -52,7 +62,17 @@ def make_object_test(test_object, **kwargs):
         info['test_object'] = test_object
         info['test_object_mass'] = self.random_mass
         return obs, info
-    cls = type('ObjectTest' + base.__name__, (base,), {method: build, '_reset_simulation': reset_sim, 'reset': reset})
+    def contacts(self):
+        result = base._get_contacts(self)
+        if not ycb:
+            return result
+        model, data = self.Dcmm.model, self.Dcmm.data
+        bid = int(model.geom_bodyid[self.object_id])
+        ids = set(np.flatnonzero(model.geom_bodyid == bid).tolist())
+        pairs = np.asarray(data.contact.geom).reshape(-1, 2)
+        from ycb_objects.loader import remap_contacts
+        return remap_contacts(result, pairs, ids, self.object_id)
+    cls = type('ObjectTest' + base.__name__, (base,), {method: build, '_reset_simulation': reset_sim, 'reset': reset, '_get_contacts': contacts})
     accepted = inspect.signature(base.__init__).parameters
     env = cls(**{k: v for k, v in kwargs.items() if k in accepted})
     gid = env.object_id
@@ -60,5 +80,5 @@ def make_object_test(test_object, **kwargs):
     env._test_object_constants = {name: getattr(env.Dcmm.model, name)[gid if name.startswith('geom_') else bid].copy()
         for name in ('geom_size', 'body_mass', 'body_inertia', 'body_ipos', 'body_iquat')}
     print('[test-object] preset={} shape={} size={} mass={} environment={}'.format(
-        test_object, *PRESETS[test_object], base.__module__ + '.' + base.__name__), flush=True)
+        test_object, *preset, base.__module__ + '.' + base.__name__), flush=True)
     return env

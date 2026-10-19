@@ -21,6 +21,9 @@ OmegaConf.register_new_resolver('resolve_default', lambda default, arg: default 
 
 @hydra.main(config_name='config', config_path='configs')
 def main(config: DictConfig):
+    if config.test_object != 'default':
+        if not config.test or config.object_motion not in ('throw', 'roll', 'bounce') or config.object_eval:
+            raise ValueError('test_object requires test=True, object_eval=false, throw/roll/bounce')
     if config.basket_reward_version == 'launch_v4':
         if config.object_motion not in ('basket', 'throw_basket') or config.basket_arm_control != 'joint_velocity' or not config.basket_fixed_base_training or config.task != 'Catching_OneStage':
             raise ValueError('launch_v4 requires fixed-base Basket joint_velocity Catching_OneStage')
@@ -89,6 +92,8 @@ def main(config: DictConfig):
     cprint('Start Building the Environment', 'green', attrs=['bold'])
     # Create and wrap the environment
     env_name = 'gym_dcmm/SlideWorld-v0' if config.object_motion == 'slide' else 'gym_dcmm/DcmmVecWorld-v0'
+    if config.test_object != 'default':
+        env_name = 'gym_dcmm/ObjectTest-v0'
     task = 'Tracking' if config.task == 'Tracking' else 'Catching'
     print("config.num_envs: ", config.num_envs)
     env = gym.make_vec(env_name, num_envs=int(config.num_envs), 
@@ -110,6 +115,7 @@ def main(config: DictConfig):
                         'basket_reward_version': str(config.basket_reward_version),
                         'basket_curriculum_stage': int(config.basket_curriculum_stage)}
                        if config.object_motion in ('basket', 'throw_basket') else {}),
+                    **({'test_object': str(config.test_object)} if config.test_object != 'default' else {}),
                     **({'slide_config': to_absolute_path(config.slide_config) if config.slide_config else None,
                         'slide_log': config.slide_log} if config.object_motion == 'slide' else {}))
 

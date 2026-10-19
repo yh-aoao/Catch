@@ -1420,3 +1420,7 @@ basket：204
 新增可选launch_v4：向前+向上联合加速奖励；有效抛出确认（0.1秒、前进0.15m、无再次接触）独立一次10分奖励；投准和实际入框奖励保留。旧版默认不变。
 新增手动距离课程stage0/1/2/3，对应篮筐世界Y=1.5/1.7/1.9/2.2；正式测试固定stage3，没有自动升级或扩大篮筐。详细训练测试命令见catch_it_copy/BASKET_LAUNCH_V4.md。
 新增3项测试、已有22+6项测试通过；本机无法实际MuJoCo仿真，服务器需验证，尚未证明训练效果。
+
+【2026-10-19 多形态测试入口】
+新增test_object=default/sphere/tennis_ball/pingpong_ball/box/cylinder/ellipsoid/capsule，仅用于train_DCMM.py test=True，支持throw/roll/bounce的Track/Catch实际类路由；默认不改变原任务。每次reset保留预设尺寸质量惯量。使用object_eval=false。
+详见catch_it_copy/TEST_OBJECTS.md。网球/乒乓球是尺寸质量近似、接触材料未标定，YCB未接入；非球体的既有成功判定仍含球体近似，暂作探索性测试。7预设XML与路由/语法检查通过，服务器真实仿真待验证。蒸馏学生独立CLI本轮未扩展。

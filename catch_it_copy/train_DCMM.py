@@ -21,6 +21,11 @@ OmegaConf.register_new_resolver('resolve_default', lambda default, arg: default 
 
 @hydra.main(config_name='config', config_path='configs')
 def main(config: DictConfig):
+    if config.basket_reward_version == 'launch_v4':
+        if config.object_motion not in ('basket', 'throw_basket') or config.basket_arm_control != 'joint_velocity' or not config.basket_fixed_base_training or config.task != 'Catching_OneStage':
+            raise ValueError('launch_v4 requires fixed-base Basket joint_velocity Catching_OneStage')
+        if config.test and config.basket_curriculum_stage != 3:
+            raise ValueError('Formal Basket testing requires curriculum stage 3')
     if config.object_motion in ('basket', 'throw_basket') and config.basket_arm_control == 'joint_velocity':
         if not config.basket_fixed_base_training or config.task != 'Catching_OneStage':
             raise ValueError('Joint-velocity throw v3 currently requires fixed-base Catching_OneStage')
@@ -101,7 +106,9 @@ def main(config: DictConfig):
                     bounce_launch=config.bounce_launch, bounce_log=config.bounce_log,
                     basket_log=config.basket_log, roll_log=config.roll_log,
                     **({'basket_fixed_base_training': config.basket_fixed_base_training, 'basket_control_probe': str(config.basket_control_probe),
-                        'basket_arm_control': str(config.basket_arm_control)}
+                        'basket_arm_control': str(config.basket_arm_control),
+                        'basket_reward_version': str(config.basket_reward_version),
+                        'basket_curriculum_stage': int(config.basket_curriculum_stage)}
                        if config.object_motion in ('basket', 'throw_basket') else {}),
                     **({'slide_config': to_absolute_path(config.slide_config) if config.slide_config else None,
                         'slide_log': config.slide_log} if config.object_motion == 'slide' else {}))

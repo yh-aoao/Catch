@@ -30,3 +30,29 @@ def best_progress(state, key, value):
     previous = state.get(key, 0.)
     state[key] = max(previous, value)
     return max(0., value-previous)
+
+
+def coupled_readiness(velocity, reference, position, center):
+    velocity, reference, position, center = map(lambda x: np.asarray(x, float), (velocity, reference, position, center))
+    direction = center[:2] - position[:2]
+    direction /= max(float(np.linalg.norm(direction)), 1e-8)
+    forward = float(velocity[:2] @ direction)
+    lateral = float(np.linalg.norm(velocity[:2] - forward * direction))
+    f = np.clip(forward / max(.5, float(reference[:2] @ direction)), 0., 1.)
+    u = np.clip(velocity[2] / max(.5, float(reference[2])), 0., 1.)
+    return float(np.sqrt(f*u) * np.exp(-(lateral/1.)**2))
+
+
+def confirm_throw(candidate, position, now, collision, min_time=.1, min_travel=.15):
+    if candidate is None:
+        return False, dict(reason='no_candidate')
+    if collision:
+        candidate['invalidated'] = True
+    elapsed = float(now-candidate['time'])
+    travel = float((np.asarray(position)[:2]-np.asarray(candidate['position'])[:2]) @ np.asarray(candidate['direction']))
+    reason = ('collision' if candidate.get('invalidated') else
+              'release_velocity' if not candidate['eligible'] else
+              'flight_duration' if elapsed < min_time else
+              'flight_travel' if travel < min_travel else 'confirmed')
+    return reason == 'confirmed', dict(reason=reason, flight_seconds=elapsed, forward_travel=travel,
+                                      forward_speed=candidate['forward'], upward_speed=candidate['upward'])

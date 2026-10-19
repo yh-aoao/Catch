@@ -525,3 +525,8 @@ basket_arm_action_scale = 0.025  # PPO's existing de-normalization factor
 basket_joint_speed_limits = np.array([2., 3., 3., 3., 3., 3.])  # rad/s targets, not measured guarantees
 basket_hand_action_gain = 1.0    # Catch PPO already supplies up to .15 rad/step; do not multiply it again
 basket_w_held_acceleration = 6.0 # maximum total acceleration credit per episode
+
+# launch_v4: once per episode, independent of aiming quality.
+basket_v4_throw_reward = 10.0
+basket_v4_flight_seconds = 0.1
+basket_v4_flight_travel = 0.15

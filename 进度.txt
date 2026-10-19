@@ -1397,7 +1397,7 @@ python -m model_experiments.run train --stage catch --variants moe --device cuda
 
 d_aux:214
 d_event：211
-d_feature:207
+d_feature:207->217
 d_camera_gate:207
 d_action_heads:217
 d_moe:217
@@ -1410,3 +1410,13 @@ basket：204
 4. 斜坡检查命令：python -m motion_slide.probe --episodes 3 （加 --viewer 可观察）
 5. 完整训练/测试命令及配置见 catch_it_copy/motion_slide/README.md 与 catch_it_copy/BASKET_LAUNCH_V3.md。
 6. 蒸馏任务使用源代码哈希检查，正在训练的蒸馏目录保持原代码；建议独立目录验证本轮运动模式改动。
+
+——————————————————————————————————————————————————————————————————————————10-19——————————————————————————————————————
+后续任务：
+1.加入了位置辅助监督的训练训练到10000轮
+2.其他的先继续训练到结束
+
+【2026-10-19 Basket launch_v4】
+新增可选launch_v4：向前+向上联合加速奖励；有效抛出确认（0.1秒、前进0.15m、无再次接触）独立一次10分奖励；投准和实际入框奖励保留。旧版默认不变。
+新增手动距离课程stage0/1/2/3，对应篮筐世界Y=1.5/1.7/1.9/2.2；正式测试固定stage3，没有自动升级或扩大篮筐。详细训练测试命令见catch_it_copy/BASKET_LAUNCH_V4.md。
+新增3项测试、已有22+6项测试通过；本机无法实际MuJoCo仿真，服务器需验证，尚未证明训练效果。

@@ -61,3 +61,7 @@ basket_control_probe: "off" # test-only: off/hold/arm/hand
 basket_arm_control: "cartesian" # joint_velocity for NEW throwing policies; incompatible with old arm action semantics
 slide_config: null # optional absolute/project-relative JSON path
 slide_log: false
+
+# Opt-in Basket v4; stage 3 is the original final target.
+basket_reward_version: legacy
+basket_curriculum_stage: 3

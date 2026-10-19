@@ -96,7 +96,9 @@ def main(config: DictConfig):
         env_name = 'gym_dcmm/ObjectTest-v0'
     task = 'Tracking' if config.task == 'Tracking' else 'Catching'
     print("config.num_envs: ", config.num_envs)
-    env = gym.make_vec(env_name, num_envs=int(config.num_envs), 
+    # Single-environment evaluation keeps Viewer and exceptions in the main process.
+    vector_mode = 'sync' if config.test and int(config.num_envs) == 1 else 'async'
+    env = gym.make_vec(env_name, num_envs=int(config.num_envs), vectorization_mode=vector_mode,
                     task=task, camera_name=["top"],
                     render_per_step=False, render_mode = "rgb_array",
                     object_name = "object",

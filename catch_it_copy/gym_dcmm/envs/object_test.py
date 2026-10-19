@@ -75,6 +75,8 @@ def make_object_test(test_object, **kwargs):
     cls = type('ObjectTest' + base.__name__, (base,), {method: build, '_reset_simulation': reset_sim, 'reset': reset, '_get_contacts': contacts})
     accepted = inspect.signature(base.__init__).parameters
     env = cls(**{k: v for k, v in kwargs.items() if k in accepted})
+    # Historical roll_compat attaches this after construction; mirror its contract.
+    env.roll_log = bool(kwargs.get('roll_log', False))
     gid = env.object_id
     bid = int(env.Dcmm.model.geom_bodyid[gid])
     env._test_object_constants = {name: getattr(env.Dcmm.model, name)[gid if name.startswith('geom_') else bid].copy()

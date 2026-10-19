@@ -261,10 +261,14 @@ def train(config, teachers, adapters, output, resume=None):
         print('Resuming model/optimizer/replay; simulator episodes restart.', flush=True)
     if start >= config['iterations']:
         raise ValueError('iterations must exceed the resumed iteration')
+    if config.get('skip_teacher_baseline'):
+        baseline = {task: {'successes': 0, 'episodes': 0, 'success_rate': 0.0}
+                    for task in config['tasks']}
+        print('[baseline] teacher evaluation skipped; best uses minimum student task success', flush=True)
     if baseline is None:
         baseline = evaluate(config, adapters, teachers=teachers, episodes=config['baseline_episodes'],
                             output_file=output / 'teacher_baseline.json')
-    if any(r['successes'] == 0 for r in baseline.values()) and not config.get('allow_zero_teacher_success'):
+    if not config.get('skip_teacher_baseline') and any(r['successes'] == 0 for r in baseline.values()) and not config.get('allow_zero_teacher_success'):
         raise RuntimeError('Zero teacher success: inspect baseline. For smoke tests only use --allow-zero-teacher-success')
     collector = Collector(config, student, teachers, adapters, replay, start)
     try:
@@ -301,7 +305,7 @@ def train(config, teachers, adapters, output, resume=None):
                                    output_file=output / ('eval_%06d.json' % iteration))
                 restore_rng(saved_rng)
                 score = min(results[t]['success_rate']-baseline[t]['success_rate'] for t in results)
-                row['worst_teacher_gap'] = score
+                row['min_task_success' if config.get('skip_teacher_baseline') else 'worst_teacher_gap'] = score
                 if score > best:
                     best = score
                     atomic_save(output / 'student_best.pth', checkpoint)
@@ -424,6 +428,8 @@ def main():
     p.add_argument('--gl-backend', choices=['auto', 'egl', 'glfw', 'osmesa'])
     p.add_argument('--viewer', action='store_true')
     p.add_argument('--allow-zero-teacher-success', action='store_true')
+    p.add_argument('--skip-teacher-baseline', action='store_true',
+                   help='Skip initial teacher evaluation; select best by minimum student task success')
     args = p.parse_args()
     saved = None
     if args.command == 'eval' or args.resume:
@@ -455,6 +461,8 @@ def main():
         p.error('--camera-steps must be positive')
     if args.allow_zero_teacher_success:
         config['allow_zero_teacher_success'] = True
+    if args.skip_teacher_baseline:
+        config['skip_teacher_baseline'] = True
     if args.gl_backend:
         config['vision']['gl_backend'] = args.gl_backend
     config['device'] = args.device or ('cpu' if args.command == 'check' else config['device'])

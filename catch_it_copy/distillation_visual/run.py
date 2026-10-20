@@ -228,7 +228,7 @@ def restore_rng(state):
         torch.cuda.set_rng_state_all(state['cuda'])
 
 
-def train(config, teachers, adapters, output, resume=None):
+def train(config, teachers, adapters, output, resume=None, allow_source_changes=False):
     student = make_student(config)
     optimizer = torch.optim.Adam(student.parameters(), lr=config['learning_rate'])
     replay = EpisodeReplay(config['tasks'], config['capacity_frames_per_task'])
@@ -237,24 +237,31 @@ def train(config, teachers, adapters, output, resume=None):
     start, best, baseline = 0, -float('inf'), None
     if resume:
         saved = torch.load(resume, map_location='cpu', weights_only=True)
-        expected, actual = copy.deepcopy(saved['config']), copy.deepcopy(config)
-        for c in (expected, actual):
-            c.pop('iterations')
-            c.pop('device')
-        if saved['schema'] != SCHEMA or expected != actual or metadata != saved['metadata']:
-            raise ValueError('Resume contracts/sources/teachers differ; use a new run')
+        from model_experiments.visual_resume import validate_resume
+        changes, reset_best = validate_resume(saved, config, metadata, SCHEMA, allow_source_changes)
+        save_json(output / 'resume_audit.json', {'checkpoint': str(resume),
+            'changed_sources': changes, 'old_config': saved['config'], 'new_config': config,
+            'source_changes_accepted': allow_source_changes})
+        if changes:
+            print('[resume] accepted source changes: ' + ', '.join(changes), flush=True)
         student.load_state_dict(saved['student'], strict=True)
         optimizer.load_state_dict(saved['optimizer'])
         replay.load_state_dict(saved['replay'])
         start, best, baseline = saved['iteration'], saved['best_score'], saved['baseline']
+        if reset_best:
+            best = -float('inf')
         restore_rng(saved['rng'])
         print('Resuming model/optimizer/replay; simulator episodes restart.', flush=True)
     if start >= config['iterations']:
         raise ValueError('iterations must exceed the resumed iteration')
+    if config.get('skip_teacher_baseline'):
+        baseline = {task: {'successes': 0, 'episodes': 0, 'success_rate': 0.0}
+                    for task in config['tasks']}
+        print('[baseline] teacher evaluation skipped; best uses minimum student task success', flush=True)
     if baseline is None:
         baseline = evaluate(config, adapters, teachers=teachers, episodes=config['baseline_episodes'],
                             output_file=output / 'teacher_baseline.json')
-    if any(r['successes'] == 0 for r in baseline.values()) and not config.get('allow_zero_teacher_success'):
+    if not config.get('skip_teacher_baseline') and any(r['successes'] == 0 for r in baseline.values()) and not config.get('allow_zero_teacher_success'):
         raise RuntimeError('Zero teacher success: inspect baseline. For smoke tests only use --allow-zero-teacher-success')
     collector = Collector(config, student, teachers, adapters, replay, start)
     try:
@@ -291,7 +298,7 @@ def train(config, teachers, adapters, output, resume=None):
                                    output_file=output / ('eval_%06d.json' % iteration))
                 restore_rng(saved_rng)
                 score = min(results[t]['success_rate']-baseline[t]['success_rate'] for t in results)
-                row['worst_teacher_gap'] = score
+                row['min_task_success' if config.get('skip_teacher_baseline') else 'worst_teacher_gap'] = score
                 if score > best:
                     best = score
                     atomic_save(output / 'student_best.pth', checkpoint)
@@ -397,6 +404,9 @@ def main():
     p.add_argument('--output', required=True)
     p.add_argument('--checkpoint')
     p.add_argument('--resume')
+    p.add_argument('--allow-source-changes', action='store_true',
+                   help='Accept reviewed source changes on resume; records every changed path')
+    p.add_argument('--image-size', type=int, help='Square camera resolution; training from scratch only')
     p.add_argument('--iterations', type=int)
     p.add_argument('--num-envs', type=int)
     p.add_argument('--episodes', type=int)
@@ -407,6 +417,7 @@ def main():
     p.add_argument('--gl-backend', choices=['auto', 'egl', 'glfw', 'osmesa'])
     p.add_argument('--viewer', action='store_true')
     p.add_argument('--allow-zero-teacher-success', action='store_true')
+    p.add_argument('--skip-teacher-baseline', action='store_true')
     args = p.parse_args()
     saved = None
     if args.command == 'eval' or args.resume:
@@ -420,6 +431,10 @@ def main():
     else:
         path = Path(args.config) if args.config else ROOT / 'distillation_visual/configs' / (args.stage + '.json')
         config = json.loads(path.read_text(encoding='utf-8-sig'))
+    if args.image_size is not None:
+        if args.image_size < 16 or args.resume or args.command == 'eval':
+            p.error('--image-size requires a fresh run and size >= 16')
+        config['vision']['height'] = config['vision']['width'] = args.image_size
     if args.resume and args.command != 'train':
         p.error('--resume is train only')
     if args.viewer and args.command not in ('eval', 'teacher-eval'):
@@ -438,6 +453,8 @@ def main():
         p.error('--camera-steps must be positive')
     if args.allow_zero_teacher_success:
         config['allow_zero_teacher_success'] = True
+    if args.skip_teacher_baseline:
+        config['skip_teacher_baseline'] = True
     if args.gl_backend:
         config['vision']['gl_backend'] = args.gl_backend
     config['device'] = args.device or ('cpu' if args.command == 'check' else config['device'])
@@ -478,7 +495,7 @@ def main():
                  output_file=output / 'teacher_baseline.json')
     else:
         save_json(output / 'resolved_config.json', config)
-        train(config, teachers, adapters, output, args.resume)
+        train(config, teachers, adapters, output, args.resume, args.allow_source_changes)
 
 
 if __name__ == '__main__':

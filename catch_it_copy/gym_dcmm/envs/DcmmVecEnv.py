@@ -43,7 +43,7 @@ from collections import deque  # 双端队列（存储历史数据）
 from gym_dcmm.utils.basket_tracking import parking_state, parking_reward, limit_speed
 from gym_dcmm.utils.basket_catching import joint_throw_reward, underhand_geometry, release_phase, ballistic_quality
 from gym_dcmm.utils.basket_catching import hoop_crossing, flight_failure, predicted_miss, catching_reward, throw_quality
-from gym_dcmm.utils.basket_launch import joint_velocity_target, acceleration_readiness, best_progress, coupled_readiness, confirm_throw
+from gym_dcmm.utils.basket_launch import joint_velocity_target, acceleration_readiness, best_progress, coupled_readiness, confirm_throw, direct_launch_progress, retention_credit
 from gym_dcmm.utils.roll_rewards import (interception_target, position_terms, hand_terms,
                                         hand_workspace, capture_ready, wait_target, hand_collision_ids, reach_terms)
 
@@ -191,7 +191,7 @@ class DcmmVecEnv(gym.Env):
         if basket_arm_control not in ('cartesian', 'joint_velocity'):
             raise ValueError('basket_arm_control must be cartesian or joint_velocity')
         self.basket_arm_control = basket_arm_control
-        if basket_reward_version not in ('legacy', 'launch_v4') or basket_curriculum_stage not in (0, 1, 2, 3):
+        if basket_reward_version not in ('legacy', 'launch_v4', 'launch_v5') or basket_curriculum_stage not in (0, 1, 2, 3):
             raise ValueError('Invalid Basket reward version or curriculum stage')
         self.basket_reward_version = basket_reward_version
         self.basket_curriculum_stage = basket_curriculum_stage
@@ -769,12 +769,28 @@ class DcmmVecEnv(gym.Env):
                 eligible = (np.linalg.norm(base[:2]-self.basket_center[:2]) >= DcmmCfg.basket_base_min_distance
                             and np.linalg.norm(position[:2]-self.basket_center[:2]) >= DcmmCfg.basket_min_release_distance
                             and np.linalg.norm(palm[:2]-base[:2]) <= DcmmCfg.basket_arm_horizontal_reach)
-                readiness_fn = coupled_readiness if getattr(self, 'basket_reward_version', 'legacy') == 'launch_v4' else acceleration_readiness
+                readiness_fn = coupled_readiness if getattr(self, 'basket_reward_version', 'legacy') in ('launch_v4', 'launch_v5') else acceleration_readiness
                 readiness = readiness_fn(velocity, reference, position, self.basket_center) if eligible else 0.
-                self.basket_acceleration_pending += best_progress(self.basket_reward_state, 'best_acceleration', readiness)
+                if getattr(self, 'basket_reward_version', 'legacy') == 'launch_v5':
+                    if eligible:
+                        self.basket_acceleration_pending += direct_launch_progress(
+                            self.basket_reward_state, velocity, reference, position, self.basket_center)
+                        rotation = self.Dcmm.data.body('link6').xmat.reshape(3, 3)
+                        local_position = rotation.T @ (position - palm)
+                        credit, slip = retention_credit(self.basket_reward_state, local_position, dt,
+                            DcmmCfg.basket_v5_slip_scale, DcmmCfg.basket_v5_support_seconds)
+                        self.basket_retention_pending += credit
+                        self.basket_slip_speed = slip
+                        self.basket_downward_pending += dt * max(0., -float(velocity[2]) - .1)
+                    else:
+                        self.basket_reward_state.pop('v5_local_position', None)
+                else:
+                    self.basket_acceleration_pending += best_progress(self.basket_reward_state, 'best_acceleration', readiness)
         else:
             self.basket_no_contact_seconds = getattr(self, 'basket_no_contact_seconds', 0.) + dt
             self.basket_contact_run = 0.
+            if getattr(self, 'basket_reward_version', 'legacy') == 'launch_v5':
+                self.basket_reward_state.pop('v5_local_position', None)
         self.basket_had_hand_contact = self.basket_had_hand_contact or touching
         old_phase = self.basket_phase
         # Exact collision-geometry surface distance, not distance to the wrist/link6.
@@ -813,7 +829,7 @@ class DcmmVecEnv(gym.Env):
                 self.basket_throw_valid = bool(self.basket_throw_valid and
                     forward >= DcmmCfg.basket_min_forward_release_speed and
                     upward >= DcmmCfg.basket_min_upward_release_speed)
-            if getattr(self, 'basket_reward_version', 'legacy') == 'launch_v4':
+            if getattr(self, 'basket_reward_version', 'legacy') in ('launch_v4', 'launch_v5'):
                 direction = self.basket_center[:2] - release_position[:2]
                 direction /= max(float(np.linalg.norm(direction)), 1e-8)
                 self.basket_release_candidate = dict(time=float(last['time']), position=release_position.tolist(),
@@ -834,7 +850,7 @@ class DcmmVecEnv(gym.Env):
             if self.basket_log:
                 print(f"[basket-release] {self.basket_release_snapshot}", flush=True)
 
-        if getattr(self, 'basket_reward_version', 'legacy') == 'launch_v4':
+        if getattr(self, 'basket_reward_version', 'legacy') in ('launch_v4', 'launch_v5'):
             # Any renewed contact invalidates this candidate, even brief contact flicker.
             confirmed, self.basket_throw_check = confirm_throw(self.basket_release_candidate,
                 position, float(self.Dcmm.data.time), bool(len(self.contacts['object_contacts'])),
@@ -1583,7 +1599,7 @@ class DcmmVecEnv(gym.Env):
         elif self.object_motion == "throw_basket":
             # 每 episode 随机篮筐 x（左右）位置（运行时改 body_pos，训练底座横向移动 + 先到正前方）
             self.basket_center = DcmmCfg.basket_center.copy()
-            if getattr(self, 'basket_reward_version', 'legacy') == 'launch_v4':
+            if getattr(self, 'basket_reward_version', 'legacy') in ('launch_v4', 'launch_v5'):
                 # Explicit curriculum, no invisible per-worker automatic progression.
                 self.basket_center[1] = [1.5, 1.7, 1.9, float(DcmmCfg.basket_center[1])][self.basket_curriculum_stage]
             self.basket_center[0] = 0. if self.basket_fixed_base_training else np.random.uniform(*DcmmCfg.basket_center_x_range)
@@ -1868,6 +1884,9 @@ class DcmmVecEnv(gym.Env):
             self.basket_support_time = 0.
             self.basket_reward_state = {}
             self.basket_acceleration_pending = 0.
+            self.basket_retention_pending = 0.
+            self.basket_downward_pending = 0.
+            self.basket_slip_speed = 0.
             self.basket_release_candidate = None
             self.basket_valid_throw_confirmed = False
             self.basket_throw_reward_paid = False
@@ -1963,12 +1982,16 @@ class DcmmVecEnv(gym.Env):
             if getattr(self, 'basket_arm_control', 'cartesian') == 'joint_velocity':
                 terms['held_acceleration'] = DcmmCfg.basket_w_held_acceleration * self.basket_acceleration_pending
                 self.basket_acceleration_pending = 0.
-            if getattr(self, 'basket_reward_version', 'legacy') == 'launch_v4':
+            if getattr(self, 'basket_reward_version', 'legacy') in ('launch_v4', 'launch_v5'):
                 terms['throw_accuracy'] = terms.pop('valid_release')
                 terms['valid_throw'] = DcmmCfg.basket_v4_throw_reward * self.basket_throw_pending
                 self.basket_throw_pending = 0.
                 info['basket_throw_check'] = dict(self.basket_throw_check,
                     confirmed_once=self.basket_valid_throw_confirmed, curriculum_stage=self.basket_curriculum_stage)
+            if getattr(self, 'basket_reward_version', 'legacy') == 'launch_v5':
+                terms['support'] = DcmmCfg.basket_v5_support_weight * self.basket_retention_pending
+                terms['held_downward'] = -DcmmCfg.basket_v5_downward_weight * self.basket_downward_pending
+                self.basket_retention_pending = self.basket_downward_pending = 0.
             terms['base_too_close'] = -DcmmCfg.basket_base_near_cost * max(0., 1. - base_distance / DcmmCfg.basket_base_min_distance)
             horizontal_distance = float(np.linalg.norm(position[:2] - self.basket_center[:2]))
             terms['too_close'] = (-DcmmCfg.basket_near_hoop_cost * max(0., 1. - horizontal_distance / DcmmCfg.basket_min_release_distance)
@@ -1978,9 +2001,10 @@ class DcmmVecEnv(gym.Env):
             attempts = getattr(self, 'basket_arm_attempts', 0)
             info['basket_release'] = getattr(self, 'basket_release_snapshot', None)
             info['basket_control'] = dict(hand_contact=touching, quality=quality,
+                held_slip_speed=getattr(self, 'basket_slip_speed', 0.),
                 throw_confirmation=getattr(self, 'basket_throw_check', None),
                 curriculum_stage=getattr(self, 'basket_curriculum_stage', 3),
-                reward_version=('launch_v4' if getattr(self, 'basket_reward_version', 'legacy') == 'launch_v4' else 'launch_v3' if getattr(self, 'basket_arm_control', 'cartesian') == 'joint_velocity' else 'ballistic_v2'), predicted_error=ballistic_error,
+                reward_version=(self.basket_reward_version if getattr(self, 'basket_reward_version', 'legacy') in ('launch_v4', 'launch_v5') else 'launch_v3' if getattr(self, 'basket_arm_control', 'cartesian') == 'joint_velocity' else 'ballistic_v2'), predicted_error=ballistic_error,
                 predicted_crossing=predicted_crossing,
                 release_count=getattr(self, 'basket_release_count', 0),
                 regrasp_count=getattr(self, 'basket_regrasp_count', 0),

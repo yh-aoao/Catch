@@ -43,6 +43,36 @@ def coupled_readiness(velocity, reference, position, center):
     return float(np.sqrt(f*u) * np.exp(-(lateral/1.)**2))
 
 
+def direct_launch_progress(state, velocity, reference, position, center):
+    """Separate bounded exploration credit from coordinated launch credit."""
+    velocity, reference, position, center = map(lambda x: np.asarray(x, float),
+                                               (velocity, reference, position, center))
+    direction = center[:2] - position[:2]
+    direction /= max(float(np.linalg.norm(direction)), 1e-8)
+    forward = float(velocity[:2] @ direction)
+    f = np.clip(forward / max(.5, float(reference[:2] @ direction)), 0., 1.)
+    u = np.clip(velocity[2] / max(.5, float(reference[2])), 0., 1.)
+    lateral = np.linalg.norm(velocity[:2] - forward * direction)
+    aligned = float(np.exp(-lateral**2))
+    return sum(weight * best_progress(state, key, value * aligned)
+               for weight, key, value in
+               ((.25, 'v5_forward', f), (.25, 'v5_up', u),
+                (.5, 'v5_coordinated', np.sqrt(f*u))))
+
+
+def retention_credit(state, local_position, dt, slip_scale=.25, budget=1.):
+    """Contact-gated, finite support credit; not an incentive to hold forever."""
+    local_position = np.asarray(local_position, float)
+    previous = state.get('v5_local_position')
+    state['v5_local_position'] = local_position.copy()
+    if previous is None:
+        return 0., 0.
+    slip = float(np.linalg.norm(local_position - previous) / dt)
+    duration = min(dt, max(0., budget - state.get('v5_support_seconds', 0.)))
+    state['v5_support_seconds'] = state.get('v5_support_seconds', 0.) + duration
+    return duration * float(np.exp(-(slip/slip_scale)**2)), slip
+
+
 def confirm_throw(candidate, position, now, collision, min_time=.1, min_travel=.15):
     if candidate is None:
         return False, dict(reason='no_candidate')

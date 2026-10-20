@@ -530,3 +530,9 @@ basket_w_held_acceleration = 6.0 # maximum total acceleration credit per episode
 basket_v4_throw_reward = 10.0
 basket_v4_flight_seconds = 0.1
 basket_v4_flight_travel = 0.15
+
+# launch_v5: direct physical launch; support budget cannot be reset by recontact.
+basket_v5_slip_scale = 0.25       # m/s in link6's moving frame
+basket_v5_support_seconds = 1.0
+basket_v5_support_weight = 1.0    # at most 1 reward per episode
+basket_v5_downward_weight = 1.0   # time-integrated held downward speed, not flight

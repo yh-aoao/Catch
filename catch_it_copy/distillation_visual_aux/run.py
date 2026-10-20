@@ -238,7 +238,7 @@ def restore_rng(state):
         torch.cuda.set_rng_state_all(state['cuda'])
 
 
-def train(config, teachers, adapters, output, resume=None):
+def train(config, teachers, adapters, output, resume=None, allow_source_changes=False):
     student = make_student(config)
     optimizer = torch.optim.Adam(student.parameters(), lr=config['learning_rate'])
     replay = EpisodeReplay(config['tasks'], config['capacity_frames_per_task'])
@@ -247,16 +247,19 @@ def train(config, teachers, adapters, output, resume=None):
     start, best, baseline = 0, -float('inf'), None
     if resume:
         saved = torch.load(resume, map_location='cpu', weights_only=True)
-        expected, actual = copy.deepcopy(saved['config']), copy.deepcopy(config)
-        for c in (expected, actual):
-            c.pop('iterations')
-            c.pop('device')
-        if saved['schema'] != SCHEMA or expected != actual or metadata != saved['metadata']:
-            raise ValueError('Resume contracts/sources/teachers differ; use a new run')
+        from model_experiments.visual_resume import validate_resume
+        changes, reset_best = validate_resume(saved, config, metadata, SCHEMA, allow_source_changes)
+        save_json(output / 'resume_audit.json', {'checkpoint': str(resume),
+            'changed_sources': changes, 'old_config': saved['config'], 'new_config': config,
+            'source_changes_accepted': allow_source_changes})
+        if changes:
+            print('[resume] accepted source changes: ' + ', '.join(changes), flush=True)
         student.load_state_dict(saved['student'], strict=True)
         optimizer.load_state_dict(saved['optimizer'])
         replay.load_state_dict(saved['replay'])
         start, best, baseline = saved['iteration'], saved['best_score'], saved['baseline']
+        if reset_best:
+            best = -float('inf')
         restore_rng(saved['rng'])
         print('Resuming model/optimizer/replay; simulator episodes restart.', flush=True)
     if start >= config['iterations']:
@@ -418,6 +421,9 @@ def main():
     p.add_argument('--output', required=True)
     p.add_argument('--checkpoint')
     p.add_argument('--resume')
+    p.add_argument('--allow-source-changes', action='store_true',
+                   help='Accept reviewed source changes on resume; records every changed path')
+    p.add_argument('--image-size', type=int, help='Square camera resolution; training from scratch only')
     p.add_argument('--iterations', type=int)
     p.add_argument('--num-envs', type=int)
     p.add_argument('--episodes', type=int)
@@ -443,6 +449,10 @@ def main():
     else:
         path = Path(args.config) if args.config else ROOT / 'distillation_visual_aux/configs' / (args.stage + '.json')
         config = json.loads(path.read_text(encoding='utf-8-sig'))
+    if args.image_size is not None:
+        if args.image_size < 16 or args.resume or args.command == 'eval':
+            p.error('--image-size requires a fresh run and size >= 16')
+        config['vision']['height'] = config['vision']['width'] = args.image_size
     if args.resume and args.command != 'train':
         p.error('--resume is train only')
     if args.viewer and args.command not in ('eval', 'teacher-eval'):
@@ -503,7 +513,7 @@ def main():
                  output_file=output / 'teacher_baseline.json')
     else:
         save_json(output / 'resolved_config.json', config)
-        train(config, teachers, adapters, output, args.resume)
+        train(config, teachers, adapters, output, args.resume, args.allow_source_changes)
 
 
 if __name__ == '__main__':

@@ -415,10 +415,16 @@ def main():
     p.add_argument('--camera-steps', type=int, default=80)
     p.add_argument('--seed', type=int)
     p.add_argument('--gl-backend', choices=['auto', 'egl', 'glfw', 'osmesa'])
+    p.add_argument('--egl-device-id', type=int, help='Explicit MuJoCo EGL device index (not necessarily CUDA logical index)')
     p.add_argument('--viewer', action='store_true')
     p.add_argument('--allow-zero-teacher-success', action='store_true')
     p.add_argument('--skip-teacher-baseline', action='store_true')
     args = p.parse_args()
+    if args.egl_device_id is not None:
+        if args.egl_device_id < 0:
+            p.error('--egl-device-id must be nonnegative')
+        import os
+        os.environ['MUJOCO_EGL_DEVICE_ID'] = str(args.egl_device_id)
     saved = None
     if args.command == 'eval' or args.resume:
         path = args.checkpoint if args.command == 'eval' else args.resume
@@ -460,6 +466,10 @@ def main():
     config['device'] = args.device or ('cpu' if args.command == 'check' else config['device'])
     if config['device'].startswith('cuda') and not torch.cuda.is_available():
         raise RuntimeError('CUDA unavailable; use --device cpu for local checks')
+    import os
+    print('[devices] torch={} EGL_DEVICE={} CUDA_VISIBLE_DEVICES={}'.format(
+        config['device'], os.environ.get('MUJOCO_EGL_DEVICE_ID', 'default'),
+        os.environ.get('CUDA_VISIBLE_DEVICES', 'unset')), flush=True)
     adapters = validate(config)
     torch.set_num_threads(1)
     seed_all(config['seed'])

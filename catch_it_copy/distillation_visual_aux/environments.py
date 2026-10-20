@@ -64,7 +64,7 @@ def _worker(pipe, task, config, seed, viewer):
             backend = 'glfw' if viewer or sys.platform != 'linux' else 'egl'
         os.environ['MUJOCO_GL'] = backend
         os.chdir(ROOT)
-        np.random.seed(seed)
+        np.random.seed(int(seed) % (2**32))
         random.seed(seed)
         module, name = config.get('env_factory', 'gym_dcmm.envs.DcmmVecEnv:DcmmVecEnv').split(':')
         factory = getattr(importlib.import_module(module), name)
@@ -118,7 +118,7 @@ def _worker(pipe, task, config, seed, viewer):
         def reset():
             nonlocal episode, previous_object, previous_time
             previous_object, previous_time = None, None
-            np.random.seed(seed + episode * 100003)
+            np.random.seed((int(seed) + int(episode) * 100003) % (2**32))
             random.seed(seed + episode * 100003)
             episode += 1
             return env.reset()[0]
@@ -153,8 +153,7 @@ def _worker(pipe, task, config, seed, viewer):
         pass
     except BaseException:
         try:
-            pipe.send(('error', traceback.format_exc() + '\nVisual distillation requires an actual OpenGL depth renderer. '
-                       'On a headless NVIDIA server use --gl-backend egl. Do not replace images with zeros.'))
+            pipe.send(('error', traceback.format_exc()))
         except (EOFError, BrokenPipeError):
             pass
     finally:

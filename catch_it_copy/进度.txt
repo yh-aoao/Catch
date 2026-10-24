@@ -198,3 +198,24 @@ bounce：
    - 固定底座：basket_fix_base = True（默认只训练臂+手）
    - 模型现在知道目标在哪，可以学习瞄准
 
+
+
+【2026-10-20 五组 Catch 视觉蒸馏实验输出目录】
+以下路径相对于服务器 catch_it_copy；为约定输出目录，不代表已完成训练。
+统一总目标10000轮；每2000轮评估一次，Throw/Roll/Bounce各300回合；跳过教师成功率评估。
+1. 辅助位置预测160×160，seed123，5000轮续训：
+   distillation_visual_aux/runs/catch_position160_seed123_to10000
+   恢复：distillation_visual_aux/runs/catch_position_5000_new/resume_last.pth
+2. 基础模型160×160，seed123，5000轮续训：
+   distillation_visual/runs/catch160_seed123_to10000
+   恢复：distillation_visual/runs/catch_dualcam160_5000/resume_last.pth
+3. 基础模型112×112，seed123，5000轮续训：
+   distillation_visual/runs/catch112_seed123_to10000
+   恢复：distillation_visual/runs/catch_dualcam_5000_fixed_10_14/resume_last.pth
+4. 基础模型224×224，seed123，从头训练：
+   distillation_visual/runs/catch224_seed123_10000
+5. 基础模型160×160，seed42，从头训练：
+   distillation_visual/runs/catch160_seed42_10000
+续训评估轮次6000/8000/10000；从头训练2000/4000/6000/8000/10000。
+GPU/EGL编号依各服务器实际占用与映射选择；cuda编号不自动绑定EGL。
+当前gpu-217相机检查已通过，尚不能据此确认24环境训练稳定或五组训练完成。

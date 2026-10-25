@@ -176,7 +176,7 @@ class DcmmVecEnv(gym.Env):
         print_contacts=False,
         object_motion="throw", # 新增的参数用来判断物体运动类型（throw/roll）
         bounce_physics="legacy", bounce_launch="legacy", bounce_log=False,
-        basket_log=False, roll_log=False, basket_fixed_base_training=False, basket_control_probe="off", basket_arm_control="cartesian", basket_reward_version="legacy", basket_curriculum_stage=3,
+        basket_log=False, basket_self_collision_debug=False, roll_log=False, basket_fixed_base_training=False, basket_control_probe="off", basket_arm_control="cartesian", basket_reward_version="legacy", basket_curriculum_stage=3,
     ):
         # 任务合法性检查（仅支持Tracking/Catching）
         if task not in ["Tracking", "Catching"]:
@@ -224,6 +224,7 @@ class DcmmVecEnv(gym.Env):
         self.bounce_physics_group = "legacy"
         self.bounce_launch_group = "legacy"
         self.bounce_log = bounce_log
+        self.basket_self_collision_debug = basket_self_collision_debug
         self.basket_log = basket_log
         
         # 初始化DCMM机器人Mujoco实例
@@ -1890,6 +1891,7 @@ class DcmmVecEnv(gym.Env):
             self.basket_release_time = float(self.Dcmm.data.time)
             self.basket_support_time = 0.
             self.basket_reward_state = {}
+            self._basket_arm_diagnostics = None
             self.basket_simple_state = {}
             self.basket_robot_collision = False
             self.basket_collision_details = []
@@ -2711,6 +2713,13 @@ class DcmmVecEnv(gym.Env):
             self.contacts = self._get_contacts()
             if self.object_motion == 'throw_basket':
                 self._basket_check_flight(basket_previous_point)
+                if self.basket_self_collision_debug:
+                    if self._basket_arm_diagnostics is None:
+                        from gym_dcmm.utils.basket_diagnostics import ArmDiagnostics
+                        self._basket_arm_diagnostics = ArmDiagnostics(self.Dcmm.model)
+                    self._basket_arm_diagnostics.sample(self.Dcmm.data,
+                                                        self.Dcmm.data.time - self.start_time)
+
 
             
             ## 碰撞检测（底盘碰撞则终止）

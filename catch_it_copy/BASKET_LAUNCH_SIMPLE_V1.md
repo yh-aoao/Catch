@@ -49,3 +49,15 @@ python3 train_DCMM.py test=False task=Catching_OneStage num_envs=32 \
 训练不受限速影响。basket_log=true 时，每回合输出 [basket-end]，包含仿真时长、结束原因、
 抛出标记、机器人撞底盘标记和碰撞几何/连杆名称。旧模型也可以直接使用诊断与慢放；
 新碰撞奖励需要继续训练或重新训练才会改变模型行为。
+
+
+## 腕部回收自碰撞诊断
+
+测试命令增加 `basket_self_collision_debug=true basket_viewer_speed=0.25`。
+每个物理步检测 link1～link6 的非相邻连杆，按几何对/类别每 0.1 仿真秒最多输出一次。
+`[basket-self] kind=contact` 为 MuJoCo 接触，附法向力、接触距离、关节角度；
+`geometry_proximity` 为小于 5 mm 的几何距离探测，不受常规接触过滤决定是否执行。
+负距离表示所用几何代理重叠；视觉网格回退和凸包代理可能与可见外观不同，不能单独证明实际碰撞。
+仅有 proximity 而无 contact 时检查模型 exclude、掩码、焊接体过滤和几何近似。
+此诊断不覆盖相邻连杆、手指之间或所有手臂-手部组合，不改变奖励、物理或终止。
+默认关闭；应在单环境测试开启，不建议大规模训练时开启。

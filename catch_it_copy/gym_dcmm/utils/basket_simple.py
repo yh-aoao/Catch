@@ -42,9 +42,12 @@ def update_launch(state, position, velocity, center, now, touching, collision, c
     state['best_distance'] = best
 
 
-def reward(state, done, cfg):
+def reward(state, done, cfg, robot_collision=False):
     terms = dict(valid_launch=state.pop('launch_pending', 0.),
-                 flight_progress=state.pop('progress_pending', 0.), failure=0.)
+                 flight_progress=state.pop('progress_pending', 0.), failure=0., robot_collision=0.)
+    if robot_collision and not state.get('collision_paid'):
+        terms['robot_collision'] = -cfg.basket_simple_collision_cost
+        state['collision_paid'] = True
     if done and not state.get('terminal_paid'):
         if not state.get('confirmed'):
             terms['failure'] = -cfg.basket_simple_failure_cost

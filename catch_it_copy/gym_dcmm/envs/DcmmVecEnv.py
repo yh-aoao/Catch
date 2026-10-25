@@ -1891,6 +1891,8 @@ class DcmmVecEnv(gym.Env):
             self.basket_support_time = 0.
             self.basket_reward_state = {}
             self.basket_simple_state = {}
+            self.basket_robot_collision = False
+            self.basket_collision_details = []
             self.basket_acceleration_pending = 0.
             self.basket_retention_pending = 0.
             self.basket_downward_pending = 0.
@@ -1959,7 +1961,8 @@ class DcmmVecEnv(gym.Env):
         '''
         if self.object_motion == "throw_basket" and getattr(self, 'basket_reward_version', 'legacy') == 'launch_simple_v1':
             done = bool(self.terminated or info['env_time'] > DcmmCfg.basket_max_time)
-            value, terms = simple_launch_reward(self.basket_simple_state, done, DcmmCfg)
+            value, terms = simple_launch_reward(self.basket_simple_state, done, DcmmCfg,
+                robot_collision=getattr(self, 'basket_robot_collision', False))
             for key, amount in terms.items():
                 self.basket_reward_totals[key] = self.basket_reward_totals.get(key, 0.) + amount
             info['launch_success'] = bool(self.basket_simple_state.get('confirmed', False))
@@ -2715,6 +2718,18 @@ class DcmmVecEnv(gym.Env):
                 self.terminated = True
                 if self.object_motion in ('bounce', 'roll', 'throw_basket'):
                     self.terminated_reason = 'base_collision'
+                if self.object_motion == 'throw_basket':
+                    self.basket_collision_details = self._base_contact_details()
+                    # Only arm/hand descendants of link1 qualify; ball impacts do not.
+                    root = int(self.Dcmm.model.body('link1').id)
+                    for geom in self.contacts['base_contacts']:
+                        body = int(self.Dcmm.model.geom_bodyid[int(geom)])
+                        while body > 0:
+                            if body == root:
+                                self.basket_robot_collision = True
+                                break
+                            body = int(self.Dcmm.model.body_parentid[body])
+
             
             ## 物体接触检测（判断是否成功抓取/跟踪）
             if self.object_motion == "roll" and self.table_geom_id in self.contacts['hand_contacts']:
@@ -3088,6 +3103,13 @@ class DcmmVecEnv(gym.Env):
         if self.object_motion == 'throw_basket':
             if done:
                 info['terminated_reason'] = self.terminated_reason or ('timeout' if truncated else 'failure')
+            info['robot_base_collision'] = getattr(self, 'basket_robot_collision', False)
+            if done and self.basket_log:
+                print(f"[basket-end] steps={self.steps} sim_seconds={info['env_time']:.3f} "
+                      f"reason={info['terminated_reason']} "
+                      f"launch_success={getattr(self, 'basket_simple_state', {}).get('confirmed', False)} "
+                      f"robot_base_collision={info['robot_base_collision']} "
+                      f"contacts={getattr(self, 'basket_collision_details', [])}", flush=True)
             if self.basket_log and (done or self.steps % DcmmCfg.basket_track_log_interval == 0):
                 print(f"[basket-throw] task={self.task} phase={self.basket_phase} released={self.object_throw} "
                       f"time={info['env_time']:.3f} distance_world={info['basket_distance_world']:.3f} "

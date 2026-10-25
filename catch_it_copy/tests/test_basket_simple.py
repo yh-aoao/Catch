@@ -13,6 +13,16 @@ class SimpleLaunchTests(unittest.TestCase):
         update_launch(state, [x, 0, 1], [speed, 0, 0], [2, 0, 1],
                       time, touching, collision, CFG)
 
+    def test_robot_collision_penalty_after_launch_and_only_once(self):
+        cfg = SimpleNamespace(**vars(CFG), basket_simple_collision_cost=20.)
+        s = {'confirmed': True, 'launch_pending': 5., 'progress_pending': 10.}
+        value, terms = reward(s, True, cfg, robot_collision=True)
+        self.assertEqual(value, -5.)
+        self.assertEqual(terms['robot_collision'], -20.)
+        self.assertEqual(reward(s, True, cfg, robot_collision=True)[0], 0.)
+        self.assertEqual(reward({}, True, cfg, robot_collision=True)[0], -25.)
+        self.assertEqual(reward({'confirmed': True}, True, cfg)[0], 0.)
+
     def test_confirmation_and_capped_total(self):
         s = {}
         self.step(s, 0, touching=True)

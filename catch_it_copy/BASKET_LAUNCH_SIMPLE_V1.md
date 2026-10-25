@@ -35,3 +35,17 @@ python3 train_DCMM.py test=False task=Catching_OneStage num_envs=32 \
 参数集中在 configs/env/DcmmCfg.py 的 basket_simple_*。
 纯逻辑测试：`python -m unittest discover -s tests -p 'test_basket_simple.py'`。
 这些测试不验证 MuJoCo 的实际动力学或训练收敛，需要在训练服务器进行短训练和可视化验证。
+
+
+## 碰撞诊断与测试播放（更新）
+
+新增独立的机械臂/手撞底盘惩罚 -20（basket_simple_collision_cost），有效抛出后仍扣，
+每回合只扣一次；未抛出失败 -5 可与其叠加。球撞底盘不算机器人自碰撞，仍保留原终止。
+此项仅影响 launch_simple_v1。检测范围为 link1 及其后代与既有 base_id 几何的接触，
+尚非所有非相邻连杆之间的自碰撞检测。
+
+固定底盘 Catching_OneStage 的 test=True viewer=true num_envs=1 测试，默认实时限速。
+追加 basket_viewer_speed=0.25 可四分之一速播放；0 取消限速。只改变等待时间，不改变物理步长。
+训练不受限速影响。basket_log=true 时，每回合输出 [basket-end]，包含仿真时长、结束原因、
+抛出标记、机器人撞底盘标记和碰撞几何/连杆名称。旧模型也可以直接使用诊断与慢放；
+新碰撞奖励需要继续训练或重新训练才会改变模型行为。

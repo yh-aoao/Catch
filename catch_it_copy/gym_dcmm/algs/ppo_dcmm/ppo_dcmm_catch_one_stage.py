@@ -33,6 +33,14 @@ class PPO_Catch_OneStage(object):
         self.fixed_basket = (full_config.get('object_motion') in ('basket', 'throw_basket')
                              and bool(full_config.get('basket_fixed_base_training', False)))
         self.basket_arm_control = str(full_config.get('basket_arm_control', 'cartesian'))
+        self.basket_viewer_speed = 0.
+        if self.fixed_basket and full_config.test and full_config.viewer:
+            self.basket_viewer_speed = float(full_config.get('basket_viewer_speed', 1.))
+            if self.basket_viewer_speed < 0 or not np.isfinite(self.basket_viewer_speed):
+                raise ValueError('basket_viewer_speed must be finite and >= 0')
+            if self.basket_viewer_speed and int(full_config.num_envs) != 1:
+                raise ValueError('Basket viewer pacing requires num_envs=1')
+
         if self.fixed_basket:
             # Learn only arm + hand; insert the two zero base commands at execution.
             self.actions_num = self.full_action_dim - 2
@@ -523,6 +531,11 @@ class PPO_Catch_OneStage(object):
 
     def play_test_steps(self):
         for _ in range(self.horizon_length):
+            if self.basket_viewer_speed:
+                clock_env = self.env.unwrapped.envs[0].unwrapped
+                wall_start = time.perf_counter()
+                sim_start = float(clock_env.Dcmm.data.time)
+
             res_dict = self.model_act(self.obs, inference=True)
             # Do env step
             # Clamp the actions of the action space 
@@ -531,6 +544,13 @@ class PPO_Catch_OneStage(object):
             actions = torch.nn.functional.pad(actions, (0, self.full_action_dim-actions.size(1)), value=0)
             actions_dict = self.action2dict(actions)
             obs, r, terminates, truncates, infos = self.env.step(actions_dict)
+            if self.basket_viewer_speed:
+                # Reset-only steps may move simulation time backwards: do not sleep.
+                elapsed_sim = max(0., float(clock_env.Dcmm.data.time) - sim_start)
+                delay = elapsed_sim / self.basket_viewer_speed - (time.perf_counter() - wall_start)
+                if delay > 0:
+                    time.sleep(delay)
+
             # Map the obs
             self.obs = {'obs': self.obs2tensor(obs)}
             # Map the rewards

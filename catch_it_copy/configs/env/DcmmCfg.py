@@ -544,3 +544,6 @@ basket_simple_target_distance = 0.5
 basket_simple_launch_bonus = 5.0
 basket_simple_progress_bonus = 10.0
 basket_simple_failure_cost = 5.0
+
+# Independent arm/hand-to-base penalty, including after successful release.
+basket_simple_collision_cost = 20.0

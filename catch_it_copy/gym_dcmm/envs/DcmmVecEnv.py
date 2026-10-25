@@ -40,6 +40,7 @@ from gym_dcmm.utils.util import *  # 工具函数（如坐标转换/四元数处
 import xml.etree.ElementTree as ET  # XML解析（修改Mujoco模型）
 from scipy.spatial.transform import Rotation as R  # 旋转变换
 from collections import deque  # 双端队列（存储历史数据）
+from gym_dcmm.utils.basket_simple import update_launch as update_simple_launch, reward as simple_launch_reward
 from gym_dcmm.utils.basket_tracking import parking_state, parking_reward, limit_speed
 from gym_dcmm.utils.basket_catching import joint_throw_reward, underhand_geometry, release_phase, ballistic_quality
 from gym_dcmm.utils.basket_catching import hoop_crossing, flight_failure, predicted_miss, catching_reward, throw_quality
@@ -191,7 +192,7 @@ class DcmmVecEnv(gym.Env):
         if basket_arm_control not in ('cartesian', 'joint_velocity'):
             raise ValueError('basket_arm_control must be cartesian or joint_velocity')
         self.basket_arm_control = basket_arm_control
-        if basket_reward_version not in ('legacy', 'launch_v4', 'launch_v5') or basket_curriculum_stage not in (0, 1, 2, 3):
+        if basket_reward_version not in ('legacy', 'launch_v4', 'launch_v5', 'launch_simple_v1') or basket_curriculum_stage not in (0, 1, 2, 3):
             raise ValueError('Invalid Basket reward version or curriculum stage')
         self.basket_reward_version = basket_reward_version
         self.basket_curriculum_stage = basket_curriculum_stage
@@ -753,6 +754,12 @@ class DcmmVecEnv(gym.Env):
         hand_ids = hand_collision_ids(self.Dcmm.model, self.hand_start_id)
         touching = bool(np.any(np.isin(self.contacts['object_contacts'], hand_ids)))
         dt = float(self.Dcmm.model.opt.timestep)
+        if getattr(self, 'basket_reward_version', 'legacy') == 'launch_simple_v1':
+            other_contact = bool(any(int(g) not in set(hand_ids.tolist())
+                                     for g in self.contacts['object_contacts']))
+            update_simple_launch(self.basket_simple_state, position,
+                self.Dcmm.data.qvel[36:39], self.basket_center,
+                float(self.Dcmm.data.time), touching, other_contact, DcmmCfg)
         if touching:
             self.basket_no_contact_seconds = 0.
             self.basket_contact_total = getattr(self, 'basket_contact_total', 0.) + dt
@@ -1883,6 +1890,7 @@ class DcmmVecEnv(gym.Env):
             self.basket_release_time = float(self.Dcmm.data.time)
             self.basket_support_time = 0.
             self.basket_reward_state = {}
+            self.basket_simple_state = {}
             self.basket_acceleration_pending = 0.
             self.basket_retention_pending = 0.
             self.basket_downward_pending = 0.
@@ -1949,6 +1957,23 @@ class DcmmVecEnv(gym.Env):
         - 约束惩罚（关节超出限位）
         - 控制惩罚（动作突变）
         '''
+        if self.object_motion == "throw_basket" and getattr(self, 'basket_reward_version', 'legacy') == 'launch_simple_v1':
+            done = bool(self.terminated or info['env_time'] > DcmmCfg.basket_max_time)
+            value, terms = simple_launch_reward(self.basket_simple_state, done, DcmmCfg)
+            for key, amount in terms.items():
+                self.basket_reward_totals[key] = self.basket_reward_totals.get(key, 0.) + amount
+            info['launch_success'] = bool(self.basket_simple_state.get('confirmed', False))
+            info['basket_success'] = bool(info['success'])  # Preserve original strict hoop metric.
+            info['launch_forward_distance'] = self.basket_simple_state.get('best_distance', 0.)
+            info['basket_reward_terms'] = terms
+            info['basket_reward_totals'] = self.basket_reward_totals.copy()
+            info['basket_distance_world'] = float(np.linalg.norm(self.Dcmm.data.qpos[37:40]-self.basket_center))
+            info['basket_control'] = dict(reward_version='launch_simple_v1',
+                launch_success=info['launch_success'], basket_success=info['basket_success'],
+                forward_distance=info['launch_forward_distance'],
+                release_forward_speed=self.basket_simple_state.get('candidate', {}).get('forward', 0.))
+            info['basket_phase'] = self.basket_phase
+            return value
         if self.object_motion == "throw_basket":
             parking = self._basket_parking_state()
             position = self.Dcmm.data.qpos[37:40].copy()

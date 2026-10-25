@@ -536,3 +536,11 @@ basket_v5_slip_scale = 0.25       # m/s in link6's moving frame
 basket_v5_support_seconds = 1.0
 basket_v5_support_weight = 1.0    # at most 1 reward per episode
 basket_v5_downward_weight = 1.0   # time-integrated held downward speed, not flight
+
+# Opt-in launch_simple_v1: physical launch only, strict basket success unchanged.
+basket_simple_free_seconds = 0.05
+basket_simple_forward_speed = 0.3
+basket_simple_target_distance = 0.5
+basket_simple_launch_bonus = 5.0
+basket_simple_progress_bonus = 10.0
+basket_simple_failure_cost = 5.0

@@ -42,9 +42,15 @@ def update_launch(state, position, velocity, center, now, touching, collision, c
     state['best_distance'] = best
 
 
-def reward(state, done, cfg, robot_collision=False):
+def reward(state, done, cfg, robot_collision=False, arm_action=None):
     terms = dict(valid_launch=state.pop('launch_pending', 0.),
-                 flight_progress=state.pop('progress_pending', 0.), failure=0., robot_collision=0.)
+                 flight_progress=state.pop('progress_pending', 0.), failure=0., robot_collision=0., arm_smoothness=0.)
+    if arm_action is not None:
+        current = np.asarray(arm_action, dtype=float).copy()
+        previous = state.get('previous_arm_action')
+        if previous is not None:
+            terms['arm_smoothness'] = -cfg.basket_simple_smooth_weight * float(np.mean((current-previous)**2))
+        state['previous_arm_action'] = current
     if robot_collision and not state.get('collision_paid'):
         terms['robot_collision'] = -cfg.basket_simple_collision_cost
         state['collision_paid'] = True
@@ -53,3 +59,27 @@ def reward(state, done, cfg, robot_collision=False):
             terms['failure'] = -cfg.basket_simple_failure_cost
         state['terminal_paid'] = True
     return float(sum(terms.values())), terms
+
+
+def arm_self_contacts(model, data, min_force):
+    """Actual loaded contacts only; no distance probes, adjacent links or fingers."""
+    import mujoco
+    names = {'link1', 'link2', 'link3', 'link4', 'link5', 'link6'}
+    result = []
+    for index, contact in enumerate(data.contact):
+        a, b = int(contact.geom1), int(contact.geom2)
+        ba, bb = int(model.geom_bodyid[a]), int(model.geom_bodyid[b])
+        na, nb = model.body(ba).name, model.body(bb).name
+        if na not in names or nb not in names or ba == bb:
+            continue
+        if model.body_parentid[ba] == bb or model.body_parentid[bb] == ba:
+            continue
+        if contact.dist > 0:
+            continue
+        force = np.zeros(6)
+        mujoco.mj_contactForce(model, data, index, force)
+        if force[0] <= min_force:
+            continue
+        result.append(dict(pair=[na, nb], geoms=[a, b],
+                           distance=float(contact.dist), normal_force=float(force[0])))
+    return result

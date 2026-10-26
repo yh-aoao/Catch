@@ -61,3 +61,22 @@ python3 train_DCMM.py test=False task=Catching_OneStage num_envs=32 \
 仅有 proximity 而无 contact 时检查模型 exclude、掩码、焊接体过滤和几何近似。
 此诊断不覆盖相邻连杆、手指之间或所有手臂-手部组合，不改变奖励、物理或终止。
 默认关闭；应在单环境测试开启，不建议大规模训练时开启。
+
+
+## safety_v2 奖励修订
+
+launch_simple_v1 现在在每个物理子步检查 link1～link6 非相邻连杆实际接触。
+接触距离 <= 0 且法向力 > 0.1 N 时立即终止，原因为 arm_self_collision。
+0.1 N 是可配置的初始去噪阈值，不是已标定的硬件安全界限。
+此检测始终启用，不依赖 basket_self_collision_debug；几何接近探测仍只作诊断。
+与机械臂/手撞底盘共用每回合一次 -20 惩罚，不重复扣分，抛出后仍生效。
+新增机械臂归一化动作变化惩罚 -0.01*mean((a_t-a_prev)^2)，不含手指，首步不扣。
+入口强制的 arm 反归一化比例为 .025，用它恢复归一化动作。
+旧的释放奖励、0.5米距离上限和未释放失败项保持原定义。
+
+info 新增 arm_self_collision、robot_dangerous_collision、safe_launch_success；
+后者仅在回合结束时判定，为有效抛出且没有上述危险碰撞。
+原 info.success 仍为入框，PPO 原 mean_success 仍为入框率，不是安全抛出率。
+[basket-end] 和 control 输出这些新指标；control.reward_revision=safety_v2 标识新奖励。
+原权重可用于诊断，但须训练才能改变动作。建议新 output_name=BasketLaunchSafeV2
+从头训练以便和旧版比较；不要直接比较新旧版本的 best_reward 数值。

@@ -547,3 +547,7 @@ basket_simple_failure_cost = 5.0
 
 # Independent arm/hand-to-base penalty, including after successful release.
 basket_simple_collision_cost = 20.0
+
+# launch_simple_v1 safety_v2: provisional force noise floor (N), calibrate in simulator.
+basket_simple_self_contact_force = 0.1
+basket_simple_smooth_weight = 0.01

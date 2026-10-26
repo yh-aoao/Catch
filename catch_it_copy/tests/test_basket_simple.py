@@ -23,6 +23,29 @@ class SimpleLaunchTests(unittest.TestCase):
         self.assertEqual(reward({}, True, cfg, robot_collision=True)[0], -25.)
         self.assertEqual(reward({'confirmed': True}, True, cfg)[0], 0.)
 
+    def test_smoothness_normalized_action_and_reset(self):
+        cfg = SimpleNamespace(**vars(CFG), basket_simple_smooth_weight=.01)
+        s = {}
+        self.assertEqual(reward(s, False, cfg, arm_action=[-1.]*6)[0], 0.)
+        self.assertAlmostEqual(reward(s, False, cfg, arm_action=[1.]*6)[0], -.04)
+        self.assertEqual(reward(s, False, cfg, arm_action=[1.]*6)[0], 0.)
+        self.assertEqual(reward({}, False, cfg, arm_action=[1.]*6)[0], 0.)
+
+    def test_self_contacts_exclude_adjacent_unloaded_and_separated(self):
+        import numpy as np
+        from unittest.mock import patch
+        from gym_dcmm.utils.basket_simple import arm_self_contacts
+        m = SimpleNamespace(geom_bodyid=[1,2,3,4], body_parentid=[0,0,1,2,0],
+            body=lambda i: SimpleNamespace(name=['world','link1','link2','link3','object'][i]))
+        contacts = [SimpleNamespace(geom1=0,geom2=b,dist=dist)
+                    for b, dist in [(1,-.001),(2,-.001),(3,-.001),(2,.001),(2,-.001)]]
+        d = SimpleNamespace(contact=contacts)
+        fake = SimpleNamespace(mj_contactForce=lambda m,d,i,f: f.__setitem__(0, 10. if i != 4 else 0.))
+        with patch.dict('sys.modules', {'mujoco':fake}):
+            hits = arm_self_contacts(m,d,.1)
+        self.assertEqual(len(hits), 1)
+        self.assertEqual(hits[0]['pair'], ['link1','link3'])
+
     def test_confirmation_and_capped_total(self):
         s = {}
         self.step(s, 0, touching=True)

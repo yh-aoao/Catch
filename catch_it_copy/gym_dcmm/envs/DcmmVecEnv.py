@@ -40,7 +40,7 @@ from gym_dcmm.utils.util import *  # 工具函数（如坐标转换/四元数处
 import xml.etree.ElementTree as ET  # XML解析（修改Mujoco模型）
 from scipy.spatial.transform import Rotation as R  # 旋转变换
 from collections import deque  # 双端队列（存储历史数据）
-from gym_dcmm.utils.basket_simple import update_launch as update_simple_launch, reward as simple_launch_reward
+from gym_dcmm.utils.basket_simple import update_launch as update_simple_launch, reward as simple_launch_reward, arm_self_contacts
 from gym_dcmm.utils.basket_tracking import parking_state, parking_reward, limit_speed
 from gym_dcmm.utils.basket_catching import joint_throw_reward, underhand_geometry, release_phase, ballistic_quality
 from gym_dcmm.utils.basket_catching import hoop_crossing, flight_failure, predicted_miss, catching_reward, throw_quality
@@ -1893,6 +1893,8 @@ class DcmmVecEnv(gym.Env):
             self.basket_reward_state = {}
             self._basket_arm_diagnostics = None
             self.basket_simple_state = {}
+            self.basket_arm_self_collision = False
+            self.basket_self_contact_details = []
             self.basket_robot_collision = False
             self.basket_collision_details = []
             self.basket_acceleration_pending = 0.
@@ -1964,10 +1966,15 @@ class DcmmVecEnv(gym.Env):
         if self.object_motion == "throw_basket" and getattr(self, 'basket_reward_version', 'legacy') == 'launch_simple_v1':
             done = bool(self.terminated or info['env_time'] > DcmmCfg.basket_max_time)
             value, terms = simple_launch_reward(self.basket_simple_state, done, DcmmCfg,
-                robot_collision=getattr(self, 'basket_robot_collision', False))
+                robot_collision=(getattr(self, 'basket_robot_collision', False) or
+                                 getattr(self, 'basket_arm_self_collision', False)),
+                arm_action=np.clip(np.asarray(action['arm']) / .025, -1., 1.))
             for key, amount in terms.items():
                 self.basket_reward_totals[key] = self.basket_reward_totals.get(key, 0.) + amount
             info['launch_success'] = bool(self.basket_simple_state.get('confirmed', False))
+            info['arm_self_collision'] = getattr(self, 'basket_arm_self_collision', False)
+            info['robot_dangerous_collision'] = bool(info['arm_self_collision'] or getattr(self, 'basket_robot_collision', False))
+            info['safe_launch_success'] = bool(done and info['launch_success'] and not info['robot_dangerous_collision'])
             info['basket_success'] = bool(info['success'])  # Preserve original strict hoop metric.
             info['launch_forward_distance'] = self.basket_simple_state.get('best_distance', 0.)
             info['basket_reward_terms'] = terms
@@ -1975,6 +1982,8 @@ class DcmmVecEnv(gym.Env):
             info['basket_distance_world'] = float(np.linalg.norm(self.Dcmm.data.qpos[37:40]-self.basket_center))
             info['basket_control'] = dict(reward_version='launch_simple_v1',
                 launch_success=info['launch_success'], basket_success=info['basket_success'],
+                safe_launch_success=info['safe_launch_success'],
+                arm_self_collision=info['arm_self_collision'], reward_revision='safety_v2',
                 forward_distance=info['launch_forward_distance'],
                 release_forward_speed=self.basket_simple_state.get('candidate', {}).get('forward', 0.))
             info['basket_phase'] = self.basket_phase
@@ -2740,6 +2749,17 @@ class DcmmVecEnv(gym.Env):
                             body = int(self.Dcmm.model.body_parentid[body])
 
             
+            if (self.object_motion == 'throw_basket' and
+                    getattr(self, 'basket_reward_version', 'legacy') == 'launch_simple_v1'):
+                hits = arm_self_contacts(self.Dcmm.model, self.Dcmm.data,
+                                         DcmmCfg.basket_simple_self_contact_force)
+                if hits:
+                    self.basket_arm_self_collision = True
+                    self.basket_self_contact_details = hits
+                    self.terminated = True
+                    self.terminated_reason = 'arm_self_collision'
+                    break  # Stop this policy step at the first loaded self-contact.
+
             ## 物体接触检测（判断是否成功抓取/跟踪）
             if self.object_motion == "roll" and self.table_geom_id in self.contacts['hand_contacts']:
                 self.terminated = True
@@ -3118,6 +3138,9 @@ class DcmmVecEnv(gym.Env):
                       f"reason={info['terminated_reason']} "
                       f"launch_success={getattr(self, 'basket_simple_state', {}).get('confirmed', False)} "
                       f"robot_base_collision={info['robot_base_collision']} "
+                      f"arm_self_collision={getattr(self, 'basket_arm_self_collision', False)} "
+                      f"safe_launch_success={info.get('safe_launch_success', False)} "
+                      f"self_contacts={getattr(self, 'basket_self_contact_details', [])} "
                       f"contacts={getattr(self, 'basket_collision_details', [])}", flush=True)
             if self.basket_log and (done or self.steps % DcmmCfg.basket_track_log_interval == 0):
                 print(f"[basket-throw] task={self.task} phase={self.basket_phase} released={self.object_throw} "

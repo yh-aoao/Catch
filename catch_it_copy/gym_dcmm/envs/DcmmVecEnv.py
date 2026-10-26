@@ -1970,7 +1970,7 @@ class DcmmVecEnv(gym.Env):
             value, terms = simple_launch_reward(self.basket_simple_state, done, DcmmCfg,
                 robot_collision=(getattr(self, 'basket_robot_collision', False) or
                                  getattr(self, 'basket_arm_self_collision', False)),
-                arm_action=np.clip(np.asarray(action['arm']) / .025, -1., 1.))
+                arm_action=np.clip(np.asarray(ctrl['arm']) / .025, -1., 1.))
             for key, amount in terms.items():
                 self.basket_reward_totals[key] = self.basket_reward_totals.get(key, 0.) + amount
             info['launch_success'] = bool(self.basket_simple_state.get('confirmed', False))

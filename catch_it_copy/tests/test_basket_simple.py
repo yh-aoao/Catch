@@ -46,6 +46,32 @@ class SimpleLaunchTests(unittest.TestCase):
         self.assertEqual(len(hits), 1)
         self.assertEqual(hits[0]['pair'], ['link1','link3'])
 
+    def test_actual_environment_reward_branch_uses_ctrl(self):
+        import ast
+        from pathlib import Path
+        import numpy as np
+        source = Path(__file__).resolve().parents[1] / 'gym_dcmm/envs/DcmmVecEnv.py'
+        tree = ast.parse(source.read_text(encoding='utf-8'))
+        cls = next(n for n in tree.body if isinstance(n, ast.ClassDef) and n.name == 'DcmmVecEnv')
+        method = next(n for n in cls.body if isinstance(n, ast.FunctionDef) and n.name == 'compute_reward')
+        scope = dict(np=np, simple_launch_reward=reward,
+                     DcmmCfg=SimpleNamespace(**vars(CFG), basket_max_time=4.,
+                         basket_simple_collision_cost=20., basket_simple_smooth_weight=.01))
+        exec(compile(ast.Module(body=[method], type_ignores=[]), str(source), 'exec'), scope)
+        env = SimpleNamespace(object_motion='throw_basket', basket_reward_version='launch_simple_v1',
+            terminated=False, basket_simple_state={}, basket_reward_totals={},
+            basket_center=np.zeros(3), basket_phase='preparing',
+            Dcmm=SimpleNamespace(data=SimpleNamespace(qpos=np.zeros(44))))
+        info = dict(env_time=.04, success=False)
+        run = scope['compute_reward']
+        self.assertEqual(run(env, {}, info, {'arm': np.full(6, -.025)}), 0.)
+        self.assertAlmostEqual(run(env, {}, info, {'arm': np.full(6, .025)}), -.04)
+        env.terminated = True
+        env.basket_arm_self_collision = True
+        self.assertAlmostEqual(run(env, {}, info, {'arm': np.full(6, .025)}), -25.)
+        self.assertFalse(info['safe_launch_success'])
+        self.assertTrue(info['robot_dangerous_collision'])
+
     def test_confirmation_and_capped_total(self):
         s = {}
         self.step(s, 0, touching=True)

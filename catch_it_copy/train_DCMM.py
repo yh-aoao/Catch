@@ -98,6 +98,13 @@ def main(config: DictConfig):
     print("config.num_envs: ", config.num_envs)
     # Single-environment evaluation keeps Viewer and exceptions in the main process.
     vector_mode = 'sync' if config.test and int(config.num_envs) == 1 else 'async'
+    requested_vector_mode = str(config.get('vector_mode', 'auto'))
+    if requested_vector_mode not in ('auto', 'sync', 'async'):
+        raise ValueError('vector_mode must be auto, sync or async')
+    if requested_vector_mode != 'auto':
+        vector_mode = requested_vector_mode
+    print('[environment] vector_mode=' + vector_mode, flush=True)
+
     env = gym.make_vec(env_name, num_envs=int(config.num_envs), vectorization_mode=vector_mode,
                     task=task, camera_name=["top"],
                     render_per_step=False, render_mode = "rgb_array",

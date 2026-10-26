@@ -39,6 +39,7 @@ from gymnasium.envs.mujoco.mujoco_rendering import MujocoRenderer  # Mujoco渲�
 from gym_dcmm.utils.util import *  # 工具函数（如坐标转换/四元数处理）
 import xml.etree.ElementTree as ET  # XML解析（修改Mujoco模型）
 from scipy.spatial.transform import Rotation as R  # 旋转变换
+from gym_dcmm.utils.worker_errors import report_worker_error
 from collections import deque  # 双端队列（存储历史数据）
 from gym_dcmm.utils.basket_simple import update_launch as update_simple_launch, reward as simple_launch_reward, arm_self_contacts
 from gym_dcmm.utils.basket_tracking import parking_state, parking_reward, limit_speed
@@ -1798,6 +1799,7 @@ class DcmmVecEnv(gym.Env):
         mujoco.mj_forward(self.Dcmm.model, self.Dcmm.data)
         mujoco.mj_forward(self.Dcmm.model_arm, self.Dcmm.data_arm)
 
+    @report_worker_error
     def reset(self):
         """
         重置环境（符合 gym.Env 标准接口）
@@ -2892,6 +2894,7 @@ class DcmmVecEnv(gym.Env):
                               f"hand_error_max={np.max(np.abs(self.action_buffer['hand'][0] - self.Dcmm.data.qpos[21:37])):.4f}", flush=True)
                 break
 
+    @report_worker_error
     def step(self, action):
         """
         环境步进（符合gym.Env标准接口）

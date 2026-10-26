@@ -74,3 +74,6 @@ basket_viewer_speed: 1.0
 
 # Read-only nonadjacent arm contact/distance diagnostics, expensive: enable only for debugging.
 basket_self_collision_debug: false
+
+# sync exposes simulator errors directly; auto preserves normal parallel training.
+vector_mode: auto

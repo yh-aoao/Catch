@@ -66,8 +66,25 @@ slide_log: false
 basket_reward_version: legacy
 basket_curriculum_stage: 3
 
+# basket_mobile_v1 only; target is sampled on reset and stays fixed in the episode.
+basket_mobile:
+  target_x_range: [-0.4, 0.4]
+  target_y_range: [1.35, 1.85]
+  max_time: 8.0
+  max_speed: 0.5
+  max_acceleration: 0.8
+  position_tolerance: 0.10
+  speed_tolerance: 0.10
+  settle_seconds: 0.20
+  carry_settle_seconds: 0.30
+
 # Evaluation-only primitive object override; default preserves original routes.
 test_object: default
+roll_speed: null # object override Roll tests only: fixed m/s or [min,max]; null inherits original speed
+roll_wait_guard: false # object override Roll tests only: wait in front of table until ball clears edge
+ycb_collision: auto # tennis_ball/baseball use sphere; other YCB objects use mesh; mesh restores old behavior
+ycb_joint_damping: null # evaluation-only override for all six YCB free-joint DOFs; null inherits task
+test_env_time: null # evaluation-only episode duration in simulation seconds; null inherits task
 
 # Fixed Basket OneStage viewer test only: 1=real time, 0.25=quarter speed, 0=unlimited.
 basket_viewer_speed: 1.0

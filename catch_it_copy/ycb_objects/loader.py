@@ -3,6 +3,19 @@ from pathlib import Path
 import copy, math
 import xml.etree.ElementTree as ET
 ROOT=Path(__file__).resolve().parents[1]/'assets/ycb'
+BALL_OBJECTS = frozenset(('tennis_ball', 'baseball'))
+
+
+def sphere_radius(resource):
+    """Approximate radius from the mean of the three visual-mesh diameters."""
+    import numpy as np
+    points = []
+    for mesh in resource[0].findall('./asset/mesh'):
+        path = ROOT / mesh.get('file')
+        if path.suffix == '.obj':
+            points.extend([list(map(float, line.split()[1:4]))
+                           for line in path.read_text().splitlines() if line.startswith('v ')])
+    return float(np.ptp(np.asarray(points), axis=0).mean() / 2)
 
 def load(name):
     if not name.replace('_','').isalnum(): raise ValueError('Invalid YCB name')
@@ -20,7 +33,9 @@ def load(name):
     radius=max(math.sqrt(sum(x*x for x in v)) for v in vertices)
     return root,mass,radius
 
-def compose(xml, resource):
+def compose(xml, resource, collision='mesh'):
+    if collision not in ('mesh', 'sphere'):
+        raise ValueError('YCB collision must be mesh or sphere')
     src,mass,radius=resource;root=ET.fromstring(xml);body=root.find(".//body[@name='object']")
     old=body.find("geom[@name='object']"); material_keys=('friction','solref','solimp','condim')
     contact={k:old.get(k) for k in material_keys if old.get(k) is not None}
@@ -45,6 +60,28 @@ def compose(xml, resource):
         e=node.attrib.pop('euler',None)
         if e and any(float(v)!=0 for v in e.split()):raise ValueError('Nonzero YCB geom Euler requires conversion')
         body.append(node)
+    if collision == 'sphere':
+        import mujoco
+        # Infer the existing mesh inertia independently, before disabling its collision.
+        reference = compose('<mujoco><worldbody><body name="object"><joint type="free"/>'
+                            '<geom name="object" type="sphere" size=".04"/>'
+                            '</body></worldbody></mujoco>', resource)
+        model = mujoco.MjModel.from_xml_string(reference)
+        bid = model.body('object').id
+        radius = sphere_radius(resource)
+        marker.set('size', str(radius))
+        for geom in body.findall('geom'):
+            geom.set('mass', '0')
+            geom.set('contype', '0')
+            geom.set('conaffinity', '0')
+        ET.SubElement(body, 'inertial', mass=str(mass),
+                      pos=' '.join(map(str, model.body_ipos[bid])),
+                      quat=' '.join(map(str, model.body_iquat[bid])),
+                      diaginertia=' '.join(map(str, model.body_inertia[bid])))
+        sphere = ET.SubElement(body, 'geom', name='object_collision_sphere', type='sphere',
+                               size=str(radius), mass='0', contype='1', conaffinity='1',
+                               rgba='0 0 0 0', group='3')
+        sphere.attrib.update(contact)
     return ET.tostring(root,encoding='unicode')
 
 

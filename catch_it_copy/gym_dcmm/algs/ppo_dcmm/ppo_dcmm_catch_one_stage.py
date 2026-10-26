@@ -33,8 +33,12 @@ class PPO_Catch_OneStage(object):
         self.fixed_basket = (full_config.get('object_motion') in ('basket', 'throw_basket')
                              and bool(full_config.get('basket_fixed_base_training', False)))
         self.basket_arm_control = str(full_config.get('basket_arm_control', 'cartesian'))
+        self.mobile_basket = full_config.get('basket_reward_version') == 'basket_mobile_v1'
+        self.basket_reward_version = str(full_config.get('basket_reward_version', 'legacy'))
+        self.mobile_seed = int(full_config.seed) if int(full_config.seed) >= 0 else None
+        self.mobile_base_scale = float(full_config.get('basket_mobile', {}).get('max_speed', .5))
         self.basket_viewer_speed = 0.
-        if self.fixed_basket and full_config.test and full_config.viewer:
+        if (self.fixed_basket or self.mobile_basket) and full_config.test and full_config.viewer:
             self.basket_viewer_speed = float(full_config.get('basket_viewer_speed', 1.))
             if self.basket_viewer_speed < 0 or not np.isfinite(self.basket_viewer_speed):
                 raise ValueError('basket_viewer_speed must be finite and >= 0')
@@ -115,6 +119,9 @@ class PPO_Catch_OneStage(object):
         self.episode_test_rewards = AverageScalarMeter(self.ppo_config['test_num_episodes'])
         self.episode_test_lengths = AverageScalarMeter(self.ppo_config['test_num_episodes'])
         self.episode_test_success = AverageScalarMeter(self.ppo_config['test_num_episodes'])
+        self.mobile_metrics = {key: AverageScalarMeter(200) for key in (
+            'parking_success', 'qualified_release', 'basket_hit',
+            'safe_basket_success', 'robot_dangerous_collision')} if self.mobile_basket else {}
         self.obs = None
         self.epoch_num = 0
         self.storage = ExperienceBuffer(
@@ -131,6 +138,7 @@ class PPO_Catch_OneStage(object):
         self.max_agent_steps = self.ppo_config['max_agent_steps']
         self.max_test_steps = self.ppo_config['max_test_steps']
         self.best_rewards = -10000
+        self.best_mobile_success = -1.
         # ---- Timing
         self.data_collect_time = 0
         self.rl_train_time = 0
@@ -150,6 +158,9 @@ class PPO_Catch_OneStage(object):
         }
         for k, v in self.extra_info.items():
             log_dict[f'{k}'] = v
+        for key, meter in self.mobile_metrics.items():
+            if len(meter):
+                log_dict['basket_mobile/' + key] = meter.get_mean()
 
         # log to wandb
         wandb.log(log_dict, step=self.agent_steps)
@@ -165,6 +176,16 @@ class PPO_Catch_OneStage(object):
         if self.normalize_value:
             self.value_mean_std.eval()
 
+    def _update_mobile_metrics(self, infos, dones):
+        if not self.mobile_basket:
+            return
+        from gym_dcmm.utils.basket_mobile import terminal_records
+        records = terminal_records(infos, dones)
+        for key, meter in self.mobile_metrics.items():
+            if records:
+                meter.update(torch.tensor([float(record.get(key, False)) for record in records],
+                                          dtype=torch.float32, device=self.device))
+
     def set_train(self):
         self.model.train()
         if self.normalize_input:
@@ -176,7 +197,7 @@ class PPO_Catch_OneStage(object):
         start_time = time.time()
         _t = time.time()
         _last_t = time.time()
-        reset_obs, _ = self.env.reset()
+        reset_obs, _ = self.env.reset(seed=self.mobile_seed) if self.mobile_basket else self.env.reset()
         self.obs = {'obs': self.obs2tensor(reset_obs)}
         self.agent_steps = self.batch_size
 
@@ -225,7 +246,7 @@ class PPO_Catch_OneStage(object):
                     self.save(os.path.join(self.nn_dir, checkpoint_name))
                 self.save(os.path.join(self.nn_dir, f'{ckpt_prefix}_last'))
 
-            if mean_rewards > self.best_rewards:
+            if mean_rewards > self.best_rewards and (not self.mobile_basket or len(self.episode_rewards)):
                 print(f'save current best reward: {mean_rewards:.2f}')
                 # remove previous best file
                 prev_best_ckpt = os.path.join(self.nn_dir, f'{ckpt_prefix}_best_reward_{self.best_rewards:.2f}.pth')
@@ -233,6 +254,10 @@ class PPO_Catch_OneStage(object):
                     os.remove(prev_best_ckpt)
                 self.best_rewards = mean_rewards
                 self.save(os.path.join(self.nn_dir, f'{ckpt_prefix}_best_reward_{mean_rewards:.2f}'))
+
+            if self.mobile_basket and len(self.episode_success) >= 50 and mean_success > self.best_mobile_success:
+                self.best_mobile_success = mean_success
+                self.save(os.path.join(self.nn_dir, f'{ckpt_prefix}_best_success'))
 
         print('max steps achieved')
         print('data collect time: %f min' % (self.data_collect_time / 60.0))
@@ -251,14 +276,18 @@ class PPO_Catch_OneStage(object):
         if self.value_mean_std:
             weights['value_mean_std'] = self.value_mean_std.state_dict()
         weights['action_layout'] = 'arm6_hand12' if self.fixed_basket else 'base2_arm6_hand12'
-        if self.fixed_basket:
+        if self.fixed_basket or self.mobile_basket:
             weights['basket_arm_control'] = getattr(self, 'basket_arm_control', 'cartesian')
+        if self.mobile_basket:
+            weights['basket_reward_version'] = self.basket_reward_version
+            weights['basket_observation_version'] = 'mobile51_v1'
         torch.save(weights, f'{name}.pth')
 
     def restore_train(self, fn):
         if not fn:
             return
         checkpoint = torch.load(fn, map_location = self.device)
+        self._validate_mobile_checkpoint(checkpoint)
         if self.fixed_basket and checkpoint.get('basket_arm_control', 'cartesian') != self.basket_arm_control:
             raise ValueError('Basket checkpoint action semantics differ: Cartesian and joint-velocity policies cannot be interchanged')
         self._load_compatible_model_state(checkpoint['model'])
@@ -266,11 +295,19 @@ class PPO_Catch_OneStage(object):
 
     def restore_test(self, fn):
         checkpoint = torch.load(fn, map_location = self.device)
+        self._validate_mobile_checkpoint(checkpoint)
         if self.fixed_basket and checkpoint.get('basket_arm_control', 'cartesian') != self.basket_arm_control:
             raise ValueError('Basket checkpoint action semantics differ: Cartesian and joint-velocity policies cannot be interchanged')
         self._load_compatible_model_state(checkpoint['model'])
         if self.normalize_input:
             self._load_compatible_running_stats(checkpoint)
+
+    def _validate_mobile_checkpoint(self, checkpoint):
+        if self.mobile_basket and (checkpoint.get('basket_reward_version') != 'basket_mobile_v1'
+                or checkpoint.get('basket_arm_control') != 'joint_velocity'
+                or checkpoint.get('basket_observation_version') != 'mobile51_v1'
+                or checkpoint.get('action_layout') != 'base2_arm6_hand12'):
+            raise ValueError('Mobile Basket requires its own 51-observation/20-action checkpoint; fixed-base weights need an explicit migration')
 
     def _load_compatible_running_stats(self, checkpoint):
         """兼容 Tracking checkpoint (18维) 和 Catching checkpoint (30维) 的 running_mean_std"""
@@ -285,7 +322,7 @@ class PPO_Catch_OneStage(object):
             print(f"[checkpoint] running_mean_std shape mismatch: checkpoint {ckpt_shape} vs model {curr_shape}, using fresh stats")
 
     def _load_compatible_model_state(self, checkpoint_state):
-        if self.fixed_basket:
+        if self.fixed_basket or getattr(self, 'mobile_basket', False):
             # Partial row copying would reinterpret old base actions as arm actions.
             self.model.load_state_dict(checkpoint_state, strict=True)
             return
@@ -422,6 +459,8 @@ class PPO_Catch_OneStage(object):
         if "basket" in obs:
             _parts.append(obs["basket"]["rel_pos3d"])
             _parts.append(obs["basket"]["target_rel_pos2d"])
+        if "mobile" in obs:
+            _parts.append(obs['mobile'])
         obs_array = np.concatenate(tuple(_parts), axis=1)
         obs_tensor = torch.tensor(obs_array, dtype=torch.float32).to(self.device)
         return obs_tensor
@@ -442,6 +481,8 @@ class PPO_Catch_OneStage(object):
             base_tensor = actions[:, :2] * self.action_catch_denorm[0]
             arm_tensor = actions[:, 2:8] * self.action_catch_denorm[1]
             hand_tensor = actions[:, 8:] * self.action_catch_denorm[2]
+        if getattr(self, 'mobile_basket', False):
+            base_tensor = actions[:, :2] * self.mobile_base_scale
         actions_dict = {
             'arm': arm_tensor,
             'base': base_tensor,
@@ -500,6 +541,7 @@ class PPO_Catch_OneStage(object):
             self.episode_lengths.update(self.current_lengths[done_indices])
             successes, _ = terminal_metrics(infos, dones, truncates)
             self.episode_success.update(torch.tensor(successes, dtype=torch.float32, device=self.device)[done_indices])
+            self._update_mobile_metrics(infos, dones)
             assert isinstance(infos, dict), 'Info Should be a Dict'
             # print("infos: ", infos)
             for k, v in infos.items():
@@ -567,6 +609,9 @@ class PPO_Catch_OneStage(object):
             self.episode_test_lengths.update(self.current_lengths[done_indices])
             successes, _ = terminal_metrics(infos, dones, truncates)
             self.episode_test_success.update(torch.tensor(successes, dtype=torch.float32, device=self.device)[done_indices])
+            self._update_mobile_metrics(infos, dones)
+            if self.mobile_basket:
+                self.mobile_test_episodes += int(np.count_nonzero(dones))
             assert isinstance(infos, dict), 'Info Should be a Dict'
             for k, v in infos.items():
                 # only log scalars
@@ -577,15 +622,18 @@ class PPO_Catch_OneStage(object):
 
             self.current_rewards = self.current_rewards * not_dones.unsqueeze(1)
             self.current_lengths = self.current_lengths * not_dones
+            if self.mobile_basket and self.mobile_test_episodes >= self.ppo_config['test_num_episodes']:
+                break
         
         res_dict = self.model_act(self.obs)
         self.agent_steps = (self.agent_steps + self.batch_size)
 
     def test(self):
         self.set_eval()
-        reset_obs, _ = self.env.reset()
+        reset_obs, _ = self.env.reset(seed=self.mobile_seed) if self.mobile_basket else self.env.reset()
         self.obs = {'obs': self.obs2tensor(reset_obs)}
         self.test_steps = self.batch_size
+        self.mobile_test_episodes = 0
 
         while self.test_steps < self.max_test_steps:
             self.play_test_steps()
@@ -597,6 +645,11 @@ class PPO_Catch_OneStage(object):
             print("mean_rewards: ", mean_rewards)
             print("mean_lengths: ", mean_lengths)
             print("mean_success: ", mean_success)
+            if self.mobile_basket:
+                print('basket_mobile:', {key: meter.get_mean() for key, meter in self.mobile_metrics.items()})
+                self.test_steps += self.horizon_length
+                if self.mobile_test_episodes >= self.ppo_config['test_num_episodes']:
+                    break
             # wandb.log({
             #     'metrics/episode_test_rewards': mean_rewards,
             #     'metrics/episode_test_lengths': mean_lengths,

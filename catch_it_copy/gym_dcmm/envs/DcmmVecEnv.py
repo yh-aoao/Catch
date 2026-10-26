@@ -177,7 +177,7 @@ class DcmmVecEnv(gym.Env):
         print_contacts=False,
         object_motion="throw", # 新增的参数用来判断物体运动类型（throw/roll）
         bounce_physics="legacy", bounce_launch="legacy", bounce_log=False,
-        basket_log=False, basket_self_collision_debug=False, roll_log=False, basket_fixed_base_training=False, basket_control_probe="off", basket_arm_control="cartesian", basket_reward_version="legacy", basket_curriculum_stage=3,
+        basket_log=False, basket_self_collision_debug=False, roll_log=False, basket_fixed_base_training=False, basket_control_probe="off", basket_arm_control="cartesian", basket_reward_version="legacy", basket_curriculum_stage=3, basket_mobile_options=None,
     ):
         # 任务合法性检查（仅支持Tracking/Catching）
         if task not in ["Tracking", "Catching"]:
@@ -193,13 +193,20 @@ class DcmmVecEnv(gym.Env):
         if basket_arm_control not in ('cartesian', 'joint_velocity'):
             raise ValueError('basket_arm_control must be cartesian or joint_velocity')
         self.basket_arm_control = basket_arm_control
-        if basket_reward_version not in ('legacy', 'launch_v4', 'launch_v5', 'launch_simple_v1', 'basket_aim_v1') or basket_curriculum_stage not in (0, 1, 2, 3):
+        if basket_reward_version not in ('legacy', 'launch_v4', 'launch_v5', 'launch_simple_v1', 'basket_aim_v1', 'basket_mobile_v1') or basket_curriculum_stage not in (0, 1, 2, 3):
             raise ValueError('Invalid Basket reward version or curriculum stage')
         self.basket_reward_version = basket_reward_version
         self.basket_cfg = DcmmCfg
         if basket_reward_version == 'basket_aim_v1':
             from gym_dcmm.utils.basket_aim import make_config
             self.basket_cfg = make_config(DcmmCfg)
+
+        self.mobile_basket = basket_reward_version == 'basket_mobile_v1'
+        if self.mobile_basket:
+            if object_motion not in ('basket', 'throw_basket') or task != 'Catching' or basket_fixed_base_training or basket_arm_control != 'joint_velocity':
+                raise ValueError('basket_mobile_v1 requires movable Basket Catching joint_velocity')
+            from gym_dcmm.utils.basket_mobile import make_config
+            self.basket_cfg = make_config(DcmmCfg, basket_mobile_options)
 
         self.basket_curriculum_stage = basket_curriculum_stage
         self.render_mode = render_mode
@@ -334,6 +341,10 @@ class DcmmVecEnv(gym.Env):
                 "target_rel_pos2d": spaces.Box(-10, 10, shape=(2,), dtype=np.float32),
             })
         
+        if self.mobile_basket:
+            self.observation_space.spaces['mobile'] = spaces.Box(
+                -np.inf, np.inf, shape=(16,), dtype=np.float32)
+
         # ===================== 定义动作空间（gym.spaces.Dict）=====================
         # 动作空间维度说明：总计2+6+12=20维
         # - base: 2维（底盘线速度指令）
@@ -734,6 +745,12 @@ class DcmmVecEnv(gym.Env):
                 "target_rel_pos2d": _basket_rel[:2] + np.random.normal(0, self.k_obs_object, 2),
             }
 
+        if self.mobile_basket:
+            from gym_dcmm.utils.basket_mobile import observation
+            obs['mobile'] = observation(self.basket_mobile_state,
+                self.Dcmm.data.qpos[15:21], self.Dcmm.data.qvel[14:20],
+                self.Dcmm.data.time-self.start_time, self.basket_cfg)
+
         # 更新历史位置
         self.prev_ee_pos3d = ee_pos3d
         self.prev_obj_pos3d = obj_pos3d
@@ -748,7 +765,8 @@ class DcmmVecEnv(gym.Env):
         rotation = self.Dcmm.data.body('base_link').xmat.reshape(3, 3)
         yaw = np.arctan2(rotation[1, 0], rotation[0, 0])
         return parking_state(self.Dcmm.data.body('arm_base').xpos,
-                             self.Dcmm.data.qvel[:2], yaw, self.basket_center, DcmmCfg,
+                             self.Dcmm.data.qvel[:2], yaw, self.basket_center,
+                             self.basket_cfg if self.mobile_basket else DcmmCfg,
                              initial_position=self.basket_initial_arm_base_position)
 
     def _basket_hold_and_release(self):
@@ -762,12 +780,23 @@ class DcmmVecEnv(gym.Env):
         hand_ids = hand_collision_ids(self.Dcmm.model, self.hand_start_id)
         touching = bool(np.any(np.isin(self.contacts['object_contacts'], hand_ids)))
         dt = float(self.Dcmm.model.opt.timestep)
-        if getattr(self, 'basket_reward_version', 'legacy') in ('launch_simple_v1', 'basket_aim_v1'):
+        if getattr(self, 'basket_reward_version', 'legacy') in ('launch_simple_v1', 'basket_aim_v1', 'basket_mobile_v1'):
             other_contact = bool(any(int(g) not in set(hand_ids.tolist())
                                      for g in self.contacts['object_contacts']))
-            update_simple_launch(self.basket_simple_state, position,
-                self.Dcmm.data.qvel[36:39], self.basket_center,
-                float(self.Dcmm.data.time), touching, other_contact, cfg)
+            if getattr(self, 'mobile_basket', False):
+                from gym_dcmm.utils.basket_mobile import update_physics
+                update_physics(self.basket_mobile_state, self.basket_simple_state,
+                    self._basket_parking_state(), position, self.Dcmm.data.qvel[36:39],
+                    self.basket_center, float(self.Dcmm.data.time-self.start_time),
+                    dt, touching, other_contact, cfg)
+                if self.basket_mobile_state['release_failure']:
+                    self.terminated = True
+                    self.terminated_reason = self.basket_mobile_state['release_failure']
+                    return
+            else:
+                update_simple_launch(self.basket_simple_state, position,
+                    self.Dcmm.data.qvel[36:39], self.basket_center,
+                    float(self.Dcmm.data.time), touching, other_contact, cfg)
         if touching:
             self.basket_no_contact_seconds = 0.
             self.basket_contact_total = getattr(self, 'basket_contact_total', 0.) + dt
@@ -884,12 +913,14 @@ class DcmmVecEnv(gym.Env):
         airborne = (getattr(self, 'basket_throw_valid', False)
                     and self.Dcmm.data.time - getattr(self, 'basket_release_time', self.Dcmm.data.time) >= cfg.basket_min_flight_time
                     and np.linalg.norm(position[:2] - release_pos[:2]) >= cfg.basket_min_flight_travel)
-        if getattr(self, 'basket_reward_version', 'legacy') == 'basket_aim_v1':
+        if getattr(self, 'basket_reward_version', 'legacy') in ('basket_aim_v1', 'basket_mobile_v1'):
             state = self.basket_simple_state
             candidate = state.get('candidate', {})
             airborne = (state.get('confirmed', False) and not state.get('stopped', False)
                         and self.Dcmm.data.time-candidate.get('time', self.Dcmm.data.time) >= cfg.basket_min_flight_time
                         and np.linalg.norm(position[:2]-candidate.get('position', position)[:2]) >= cfg.basket_min_flight_travel)
+            if getattr(self, 'mobile_basket', False):
+                airborne = airborne and self.basket_mobile_state['release_qualified']
             if self.basket_aim_hit_time is None and crossed and scored and airborne and not touching and not failure:
                 self.basket_aim_hit_time = float(self.Dcmm.data.time)
             if self.basket_aim_hit_time is not None:
@@ -898,6 +929,11 @@ class DcmmVecEnv(gym.Env):
                     self.terminated = True
                     self.terminated_reason = 'basket_score'
                 return
+        if getattr(self, 'mobile_basket', False) and crossed and scored:
+            # A plane crossing can never bypass the mobile release eligibility gate.
+            self.terminated = True
+            self.terminated_reason = failure or 'not_a_throw'
+            return
         if crossed and scored and not airborne:
             failure = failure or 'not_a_throw'
         # Crossing the infinite plane outside the opening is not a terminal event.
@@ -1631,7 +1667,11 @@ class DcmmVecEnv(gym.Env):
             if getattr(self, 'basket_reward_version', 'legacy') in ('launch_v4', 'launch_v5'):
                 # Explicit curriculum, no invisible per-worker automatic progression.
                 self.basket_center[1] = [1.5, 1.7, 1.9, float(DcmmCfg.basket_center[1])][self.basket_curriculum_stage]
-            self.basket_center[0] = 0. if self.basket_fixed_base_training else np.random.uniform(*DcmmCfg.basket_center_x_range)
+            if self.mobile_basket:
+                from gym_dcmm.utils.basket_mobile import sample_target
+                self.basket_center = sample_target(self.basket_cfg, self.np_random)
+            else:
+                self.basket_center[0] = 0. if self.basket_fixed_base_training else np.random.uniform(*DcmmCfg.basket_center_x_range)
             _basket_bid = mujoco.mj_name2id(self.Dcmm.model, mujoco.mjtObj.mjOBJ_BODY, 'basket_target')
             if _basket_bid >= 0:
                 self.Dcmm.model.body_pos[_basket_bid] = self.basket_center
@@ -1820,7 +1860,7 @@ class DcmmVecEnv(gym.Env):
         mujoco.mj_forward(self.Dcmm.model_arm, self.Dcmm.data_arm)
 
     @report_worker_error
-    def reset(self):
+    def reset(self, *, seed=None, options=None):
         """
         重置环境（符合 gym.Env 标准接口）
         Returns:
@@ -1831,6 +1871,7 @@ class DcmmVecEnv(gym.Env):
             print("[DEBUG] RESET called!")
             print("="*80)
         
+        super().reset(seed=seed)
         # 重置仿真
         self.episode_count += 1
         self._reset_simulation()
@@ -1934,7 +1975,17 @@ class DcmmVecEnv(gym.Env):
             self.basket_arm_ik_successes = 0
             self.basket_previous_flight_distance = None
             self.basket_initial_arm_base_position = self.Dcmm.data.body('arm_base').xpos.copy()
+            if self.mobile_basket:
+                # Preserve the fixed policy's target-to-arm_base offset, independent
+                # of the new target and of the robot's subsequent movement.
+                self.basket_cfg.basket_base_front_dist = float(
+                    self.basket_cfg.basket_center[1]-self.basket_initial_arm_base_position[1])
             self.basket_previous_distance = self._basket_parking_state()['distance']
+            if self.mobile_basket:
+                from gym_dcmm.utils.basket_mobile import new_state
+                self.basket_mobile_state = new_state(self.basket_previous_distance)
+                self.basket_carry_arm = self.Dcmm.target_arm_qpos.copy()
+                self.basket_carry_hand = self.Dcmm.target_hand_qpos.copy()
         self.info = {
             "ee_distance": np.linalg.norm(self.Dcmm.data.body("link6").xpos - 
                                        self.Dcmm.data.body(self.Dcmm.object_name).xpos[0:3]),
@@ -1986,16 +2037,22 @@ class DcmmVecEnv(gym.Env):
         - 约束惩罚（关节超出限位）
         - 控制惩罚（动作突变）
         '''
-        if self.object_motion == "throw_basket" and getattr(self, 'basket_reward_version', 'legacy') in ('launch_simple_v1', 'basket_aim_v1'):
-            done = bool(self.terminated or info['env_time'] > DcmmCfg.basket_max_time)
+        if self.object_motion == "throw_basket" and getattr(self, 'basket_reward_version', 'legacy') in ('launch_simple_v1', 'basket_aim_v1', 'basket_mobile_v1'):
+            cfg = getattr(self, 'basket_cfg', DcmmCfg)
+            done = bool(self.terminated or info['env_time'] > cfg.basket_max_time)
             reward_fn = simple_launch_reward
             extra = {}
-            cfg = getattr(self, 'basket_cfg', DcmmCfg)
-            if self.basket_reward_version == 'basket_aim_v1':
+            if self.basket_reward_version in ('basket_aim_v1', 'basket_mobile_v1'):
                 from gym_dcmm.utils.basket_aim import reward as reward_fn
                 extra = dict(center=self.basket_center, gravity=self.Dcmm.model.opt.gravity,
                              hit=self.basket_aim_hit_time is not None)
-            value, terms = reward_fn(self.basket_simple_state, done, cfg,
+            args = (self.basket_simple_state, done, cfg)
+            if getattr(self, 'mobile_basket', False):
+                from gym_dcmm.utils.basket_mobile import reward as reward_fn
+                args = (self.basket_mobile_state, self.basket_simple_state,
+                        self._basket_parking_state(), done, bool(info['success']), info['env_time'], cfg)
+                extra['base_action'] = np.clip(np.asarray(ctrl['base'])/cfg.mobile_max_speed, -1., 1.)
+            value, terms = reward_fn(*args,
                 robot_collision=(getattr(self, 'basket_robot_collision', False) or
                                  getattr(self, 'basket_arm_self_collision', False)),
                 arm_action=np.clip(np.asarray(ctrl['arm']) / .025, -1., 1.), **extra)
@@ -2021,6 +2078,19 @@ class DcmmVecEnv(gym.Env):
             info['basket_control'].update(basket_hit=info['basket_hit'], safe_basket_success=info['safe_basket_success'],
                                          aim_error=(self.basket_simple_state.get('aim_error') if self.basket_simple_state.get('aim_error') is not None else -1.))
             info['basket_phase'] = self.basket_phase
+            if getattr(self, 'mobile_basket', False):
+                mobile = self.basket_mobile_state
+                parking = self._basket_parking_state()
+                info['parking_success'] = bool(mobile['unlocked'])
+                info['qualified_release'] = bool(mobile['release_qualified'])
+                info['basket_control'].update(
+                    mobile_phase=('flight' if info['launch_success'] else 'throw' if mobile['unlocked'] else 'navigate'),
+                    target=self.basket_center.tolist(), parking_target=parking['target'][:2].tolist(),
+                    parking_distance=parking['distance'], base_speed=parking['speed'],
+                    settle_seconds=mobile['settle_seconds'], parking_success=info['parking_success'],
+                    qualified_release=info['qualified_release'],
+                    release_parking_distance=mobile.get('release_parking_distance', -1.),
+                    release_base_speed=mobile.get('release_base_speed', -1.))
             return value
         if self.object_motion == "throw_basket":
             parking = self._basket_parking_state()
@@ -2651,6 +2721,15 @@ class DcmmVecEnv(gym.Env):
                 self.Dcmm.data_arm.qpos[:6] = self.Dcmm.data.qpos[15:21]
                 mujoco.mj_fwdPosition(self.Dcmm.model_arm, self.Dcmm.data_arm)
 
+        if self.mobile_basket:
+            from gym_dcmm.utils.basket_mobile import base_command
+            self.Dcmm.target_base_vel[:2] = base_command(self.basket_mobile_state,
+                action_dict['base'], self.steps_per_policy*self.Dcmm.model.opt.timestep,
+                self.basket_cfg)
+            if not self.basket_mobile_state['unlocked']:
+                self.Dcmm.target_arm_qpos[:] = self.basket_carry_arm
+                self.Dcmm.target_hand_qpos[:] = self.basket_carry_hand
+
         ## 更新目标动作到延迟缓冲区
         self.update_target_ctrl()
         
@@ -2784,7 +2863,7 @@ class DcmmVecEnv(gym.Env):
 
             
             if (self.object_motion == 'throw_basket' and
-                    getattr(self, 'basket_reward_version', 'legacy') in ('launch_simple_v1', 'basket_aim_v1')):
+                    getattr(self, 'basket_reward_version', 'legacy') in ('launch_simple_v1', 'basket_aim_v1', 'basket_mobile_v1')):
                 hits = arm_self_contacts(self.Dcmm.model, self.Dcmm.data,
                                          DcmmCfg.basket_simple_self_contact_force)
                 if hits:
@@ -3110,6 +3189,10 @@ class DcmmVecEnv(gym.Env):
         # ==================== throw_basket 终止判定 ====================
         if self.object_motion == 'throw_basket':
             info['success'] = self.terminated_reason == 'basket_score'
+            if self.mobile_basket and info['env_time'] > self.basket_cfg.basket_max_time:
+                info['success'] = False
+                if self.terminated_reason == 'basket_score':
+                    self.terminated_reason = 'timeout'
         if self.object_motion == "throw_force" and not self.terminated:
             obj_pos = obs['object']['pos3d']
             # 球落地 = 结束（成功与否看扔多远，这里只终止）
@@ -3147,7 +3230,7 @@ class DcmmVecEnv(gym.Env):
         
         # 判断是否截断（任务完成/超时）
         if self.object_motion == "throw_basket":
-            max_time = getattr(DcmmCfg, 'basket_max_time', 4.0)
+            max_time = self.basket_cfg.basket_max_time
             truncated = info["env_time"] > max_time
         elif self.object_motion == "throw_force":
             max_time = getattr(DcmmCfg, 'throw_force_max_time', 3.0)

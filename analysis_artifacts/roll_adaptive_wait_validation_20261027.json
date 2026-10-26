@@ -1,0 +1,30 @@
+{
+  "version": "adaptive_wait_v1",
+  "baseline_commit": "90d9d1474fb89b84885d08af50d2055d163cc40f",
+  "snapshot_files": 164,
+  "backup": "backups/roll_before_adaptive_wait_20261027_001703",
+  "changed_existing_snapshot_files": [
+    "configs/config.yaml",
+    "gym_dcmm/__init__.py",
+    "train_DCMM.py"
+  ],
+  "tests": {
+    "new_reward_tests_passed": 7,
+    "historical_suite_existing_failures": 2,
+    "baseline_snapshot_reproduces_failures": true
+  },
+  "training_smoke": {
+    "catch_ppo_updates": 4,
+    "track_ppo_updates": 3,
+    "two_async_workers": true,
+    "catch_updated_tensors": 20,
+    "catch_last": "outputs/RollAdaptiveWaitV1Smoke_20261027/2026-10-27/00:25:06/nn/roll_catch_last.pth"
+  },
+  "rollback": {
+    "snapshot_integrity": true,
+    "restore_in_temporary_directory_verified": true,
+    "live_restore_applied": false
+  },
+  "formal_long_training_started": false,
+  "convergence_verified": false
+}

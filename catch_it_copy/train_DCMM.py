@@ -22,6 +22,12 @@ OmegaConf.register_new_resolver('resolve_default', lambda default, arg: default 
 
 @hydra.main(config_name='config', config_path='configs')
 def main(config: DictConfig):
+    roll_reward_version = str(config.get('roll_reward_version', 'legacy'))
+    if roll_reward_version not in ('legacy', 'adaptive_wait_v1'):
+        raise ValueError('roll_reward_version must be legacy or adaptive_wait_v1')
+    adaptive_roll = roll_reward_version == 'adaptive_wait_v1'
+    if adaptive_roll and (config.object_motion != 'roll' or config.get('roll_wait_guard', False)):
+        raise ValueError('adaptive_wait_v1 requires object_motion=roll and roll_wait_guard=false')
     from gym_dcmm.utils.roll_speed import speed_range
     roll_speed = config.get('roll_speed')
     if OmegaConf.is_config(roll_speed):
@@ -129,6 +135,9 @@ def main(config: DictConfig):
     env_name = 'gym_dcmm/SlideWorld-v0' if config.object_motion == 'slide' else 'gym_dcmm/DcmmVecWorld-v0'
     if config.test_object != 'default':
         env_name = 'gym_dcmm/ObjectTest-v0'
+    if adaptive_roll:
+        env_name = 'gym_dcmm/RollAdaptiveWorld-v0'
+        print('[roll-reward] version=adaptive_wait_v1; reward-only shaping; no hard command guard', flush=True)
     task = 'Tracking' if config.task == 'Tracking' else 'Catching'
     print("config.num_envs: ", config.num_envs)
     # Single-environment evaluation keeps Viewer and exceptions in the main process.
@@ -166,7 +175,9 @@ def main(config: DictConfig):
                         'roll_wait_guard': roll_wait_guard}
                        if config.test_object != 'default' else {}),
                     **({'slide_config': to_absolute_path(config.slide_config) if config.slide_config else None,
-                        'slide_log': config.slide_log} if config.object_motion == 'slide' else {}))
+                        'slide_log': config.slide_log} if config.object_motion == 'slide' else {}),
+                    **({'roll_adaptive_wait': OmegaConf.to_container(config.roll_adaptive_wait, resolve=True)}
+                       if adaptive_roll else {}))
 
     output_dif = os.path.join('outputs', config.output_name)
     # Get the local date and time
@@ -176,6 +187,10 @@ def main(config: DictConfig):
     output_dif = os.path.join(output_dif, current_datetime_str)
     os.makedirs(output_dif, exist_ok=True)
     OmegaConf.save(config, os.path.join(output_dif, 'resolved_config.yaml'), resolve=True)
+    if adaptive_roll:
+        from gym_dcmm.envs.roll_adaptive import write_provenance
+        write_provenance(output_dif, OmegaConf.to_container(config, resolve=True))
+        env.call('set_roll_reward_log_dir', os.path.join(output_dif, 'roll_reward'))
 
     PPO = TrackingAgent if config.task == 'Tracking' else \
           TwoStageAgent if config.task == 'Catching_TwoStage' else \

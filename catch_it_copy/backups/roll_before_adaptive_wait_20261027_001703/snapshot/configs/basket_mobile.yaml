@@ -1,0 +1,21 @@
+# Train from scratch: physical carry, policy navigation, settle, policy throw.
+defaults:
+  - config
+  - _self_
+
+task: Catching_OneStage
+object_motion: throw_basket
+basket_reward_version: basket_mobile_v1
+basket_fixed_base_training: false
+basket_arm_control: joint_velocity
+basket_control_probe: "off"
+basket_curriculum_stage: 3
+checkpoint_tracking: ''
+checkpoint_catching: ''
+object_eval: false
+output_name: BasketMobileV1_FromScratch
+
+train:
+  ppo:
+    test_num_episodes: 200
+    max_test_steps: 100000

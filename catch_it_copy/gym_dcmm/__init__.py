@@ -12,3 +12,4 @@ register(
 )
 
 register(id="gym_dcmm/ObjectTest-v0", entry_point="gym_dcmm.envs.object_test:make_object_test")
+register(id="gym_dcmm/RollAdaptiveWorld-v0", entry_point="gym_dcmm.envs.roll_adaptive:make_roll_adaptive")

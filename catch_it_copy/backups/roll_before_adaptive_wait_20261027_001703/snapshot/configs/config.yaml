@@ -1,0 +1,96 @@
+# experiment name. defaults to name of training config
+experiment: ''
+# seed - set to -1 to choose random seed
+seed: 123
+# set to True for deterministic performance
+torch_deterministic: True
+## Device config
+rl_device: ???
+device_id: 0  # 'cuda:?', -1 for 'cpu'
+
+# Disables viewer or camera visualization
+viewer: False
+imshow_cam: False
+# RL Arguments
+test: False # False, True
+task: Tracking # Catching_TwoStage, Catching_OneStage, Tracking
+num_envs: 32 # This should be no more than 2x your CPUs (1x is recommended)
+object_eval: False
+# used to set checkpoint path
+checkpoint_tracking: ''
+checkpoint_catching: ''
+
+# wandb config
+output_name: Dcmm
+wandb_mode: "disabled"  # "online" | "offline" | "disabled"
+wandb_entity: 'Your_username'
+# wandb_project: 'RL_Dcmm_Track_Random'
+wandb_project: 'RL_Dcmm_Catch_Random'
+
+# set default task and default training config based on task
+defaults:
+  - train: DcmmPPO
+  - hydra/job_logging: disabled
+
+# set the directory where the output files get saved
+hydra:
+  output_subdir: null
+  run:
+    dir: .
+
+object_motion: "throw"
+
+# Bounce uses the frozen 3a36f5f environment, config and PPO implementation.
+# Only legacy is accepted while reproducing this baseline; P/L overrides error.
+bounce_physics: "legacy"
+bounce_launch: "legacy"
+bounce_log: False        # print baseline identity; no later outcome diagnostics
+basket_log: False        # print parking error, speed, reward terms and terminal reason
+basket_freeze_tracking: True # TwoStage basket: preserve pretrained parking actor and normalization
+roll_log: False          # Roll 645edc4 baseline identity; newer diagnostics inactive
+
+# catch→throw 顺序任务专用 checkpoint（catch_throw_demo.py 使用）
+catch_tracking: ''
+catch_catching: ''
+basket_tracking: ''
+
+# Pure physical throwing curriculum: fixed base/target, learn arm and fingers.
+basket_fixed_base_training: false
+
+basket_control_probe: "off" # test-only: off/hold/arm/hand
+basket_arm_control: "cartesian" # joint_velocity for NEW throwing policies; incompatible with old arm action semantics
+slide_config: null # optional absolute/project-relative JSON path
+slide_log: false
+
+# Opt-in Basket v4; stage 3 is the original final target.
+basket_reward_version: legacy
+basket_curriculum_stage: 3
+
+# basket_mobile_v1 only; target is sampled on reset and stays fixed in the episode.
+basket_mobile:
+  target_x_range: [-0.4, 0.4]
+  target_y_range: [1.35, 1.85]
+  max_time: 8.0
+  max_speed: 0.5
+  max_acceleration: 0.8
+  position_tolerance: 0.10
+  speed_tolerance: 0.10
+  settle_seconds: 0.20
+  carry_settle_seconds: 0.30
+
+# Evaluation-only primitive object override; default preserves original routes.
+test_object: default
+roll_speed: null # object override Roll tests only: fixed m/s or [min,max]; null inherits original speed
+roll_wait_guard: false # object override Roll tests only: wait in front of table until ball clears edge
+ycb_collision: auto # tennis_ball/baseball use sphere; other YCB objects use mesh; mesh restores old behavior
+ycb_joint_damping: null # evaluation-only override for all six YCB free-joint DOFs; null inherits task
+test_env_time: null # evaluation-only episode duration in simulation seconds; null inherits task
+
+# Fixed Basket OneStage viewer test only: 1=real time, 0.25=quarter speed, 0=unlimited.
+basket_viewer_speed: 1.0
+
+# Read-only nonadjacent arm contact/distance diagnostics, expensive: enable only for debugging.
+basket_self_collision_debug: false
+
+# sync exposes simulator errors directly; auto preserves normal parallel training.
+vector_mode: auto

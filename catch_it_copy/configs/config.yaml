@@ -48,6 +48,22 @@ bounce_log: False        # print baseline identity; no later outcome diagnostics
 basket_log: False        # print parking error, speed, reward terms and terminal reason
 basket_freeze_tracking: True # TwoStage basket: preserve pretrained parking actor and normalization
 roll_log: False          # Roll 645edc4 baseline identity; newer diagnostics inactive
+roll_reward_version: legacy # legacy / adaptive_wait_v1; only the latter changes Roll reward shaping
+roll_adaptive_wait:
+  min_height: 0.38
+  max_height: 0.62
+  height_band: 0.06
+  stand_off: 0.10
+  speed_lookahead: 0.08
+  hand_margin: 0.03
+  xy_weight: 1.0
+  xy_scale: 0.30
+  progress_weight: 5.0
+  height_weight: 1.5
+  hand_weight: 4.0
+  ready_weight: 0.5
+  settle_speed: 0.15
+  early_contact_weight: 2.0
 
 # catch→throw 顺序任务专用 checkpoint（catch_throw_demo.py 使用）
 catch_tracking: ''

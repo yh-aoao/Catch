@@ -1,0 +1,13 @@
+# Fixed-base, fixed-target, physical arm+hand throwing baseline.
+defaults:
+  - config
+  - _self_
+
+task: Catching_OneStage
+object_motion: throw_basket
+basket_fixed_base_training: true
+basket_control_probe: "off"
+checkpoint_tracking: ''
+checkpoint_catching: ''
+object_eval: false
+output_name: BasketFixedOneStage

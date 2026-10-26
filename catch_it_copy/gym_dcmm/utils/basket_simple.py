@@ -13,7 +13,7 @@ def update_launch(state, position, velocity, center, now, touching, collision, c
             return
         direction = np.asarray(center, dtype=float)[:2] - p[:2]
         direction /= max(float(np.linalg.norm(direction)), 1e-8)
-        state['candidate'] = dict(position=p.copy(), time=float(now), direction=direction,
+        state['candidate'] = dict(position=p.copy(), time=float(now), direction=direction, velocity=np.asarray(velocity, dtype=float).copy(),
                                   forward=float(np.asarray(velocity)[:2] @ direction), invalid=False)
         # Touching the ground or another body while held is not free flight.
         state['candidate']['invalid'] = bool(collision)

@@ -24,7 +24,7 @@ def main(config: DictConfig):
     if config.test_object != 'default':
         if not config.test or config.object_motion not in ('throw', 'roll', 'bounce') or config.object_eval:
             raise ValueError('test_object requires test=True, object_eval=false, throw/roll/bounce')
-    if config.basket_reward_version in ('launch_v4', 'launch_v5', 'launch_simple_v1'):
+    if config.basket_reward_version in ('launch_v4', 'launch_v5', 'launch_simple_v1', 'basket_aim_v1'):
         if config.object_motion not in ('basket', 'throw_basket') or config.basket_arm_control != 'joint_velocity' or not config.basket_fixed_base_training or config.task != 'Catching_OneStage':
             raise ValueError('launch_v4/v5/simple requires fixed-base Basket joint_velocity Catching_OneStage')
         if config.test and config.basket_curriculum_stage != 3:

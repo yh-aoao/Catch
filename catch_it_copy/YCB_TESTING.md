@@ -34,3 +34,23 @@ python -m ycb_objects.download --objects lemon
 已做下载资源存在性、质量总和、非碰撞标记、多部件接触映射、路径校验及语法检查。本机MuJoCo DLL无法加载，未完成真实模型编译/重置/运行验证。先num_envs=1 viewer=true，确认形状、接触和放置正常后再统计成功率。
 
 仅接入train_DCMM.py现有物体测试入口，蒸馏学生独立CLI未扩展；未修改既有Throw/Roll/Bounce默认行为。
+
+## 2026-10-26 接触参数修复
+
+占位 object 几何现在同时继承原任务的 friction、solref、solimp、condim，继续保持不可见、零质量、不可碰撞。
+此前重置将占位体的默认接触参数复制到网格，覆盖了 Throw/Roll 初始化时设置的参数。
+现在重置同步保留原任务参数；Bounce 在基础环境重置时更新占位体的参数后，仍同步这些最新值。
+原来的网格形状、质量和惯量计算方式没有改变。
+
+在能加载 MuJoCo 的服务器上，可不启动 viewer 检查网格编译、接触属性和惯量：
+
+```bash
+python -m ycb_objects.audit --objects tennis_ball baseball tomato_soup_can
+```
+
+输出包括碰撞部件数、质量、质心、主惯量及主轴姿态，并列出旧物体 XML 的惯量。
+该命令验证独立物体编译，不替代完整任务 reset/step 和抓取效果测试。
+当前本机仍有 MuJoCo DLL 初始化错误，因此不能声称已完成编译或动态验证。
+
+Bounce 默认 Catch（5fe75d5f）和 Track（july22）配置有位置、方向、自旋随机化；
+质量、半径、摩擦、反弹参数、关节阻尼及初始高度/速率的范围上下限相同，实际未开启这些参数的域随机化。

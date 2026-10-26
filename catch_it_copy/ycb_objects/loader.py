@@ -26,7 +26,8 @@ def compose(xml, resource):
     contact={k:old.get(k) for k in material_keys if old.get(k) is not None}
     for node in list(body):
         if node.tag in ('geom','inertial'):body.remove(node)
-    ET.SubElement(body,'geom',name='object',type='sphere',size=str(radius),mass='0',contype='0',conaffinity='0',rgba='0 0 0 0')
+    marker = ET.SubElement(body,'geom',name='object',type='sphere',size=str(radius),mass='0',contype='0',conaffinity='0',rgba='0 0 0 0')
+    marker.attrib.update(contact)
     asset=root.find('asset')
     if asset is None:asset=ET.SubElement(root,'asset')
     for node in src.findall('./asset/*'):

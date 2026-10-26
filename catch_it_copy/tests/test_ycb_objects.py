@@ -5,6 +5,26 @@ from ycb_objects.loader import load, compose, remap_contacts
 
 
 class YCBTests(unittest.TestCase):
+    def test_contact_source_survives_replacement(self):
+        for friction, solref, solimp in (
+                ('0.95 0.3 0.1', '0.001 1', '0.998 0.998 0.001'),
+                ('1.2 0.1 0.1', '0.02 1', '0.9 0.95 0.01'),
+                ('0.5 0.05 0.015', '0.008 0.1', '0.95 0.998 0.002')):
+            xml = ('<mujoco><worldbody><body name="object"><joint type="free"/>'
+                   '<geom name="object" type="sphere" size=".04" friction="{}" '
+                   'solref="{}" solimp="{}" condim="4"/></body></worldbody></mujoco>').format(
+                       friction, solref, solimp)
+            for name in ('tennis_ball', 'baseball', 'tomato_soup_can'):
+                root = ET.fromstring(compose(xml, load(name)))
+                marker = root.find('.//geom[@name="object"]')
+                expected = dict(friction=friction, solref=solref, solimp=solimp, condim='4')
+                self.assertEqual({key: marker.get(key) for key in expected}, expected)
+                self.assertEqual(marker.get('contype'), '0')
+                self.assertEqual(marker.get('conaffinity'), '0')
+                for geom in root.findall('.//body/geom'):
+                    if geom.get('contype') == '1':
+                        self.assertEqual({key: geom.get(key) for key in expected}, expected)
+
     def test_downloaded_assets(self):
         for name in ('tennis_ball', 'baseball', 'tomato_soup_can'):
             resource = load(name)

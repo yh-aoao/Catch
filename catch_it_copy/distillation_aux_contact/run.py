@@ -239,13 +239,13 @@ def rng_state():
             'cuda': torch.cuda.get_rng_state_all() if torch.cuda.is_available() else None}
 
 
-def restore_rng(state):
+def restore_rng(state, saved_device=None, device=None):
     torch.set_rng_state(state['torch'])
     random.setstate(state['python'])
     n = state['numpy']
     np.random.set_state((n[0], np.asarray(n[1], dtype=np.uint32), *n[2:]))
-    if state['cuda'] is not None and torch.cuda.is_available():
-        torch.cuda.set_rng_state_all(state['cuda'])
+    from model_experiments.visual_resume import restore_cuda_rng
+    restore_cuda_rng(state['cuda'], saved_device, device)
 
 
 def train(config, teachers, adapters, output, resume=None, allow_source_changes=False):
@@ -270,7 +270,7 @@ def train(config, teachers, adapters, output, resume=None, allow_source_changes=
         start, best, baseline = saved['iteration'], saved['best_score'], saved['baseline']
         if reset_best:
             best = -float('inf')
-        restore_rng(saved['rng'])
+        restore_rng(saved['rng'], saved['config']['device'], config['device'])
         print('Resuming model/optimizer/replay; simulator episodes restart.', flush=True)
     if start >= config['iterations']:
         raise ValueError('iterations must exceed the resumed iteration')

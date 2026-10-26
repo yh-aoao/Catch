@@ -22,3 +22,26 @@ def validate_resume(saved, config, metadata, schema, allow_source_changes=False)
     reset_best = bool(changes) or any(saved['config'].get(k) != config.get(k)
                                      for k in ('eval_episodes', 'skip_teacher_baseline'))
     return changes, reset_best
+
+
+def restore_cuda_rng(states, saved_device=None, device=None):
+    """Restore visible generators, then remap the training stream across devices."""
+    import torch
+    if states is None or not torch.cuda.is_available():
+        return
+    count = torch.cuda.device_count()
+    for index, value in enumerate(states[:count]):
+        torch.cuda.set_rng_state(value.cpu(), index)
+    if saved_device is not None and device is not None:
+        source, target = torch.device(saved_device), torch.device(device)
+        if source.type == 'cuda' and target.type == 'cuda':
+            src = source.index if source.index is not None else 0
+            dst = target.index if target.index is not None else torch.cuda.current_device()
+            if dst >= count:
+                raise ValueError('Requested CUDA device is not visible: ' + str(target))
+            if src >= len(states):
+                raise ValueError('Checkpoint lacks RNG state for its training device: ' + str(source))
+            torch.cuda.set_rng_state(states[src].cpu(), dst)
+            if src != dst or len(states) != count:
+                print('[resume-rng] restored training RNG {} -> {}; saved GPUs={}, visible GPUs={}'.format(
+                    source, target, len(states), count), flush=True)

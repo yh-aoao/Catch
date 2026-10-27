@@ -40,14 +40,32 @@ hydra:
 
 object_motion: "throw"
 
-# Bounce uses the frozen 3a36f5f environment, config and PPO implementation.
-# Only legacy is accepted while reproducing this baseline; P/L overrides error.
-bounce_physics: "legacy"
-bounce_launch: "legacy"
+# Legacy remains frozen; newer physics modes are opt-in and keep reward/PPO.
+bounce_physics: "legacy" # legacy / stable_v1 / physical_v2
+bounce_launch: "legacy" # physical_v2 also supports baseball_intercept_v1 (baseball only)
+bounce_ball_mode: fixed # physical_v2 only: fixed / mixed (balanced in expectation)
+bounce_ball_weights: null # null=uniform; mixed accepts a map such as {original: 0.6, tennis_ball: 0.2, baseball: 0.2}
+bounce_material_file: null # optional per-ball/per-floor JSON, physical_v2 only
+bounce_v2:
+  height: [0.9, 1.1] # reasonable initial energy; nearer launch aims at first-bounce interception
+  distance: [1.6, 2.0]
+  speed: [1.3, 1.7]
+  vertical_speed: [-0.2, -0.2]
+  heading_degrees: [-15.0, 15.0]
+  spin_factor: [0.5, 1.5]
+  damping_ratio: [0.11, 0.11] # contact parameter, not COR; uncalibrated simulation prior
+  ground_friction: 0.3 # explicit ball/floor pair, independent of robot/floor friction
+  time_constant: 0.008
+  mass_jitter: 0.10 # mixed mode: +/-10%, radius +/-5%; inertia follows m*r^2
+  radius_jitter: 0.05
 bounce_log: False        # print baseline identity; no later outcome diagnostics
 basket_log: False        # print parking error, speed, reward terms and terminal reason
 basket_freeze_tracking: True # TwoStage basket: preserve pretrained parking actor and normalization
 roll_log: False          # Roll 645edc4 baseline identity; newer diagnostics inactive
+roll_physics: legacy # legacy / physical_v1; independent sphere inertia and table materials
+roll_material_file: null # null uses bundled balls.roll_table_priors_v1.json in physical_v1
+roll_ball_mode: fixed # physical_v1: fixed / mixed
+roll_ball_weights: null # physical_v1 mixed weights, null=uniform
 roll_reward_version: legacy # legacy / adaptive_wait_v1; only the latter changes Roll reward shaping
 roll_adaptive_wait:
   min_height: 0.38
@@ -82,6 +100,12 @@ slide_log: false
 basket_reward_version: legacy
 basket_curriculum_stage: 3
 
+# Explicit fixed35/arm18 -> mobile51/base2+arm18 migration; empty means scratch.
+basket_warm_start: ''
+basket_training_stage: joint # joint / parking / throw (separate frozen parking actor)
+basket_parking_checkpoint: ''
+basket_mask_navigation_updates: false
+
 # basket_mobile_v1 only; target is sampled on reset and stays fixed in the episode.
 basket_mobile:
   target_x_range: [-0.4, 0.4]
@@ -93,6 +117,15 @@ basket_mobile:
   speed_tolerance: 0.10
   settle_seconds: 0.20
   carry_settle_seconds: 0.30
+  brake_after_unlock: false
+  approach_braking: false
+  parking_only: false
+  hold_position: false
+  settle_contact_grace: 0.0
+  release_speed_tolerance: 0.0
+  release_position_tolerance: 0.0
+  post_ready_seconds: 0.0
+  fixed_throw_probability: 0.0
 
 # Evaluation-only primitive object override; default preserves original routes.
 test_object: default

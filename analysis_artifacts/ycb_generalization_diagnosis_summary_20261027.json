@@ -1,0 +1,257 @@
+{
+  "mujoco_version": "3.6.0",
+  "policy_seed_range": [
+    0,
+    19
+  ],
+  "episode_limit_s": 2.5,
+  "summaries": {
+    "before": {
+      "roll_default": {
+        "episodes": 20,
+        "successes": 14,
+        "hand_contact_episodes": 20,
+        "max_speed": 2.3794633723453877,
+        "max_height": 0.7463,
+        "reasons": {
+          "timeout": 17,
+          "out_of_bounds": 3
+        },
+        "teacher_sha256": "40020e1b13a29ad49de9e9b6ad2e6316678f418bdd8712be898b7a257af3d0ba",
+        "collision": "auto"
+      },
+      "roll_tennis_ball": {
+        "episodes": 20,
+        "successes": 0,
+        "hand_contact_episodes": 7,
+        "max_speed": 3.94572463422178,
+        "max_height": 1.2,
+        "reasons": {
+          "ball_on_floor": 14,
+          "timeout": 3,
+          "base_collision": 2,
+          "out_of_bounds": 1
+        },
+        "teacher_sha256": "40020e1b13a29ad49de9e9b6ad2e6316678f418bdd8712be898b7a257af3d0ba",
+        "collision": "auto"
+      },
+      "roll_baseball": {
+        "episodes": 20,
+        "successes": 0,
+        "hand_contact_episodes": 6,
+        "max_speed": 3.8381947307541386,
+        "max_height": 1.2,
+        "reasons": {
+          "base_collision": 3,
+          "timeout": 3,
+          "ball_on_floor": 13,
+          "out_of_bounds": 1
+        },
+        "teacher_sha256": "40020e1b13a29ad49de9e9b6ad2e6316678f418bdd8712be898b7a257af3d0ba",
+        "collision": "auto"
+      },
+      "bounce_default": {
+        "episodes": 20,
+        "successes": 20,
+        "hand_contact_episodes": 20,
+        "max_speed": 4.416274395886001,
+        "max_height": 0.9853956991883064,
+        "reasons": {
+          "catch_success": 20
+        },
+        "teacher_sha256": "f3ff1fe5aa34a8d4384dda6915b6749847002447d2816f18e72b661c6254a09c",
+        "collision": "auto"
+      },
+      "bounce_tennis_ball": {
+        "episodes": 20,
+        "successes": 2,
+        "hand_contact_episodes": 18,
+        "max_speed": 5.387578572181737,
+        "max_height": 1.4806308855843242,
+        "reasons": {
+          "ball_left": 18,
+          "catch_success": 2
+        },
+        "teacher_sha256": "f3ff1fe5aa34a8d4384dda6915b6749847002447d2816f18e72b661c6254a09c",
+        "collision": "auto"
+      },
+      "bounce_baseball": {
+        "episodes": 20,
+        "successes": 0,
+        "hand_contact_episodes": 11,
+        "max_speed": 4.250208106126112,
+        "max_height": 1.2,
+        "reasons": {
+          "ball_left": 20
+        },
+        "teacher_sha256": "f3ff1fe5aa34a8d4384dda6915b6749847002447d2816f18e72b661c6254a09c",
+        "collision": "auto"
+      }
+    },
+    "after": {
+      "roll_default": {
+        "episodes": 20,
+        "successes": 14,
+        "hand_contact_episodes": 20,
+        "max_speed": 2.3794633723453877,
+        "max_height": 0.7463,
+        "reasons": {
+          "timeout": 17,
+          "out_of_bounds": 3
+        },
+        "teacher_sha256": "40020e1b13a29ad49de9e9b6ad2e6316678f418bdd8712be898b7a257af3d0ba",
+        "collision": "auto"
+      },
+      "roll_tennis_ball": {
+        "episodes": 20,
+        "successes": 9,
+        "hand_contact_episodes": 19,
+        "max_speed": 3.269942168004082,
+        "max_height": 0.7352757853333333,
+        "reasons": {
+          "timeout": 11,
+          "ball_on_floor": 4,
+          "out_of_bounds": 5
+        },
+        "teacher_sha256": "40020e1b13a29ad49de9e9b6ad2e6316678f418bdd8712be898b7a257af3d0ba",
+        "collision": "auto"
+      },
+      "roll_baseball": {
+        "episodes": 20,
+        "successes": 11,
+        "hand_contact_episodes": 20,
+        "max_speed": 3.085230575051303,
+        "max_height": 0.7381762338333333,
+        "reasons": {
+          "timeout": 13,
+          "ball_on_floor": 3,
+          "out_of_bounds": 4
+        },
+        "teacher_sha256": "40020e1b13a29ad49de9e9b6ad2e6316678f418bdd8712be898b7a257af3d0ba",
+        "collision": "auto"
+      },
+      "bounce_default": {
+        "episodes": 20,
+        "successes": 20,
+        "hand_contact_episodes": 20,
+        "max_speed": 4.416274395886001,
+        "max_height": 0.9853956991883064,
+        "reasons": {
+          "catch_success": 20
+        },
+        "teacher_sha256": "f3ff1fe5aa34a8d4384dda6915b6749847002447d2816f18e72b661c6254a09c",
+        "collision": "auto"
+      },
+      "bounce_tennis_ball": {
+        "episodes": 20,
+        "successes": 0,
+        "hand_contact_episodes": 14,
+        "max_speed": 5.387578572181737,
+        "max_height": 1.4806308855843242,
+        "reasons": {
+          "ball_left": 20
+        },
+        "teacher_sha256": "f3ff1fe5aa34a8d4384dda6915b6749847002447d2816f18e72b661c6254a09c",
+        "collision": "auto"
+      },
+      "bounce_baseball": {
+        "episodes": 20,
+        "successes": 0,
+        "hand_contact_episodes": 13,
+        "max_speed": 4.250208106126112,
+        "max_height": 0.9,
+        "reasons": {
+          "ball_left": 20
+        },
+        "teacher_sha256": "f3ff1fe5aa34a8d4384dda6915b6749847002447d2816f18e72b661c6254a09c",
+        "collision": "auto"
+      }
+    },
+    "matched_diagnostic": {
+      "roll_tennis_ball": {
+        "episodes": 10,
+        "successes": 10,
+        "hand_contact_episodes": 10,
+        "max_speed": 2.3794633723453846,
+        "max_height": 0.7463,
+        "reasons": {
+          "timeout": 10
+        },
+        "teacher_sha256": "40020e1b13a29ad49de9e9b6ad2e6316678f418bdd8712be898b7a257af3d0ba",
+        "collision": "auto",
+        "physics_matched_to_original_ball": true
+      },
+      "roll_baseball": {
+        "episodes": 10,
+        "successes": 10,
+        "hand_contact_episodes": 10,
+        "max_speed": 2.3794633723453846,
+        "max_height": 0.7463,
+        "reasons": {
+          "timeout": 10
+        },
+        "teacher_sha256": "40020e1b13a29ad49de9e9b6ad2e6316678f418bdd8712be898b7a257af3d0ba",
+        "collision": "auto",
+        "physics_matched_to_original_ball": true
+      },
+      "bounce_tennis_ball": {
+        "episodes": 10,
+        "successes": 10,
+        "hand_contact_episodes": 10,
+        "max_speed": 4.416274395885765,
+        "max_height": 0.9853956991883064,
+        "reasons": {
+          "catch_success": 10
+        },
+        "teacher_sha256": "f3ff1fe5aa34a8d4384dda6915b6749847002447d2816f18e72b661c6254a09c",
+        "collision": "auto",
+        "physics_matched_to_original_ball": true
+      },
+      "bounce_baseball": {
+        "episodes": 10,
+        "successes": 10,
+        "hand_contact_episodes": 10,
+        "max_speed": 4.416274395885765,
+        "max_height": 0.9853956991883064,
+        "reasons": {
+          "catch_success": 10
+        },
+        "teacher_sha256": "f3ff1fe5aa34a8d4384dda6915b6749847002447d2816f18e72b661c6254a09c",
+        "collision": "auto",
+        "physics_matched_to_original_ball": true
+      }
+    }
+  },
+  "source_sha256_at_report": {
+    "gym_dcmm/envs/object_test.py": "6b2ec54124cd166dad10851ef14ebd1728c519e287f71d5be0b5d3a99f289e1a",
+    "ycb_objects/audit.py": "03b071bbe35595f26b6772f02b6ac7c320bd9586637c0d19c2467d079a728e35",
+    "ycb_objects/generalization_probe.py": "bb932cbc01c7dfa65d99f4edb0473d17fe25d7692a5c7617f555bc491befb4fa",
+    "ycb_objects/bounce_stability.py": "f33ccb612e55c274d91f4a8ceacc56d06484ff2f57d51777cea929ffa69f3c4e"
+  },
+  "reset_fix": "preserve mjSTATE_INTEGRATION around mj_setConst",
+  "paired_policy_episodes": 240,
+  "matched_physics_diagnostic_episodes": 40,
+  "tests": {
+    "ycb": 16,
+    "bounce_stability": 2,
+    "roll_wait_guard": 3,
+    "adaptive_wait": 7
+  },
+  "historical_default_physics_changed": false,
+  "mixed_object_training_implemented": false,
+  "actual_material_calibration_completed": false,
+  "additional_low_speed_test": {
+    "long": {
+      "episodes": 10,
+      "object": "baseball",
+      "speed": 0.5,
+      "wait_guard": false,
+      "collision": "sphere",
+      "reached_front_edge": 10,
+      "successes": 3,
+      "ended_on_table": 0,
+      "checkpoint_sha256": "40020e1b13a29ad49de9e9b6ad2e6316678f418bdd8712be898b7a257af3d0ba"
+    }
+  },
+  "total_policy_diagnostic_episodes": 290
+}

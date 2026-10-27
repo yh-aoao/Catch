@@ -1,0 +1,13 @@
+# Existing fixed-base throw skill -> mobile throwing with fixed-task rehearsal.
+defaults:
+  - basket_stage2
+  - _self_
+output_name: BasketThrowFirst
+basket_mask_navigation_updates: true
+basket_mobile:
+  hold_position: true
+  settle_contact_grace: 0.03
+  release_speed_tolerance: 0.15
+  release_position_tolerance: 0.10
+  post_ready_seconds: 2.5
+  fixed_throw_probability: 0.30

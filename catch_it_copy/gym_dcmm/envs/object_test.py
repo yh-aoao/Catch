@@ -7,6 +7,16 @@ import mujoco
 from gym_dcmm.utils.test_objects import PRESETS, object_xml
 
 
+def set_constants_preserving_state(model, data):
+    """mj_setConst uses qpos0 as scratch state; preserve the episode's full state."""
+    spec = mujoco.mjtState.mjSTATE_INTEGRATION
+    state = np.empty(mujoco.mj_stateSize(model, spec))
+    mujoco.mj_getState(model, data, state, spec)
+    mujoco.mj_setConst(model, data)
+    mujoco.mj_setState(model, data, state, spec)
+    mujoco.mj_forward(model, data)
+
+
 def make_object_test(test_object, ycb_joint_damping=None, ycb_collision='auto', roll_speed=None,
                      roll_wait_guard=False, **kwargs):
     if roll_wait_guard and kwargs.get('object_motion', 'throw') != 'roll':
@@ -79,14 +89,14 @@ def make_object_test(test_object, ycb_joint_damping=None, ycb_collision='auto', 
             ids = np.flatnonzero((model.geom_bodyid == bid) & (np.arange(model.ngeom) != gid))
             for name in ('geom_friction', 'geom_solref', 'geom_solimp', 'geom_condim'):
                 getattr(model, name)[ids] = getattr(model, name)[gid]
-        mujoco.mj_setConst(model, data)
-        mujoco.mj_forward(model, data)
+        set_constants_preserving_state(model, data)
     def reset(self, *args, **kw):
         obs, info = base.reset(self, *args, **kw)
         if roll_wait_guard:
             from gym_dcmm.utils.roll_wait_guard import RollWaitGuard
             self._roll_wait_guard = RollWaitGuard(self)
         info['test_object'] = test_object
+        info['test_object_reset_revision'] = 'state_preserving_v1'
         info['test_object_mass'] = self.random_mass
         if motion == 'roll':
             info['roll_initial_velocity'] = self.object_vel6d.copy()
@@ -132,7 +142,7 @@ def make_object_test(test_object, ycb_joint_damping=None, ycb_collision='auto', 
     bid = int(env.Dcmm.model.geom_bodyid[gid])
     env._test_object_constants = {name: getattr(env.Dcmm.model, name)[gid if name.startswith('geom_') else bid].copy()
         for name in ('geom_size', 'body_mass', 'body_inertia', 'body_ipos', 'body_iquat')}
-    print('[test-object] preset={} shape={} size={} mass={} environment={}'.format(
+    print('[test-object] preset={} shape={} size={} mass={} environment={} reset=state_preserving_v1'.format(
         test_object, *preset, base.__module__ + '.' + base.__name__), flush=True)
     if roll_speed is not None:
         print('[roll-speed] initial speed range={} m/s'.format(roll_speed), flush=True)

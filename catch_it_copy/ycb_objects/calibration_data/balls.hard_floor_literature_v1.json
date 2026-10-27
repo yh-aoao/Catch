@@ -1,0 +1,177 @@
+{
+  "schema": "ball_ground_materials_v1",
+  "surface_id": "generic_dry_rigid_floor_literature_approx_v1",
+  "basis": "literature_informed_simulation_prior_not_YCB_official_or_specimen_measurements",
+  "sources": {
+    "ycb": "https://arxiv.org/pdf/1502.03143",
+    "cross_1999": "https://www.physics.sydney.edu.au/~cross/PUBLICATIONS/BallBounce.pdf",
+    "cross_2002": "https://www.physics.usyd.edu.au/~cross/PUBLICATIONS/GripSlip.pdf",
+    "baseball_overview": "https://physics.usyd.edu.au/~cross/baseball.html"
+  },
+  "profiles": {
+    "tennis_ball": {
+      "bounce_status": "simulation_prior",
+      "friction_status": "simulation_prior",
+      "basis": "literature_informed_approximation",
+      "normal_cor_target": 0.75,
+      "damping_ratio": 0.0977594549552959,
+      "time_constant": 0.008,
+      "sliding_friction": 0.5,
+      "torsional_friction": 0.005,
+      "inertia_factor": 0.55,
+      "friction_basis": "Cross 2002 reports tennis/court sliding friction usually >=0.5; transfer to generic floor is approximate",
+      "inertia_basis": "Cross 2002 spherical-structure approximation; not measured YCB inertia",
+      "numerical_validation": {
+        "passed": true,
+        "heights_clearance_m": [
+          0.5,
+          1.0,
+          1.5
+        ],
+        "peak_refinement_error_m": 0.002593896367875659,
+        "max_cor_target_error": 0.0025947115352549233,
+        "coarse": [
+          {
+            "height": 0.5332757853333333,
+            "hit_floor": true,
+            "max_height_after_first_floor": 0.3132121492341281,
+            "max_penetration": 0.002132119698579585,
+            "effective_height_restitution": 0.7482464352080734,
+            "passive_energy_height_bound": 0.5332757853333333,
+            "exceeds_energy_height_bound": false
+          },
+          {
+            "height": 1.0332757853333334,
+            "hit_floor": true,
+            "max_height_after_first_floor": 0.5942322251500191,
+            "max_penetration": 0.003003017177573699,
+            "effective_height_restitution": 0.7489702529584775,
+            "passive_energy_height_bound": 1.0332757853333334,
+            "exceeds_energy_height_bound": false
+          },
+          {
+            "height": 1.5332757853333334,
+            "hit_floor": true,
+            "max_height_after_first_floor": 0.8828739850795836,
+            "max_penetration": 0.003698995861059866,
+            "effective_height_restitution": 0.7525947115352549,
+            "passive_energy_height_bound": 1.5332757853333334,
+            "exceeds_energy_height_bound": false
+          }
+        ],
+        "fine": [
+          {
+            "height": 0.5332757853333333,
+            "hit_floor": true,
+            "max_height_after_first_floor": 0.3117543507845604,
+            "max_penetration": 0.0021341061721175843,
+            "effective_height_restitution": 0.7462956055762717,
+            "passive_energy_height_bound": 0.5332757853333333,
+            "exceeds_energy_height_bound": false
+          },
+          {
+            "height": 1.0332757853333334,
+            "hit_floor": true,
+            "max_height_after_first_floor": 0.5916898477176203,
+            "max_penetration": 0.0030044236247590665,
+            "effective_height_restitution": 0.7472710769086992,
+            "passive_energy_height_bound": 1.0332757853333334,
+            "exceeds_energy_height_bound": false
+          },
+          {
+            "height": 1.5332757853333334,
+            "hit_floor": true,
+            "max_height_after_first_floor": 0.8802800887117079,
+            "max_penetration": 0.0036907665977184596,
+            "effective_height_restitution": 0.7514449651076139,
+            "passive_energy_height_bound": 1.5332757853333334,
+            "exceeds_energy_height_bound": false
+          }
+        ]
+      },
+      "limitations": "Surface/speed/specimen dependent; fixed COR and Coulomb friction approximate compliant balls; torsional friction remains a prior"
+    },
+    "baseball": {
+      "bounce_status": "simulation_prior",
+      "friction_status": "simulation_prior",
+      "basis": "literature_informed_approximation",
+      "normal_cor_target": 0.5,
+      "damping_ratio": 0.25471692144735075,
+      "time_constant": 0.008,
+      "sliding_friction": 0.3,
+      "torsional_friction": 0.005,
+      "inertia_factor": 0.4,
+      "friction_basis": "Engineering prior .3; not a directly measured baseball/floor coefficient",
+      "inertia_basis": "Cross 2002 spherical-structure approximation; not measured YCB inertia",
+      "numerical_validation": {
+        "passed": true,
+        "heights_clearance_m": [
+          0.5,
+          1.0,
+          1.5
+        ],
+        "peak_refinement_error_m": 0.0018688391769390855,
+        "max_cor_target_error": 0.002005838959777795,
+        "coarse": [
+          {
+            "height": 0.5361762338333333,
+            "hit_floor": true,
+            "max_height_after_first_floor": 0.1604854062281025,
+            "max_penetration": 0.0045251041430021816,
+            "effective_height_restitution": 0.49861643052504634,
+            "passive_energy_height_bound": 0.5361762338333333,
+            "exceeds_energy_height_bound": false
+          },
+          {
+            "height": 1.0361762338333333,
+            "hit_floor": true,
+            "max_height_after_first_floor": 0.2852819323928729,
+            "max_penetration": 0.006393524981338709,
+            "effective_height_restitution": 0.49910489735078695,
+            "passive_energy_height_bound": 1.0361762338333333,
+            "exceeds_energy_height_bound": false
+          },
+          {
+            "height": 1.5361762338333333,
+            "hit_floor": true,
+            "max_height_after_first_floor": 0.4141910273578989,
+            "max_penetration": 0.007870394321548353,
+            "effective_height_restitution": 0.5020058389597778,
+            "passive_energy_height_bound": 1.5361762338333333,
+            "exceeds_energy_height_bound": false
+          }
+        ],
+        "fine": [
+          {
+            "height": 0.5361762338333333,
+            "hit_floor": true,
+            "max_height_after_first_floor": 0.1598686208688898,
+            "max_penetration": 0.004514638613099822,
+            "effective_height_restitution": 0.4973778986556529,
+            "passive_energy_height_bound": 0.5361762338333333,
+            "exceeds_energy_height_bound": false
+          },
+          {
+            "height": 1.0361762338333333,
+            "hit_floor": true,
+            "max_height_after_first_floor": 0.284072450857578,
+            "max_penetration": 0.006378520404481891,
+            "effective_height_restitution": 0.4978917724006339,
+            "passive_energy_height_bound": 1.0361762338333333,
+            "exceeds_energy_height_bound": false
+          },
+          {
+            "height": 1.5361762338333333,
+            "hit_floor": true,
+            "max_height_after_first_floor": 0.41232218818095984,
+            "max_penetration": 0.007850559127638195,
+            "effective_height_restitution": 0.5007633868056692,
+            "passive_energy_height_bound": 1.5361762338333333,
+            "exceeds_energy_height_bound": false
+          }
+        ]
+      },
+      "limitations": "Surface/speed/specimen dependent; fixed COR and Coulomb friction approximate compliant balls; torsional friction remains a prior"
+    }
+  }
+}

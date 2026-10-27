@@ -8,7 +8,10 @@ from gym_dcmm.utils.basket_simple import update_launch
 DEFAULTS = dict(target_x_range=[-.4, .4], target_y_range=[1.35, 1.85],
                 max_time=8., max_speed=.5, max_acceleration=.8,
                 position_tolerance=.10, speed_tolerance=.10, settle_seconds=.20,
-                carry_settle_seconds=.30)
+                carry_settle_seconds=.30, brake_after_unlock=False, approach_braking=False,
+                parking_only=False, hold_position=False, settle_contact_grace=0.,
+                release_speed_tolerance=0., release_position_tolerance=0.,
+                post_ready_seconds=0., fixed_throw_probability=0.)
 
 
 def make_config(base, options=None):
@@ -24,9 +27,19 @@ def make_config(base, options=None):
         values[key] = pair.copy()
     if values['target_y_range'][0] < 1.05:
         raise ValueError('Mobile target_y_range must stay >= 1.05m')
-    for key in set(DEFAULTS) - {'target_x_range', 'target_y_range'}:
-        if not np.isfinite(float(values[key])) or float(values[key]) <= 0:
-            raise ValueError(key + ' must be finite and positive')
+    booleans = {'brake_after_unlock', 'approach_braking', 'parking_only', 'hold_position'}
+    optional_nonnegative = {'settle_contact_grace', 'release_speed_tolerance',
+                            'release_position_tolerance', 'post_ready_seconds', 'fixed_throw_probability'}
+    for key in booleans:
+        if not isinstance(values[key], bool):
+            raise ValueError(key + ' must be boolean')
+    for key in set(DEFAULTS) - {'target_x_range', 'target_y_range'} - booleans:
+        if not np.isfinite(float(values[key])) or (float(values[key]) < 0 if key in optional_nonnegative else float(values[key]) <= 0):
+            raise ValueError(key + ' must be finite and ' + ('nonnegative' if key in optional_nonnegative else 'positive'))
+    if values['fixed_throw_probability'] > 1 or values['settle_contact_grace'] >= .05:
+        raise ValueError('fixed_throw_probability must be <=1 and contact grace must be <0.05s')
+    if values['parking_only'] and values['fixed_throw_probability']:
+        raise ValueError('Fixed-throw rehearsal is not a parking task')
     cfg = aim_config(base)
     for key, value in values.items():
         setattr(cfg, 'mobile_' + key, value)
@@ -55,27 +68,43 @@ def new_state(distance):
                 previous_command=np.zeros(2), elapsed_reward_time=0., physics_time=0.)
 
 
+def episode_deadline(state, cfg):
+    if cfg.mobile_post_ready_seconds and state.get('unlocked'):
+        return state['ready_time'] + cfg.mobile_post_ready_seconds
+    return cfg.basket_max_time
+
+
 def update_physics(state, launch, parking, position, velocity, center,
                    now, dt, touching, collision, cfg):
     """Capture eligibility at LAST contact, never at delayed release detection."""
     state['touching'] = bool(touching)
     state['physics_time'] = float(now)
+    if touching:
+        state['last_hand_touch_time'] = float(now)
+    supported = touching or (cfg.mobile_settle_contact_grace > 0 and
+        now-state.get('last_hand_touch_time', -1e9) <= cfg.mobile_settle_contact_grace)
     if not state['unlocked']:
         state['settle_seconds'] = (state['settle_seconds'] + dt
                                    if now >= cfg.mobile_carry_settle_seconds and
-                                   parking['settled'] and touching and not collision else 0.)
+                                   parking['settled'] and supported and not collision else 0.)
         if state['settle_seconds'] + 1e-9 >= cfg.mobile_settle_seconds:
             state['unlocked'] = True
             state['ready_pending'] = 3.
             state['ready_time'] = float(now)
     if touching and not launch.get('confirmed'):
-        state['last_contact_qualified'] = bool(state['unlocked'] and parking['settled'])
+        eligible = parking['settled']
+        if cfg.mobile_release_speed_tolerance or cfg.mobile_release_position_tolerance:
+            position_ok = bool(np.all(np.abs(parking['error_world']) < (
+                cfg.mobile_release_position_tolerance or cfg.basket_track_position_tolerance)))
+            eligible = position_ok and parking['speed'] < (
+                cfg.mobile_release_speed_tolerance or cfg.basket_track_speed_tolerance)
+        state['last_contact_qualified'] = bool(state['unlocked'] and eligible)
         state['release_parking_distance'] = parking['distance']
         state['release_base_speed'] = parking['speed']
     candidate = launch.get('candidate')
     # The reset ball settles onto the cup under gravity. During this initial
     # interval the base remains still; contact flicker is not a policy release.
-    if not touching and now < cfg.mobile_carry_settle_seconds:
+    if not touching and now < cfg.mobile_carry_settle_seconds and not state['unlocked']:
         return
     # Includes slow drops that would never pass launch's forward-speed threshold.
     if (not touching and candidate is not None and not launch.get('confirmed')
@@ -92,12 +121,29 @@ def update_physics(state, launch, parking, position, velocity, center,
         state['release_qualified'] = bool(state.get('last_contact_qualified', False))
 
 
-def base_command(state, requested, dt, cfg):
+def base_command(state, requested, dt, cfg, parking=None):
     """Policy steering with speed/acceleration limits; no automatic navigation."""
     requested = np.array(requested, dtype=float, copy=True)
-    if state['physics_time'] < cfg.mobile_carry_settle_seconds:
+    if cfg.mobile_hold_position:
+        if parking is None:
+            raise ValueError('Position braking requires measured parking state')
+        if parking['in_position']:
+            state['parking_brake_latched'] = True
+        elif np.max(np.abs(parking['error_world'])) > 1.5*cfg.basket_track_position_tolerance:
+            state['parking_brake_latched'] = False
+        if state.get('parking_brake_latched'):
+            requested[:] = 0.
+    if state['physics_time'] < cfg.mobile_carry_settle_seconds or (
+            cfg.mobile_brake_after_unlock and state['unlocked']):
         requested[:] = 0.
-    requested *= min(1., cfg.mobile_max_speed / max(float(np.linalg.norm(requested)), 1e-9))
+    maximum = cfg.mobile_max_speed
+    if cfg.mobile_approach_braking:
+        if parking is None:
+            raise ValueError('Approach braking requires measured parking state')
+        # Envelope limits speed only. The policy still chooses XY direction.
+        remaining = max(0., parking['distance']-.5*cfg.basket_track_position_tolerance)
+        maximum = min(maximum, np.sqrt(2.*cfg.mobile_max_acceleration*remaining))
+    requested *= min(1., maximum / max(float(np.linalg.norm(requested)), 1e-9))
     previous = state['previous_command']
     delta = requested - previous
     delta *= min(1., cfg.mobile_max_acceleration*dt / max(float(np.linalg.norm(delta)), 1e-9))
@@ -107,16 +153,17 @@ def base_command(state, requested, dt, cfg):
 
 
 def observation(state, joints, joint_velocity, elapsed, cfg):
+    budget = cfg.mobile_post_ready_seconds if cfg.mobile_post_ready_seconds and state.get('unlocked') else cfg.basket_max_time
     return np.r_[joints, joint_velocity, float(state['unlocked']),
                  min(state['settle_seconds']/cfg.mobile_settle_seconds, 1.),
-                 float(state['touching']), np.clip(1.-elapsed/cfg.basket_max_time, 0., 1.)]
+                 float(state['touching']), np.clip((episode_deadline(state,cfg)-elapsed)/budget, 0., 1.)]
 
 
 def reward(state, launch, parking, done, success, elapsed, cfg, *,
            robot_collision=False, arm_action=None, base_action=None,
            center=None, gravity=None, hit=False):
     # Invalid/early releases cannot receive launch, flight, aim or hit credit.
-    value, terms = aim_reward(launch, done, cfg, robot_collision=robot_collision,
+    value, terms = aim_reward(launch, done and not (cfg.mobile_parking_only and success), cfg, robot_collision=robot_collision,
                              arm_action=arm_action if state['unlocked'] else None,
                              center=center, gravity=gravity,
                              hit=hit and state['release_qualified'])

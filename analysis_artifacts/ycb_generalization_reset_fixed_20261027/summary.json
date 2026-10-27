@@ -1,0 +1,79 @@
+{
+  "roll_default": {
+    "episodes": 20,
+    "successes": 14,
+    "hand_contact_episodes": 20,
+    "max_speed": 2.3794633723453877,
+    "max_height": 0.7463,
+    "reasons": {
+      "timeout": 17,
+      "out_of_bounds": 3
+    },
+    "teacher_sha256": "40020e1b13a29ad49de9e9b6ad2e6316678f418bdd8712be898b7a257af3d0ba",
+    "collision": "auto"
+  },
+  "roll_tennis_ball": {
+    "episodes": 20,
+    "successes": 9,
+    "hand_contact_episodes": 19,
+    "max_speed": 3.269942168004082,
+    "max_height": 0.7352757853333333,
+    "reasons": {
+      "timeout": 11,
+      "ball_on_floor": 4,
+      "out_of_bounds": 5
+    },
+    "teacher_sha256": "40020e1b13a29ad49de9e9b6ad2e6316678f418bdd8712be898b7a257af3d0ba",
+    "collision": "auto"
+  },
+  "roll_baseball": {
+    "episodes": 20,
+    "successes": 11,
+    "hand_contact_episodes": 20,
+    "max_speed": 3.085230575051303,
+    "max_height": 0.7381762338333333,
+    "reasons": {
+      "timeout": 13,
+      "ball_on_floor": 3,
+      "out_of_bounds": 4
+    },
+    "teacher_sha256": "40020e1b13a29ad49de9e9b6ad2e6316678f418bdd8712be898b7a257af3d0ba",
+    "collision": "auto"
+  },
+  "bounce_default": {
+    "episodes": 20,
+    "successes": 20,
+    "hand_contact_episodes": 20,
+    "max_speed": 4.416274395886001,
+    "max_height": 0.9853956991883064,
+    "reasons": {
+      "catch_success": 20
+    },
+    "teacher_sha256": "f3ff1fe5aa34a8d4384dda6915b6749847002447d2816f18e72b661c6254a09c",
+    "collision": "auto"
+  },
+  "bounce_tennis_ball": {
+    "episodes": 20,
+    "successes": 0,
+    "hand_contact_episodes": 14,
+    "max_speed": 5.387578572181737,
+    "max_height": 1.4806308855843242,
+    "reasons": {
+      "ball_left": 20
+    },
+    "teacher_sha256": "f3ff1fe5aa34a8d4384dda6915b6749847002447d2816f18e72b661c6254a09c",
+    "collision": "auto"
+  },
+  "bounce_baseball": {
+    "episodes": 20,
+    "successes": 0,
+    "hand_contact_episodes": 13,
+    "max_speed": 4.250208106126112,
+    "max_height": 0.9,
+    "reasons": {
+      "ball_left": 20
+    },
+    "teacher_sha256": "f3ff1fe5aa34a8d4384dda6915b6749847002447d2816f18e72b661c6254a09c",
+    "collision": "auto"
+  }
+}

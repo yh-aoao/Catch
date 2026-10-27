@@ -1,0 +1,16 @@
+# Keep the existing throw actor as initialization; adapt it after navigation.
+defaults:
+  - basket_mobile
+  - _self_
+
+basket_warm_start: ../10-25/throw_basket_catch_best_reward_39.44.pth
+output_name: BasketMobileTransfer
+basket_mobile:
+  position_tolerance: 0.07
+  speed_tolerance: 0.06
+  settle_seconds: 0.30
+  brake_after_unlock: true
+  approach_braking: true
+train:
+  ppo:
+    learning_rate: 0.0001

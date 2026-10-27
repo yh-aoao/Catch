@@ -1,0 +1,55 @@
+{
+  "schema": "ycb_real_measurements_v1",
+  "object": "tennis_ball",
+  "specimen_id": null,
+  "mass_g": null,
+  "diameters_mm": [
+    null,
+    null,
+    null
+  ],
+  "surfaces": {
+    "table": null,
+    "floor": null
+  },
+  "rolling_trials": [
+    {
+      "trial_id": "roll_01",
+      "surface_id": "table",
+      "fps": null,
+      "moving_only": true,
+      "samples": [
+        {
+          "t_s": null,
+          "distance_m": null
+        },
+        {
+          "t_s": null,
+          "distance_m": null
+        },
+        {
+          "t_s": null,
+          "distance_m": null
+        },
+        {
+          "t_s": null,
+          "distance_m": null
+        },
+        {
+          "t_s": null,
+          "distance_m": null
+        }
+      ]
+    }
+  ],
+  "bounce_trials": [
+    {
+      "trial_id": "bounce_01",
+      "surface_id": "floor",
+      "fps": null,
+      "release_clearance_m": null,
+      "rebound_clearance_m": null
+    }
+  ],
+  "notes": "Use the same physical ball and surfaces as the robot experiment. Heights are ball-bottom clearance above the surface."
+}

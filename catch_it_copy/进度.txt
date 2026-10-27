@@ -227,3 +227,30 @@ python3 train_DCMM.py   test=True task=Catching_OneStage num_envs=1   vector_mod
 git add .
 git commit -m "更新说明"
 git push
+
+
+bounce泛化的训练：
+bash scripts/train_bounce_three_ball_v1.sh device_id=1
+
+————————————————————————————————————————————————————————————————————————————————————————————————————
+理一下现在的任务：
+1.YCB接入问题，泛化问题：
+    现在新增了YCB数据集里面的棒球和网球，throw没问题，但是roll跟throw需要重新训练：
+    roll：两种球成功率在一半左右，我觉得需要在现在的基础上新增一项训练逻辑
+    bounce：需要修改二者和原来球的物理参数重新训练
+2.basket：给出新的一版，目前感觉有戏
+3.模型新增模块需要全部训练完进行对比
+
+bash scripts/train_bounce_three_ball_v1.sh
+
+bash scripts/train_bounce_three_ball_v1.sh \
+  task=Catching_TwoStage \
+  checkpoint_tracking=/第一阶段实际输出目录/nn/bounce_track_last.pth \
+  output_name=bounce_three_ball_catching_v1_seed123
+
+  python3 train_DCMM.py --config-name basket_stage2   test=False num_envs=32 vector_mode=async device_id=0   basket_parking_checkpoint=/home/isee/Catch/catch_it_copy/outputs/BasketStage1_Parking/2026-10-27/19:23:21/nn/throw_basket_catch_best_reward_3.50.pth   basket_warm_start=/home/isee/Catch/10-25/throw_basket_catch_best_reward_39.44.pth   viewer=false basket_log=false basket_self_collision_debug=false   output_name=BasketStage2_Throw
+
+后续需要训练的：
+1.四个模型训练
+2.新版的roll跟bounce的track，明天训练catch
+3.新版的basket

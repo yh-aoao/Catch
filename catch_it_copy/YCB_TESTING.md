@@ -1,5 +1,10 @@
 # YCB测试接入
 
+> 2026-10-27关键修复：`mj_setConst`曾将YCB reset后的关节/物体位置改回qpos0。
+> 现已保存和恢复完整积分状态，启动日志应含`reset=state_preserving_v1`。
+> 旧YCB闭环失败不能全部归为泛化；最新对照和Bounce数值问题见
+> [YCB兼容与泛化诊断](YCB_GENERALIZATION_DIAGNOSIS_2026-10-27.md)。
+
 > 2026-10-26 Linux 本机更新：`dcmm` 环境现已完成三个 YCB 物体编译、完整 Roll 环境重置/步进及教师闭环对照。
 > 下文 Windows DLL 不可用的描述为历史记录。最新结果见 [Roll 动态诊断](YCB_ROLL_DIAGNOSIS_2026-10-26.md)。
 
@@ -61,6 +66,7 @@ python -m ycb_objects.audit --objects tennis_ball baseball tomato_soup_can
 ```
 
 输出包括碰撞部件数、质量、质心、主惯量及主轴姿态，并列出旧物体 XML 的惯量。
+2026-10-27起audit默认auto与测试入口一致，球类审计解析球；加`--collision mesh`检查旧网格。
 该命令验证独立物体编译，不替代完整任务 reset/step 和抓取效果测试。
 当前本机仍有 MuJoCo DLL 初始化错误，因此不能声称已完成编译或动态验证。
 

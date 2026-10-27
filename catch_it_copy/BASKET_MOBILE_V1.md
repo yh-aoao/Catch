@@ -1,7 +1,9 @@
 # 移动到位后投篮：basket_mobile_v1
 
 此版本从零训练单个 PPO 策略。目标框每回合随机位置，回合内静止；底盘可以移动。
-固定基座 `basket_aim_v1` 保留。新配置不加载已有投掷模型，训练入口拒绝非空训练 checkpoint。
+固定基座 `basket_aim_v1` 保留。默认 `basket_mobile` 配置从零训练，训练入口拒绝非空 `checkpoint_catching`。
+2026-10-27增加可选的 `basket_mobile_transfer`：通过 `basket_warm_start` 显式迁移固定基座Actor，见 [BASKET_MOBILE_TRANSFER.md](BASKET_MOBILE_TRANSFER.md)。
+两阶段“先停车、再冻结底盘训练臂手”使用`basket_stage1`和`basket_stage2`，见 [BASKET_TWO_STAGE.md](BASKET_TWO_STAGE.md)。
 
 ## 控制和回合流程
 
@@ -68,9 +70,9 @@ python3 train_DCMM.py --config-name basket_mobile \
   output_name=BasketMobileV1_FromScratch
 ```
 
-不要传旧的 `checkpoint_tracking` 或 `checkpoint_catching`。本次训练不做旧权重迁移。
-若后续确实需要保留固定基座技能再学移动，应另做显式迁移：扩展输入、把旧18个动作正确映射至新输出的后18行、
-处理归一化统计和价值网络，并分别验证；不能使用现有宽松的部分行拷贝加载。
+从零训练不要传旧的 `checkpoint_tracking` 或 `checkpoint_catching`。
+需要利用固定基座权重时，改用 `basket_mobile_transfer` 配置和 `basket_warm_start` 参数；
+它显式扩展输入、映射旧18个动作到新输出后18行、处理归一化统计并新建价值网络。
 
 范围等选项在 `configs/config.yaml` 的 `basket_mobile` 中，支持 Hydra 覆盖，例如：
 

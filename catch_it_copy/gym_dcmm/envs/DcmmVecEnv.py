@@ -789,6 +789,10 @@ class DcmmVecEnv(gym.Env):
                     self._basket_parking_state(), position, self.Dcmm.data.qvel[36:39],
                     self.basket_center, float(self.Dcmm.data.time-self.start_time),
                     dt, touching, other_contact, cfg)
+                if cfg.mobile_parking_only and self.basket_mobile_state['unlocked']:
+                    self.terminated = True
+                    self.terminated_reason = 'parking_score'
+                    return
                 if self.basket_mobile_state['release_failure']:
                     self.terminated = True
                     self.terminated_reason = self.basket_mobile_state['release_failure']
@@ -1669,7 +1673,10 @@ class DcmmVecEnv(gym.Env):
                 self.basket_center[1] = [1.5, 1.7, 1.9, float(DcmmCfg.basket_center[1])][self.basket_curriculum_stage]
             if self.mobile_basket:
                 from gym_dcmm.utils.basket_mobile import sample_target
-                self.basket_center = sample_target(self.basket_cfg, self.np_random)
+                probability = self.basket_cfg.mobile_fixed_throw_probability
+                self.basket_rehearsal_episode = bool(probability and self.np_random.random() < probability)
+                self.basket_center = (self.basket_cfg.basket_center.copy() if self.basket_rehearsal_episode
+                                      else sample_target(self.basket_cfg, self.np_random))
             else:
                 self.basket_center[0] = 0. if self.basket_fixed_base_training else np.random.uniform(*DcmmCfg.basket_center_x_range)
             _basket_bid = mujoco.mj_name2id(self.Dcmm.model, mujoco.mjtObj.mjOBJ_BODY, 'basket_target')
@@ -1984,6 +1991,11 @@ class DcmmVecEnv(gym.Env):
             if self.mobile_basket:
                 from gym_dcmm.utils.basket_mobile import new_state
                 self.basket_mobile_state = new_state(self.basket_previous_distance)
+                if self.basket_rehearsal_episode:
+                    # A separate fixed-target rehearsal episode starts in the
+                    # original reset state. Never teleport/regrasp after driving.
+                    self.basket_mobile_state.update(unlocked=True, ready_time=0.,
+                        settle_seconds=self.basket_cfg.mobile_settle_seconds)
                 self.basket_carry_arm = self.Dcmm.target_arm_qpos.copy()
                 self.basket_carry_hand = self.Dcmm.target_hand_qpos.copy()
         self.info = {
@@ -2039,7 +2051,11 @@ class DcmmVecEnv(gym.Env):
         '''
         if self.object_motion == "throw_basket" and getattr(self, 'basket_reward_version', 'legacy') in ('launch_simple_v1', 'basket_aim_v1', 'basket_mobile_v1'):
             cfg = getattr(self, 'basket_cfg', DcmmCfg)
-            done = bool(self.terminated or info['env_time'] > cfg.basket_max_time)
+            deadline = cfg.basket_max_time
+            if getattr(self, 'mobile_basket', False):
+                from gym_dcmm.utils.basket_mobile import episode_deadline
+                deadline = episode_deadline(self.basket_mobile_state, cfg)
+            done = bool(self.terminated or info['env_time'] > deadline)
             reward_fn = simple_launch_reward
             extra = {}
             if self.basket_reward_version in ('basket_aim_v1', 'basket_mobile_v1'):
@@ -2062,7 +2078,7 @@ class DcmmVecEnv(gym.Env):
             info['arm_self_collision'] = getattr(self, 'basket_arm_self_collision', False)
             info['robot_dangerous_collision'] = bool(info['arm_self_collision'] or getattr(self, 'basket_robot_collision', False))
             info['safe_launch_success'] = bool(done and info['launch_success'] and not info['robot_dangerous_collision'])
-            info['basket_success'] = bool(info['success'])  # Preserve original strict hoop metric.
+            info['basket_success'] = bool(info['success'] and self.terminated_reason == 'basket_score')
             info['launch_forward_distance'] = self.basket_simple_state.get('best_distance', 0.)
             info['basket_reward_terms'] = terms
             info['basket_reward_totals'] = self.basket_reward_totals.copy()
@@ -2082,6 +2098,7 @@ class DcmmVecEnv(gym.Env):
                 mobile = self.basket_mobile_state
                 parking = self._basket_parking_state()
                 info['parking_success'] = bool(mobile['unlocked'])
+                info['basket_rehearsal'] = getattr(self, 'basket_rehearsal_episode', False)
                 info['qualified_release'] = bool(mobile['release_qualified'])
                 info['basket_control'].update(
                     mobile_phase=('flight' if info['launch_success'] else 'throw' if mobile['unlocked'] else 'navigate'),
@@ -2091,6 +2108,10 @@ class DcmmVecEnv(gym.Env):
                     qualified_release=info['qualified_release'],
                     release_parking_distance=mobile.get('release_parking_distance', -1.),
                     release_base_speed=mobile.get('release_base_speed', -1.))
+                from gym_dcmm.utils.basket_mobile import episode_deadline
+                info['basket_control'].update(ready_time=mobile.get('ready_time', -1.),
+                    deadline=episode_deadline(mobile, cfg),
+                    rehearsal=getattr(self, 'basket_rehearsal_episode', False))
             return value
         if self.object_motion == "throw_basket":
             parking = self._basket_parking_state()
@@ -2725,7 +2746,7 @@ class DcmmVecEnv(gym.Env):
             from gym_dcmm.utils.basket_mobile import base_command
             self.Dcmm.target_base_vel[:2] = base_command(self.basket_mobile_state,
                 action_dict['base'], self.steps_per_policy*self.Dcmm.model.opt.timestep,
-                self.basket_cfg)
+                self.basket_cfg, parking=self._basket_parking_state())
             if not self.basket_mobile_state['unlocked']:
                 self.Dcmm.target_arm_qpos[:] = self.basket_carry_arm
                 self.Dcmm.target_hand_qpos[:] = self.basket_carry_hand
@@ -3188,10 +3209,14 @@ class DcmmVecEnv(gym.Env):
 
         # ==================== throw_basket 终止判定 ====================
         if self.object_motion == 'throw_basket':
-            info['success'] = self.terminated_reason == 'basket_score'
-            if self.mobile_basket and info['env_time'] > self.basket_cfg.basket_max_time:
+            info['success'] = self.terminated_reason == 'basket_score' or (
+                self.mobile_basket and self.basket_cfg.mobile_parking_only and self.terminated_reason == 'parking_score')
+            if self.mobile_basket:
+                from gym_dcmm.utils.basket_mobile import episode_deadline
+                basket_deadline = episode_deadline(self.basket_mobile_state, self.basket_cfg)
+            if self.mobile_basket and info['env_time'] > basket_deadline:
                 info['success'] = False
-                if self.terminated_reason == 'basket_score':
+                if self.terminated_reason in ('basket_score', 'parking_score'):
                     self.terminated_reason = 'timeout'
         if self.object_motion == "throw_force" and not self.terminated:
             obj_pos = obs['object']['pos3d']
@@ -3231,6 +3256,9 @@ class DcmmVecEnv(gym.Env):
         # 判断是否截断（任务完成/超时）
         if self.object_motion == "throw_basket":
             max_time = self.basket_cfg.basket_max_time
+            if self.mobile_basket:
+                from gym_dcmm.utils.basket_mobile import episode_deadline
+                max_time = episode_deadline(self.basket_mobile_state, self.basket_cfg)
             truncated = info["env_time"] > max_time
         elif self.object_motion == "throw_force":
             max_time = getattr(DcmmCfg, 'throw_force_max_time', 3.0)
@@ -8442,7 +8470,8 @@ class BounceEnv(gym.Env):
             ## 执行 Mujoco 仿真步
             if self.print_info:
                 print(f"[DEBUG] Before mj_step - object qpos: {self.Dcmm.data.qpos[37:44]}, qvel: {self.Dcmm.data.qvel[36:42]}")
-            mujoco.mj_step(self.Dcmm.model, self.Dcmm.data)
+            mujoco.mj_step(self.Dcmm.model, self.Dcmm.data,
+                           nstep=getattr(self, "_bounce_physics_substeps", 1))
             mujoco.mj_rnePostConstraint(self.Dcmm.model, self.Dcmm.data)
             if self.print_info:
                 print(f"[DEBUG] After mj_step - object qpos: {self.Dcmm.data.qpos[37:44]}, qvel: {self.Dcmm.data.qvel[36:42]}")

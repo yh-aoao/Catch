@@ -1699,7 +1699,8 @@ class DcmmVecEnv(gym.Env):
             ## 执行 Mujoco 仿真步
             if self.print_info:
                 print(f"[DEBUG] Before mj_step - object qpos: {self.Dcmm.data.qpos[37:44]}, qvel: {self.Dcmm.data.qvel[36:42]}")
-            mujoco.mj_step(self.Dcmm.model, self.Dcmm.data)
+            mujoco.mj_step(self.Dcmm.model, self.Dcmm.data,
+                           nstep=getattr(self, "_bounce_physics_substeps", 1))
             mujoco.mj_rnePostConstraint(self.Dcmm.model, self.Dcmm.data)
             if self.print_info:
                 print(f"[DEBUG] After mj_step - object qpos: {self.Dcmm.data.qpos[37:44]}, qvel: {self.Dcmm.data.qvel[36:42]}")

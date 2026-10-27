@@ -1,0 +1,452 @@
+{
+  "mujoco_version": "3.6.0",
+  "time_constant": 0.008,
+  "damping_ratio": 0.1,
+  "assumptions": "No robot, zero horizontal speed/spin, centered homogeneous sphere; no claim of measured ball physics",
+  "results": [
+    {
+      "object": "default",
+      "mass": 0.05,
+      "radius": 0.04,
+      "timestep": 0.000125,
+      "rows": [
+        {
+          "height": 0.898,
+          "hit_floor": true,
+          "max_height_after_first_floor": 0.5266050617390354,
+          "passive_energy_height_bound": 0.9000428134556575,
+          "exceeds_energy_height_bound": false
+        },
+        {
+          "height": 0.8985000000000001,
+          "hit_floor": true,
+          "max_height_after_first_floor": 0.5082500204058258,
+          "passive_energy_height_bound": 0.9005428134556576,
+          "exceeds_energy_height_bound": false
+        },
+        {
+          "height": 0.899,
+          "hit_floor": true,
+          "max_height_after_first_floor": 0.5092001923356728,
+          "passive_energy_height_bound": 0.9010428134556575,
+          "exceeds_energy_height_bound": false
+        },
+        {
+          "height": 0.8995,
+          "hit_floor": true,
+          "max_height_after_first_floor": 0.5101583142376169,
+          "passive_energy_height_bound": 0.9015428134556575,
+          "exceeds_energy_height_bound": false
+        },
+        {
+          "height": 0.9,
+          "hit_floor": true,
+          "max_height_after_first_floor": 0.5111249534195695,
+          "passive_energy_height_bound": 0.9020428134556575,
+          "exceeds_energy_height_bound": false
+        },
+        {
+          "height": 0.9005000000000001,
+          "hit_floor": true,
+          "max_height_after_first_floor": 0.5121003372311338,
+          "passive_energy_height_bound": 0.9025428134556576,
+          "exceeds_energy_height_bound": false
+        },
+        {
+          "height": 0.901,
+          "hit_floor": true,
+          "max_height_after_first_floor": 0.5130845284042224,
+          "passive_energy_height_bound": 0.9030428134556575,
+          "exceeds_energy_height_bound": false
+        },
+        {
+          "height": 0.9015,
+          "hit_floor": true,
+          "max_height_after_first_floor": 0.5140775007026633,
+          "passive_energy_height_bound": 0.9035428134556575,
+          "exceeds_energy_height_bound": false
+        },
+        {
+          "height": 0.902,
+          "hit_floor": true,
+          "max_height_after_first_floor": 0.5150792190174235,
+          "passive_energy_height_bound": 0.9040428134556575,
+          "exceeds_energy_height_bound": false
+        }
+      ],
+      "min_peak": 0.5082500204058258,
+      "max_peak": 0.5266050617390354,
+      "energy_bound_violations": 0
+    },
+    {
+      "object": "default",
+      "mass": 0.05,
+      "radius": 0.04,
+      "timestep": 6.25e-05,
+      "rows": [
+        {
+          "height": 0.898,
+          "hit_floor": true,
+          "max_height_after_first_floor": 0.5188235580586397,
+          "passive_energy_height_bound": 0.9000428134556575,
+          "exceeds_energy_height_bound": false
+        },
+        {
+          "height": 0.8985000000000001,
+          "hit_floor": true,
+          "max_height_after_first_floor": 0.5149495055180607,
+          "passive_energy_height_bound": 0.9005428134556576,
+          "exceeds_energy_height_bound": false
+        },
+        {
+          "height": 0.899,
+          "hit_floor": true,
+          "max_height_after_first_floor": 0.5159058322581681,
+          "passive_energy_height_bound": 0.9010428134556575,
+          "exceeds_energy_height_bound": false
+        },
+        {
+          "height": 0.8995,
+          "hit_floor": true,
+          "max_height_after_first_floor": 0.5168706029113905,
+          "passive_energy_height_bound": 0.9015428134556575,
+          "exceeds_energy_height_bound": false
+        },
+        {
+          "height": 0.9,
+          "hit_floor": true,
+          "max_height_after_first_floor": 0.5178439152326547,
+          "passive_energy_height_bound": 0.9020428134556575,
+          "exceeds_energy_height_bound": false
+        },
+        {
+          "height": 0.9005000000000001,
+          "hit_floor": true,
+          "max_height_after_first_floor": 0.5188258120626116,
+          "passive_energy_height_bound": 0.9025428134556576,
+          "exceeds_energy_height_bound": false
+        },
+        {
+          "height": 0.901,
+          "hit_floor": true,
+          "max_height_after_first_floor": 0.5198163555131283,
+          "passive_energy_height_bound": 0.9030428134556575,
+          "exceeds_energy_height_bound": false
+        },
+        {
+          "height": 0.9015,
+          "hit_floor": true,
+          "max_height_after_first_floor": 0.5209971665414077,
+          "passive_energy_height_bound": 0.9035428134556575,
+          "exceeds_energy_height_bound": false
+        },
+        {
+          "height": 0.902,
+          "hit_floor": true,
+          "max_height_after_first_floor": 0.5222047313523145,
+          "passive_energy_height_bound": 0.9040428134556575,
+          "exceeds_energy_height_bound": false
+        }
+      ],
+      "min_peak": 0.5149495055180607,
+      "max_peak": 0.5222047313523145,
+      "energy_bound_violations": 0
+    },
+    {
+      "object": "tennis_ball",
+      "mass": 0.058,
+      "radius": 0.033275785333333335,
+      "timestep": 0.000125,
+      "rows": [
+        {
+          "height": 0.898,
+          "hit_floor": true,
+          "max_height_after_first_floor": 0.5160602452573354,
+          "passive_energy_height_bound": 0.900042251045731,
+          "exceeds_energy_height_bound": false
+        },
+        {
+          "height": 0.8985000000000001,
+          "hit_floor": true,
+          "max_height_after_first_floor": 0.517341140638561,
+          "passive_energy_height_bound": 0.900542251045731,
+          "exceeds_energy_height_bound": false
+        },
+        {
+          "height": 0.899,
+          "hit_floor": true,
+          "max_height_after_first_floor": 0.5186332938504777,
+          "passive_energy_height_bound": 0.901042251045731,
+          "exceeds_energy_height_bound": false
+        },
+        {
+          "height": 0.8995,
+          "hit_floor": true,
+          "max_height_after_first_floor": 0.5100729542555255,
+          "passive_energy_height_bound": 0.9015422510457309,
+          "exceeds_energy_height_bound": false
+        },
+        {
+          "height": 0.9,
+          "hit_floor": true,
+          "max_height_after_first_floor": 0.5111565366572697,
+          "passive_energy_height_bound": 0.902042251045731,
+          "exceeds_energy_height_bound": false
+        },
+        {
+          "height": 0.9005000000000001,
+          "hit_floor": true,
+          "max_height_after_first_floor": 0.5122484063060778,
+          "passive_energy_height_bound": 0.902542251045731,
+          "exceeds_energy_height_bound": false
+        },
+        {
+          "height": 0.901,
+          "hit_floor": true,
+          "max_height_after_first_floor": 0.5133487504127149,
+          "passive_energy_height_bound": 0.903042251045731,
+          "exceeds_energy_height_bound": false
+        },
+        {
+          "height": 0.9015,
+          "hit_floor": true,
+          "max_height_after_first_floor": 0.5144577810503833,
+          "passive_energy_height_bound": 0.9035422510457309,
+          "exceeds_energy_height_bound": false
+        },
+        {
+          "height": 0.902,
+          "hit_floor": true,
+          "max_height_after_first_floor": 0.5155757951584181,
+          "passive_energy_height_bound": 0.904042251045731,
+          "exceeds_energy_height_bound": false
+        }
+      ],
+      "min_peak": 0.5100729542555255,
+      "max_peak": 0.5186332938504777,
+      "energy_bound_violations": 0
+    },
+    {
+      "object": "tennis_ball",
+      "mass": 0.058,
+      "radius": 0.033275785333333335,
+      "timestep": 6.25e-05,
+      "rows": [
+        {
+          "height": 0.898,
+          "hit_floor": true,
+          "max_height_after_first_floor": 0.513719706066123,
+          "passive_energy_height_bound": 0.900042251045731,
+          "exceeds_energy_height_bound": false
+        },
+        {
+          "height": 0.8985000000000001,
+          "hit_floor": true,
+          "max_height_after_first_floor": 0.5148900094972303,
+          "passive_energy_height_bound": 0.900542251045731,
+          "exceeds_energy_height_bound": false
+        },
+        {
+          "height": 0.899,
+          "hit_floor": true,
+          "max_height_after_first_floor": 0.5160703623259557,
+          "passive_energy_height_bound": 0.901042251045731,
+          "exceeds_energy_height_bound": false
+        },
+        {
+          "height": 0.8995,
+          "hit_floor": true,
+          "max_height_after_first_floor": 0.5123331655793935,
+          "passive_energy_height_bound": 0.9015422510457309,
+          "exceeds_energy_height_bound": false
+        },
+        {
+          "height": 0.9,
+          "hit_floor": true,
+          "max_height_after_first_floor": 0.5134184248694655,
+          "passive_energy_height_bound": 0.902042251045731,
+          "exceeds_energy_height_bound": false
+        },
+        {
+          "height": 0.9005000000000001,
+          "hit_floor": true,
+          "max_height_after_first_floor": 0.5145122515409557,
+          "passive_energy_height_bound": 0.902542251045731,
+          "exceeds_energy_height_bound": false
+        },
+        {
+          "height": 0.901,
+          "hit_floor": true,
+          "max_height_after_first_floor": 0.5156148003448634,
+          "passive_energy_height_bound": 0.903042251045731,
+          "exceeds_energy_height_bound": false
+        },
+        {
+          "height": 0.9015,
+          "hit_floor": true,
+          "max_height_after_first_floor": 0.516726088316408,
+          "passive_energy_height_bound": 0.9035422510457309,
+          "exceeds_energy_height_bound": false
+        },
+        {
+          "height": 0.902,
+          "hit_floor": true,
+          "max_height_after_first_floor": 0.5179316249585639,
+          "passive_energy_height_bound": 0.904042251045731,
+          "exceeds_energy_height_bound": false
+        }
+      ],
+      "min_peak": 0.5123331655793935,
+      "max_peak": 0.5179316249585639,
+      "energy_bound_violations": 0
+    },
+    {
+      "object": "baseball",
+      "mass": 0.138,
+      "radius": 0.036176233833333335,
+      "timestep": 0.000125,
+      "rows": [
+        {
+          "height": 0.898,
+          "hit_floor": true,
+          "max_height_after_first_floor": 0.5226183728557009,
+          "passive_energy_height_bound": 0.9000402133286058,
+          "exceeds_energy_height_bound": false
+        },
+        {
+          "height": 0.8985000000000001,
+          "hit_floor": true,
+          "max_height_after_first_floor": 0.5240777539667935,
+          "passive_energy_height_bound": 0.9005402133286059,
+          "exceeds_energy_height_bound": false
+        },
+        {
+          "height": 0.899,
+          "hit_floor": true,
+          "max_height_after_first_floor": 0.5255506194885121,
+          "passive_energy_height_bound": 0.9010402133286058,
+          "exceeds_energy_height_bound": false
+        },
+        {
+          "height": 0.8995,
+          "hit_floor": true,
+          "max_height_after_first_floor": 0.50731865441526,
+          "passive_energy_height_bound": 0.9015402133286058,
+          "exceeds_energy_height_bound": false
+        },
+        {
+          "height": 0.9,
+          "hit_floor": true,
+          "max_height_after_first_floor": 0.508370495869335,
+          "passive_energy_height_bound": 0.9020402133286058,
+          "exceeds_energy_height_bound": false
+        },
+        {
+          "height": 0.9005000000000001,
+          "hit_floor": true,
+          "max_height_after_first_floor": 0.5094303909333513,
+          "passive_energy_height_bound": 0.9025402133286059,
+          "exceeds_energy_height_bound": false
+        },
+        {
+          "height": 0.901,
+          "hit_floor": true,
+          "max_height_after_first_floor": 0.5104989193595444,
+          "passive_energy_height_bound": 0.9030402133286058,
+          "exceeds_energy_height_bound": false
+        },
+        {
+          "height": 0.9015,
+          "hit_floor": true,
+          "max_height_after_first_floor": 0.5115763822253102,
+          "passive_energy_height_bound": 0.9035402133286058,
+          "exceeds_energy_height_bound": false
+        },
+        {
+          "height": 0.902,
+          "hit_floor": true,
+          "max_height_after_first_floor": 0.5126628508921793,
+          "passive_energy_height_bound": 0.9040402133286058,
+          "exceeds_energy_height_bound": false
+        }
+      ],
+      "min_peak": 0.50731865441526,
+      "max_peak": 0.5255506194885121,
+      "energy_bound_violations": 0
+    },
+    {
+      "object": "baseball",
+      "mass": 0.138,
+      "radius": 0.036176233833333335,
+      "timestep": 6.25e-05,
+      "rows": [
+        {
+          "height": 0.898,
+          "hit_floor": true,
+          "max_height_after_first_floor": 0.5155387899356576,
+          "passive_energy_height_bound": 0.9000402133286058,
+          "exceeds_energy_height_bound": false
+        },
+        {
+          "height": 0.8985000000000001,
+          "hit_floor": true,
+          "max_height_after_first_floor": 0.5166785791923919,
+          "passive_energy_height_bound": 0.9005402133286059,
+          "exceeds_energy_height_bound": false
+        },
+        {
+          "height": 0.899,
+          "hit_floor": true,
+          "max_height_after_first_floor": 0.5178283582371049,
+          "passive_energy_height_bound": 0.9010402133286058,
+          "exceeds_energy_height_bound": false
+        },
+        {
+          "height": 0.8995,
+          "hit_floor": true,
+          "max_height_after_first_floor": 0.5140613200678646,
+          "passive_energy_height_bound": 0.9015402133286058,
+          "exceeds_energy_height_bound": false
+        },
+        {
+          "height": 0.9,
+          "hit_floor": true,
+          "max_height_after_first_floor": 0.5151196787968031,
+          "passive_energy_height_bound": 0.9020402133286058,
+          "exceeds_energy_height_bound": false
+        },
+        {
+          "height": 0.9005000000000001,
+          "hit_floor": true,
+          "max_height_after_first_floor": 0.5161866039477667,
+          "passive_energy_height_bound": 0.9025402133286059,
+          "exceeds_energy_height_bound": false
+        },
+        {
+          "height": 0.901,
+          "hit_floor": true,
+          "max_height_after_first_floor": 0.5172622135890501,
+          "passive_energy_height_bound": 0.9030402133286058,
+          "exceeds_energy_height_bound": false
+        },
+        {
+          "height": 0.9015,
+          "hit_floor": true,
+          "max_height_after_first_floor": 0.5183465476374434,
+          "passive_energy_height_bound": 0.9035402133286058,
+          "exceeds_energy_height_bound": false
+        },
+        {
+          "height": 0.902,
+          "hit_floor": true,
+          "max_height_after_first_floor": 0.5195117477578803,
+          "passive_energy_height_bound": 0.9040402133286058,
+          "exceeds_energy_height_bound": false
+        }
+      ],
+      "min_peak": 0.5140613200678646,
+      "max_peak": 0.5195117477578803,
+      "energy_bound_violations": 0
+    }
+  ]
+}

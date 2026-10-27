@@ -8,6 +8,52 @@ from ycb_objects.roll_probe import model_for, run
 
 
 class YCBRuntimeTests(unittest.TestCase):
+    def test_reset_preserves_robot_pose_and_requested_object_initial_state(self):
+        for name in ('tennis_ball', 'baseball'):
+            for motion in ('throw', 'roll', 'bounce'):
+                for task in ('Tracking', 'Catching'):
+                    with self.subTest(name=name, motion=motion, task=task):
+                        env = make_object_test('ycb:' + name, task=task, object_motion=motion,
+                                               object_eval=False, viewer=False, render_mode=None)
+                        try:
+                            for _ in range(2):
+                                env.reset()
+                                model, data = env.Dcmm.model, env.Dcmm.data
+                                bid = model.body('object').id
+                                joint = model.body_jntadr[bid]
+                                q, v = model.jnt_qposadr[joint], model.jnt_dofadr[joint]
+                                np.testing.assert_allclose(data.qpos[q:q+3], env.object_pos3d)
+                                np.testing.assert_allclose(data.qpos[q+3:q+7], env.object_q)
+                                np.testing.assert_allclose(data.qpos[15:21], env.Dcmm.data_arm.qpos[:6])
+                                self.assertGreater(np.linalg.norm(data.qpos[15:21]), 1.)
+                                if motion in ('roll', 'bounce'):
+                                    np.testing.assert_allclose(data.qvel[v:v+6], env.object_vel6d)
+                        finally:
+                            env.close()
+
+    def test_set_constants_preserves_generalized_state_and_time(self):
+        import mujoco
+        from gym_dcmm.envs.object_test import set_constants_preserving_state
+        model = mujoco.MjModel.from_xml_string('<mujoco><worldbody><body><freejoint name="free"/>'
+                                               '<geom type="sphere" size=".04" mass=".1"/>'
+                                               '</body></worldbody><actuator><general joint="free" '
+                                               'gear="0 0 1 0 0 0"/></actuator></mujoco>')
+        data = mujoco.MjData(model)
+        data.qpos[:3] = [.1, .2, .9]
+        data.qvel[:] = [1., 2., 3., 4., 5., 6.]
+        data.time = 1.25
+        data.ctrl[:] = .3
+        data.qfrc_applied[:] = .4
+        before_qpos, before_qvel = data.qpos.copy(), data.qvel.copy()
+        model.body_mass[1] = .15
+        set_constants_preserving_state(model, data)
+        np.testing.assert_array_equal(data.qpos, before_qpos)
+        np.testing.assert_array_equal(data.qvel, before_qvel)
+        self.assertEqual(data.time, 1.25)
+        np.testing.assert_array_equal(data.ctrl, [.3])
+        np.testing.assert_array_equal(data.qfrc_applied, np.full(6, .4))
+        self.assertEqual(model.body_mass[1], .15)
+
     def test_roll_speed_is_applied_on_each_reset_with_matching_spin(self):
         for name in ('tennis_ball', 'baseball'):
             for task in ('Tracking', 'Catching'):

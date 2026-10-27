@@ -1,5 +1,10 @@
 # YCB Roll 网球动态诊断（2026-10-26）
 
+> 2026-10-27更正：已发现并修复YCB reset的mj_setConst状态丢失错误。
+> 本文完整策略对照是在错误的机器人初始姿态下完成，不能作为公平泛化评估或唯一根因结论。
+> 独立球—桌物理对照不调用该reset工厂，其运动结果仍可作为受限条件下的物理诊断。
+> 最新结果见[YCB兼容与泛化诊断](YCB_GENERALIZATION_DIAGNOSIS_2026-10-27.md)。
+
 ## 环境与复现
 
 本机 `/home/isee/miniconda3/envs/dcmm/bin/python`，MuJoCo 可用。

@@ -1,0 +1,15 @@
+{
+  "schema": "roll_table_materials_v1",
+  "surface_id": "generic_dry_rigid_table_prior_v1",
+  "status": "simulation_priors_not_measured",
+  "notes": "Sliding friction values are literature-informed engineering priors for different ball covers, not measured on a common table. Rolling/torsional parameters are lengths in metres, chosen low resistance priors; no official YCB rolling coefficients are claimed.",
+  "sources": [
+    "https://www.physics.usyd.edu.au/~cross/PUBLICATIONS/GripSlip.pdf",
+    "https://mujoco.readthedocs.io/en/stable/computation.html#contact"
+  ],
+  "profiles": {
+    "original": {"mass_kg": 0.05, "radius_m": 0.04, "inertia_factor": 0.4, "sliding_friction": 0.4, "torsional_length_m": 0.0001, "rolling_length_m": 0.00015},
+    "tennis_ball": {"mass_kg": 0.058, "radius_m": 0.033275785333333335, "inertia_factor": 0.55, "sliding_friction": 0.5, "torsional_length_m": 0.0001, "rolling_length_m": 0.0003},
+    "baseball": {"mass_kg": 0.138, "radius_m": 0.036176233833333335, "inertia_factor": 0.4, "sliding_friction": 0.3, "torsional_length_m": 0.0001, "rolling_length_m": 0.00012}
+  }
+}

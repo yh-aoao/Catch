@@ -22,6 +22,30 @@ OmegaConf.register_new_resolver('resolve_default', lambda default, arg: default 
 
 @hydra.main(config_name='config', config_path='configs')
 def main(config: DictConfig):
+    roll_physics=str(config.get('roll_physics','legacy'))
+    if roll_physics not in ('legacy','physical_v1'):
+        raise ValueError('roll_physics must be legacy or physical_v1')
+    physical_roll=roll_physics=='physical_v1'
+    if physical_roll and (config.object_motion!='roll' or config.object_eval or config.get('roll_wait_guard',False)):
+        raise ValueError('Roll physical_v1 requires object_motion=roll, object_eval=false, roll_wait_guard=false')
+    if not physical_roll and (config.get('roll_material_file') or config.get('roll_ball_mode','fixed')!='fixed' or config.get('roll_ball_weights') is not None):
+        raise ValueError('Roll material/sampling options require roll_physics=physical_v1')
+    if config.get('roll_material_file'):
+        config.roll_material_file=to_absolute_path(config.roll_material_file)
+    physical_bounce = str(config.bounce_physics) == 'physical_v2'
+    if config.get('bounce_ball_weights') is not None and (not physical_bounce or config.bounce_ball_mode != 'mixed'):
+        raise ValueError('bounce_ball_weights requires physical_v2 and bounce_ball_mode=mixed')
+    if physical_bounce and (config.object_motion != 'bounce' or config.object_eval):
+        raise ValueError('physical_v2 requires object_motion=bounce, object_eval=false')
+    if str(config.get('bounce_ball_mode', 'fixed')) != 'fixed' and not physical_bounce:
+        raise ValueError('bounce_ball_mode=mixed requires bounce_physics=physical_v2')
+    if config.get('bounce_material_file'):
+        if not physical_bounce:
+            raise ValueError('bounce_material_file requires bounce_physics=physical_v2')
+        config.bounce_material_file = to_absolute_path(config.bounce_material_file)
+    stable_bounce = str(config.bounce_physics) == 'stable_v1'
+    if stable_bounce and (config.object_motion != 'bounce' or config.object_eval):
+        raise ValueError('bounce_physics=stable_v1 requires object_motion=bounce and object_eval=false')
     roll_reward_version = str(config.get('roll_reward_version', 'legacy'))
     if roll_reward_version not in ('legacy', 'adaptive_wait_v1'):
         raise ValueError('roll_reward_version must be legacy or adaptive_wait_v1')
@@ -33,8 +57,9 @@ def main(config: DictConfig):
     if OmegaConf.is_config(roll_speed):
         roll_speed = OmegaConf.to_container(roll_speed)
     roll_speed = speed_range(roll_speed)
-    if roll_speed is not None and (not config.test or config.object_motion != 'roll' or config.test_object == 'default'):
-        raise ValueError('roll_speed requires test=True, object_motion=roll and a non-default test_object')
+    if roll_speed is not None and (config.object_motion!='roll' or
+            (not physical_roll and (not config.test or config.test_object=='default'))):
+        raise ValueError('roll_speed requires physical_v1 Roll or a legacy non-default Roll test')
     roll_wait_guard = bool(config.get('roll_wait_guard', False))
     if roll_wait_guard and (not config.test or config.object_motion != 'roll' or config.test_object == 'default'):
         raise ValueError('roll_wait_guard requires test=True, object_motion=roll and a non-default test_object')
@@ -55,23 +80,42 @@ def main(config: DictConfig):
         if not config.test or config.object_motion not in ('throw', 'roll', 'bounce') or config.object_eval:
             raise ValueError('test_object requires test=True, object_eval=false, throw/roll/bounce')
     mobile_basket = config.basket_reward_version == 'basket_mobile_v1'
+    basket_stage = str(config.get('basket_training_stage', 'joint'))
+    if basket_stage not in ('joint', 'parking', 'throw') or (basket_stage != 'joint' and not mobile_basket):
+        raise ValueError('Basket training stage must be joint, parking or throw; staged training requires Mobile Basket')
+    warm_start = str(config.get('basket_warm_start', ''))
+    if warm_start and not mobile_basket:
+        raise ValueError('basket_warm_start is only supported by basket_mobile_v1')
+    if warm_start and not config.test:
+        config.basket_warm_start = to_absolute_path(warm_start)
     if mobile_basket:
+        expected_task = 'Catching_OneStage' if basket_stage == 'joint' else 'Catching_TwoStage'
         if (config.object_motion not in ('basket', 'throw_basket') or config.basket_fixed_base_training
-                or config.basket_arm_control != 'joint_velocity' or config.task != 'Catching_OneStage'
+                or config.basket_arm_control != 'joint_velocity' or config.task != expected_task
                 or config.checkpoint_tracking or config.basket_control_probe != 'off' or config.object_eval):
             raise ValueError('basket_mobile_v1 requires movable Basket joint_velocity OneStage, no Tracking checkpoint/probe/object_eval')
+        if bool(config.basket_mobile.parking_only) != (basket_stage == 'parking'):
+            raise ValueError('parking_only must be true exactly in Basket parking stage')
+        if basket_stage == 'parking' and warm_start:
+            raise ValueError('Parking stage trains only base2 from scratch; leave basket_warm_start empty')
+        if basket_stage == 'throw' and not config.test:
+            if not config.basket_parking_checkpoint:
+                raise ValueError('Stage two requires basket_parking_checkpoint from basket_stage1')
+            config.basket_parking_checkpoint = to_absolute_path(config.basket_parking_checkpoint)
+            if not config.basket_mobile.brake_after_unlock:
+                raise ValueError('Stage two requires brake_after_unlock=true')
         if not config.test and config.checkpoint_catching:
-            raise ValueError('basket_mobile_v1 currently trains from scratch: leave checkpoint_catching empty')
+            raise ValueError('Leave checkpoint_catching empty for Mobile training; use basket_warm_start for explicit fixed-base actor migration')
         if config.test and not config.checkpoint_catching:
             raise ValueError('Mobile evaluation requires a basket_mobile_v1 checkpoint')
-        print('[basket-mobile-v1] random target per episode; physical carry -> settle -> throw; policy=base2+arm6+hand12', flush=True)
+        print('[basket-mobile-v1] random target per episode; physical carry -> settle -> throw; policy=base2+arm6+hand12; initialization=' + ('fixed_actor_transfer' if warm_start else 'scratch'), flush=True)
     if config.basket_reward_version in ('launch_v4', 'launch_v5', 'launch_simple_v1', 'basket_aim_v1'):
         if config.object_motion not in ('basket', 'throw_basket') or config.basket_arm_control != 'joint_velocity' or not config.basket_fixed_base_training or config.task != 'Catching_OneStage':
             raise ValueError('launch_v4/v5/simple requires fixed-base Basket joint_velocity Catching_OneStage')
         if config.test and config.basket_curriculum_stage != 3:
             raise ValueError('Formal Basket testing requires curriculum stage 3')
     if config.object_motion in ('basket', 'throw_basket') and config.basket_arm_control == 'joint_velocity':
-        if (not config.basket_fixed_base_training and not mobile_basket) or config.task != 'Catching_OneStage':
+        if (not config.basket_fixed_base_training and not mobile_basket) or (config.task != 'Catching_OneStage' and not (mobile_basket and basket_stage != 'joint')):
             raise ValueError('Joint-velocity throw v3 currently requires fixed-base Catching_OneStage')
         if abs(float(config.train.ppo.action_catch_denorm[1]) - .025) > 1e-9:
             raise ValueError('Joint-velocity throw expects arm action de-normalization .025')
@@ -138,6 +182,16 @@ def main(config: DictConfig):
     if adaptive_roll:
         env_name = 'gym_dcmm/RollAdaptiveWorld-v0'
         print('[roll-reward] version=adaptive_wait_v1; reward-only shaping; no hard command guard', flush=True)
+    if physical_roll:
+        env_name='gym_dcmm/RollPhysicalWorld-v1'
+        print('[roll-physics] physical_v1: consistent inertia; zero armature/damping; separate table contact; condim=6 rolling resistance',flush=True)
+    if stable_bounce:
+        env_name = 'gym_dcmm/BounceStableWorld-v0'
+        print('[bounce-physics] stable_v1: RK4 dt=0.000125; control=0.002; policy=0.04 s; reward unchanged', flush=True)
+    if physical_bounce:
+        env_name = 'gym_dcmm/BouncePhysicalWorld-v2'
+        print('[bounce-physics] physical_v2: consistent sphere inertia; zero armature; explicit ground pair; nearer interception launch; reward unchanged', flush=True)
+        print('[bounce-launch] mode=' + str(config.bounce_launch) + '; baseball_intercept_v1 applies only when the sampled ball is baseball', flush=True)
     task = 'Tracking' if config.task == 'Tracking' else 'Catching'
     print("config.num_envs: ", config.num_envs)
     # Single-environment evaluation keeps Viewer and exceptions in the main process.
@@ -151,7 +205,8 @@ def main(config: DictConfig):
 
     env = gym.make_vec(env_name, num_envs=int(config.num_envs), vectorization_mode=vector_mode,
                     task=task, camera_name=["top"],
-                    render_per_step=False, render_mode = "rgb_array",
+                    render_per_step=False,
+                    render_mode = None if (physical_bounce or physical_roll) and not config.viewer and not config.imshow_cam else "rgb_array",
                     object_name = "object",
                     img_size = config.train.ppo.img_dim,
                     imshow_cam = config.imshow_cam, 
@@ -177,7 +232,18 @@ def main(config: DictConfig):
                     **({'slide_config': to_absolute_path(config.slide_config) if config.slide_config else None,
                         'slide_log': config.slide_log} if config.object_motion == 'slide' else {}),
                     **({'roll_adaptive_wait': OmegaConf.to_container(config.roll_adaptive_wait, resolve=True)}
-                       if adaptive_roll else {}))
+                       if adaptive_roll else {}),
+                    **({'roll_physics':roll_physics,'roll_material_file':config.roll_material_file,
+                        'roll_ball_mode':str(config.roll_ball_mode),
+                        'roll_ball_weights':OmegaConf.to_container(config.roll_ball_weights,resolve=True) if config.roll_ball_weights is not None else None,
+                        'roll_reward_version':roll_reward_version,
+                        **({'roll_speed':roll_speed} if config.test_object=='default' else {})}
+                       if physical_roll else {}),
+                    **({'bounce_ball_mode': str(config.bounce_ball_mode),
+                        'bounce_ball_weights': OmegaConf.to_container(config.bounce_ball_weights, resolve=True) if config.bounce_ball_weights is not None else None,
+                        'bounce_material_file': config.bounce_material_file,
+                        'bounce_v2': OmegaConf.to_container(config.bounce_v2, resolve=True)}
+                       if physical_bounce else {}))
 
     output_dif = os.path.join('outputs', config.output_name)
     # Get the local date and time
@@ -187,6 +253,12 @@ def main(config: DictConfig):
     output_dif = os.path.join(output_dif, current_datetime_str)
     os.makedirs(output_dif, exist_ok=True)
     OmegaConf.save(config, os.path.join(output_dif, 'resolved_config.yaml'), resolve=True)
+    if physical_roll:
+        from gym_dcmm.envs.roll_physical import write_provenance
+        write_provenance(output_dif,OmegaConf.to_container(config,resolve=True))
+    if physical_bounce:
+        from gym_dcmm.envs.bounce_physical_v2 import write_provenance
+        write_provenance(output_dif, OmegaConf.to_container(config, resolve=True))
     if adaptive_roll:
         from gym_dcmm.envs.roll_adaptive import write_provenance
         write_provenance(output_dif, OmegaConf.to_container(config, resolve=True))
@@ -195,6 +267,9 @@ def main(config: DictConfig):
     PPO = TrackingAgent if config.task == 'Tracking' else \
           TwoStageAgent if config.task == 'Catching_TwoStage' else \
           OneStageAgent
+    if mobile_basket and basket_stage != 'joint':
+        from gym_dcmm.algs.ppo_dcmm.ppo_dcmm_basket_two_stage import PPO_Basket_TwoStage
+        PPO = PPO_Basket_TwoStage
     agent = PPO(env, output_dif, full_config=config)
 
     cprint('Start Training/Testing the Agent', 'green', attrs=['bold'])

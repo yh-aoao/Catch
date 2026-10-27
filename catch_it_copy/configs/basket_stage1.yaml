@@ -1,0 +1,12 @@
+defaults:
+  - basket_mobile_transfer
+  - _self_
+task: Catching_TwoStage
+basket_training_stage: parking
+basket_warm_start: ''
+output_name: BasketStage1_Parking
+basket_mobile:
+  parking_only: true
+train:
+  ppo:
+    learning_rate: 0.0005

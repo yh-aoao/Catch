@@ -6,13 +6,16 @@ from pathlib import Path
 import numpy as np
 
 
-def run(episodes):
+def run(episodes, transfer_controls=False, parking_stage=False):
     from gym_dcmm.envs.DcmmVecEnv import DcmmVecEnv
     results = []
     for seed in range(episodes):
         np.random.seed(seed)
         env = DcmmVecEnv(task='Catching', object_motion='throw_basket',
-            basket_arm_control='joint_velocity', basket_reward_version='basket_mobile_v1', viewer=False)
+            basket_arm_control='joint_velocity', basket_reward_version='basket_mobile_v1', viewer=False,
+            basket_mobile_options=(dict(position_tolerance=.07, speed_tolerance=.06,
+                settle_seconds=.30, brake_after_unlock=True, approach_braking=True,
+                parking_only=parking_stage) if transfer_controls else dict(parking_only=parking_stage)))
         try:
             obs, _ = env.reset(seed=seed)
             target = env.basket_center.copy()
@@ -30,6 +33,9 @@ def run(episodes):
                 np.testing.assert_array_equal(env.basket_center, target)
                 np.testing.assert_array_equal(env.Dcmm.model.body('basket_target').pos, target_body)
                 if env.basket_mobile_state['unlocked'] or terminated or truncated:
+                    if parking_stage and env.basket_mobile_state['unlocked']:
+                        assert terminated and info['success'] and info['terminated_reason'] == 'parking_score'
+                        assert not info['safe_basket_success']
                     break
                 np.testing.assert_array_equal(env.Dcmm.target_arm_qpos, env.basket_carry_arm)
                 np.testing.assert_array_equal(env.Dcmm.target_hand_qpos, env.basket_carry_hand)
@@ -51,10 +57,12 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--episodes', type=int, default=15)
     parser.add_argument('--report', type=Path, default=Path('/tmp/basket_mobile_probe.json'))
+    parser.add_argument('--transfer-controls', action='store_true')
+    parser.add_argument('--parking-stage', action='store_true')
     args = parser.parse_args()
     if args.episodes <= 0:
         parser.error('--episodes must be positive')
-    report = run(args.episodes)
+    report = run(args.episodes, args.transfer_controls, args.parking_stage)
     args.report.parent.mkdir(parents=True, exist_ok=True)
     args.report.write_text(json.dumps(report, indent=2), encoding='utf-8')
     print('Diagnostic parking: {}/{}; report={}'.format(report['parked'], report['count'], args.report))

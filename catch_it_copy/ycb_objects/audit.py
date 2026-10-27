@@ -3,12 +3,13 @@ import argparse
 import json
 import xml.etree.ElementTree as ET
 
-from ycb_objects.loader import ROOT, compose, load
+from ycb_objects.loader import ROOT, compose, load, BALL_OBJECTS
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--objects', nargs='+', default=['tennis_ball', 'baseball'])
+    parser.add_argument('--collision', choices=['auto', 'mesh', 'sphere'], default='auto')
     args = parser.parse_args()
     import mujoco
     import numpy as np
@@ -18,10 +19,11 @@ def main():
     results = {}
     for name in args.objects:
         resource = load(name)
+        collision = ('sphere' if name in BALL_OBJECTS else 'mesh') if args.collision == 'auto' else args.collision
         xml = compose('<mujoco><worldbody><body name="object"><joint type="free"/>'
                       '<geom name="object" type="sphere" size=".04" friction="1.2 .1 .1" '
                       'solref=".02 1" solimp=".9 .95 .01" condim="4"/>'
-                      '</body></worldbody></mujoco>', resource)
+                      '</body></worldbody></mujoco>', resource, collision=collision)
         model = mujoco.MjModel.from_xml_string(xml)
         body_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_BODY, 'object')
         marker_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_GEOM, 'object')
@@ -37,6 +39,8 @@ def main():
                 np.testing.assert_allclose(getattr(model, attribute)[geom_id],
                                            getattr(model, attribute)[marker_id])
         results[name] = dict(mass_kg=float(model.body_mass[body_id]),
+                            collision=collision,
+                            collision_radius_m=float(model.geom_size[collision_ids[0], 0]) if collision == 'sphere' else None,
                             bounding_radius_m=resource[2],
                             collision_parts=len(collision_ids),
                             inertia_kg_m2=model.body_inertia[body_id].tolist(),

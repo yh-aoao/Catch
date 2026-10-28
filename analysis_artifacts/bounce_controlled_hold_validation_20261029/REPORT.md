@@ -2,7 +2,7 @@
 
 实现文档：[训练、测试与回退](../../catch_it_copy/BOUNCE_CONTROLLED_HOLD_V1_2026-10-29.md)。
 
-- 新版环境与PPO、旧物理与材质的27项相关测试全部通过。包含奖励/接触/保持、实际极值动作、三球reset、球物理不变、Track严格初始化与冻结/解冻、Adam恢复后同批样本更新一致。
+- 新版环境与PPO、旧物理与材质的29项相关测试全部通过。包含奖励/接触/保持、实际极值动作、三球reset、球物理不变、Track严格初始化与冻结/解冻、Adam恢复后同批样本更新一致。
 - 扩展运行的3项历史结构检查中有1失败、1错误；使用修改前备份源文件复跑得到相同结果。具体见 final_suite 和 baseline_historical_checks 日志，未把这些既有失败算作通过。
 - 两环境异步短训练已完成；冻结checkpoint在128步保存。真实预训练Track权重及归一化逐位不变，恢复到256步后Track已按计划解冻更新，归一化仍保持原值。见 training_verification.json。
 - 新测试脚本加载短训练checkpoint、固定网球、无viewer推理64步后正常退出。短训练模型仅用于管线验证，不是正式训练结果。
@@ -11,3 +11,5 @@
 - 尚未进行正式2500万步训练，没有新版正式成功率；手部力矩/软限位参数仍是工程仿真先验。
 
 源文件指纹见source_manifest.json。生产训练参数预览见production_config_preview.yaml。旧版完整备份：catch_it_copy/backups/bounce_before_controlled_hold_20261028_195129/manifest.json。
+
+最终奖励采用gamma*Phi_next-Phi_previous，gamma与PPO一致，全部终态清势能；正分数仅作为势能组成，不按每步重复发放。新增两项行为测试验证了立即成功优于拖延、重复接触循环没有净折扣shaping收益。最终新版本管线日志见final_train/final_resume和related_suite。

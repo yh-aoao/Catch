@@ -157,8 +157,11 @@ class GraspRuntimeTests(unittest.TestCase):
             _, reward, terminated, truncated, info = env.step(dict(
                 base=np.zeros(2), arm=np.zeros(6), hand=np.zeros(12)))
             self.assertTrue(terminated or truncated)
+            self.assertTrue(truncated)
             self.assertFalse(info['success'])
             self.assertEqual(info['success_version'], 'bounce_controlled_hold_v1')
+            self.assertTrue(info['bounce_grasp_terminal'])
+            self.assertEqual(info['bounce_grasp_potential'], 0.)
         finally:
             env.close()
 
@@ -332,6 +335,84 @@ class GraspStepContractTests(unittest.TestCase):
             self.assertFalse(env._success_latched)
         finally:
             env.close()
+
+
+class GraspRewardReturnTests(unittest.TestCase):
+    """Exercise actual reward payment with controlled, bounded state scores."""
+
+    def make_reward_fixture(self, initial_potential, **options):
+        env = object.__new__(BounceGraspEnv)
+        env.grasp_cfg = configuration(dict(reward_discount=.97, **options))
+        env.Dcmm = SimpleNamespace(data=SimpleNamespace(qpos=np.zeros(37)))
+        env._previous_potential = initial_potential
+        env._previous_hand_action = np.zeros(12)
+        env._max_violation_in_step = 0.
+        env._collision_in_step = False
+        env.arm_limit = True
+        env._reward_sums = {}
+        env._potential_score_sums = {}
+        return env
+
+    def reward_trajectory(self, env, score_sequence, success):
+        """Call production compute_reward; only the state-score fixture varies."""
+        observations = dict(hand=np.zeros(12))
+        control = dict(hand=np.zeros(12), base=np.zeros(2), arm=np.zeros(6))
+        rewards, infos = [], []
+        for index, scores in enumerate(score_sequence):
+            terminal = index == len(score_sequence)-1
+            info = dict(success=bool(success and terminal),
+                        bounce_grasp_terminal=terminal,
+                        terminated_reason=('controlled_hold' if success else 'timeout')
+                            if terminal else None)
+            with patch.object(env, '_potential_terms', return_value=scores.copy()):
+                rewards.append(env.compute_reward(observations, info, control))
+            infos.append(info)
+        return sum(env.grasp_cfg.reward_discount**i * reward
+                   for i, reward in enumerate(rewards)), rewards, infos
+
+    def test_finishing_now_beats_waiting_and_then_succeeding(self):
+        immediate = self.make_reward_fixture(initial_potential=3.)
+        delayed = self.make_reward_fixture(initial_potential=3.)
+        # The delayed path repeatedly reaches high contact/wrap/hold scores.
+        # Dense payment of those values could otherwise reward postponement.
+        winning_score = dict(position=2., contact=2., wrap=2., hold=8.)
+        fast_return, _, fast_info = self.reward_trajectory(
+            immediate, [winning_score], success=True)
+        slow_return, _, slow_info = self.reward_trajectory(delayed, [
+            winning_score, dict(position=2., contact=2., wrap=2., hold=6.),
+            winning_score, winning_score], success=True)
+        self.assertGreater(fast_return, slow_return)
+        self.assertEqual(fast_info[-1]['bounce_grasp_potential'], 0.)
+        self.assertEqual(slow_info[-1]['bounce_grasp_potential'], 0.)
+        self.assertEqual(immediate._previous_potential, 0.)
+        self.assertEqual(delayed._previous_potential, 0.)
+        self.assertEqual(fast_info[-1]['bounce_grasp_reward_terms']['success'],
+                         immediate.grasp_cfg.success_bonus)
+        self.assertEqual(slow_info[-1]['bounce_grasp_reward_terms']['success'],
+                         delayed.grasp_cfg.success_bonus)
+
+    def test_repeated_contact_loss_has_no_net_discounted_shaping_gain_at_timeout(self):
+        # Remove all non-shaping costs/bonuses to measure actual shaping alone.
+        options = dict(step_cost=0., failure_penalty=0., hand_action_weight=0.,
+                       hand_smooth_weight=0., joint_limit_weight=0.)
+        initial = .5
+        env = self.make_reward_fixture(initial, **options)
+        no_loop = self.make_reward_fixture(initial, **options)
+        lost = dict(position=.5, contact=0., wrap=0., hold=0.)
+        touching = dict(position=2., contact=2., wrap=2., hold=4.)
+        sequence = [touching, lost, touching, lost, touching, lost, touching]
+        total, rewards, infos = self.reward_trajectory(env, sequence, success=False)
+        baseline, _, _ = self.reward_trajectory(no_loop, [lost], success=False)
+        self.assertAlmostEqual(total, -initial, places=12)
+        self.assertAlmostEqual(total, baseline, places=12)
+        for reward, info in zip(rewards, infos):
+            self.assertAlmostEqual(reward, info['bounce_grasp_reward_terms']['shaping'])
+        # Even timeout while the final contact score is high must clear Phi.
+        self.assertGreater(sum(infos[-1]['bounce_grasp_potential_terms'].values()), 0.)
+        self.assertEqual(infos[-1]['terminated_reason'], 'timeout')
+        self.assertFalse(infos[-1]['success'])
+        self.assertEqual(infos[-1]['bounce_grasp_potential'], 0.)
+        self.assertEqual(env._previous_potential, 0.)
 
 
 if __name__ == '__main__':

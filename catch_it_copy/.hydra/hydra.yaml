@@ -132,14 +132,14 @@ hydra:
     - test_object=ycb:tennis_ball
     - object_eval=false
     - checkpoint_tracking=
-    - checkpoint_catching=/home/isee/Catch/catch_it_copy/outputs/bounce_hold_resume_validation_20261029/2026-10-29/00:51:19/nn/bounce_catch_last.pth
+    - checkpoint_catching=/home/isee/Catch/catch_it_copy/outputs/bounce_hold_final_resume_20261029/2026-10-29/01:13:36/nn/bounce_catch_last.pth
     - output_name=bounce_hold_video_tennis_ball
     - viewer=false
     - train.ppo.max_test_steps=64
   job:
     name: train_DCMM
     chdir: false
-    override_dirname: bounce_ball_mode=fixed,bounce_ball_weights=null,bounce_grasp_version=controlled_hold_v1,bounce_launch=baseball_intercept_v1,bounce_material_file=/home/isee/Catch/catch_it_copy/ycb_objects/calibration_data/balls.three_ball_training_v1.json,bounce_physics=physical_v2,checkpoint_catching=/home/isee/Catch/catch_it_copy/outputs/bounce_hold_resume_validation_20261029/2026-10-29/00:51:19/nn/bounce_catch_last.pth,checkpoint_tracking=,device_id=-1,imshow_cam=false,num_envs=1,object_eval=false,object_motion=bounce,output_name=bounce_hold_video_tennis_ball,seed=0,task=Catching_TwoStage,test=True,test_object=ycb:tennis_ball,train.ppo.max_test_steps=64,train.ppo.num_actors=1,viewer=false,viewer=true
+    override_dirname: bounce_ball_mode=fixed,bounce_ball_weights=null,bounce_grasp_version=controlled_hold_v1,bounce_launch=baseball_intercept_v1,bounce_material_file=/home/isee/Catch/catch_it_copy/ycb_objects/calibration_data/balls.three_ball_training_v1.json,bounce_physics=physical_v2,checkpoint_catching=/home/isee/Catch/catch_it_copy/outputs/bounce_hold_final_resume_20261029/2026-10-29/01:13:36/nn/bounce_catch_last.pth,checkpoint_tracking=,device_id=-1,imshow_cam=false,num_envs=1,object_eval=false,object_motion=bounce,output_name=bounce_hold_video_tennis_ball,seed=0,task=Catching_TwoStage,test=True,test_object=ycb:tennis_ball,train.ppo.max_test_steps=64,train.ppo.num_actors=1,viewer=false,viewer=true
     id: ???
     num: ???
     config_name: resolved_config
@@ -158,7 +158,7 @@ hydra:
     - path: hydra.conf
       schema: pkg
       provider: hydra
-    - path: /home/isee/Catch/catch_it_copy/outputs/bounce_hold_resume_validation_20261029/2026-10-29/00:51:19
+    - path: /home/isee/Catch/catch_it_copy/outputs/bounce_hold_final_resume_20261029/2026-10-29/01:13:36
       schema: file
       provider: main
     - path: ''

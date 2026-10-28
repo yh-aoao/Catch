@@ -214,6 +214,7 @@ class BounceGraspEnv(BounceEnv):
         self._previous_distance = None
         self._previous_hand_action = np.zeros(12)
         self._reward_sums = {}
+        self._potential_score_sums = {}
         self._episode_ticks = 0
         self._last_grasp_state = self._grasp_state()
         self._reset_step_samples()
@@ -396,6 +397,8 @@ class BounceGraspEnv(BounceEnv):
         info['bounce_grasp_potential'] = next_potential
         for name, value in terms.items():
             self._reward_sums[name] = self._reward_sums.get(name, 0.)+float(value)
+        for name, value in scores.items():
+            self._potential_score_sums[name] = self._potential_score_sums.get(name, 0.)+float(value)
         return float(sum(terms.values()))
 
     def step(self, action):
@@ -436,6 +439,7 @@ class BounceGraspEnv(BounceEnv):
                     bounce_grasp_version=VERSION, terminated_reason=self.terminated_reason or ('timeout' if truncated else None),
                     bounce_grasp_hold_seconds=float(self._hold_time),
                     bounce_grasp_max_hold_seconds=float(self._max_hold_time),
+                    bounce_grasp_hold_reached=self._success_latched,
                     bounce_grasp_contact_fraction=self._contact_ticks/max(1, self._sample_count),
                     bounce_grasp_had_contact=self._had_contact,
                     bounce_grasp_hand_target_clipped=self._target_clipped,
@@ -451,7 +455,8 @@ class BounceGraspEnv(BounceEnv):
             summary = dict(version=VERSION, episode=self.episode_count, success=success,
                 reason=info['terminated_reason'], physics=getattr(self, 'bounce_v2_episode', {}),
                 policy_steps=self.steps, control_ticks=self._episode_ticks,
-                max_hold_seconds=self._max_hold_time, sums=self._reward_sums.copy())
+                max_hold_seconds=self._max_hold_time, sums=self._reward_sums.copy(),
+                potential_score_sums=self._potential_score_sums.copy())
             info['bounce_grasp_episode'] = summary
             if self._grasp_log_file:
                 with self._grasp_log_file.open('a') as file:

@@ -1,0 +1,145 @@
+{
+  "original": {
+    "track": {
+      "episodes": 100,
+      "successes": 93,
+      "success_rate": 0.93,
+      "wilson_95_interval": [
+        0.8625048526092651,
+        0.9656807389327273
+      ],
+      "environment_successes": 93,
+      "hand_contact_episodes": 97,
+      "continuous_hand_contact_0p3s": 0,
+      "successes_with_continuous_contact_0p3s": 0,
+      "reasons": {
+        "track_touch": 93,
+        "early_contact": 6,
+        "out_of_bounds": 1
+      },
+      "mean_reward": 19.84968684565891,
+      "mean_episode_sim_seconds": 0.8851800000000837,
+      "wall_seconds": 214.44781321800008,
+      "case": "bounce_track",
+      "object": "original"
+    },
+    "catch": {
+      "episodes": 100,
+      "successes": 24,
+      "success_rate": 0.24,
+      "wilson_95_interval": [
+        0.16691325556948772,
+        0.33232336349814473
+      ],
+      "environment_successes": 24,
+      "hand_contact_episodes": 97,
+      "continuous_hand_contact_0p3s": 23,
+      "successes_with_continuous_contact_0p3s": 20,
+      "reasons": {
+        "ball_left": 71,
+        "catch_success": 24,
+        "failure_unspecified": 5
+      },
+      "mean_reward": 296.95538305130486,
+      "mean_episode_sim_seconds": 1.7036799999999621,
+      "wall_seconds": 412.8735554550003,
+      "case": "bounce_catch",
+      "object": "original"
+    }
+  },
+  "tennis_ball": {
+    "track": {
+      "episodes": 100,
+      "successes": 89,
+      "success_rate": 0.89,
+      "wilson_95_interval": [
+        0.8136870349691969,
+        0.9374580364293543
+      ],
+      "environment_successes": 89,
+      "hand_contact_episodes": 93,
+      "continuous_hand_contact_0p3s": 0,
+      "successes_with_continuous_contact_0p3s": 0,
+      "reasons": {
+        "track_touch": 89,
+        "out_of_bounds": 1,
+        "early_contact": 10
+      },
+      "mean_reward": 20.108011913815,
+      "mean_episode_sim_seconds": 0.9128800000000958,
+      "wall_seconds": 224.00434763499993,
+      "case": "bounce_track",
+      "object": "tennis_ball"
+    },
+    "catch": {
+      "episodes": 100,
+      "successes": 34,
+      "success_rate": 0.34,
+      "wilson_95_interval": [
+        0.25461520797348164,
+        0.43722271145275377
+      ],
+      "environment_successes": 34,
+      "hand_contact_episodes": 97,
+      "continuous_hand_contact_0p3s": 36,
+      "successes_with_continuous_contact_0p3s": 28,
+      "reasons": {
+        "catch_success": 34,
+        "ball_left": 60,
+        "failure_unspecified": 6
+      },
+      "mean_reward": 396.4540056111636,
+      "mean_episode_sim_seconds": 1.8843600000000098,
+      "wall_seconds": 474.32929757700185,
+      "case": "bounce_catch",
+      "object": "tennis_ball"
+    }
+  },
+  "baseball": {
+    "track": {
+      "episodes": 100,
+      "successes": 96,
+      "success_rate": 0.96,
+      "wilson_95_interval": [
+        0.9016292856411208,
+        0.9843366960084523
+      ],
+      "environment_successes": 96,
+      "hand_contact_episodes": 96,
+      "continuous_hand_contact_0p3s": 0,
+      "successes_with_continuous_contact_0p3s": 0,
+      "reasons": {
+        "track_touch": 96,
+        "out_of_bounds": 4
+      },
+      "mean_reward": 17.455073625321972,
+      "mean_episode_sim_seconds": 0.7316200000000308,
+      "wall_seconds": 184.057904527,
+      "case": "bounce_track",
+      "object": "baseball"
+    },
+    "catch": {
+      "episodes": 100,
+      "successes": 8,
+      "success_rate": 0.08,
+      "wilson_95_interval": [
+        0.041093461484380624,
+        0.14998107700948735
+      ],
+      "environment_successes": 8,
+      "hand_contact_episodes": 82,
+      "continuous_hand_contact_0p3s": 13,
+      "successes_with_continuous_contact_0p3s": 6,
+      "reasons": {
+        "ball_left": 90,
+        "catch_success": 8,
+        "failure_unspecified": 2
+      },
+      "mean_reward": 169.34741601826747,
+      "mean_episode_sim_seconds": 1.118920000000075,
+      "wall_seconds": 258.926064346997,
+      "case": "bounce_catch",
+      "object": "baseball"
+    }
+  }
+}

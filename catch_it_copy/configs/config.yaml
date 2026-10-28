@@ -43,6 +43,12 @@ object_motion: "throw"
 # Legacy remains frozen; newer physics modes are opt-in and keep reward/PPO.
 bounce_physics: "legacy" # legacy / stable_v1 / physical_v2
 bounce_launch: "legacy" # physical_v2 also supports baseball_intercept_v1 (baseball only)
+bounce_grasp_version: legacy # legacy / controlled_hold_v1 (physical_v2 Catching_TwoStage only)
+bounce_grasp: {} # controlled_hold_v1 options; defaults live in gym_dcmm/envs/bounce_grasp.py
+bounce_grasp_training:
+  track_lr_scale: 0.1
+  freeze_track_steps: 500000
+  freeze_track_normalization: true
 bounce_ball_mode: fixed # physical_v2 only: fixed / mixed (balanced in expectation)
 bounce_ball_weights: null # null=uniform; mixed accepts a map such as {original: 0.6, tennis_ball: 0.2, baseball: 0.2}
 bounce_material_file: null # optional per-ball/per-floor JSON, physical_v2 only
@@ -105,6 +111,7 @@ basket_warm_start: ''
 basket_training_stage: joint # joint / parking / throw (separate frozen parking actor)
 basket_parking_checkpoint: ''
 basket_mask_navigation_updates: false
+basket_pose_eval_override: false # test-only: explicitly compare a new carry pose with existing weights
 
 # basket_mobile_v1 only; target is sampled on reset and stays fixed in the episode.
 basket_mobile:
@@ -126,6 +133,16 @@ basket_mobile:
   release_position_tolerance: 0.0
   post_ready_seconds: 0.0
   fixed_throw_probability: 0.0
+  hold_only: false
+  hold_time_range: [0.0, 0.0]
+  collision_free_spawn: false
+  hold_aim_bonus: 0.0
+  arm_drive_bonus: 0.0
+  hold_ball_speed_tolerance: 0.15
+  hold_arm_offset_deg: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  hold_hand_flex: [0.6, 0.5, 0.5]
+  hold_thumb_flex: [0.4, 0.4, 0.4]
+  hold_ball_local: [0.0, 0.03, 0.07]
 
 # Evaluation-only primitive object override; default preserves original routes.
 test_object: default
@@ -143,3 +160,18 @@ basket_self_collision_debug: false
 
 # sync exposes simulator errors directly; auto preserves normal parallel training.
 vector_mode: auto
+
+# Test-only hand pose override for legacy fixed Basket policies.
+basket_eval_hand_flex: null
+
+# Fixed35 policy refinement with explicit training/evaluation grip.
+basket_fixed_hand_flex: null
+basket_fixed_arm_drive_bonus: 0.0
+basket_freeze_input_normalization: false
+
+# Collision-free, physically settled fixed35 throwing task (new training only).
+basket_fixed_physical: false
+
+# Additive original-aim + supported forward carry reward (fixed35 only).
+basket_carry_reward: false
+basket_carry_options: {}

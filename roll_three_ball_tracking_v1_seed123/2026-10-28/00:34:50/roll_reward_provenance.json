@@ -1,0 +1,30 @@
+{
+  "version": "adaptive_wait_v1",
+  "baseline_manifest": "backups/roll_before_adaptive_wait_20261027_001703/manifest.json",
+  "baseline_sha256": "8f95a35cd6e66b2727cc42fb427bd8f482210a009d1b1d6a3e0b3525917a2fcc",
+  "sources": {
+    "train_DCMM.py": "385c9aaf2883d901ba53d4f381fe8a322a2fa9027d0160ed5df76c17150bf79f",
+    "configs/config.yaml": "da652c60fac0ca5daf01425b75c5ec5706f2fc393e104b9c3b2cea316a5dd3ff",
+    "configs/train/DcmmPPO.yaml": "24b38442bdddc431f3a6ab9e6b52d9f30c0a49933eebeeb5e8ea13494ac736ee",
+    "gym_dcmm/__init__.py": "6a03c03a8479108b05d65f00f7935187e8d5a322007bb6f392e7cab287baee38",
+    "gym_dcmm/envs/roll_adaptive.py": "1cb304449bbf7ae81ca55a191cfee16f07ef69f77f5b217cb230622258e44971",
+    "gym_dcmm/utils/roll_adaptive_wait.py": "9f6261d7140caebc0b8a22dab3be897df3f11944525a36ec90d9ed1fa51ecf6a",
+    "gym_dcmm/utils/roll_waiting.py": "2b6b5cb9b356f54a5b63809da31098e8c2268074bf80aaf023a84e4d8870a419",
+    "gym_dcmm/envs/roll_compat.py": "e9d645643e866678bf3f58cc28dd9fa8bce53dbb47ab909a2663c36b3a8b8f1d",
+    "gym_dcmm/envs/DcmmVecEnv.py": "2ff609cf2f2525585c1604d9a5959a2d7243f54fa7ff4338b3cc4958e11090d9",
+    "gym_dcmm/envs/DcmmVecEnv_roll_645edc4.py": "fac469c8c8ff75ad3e3ef23a0b9e1840e115aba796ccc6b2403ba4ae109fe53f",
+    "configs/env/DcmmCfg_roll_645edc4.py": "8d1021ed189abb7e89aa3639d09eb7bd66398ed616f08bcdf3ba2596c361aef0",
+    "configs/env/DcmmCfg_roll_track_07c176f.py": "1a7bf4c6685c6334aa574b76230f73d7c7eff74ddc88c07d681c29b980512dd0",
+    "gym_dcmm/algs/ppo_dcmm_645edc4/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "gym_dcmm/algs/ppo_dcmm_645edc4/experience.py": "a67f19b6aeeac134bd4b7a6afa7f63efee23a49bbcb85e8cddcadab16eff323a",
+    "gym_dcmm/algs/ppo_dcmm_645edc4/models_catch.py": "52836785dff94b7ec5a8aa91d9aae8f9f31d65beda85ee641e599ad9f12c5047",
+    "gym_dcmm/algs/ppo_dcmm_645edc4/models_track.py": "1a1fb8b1bd658cbbdc608a775342d7039e8a6e5e0bca58b77ba570921e0d94e3",
+    "gym_dcmm/algs/ppo_dcmm_645edc4/ppo_dcmm_catch_one_stage.py": "a9ebfeca4aaa0533f3393fe833e7983863e487d386f1a2d6c1e1ef6f09089465",
+    "gym_dcmm/algs/ppo_dcmm_645edc4/ppo_dcmm_catch_two_stage.py": "3ad421357316ddff4153f7a5d96e80d5c7b0db25a4eb52eb41a41f7fbaaf0a3d",
+    "gym_dcmm/algs/ppo_dcmm_645edc4/ppo_dcmm_track.py": "59976be0ca118c46f783fc5780a60c55a51b8e716721ca59145c20fd2d35afac",
+    "gym_dcmm/algs/ppo_dcmm_645edc4/utils.py": "4f7dac3a2c2ea83c884c3888dfed9804432b67d451e3c0c8f8f2d908ecc3d738"
+  },
+  "checkpoints": {},
+  "implementation": "base reward minus old four wait terms plus adaptive wait terms",
+  "hard_wait_guard": false
+}

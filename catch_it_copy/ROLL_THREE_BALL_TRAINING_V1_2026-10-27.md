@@ -2,7 +2,8 @@
 
 脚本：`scripts/train_roll_three_ball_v1.sh`。
 保持既有 Tracking → Catching_TwoStage 流程，不改 PPO、网络结构、动作接口或抓取判据。
-启用已验证的 roll_physics=physical_v1 与 adaptive_wait_v1 等待奖励。
+2026-10-28 更新：按用户要求停用 adaptive_wait_v1，恢复原环境奖励 roll_reward_version=legacy。
+保留 roll_physics=physical_v1 和三球采样；不启用硬等待控制。
 旧模型和旧物理配置保留，新训练输出使用独立目录和日期/时间。
 
 ## 配置
@@ -24,7 +25,7 @@ cd /home/isee/Catch/catch_it_copy
 bash scripts/train_roll_three_ball_v1.sh
 ```
 
-输出：`outputs/roll_three_ball_tracking_v1_seed123/日期/时间/nn/`。
+输出：`outputs/roll_three_ball_tracking_legacy_reward_v1_seed123/日期/时间/nn/`。
 选择实际验证效果较好的 `roll_track_best_reward_*.pth`，或使用 `roll_track_last.pth`。
 不要把文档里的占位路径直接当作真实 checkpoint。
 
@@ -38,7 +39,7 @@ bash scripts/train_roll_three_ball_v1.sh \
   checkpoint_tracking=/actual/path/nn/roll_track_last.pth
 ```
 
-脚本会自动使用 `output_name=roll_three_ball_catching_v1_seed123`。
+脚本会自动使用 `output_name=roll_three_ball_catching_legacy_reward_v1_seed123`。
 第二阶段导入 Tracking actor 和输入归一化，抓取分支重新初始化，按既有 TwoStage PPO 训练。
 脚本不会自动选择 Track checkpoint，也不会在 Track 未训练好时自动开始 Catch。
 未提供权重、路径不存在或误选 OneStage 会提前报错。
@@ -56,7 +57,7 @@ roll_physics_provenance.json、roll_reward_provenance.json 与奖励分项日志
 
 ## 验证范围
 
-脚本已通过 shell 语法与误用检查；CPU 双异步环境的短 Tracking 训练保存了新 checkpoint。
+此前 adaptive_wait_v1 版本的脚本已通过 shell 语法与误用检查；CPU 双异步环境的短 Tracking 训练保存了新 checkpoint。
 随后 Catching_TwoStage 成功加载该新 Track actor 与归一化，并完成 2 次短 PPO 更新。
 链路日志：`/tmp/roll_three_ball_tracking_script.log`、`/tmp/roll_three_ball_catching_script.log`。
 训练链路短检查不能证明收敛或泛化，必须分别评估三种球，避免混合均值掩盖弱项。
@@ -67,7 +68,7 @@ roll_physics_provenance.json、roll_reward_provenance.json 与奖励分项日志
 ```bash
 python train_DCMM.py test=True task=Catching_TwoStage num_envs=1 \
   object_motion=roll roll_physics=physical_v1 \
-  roll_reward_version=adaptive_wait_v1 roll_wait_guard=false \
+  roll_reward_version=legacy roll_wait_guard=false \
   roll_material_file=/home/isee/Catch/catch_it_copy/ycb_objects/calibration_data/balls.roll_table_priors_v1.json \
   'roll_speed=[0.8,1.3]' test_object=ycb:tennis_ball ycb_collision=sphere \
   object_eval=false viewer=true checkpoint_catching=/actual/path/to/new_catch.pth

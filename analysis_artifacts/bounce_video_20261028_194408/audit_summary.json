@@ -1,0 +1,42 @@
+{
+  "video": {
+    "video_path": "/home/isee/视频/录屏/录屏 10-28-2026 07:44:08 PM.webm",
+    "fps_reported": 29.833333333333332,
+    "frames_reported": 479,
+    "estimated_duration_s": 16.05586592178771,
+    "width": 849,
+    "height": 738
+  },
+  "video_sha256": "62de48b76c81b6e9d8d7fa305b783a597857b6aeda439698364dfae9fa762278",
+  "diagnostic": "Separate deterministic model runs, not frame-synchronized recreation of the user recording. CPU, no viewer, original PPO normalization/action adapter, strict checkpoint model load, 40ms policy. Fixed tennis physical_v2/baseball_intercept_v1 (preset does not affect tennis), per-ball material file.",
+  "summary": [
+    {
+      "seed": 0,
+      "steps": 63,
+      "steps_with_target_violation": 61,
+      "max_target_violation_rad": 8.554199928805232,
+      "max_actual_movable_joint_violation_rad": 5.388745743397329,
+      "environment_success": true,
+      "reason": null
+    },
+    {
+      "seed": 1,
+      "steps": 35,
+      "steps_with_target_violation": 33,
+      "max_target_violation_rad": 3.628302608668804,
+      "max_actual_movable_joint_violation_rad": 1.6217882463144186,
+      "environment_success": false,
+      "reason": "ball_left"
+    }
+  ],
+  "sources": {
+    "/home/isee/Catch/bounce_three_ball_catching_v1_seed123/2026-10-28/11:36:32/nn/bounce_catch_best_reward_288.46.pth": "5d580d59cf4d3cdace14457351c35434fa44aaf82a08babfe5a2b8968bb2b63d",
+    "/home/isee/Catch/bounce_three_ball_catching_v1_seed123/2026-10-28/11:36:32/resolved_config.yaml": "ffb8adbc2e83991c93f5ce406b4572879ba87eb0455ff0d89461632b1bdd403d",
+    "/home/isee/Catch/catch_it_copy/gym_dcmm/agents/MujocoDcmm_bounce_5fe75d5f.py": "27926a1fab5ffa55f3721d82154ddf1aa9305506606cf25247f8b61bcc0037fc",
+    "/home/isee/Catch/catch_it_copy/gym_dcmm/envs/DcmmVecEnv.py": "33b6c9038aa7c91a7141d048f2dcddbd3c0e84b19a0cb81aaa81628816cef095",
+    "/home/isee/Catch/catch_it_copy/gym_dcmm/utils/pid.py": "43a0390ddf368a920a252152748a30f52cecc605a6f0963e8cbf81cdbcd47f8e",
+    "/home/isee/Catch/catch_it_copy/gym_dcmm/envs/bounce_physical_v2.py": "baee27209d6390247d2348aecc058833d16c5f61211efc60974fefbf4b686a59",
+    "/home/isee/Catch/catch_it_copy/ycb_objects/calibration_data/balls.three_ball_training_v1.json": "4f8b6b5397ae56eae3c46af8a2e96d348e8477511cb56a1960d575f60083488e",
+    "/home/isee/Catch/analysis_artifacts/bounce_video_20261028_194408/tennis_hand_audit.py": "7cd77d8fea6de04c24d6a069b5cec4c2494b523c8995a79886f73c66c8bd2cce"
+  }
+}

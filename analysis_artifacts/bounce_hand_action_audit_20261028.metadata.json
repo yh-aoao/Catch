@@ -1,0 +1,233 @@
+{
+  "checkpoint": {
+    "path": "/home/isee/Catch/bounce_three_ball_catching_v1_seed123/2026-10-28/11:36:32/nn/bounce_catch_best_reward_288.46.pth",
+    "sha256": "5d580d59cf4d3cdace14457351c35434fa44aaf82a08babfe5a2b8968bb2b63d"
+  },
+  "config": {
+    "path": "/home/isee/Catch/bounce_three_ball_catching_v1_seed123/2026-10-28/11:36:32/resolved_config.yaml",
+    "sha256": "ffb8adbc2e83991c93f5ce406b4572879ba87eb0455ff0d89461632b1bdd403d"
+  },
+  "material": {
+    "path": "/home/isee/Catch/catch_it_copy/ycb_objects/calibration_data/balls.three_ball_training_v1.json",
+    "sha256": "4f8b6b5397ae56eae3c46af8a2e96d348e8477511cb56a1960d575f60083488e"
+  },
+  "script": {
+    "path": "/home/isee/Catch/analysis/bounce_hand_action_audit_20261028.py",
+    "sha256": "88dea5c07b2a067a5b57d75f9acd66642bab635ea6810e9ab00ac1edd3ce4238"
+  },
+  "data": {
+    "path": "/home/isee/Catch/analysis_artifacts/bounce_hand_action_audit_20261028.json",
+    "sha256": "d457a9799a86da9dba742cc34ac292df3da8bf7a696f21b2e598e2c1d847bb93"
+  },
+  "sources": [
+    {
+      "path": "/home/isee/Catch/catch_it_copy/gym_dcmm/envs/DcmmVecEnv.py",
+      "sha256": "33b6c9038aa7c91a7141d048f2dcddbd3c0e84b19a0cb81aaa81628816cef095"
+    },
+    {
+      "path": "/home/isee/Catch/catch_it_copy/gym_dcmm/envs/bounce_physical_v2.py",
+      "sha256": "baee27209d6390247d2348aecc058833d16c5f61211efc60974fefbf4b686a59"
+    },
+    {
+      "path": "/home/isee/Catch/catch_it_copy/gym_dcmm/agents/MujocoDcmm.py",
+      "sha256": "d858db764a5a8ee8cb6764b8f2dbd0a4dc240ed1e4284292d7dd98d4da21a471"
+    },
+    {
+      "path": "/home/isee/Catch/catch_it_copy/gym_dcmm/utils/pid.py",
+      "sha256": "43a0390ddf368a920a252152748a30f52cecc605a6f0963e8cbf81cdbcd47f8e"
+    },
+    {
+      "path": "/home/isee/Catch/catch_it_copy/gym_dcmm/algs/ppo_dcmm_5fe75d5f/ppo_dcmm_catch_two_stage.py",
+      "sha256": "7a16b0c6ce3fbc14a1bc0bf2c501a3790662d7745b4b9f134110baf4661a750b"
+    },
+    {
+      "path": "/home/isee/Catch/catch_it_copy/gym_dcmm/algs/ppo_dcmm_5fe75d5f/models_catch.py",
+      "sha256": "fb4473b1be83c02a799d5be29bc6ae95ee7f6bd56ea731221947924fab2e4b70"
+    },
+    {
+      "path": "/home/isee/Catch/catch_it_copy/configs/env/DcmmCfg_bounce_5fe75d5f.py",
+      "sha256": "2c7dd7312bc8c9b2f75b558c707ecfc056015a5ecd230211d726f9a0a78c8536"
+    },
+    {
+      "path": "/home/isee/Catch/catch_it_copy/assets/urdf/x1_xarm6_leap_right_object.xml",
+      "sha256": "b13a04e1bd4413cf986d131a5b1b32f843c58539ccd6e2bdf4d3aa8e73762030"
+    },
+    {
+      "path": "/home/isee/Catch/catch_it_copy/ycb_objects/evaluate_trained_balls.py",
+      "sha256": "0e1264a2b27d116c4f54cd1dfea2b4f672693008b3ae12bae4950cf2be5131b6"
+    }
+  ],
+  "physics": {
+    "version": "physical_v2",
+    "launch": "baseball_intercept_v1",
+    "ball_mode": "fixed",
+    "material_path": "/home/isee/Catch/catch_it_copy/ycb_objects/calibration_data/balls.three_ball_training_v1.json",
+    "policy_interval_s": 0.04,
+    "controller_interval_s": 0.002,
+    "physics_timestep_s": 0.000125,
+    "substeps": 16,
+    "env_time_s": 2.5
+  },
+  "construction": "Direct make_bounce_physical_v2(task=Catching) using saved bounce_v2 options, local three-ball material, viewer=False, object_eval=False. PPO_Catch_TwoStage actual normalization/action2dict; deterministic inference=True clamp(-1,1). Saved config adapted test=True CPU num_envs/num_actors=1 checkpoint arguments empty before restore_test supplied catch. env.reset(seed=0/1); contact/noise as current environment. Exact script archived.",
+  "sampling": "Policy-step snapshots every 40 ms, not max across physics substeps.",
+  "reproduce": "cd /home/isee/Catch/catch_it_copy && PYTHONPATH=/home/isee/Catch/catch_it_copy /home/isee/miniconda3/envs/dcmm/bin/python /home/isee/Catch/analysis/bounce_hand_action_audit_20261028.py",
+  "controlled_hand_indices": [
+    0,
+    2,
+    3,
+    4,
+    6,
+    7,
+    8,
+    10,
+    11,
+    13,
+    14,
+    15
+  ],
+  "fixed_spread_hand_indices": [
+    1,
+    5,
+    9,
+    12
+  ],
+  "limits_summary": [
+    {
+      "ball": "default",
+      "seed": 0,
+      "policy_steps": 31,
+      "controlled": {
+        "max_actual_q_limit_excess_rad": 2.0183185355976816,
+        "joint_hand_index": 11,
+        "joint_name": "11",
+        "policy_index": 30,
+        "time_s": 1.2399999999999927,
+        "actual_q_rad": -2.3843185355976817,
+        "range_rad": [
+          -0.366,
+          2.042
+        ],
+        "max_target_limit_excess_rad": 3.796019441694021,
+        "policy_steps_actual_q_exceeds_limit": 29
+      },
+      "fixed_spread": {
+        "max_actual_q_limit_excess_rad": 0.2474157579085176,
+        "joint_hand_index": 5,
+        "joint_name": "4",
+        "policy_index": 16,
+        "time_s": 0.6800000000000189,
+        "actual_q_rad": 0.2574157579085176,
+        "range_rad": [
+          -0.01,
+          0.01
+        ],
+        "max_target_limit_excess_rad": 0.0,
+        "policy_steps_actual_q_exceeds_limit": 31
+      }
+    },
+    {
+      "ball": "default",
+      "seed": 1,
+      "policy_steps": 28,
+      "controlled": {
+        "max_actual_q_limit_excess_rad": 1.2051906367891325,
+        "joint_hand_index": 7,
+        "joint_name": "7",
+        "policy_index": 16,
+        "time_s": 0.6800000000000189,
+        "actual_q_rad": -1.5711906367891324,
+        "range_rad": [
+          -0.366,
+          2.042
+        ],
+        "max_target_limit_excess_rad": 3.2696498960852622,
+        "policy_steps_actual_q_exceeds_limit": 27
+      },
+      "fixed_spread": {
+        "max_actual_q_limit_excess_rad": 0.11172543461944623,
+        "joint_hand_index": 5,
+        "joint_name": "4",
+        "policy_index": 6,
+        "time_s": 0.27999999999998304,
+        "actual_q_rad": -0.12172543461944622,
+        "range_rad": [
+          -0.01,
+          0.01
+        ],
+        "max_target_limit_excess_rad": 0.0,
+        "policy_steps_actual_q_exceeds_limit": 22
+      }
+    },
+    {
+      "ball": "ycb:baseball",
+      "seed": 0,
+      "policy_steps": 21,
+      "controlled": {
+        "max_actual_q_limit_excess_rad": 1.424277366133734,
+        "joint_hand_index": 11,
+        "joint_name": "11",
+        "policy_index": 20,
+        "time_s": 0.8400000000000724,
+        "actual_q_rad": -1.790277366133734,
+        "range_rad": [
+          -0.366,
+          2.042
+        ],
+        "max_target_limit_excess_rad": 2.3905137751847505,
+        "policy_steps_actual_q_exceeds_limit": 19
+      },
+      "fixed_spread": {
+        "max_actual_q_limit_excess_rad": 0.1368079481492453,
+        "joint_hand_index": 5,
+        "joint_name": "4",
+        "policy_index": 10,
+        "time_s": 0.4399999999999654,
+        "actual_q_rad": -0.1468079481492453,
+        "range_rad": [
+          -0.01,
+          0.01
+        ],
+        "max_target_limit_excess_rad": 0.0,
+        "policy_steps_actual_q_exceeds_limit": 21
+      }
+    },
+    {
+      "ball": "ycb:baseball",
+      "seed": 1,
+      "policy_steps": 22,
+      "controlled": {
+        "max_actual_q_limit_excess_rad": 1.0498729370440092,
+        "joint_hand_index": 7,
+        "joint_name": "7",
+        "policy_index": 14,
+        "time_s": 0.5999999999999922,
+        "actual_q_rad": -1.4158729370440093,
+        "range_rad": [
+          -0.366,
+          2.042
+        ],
+        "max_target_limit_excess_rad": 2.441602279677987,
+        "policy_steps_actual_q_exceeds_limit": 21
+      },
+      "fixed_spread": {
+        "max_actual_q_limit_excess_rad": 0.13560068179206522,
+        "joint_hand_index": 5,
+        "joint_name": "4",
+        "policy_index": 13,
+        "time_s": 0.5599999999999788,
+        "actual_q_rad": -0.14560068179206523,
+        "range_rad": [
+          -0.01,
+          0.01
+        ],
+        "max_target_limit_excess_rad": 0.0,
+        "policy_steps_actual_q_exceeds_limit": 22
+      }
+    }
+  ],
+  "limitations": [
+    "Four diagnostic episodes only; no statistical success comparison.",
+    "Actual q limit violations measured against MuJoCo model jnt_range; MuJoCo limits are soft constraints.",
+    "CPU test current local environment; not byte-identical historical training source."
+  ]
+}

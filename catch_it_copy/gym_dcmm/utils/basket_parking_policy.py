@@ -18,7 +18,8 @@ class FrozenParkingPolicy:
         # they do not change the frozen actor's action scaling or target geometry.
         for key in ('parking_only', 'hold_position', 'settle_contact_grace',
                     'release_speed_tolerance', 'release_position_tolerance',
-                    'post_ready_seconds', 'fixed_throw_probability'):
+                    'post_ready_seconds', 'fixed_throw_probability', 'hold_only',
+                    'hold_time_range', 'collision_free_spawn', 'hold_aim_bonus', 'hold_ball_speed_tolerance'):
             source_options.pop(key, None)
             target_options.pop(key, None)
         if source_options != target_options:

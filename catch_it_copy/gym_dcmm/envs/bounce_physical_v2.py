@@ -105,7 +105,8 @@ def _xml(xml, name, cfg, resource=None):
 
 def make_bounce_physical_v2(test_object='default', bounce_physics=VERSION,
                             bounce_launch='legacy', bounce_ball_mode='fixed',
-                            bounce_v2=None, bounce_material_file=None, bounce_ball_weights=None, **kwargs):
+                            bounce_v2=None, bounce_material_file=None, bounce_ball_weights=None,
+                            bounce_grasp_version='legacy', bounce_grasp=None, **kwargs):
     if bounce_physics != VERSION or kwargs.get('object_motion') != 'bounce':
         raise ValueError('physical_v2 requires object_motion=bounce')
     if bounce_launch not in ('legacy', 'baseball_intercept_v1') or kwargs.get('object_eval', False):
@@ -121,6 +122,10 @@ def make_bounce_physical_v2(test_object='default', bounce_physics=VERSION,
         raise ValueError('Mixed physics training uses test_object=default; YCB visual tests are fixed')
     if kwargs.get('ycb_collision', 'auto') == 'mesh' or kwargs.get('ycb_joint_damping') is not None:
         raise ValueError('physical_v2 requires analytical spheres and owns joint damping')
+    if bounce_grasp_version not in ('legacy', 'controlled_hold_v1'):
+        raise ValueError('Unknown bounce_grasp_version: '+str(bounce_grasp_version))
+    if bounce_grasp_version != 'legacy' and kwargs.get('task') != 'Catching':
+        raise ValueError('controlled_hold_v1 requires Catching')
     cfg, catalog = configuration(bounce_v2), profiles()
     materials = None
     if bounce_material_file:
@@ -138,6 +143,12 @@ def make_bounce_physical_v2(test_object='default', bounce_physics=VERSION,
         from gym_dcmm.envs.DcmmVecEnv_bounce_july22 import DcmmVecEnv as Base
     else:
         from gym_dcmm.envs.DcmmVecEnv import BounceEnv as Base
+    accepted = inspect.signature(Base.__init__).parameters
+    extra = {}
+    if bounce_grasp_version == 'controlled_hold_v1':
+        from gym_dcmm.envs.bounce_grasp import BounceGraspEnv
+        Base = BounceGraspEnv
+        extra['bounce_grasp'] = bounce_grasp
 
     class PhysicalBounce(Base):
         def _reset_object_bounce(self):
@@ -236,8 +247,7 @@ def make_bounce_physical_v2(test_object='default', bounce_physics=VERSION,
                         bounce_material_status=self.bounce_v2_episode['material_status'])
             return obs, reward, terminated, truncated, info
 
-    accepted = inspect.signature(Base.__init__).parameters
-    env = PhysicalBounce(**{key: value for key, value in kwargs.items() if key in accepted})
+    env = PhysicalBounce(**{key: value for key, value in kwargs.items() if key in accepted}, **extra)
     env.bounce_v2_options = cfg
     return env
 

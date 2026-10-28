@@ -1,0 +1,178 @@
+hydra:
+  run:
+    dir: .
+  sweep:
+    dir: multirun/${now:%Y-%m-%d}/${now:%H-%M-%S}
+    subdir: ${hydra.job.num}
+  launcher:
+    _target_: hydra._internal.core_plugins.basic_launcher.BasicLauncher
+  sweeper:
+    _target_: hydra._internal.core_plugins.basic_sweeper.BasicSweeper
+    max_batch_size: null
+    params: null
+  help:
+    app_name: ${hydra.job.name}
+    header: '${hydra.help.app_name} is powered by Hydra.
+
+      '
+    footer: 'Powered by Hydra (https://hydra.cc)
+
+      Use --hydra-help to view Hydra specific help
+
+      '
+    template: '${hydra.help.header}
+
+      == Configuration groups ==
+
+      Compose your configuration from those groups (group=option)
+
+
+      $APP_CONFIG_GROUPS
+
+
+      == Config ==
+
+      Override anything in the config (foo.bar=value)
+
+
+      $CONFIG
+
+
+      ${hydra.help.footer}
+
+      '
+  hydra_help:
+    template: 'Hydra (${hydra.runtime.version})
+
+      See https://hydra.cc for more info.
+
+
+      == Flags ==
+
+      $FLAGS_HELP
+
+
+      == Configuration groups ==
+
+      Compose your configuration from those groups (For example, append hydra/job_logging=disabled
+      to command line)
+
+
+      $HYDRA_CONFIG_GROUPS
+
+
+      Use ''--cfg hydra'' to Show the Hydra config.
+
+      '
+    hydra_help: ???
+  hydra_logging:
+    version: 1
+    formatters:
+      simple:
+        format: '[%(asctime)s][HYDRA] %(message)s'
+    handlers:
+      console:
+        class: logging.StreamHandler
+        formatter: simple
+        stream: ext://sys.stdout
+    root:
+      level: INFO
+      handlers:
+      - console
+    loggers:
+      logging_example:
+        level: DEBUG
+    disable_existing_loggers: false
+  job_logging:
+    version: 1
+    formatters:
+      simple:
+        format: '[%(asctime)s][%(name)s][%(levelname)s] - %(message)s'
+    handlers:
+      console:
+        class: logging.StreamHandler
+        formatter: simple
+        stream: ext://sys.stdout
+      file:
+        class: logging.FileHandler
+        formatter: simple
+        filename: ${hydra.runtime.output_dir}/${hydra.job.name}.log
+    root:
+      level: INFO
+      handlers:
+      - console
+      - file
+    disable_existing_loggers: false
+  env: {}
+  mode: RUN
+  searchpath: []
+  callbacks: {}
+  output_subdir: .hydra
+  overrides:
+    hydra:
+    - hydra.job.chdir=false
+    - hydra.run.dir=.
+    - hydra.mode=RUN
+    task:
+    - test=True
+    - task=Catching_TwoStage
+    - num_envs=1
+    - train.ppo.num_actors=1
+    - device_id=-1
+    - viewer=true
+    - imshow_cam=false
+    - seed=0
+    - object_motion=bounce
+    - bounce_physics=physical_v2
+    - bounce_grasp_version=controlled_hold_v1
+    - bounce_launch=baseball_intercept_v1
+    - bounce_ball_mode=fixed
+    - bounce_ball_weights=null
+    - bounce_material_file=/home/isee/Catch/catch_it_copy/ycb_objects/calibration_data/balls.three_ball_training_v1.json
+    - test_object=ycb:tennis_ball
+    - object_eval=false
+    - checkpoint_tracking=
+    - checkpoint_catching=/home/isee/Catch/catch_it_copy/outputs/bounce_hold_resume_validation_20261029/2026-10-29/00:51:19/nn/bounce_catch_last.pth
+    - output_name=bounce_hold_video_tennis_ball
+    - viewer=false
+    - train.ppo.max_test_steps=64
+  job:
+    name: train_DCMM
+    chdir: false
+    override_dirname: bounce_ball_mode=fixed,bounce_ball_weights=null,bounce_grasp_version=controlled_hold_v1,bounce_launch=baseball_intercept_v1,bounce_material_file=/home/isee/Catch/catch_it_copy/ycb_objects/calibration_data/balls.three_ball_training_v1.json,bounce_physics=physical_v2,checkpoint_catching=/home/isee/Catch/catch_it_copy/outputs/bounce_hold_resume_validation_20261029/2026-10-29/00:51:19/nn/bounce_catch_last.pth,checkpoint_tracking=,device_id=-1,imshow_cam=false,num_envs=1,object_eval=false,object_motion=bounce,output_name=bounce_hold_video_tennis_ball,seed=0,task=Catching_TwoStage,test=True,test_object=ycb:tennis_ball,train.ppo.max_test_steps=64,train.ppo.num_actors=1,viewer=false,viewer=true
+    id: ???
+    num: ???
+    config_name: resolved_config
+    env_set: {}
+    env_copy: []
+    config:
+      override_dirname:
+        kv_sep: '='
+        item_sep: ','
+        exclude_keys: []
+  runtime:
+    version: 1.3.2
+    version_base: '1.1'
+    cwd: /home/isee/Catch/catch_it_copy
+    config_sources:
+    - path: hydra.conf
+      schema: pkg
+      provider: hydra
+    - path: /home/isee/Catch/catch_it_copy/outputs/bounce_hold_resume_validation_20261029/2026-10-29/00:51:19
+      schema: file
+      provider: main
+    - path: ''
+      schema: structured
+      provider: schema
+    output_dir: /home/isee/Catch/catch_it_copy
+    choices:
+      hydra/env: default
+      hydra/callbacks: null
+      hydra/job_logging: default
+      hydra/hydra_logging: default
+      hydra/hydra_help: default
+      hydra/help: default
+      hydra/sweeper: basic
+      hydra/launcher: basic
+      hydra/output: default
+  verbose: false

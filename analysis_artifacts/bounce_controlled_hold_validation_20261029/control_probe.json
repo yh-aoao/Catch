@@ -1,0 +1,127 @@
+{
+  "note": "Same legacy Catch policy, same action scale .15rad and seeds; 2ms control samples. New policy must be retrained. Success definitions differ, so rates are not comparable.",
+  "checkpoint": "/home/isee/Catch/bounce_three_ball_catching_v1_seed123/2026-10-28/11:36:32/nn/bounce_catch_best_reward_288.46.pth",
+  "checkpoint_sha256": "5d580d59cf4d3cdace14457351c35434fa44aaf82a08babfe5a2b8968bb2b63d",
+  "rows": [
+    {
+      "ball": "default",
+      "version": "legacy",
+      "seed": 0,
+      "policy_steps": 31,
+      "max_actual_joint_violation_rad": 2.0183185355976816,
+      "max_target_joint_violation_rad": 3.796019441694021,
+      "reason": "ball_left",
+      "environment_success": false
+    },
+    {
+      "ball": "default",
+      "version": "legacy",
+      "seed": 1,
+      "policy_steps": 28,
+      "max_actual_joint_violation_rad": 1.2051906367891325,
+      "max_target_joint_violation_rad": 3.2696498960852622,
+      "reason": "ball_left",
+      "environment_success": false
+    },
+    {
+      "ball": "default",
+      "version": "controlled_hold_v1",
+      "seed": 0,
+      "policy_steps": 41,
+      "max_actual_joint_violation_rad": 0.014366077466160698,
+      "max_target_joint_violation_rad": 0.0,
+      "reason": "controlled_hold",
+      "environment_success": true
+    },
+    {
+      "ball": "default",
+      "version": "controlled_hold_v1",
+      "seed": 1,
+      "policy_steps": 40,
+      "max_actual_joint_violation_rad": 0.01002704730728926,
+      "max_target_joint_violation_rad": 0.0,
+      "reason": "out_of_bounds",
+      "environment_success": false
+    },
+    {
+      "ball": "ycb:tennis_ball",
+      "version": "legacy",
+      "seed": 0,
+      "policy_steps": 63,
+      "max_actual_joint_violation_rad": 5.388745743397329,
+      "max_target_joint_violation_rad": 8.554199928805232,
+      "reason": "catch_success",
+      "environment_success": true
+    },
+    {
+      "ball": "ycb:tennis_ball",
+      "version": "legacy",
+      "seed": 1,
+      "policy_steps": 35,
+      "max_actual_joint_violation_rad": 1.6217882463144186,
+      "max_target_joint_violation_rad": 3.628302608668804,
+      "reason": "ball_left",
+      "environment_success": false
+    },
+    {
+      "ball": "ycb:tennis_ball",
+      "version": "controlled_hold_v1",
+      "seed": 0,
+      "policy_steps": 38,
+      "max_actual_joint_violation_rad": 0.014366077466160698,
+      "max_target_joint_violation_rad": 0.0,
+      "reason": "controlled_hold",
+      "environment_success": true
+    },
+    {
+      "ball": "ycb:tennis_ball",
+      "version": "controlled_hold_v1",
+      "seed": 1,
+      "policy_steps": 36,
+      "max_actual_joint_violation_rad": 0.012469348824047932,
+      "max_target_joint_violation_rad": 0.0,
+      "reason": "out_of_bounds",
+      "environment_success": false
+    },
+    {
+      "ball": "ycb:baseball",
+      "version": "legacy",
+      "seed": 0,
+      "policy_steps": 21,
+      "max_actual_joint_violation_rad": 1.4245566796509683,
+      "max_target_joint_violation_rad": 2.3905137751847505,
+      "reason": "ball_left",
+      "environment_success": false
+    },
+    {
+      "ball": "ycb:baseball",
+      "version": "legacy",
+      "seed": 1,
+      "policy_steps": 22,
+      "max_actual_joint_violation_rad": 1.0498729370440092,
+      "max_target_joint_violation_rad": 2.441602279677987,
+      "reason": "ball_left",
+      "environment_success": false
+    },
+    {
+      "ball": "ycb:baseball",
+      "version": "controlled_hold_v1",
+      "seed": 0,
+      "policy_steps": 63,
+      "max_actual_joint_violation_rad": 0.028498162518580727,
+      "max_target_joint_violation_rad": 0.0,
+      "reason": "timeout",
+      "environment_success": false
+    },
+    {
+      "ball": "ycb:baseball",
+      "version": "controlled_hold_v1",
+      "seed": 1,
+      "policy_steps": 33,
+      "max_actual_joint_violation_rad": 0.009785705750420037,
+      "max_target_joint_violation_rad": 0.0,
+      "reason": "out_of_bounds",
+      "environment_success": false
+    }
+  ]
+}

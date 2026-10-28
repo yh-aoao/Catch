@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
-# Activate dcmm first. Default: train Tracking from scratch.
+# Activate dcmm first. Default: train Tracking from scratch with legacy reward.
 # Stage 2: append task=Catching_TwoStage checkpoint_tracking=/absolute/path/track.pth
 TASK_ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$TASK_ROOT"
@@ -15,9 +15,9 @@ for TASK_ARG in "$@"; do
   esac
 done
 case "$TRAIN_TASK" in
-  Tracking) OUTPUT_NAME=roll_three_ball_tracking_v1_seed123 ;;
+  Tracking) OUTPUT_NAME=roll_three_ball_tracking_legacy_reward_v1_seed123 ;;
   Catching_TwoStage)
-    OUTPUT_NAME=roll_three_ball_catching_v1_seed123
+    OUTPUT_NAME=roll_three_ball_catching_legacy_reward_v1_seed123
     if [[ -z "$TRACK_CKPT" && -z "$CATCH_CKPT" ]]; then
       echo 'Stage 2 requires checkpoint_tracking=/absolute/path/to/roll_track.pth (or a compatible Catch checkpoint for continuation).' >&2
       exit 2
@@ -35,7 +35,7 @@ export OPENBLAS_NUM_THREADS="${OPENBLAS_NUM_THREADS:-1}"
 python train_DCMM.py \
   test=False task=Tracking num_envs=16 device_id=0 \
   object_motion=roll roll_physics=physical_v1 \
-  roll_reward_version=adaptive_wait_v1 roll_wait_guard=false \
+  roll_reward_version=legacy roll_wait_guard=false \
   roll_ball_mode=mixed \
   'roll_ball_weights={original:0.6,tennis_ball:0.2,baseball:0.2}' \
   'roll_speed=[0.8,1.3]' \

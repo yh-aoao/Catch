@@ -1,0 +1,80 @@
+{
+  "purpose": "Static FK/contact predicate feasibility only: explicit joint/ball placement, no physics ticks and no dynamic hold or task-success evidence.",
+  "ball_world_position": [
+    -0.015207671701999121,
+    0.45511933069565425,
+    0.6836978850219583
+  ],
+  "ball_local_position": [
+    0,
+    0,
+    0.11
+  ],
+  "hand_qpos_16": [
+    1.0,
+    0.0,
+    0.75,
+    0.65,
+    1.0,
+    0.0,
+    0.75,
+    0.65,
+    1.0,
+    0.0,
+    0.75,
+    0.65,
+    0.0,
+    1.2,
+    1.2,
+    1.2
+  ],
+  "arm_qpos": [
+    0.0,
+    0.0,
+    -0.0,
+    3.07,
+    2.25,
+    -1.5
+  ],
+  "contacts": [
+    {
+      "geom1": 101,
+      "name1": "object",
+      "geom2": 83,
+      "name2": "fingertip_2_",
+      "dist": -0.0003398255716534279,
+      "force_normal": 0.01285774942731509
+    },
+    {
+      "geom1": 101,
+      "name1": "object",
+      "geom2": 99,
+      "name2": "thumb_fingertip_",
+      "dist": -0.004883288853185015,
+      "force_normal": 0.2273088822089393
+    }
+  ],
+  "state": {
+    "hand_contact": true,
+    "floor_contact": false,
+    "external_support": false,
+    "off_ground": true,
+    "capture": true,
+    "contact_groups": 2,
+    "contact_span": 0.5046271866269989,
+    "relative_speed": 0.0,
+    "palm_dot": 0.9351594452898593,
+    "distance": 0.04360045871318328,
+    "local_ball": [
+      -4.336808689942018e-19,
+      6.938893903907228e-18,
+      0.11000000000000007
+    ],
+    "joint_violation": 0.0,
+    "target_violation": 0.0,
+    "valid_hold": true,
+    "collision": false
+  },
+  "elapsed_control_ticks": 0,
+  "hold_time": 0.0
+}

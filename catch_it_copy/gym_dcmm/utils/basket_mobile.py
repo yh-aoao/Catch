@@ -11,7 +11,11 @@ DEFAULTS = dict(target_x_range=[-.4, .4], target_y_range=[1.35, 1.85],
                 carry_settle_seconds=.30, brake_after_unlock=False, approach_braking=False,
                 parking_only=False, hold_position=False, settle_contact_grace=0.,
                 release_speed_tolerance=0., release_position_tolerance=0.,
-                post_ready_seconds=0., fixed_throw_probability=0.)
+                post_ready_seconds=0., fixed_throw_probability=0., hold_only=False,
+                hold_time_range=[0.,0.], collision_free_spawn=False, hold_aim_bonus=0.,
+                hold_ball_speed_tolerance=.15, arm_drive_bonus=0.,
+                hold_arm_offset_deg=[0.,0.,0.,0.,0.,0.],hold_hand_flex=[.6,.5,.5],
+                hold_thumb_flex=[.4,.4,.4],hold_ball_local=[0.,.03,.07])
 
 
 def make_config(base, options=None):
@@ -20,26 +24,36 @@ def make_config(base, options=None):
     if unknown:
         raise ValueError('Unknown basket_mobile options: ' + str(sorted(unknown)))
     values = dict(DEFAULTS, **options)
-    for key in ('target_x_range', 'target_y_range'):
+    for key in ('target_x_range', 'target_y_range', 'hold_time_range'):
         pair = np.asarray(values[key], dtype=float)
         if pair.shape != (2,) or not np.all(np.isfinite(pair)) or pair[0] > pair[1]:
             raise ValueError(key + ' must be a finite ordered pair')
         values[key] = pair.copy()
+    pose_arrays={'hold_arm_offset_deg':6,'hold_hand_flex':3,'hold_thumb_flex':3,'hold_ball_local':3}
+    for key,size in pose_arrays.items():
+        array=np.asarray(values[key],dtype=float)
+        if array.shape!=(size,) or not np.all(np.isfinite(array)):
+            raise ValueError(key+' must contain '+str(size)+' finite values')
+        values[key]=array.copy()
     if values['target_y_range'][0] < 1.05:
         raise ValueError('Mobile target_y_range must stay >= 1.05m')
-    booleans = {'brake_after_unlock', 'approach_braking', 'parking_only', 'hold_position'}
+    booleans = {'brake_after_unlock', 'approach_braking', 'parking_only', 'hold_position', 'hold_only', 'collision_free_spawn'}
     optional_nonnegative = {'settle_contact_grace', 'release_speed_tolerance',
-                            'release_position_tolerance', 'post_ready_seconds', 'fixed_throw_probability'}
+                            'release_position_tolerance', 'post_ready_seconds', 'fixed_throw_probability', 'hold_aim_bonus', 'arm_drive_bonus'}
     for key in booleans:
         if not isinstance(values[key], bool):
             raise ValueError(key + ' must be boolean')
-    for key in set(DEFAULTS) - {'target_x_range', 'target_y_range'} - booleans:
+    for key in set(DEFAULTS) - {'target_x_range', 'target_y_range', 'hold_time_range'} - booleans - set(pose_arrays):
         if not np.isfinite(float(values[key])) or (float(values[key]) < 0 if key in optional_nonnegative else float(values[key]) <= 0):
             raise ValueError(key + ' must be finite and ' + ('nonnegative' if key in optional_nonnegative else 'positive'))
     if values['fixed_throw_probability'] > 1 or values['settle_contact_grace'] >= .05:
         raise ValueError('fixed_throw_probability must be <=1 and contact grace must be <0.05s')
     if values['parking_only'] and values['fixed_throw_probability']:
         raise ValueError('Fixed-throw rehearsal is not a parking task')
+    if values['hold_time_range'][0] < 0 or (values['hold_only'] and (
+            values['fixed_throw_probability'] != 1. or values['hold_time_range'][0] < .3
+            or values['hold_time_range'][1]+values['settle_contact_grace'] >= values['max_time'])):
+        raise ValueError('Hold-only training needs fixed_throw_probability=1, hold times >=0.3s and below navigation timeout')
     cfg = aim_config(base)
     for key, value in values.items():
         setattr(cfg, 'mobile_' + key, value)
@@ -75,7 +89,7 @@ def episode_deadline(state, cfg):
 
 
 def update_physics(state, launch, parking, position, velocity, center,
-                   now, dt, touching, collision, cfg):
+                   now, dt, touching, collision, cfg, gravity=None):
     """Capture eligibility at LAST contact, never at delayed release detection."""
     state['touching'] = bool(touching)
     state['physics_time'] = float(now)
@@ -84,13 +98,25 @@ def update_physics(state, launch, parking, position, velocity, center,
     supported = touching or (cfg.mobile_settle_contact_grace > 0 and
         now-state.get('last_hand_touch_time', -1e9) <= cfg.mobile_settle_contact_grace)
     if not state['unlocked']:
-        state['settle_seconds'] = (state['settle_seconds'] + dt
-                                   if now >= cfg.mobile_carry_settle_seconds and
-                                   parking['settled'] and supported and not collision else 0.)
-        if state['settle_seconds'] + 1e-9 >= cfg.mobile_settle_seconds:
+        if 'hold_until' in state:
+            ready = (now >= state['hold_until'] and touching and parking['settled'] and not collision
+                     and float(np.linalg.norm(velocity)) < cfg.mobile_hold_ball_speed_tolerance)
+            state['settle_seconds'] = min(now/max(state['hold_until'],1e-9),1.)*cfg.mobile_settle_seconds
+        else:
+            state['settle_seconds'] = (state['settle_seconds'] + dt
+                                       if now >= cfg.mobile_carry_settle_seconds and
+                                       parking['settled'] and supported and not collision else 0.)
+            ready = state['settle_seconds'] + 1e-9 >= cfg.mobile_settle_seconds
+        if ready:
             state['unlocked'] = True
-            state['ready_pending'] = 3.
+            state['ready_pending'] = 0. if cfg.mobile_hold_only else 3.
             state['ready_time'] = float(now)
+            if 'hold_until' in state:
+                state['held_ball_speed_at_ready'] = float(np.linalg.norm(velocity))
+    if touching and state['unlocked'] and cfg.mobile_hold_aim_bonus > 0 and not collision:
+        from gym_dcmm.utils.basket_hold import preparation_progress
+        preparation_progress(state, position, velocity, center,
+            np.array([0.,0.,-9.81]) if gravity is None else gravity, cfg)
     if touching and not launch.get('confirmed'):
         eligible = parking['settled']
         if cfg.mobile_release_speed_tolerance or cfg.mobile_release_position_tolerance:
@@ -124,6 +150,8 @@ def update_physics(state, launch, parking, position, velocity, center,
 def base_command(state, requested, dt, cfg, parking=None):
     """Policy steering with speed/acceleration limits; no automatic navigation."""
     requested = np.array(requested, dtype=float, copy=True)
+    if cfg.mobile_hold_only:
+        requested[:] = 0.
     if cfg.mobile_hold_position:
         if parking is None:
             raise ValueError('Position braking requires measured parking state')
@@ -172,6 +200,15 @@ def reward(state, launch, parking, done, success, elapsed, cfg, *,
     terms.update(navigation=0., navigation_distance=0., navigation_velocity=0.,
                  parked=state.pop('ready_pending', 0.), braking=0.,
                  base_control=0., base_smoothness=0., time=-.15*dt, task_failure=0.)
+    if cfg.mobile_hold_aim_bonus:
+        terms['held_aim_progress'] = state.pop('held_aim_pending', 0.)
+    if cfg.mobile_arm_drive_bonus:
+        terms['arm_drive_progress'] = state.pop('arm_drive_pending', 0.) if not robot_collision else 0.
+        terms['arm_drive_release'] = 0.
+        if (launch.get('confirmed') and state['release_qualified'] and not robot_collision
+                and not state.get('arm_drive_release_paid')):
+            terms['arm_drive_release'] = cfg.mobile_arm_drive_bonus*state.get('last_contact_arm_drive', 0.)
+            state['arm_drive_release_paid'] = True
     if not state['unlocked']:
         initial = max(state['initial_distance'], .25)
         old = np.clip(state['previous_distance'], 0., initial)

@@ -1,0 +1,418 @@
+{
+  "case": "bounce_track",
+  "object": "original",
+  "checkpoint": "/home/isee/Catch/bounce_three_ball_tracking_v1_seed123/2026-10-28/00:42:24/nn/bounce_track_best_reward_19.31.pth",
+  "checkpoint_sha256": "82bf576bcdd7b7342ccf7642e5156521b7b42de293b387234fcc24b3edd4801c",
+  "training_config_path": "/home/isee/Catch/bounce_three_ball_tracking_v1_seed123/2026-10-28/00:42:24/resolved_config.yaml",
+  "training_config_sha256": "8601713bde636ea0b8021b8639b2a290e4cd55db98a9b77833f9e5083ec97929",
+  "material_path": "/home/isee/Catch/catch_it_copy/ycb_objects/calibration_data/balls.three_ball_training_v1.json",
+  "material_sha256": "4f8b6b5397ae56eae3c46af8a2e96d348e8477511cb56a1960d575f60083488e",
+  "material": {
+    "schema": "ball_ground_materials_v1",
+    "surface_id": "generic_dry_rigid_floor_literature_approx_v1",
+    "basis": "literature_informed_simulation_prior_not_YCB_official_or_specimen_measurements",
+    "sources": {
+      "ycb": "https://arxiv.org/pdf/1502.03143",
+      "cross_1999": "https://www.physics.sydney.edu.au/~cross/PUBLICATIONS/BallBounce.pdf",
+      "cross_2002": "https://www.physics.usyd.edu.au/~cross/PUBLICATIONS/GripSlip.pdf",
+      "baseball_overview": "https://physics.usyd.edu.au/~cross/baseball.html"
+    },
+    "profiles": {
+      "original": {
+        "bounce_status": "simulation_prior",
+        "friction_status": "simulation_prior",
+        "damping_ratio": 0.11,
+        "time_constant": 0.008,
+        "sliding_friction": 0.3,
+        "torsional_friction": 0.005,
+        "inertia_factor": 0.4,
+        "basis": "physical_v2_original_simulation_baseline_not_measured"
+      },
+      "tennis_ball": {
+        "bounce_status": "simulation_prior",
+        "friction_status": "simulation_prior",
+        "basis": "literature_informed_approximation",
+        "normal_cor_target": 0.75,
+        "damping_ratio": 0.0977594549552959,
+        "time_constant": 0.008,
+        "sliding_friction": 0.5,
+        "torsional_friction": 0.005,
+        "inertia_factor": 0.55,
+        "friction_basis": "Cross 2002 reports tennis/court sliding friction usually >=0.5; transfer to generic floor is approximate",
+        "inertia_basis": "Cross 2002 spherical-structure approximation; not measured YCB inertia",
+        "numerical_validation": {
+          "passed": true,
+          "heights_clearance_m": [
+            0.5,
+            1.0,
+            1.5
+          ],
+          "peak_refinement_error_m": 0.002593896367875659,
+          "max_cor_target_error": 0.0025947115352549233,
+          "coarse": [
+            {
+              "height": 0.5332757853333333,
+              "hit_floor": true,
+              "max_height_after_first_floor": 0.3132121492341281,
+              "max_penetration": 0.002132119698579585,
+              "effective_height_restitution": 0.7482464352080734,
+              "passive_energy_height_bound": 0.5332757853333333,
+              "exceeds_energy_height_bound": false
+            },
+            {
+              "height": 1.0332757853333334,
+              "hit_floor": true,
+              "max_height_after_first_floor": 0.5942322251500191,
+              "max_penetration": 0.003003017177573699,
+              "effective_height_restitution": 0.7489702529584775,
+              "passive_energy_height_bound": 1.0332757853333334,
+              "exceeds_energy_height_bound": false
+            },
+            {
+              "height": 1.5332757853333334,
+              "hit_floor": true,
+              "max_height_after_first_floor": 0.8828739850795836,
+              "max_penetration": 0.003698995861059866,
+              "effective_height_restitution": 0.7525947115352549,
+              "passive_energy_height_bound": 1.5332757853333334,
+              "exceeds_energy_height_bound": false
+            }
+          ],
+          "fine": [
+            {
+              "height": 0.5332757853333333,
+              "hit_floor": true,
+              "max_height_after_first_floor": 0.3117543507845604,
+              "max_penetration": 0.0021341061721175843,
+              "effective_height_restitution": 0.7462956055762717,
+              "passive_energy_height_bound": 0.5332757853333333,
+              "exceeds_energy_height_bound": false
+            },
+            {
+              "height": 1.0332757853333334,
+              "hit_floor": true,
+              "max_height_after_first_floor": 0.5916898477176203,
+              "max_penetration": 0.0030044236247590665,
+              "effective_height_restitution": 0.7472710769086992,
+              "passive_energy_height_bound": 1.0332757853333334,
+              "exceeds_energy_height_bound": false
+            },
+            {
+              "height": 1.5332757853333334,
+              "hit_floor": true,
+              "max_height_after_first_floor": 0.8802800887117079,
+              "max_penetration": 0.0036907665977184596,
+              "effective_height_restitution": 0.7514449651076139,
+              "passive_energy_height_bound": 1.5332757853333334,
+              "exceeds_energy_height_bound": false
+            }
+          ]
+        },
+        "limitations": "Surface/speed/specimen dependent; fixed COR and Coulomb friction approximate compliant balls; torsional friction remains a prior"
+      },
+      "baseball": {
+        "bounce_status": "simulation_prior",
+        "friction_status": "simulation_prior",
+        "basis": "literature_informed_approximation",
+        "normal_cor_target": 0.5,
+        "damping_ratio": 0.25471692144735075,
+        "time_constant": 0.008,
+        "sliding_friction": 0.3,
+        "torsional_friction": 0.005,
+        "inertia_factor": 0.4,
+        "friction_basis": "Engineering prior .3; not a directly measured baseball/floor coefficient",
+        "inertia_basis": "Cross 2002 spherical-structure approximation; not measured YCB inertia",
+        "numerical_validation": {
+          "passed": true,
+          "heights_clearance_m": [
+            0.5,
+            1.0,
+            1.5
+          ],
+          "peak_refinement_error_m": 0.0018688391769390855,
+          "max_cor_target_error": 0.002005838959777795,
+          "coarse": [
+            {
+              "height": 0.5361762338333333,
+              "hit_floor": true,
+              "max_height_after_first_floor": 0.1604854062281025,
+              "max_penetration": 0.0045251041430021816,
+              "effective_height_restitution": 0.49861643052504634,
+              "passive_energy_height_bound": 0.5361762338333333,
+              "exceeds_energy_height_bound": false
+            },
+            {
+              "height": 1.0361762338333333,
+              "hit_floor": true,
+              "max_height_after_first_floor": 0.2852819323928729,
+              "max_penetration": 0.006393524981338709,
+              "effective_height_restitution": 0.49910489735078695,
+              "passive_energy_height_bound": 1.0361762338333333,
+              "exceeds_energy_height_bound": false
+            },
+            {
+              "height": 1.5361762338333333,
+              "hit_floor": true,
+              "max_height_after_first_floor": 0.4141910273578989,
+              "max_penetration": 0.007870394321548353,
+              "effective_height_restitution": 0.5020058389597778,
+              "passive_energy_height_bound": 1.5361762338333333,
+              "exceeds_energy_height_bound": false
+            }
+          ],
+          "fine": [
+            {
+              "height": 0.5361762338333333,
+              "hit_floor": true,
+              "max_height_after_first_floor": 0.1598686208688898,
+              "max_penetration": 0.004514638613099822,
+              "effective_height_restitution": 0.4973778986556529,
+              "passive_energy_height_bound": 0.5361762338333333,
+              "exceeds_energy_height_bound": false
+            },
+            {
+              "height": 1.0361762338333333,
+              "hit_floor": true,
+              "max_height_after_first_floor": 0.284072450857578,
+              "max_penetration": 0.006378520404481891,
+              "effective_height_restitution": 0.4978917724006339,
+              "passive_energy_height_bound": 1.0361762338333333,
+              "exceeds_energy_height_bound": false
+            },
+            {
+              "height": 1.5361762338333333,
+              "hit_floor": true,
+              "max_height_after_first_floor": 0.41232218818095984,
+              "max_penetration": 0.007850559127638195,
+              "effective_height_restitution": 0.5007633868056692,
+              "passive_energy_height_bound": 1.5361762338333333,
+              "exceeds_energy_height_bound": false
+            }
+          ]
+        },
+        "limitations": "Surface/speed/specimen dependent; fixed COR and Coulomb friction approximate compliant balls; torsional friction remains a prior"
+      }
+    },
+    "derived_from_sha256": "38ec46dd0862f92adba9b060b349bef70ada99a81edca0a01f55a00dd515e6d6"
+  },
+  "seed_start": 0,
+  "episodes": 100,
+  "policy": "deterministic mean action, original PPO normalization/clamp/padding/action2dict",
+  "criterion": "bounce_touch_v1: any hand contact without failure; not grasping",
+  "contact_sampling_seconds": 0.002,
+  "mujoco_version": "3.6.0",
+  "torch_version": "2.11.0+cu128",
+  "evaluation_config": {
+    "train": {
+      "seed": 123,
+      "algo": "PPO",
+      "network": {
+        "mlp": {
+          "units": [
+            256,
+            128
+          ]
+        },
+        "separate_value_mlp": true
+      },
+      "ppo": {
+        "name": "Dcmm",
+        "normalize_input": true,
+        "normalize_value": true,
+        "value_bootstrap": true,
+        "num_actors": 1,
+        "reward_scale_value": 0.1,
+        "clip_value_loss": false,
+        "normalize_advantage": true,
+        "gamma": 0.99,
+        "tau": 0.95,
+        "learning_rate": 0.0005,
+        "lr_schedule": "kl",
+        "kl_threshold": 0.016,
+        "save_best_after": 500,
+        "save_frequency": 2000,
+        "grad_norm": 1.0,
+        "entropy_coef": 0.0,
+        "freeze_base": false,
+        "freeze_arm": false,
+        "truncate_grads": true,
+        "e_clip": 0.2,
+        "action_track_denorm": [
+          1.5,
+          0.025,
+          0.01
+        ],
+        "action_catch_denorm": [
+          1.5,
+          0.025,
+          0.15
+        ],
+        "horizon_length": 64,
+        "minibatch_size": 512,
+        "mini_epochs": 6,
+        "critic_coef": 4,
+        "clip_value": true,
+        "bounds_loss_coef": 0.0001,
+        "max_agent_steps": 25000000,
+        "test_num_episodes": 100,
+        "max_test_steps": 10000,
+        "img_dim": [
+          112,
+          112
+        ],
+        "num_frames": 2
+      }
+    },
+    "experiment": "",
+    "seed": 123,
+    "torch_deterministic": true,
+    "rl_device": "cpu",
+    "device_id": -1,
+    "viewer": false,
+    "imshow_cam": false,
+    "test": true,
+    "task": "Tracking",
+    "num_envs": 1,
+    "object_eval": false,
+    "checkpoint_tracking": "",
+    "checkpoint_catching": "",
+    "output_name": "bounce_three_ball_tracking_v1_seed123",
+    "wandb_mode": "disabled",
+    "wandb_entity": "Your_username",
+    "wandb_project": "RL_Dcmm_Catch_Random",
+    "object_motion": "bounce",
+    "bounce_physics": "physical_v2",
+    "bounce_launch": "baseball_intercept_v1",
+    "bounce_ball_mode": "mixed",
+    "bounce_ball_weights": {
+      "original": 0.6,
+      "tennis_ball": 0.2,
+      "baseball": 0.2
+    },
+    "bounce_material_file": "/home/isee/Catch/catch_it_copy/ycb_objects/calibration_data/balls.three_ball_training_v1.json",
+    "bounce_v2": {
+      "height": [
+        0.9,
+        1.1
+      ],
+      "distance": [
+        1.6,
+        2.0
+      ],
+      "speed": [
+        1.3,
+        1.7
+      ],
+      "vertical_speed": [
+        -0.2,
+        -0.2
+      ],
+      "heading_degrees": [
+        -15.0,
+        15.0
+      ],
+      "spin_factor": [
+        0.5,
+        1.5
+      ],
+      "damping_ratio": [
+        0.11,
+        0.11
+      ],
+      "ground_friction": 0.3,
+      "time_constant": 0.008,
+      "mass_jitter": 0.1,
+      "radius_jitter": 0.05
+    },
+    "bounce_log": false,
+    "basket_log": false,
+    "basket_freeze_tracking": true,
+    "roll_log": false,
+    "roll_physics": "legacy",
+    "roll_material_file": null,
+    "roll_ball_mode": "fixed",
+    "roll_ball_weights": null,
+    "roll_reward_version": "legacy",
+    "roll_adaptive_wait": {
+      "min_height": 0.38,
+      "max_height": 0.62,
+      "height_band": 0.06,
+      "stand_off": 0.1,
+      "speed_lookahead": 0.08,
+      "hand_margin": 0.03,
+      "xy_weight": 1.0,
+      "xy_scale": 0.3,
+      "progress_weight": 5.0,
+      "height_weight": 1.5,
+      "hand_weight": 4.0,
+      "ready_weight": 0.5,
+      "settle_speed": 0.15,
+      "early_contact_weight": 2.0
+    },
+    "catch_tracking": "",
+    "catch_catching": "",
+    "basket_tracking": "",
+    "basket_fixed_base_training": false,
+    "basket_control_probe": "off",
+    "basket_arm_control": "cartesian",
+    "slide_config": null,
+    "slide_log": false,
+    "basket_reward_version": "legacy",
+    "basket_curriculum_stage": 3,
+    "basket_warm_start": "",
+    "basket_training_stage": "joint",
+    "basket_parking_checkpoint": "",
+    "basket_mask_navigation_updates": false,
+    "basket_mobile": {
+      "target_x_range": [
+        -0.4,
+        0.4
+      ],
+      "target_y_range": [
+        1.35,
+        1.85
+      ],
+      "max_time": 8.0,
+      "max_speed": 0.5,
+      "max_acceleration": 0.8,
+      "position_tolerance": 0.1,
+      "speed_tolerance": 0.1,
+      "settle_seconds": 0.2,
+      "carry_settle_seconds": 0.3,
+      "brake_after_unlock": false,
+      "approach_braking": false,
+      "parking_only": false,
+      "hold_position": false,
+      "settle_contact_grace": 0.0,
+      "release_speed_tolerance": 0.0,
+      "release_position_tolerance": 0.0,
+      "post_ready_seconds": 0.0,
+      "fixed_throw_probability": 0.0
+    },
+    "test_object": "default",
+    "roll_speed": null,
+    "roll_wait_guard": false,
+    "ycb_collision": "auto",
+    "ycb_joint_damping": null,
+    "test_env_time": null,
+    "basket_viewer_speed": 1.0,
+    "basket_self_collision_debug": false,
+    "vector_mode": "auto"
+  },
+  "sources": {
+    "ycb_objects/evaluate_trained_balls.py": "0e1264a2b27d116c4f54cd1dfea2b4f672693008b3ae12bae4950cf2be5131b6",
+    "gym_dcmm/envs/roll_physical.py": "45f6822177d7fb11d02763dc98118a1a37a6c12a9cbc75088cfb10cc1e8c82b3",
+    "gym_dcmm/envs/bounce_physical_v2.py": "baee27209d6390247d2348aecc058833d16c5f61211efc60974fefbf4b686a59",
+    "gym_dcmm/envs/DcmmVecEnv.py": "57161831c451e9fb20245058c5be05b2d33622ad65aadbd1fec2d73da860397e",
+    "gym_dcmm/utils/roll_evaluation.py": "d449e4193e17153ec1d2bdf1e3c5cb83f2e924650c3f5a337156bfc2e2e95da6",
+    "gym_dcmm/envs/DcmmVecEnv_bounce_july22.py": "bcc29c6ff56ce9a2b05944dffe7f318bdff4e8c7b15d5c2beb9adab26b6e7e36",
+    "gym_dcmm/algs/ppo_dcmm_july22/ppo_dcmm_catch_one_stage.py": "19ca42a85a3d4454b53bc895438931b3f245dc85c86c2fac163b230bd399aacd",
+    "gym_dcmm/algs/ppo_dcmm_july22/ppo_dcmm_track.py": "2e37514d41dcd4ebc54d389397c347284ffca6d918a63f71c4b4083550911f92",
+    "gym_dcmm/algs/ppo_dcmm_july22/models_track.py": "1a1fb8b1bd658cbbdc608a775342d7039e8a6e5e0bca58b77ba570921e0d94e3",
+    "gym_dcmm/algs/ppo_dcmm_july22/utils.py": "4f7dac3a2c2ea83c884c3888dfed9804432b67d451e3c0c8f8f2d908ecc3d738",
+    "gym_dcmm/algs/ppo_dcmm_july22/experience.py": "a67f19b6aeeac134bd4b7a6afa7f63efee23a49bbcb85e8cddcadab16eff323a",
+    "gym_dcmm/algs/ppo_dcmm_july22/models_catch.py": "42de90f24c40cef500fc2f223e4e9c643764c39ed0f329326e4d274ab6fbc520",
+    "gym_dcmm/algs/ppo_dcmm_july22/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "gym_dcmm/algs/ppo_dcmm_july22/ppo_dcmm_catch_two_stage.py": "4e3b7c883510fb572037b1b7b762f2f397c0de65414e28c6ec73d779a27eb851"
+  }
+}

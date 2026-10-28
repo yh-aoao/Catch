@@ -1,0 +1,13 @@
+# Fixed base command and fixed near target; practice physically settled throws.
+defaults:
+  - basket_throw_first
+  - _self_
+basket_training_stage: hold
+basket_parking_checkpoint: ''
+output_name: BasketHold
+basket_mobile:
+  hold_only: true
+  fixed_throw_probability: 1.0
+  hold_time_range: [0.3, 0.6]
+  collision_free_spawn: true
+  hold_aim_bonus: 4.0

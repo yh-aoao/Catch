@@ -9,6 +9,6 @@ from .ppo_dcmm_catch_one_stage import PPO_Catch_OneStage
 
 class PPO_Basket_TwoStage(PPO_Catch_OneStage):
     def __init__(self, env, output_dif, full_config):
-        if full_config.get('basket_training_stage') not in ('parking', 'throw'):
+        if full_config.get('basket_training_stage') not in ('parking', 'throw', 'hold'):
             raise ValueError('Basket two-stage PPO requires parking or throw stage')
         super().__init__(env, output_dif, full_config)

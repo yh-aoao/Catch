@@ -33,6 +33,22 @@ def main(config: DictConfig):
     if config.get('roll_material_file'):
         config.roll_material_file=to_absolute_path(config.roll_material_file)
     physical_bounce = str(config.bounce_physics) == 'physical_v2'
+    bounce_grasp_version = str(config.get('bounce_grasp_version', 'legacy'))
+    if bounce_grasp_version not in ('legacy', 'controlled_hold_v1'):
+        raise ValueError('bounce_grasp_version must be legacy or controlled_hold_v1')
+    controlled_bounce = bounce_grasp_version == 'controlled_hold_v1'
+    if controlled_bounce and (not physical_bounce or config.object_motion != 'bounce'
+                              or config.task != 'Catching_TwoStage'):
+        raise ValueError('controlled_hold_v1 requires physical_v2 Bounce Catching_TwoStage')
+    if not controlled_bounce and config.get('bounce_grasp'):
+        raise ValueError('bounce_grasp options require bounce_grasp_version=controlled_hold_v1')
+    if controlled_bounce:
+        grasp_options = OmegaConf.to_container(config.bounce_grasp, resolve=True) if config.get('bounce_grasp') else {}
+        reward_discount = float(config.train.ppo.gamma)
+        if 'reward_discount' in grasp_options and abs(float(grasp_options['reward_discount'])-reward_discount) > 1e-12:
+            raise ValueError('bounce_grasp.reward_discount must match train.ppo.gamma')
+        grasp_options['reward_discount'] = reward_discount
+        config.bounce_grasp = grasp_options
     if config.get('bounce_ball_weights') is not None and (not physical_bounce or config.bounce_ball_mode != 'mixed'):
         raise ValueError('bounce_ball_weights requires physical_v2 and bounce_ball_mode=mixed')
     if physical_bounce and (config.object_motion != 'bounce' or config.object_eval):
@@ -79,9 +95,19 @@ def main(config: DictConfig):
     if config.test_object != 'default':
         if not config.test or config.object_motion not in ('throw', 'roll', 'bounce') or config.object_eval:
             raise ValueError('test_object requires test=True, object_eval=false, throw/roll/bounce')
+    if config.get('basket_eval_hand_flex') is not None and not (config.test and config.basket_fixed_base_training and config.object_motion in ('basket','throw_basket') and config.basket_reward_version == 'basket_aim_v1'):
+        raise ValueError('basket_eval_hand_flex is only for fixed Basket aiming evaluation')
+    if (config.get('basket_fixed_hand_flex') is not None or config.get('basket_fixed_arm_drive_bonus',0.)) and not (config.basket_fixed_base_training and config.object_motion in ('basket','throw_basket') and config.basket_reward_version == 'basket_aim_v1'):
+        raise ValueError('Fixed grip/arm drive requires fixed Basket aiming task')
+    if config.get('basket_fixed_physical',False) and not (config.basket_fixed_base_training and (config.basket_fixed_arm_drive_bonus > 0 or config.get('basket_carry_reward',False)) and config.basket_reward_version == 'basket_aim_v1'):
+        raise ValueError('Physical fixed Basket requires fixed aiming and arm-drive reward')
+    if config.get('basket_carry_reward',False) and not config.get('basket_fixed_physical',False):
+        raise ValueError('Basket carry shaping requires collision-free physical preparation')
     mobile_basket = config.basket_reward_version == 'basket_mobile_v1'
     basket_stage = str(config.get('basket_training_stage', 'joint'))
-    if basket_stage not in ('joint', 'parking', 'throw') or (basket_stage != 'joint' and not mobile_basket):
+    if config.get('basket_pose_eval_override', False) and not (config.test and mobile_basket and basket_stage == 'hold'):
+        raise ValueError('basket_pose_eval_override is only for Basket hold-policy evaluation')
+    if basket_stage not in ('joint', 'parking', 'throw', 'hold') or (basket_stage != 'joint' and not mobile_basket):
         raise ValueError('Basket training stage must be joint, parking or throw; staged training requires Mobile Basket')
     warm_start = str(config.get('basket_warm_start', ''))
     if warm_start and not mobile_basket:
@@ -96,6 +122,8 @@ def main(config: DictConfig):
             raise ValueError('basket_mobile_v1 requires movable Basket joint_velocity OneStage, no Tracking checkpoint/probe/object_eval')
         if bool(config.basket_mobile.parking_only) != (basket_stage == 'parking'):
             raise ValueError('parking_only must be true exactly in Basket parking stage')
+        if bool(config.basket_mobile.hold_only) != (basket_stage == 'hold'):
+            raise ValueError('hold_only must be true exactly in Basket hold stage')
         if basket_stage == 'parking' and warm_start:
             raise ValueError('Parking stage trains only base2 from scratch; leave basket_warm_start empty')
         if basket_stage == 'throw' and not config.test:
@@ -108,7 +136,10 @@ def main(config: DictConfig):
             raise ValueError('Leave checkpoint_catching empty for Mobile training; use basket_warm_start for explicit fixed-base actor migration')
         if config.test and not config.checkpoint_catching:
             raise ValueError('Mobile evaluation requires a basket_mobile_v1 checkpoint')
-        print('[basket-mobile-v1] random target per episode; physical carry -> settle -> throw; policy=base2+arm6+hand12; initialization=' + ('fixed_actor_transfer' if warm_start else 'scratch'), flush=True)
+        if basket_stage == 'hold':
+            print('[basket-hold] fixed base command and fixed near target; physical hold -> throw; policy=arm18; initialization=' + ('actor_transfer' if warm_start else 'scratch'), flush=True)
+        else:
+            print('[basket-mobile-v1] random target per episode; physical carry -> settle -> throw; policy=base2+arm6+hand12; initialization=' + ('fixed_actor_transfer' if warm_start else 'scratch'), flush=True)
     if config.basket_reward_version in ('launch_v4', 'launch_v5', 'launch_simple_v1', 'basket_aim_v1'):
         if config.object_motion not in ('basket', 'throw_basket') or config.basket_arm_control != 'joint_velocity' or not config.basket_fixed_base_training or config.task != 'Catching_OneStage':
             raise ValueError('launch_v4/v5/simple requires fixed-base Basket joint_velocity Catching_OneStage')
@@ -133,8 +164,13 @@ def main(config: DictConfig):
                   'environment=DcmmVecEnv_bounce_july22.py PPO=ppo_dcmm_july22.track success=touch_only; catch=5fe75d5f', flush=True)
         else:
             from gym_dcmm.algs.ppo_dcmm_5fe75d5f.ppo_dcmm_track import PPO_Track as TrackingAgent
-            print('[bounce-catch-baseline] commit=5fe75d5f1e151c1fdc686fbf8f104db3870b2844 '
-                  'environment=DcmmVecEnv.py::BounceEnv config=original success=environment_flag', flush=True)
+            if controlled_bounce:
+                from gym_dcmm.algs.ppo_dcmm_5fe75d5f.ppo_dcmm_catch_hold import PPO_Catch_Hold as TwoStageAgent
+                print('[bounce-catch] version=controlled_hold_v1 environment=bounce_grasp.py::BounceGraspEnv '
+                      'policy=ppo_dcmm_catch_hold success=continuous_unsupported_hold', flush=True)
+            else:
+                print('[bounce-catch-baseline] commit=5fe75d5f1e151c1fdc686fbf8f104db3870b2844 '
+                      'environment=DcmmVecEnv.py::BounceEnv config=original success=environment_flag', flush=True)
     elif config.object_motion == 'roll':
         from gym_dcmm.algs.ppo_dcmm_645edc4.ppo_dcmm_track import PPO_Track as TrackingAgent
         from gym_dcmm.algs.ppo_dcmm_645edc4.ppo_dcmm_catch_two_stage import PPO_Catch_TwoStage as TwoStageAgent
@@ -190,7 +226,8 @@ def main(config: DictConfig):
         print('[bounce-physics] stable_v1: RK4 dt=0.000125; control=0.002; policy=0.04 s; reward unchanged', flush=True)
     if physical_bounce:
         env_name = 'gym_dcmm/BouncePhysicalWorld-v2'
-        print('[bounce-physics] physical_v2: consistent sphere inertia; zero armature; explicit ground pair; nearer interception launch; reward unchanged', flush=True)
+        print('[bounce-physics] physical_v2: consistent sphere inertia; zero armature; explicit ground pair; '
+              'catch=' + bounce_grasp_version, flush=True)
         print('[bounce-launch] mode=' + str(config.bounce_launch) + '; baseball_intercept_v1 applies only when the sampled ball is baseball', flush=True)
     task = 'Tracking' if config.task == 'Tracking' else 'Catching'
     print("config.num_envs: ", config.num_envs)
@@ -206,7 +243,7 @@ def main(config: DictConfig):
     env = gym.make_vec(env_name, num_envs=int(config.num_envs), vectorization_mode=vector_mode,
                     task=task, camera_name=["top"],
                     render_per_step=False,
-                    render_mode = None if (physical_bounce or physical_roll) and not config.viewer and not config.imshow_cam else "rgb_array",
+                    render_mode = None if (physical_bounce or physical_roll or config.get('basket_carry_reward',False)) and not config.viewer and not config.imshow_cam else "rgb_array",
                     object_name = "object",
                     img_size = config.train.ppo.img_dim,
                     imshow_cam = config.imshow_cam, 
@@ -221,6 +258,12 @@ def main(config: DictConfig):
                     **({'basket_self_collision_debug': bool(config.basket_self_collision_debug),
                         'basket_fixed_base_training': config.basket_fixed_base_training, 'basket_control_probe': str(config.basket_control_probe),
                         'basket_arm_control': str(config.basket_arm_control),
+                        'basket_eval_hand_flex': list(config.basket_eval_hand_flex) if config.get('basket_eval_hand_flex') is not None else None,
+                        'basket_fixed_hand_flex': list(config.basket_fixed_hand_flex) if config.get('basket_fixed_hand_flex') is not None else None,
+                        'basket_fixed_arm_drive_bonus': float(config.get('basket_fixed_arm_drive_bonus',0.)),
+                        'basket_fixed_physical': bool(config.get('basket_fixed_physical',False)),
+                        'basket_carry_reward': bool(config.get('basket_carry_reward',False)),
+                        'basket_carry_options': OmegaConf.to_container(config.basket_carry_options,resolve=True),
                         'basket_reward_version': str(config.basket_reward_version),
                         'basket_mobile_options': OmegaConf.to_container(config.basket_mobile, resolve=True) if mobile_basket else None,
                         'basket_curriculum_stage': int(config.basket_curriculum_stage)}
@@ -242,7 +285,10 @@ def main(config: DictConfig):
                     **({'bounce_ball_mode': str(config.bounce_ball_mode),
                         'bounce_ball_weights': OmegaConf.to_container(config.bounce_ball_weights, resolve=True) if config.bounce_ball_weights is not None else None,
                         'bounce_material_file': config.bounce_material_file,
-                        'bounce_v2': OmegaConf.to_container(config.bounce_v2, resolve=True)}
+                        'bounce_v2': OmegaConf.to_container(config.bounce_v2, resolve=True),
+                        **({'bounce_grasp_version': bounce_grasp_version,
+                            'bounce_grasp': OmegaConf.to_container(config.bounce_grasp, resolve=True)
+                                if config.get('bounce_grasp') else {}} if controlled_bounce else {})}
                        if physical_bounce else {}))
 
     output_dif = os.path.join('outputs', config.output_name)
@@ -259,6 +305,10 @@ def main(config: DictConfig):
     if physical_bounce:
         from gym_dcmm.envs.bounce_physical_v2 import write_provenance
         write_provenance(output_dif, OmegaConf.to_container(config, resolve=True))
+    if controlled_bounce:
+        from gym_dcmm.envs.bounce_grasp import write_provenance
+        write_provenance(output_dif, OmegaConf.to_container(config, resolve=True))
+        env.call('set_bounce_grasp_log_dir', os.path.join(output_dif, 'bounce_grasp'))
     if adaptive_roll:
         from gym_dcmm.envs.roll_adaptive import write_provenance
         write_provenance(output_dif, OmegaConf.to_container(config, resolve=True))

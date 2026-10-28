@@ -1,0 +1,10 @@
+# Use only after the held-throw policy has passed delayed-throw evaluation.
+defaults:
+  - basket_throw_first
+  - _self_
+basket_warm_start: ??? # pass the NEW basket_hold checkpoint explicitly
+output_name: BasketAfterHold
+basket_mobile:
+  collision_free_spawn: true
+  hold_time_range: [0.3, 2.0]
+  hold_aim_bonus: 4.0

@@ -35,16 +35,21 @@ class PPO_Catch_OneStage(object):
                              and bool(full_config.get('basket_fixed_base_training', False)))
         self.basket_arm_control = str(full_config.get('basket_arm_control', 'cartesian'))
         self.mobile_basket = full_config.get('basket_reward_version') == 'basket_mobile_v1'
+        self.fixed_physical = bool(full_config.get('basket_fixed_physical',False))
+        self.carry_reward = bool(full_config.get('basket_carry_reward',False))
+        from gym_dcmm.utils.basket_carry import make_options
+        self.carry_options = make_options(full_config.get('basket_carry_options',{}))
         self.basket_training_stage = str(full_config.get('basket_training_stage', 'joint'))
         self.parking_policy = None
-        self.mask_navigation_updates = bool(full_config.get('basket_mask_navigation_updates', False)) and self.basket_training_stage == 'throw'
+        self.pose_eval_override = bool(full_config.get('basket_pose_eval_override',False))
+        self.mask_navigation_updates = bool(full_config.get('basket_mask_navigation_updates', False)) and self.basket_training_stage in ('throw','hold')
         self.basket_reward_version = str(full_config.get('basket_reward_version', 'legacy'))
         self.mobile_seed = int(full_config.seed) if int(full_config.seed) >= 0 else None
         self.mobile_base_scale = float(full_config.get('basket_mobile', {}).get('max_speed', .5))
         options = full_config.get('basket_mobile', {})
         self.mobile_options = OmegaConf.to_container(options, resolve=True) if OmegaConf.is_config(options) else dict(options)
         self.basket_transfer_metadata = {}
-        self.input_normalization_frozen = False
+        self.input_normalization_frozen = bool(full_config.get('basket_freeze_input_normalization',False))
         self.basket_viewer_speed = 0.
         if (self.fixed_basket or self.mobile_basket) and full_config.test and full_config.viewer:
             self.basket_viewer_speed = float(full_config.get('basket_viewer_speed', 1.))
@@ -146,7 +151,7 @@ class PPO_Catch_OneStage(object):
             'parking_success', 'qualified_release', 'basket_hit',
             'safe_basket_success', 'robot_dangerous_collision')} if self.mobile_basket else {}
         self.mobile_group_metrics = {key: AverageScalarMeter(200) for key in (
-            'rehearsal_success', 'mobile_success')} if self.mobile_basket and self.mobile_options.get('fixed_throw_probability', 0.) else {}
+            'rehearsal_success', 'mobile_success')} if self.mobile_basket and self.mobile_options.get('fixed_throw_probability', 0.) and self.basket_training_stage != 'hold' else {}
         self.obs = None
         self.epoch_num = 0
         self.storage = ExperienceBuffer(
@@ -231,7 +236,7 @@ class PPO_Catch_OneStage(object):
         start_time = time.time()
         _t = time.time()
         _last_t = time.time()
-        reset_obs, _ = self.env.reset(seed=self.mobile_seed) if self.mobile_basket else self.env.reset()
+        reset_obs, _ = self.env.reset(seed=self.mobile_seed) if (self.mobile_basket or self.fixed_basket) else self.env.reset()
         self.obs = {'obs': self.obs2tensor(reset_obs)}
         self.agent_steps = self.batch_size
 
@@ -248,18 +253,29 @@ class PPO_Catch_OneStage(object):
                 self.batch_size) \
                 / (time.time() - _last_t)
             _last_t = time.time()
+            mean_rewards = self.episode_rewards.get_mean()
+            mean_lengths = self.episode_lengths.get_mean()
+            mean_success = self.episode_success.get_mean()
+            current_label = f'{mean_rewards:.2f}' if len(self.episode_rewards) else 'n/a'
+            best_label = f'{self.best_rewards:.2f}' if self.best_rewards != -10000 else 'n/a'
             info_string = f'Agent Steps: {int(self.agent_steps // 1e3):04}K | FPS: {all_fps:.1f} | ' \
                             f'Last FPS: {last_fps:.1f} | ' \
                             f'Collect Time: {self.data_collect_time / 60:.1f} min | ' \
                             f'Train RL Time: {self.rl_train_time / 60:.1f} min | ' \
-                            f'Current Best: {self.best_rewards:.2f}'
+                            f'Current Reward: {current_label} | Best Reward: {best_label}'
+            if self.mobile_group_metrics:
+                mobile = self.mobile_group_metrics['mobile_success']
+                replay = self.mobile_group_metrics['rehearsal_success']
+                info_string += (' | Mobile SR: ' + (f'{mobile.get_mean():.2%}' if len(mobile) else 'n/a')
+                                + ' | Replay SR: ' + (f'{replay.get_mean():.2%}' if len(replay) else 'n/a'))
+            elif self.mobile_basket and self.basket_training_stage == 'hold':
+                info_string += ' | HeldThrow SR: ' + (f'{mean_success:.2%}' if len(self.episode_success) else 'n/a')
+            if self.fixed_physical:
+                info_string += (' | Basket SR: ' if self.carry_reward else ' | QualifiedThrow SR: ') + (f'{mean_success:.2%}' if len(self.episode_success) else 'n/a')
             print(info_string)
 
             self.write_stats(a_losses, c_losses, b_losses, entropies, kls)
 
-            mean_rewards = self.episode_rewards.get_mean()
-            mean_lengths = self.episode_lengths.get_mean()
-            mean_success = self.episode_success.get_mean()
             # print("mean_rewards: ", mean_rewards)
             self.writer.add_scalar(
                 'metrics/episode_rewards_per_step', mean_rewards, self.agent_steps)
@@ -280,7 +296,12 @@ class PPO_Catch_OneStage(object):
                     self.save(os.path.join(self.nn_dir, checkpoint_name))
                 self.save(os.path.join(self.nn_dir, f'{ckpt_prefix}_last'))
 
-            if mean_rewards > self.best_rewards and (not self.mobile_basket or len(self.episode_rewards)):
+            success_meter = self.mobile_group_metrics.get('mobile_success', self.episode_success)
+            # Short replay episodes finish first. Their early reward average is
+            # not representative of the mixed task or mobile performance.
+            reward_eligible = (len(success_meter) >= 50 if self.mobile_group_metrics
+                               else (not self.mobile_basket or bool(len(self.episode_rewards))))
+            if mean_rewards > self.best_rewards and reward_eligible:
                 print(f'save current best reward: {mean_rewards:.2f}')
                 # remove previous best file
                 prev_best_ckpt = os.path.join(self.nn_dir, f'{ckpt_prefix}_best_reward_{self.best_rewards:.2f}.pth')
@@ -289,8 +310,7 @@ class PPO_Catch_OneStage(object):
                 self.best_rewards = mean_rewards
                 self.save(os.path.join(self.nn_dir, f'{ckpt_prefix}_best_reward_{mean_rewards:.2f}'))
 
-            success_meter = self.mobile_group_metrics.get('mobile_success', self.episode_success)
-            if self.mobile_basket and len(success_meter) >= 50 and success_meter.get_mean() > self.best_mobile_success:
+            if (self.mobile_basket or self.fixed_physical) and len(success_meter) >= 50 and success_meter.get_mean() > self.best_mobile_success:
                 self.best_mobile_success = success_meter.get_mean()
                 self.save(os.path.join(self.nn_dir, f'{ckpt_prefix}_best_success'))
 
@@ -311,6 +331,14 @@ class PPO_Catch_OneStage(object):
         if self.value_mean_std:
             weights['value_mean_std'] = self.value_mean_std.state_dict()
         weights['action_layout'] = 'arm6_hand12' if self.fixed_basket else 'base2_arm6_hand12'
+        if self.fixed_physical:
+            weights['basket_fixed_protocol'] = 'aim_carry_v1' if self.carry_reward else 'physical_settle_forward_v1'
+            if self.carry_reward:
+                weights['basket_carry_options'] = self.carry_options
+            weights['input_normalization_frozen'] = self.input_normalization_frozen
+            weights['training_metrics'] = dict(agent_steps=int(self.agent_steps),
+                episode_success=float(self.episode_success.get_mean()),
+                episode_reward=float(self.episode_rewards.get_mean()))
         if self.fixed_basket or self.mobile_basket:
             weights['basket_arm_control'] = getattr(self, 'basket_arm_control', 'cartesian')
         if self.mobile_basket:
@@ -320,11 +348,18 @@ class PPO_Catch_OneStage(object):
             weights['basket_transfer'] = self.basket_transfer_metadata
             weights['input_normalization_frozen'] = self.input_normalization_frozen
             weights['basket_training_stage'] = self.basket_training_stage
+            weights['training_metrics'] = dict(agent_steps=int(self.agent_steps),
+                epoch=int(self.epoch_num), episode_reward=float(self.episode_rewards.get_mean()),
+                episode_success=float(self.episode_success.get_mean()),
+                grouped_success={key: float(meter.get_mean()) for key,meter in self.mobile_group_metrics.items()},
+                grouped_counts={key: int(len(meter)) for key,meter in self.mobile_group_metrics.items()})
             if self.basket_training_stage == 'parking':
                 weights['action_layout'] = 'base2_parking'
             elif self.basket_training_stage == 'throw':
                 weights['action_layout'] = 'frozen_base2_arm6_hand12'
                 weights['parking_policy'] = self.parking_policy.export()
+            elif self.basket_training_stage == 'hold':
+                weights['action_layout'] = 'held_arm6_hand12'
         torch.save(weights, f'{name}.pth')
 
     def restore_train(self, fn):
@@ -353,9 +388,16 @@ class PPO_Catch_OneStage(object):
                 self.parking_policy = FrozenParkingPolicy(checkpoint['parking_policy'], self.mobile_options, self.device)
 
     def _validate_mobile_checkpoint(self, checkpoint):
+        if checkpoint.get('basket_fixed_protocol') == 'aim_carry_v1':
+            if not getattr(self,'carry_reward',False):
+                raise ValueError('Carry-shaped checkpoint requires basket_aim_carry')
+            if checkpoint.get('basket_carry_options') != self.carry_options:
+                raise ValueError('Carry reward options differ from the checkpoint')
+        if checkpoint.get('basket_fixed_protocol') and not getattr(self,'fixed_physical',False):
+            raise ValueError('This checkpoint requires basket_physical_arm: physical preparation and qualified release')
         stage = getattr(self, 'basket_training_stage', 'joint')
         layout = {'joint': 'base2_arm6_hand12', 'parking': 'base2_parking',
-                  'throw': 'frozen_base2_arm6_hand12'}[stage]
+                  'throw': 'frozen_base2_arm6_hand12', 'hold':'held_arm6_hand12'}[stage]
         if self.mobile_basket and (checkpoint.get('basket_reward_version') != 'basket_mobile_v1'
                 or checkpoint.get('basket_arm_control') != 'joint_velocity'
                 or checkpoint.get('basket_observation_version') != 'mobile51_v1'
@@ -369,6 +411,18 @@ class PPO_Catch_OneStage(object):
             # Evaluation may select pure mobile or pure fixed-task rehearsal.
             saved_options.pop('fixed_throw_probability', None)
             current_options.pop('fixed_throw_probability', None)
+            if stage == 'hold':
+                # Delayed-throw evaluation must be able to test wait-time bins.
+                saved_options.pop('hold_time_range', None)
+                current_options.pop('hold_time_range', None)
+                if getattr(self,'pose_eval_override',False):
+                    changed={}
+                    for key in ('hold_arm_offset_deg','hold_hand_flex','hold_thumb_flex','hold_ball_local'):
+                        if saved_options.get(key)!=current_options.get(key):
+                            changed[key]=dict(training=saved_options.get(key),evaluation=current_options.get(key))
+                        saved_options.pop(key,None)
+                        current_options.pop(key,None)
+                    print('[basket-pose-evaluation] explicit pose changes: '+str(changed),flush=True)
             if saved_options != current_options:
                 raise ValueError('Mobile checkpoint task options differ; use its training preset/options for evaluation')
 
@@ -556,6 +610,10 @@ class PPO_Catch_OneStage(object):
             base = self.parking_policy.actions(self.obs['obs']).cpu().numpy()*self.mobile_base_scale
             return dict(base=base, arm=actions[:, :6]*self.action_catch_denorm[1],
                         hand=actions[:, 6:18]*self.action_catch_denorm[2])
+        if getattr(self, 'mobile_basket', False) and stage == 'hold':
+            return dict(base=np.zeros((len(actions),2)),
+                        arm=actions[:,:6]*self.action_catch_denorm[1],
+                        hand=actions[:,6:18]*self.action_catch_denorm[2])
         if self.fixed_basket:
             # Rollout code pads to the environment width on the right; ignore padding.
             return dict(base=np.zeros((len(actions), 2), dtype=actions.dtype),
@@ -708,7 +766,7 @@ class PPO_Catch_OneStage(object):
             successes, _ = terminal_metrics(infos, dones, truncates)
             self.episode_test_success.update(torch.tensor(successes, dtype=torch.float32, device=self.device)[done_indices])
             self._update_mobile_metrics(infos, dones)
-            if self.mobile_basket:
+            if self.mobile_basket or self.fixed_basket:
                 self.mobile_test_episodes += int(np.count_nonzero(dones))
             assert isinstance(infos, dict), 'Info Should be a Dict'
             for k, v in infos.items():
@@ -720,7 +778,7 @@ class PPO_Catch_OneStage(object):
 
             self.current_rewards = self.current_rewards * not_dones.unsqueeze(1)
             self.current_lengths = self.current_lengths * not_dones
-            if self.mobile_basket and self.mobile_test_episodes >= self.ppo_config['test_num_episodes']:
+            if (self.mobile_basket or self.fixed_basket) and self.mobile_test_episodes >= self.ppo_config['test_num_episodes']:
                 break
         
         res_dict = self.model_act(self.obs)
@@ -745,9 +803,9 @@ class PPO_Catch_OneStage(object):
             print("mean_success: ", mean_success)
             if self.mobile_basket:
                 print('basket_mobile:', {key: meter.get_mean() for key, meter in dict(self.mobile_metrics, **self.mobile_group_metrics).items()})
-                self.test_steps += self.horizon_length
-                if self.mobile_test_episodes >= self.ppo_config['test_num_episodes']:
-                    break
+            self.test_steps += self.horizon_length
+            if (self.mobile_basket or self.fixed_basket) and self.mobile_test_episodes >= self.ppo_config['test_num_episodes']:
+                break
             # wandb.log({
             #     'metrics/episode_test_rewards': mean_rewards,
             #     'metrics/episode_test_lengths': mean_lengths,

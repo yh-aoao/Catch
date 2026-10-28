@@ -1,0 +1,21 @@
+# Original 39-point objective + additive forward carry / palm retention shaping.
+defaults:
+  - basket_physical_arm
+  - _self_
+basket_carry_reward: true
+basket_fixed_arm_drive_bonus: 0.0
+output_name: BasketAimCarry
+# This policy already adapts to natural settled support; 24.85 used the old discounted hit reward.
+checkpoint_catching: /home/isee/Catch/catch_it_copy/outputs/BasketPhysicalArm_Continue/2026-10-28/18:10:13/nn/throw_basket_catch_best_reward_24.85.pth
+basket_carry_options:
+  forward_distance: 0.06
+  forward_speed: 0.30
+  forward_bonus: 6.0
+  position_bonus: 2.0
+  slip_cost: 2.0
+  release_bonus: 4.0
+  local_tolerance: [0.008, 0.015, 0.010]
+  local_sigma: [0.015, 0.020, 0.015]
+train:
+  ppo:
+    learning_rate: 0.00005

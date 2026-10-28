@@ -1,0 +1,15 @@
+# Preserve the verified fixed35/arm18 task, new cup, original spawn and timing.
+defaults:
+  - basket_fixed
+  - _self_
+basket_arm_control: joint_velocity
+basket_reward_version: basket_aim_v1
+basket_fixed_hand_flex: [0.8, 0.7, 0.7]
+basket_fixed_arm_drive_bonus: 2.0
+basket_freeze_input_normalization: true
+checkpoint_catching: /home/isee/Catch/10-25/throw_basket_catch_best_reward_39.44.pth
+output_name: Basket39_ArmDrive
+train:
+  ppo:
+    learning_rate: 0.0001
+    max_agent_steps: 2000000

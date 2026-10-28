@@ -1,0 +1,207 @@
+{
+  "episodes_per_condition": 100,
+  "total_episodes": 600,
+  "seed_start": 0,
+  "seed_end": 99,
+  "inference": "Deterministic policy mean with saved observation normalization; clamped/padded/scaled exactly as PPO test",
+  "material_hash_matches_training": {
+    "roll_track": true,
+    "bounce_catch": true
+  },
+  "results": [
+    {
+      "episodes": 100,
+      "successes": 65,
+      "success_rate": 0.65,
+      "wilson_95_interval": [
+        0.5525444329688796,
+        0.7363575175690247
+      ],
+      "environment_successes": 36,
+      "hand_contact_episodes": 65,
+      "continuous_hand_contact_0p3s": 0,
+      "successes_with_continuous_contact_0p3s": 0,
+      "reasons": {
+        "collision_or_failure": 61,
+        "track_touch": 36,
+        "timeout": 3
+      },
+      "mean_reward": 21.7023772607124,
+      "mean_episode_sim_seconds": 1.882959999999994,
+      "wall_seconds": 105.43526513699908,
+      "case": "roll_track",
+      "object": "original",
+      "task": "roll_track",
+      "checkpoint": "/home/isee/Catch/roll_three_ball_tracking_legacy_reward_v1_seed123/2026-10-28/11:36:06/nn/roll_track_best_reward_23.86.pth",
+      "checkpoint_sha256": "d188548fc27be1ea98cd98d607d4fd7304d416db0772a1e2241e977b7df65687",
+      "criterion": "roll_eval_success: hand interception after full front-edge departure, no table/floor support; not grasping",
+      "provenance": "/home/isee/Catch/analysis_artifacts/trained_ball_evaluation_20261028_v1/roll_track_original/provenance.json"
+    },
+    {
+      "episodes": 100,
+      "successes": 53,
+      "success_rate": 0.53,
+      "wilson_95_interval": [
+        0.4328885697009936,
+        0.6248918204065872
+      ],
+      "environment_successes": 21,
+      "hand_contact_episodes": 53,
+      "continuous_hand_contact_0p3s": 0,
+      "successes_with_continuous_contact_0p3s": 0,
+      "reasons": {
+        "collision_or_failure": 75,
+        "track_touch": 21,
+        "timeout": 4
+      },
+      "mean_reward": 22.69699255967497,
+      "mean_episode_sim_seconds": 1.9429799999999913,
+      "wall_seconds": 110.01804632099811,
+      "case": "roll_track",
+      "object": "tennis_ball",
+      "task": "roll_track",
+      "checkpoint": "/home/isee/Catch/roll_three_ball_tracking_legacy_reward_v1_seed123/2026-10-28/11:36:06/nn/roll_track_best_reward_23.86.pth",
+      "checkpoint_sha256": "d188548fc27be1ea98cd98d607d4fd7304d416db0772a1e2241e977b7df65687",
+      "criterion": "roll_eval_success: hand interception after full front-edge departure, no table/floor support; not grasping",
+      "provenance": "/home/isee/Catch/analysis_artifacts/trained_ball_evaluation_20261028_v1/roll_track_tennis_ball/provenance.json"
+    },
+    {
+      "episodes": 100,
+      "successes": 63,
+      "success_rate": 0.63,
+      "wilson_95_interval": [
+        0.5322052958094291,
+        0.7181763946567546
+      ],
+      "environment_successes": 30,
+      "hand_contact_episodes": 63,
+      "continuous_hand_contact_0p3s": 0,
+      "successes_with_continuous_contact_0p3s": 0,
+      "reasons": {
+        "track_touch": 30,
+        "collision_or_failure": 69,
+        "timeout": 1
+      },
+      "mean_reward": 22.791926696379218,
+      "mean_episode_sim_seconds": 1.8841799999999946,
+      "wall_seconds": 110.22729500000423,
+      "case": "roll_track",
+      "object": "baseball",
+      "task": "roll_track",
+      "checkpoint": "/home/isee/Catch/roll_three_ball_tracking_legacy_reward_v1_seed123/2026-10-28/11:36:06/nn/roll_track_best_reward_23.86.pth",
+      "checkpoint_sha256": "d188548fc27be1ea98cd98d607d4fd7304d416db0772a1e2241e977b7df65687",
+      "criterion": "roll_eval_success: hand interception after full front-edge departure, no table/floor support; not grasping",
+      "provenance": "/home/isee/Catch/analysis_artifacts/trained_ball_evaluation_20261028_v1/roll_track_baseball/provenance.json"
+    },
+    {
+      "episodes": 100,
+      "successes": 24,
+      "success_rate": 0.24,
+      "wilson_95_interval": [
+        0.16691325556948772,
+        0.33232336349814473
+      ],
+      "environment_successes": 24,
+      "hand_contact_episodes": 97,
+      "continuous_hand_contact_0p3s": 23,
+      "successes_with_continuous_contact_0p3s": 20,
+      "reasons": {
+        "ball_left": 71,
+        "catch_success": 24,
+        "failure_unspecified": 5
+      },
+      "mean_reward": 296.95538305130486,
+      "mean_episode_sim_seconds": 1.7036799999999621,
+      "wall_seconds": 412.8735554550003,
+      "case": "bounce_catch",
+      "object": "original",
+      "task": "bounce_catch",
+      "checkpoint": "/home/isee/Catch/bounce_three_ball_catching_v1_seed123/2026-10-28/11:36:32/nn/bounce_catch_best_reward_288.46.pth",
+      "checkpoint_sha256": "5d580d59cf4d3cdace14457351c35434fa44aaf82a08babfe5a2b8968bb2b63d",
+      "criterion": "bounce_catch_proximity_v2: horizon reached, no failure, grasp stage, ee distance <0.25m; not strict hold",
+      "provenance": "/home/isee/Catch/analysis_artifacts/trained_ball_evaluation_20261028_v1/bounce_catch_original/provenance.json"
+    },
+    {
+      "episodes": 100,
+      "successes": 34,
+      "success_rate": 0.34,
+      "wilson_95_interval": [
+        0.25461520797348164,
+        0.43722271145275377
+      ],
+      "environment_successes": 34,
+      "hand_contact_episodes": 97,
+      "continuous_hand_contact_0p3s": 36,
+      "successes_with_continuous_contact_0p3s": 28,
+      "reasons": {
+        "catch_success": 34,
+        "ball_left": 60,
+        "failure_unspecified": 6
+      },
+      "mean_reward": 396.4540056111636,
+      "mean_episode_sim_seconds": 1.8843600000000098,
+      "wall_seconds": 474.32929757700185,
+      "case": "bounce_catch",
+      "object": "tennis_ball",
+      "task": "bounce_catch",
+      "checkpoint": "/home/isee/Catch/bounce_three_ball_catching_v1_seed123/2026-10-28/11:36:32/nn/bounce_catch_best_reward_288.46.pth",
+      "checkpoint_sha256": "5d580d59cf4d3cdace14457351c35434fa44aaf82a08babfe5a2b8968bb2b63d",
+      "criterion": "bounce_catch_proximity_v2: horizon reached, no failure, grasp stage, ee distance <0.25m; not strict hold",
+      "provenance": "/home/isee/Catch/analysis_artifacts/trained_ball_evaluation_20261028_v1/bounce_catch_tennis_ball/provenance.json"
+    },
+    {
+      "episodes": 100,
+      "successes": 8,
+      "success_rate": 0.08,
+      "wilson_95_interval": [
+        0.041093461484380624,
+        0.14998107700948735
+      ],
+      "environment_successes": 8,
+      "hand_contact_episodes": 82,
+      "continuous_hand_contact_0p3s": 13,
+      "successes_with_continuous_contact_0p3s": 6,
+      "reasons": {
+        "ball_left": 90,
+        "catch_success": 8,
+        "failure_unspecified": 2
+      },
+      "mean_reward": 169.34741601826747,
+      "mean_episode_sim_seconds": 1.118920000000075,
+      "wall_seconds": 258.926064346997,
+      "case": "bounce_catch",
+      "object": "baseball",
+      "task": "bounce_catch",
+      "checkpoint": "/home/isee/Catch/bounce_three_ball_catching_v1_seed123/2026-10-28/11:36:32/nn/bounce_catch_best_reward_288.46.pth",
+      "checkpoint_sha256": "5d580d59cf4d3cdace14457351c35434fa44aaf82a08babfe5a2b8968bb2b63d",
+      "criterion": "bounce_catch_proximity_v2: horizon reached, no failure, grasp stage, ee distance <0.25m; not strict hold",
+      "provenance": "/home/isee/Catch/analysis_artifacts/trained_ball_evaluation_20261028_v1/bounce_catch_baseball/provenance.json"
+    }
+  ],
+  "actual_factory_overrides": {
+    "ball_mode": "fixed",
+    "sampling_weights": null,
+    "viewer": false,
+    "render_mode": null,
+    "episode_seconds": 2.5,
+    "policy_seconds": 0.04
+  },
+  "limitations": [
+    "Roll Track measures interception, not holding. Interception can precede a later failure.",
+    "Bounce existing success criterion is terminal proximity/stage/horizon, not verified grasp.",
+    "Contact duration is sampled at 2ms controller ticks. >=0.3s is supplementary, not proof of stable grasp.",
+    "100 seeds per fixed nominal ball; not exhaustive unseen-material or real-robot testing.",
+    "evaluation_config in each provenance adapts the saved PPO configuration; fixed ball/object overrides are applied directly in the factory.",
+    "Physical factory/material hashes match training records. Shared DcmmVecEnv.py whole-file hash differs; exact historical shared-module replay is not established. These results evaluate current local code."
+  ],
+  "training_shared_source_comparison": {
+    "roll": {
+      "training_module_sha256": "2ff609cf2f2525585c1604d9a5959a2d7243f54fa7ff4338b3cc4958e11090d9",
+      "matching_backup_files": []
+    },
+    "bounce": {
+      "training_module_sha256": "2ff609cf2f2525585c1604d9a5959a2d7243f54fa7ff4338b3cc4958e11090d9",
+      "matching_backup_files": []
+    }
+  }
+}

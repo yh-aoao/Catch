@@ -1,0 +1,1036 @@
+{
+  "raw_metric_rows": 10497,
+  "unique_iterations": 10000,
+  "duplicate_metric_rows": 497,
+  "resume_jumps": [
+    {
+      "line": 2198,
+      "previous": 2197,
+      "resumed_at": 2001
+    },
+    {
+      "line": 2525,
+      "previous": 2327,
+      "resumed_at": 2201
+    },
+    {
+      "line": 2698,
+      "previous": 2373,
+      "resumed_at": 2201
+    }
+  ],
+  "resume_audit": {
+    "config_unchanged": true,
+    "source_changes_accepted": true,
+    "changed_source_count": 41,
+    "changed_sources": [
+      "configs/basket_mobile.yaml",
+      "configs/basket_mobile_transfer.yaml",
+      "configs/basket_stage1.yaml",
+      "configs/basket_stage2.yaml",
+      "configs/basket_throw_first.yaml",
+      "configs/catch.json",
+      "configs/catch_control.json",
+      "configs/catch_position.json",
+      "configs/catch_position_velocity.json",
+      "configs/config.yaml",
+      "configs/track.json",
+      "configs/track_control.json",
+      "configs/track_position.json",
+      "configs/track_position_velocity.json",
+      "distillation_aux_contact/configs/catch.json",
+      "distillation_aux_contact/configs/track.json",
+      "distillation_aux_contact/core.py",
+      "distillation_aux_contact/environments.py",
+      "distillation_aux_contact/run.py",
+      "gym_dcmm/__init__.py",
+      "gym_dcmm/algs/ppo_dcmm/ppo_dcmm_basket_two_stage.py",
+      "gym_dcmm/algs/ppo_dcmm/ppo_dcmm_catch_one_stage.py",
+      "gym_dcmm/envs/DcmmVecEnv.py",
+      "gym_dcmm/envs/DcmmVecEnv_bounce_july22.py",
+      "gym_dcmm/envs/bounce_physical_v2.py",
+      "gym_dcmm/envs/bounce_stable.py",
+      "gym_dcmm/envs/object_test.py",
+      "gym_dcmm/envs/roll_adaptive.py",
+      "gym_dcmm/envs/roll_physical.py",
+      "gym_dcmm/utils/basket_aim.py",
+      "gym_dcmm/utils/basket_mobile.py",
+      "gym_dcmm/utils/basket_parking_policy.py",
+      "gym_dcmm/utils/basket_policy_mask.py",
+      "gym_dcmm/utils/basket_simple.py",
+      "gym_dcmm/utils/basket_teacher.py",
+      "gym_dcmm/utils/basket_transfer.py",
+      "gym_dcmm/utils/roll_adaptive_wait.py",
+      "gym_dcmm/utils/roll_speed.py",
+      "gym_dcmm/utils/roll_wait_guard.py",
+      "model_experiments/run.py",
+      "model_experiments/visual_resume.py"
+    ]
+  },
+  "evaluations": {
+    "2000": {
+      "tasks": {
+        "throw": {
+          "successes": 153,
+          "episodes": 300,
+          "success_rate": 0.51,
+          "wilson_95": [
+            0.45366316504261445,
+            0.5660839663574307
+          ],
+          "termination_counts": {
+            "unspecified": 169,
+            "ball_left": 131
+          },
+          "mean_reward": 331.5422368019618
+        },
+        "roll": {
+          "successes": 132,
+          "episodes": 300,
+          "success_rate": 0.44,
+          "wilson_95": [
+            0.3849382095794712,
+            0.49657900202025707
+          ],
+          "termination_counts": {
+            "timeout": 176,
+            "out_of_bounds": 21,
+            "ball_on_floor": 97,
+            "ball_left": 6
+          },
+          "mean_reward": 213.84046228213307,
+          "retention_counts": {
+            "roll_caught_once": 246,
+            "roll_holding_at_end": 143,
+            "roll_stable_hold": 0
+          },
+          "unmet_counts": {
+            "no_active_retention": 157,
+            "below_palm": 137,
+            "not_retained_at_end": 157,
+            "outside_lateral_region": 15,
+            "above_hand_region": 2,
+            "ball_not_clear_of_table_or_floor": 1
+          }
+        },
+        "bounce": {
+          "successes": 153,
+          "episodes": 300,
+          "success_rate": 0.51,
+          "wilson_95": [
+            0.45366316504261445,
+            0.5660839663574307
+          ],
+          "termination_counts": {
+            "catch_success": 153,
+            "ball_left": 147
+          },
+          "mean_reward": 424.5121986062634
+        }
+      },
+      "mean_success_rate": 0.4866666666666667,
+      "minimum_success_rate": 0.44
+    },
+    "4000": {
+      "tasks": {
+        "throw": {
+          "successes": 188,
+          "episodes": 300,
+          "success_rate": 0.6266666666666667,
+          "wilson_95": [
+            0.5706540867432932,
+            0.6794762443239473
+          ],
+          "termination_counts": {
+            "ball_left": 99,
+            "unspecified": 201
+          },
+          "mean_reward": 395.5322060348584
+        },
+        "roll": {
+          "successes": 128,
+          "episodes": 300,
+          "success_rate": 0.4266666666666667,
+          "wilson_95": [
+            0.37197260006995525,
+            0.4832151029963794
+          ],
+          "termination_counts": {
+            "ball_on_floor": 92,
+            "timeout": 178,
+            "ball_left": 8,
+            "out_of_bounds": 21,
+            "base_collision": 1
+          },
+          "mean_reward": 217.03921805365056,
+          "retention_counts": {
+            "roll_caught_once": 286,
+            "roll_holding_at_end": 136,
+            "roll_stable_hold": 1
+          },
+          "unmet_counts": {
+            "no_active_retention": 164,
+            "below_palm": 145,
+            "not_retained_at_end": 164,
+            "above_hand_region": 3,
+            "outside_lateral_region": 12,
+            "ball_not_clear_of_table_or_floor": 1
+          }
+        },
+        "bounce": {
+          "successes": 156,
+          "episodes": 300,
+          "success_rate": 0.52,
+          "wilson_95": [
+            0.46357005360167935,
+            0.5759242091984114
+          ],
+          "termination_counts": {
+            "catch_success": 156,
+            "ball_left": 144
+          },
+          "mean_reward": 452.36108591422334
+        }
+      },
+      "mean_success_rate": 0.5244444444444445,
+      "minimum_success_rate": 0.4266666666666667
+    },
+    "6000": {
+      "tasks": {
+        "throw": {
+          "successes": 202,
+          "episodes": 300,
+          "success_rate": 0.6733333333333333,
+          "wilson_95": [
+            0.6183611701576165,
+            0.7239224407765018
+          ],
+          "termination_counts": {
+            "unspecified": 242,
+            "ball_left": 58
+          },
+          "mean_reward": 418.5173473829987
+        },
+        "roll": {
+          "successes": 203,
+          "episodes": 300,
+          "success_rate": 0.6766666666666666,
+          "wilson_95": [
+            0.6217905083935192,
+            0.7270754796739475
+          ],
+          "termination_counts": {
+            "timeout": 242,
+            "out_of_bounds": 15,
+            "ball_on_floor": 38,
+            "ball_left": 5
+          },
+          "mean_reward": 236.74065911700222,
+          "retention_counts": {
+            "roll_caught_once": 282,
+            "roll_holding_at_end": 210,
+            "roll_stable_hold": 0
+          },
+          "unmet_counts": {
+            "no_active_retention": 90,
+            "below_palm": 72,
+            "not_retained_at_end": 90,
+            "above_hand_region": 3,
+            "outside_lateral_region": 10,
+            "ball_not_clear_of_table_or_floor": 1
+          }
+        },
+        "bounce": {
+          "successes": 210,
+          "episodes": 300,
+          "success_rate": 0.7,
+          "wilson_95": [
+            0.6458814453011743,
+            0.7490611826997313
+          ],
+          "termination_counts": {
+            "ball_left": 90,
+            "catch_success": 210
+          },
+          "mean_reward": 551.006562494612
+        }
+      },
+      "mean_success_rate": 0.6833333333333333,
+      "minimum_success_rate": 0.6733333333333333
+    },
+    "8000": {
+      "tasks": {
+        "throw": {
+          "successes": 230,
+          "episodes": 300,
+          "success_rate": 0.7666666666666667,
+          "wilson_95": [
+            0.7156176619060443,
+            0.8109725087618301
+          ],
+          "termination_counts": {
+            "ball_left": 39,
+            "unspecified": 261
+          },
+          "mean_reward": 469.2480229434241
+        },
+        "roll": {
+          "successes": 185,
+          "episodes": 300,
+          "success_rate": 0.6166666666666667,
+          "wilson_95": [
+            0.5605020926949223,
+            0.6698811069722727
+          ],
+          "termination_counts": {
+            "timeout": 221,
+            "out_of_bounds": 17,
+            "ball_on_floor": 57,
+            "ball_left": 4,
+            "base_collision": 1
+          },
+          "mean_reward": 227.85991883262056,
+          "retention_counts": {
+            "roll_caught_once": 271,
+            "roll_holding_at_end": 190,
+            "roll_stable_hold": 0
+          },
+          "unmet_counts": {
+            "no_active_retention": 110,
+            "below_palm": 92,
+            "not_retained_at_end": 110,
+            "above_hand_region": 2,
+            "outside_lateral_region": 10,
+            "ball_not_clear_of_table_or_floor": 1
+          }
+        },
+        "bounce": {
+          "successes": 220,
+          "episodes": 300,
+          "success_rate": 0.7333333333333333,
+          "wilson_95": [
+            0.6805715919237879,
+            0.7801948074106021
+          ],
+          "termination_counts": {
+            "catch_success": 220,
+            "ball_left": 80
+          },
+          "mean_reward": 578.1463879537077
+        }
+      },
+      "mean_success_rate": 0.7055555555555556,
+      "minimum_success_rate": 0.6166666666666667
+    },
+    "10000": {
+      "tasks": {
+        "throw": {
+          "successes": 225,
+          "episodes": 300,
+          "success_rate": 0.75,
+          "wilson_95": [
+            0.6980473999132474,
+            0.7956308850878847
+          ],
+          "termination_counts": {
+            "unspecified": 234,
+            "ball_left": 66
+          },
+          "mean_reward": 459.37711378278306
+        },
+        "roll": {
+          "successes": 146,
+          "episodes": 300,
+          "success_rate": 0.4866666666666667,
+          "wilson_95": [
+            0.43063348243848176,
+            0.5430370090281246
+          ],
+          "termination_counts": {
+            "timeout": 184,
+            "ball_on_floor": 81,
+            "out_of_bounds": 22,
+            "ball_left": 11,
+            "base_collision": 2
+          },
+          "mean_reward": 220.29667394463806,
+          "retention_counts": {
+            "roll_caught_once": 277,
+            "roll_holding_at_end": 153,
+            "roll_stable_hold": 0
+          },
+          "unmet_counts": {
+            "no_active_retention": 147,
+            "below_palm": 134,
+            "not_retained_at_end": 147,
+            "above_hand_region": 3,
+            "outside_lateral_region": 6,
+            "ball_not_clear_of_table_or_floor": 1
+          }
+        },
+        "bounce": {
+          "successes": 132,
+          "episodes": 300,
+          "success_rate": 0.44,
+          "wilson_95": [
+            0.3849382095794712,
+            0.49657900202025707
+          ],
+          "termination_counts": {
+            "catch_success": 132,
+            "ball_left": 168
+          },
+          "mean_reward": 376.75598060800166
+        }
+      },
+      "mean_success_rate": 0.5588888888888889,
+      "minimum_success_rate": 0.44
+    }
+  },
+  "loss_windows": {
+    "5001-6000": {
+      "loss": {
+        "mean": 0.9130956669163425,
+        "sd": 0.007633677971599553
+      },
+      "imitation_loss": {
+        "mean": 0.9085518842008896,
+        "sd": 0.007633116548213907
+      },
+      "position_loss": {
+        "mean": 0.0005723487466409551,
+        "sd": 9.083010785078441e-05
+      },
+      "velocity_loss": {
+        "mean": 0.025726217743861527,
+        "sd": 0.001099646243129691
+      },
+      "module_loss": {
+        "mean": 0.0044865479262216484,
+        "sd": 0.0007650820552219586
+      }
+    },
+    "7001-8000": {
+      "loss": {
+        "mean": 0.9084547840289305,
+        "sd": 0.007255687734342746
+      },
+      "imitation_loss": {
+        "mean": 0.9042422257487196,
+        "sd": 0.0072394461723796315
+      },
+      "position_loss": {
+        "mean": 0.00048453306413324525,
+        "sd": 7.806559899178867e-05
+      },
+      "velocity_loss": {
+        "mean": 0.025045652561442693,
+        "sd": 0.0011015258877389812
+      },
+      "module_loss": {
+        "mean": 0.0041641053248485434,
+        "sd": 0.0007411522439131193
+      }
+    },
+    "8001-9000": {
+      "loss": {
+        "mean": 0.9067266873265617,
+        "sd": 0.007159982313609582
+      },
+      "imitation_loss": {
+        "mean": 0.9026489731976762,
+        "sd": 0.007194935787518737
+      },
+      "position_loss": {
+        "mean": 0.000459516421288356,
+        "sd": 7.704536012946605e-05
+      },
+      "velocity_loss": {
+        "mean": 0.02461771386818873,
+        "sd": 0.0011230811697154376
+      },
+      "module_loss": {
+        "mean": 0.00403176270865498,
+        "sd": 0.0006843967090858428
+      }
+    },
+    "9001-10000": {
+      "loss": {
+        "mean": 0.9058495108631905,
+        "sd": 0.007201604914423779
+      },
+      "imitation_loss": {
+        "mean": 0.9019331613502,
+        "sd": 0.007220040163671533
+      },
+      "position_loss": {
+        "mean": 0.0004406237232430215,
+        "sd": 7.22654978690991e-05
+      },
+      "velocity_loss": {
+        "mean": 0.02416796787508429,
+        "sd": 0.0011350382531312396
+      },
+      "module_loss": {
+        "mean": 0.003872286992039192,
+        "sd": 0.000703522062149886
+      }
+    },
+    "7801-8000": {
+      "loss": {
+        "mean": 0.9078699958487414,
+        "sd": 0.007909674631377584
+      },
+      "imitation_loss": {
+        "mean": 0.9037717685056851,
+        "sd": 0.007857735191280723
+      },
+      "position_loss": {
+        "mean": 0.00047035163035900494,
+        "sd": 6.855141789739144e-05
+      },
+      "velocity_loss": {
+        "mean": 0.025113283182718077,
+        "sd": 0.001067523514247278
+      },
+      "module_loss": {
+        "mean": 0.0040511927953915845,
+        "sd": 0.0006915276415024131
+      }
+    },
+    "9801-10000": {
+      "loss": {
+        "mean": 0.9063276265794411,
+        "sd": 0.0067374686826030105
+      },
+      "imitation_loss": {
+        "mean": 0.9024995353957638,
+        "sd": 0.0066985396405061124
+      },
+      "position_loss": {
+        "mean": 0.0004266469218043767,
+        "sd": 7.159448156410191e-05
+      },
+      "velocity_loss": {
+        "mean": 0.02411283070228819,
+        "sd": 0.0010878813652051406
+      },
+      "module_loss": {
+        "mean": 0.0037854270603730634,
+        "sd": 0.0007214759878578265
+      }
+    }
+  },
+  "visible_eval_metadata": {
+    "throw": {
+      "success_metric": "success",
+      "success_definition": "throw_official",
+      "evaluation_revision": "2026-10-12-bounce-catch-v2",
+      "seed": 123,
+      "stage": "catch",
+      "camera": {
+        "camera": "top",
+        "height": 160,
+        "width": 160,
+        "near": 0.1,
+        "far": 5.0,
+        "gl_backend": "egl",
+        "cameras": [
+          {
+            "name": "top",
+            "near": 0.1,
+            "far": 5.0
+          },
+          {
+            "name": "wrist",
+            "near": 0.01,
+            "far": 1.5
+          }
+        ]
+      },
+      "episodes": 300
+    },
+    "roll": {
+      "success_metric": "roll_eval_success",
+      "success_definition": "region_retention_v5",
+      "evaluation_revision": "2026-10-12-bounce-catch-v2",
+      "seed": 123,
+      "stage": "catch",
+      "camera": {
+        "camera": "top",
+        "height": 160,
+        "width": 160,
+        "near": 0.1,
+        "far": 5.0,
+        "gl_backend": "egl",
+        "cameras": [
+          {
+            "name": "top",
+            "near": 0.1,
+            "far": 5.0
+          },
+          {
+            "name": "wrist",
+            "near": 0.01,
+            "far": 1.5
+          }
+        ]
+      },
+      "episodes": 300
+    },
+    "bounce": {
+      "success_metric": "success",
+      "success_definition": "bounce_catch_proximity_v2",
+      "evaluation_revision": "2026-10-12-bounce-catch-v2",
+      "seed": 123,
+      "stage": "catch",
+      "camera": {
+        "camera": "top",
+        "height": 160,
+        "width": 160,
+        "near": 0.1,
+        "far": 5.0,
+        "gl_backend": "egl",
+        "cameras": [
+          {
+            "name": "top",
+            "near": 0.1,
+            "far": 5.0
+          },
+          {
+            "name": "wrist",
+            "near": 0.01,
+            "far": 1.5
+          }
+        ]
+      },
+      "episodes": 300
+    }
+  },
+  "students": {
+    "checkpoints": {
+      "best": {
+        "path": "/home/isee/Catch/catch_it_copy/distillation_aux_contact/runs/catch_10000_seed123/student_best.pth",
+        "sha256": "381bb98d3605b0396f8cffa025900171da23cbed05d425bf3a0c1f239d42bec3",
+        "iteration": 6000,
+        "schema": "distillation_aux_contact_v1",
+        "all_weights_finite": true
+      },
+      "last": {
+        "path": "/home/isee/Catch/catch_it_copy/distillation_aux_contact/runs/catch_10000_seed123/student_last.pth",
+        "sha256": "b520de40e69fc4ef79ef522f5caa27f3dda9ffda912723ffc8344f48eaa2ce8b",
+        "iteration": 10000,
+        "schema": "distillation_aux_contact_v1",
+        "all_weights_finite": true
+      }
+    },
+    "config_equal": true,
+    "source_manifest_equal": true,
+    "teacher_hashes_equal": true
+  },
+  "config": {
+    "seed": 123,
+    "device": "cuda:1",
+    "learning_rate": 0.0003,
+    "num_envs_per_task": 8,
+    "iterations": 10000,
+    "rollout_steps": 64,
+    "updates_per_iteration": 8,
+    "calibration_steps": 128,
+    "eval_every": 2000,
+    "eval_episodes": 300,
+    "baseline_episodes": 300,
+    "max_eval_steps": 100000,
+    "tasks": {
+      "throw": {
+        "checkpoint": "best_model/throw_catch_best_reward_497.09.pth",
+        "sha256": "fcfebd624e282d8b171284fab65f3fe70a195f850db381fc6ee5197139e7f735",
+        "expected_action_dim": 20,
+        "family": "ppo_dcmm",
+        "action_indices": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19
+        ],
+        "action_scales": [
+          1.5,
+          0.025,
+          0.15
+        ],
+        "success_metric": "success",
+        "interface_note": "New server teacher: require 8 tracking + 12 hand outputs. SHA256 is computed on load and recorded; pin it after server check. Verify closed-loop behavior before full training.",
+        "success_definition": "throw_official"
+      },
+      "roll": {
+        "checkpoint": "best_model/roll_catch_best_reward_252.54.pth",
+        "sha256": "40020e1b13a29ad49de9e9b6ad2e6316678f418bdd8712be898b7a257af3d0ba",
+        "family": "ppo_dcmm_645edc4",
+        "action_indices": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19
+        ],
+        "action_scales": [
+          1.5,
+          0.025,
+          0.15
+        ],
+        "success_metric": "roll_eval_success",
+        "success_definition": "region_retention_v5",
+        "expected_action_dim": 20
+      },
+      "bounce": {
+        "checkpoint": "best_model/bounce_catch_best_reward_653.87.pth",
+        "sha256": "f3ff1fe5aa34a8d4384dda6915b6749847002447d2816f18e72b661c6254a09c",
+        "family": "ppo_dcmm_5fe75d5f",
+        "action_indices": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19
+        ],
+        "action_scales": [
+          1.5,
+          0.025,
+          0.15
+        ],
+        "success_metric": "success",
+        "success_definition": "bounce_catch_proximity_v2",
+        "expected_action_dim": 20
+      }
+    },
+    "env_kwargs": {
+      "camera_name": [
+        "top"
+      ],
+      "render_per_step": false,
+      "render_mode": "rgb_array",
+      "object_name": "object",
+      "img_size": [
+        160,
+        160
+      ],
+      "imshow_cam": false,
+      "print_obs": false,
+      "print_info": false,
+      "print_reward": false,
+      "print_ctrl": false,
+      "print_contacts": false,
+      "object_eval": false,
+      "env_time": 2.5,
+      "steps_per_policy": 20,
+      "bounce_physics": "legacy",
+      "bounce_launch": "legacy",
+      "bounce_log": false,
+      "basket_log": false,
+      "roll_log": false
+    },
+    "evaluation_revision": "2026-10-12-bounce-catch-v2",
+    "stage": "catch",
+    "save_every": 200,
+    "batch_episodes_per_task": 2,
+    "capacity_frames_per_task": 8192,
+    "max_episode_steps": 512,
+    "bptt_steps": 16,
+    "loss": "bce",
+    "model": {
+      "cnn_channels": [
+        16,
+        32,
+        32
+      ],
+      "cnn_kernels": [
+        5,
+        4,
+        3
+      ],
+      "cnn_strides": [
+        2,
+        2,
+        1
+      ],
+      "embedding": 128,
+      "gru_hidden": 256,
+      "mlp_hidden": [
+        512,
+        256,
+        128
+      ]
+    },
+    "vision": {
+      "camera": "top",
+      "height": 160,
+      "width": 160,
+      "near": 0.1,
+      "far": 5.0,
+      "gl_backend": "egl",
+      "cameras": [
+        {
+          "name": "top",
+          "near": 0.1,
+          "far": 5.0
+        },
+        {
+          "name": "wrist",
+          "near": 0.01,
+          "far": 1.5
+        }
+      ]
+    },
+    "auxiliary": {
+      "position_weight": 0.1,
+      "velocity_weight": 0.0,
+      "scales": [
+        1.0,
+        1.0,
+        1.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    "experiment": {
+      "variant": "contact"
+    },
+    "skip_teacher_baseline": true
+  },
+  "all_logged_losses_finite": true,
+  "input_sha256": {
+    "/home/isee/Catch/catch_it_copy/distillation_aux_contact/runs/catch_10000_seed123/eval_002000.json": "d7ac7ede6400421916b5741c72b6ddf729ae910591c6a2bf9c332eaf75086c06",
+    "/home/isee/Catch/catch_it_copy/distillation_aux_contact/runs/catch_10000_seed123/eval_004000.json": "7c059657878069e15997534da3657ed064a1885ee9a4e2098ed4de45a17dbf28",
+    "/home/isee/Catch/catch_it_copy/distillation_aux_contact/runs/catch_10000_seed123/eval_006000.json": "57c2571c3cc7f4742eb7cc8f18b19d785f12a21177c90776de3bd9482e0e4d68",
+    "/home/isee/Catch/catch_it_copy/distillation_aux_contact/runs/catch_10000_seed123/eval_008000.json": "f88f87f9d641d607722bb6b6d9cbfecad5f7a6ac8407ed07f067352e20a63083",
+    "/home/isee/Catch/catch_it_copy/distillation_aux_contact/runs/catch_10000_seed123/eval_010000.json": "f7972a4ebefb2f2e7ae773358455de9e11bdb488e66ef17f1fd0b8a5a484a534",
+    "/home/isee/Catch/catch_it_copy/distillation_aux_contact/runs/catch_10000_seed123/metrics.jsonl": "fed49db1251a7c0dedc38271fc31bbc51573e39629dad7c8d415d068bd38b210",
+    "/home/isee/Catch/catch_it_copy/distillation_aux_contact/runs/catch_10000_seed123/resolved_config.json": "05b4f627d5108566ba6ddc4c8220fbaea96ce43539664af18f3ea19a981fa36c",
+    "/home/isee/Catch/catch_it_copy/distillation_aux_contact/runs/catch_10000_seed123/resume_audit.json": "d945f406592dfb492f0559f44de176d9d983cbb744aa6315dbb9d95b5d482746",
+    "/home/isee/Catch/catch_it_copy/distillation_aux_contact/runs/catch_10000_seed123/teacher_check.json": "284316dbb725c0fa2b593106af4cb99def90c87ddca95433e76159920d43dbd7",
+    "/home/isee/Catch/catch_it_copy/distillation_aux_contact/runs/catch_10000_seed123/resume_last.pth": "a4d7744f635629832ccb9b1e8150cbe2d3f3972d465d43bbff7e7ddd0131bffc",
+    "/home/isee/Catch/analysis_artifacts/contact_training_diagnosis_20261031/resume_inspection.json": "6adc55a64618f23815f0d8cab76a29d590054791fae044d43ddbe42387d8099d"
+  },
+  "resume_file": {
+    "path": "/home/isee/Catch/catch_it_copy/distillation_aux_contact/runs/catch_10000_seed123/resume_last.pth",
+    "observed_bytes": 2561199479,
+    "earlier_growing_file_observations_bytes": [
+      738197504,
+      831782912,
+      838598656,
+      845938688
+    ],
+    "inspection": "Successfully loaded after transfer completed; optimizer/replay inspected on CPU"
+  },
+  "scope": "read-only log analysis; no training, GPU policy evaluation or ablation",
+  "analysis_script_sha256": "fb91c46383cddae39b3005c48e89b3f9961c0e3e901d165050272847dc442e74",
+  "resume_inspection": {
+    "iteration": 10000,
+    "file_bytes": 2561199479,
+    "file_size_stable": true,
+    "schema": "distillation_aux_contact_v1",
+    "optimizer_groups": [
+      {
+        "lr": 0.0003,
+        "betas": [
+          0.9,
+          0.999
+        ],
+        "eps": 1e-08,
+        "weight_decay": 0,
+        "amsgrad": false,
+        "maximize": false,
+        "foreach": null,
+        "capturable": false,
+        "differentiable": false,
+        "fused": null
+      }
+    ],
+    "optimizer_step_values": [
+      80000.0
+    ],
+    "best_score": 0.6733333333333333,
+    "student_equal_to_last": true,
+    "config_equal_to_last": true,
+    "metadata_equal_to_last": true,
+    "replay": {
+      "throw": {
+        "episodes": 143,
+        "frames": 8160,
+        "contact_frames": 3301,
+        "contact_frame_fraction": 0.4045343137254902,
+        "phase_positive_counts": [
+          3613.0,
+          3196.0,
+          2876.0
+        ],
+        "phase_valid_counts": [
+          8088.0,
+          8160.0,
+          8160.0
+        ],
+        "phase_positive_fractions": [
+          0.44671117705242336,
+          0.39166666666666666,
+          0.3524509803921569
+        ],
+        "episode_keys": [
+          "depth",
+          "proprio",
+          "previous",
+          "target",
+          "object_target",
+          "object_valid",
+          "world_position",
+          "visible",
+          "uv",
+          "contact_after",
+          "future_target",
+          "future_valid",
+          "contact_target",
+          "contact_valid"
+        ],
+        "depth_shape": [
+          63,
+          2,
+          160,
+          160
+        ]
+      },
+      "roll": {
+        "episodes": 134,
+        "frames": 8154,
+        "contact_frames": 1534,
+        "contact_frame_fraction": 0.18812852587687023,
+        "phase_positive_counts": [
+          2057.0,
+          1459.0,
+          872.0
+        ],
+        "phase_valid_counts": [
+          8047.0,
+          8154.0,
+          8154.0
+        ],
+        "phase_positive_fractions": [
+          0.2556232136199826,
+          0.17893058621535443,
+          0.10694137846455727
+        ],
+        "episode_keys": [
+          "depth",
+          "proprio",
+          "previous",
+          "target",
+          "object_target",
+          "object_valid",
+          "world_position",
+          "visible",
+          "uv",
+          "contact_after",
+          "future_target",
+          "future_valid",
+          "contact_target",
+          "contact_valid"
+        ],
+        "depth_shape": [
+          44,
+          2,
+          160,
+          160
+        ]
+      },
+      "bounce": {
+        "episodes": 142,
+        "frames": 8176,
+        "contact_frames": 3933,
+        "contact_frame_fraction": 0.48104207436399216,
+        "phase_positive_counts": [
+          4240.0,
+          3830.0,
+          3522.0
+        ],
+        "phase_valid_counts": [
+          8100.0,
+          8176.0,
+          8176.0
+        ],
+        "phase_positive_fractions": [
+          0.5234567901234568,
+          0.46844422700587085,
+          0.43077299412915854
+        ],
+        "episode_keys": [
+          "depth",
+          "proprio",
+          "previous",
+          "target",
+          "object_target",
+          "object_valid",
+          "world_position",
+          "visible",
+          "uv",
+          "contact_after",
+          "future_target",
+          "future_valid",
+          "contact_target",
+          "contact_valid"
+        ],
+        "depth_shape": [
+          63,
+          2,
+          160,
+          160
+        ]
+      }
+    },
+    "sha256": "a4d7744f635629832ccb9b1e8150cbe2d3f3972d465d43bbff7e7ddd0131bffc"
+  }
+}

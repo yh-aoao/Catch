@@ -1466,3 +1466,10 @@ GPU/EGL编号依各服务器实际占用与映射选择；cuda编号不自动绑
 distillation_aux_belief
 distillation_aux_contact
 distillation_aux_camera_gate
+
+1.先再测试一下两个模型的成功率，需要确定用best还是last
+2.把两个模型合起来训练：
+   a、可以先确定一下两个模型的逻辑，也许可以做一些更高级的改进
+   b、两个模型擅长的好像不一样（针对运动模式），可不可以有一些小设计
+3.继续研究泛化问题，测试成功率。可以增加一些目标，比如苹果
+4.basket的手指

@@ -1,0 +1,162 @@
+{
+  "iteration": 10000,
+  "file_bytes": 2561199479,
+  "file_size_stable": true,
+  "schema": "distillation_aux_contact_v1",
+  "optimizer_groups": [
+    {
+      "lr": 0.0003,
+      "betas": [
+        0.9,
+        0.999
+      ],
+      "eps": 1e-08,
+      "weight_decay": 0,
+      "amsgrad": false,
+      "maximize": false,
+      "foreach": null,
+      "capturable": false,
+      "differentiable": false,
+      "fused": null
+    }
+  ],
+  "optimizer_step_values": [
+    80000.0
+  ],
+  "best_score": 0.6733333333333333,
+  "student_equal_to_last": true,
+  "config_equal_to_last": true,
+  "metadata_equal_to_last": true,
+  "replay": {
+    "throw": {
+      "episodes": 143,
+      "frames": 8160,
+      "contact_frames": 3301,
+      "contact_frame_fraction": 0.4045343137254902,
+      "phase_positive_counts": [
+        3613.0,
+        3196.0,
+        2876.0
+      ],
+      "phase_valid_counts": [
+        8088.0,
+        8160.0,
+        8160.0
+      ],
+      "phase_positive_fractions": [
+        0.44671117705242336,
+        0.39166666666666666,
+        0.3524509803921569
+      ],
+      "episode_keys": [
+        "depth",
+        "proprio",
+        "previous",
+        "target",
+        "object_target",
+        "object_valid",
+        "world_position",
+        "visible",
+        "uv",
+        "contact_after",
+        "future_target",
+        "future_valid",
+        "contact_target",
+        "contact_valid"
+      ],
+      "depth_shape": [
+        63,
+        2,
+        160,
+        160
+      ]
+    },
+    "roll": {
+      "episodes": 134,
+      "frames": 8154,
+      "contact_frames": 1534,
+      "contact_frame_fraction": 0.18812852587687023,
+      "phase_positive_counts": [
+        2057.0,
+        1459.0,
+        872.0
+      ],
+      "phase_valid_counts": [
+        8047.0,
+        8154.0,
+        8154.0
+      ],
+      "phase_positive_fractions": [
+        0.2556232136199826,
+        0.17893058621535443,
+        0.10694137846455727
+      ],
+      "episode_keys": [
+        "depth",
+        "proprio",
+        "previous",
+        "target",
+        "object_target",
+        "object_valid",
+        "world_position",
+        "visible",
+        "uv",
+        "contact_after",
+        "future_target",
+        "future_valid",
+        "contact_target",
+        "contact_valid"
+      ],
+      "depth_shape": [
+        44,
+        2,
+        160,
+        160
+      ]
+    },
+    "bounce": {
+      "episodes": 142,
+      "frames": 8176,
+      "contact_frames": 3933,
+      "contact_frame_fraction": 0.48104207436399216,
+      "phase_positive_counts": [
+        4240.0,
+        3830.0,
+        3522.0
+      ],
+      "phase_valid_counts": [
+        8100.0,
+        8176.0,
+        8176.0
+      ],
+      "phase_positive_fractions": [
+        0.5234567901234568,
+        0.46844422700587085,
+        0.43077299412915854
+      ],
+      "episode_keys": [
+        "depth",
+        "proprio",
+        "previous",
+        "target",
+        "object_target",
+        "object_valid",
+        "world_position",
+        "visible",
+        "uv",
+        "contact_after",
+        "future_target",
+        "future_valid",
+        "contact_target",
+        "contact_valid"
+      ],
+      "depth_shape": [
+        63,
+        2,
+        160,
+        160
+      ]
+    }
+  },
+  "sha256": "a4d7744f635629832ccb9b1e8150cbe2d3f3972d465d43bbff7e7ddd0131bffc"
+}

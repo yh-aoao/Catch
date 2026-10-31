@@ -39,6 +39,9 @@ class PPO_Catch_OneStage(object):
         self.carry_reward = bool(full_config.get('basket_carry_reward',False))
         from gym_dcmm.utils.basket_carry import make_options
         self.carry_options = make_options(full_config.get('basket_carry_options',{}))
+        self.finger_reward = bool(full_config.get('basket_finger_reward', False))
+        from gym_dcmm.utils.basket_fingers import make_options as finger_options
+        self.finger_options = finger_options(full_config.get('basket_finger_options', {}))
         self.basket_training_stage = str(full_config.get('basket_training_stage', 'joint'))
         self.parking_policy = None
         self.pose_eval_override = bool(full_config.get('basket_pose_eval_override',False))
@@ -333,6 +336,9 @@ class PPO_Catch_OneStage(object):
         weights['action_layout'] = 'arm6_hand12' if self.fixed_basket else 'base2_arm6_hand12'
         if self.fixed_physical:
             weights['basket_fixed_protocol'] = 'aim_carry_v1' if self.carry_reward else 'physical_settle_forward_v1'
+            if self.finger_reward:
+                weights['basket_fixed_protocol'] = 'aim_carry_fingers_v1'
+                weights['basket_finger_options'] = self.finger_options
             if self.carry_reward:
                 weights['basket_carry_options'] = self.carry_options
             weights['input_normalization_frozen'] = self.input_normalization_frozen
@@ -388,7 +394,12 @@ class PPO_Catch_OneStage(object):
                 self.parking_policy = FrozenParkingPolicy(checkpoint['parking_policy'], self.mobile_options, self.device)
 
     def _validate_mobile_checkpoint(self, checkpoint):
-        if checkpoint.get('basket_fixed_protocol') == 'aim_carry_v1':
+        if checkpoint.get('basket_fixed_protocol') == 'aim_carry_fingers_v1':
+            if not getattr(self, 'finger_reward', False):
+                raise ValueError('Finger-coordinated checkpoint requires basket_finger_sync')
+            if checkpoint.get('basket_finger_options') != self.finger_options:
+                raise ValueError('Basket finger options differ from the checkpoint')
+        if checkpoint.get('basket_fixed_protocol') in ('aim_carry_v1', 'aim_carry_fingers_v1'):
             if not getattr(self,'carry_reward',False):
                 raise ValueError('Carry-shaped checkpoint requires basket_aim_carry')
             if checkpoint.get('basket_carry_options') != self.carry_options:

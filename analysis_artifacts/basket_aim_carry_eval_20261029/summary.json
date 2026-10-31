@@ -1,0 +1,125 @@
+{
+  "new": {
+    "episodes": 200,
+    "actual_hits": 197,
+    "safe_hits": 197,
+    "safe_rate": 0.985,
+    "safe_rate_wilson95": [
+      0.9568342712073097,
+      0.9948857622067417
+    ],
+    "qualified_forward_safe_hits": 0,
+    "robot_collision_episodes": 0,
+    "mean_reward": 40.44868684495849,
+    "metrics": {
+      "arm_forward": {
+        "mean": 0.015939318518215152,
+        "min": 0.008878883924090369,
+        "max": 0.03432373180693852,
+        "median": 0.012665619653319098
+      },
+      "proximal_forward_speed": {
+        "mean": 0.2615311911516688,
+        "min": -0.2515857525058702,
+        "max": 0.45787527674874384,
+        "median": 0.3211102819966387
+      },
+      "release_policy_seconds": {
+        "mean": 0.058450000000000016,
+        "min": 0.04199999999999998,
+        "max": 0.10400000000000009,
+        "median": 0.043999999999999984
+      },
+      "carry_position_quality": {
+        "mean": 0.7100986026736112,
+        "min": 1.2807014573904006e-07,
+        "max": 1.0,
+        "median": 1.0
+      },
+      "aim_error": {
+        "mean": 0.07626129548470299,
+        "min": 0.025694503148611804,
+        "max": 0.34700107314460493,
+        "median": 0.06291663934064429
+      }
+    },
+    "by_seed": {
+      "new_123.log": {
+        "episodes": 100,
+        "hit": 99,
+        "safe": 99
+      },
+      "new_456.log": {
+        "episodes": 100,
+        "hit": 98,
+        "safe": 98
+      }
+    },
+    "reasons": {
+      "ball_on_floor": 3,
+      "basket_score": 197
+    }
+  },
+  "baseline": {
+    "episodes": 200,
+    "actual_hits": 192,
+    "safe_hits": 192,
+    "safe_rate": 0.96,
+    "safe_rate_wilson95": [
+      0.923067931799067,
+      0.9795943679338476
+    ],
+    "qualified_forward_safe_hits": 0,
+    "robot_collision_episodes": 0,
+    "mean_reward": 39.29647535867756,
+    "metrics": {
+      "arm_forward": {
+        "mean": 0.015048427022407858,
+        "min": 0.008717047549484375,
+        "max": 0.034590263781441345,
+        "median": 0.012276506434536223
+      },
+      "proximal_forward_speed": {
+        "mean": 0.24138276542567666,
+        "min": -0.29789743497113386,
+        "max": 0.4678143393466862,
+        "median": 0.31377257016539506
+      },
+      "release_policy_seconds": {
+        "mean": 0.05648000000000002,
+        "min": 0.04199999999999998,
+        "max": 0.12400000000000011,
+        "median": 0.04400000000000004
+      },
+      "carry_position_quality": {
+        "mean": 0.7647901101999862,
+        "min": 4.862668955657411e-08,
+        "max": 1.0,
+        "median": 1.0
+      },
+      "aim_error": {
+        "mean": 0.09305077915439045,
+        "min": 0.03480436435810971,
+        "max": 0.3627216308468908,
+        "median": 0.07066265066082088
+      }
+    },
+    "by_seed": {
+      "baseline_123.log": {
+        "episodes": 100,
+        "hit": 97,
+        "safe": 97
+      },
+      "baseline_456.log": {
+        "episodes": 100,
+        "hit": 95,
+        "safe": 95
+      }
+    },
+    "reasons": {
+      "ball_on_floor": 7,
+      "not_a_throw": 1,
+      "basket_score": 192
+    }
+  }
+}

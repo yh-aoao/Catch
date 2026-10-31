@@ -1,0 +1,25 @@
+{
+  "date": "2026-10-29",
+  "config": "basket_aim_carry",
+  "seed_groups": [
+    123,
+    456
+  ],
+  "episodes_per_group": 100,
+  "num_envs": 1,
+  "vector_mode": "sync",
+  "device": "cpu",
+  "policy": "deterministic mean actions; original normalization",
+  "training_started": false,
+  "scope": "current default fixed-base Basket sphere only; no tennis/baseball/bounce/roll evaluation",
+  "checkpoints": {
+    "new": {
+      "path": "/home/isee/Catch/catch_it_copy/outputs/BasketAimCarry/2026-10-29/01:23:05/nn/throw_basket_catch_best_reward_38.38.pth",
+      "sha256": "6bf1a3f9b3d1fca09d0d697a0d06f53ca6f7c99a40d67d6d53e10416fc3094ce"
+    },
+    "baseline": {
+      "path": "/home/isee/Catch/catch_it_copy/outputs/BasketPhysicalArm_Continue/2026-10-28/18:10:13/nn/throw_basket_catch_best_reward_24.85.pth",
+      "sha256": "74c2018deee4d5fb10e21ae76852479dbc2bc4a4ea7bee9f762e817c9dac7c35"
+    }
+  }
+}

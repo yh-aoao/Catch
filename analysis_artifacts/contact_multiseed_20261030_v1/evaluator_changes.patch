@@ -1,0 +1,20 @@
+--- previous_evaluator
++++ contact_evaluator
+@@ -21,7 +21,7 @@
+ 
+ def main():
+     parser = argparse.ArgumentParser(description=__doc__)
+-    parser.add_argument('--variant', choices=['belief', 'future'], required=True)
++    parser.add_argument('--variant', choices=['contact'], required=True)
+     parser.add_argument('--task', choices=['throw', 'roll', 'bounce'], required=True)
+     parser.add_argument('--seeds', nargs='+', type=int, required=True)
+     parser.add_argument('--episodes', type=int, required=True)
+@@ -31,7 +31,7 @@
+     if args.episodes < 1 or len(set(args.seeds)) != len(args.seeds):
+         parser.error('Use positive episodes and unique seeds')
+     root = Path('/home/isee/Catch')
+-    audit_path = root/'analysis_artifacts/distill_best_multiseed_20261029_v1/source_audit.json'
++    audit_path = root/'analysis_artifacts/contact_multiseed_20261030_v1/source_audit.json'
+     audit = json.loads(audit_path.read_text())[args.variant]
+     source = Path(audit['source_root'])
+     for item in audit['files']:

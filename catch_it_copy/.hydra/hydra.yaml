@@ -115,31 +115,25 @@ hydra:
     - hydra.mode=RUN
     task:
     - test=True
-    - task=Catching_TwoStage
     - num_envs=1
     - train.ppo.num_actors=1
+    - vector_mode=sync
     - device_id=-1
     - viewer=true
     - imshow_cam=false
     - seed=0
-    - object_motion=bounce
-    - bounce_physics=physical_v2
-    - bounce_grasp_version=controlled_hold_v1
-    - bounce_launch=baseball_intercept_v1
-    - bounce_ball_mode=fixed
-    - bounce_ball_weights=null
-    - bounce_material_file=/home/isee/Catch/catch_it_copy/ycb_objects/calibration_data/balls.three_ball_training_v1.json
-    - test_object=ycb:tennis_ball
+    - basket_viewer_speed=1.0
+    - basket_log=true
+    - test_object=default
     - object_eval=false
     - checkpoint_tracking=
-    - checkpoint_catching=/home/isee/Catch/catch_it_copy/outputs/bounce_hold_final_resume_20261029/2026-10-29/01:13:36/nn/bounce_catch_last.pth
-    - output_name=bounce_hold_video_tennis_ball
-    - viewer=false
-    - train.ppo.max_test_steps=64
+    - checkpoint_catching=/home/isee/Catch/catch_it_copy/outputs/BasketAimCarry/2026-10-29/01:23:05/nn/throw_basket_catch_best_reward_38.38.pth
+    - train.ppo.test_num_episodes=30
+    - output_name=basket_video_original
   job:
     name: train_DCMM
     chdir: false
-    override_dirname: bounce_ball_mode=fixed,bounce_ball_weights=null,bounce_grasp_version=controlled_hold_v1,bounce_launch=baseball_intercept_v1,bounce_material_file=/home/isee/Catch/catch_it_copy/ycb_objects/calibration_data/balls.three_ball_training_v1.json,bounce_physics=physical_v2,checkpoint_catching=/home/isee/Catch/catch_it_copy/outputs/bounce_hold_final_resume_20261029/2026-10-29/01:13:36/nn/bounce_catch_last.pth,checkpoint_tracking=,device_id=-1,imshow_cam=false,num_envs=1,object_eval=false,object_motion=bounce,output_name=bounce_hold_video_tennis_ball,seed=0,task=Catching_TwoStage,test=True,test_object=ycb:tennis_ball,train.ppo.max_test_steps=64,train.ppo.num_actors=1,viewer=false,viewer=true
+    override_dirname: basket_log=true,basket_viewer_speed=1.0,checkpoint_catching=/home/isee/Catch/catch_it_copy/outputs/BasketAimCarry/2026-10-29/01:23:05/nn/throw_basket_catch_best_reward_38.38.pth,checkpoint_tracking=,device_id=-1,imshow_cam=false,num_envs=1,object_eval=false,output_name=basket_video_original,seed=0,test=True,test_object=default,train.ppo.num_actors=1,train.ppo.test_num_episodes=30,vector_mode=sync,viewer=true
     id: ???
     num: ???
     config_name: resolved_config
@@ -158,7 +152,7 @@ hydra:
     - path: hydra.conf
       schema: pkg
       provider: hydra
-    - path: /home/isee/Catch/catch_it_copy/outputs/bounce_hold_final_resume_20261029/2026-10-29/01:13:36
+    - path: /home/isee/Catch/catch_it_copy/outputs/BasketAimCarry/2026-10-29/01:23:05
       schema: file
       provider: main
     - path: ''

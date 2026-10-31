@@ -1,0 +1,25 @@
+{
+  "models": [
+    "belief_best_10000",
+    "future_last_10000"
+  ],
+  "seeds": [
+    20261029,
+    20262029,
+    20263029,
+    20264029,
+    20265029
+  ],
+  "episodes_per_seed_per_task": 300,
+  "expected_total_episodes": 9000,
+  "tasks": [
+    "throw",
+    "roll",
+    "bounce"
+  ],
+  "parallel_jobs": 2,
+  "streams_per_job": 5,
+  "policy_batch_size": 1,
+  "original_weights_unchanged": true,
+  "no_training": true
+}

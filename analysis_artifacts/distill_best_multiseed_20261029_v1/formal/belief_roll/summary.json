@@ -1,0 +1,238 @@
+{
+  "protocol": {
+    "variant": "belief",
+    "task": "roll",
+    "seeds": [
+      20261029,
+      20262029,
+      20263029,
+      20264029,
+      20265029
+    ],
+    "episodes_per_seed": 300,
+    "checkpoint": "/home/isee/Catch/distill_best_ckpt/belief_student_best.pth",
+    "checkpoint_sha256": "83a6a4f0ba6c72fcc983464dc8051ede940ff26cd71f494409527cc7b4e02888",
+    "iteration": 10000,
+    "source_audit": "/home/isee/Catch/analysis_artifacts/distill_best_multiseed_20261029_v1/source_audit.json",
+    "source_root": "/tmp/catch_distill_eval_sources_20261029/belief",
+    "source_audit_sha256": "6a3588a6cd5a0cd4be426cfd8e01f743f17d031798fcdb0be0b843d3d3608346",
+    "evaluator_sha256": "ea85a2d321d3e9538365c6b57f0228078f1e8ce1126e77fd78ae25a928f5b089",
+    "capture_hook_sha256": "6b515f2f13d3f1df2815dfeefcd1ee857a9e14d75532a210809686c5656a434e",
+    "source_exceptions": [],
+    "device": "cuda:0",
+    "batch_streams": 5,
+    "policy_batch_size": 1,
+    "deterministic_algorithms": true,
+    "tf32": false,
+    "constructor_seed": "evaluation_seed + 1000000 + TASK_ID*10000",
+    "reset_seed": "constructor_seed + episode_index*100003",
+    "versions": {
+      "torch": "2.11.0+cu128",
+      "numpy": "1.23.0",
+      "mujoco": "3.6.0",
+      "cudnn": 91900,
+      "python": "3.10.20 (main, Mar 11 2026, 17:46:40) [GCC 14.3.0]"
+    },
+    "no_teacher_required": true
+  },
+  "per_seed": {
+    "20261029": {
+      "success_metric": "roll_eval_success",
+      "successes": 208,
+      "episodes": 300,
+      "requested_episodes": 300,
+      "complete": true,
+      "success_rate": 0.6933333333333334,
+      "auxiliary_metrics": {
+        "success": {
+          "true": 0,
+          "reported": 300,
+          "rate": 0.0
+        },
+        "roll_eval_success": {
+          "true": 208,
+          "reported": 300,
+          "rate": 0.6933333333333334
+        },
+        "roll_legacy_success": {
+          "true": 0,
+          "reported": 300,
+          "rate": 0.0
+        },
+        "roll_final_hold": {
+          "true": 210,
+          "reported": 300,
+          "rate": 0.7
+        }
+      },
+      "termination_counts": {
+        "timeout": 233,
+        "out_of_bounds": 11,
+        "ball_on_floor": 50,
+        "ball_left": 5,
+        "base_collision": 1
+      },
+      "legacy_truncated_rate": 0.7766666666666666,
+      "mean_reward": 231.5224023150984
+    },
+    "20262029": {
+      "success_metric": "roll_eval_success",
+      "successes": 220,
+      "episodes": 300,
+      "requested_episodes": 300,
+      "complete": true,
+      "success_rate": 0.7333333333333333,
+      "auxiliary_metrics": {
+        "success": {
+          "true": 0,
+          "reported": 300,
+          "rate": 0.0
+        },
+        "roll_eval_success": {
+          "true": 220,
+          "reported": 300,
+          "rate": 0.7333333333333333
+        },
+        "roll_legacy_success": {
+          "true": 0,
+          "reported": 300,
+          "rate": 0.0
+        },
+        "roll_final_hold": {
+          "true": 226,
+          "reported": 300,
+          "rate": 0.7533333333333333
+        }
+      },
+      "termination_counts": {
+        "timeout": 249,
+        "out_of_bounds": 12,
+        "ball_on_floor": 35,
+        "ball_left": 3,
+        "base_collision": 1
+      },
+      "legacy_truncated_rate": 0.83,
+      "mean_reward": 234.81004352170794
+    },
+    "20263029": {
+      "success_metric": "roll_eval_success",
+      "successes": 205,
+      "episodes": 300,
+      "requested_episodes": 300,
+      "complete": true,
+      "success_rate": 0.6833333333333333,
+      "auxiliary_metrics": {
+        "success": {
+          "true": 0,
+          "reported": 300,
+          "rate": 0.0
+        },
+        "roll_eval_success": {
+          "true": 205,
+          "reported": 300,
+          "rate": 0.6833333333333333
+        },
+        "roll_legacy_success": {
+          "true": 0,
+          "reported": 300,
+          "rate": 0.0
+        },
+        "roll_final_hold": {
+          "true": 211,
+          "reported": 300,
+          "rate": 0.7033333333333334
+        }
+      },
+      "termination_counts": {
+        "timeout": 233,
+        "ball_left": 6,
+        "out_of_bounds": 10,
+        "ball_on_floor": 49,
+        "base_collision": 2
+      },
+      "legacy_truncated_rate": 0.79,
+      "mean_reward": 222.34727769938104
+    },
+    "20264029": {
+      "success_metric": "roll_eval_success",
+      "successes": 177,
+      "episodes": 300,
+      "requested_episodes": 300,
+      "complete": true,
+      "success_rate": 0.59,
+      "auxiliary_metrics": {
+        "success": {
+          "true": 0,
+          "reported": 300,
+          "rate": 0.0
+        },
+        "roll_eval_success": {
+          "true": 177,
+          "reported": 300,
+          "rate": 0.59
+        },
+        "roll_legacy_success": {
+          "true": 0,
+          "reported": 300,
+          "rate": 0.0
+        },
+        "roll_final_hold": {
+          "true": 178,
+          "reported": 300,
+          "rate": 0.5933333333333334
+        }
+      },
+      "termination_counts": {
+        "ball_on_floor": 62,
+        "timeout": 226,
+        "ball_left": 5,
+        "out_of_bounds": 6,
+        "base_collision": 1
+      },
+      "legacy_truncated_rate": 0.76,
+      "mean_reward": 222.51646089939464
+    },
+    "20265029": {
+      "success_metric": "roll_eval_success",
+      "successes": 177,
+      "episodes": 300,
+      "requested_episodes": 300,
+      "complete": true,
+      "success_rate": 0.59,
+      "auxiliary_metrics": {
+        "success": {
+          "true": 0,
+          "reported": 300,
+          "rate": 0.0
+        },
+        "roll_eval_success": {
+          "true": 177,
+          "reported": 300,
+          "rate": 0.59
+        },
+        "roll_legacy_success": {
+          "true": 0,
+          "reported": 300,
+          "rate": 0.0
+        },
+        "roll_final_hold": {
+          "true": 181,
+          "reported": 300,
+          "rate": 0.6033333333333334
+        }
+      },
+      "termination_counts": {
+        "timeout": 214,
+        "ball_on_floor": 67,
+        "ball_left": 6,
+        "out_of_bounds": 13
+      },
+      "legacy_truncated_rate": 0.7233333333333334,
+      "mean_reward": 225.15510755036448
+    }
+  },
+  "successes": 987,
+  "episodes": 1500,
+  "seconds": 1313.2342409280027,
+  "policy_batch_size": 1
+}

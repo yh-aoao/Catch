@@ -1,0 +1,1404 @@
+{
+  "seed": 20261029,
+  "episodes": 5,
+  "physical_pairs_equal": 5,
+  "depth_pairs_equal": 4,
+  "protocols": [
+    {
+      "variant": "belief",
+      "checkpoint": "/home/isee/Catch/distill_best_ckpt/belief_student_best.pth",
+      "checkpoint_sha256": "83a6a4f0ba6c72fcc983464dc8051ede940ff26cd71f494409527cc7b4e02888",
+      "iteration": 10000,
+      "source_audit_sha256": "6a3588a6cd5a0cd4be426cfd8e01f743f17d031798fcdb0be0b843d3d3608346",
+      "script_sha256": "0bdf7b7c794241fd6d608d2eb295fad0e0139d09ceca378669e2ae61a9aed7ad",
+      "capture_hook_sha256": "6b515f2f13d3f1df2815dfeefcd1ee857a9e14d75532a210809686c5656a434e",
+      "task": "throw",
+      "seed": 20261029,
+      "episodes": 5,
+      "device": "cuda:0",
+      "egl_device_id": 0,
+      "deterministic_algorithms": true,
+      "tf32": false,
+      "policy_batch_size": 1,
+      "camera_specs": [
+        {
+          "name": "top",
+          "near": 0.1,
+          "far": 5.0
+        },
+        {
+          "name": "wrist",
+          "near": 0.01,
+          "far": 1.5
+        }
+      ],
+      "depth_encoding": "float16((clip(metric_depth_m, near, far)-near)/(far-near))",
+      "versions": {
+        "torch": "2.11.0+cu128",
+        "numpy": "1.23.0",
+        "mujoco": "3.6.0",
+        "cudnn": 91900,
+        "python": "3.10.20 (main, Mar 11 2026, 17:46:40) [GCC 14.3.0]"
+      }
+    },
+    {
+      "variant": "future",
+      "checkpoint": "/home/isee/Catch/distill_best_ckpt/future_student_last.pth",
+      "checkpoint_sha256": "d0d789a03ae850995f5e7ba524754518afa6891802f3882d8b475dd92c312ae6",
+      "iteration": 10000,
+      "source_audit_sha256": "6a3588a6cd5a0cd4be426cfd8e01f743f17d031798fcdb0be0b843d3d3608346",
+      "script_sha256": "0bdf7b7c794241fd6d608d2eb295fad0e0139d09ceca378669e2ae61a9aed7ad",
+      "capture_hook_sha256": "6b515f2f13d3f1df2815dfeefcd1ee857a9e14d75532a210809686c5656a434e",
+      "task": "throw",
+      "seed": 20261029,
+      "episodes": 5,
+      "device": "cuda:0",
+      "egl_device_id": 0,
+      "deterministic_algorithms": true,
+      "tf32": false,
+      "policy_batch_size": 1,
+      "camera_specs": [
+        {
+          "name": "top",
+          "near": 0.1,
+          "far": 5.0
+        },
+        {
+          "name": "wrist",
+          "near": 0.01,
+          "far": 1.5
+        }
+      ],
+      "depth_encoding": "float16((clip(metric_depth_m, near, far)-near)/(far-near))",
+      "versions": {
+        "torch": "2.11.0+cu128",
+        "numpy": "1.23.0",
+        "mujoco": "3.6.0",
+        "cudnn": 91900,
+        "python": "3.10.20 (main, Mar 11 2026, 17:46:40) [GCC 14.3.0]"
+      }
+    }
+  ],
+  "per_episode": [
+    {
+      "episode_id": 0,
+      "physical_hash_equal": true,
+      "depth_hash_equal": true,
+      "proprio": {
+        "shape_equal": true,
+        "values": 24,
+        "different": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "quantiles_all": {
+          "0": 0.0,
+          "0.5": 0.0,
+          "0.9": 0.0,
+          "0.95": 0.0,
+          "0.99": 0.0,
+          "1": 0.0
+        },
+        "quantiles_changed": {}
+      },
+      "cameras": {
+        "top": {
+          "encoded": {
+            "shape_equal": true,
+            "values": 25600,
+            "different": 0,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "quantiles_all": {
+              "0": 0.0,
+              "0.5": 0.0,
+              "0.9": 0.0,
+              "0.95": 0.0,
+              "0.99": 0.0,
+              "1": 0.0
+            },
+            "quantiles_changed": {}
+          },
+          "decoded_clipped_metres": {
+            "shape_equal": true,
+            "values": 25600,
+            "different": 0,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "quantiles_all": {
+              "0": 0.0,
+              "0.5": 0.0,
+              "0.9": 0.0,
+              "0.95": 0.0,
+              "0.99": 0.0,
+              "1": 0.0
+            },
+            "quantiles_changed": {}
+          }
+        },
+        "wrist": {
+          "encoded": {
+            "shape_equal": true,
+            "values": 25600,
+            "different": 0,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "quantiles_all": {
+              "0": 0.0,
+              "0.5": 0.0,
+              "0.9": 0.0,
+              "0.95": 0.0,
+              "0.99": 0.0,
+              "1": 0.0
+            },
+            "quantiles_changed": {}
+          },
+          "decoded_clipped_metres": {
+            "shape_equal": true,
+            "values": 25600,
+            "different": 0,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "quantiles_all": {
+              "0": 0.0,
+              "0.5": 0.0,
+              "0.9": 0.0,
+              "0.95": 0.0,
+              "0.99": 0.0,
+              "1": 0.0
+            },
+            "quantiles_changed": {}
+          }
+        }
+      },
+      "render_scalars_equal": {
+        "extent": true,
+        "znear": true,
+        "zfar": true,
+        "simulation_time": true
+      },
+      "extra_arrays": {
+        "cam_fovy": {
+          "shape_equal": true,
+          "values": 2,
+          "different": 0,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "quantiles_all": {
+            "0": 0.0,
+            "0.5": 0.0,
+            "0.9": 0.0,
+            "0.95": 0.0,
+            "0.99": 0.0,
+            "1": 0.0
+          },
+          "quantiles_changed": {}
+        },
+        "cam_xpos": {
+          "shape_equal": true,
+          "values": 6,
+          "different": 0,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "quantiles_all": {
+            "0": 0.0,
+            "0.5": 0.0,
+            "0.9": 0.0,
+            "0.95": 0.0,
+            "0.99": 0.0,
+            "1": 0.0
+          },
+          "quantiles_changed": {}
+        },
+        "cam_xmat": {
+          "shape_equal": true,
+          "values": 18,
+          "different": 0,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "quantiles_all": {
+            "0": 0.0,
+            "0.5": 0.0,
+            "0.9": 0.0,
+            "0.95": 0.0,
+            "0.99": 0.0,
+            "1": 0.0
+          },
+          "quantiles_changed": {}
+        },
+        "geom_xpos": {
+          "shape_equal": true,
+          "values": 306,
+          "different": 0,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "quantiles_all": {
+            "0": 0.0,
+            "0.5": 0.0,
+            "0.9": 0.0,
+            "0.95": 0.0,
+            "0.99": 0.0,
+            "1": 0.0
+          },
+          "quantiles_changed": {}
+        },
+        "geom_xmat": {
+          "shape_equal": true,
+          "values": 918,
+          "different": 0,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "quantiles_all": {
+            "0": 0.0,
+            "0.5": 0.0,
+            "0.9": 0.0,
+            "0.95": 0.0,
+            "0.99": 0.0,
+            "1": 0.0
+          },
+          "quantiles_changed": {}
+        },
+        "geom_rgba": {
+          "shape_equal": true,
+          "values": 408,
+          "different": 0,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "quantiles_all": {
+            "0": 0.0,
+            "0.5": 0.0,
+            "0.9": 0.0,
+            "0.95": 0.0,
+            "0.99": 0.0,
+            "1": 0.0
+          },
+          "quantiles_changed": {}
+        },
+        "geom_pos": {
+          "shape_equal": true,
+          "values": 306,
+          "different": 0,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "quantiles_all": {
+            "0": 0.0,
+            "0.5": 0.0,
+            "0.9": 0.0,
+            "0.95": 0.0,
+            "0.99": 0.0,
+            "1": 0.0
+          },
+          "quantiles_changed": {}
+        },
+        "geom_quat": {
+          "shape_equal": true,
+          "values": 408,
+          "different": 0,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "quantiles_all": {
+            "0": 0.0,
+            "0.5": 0.0,
+            "0.9": 0.0,
+            "0.95": 0.0,
+            "0.99": 0.0,
+            "1": 0.0
+          },
+          "quantiles_changed": {}
+        },
+        "geom_type": {
+          "shape_equal": true,
+          "values": 102,
+          "different": 0,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "quantiles_all": {
+            "0": 0.0,
+            "0.5": 0.0,
+            "0.9": 0.0,
+            "0.95": 0.0,
+            "0.99": 0.0,
+            "1": 0.0
+          },
+          "quantiles_changed": {}
+        }
+      }
+    },
+    {
+      "episode_id": 1,
+      "physical_hash_equal": true,
+      "depth_hash_equal": true,
+      "proprio": {
+        "shape_equal": true,
+        "values": 24,
+        "different": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "quantiles_all": {
+          "0": 0.0,
+          "0.5": 0.0,
+          "0.9": 0.0,
+          "0.95": 0.0,
+          "0.99": 0.0,
+          "1": 0.0
+        },
+        "quantiles_changed": {}
+      },
+      "cameras": {
+        "top": {
+          "encoded": {
+            "shape_equal": true,
+            "values": 25600,
+            "different": 0,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "quantiles_all": {
+              "0": 0.0,
+              "0.5": 0.0,
+              "0.9": 0.0,
+              "0.95": 0.0,
+              "0.99": 0.0,
+              "1": 0.0
+            },
+            "quantiles_changed": {}
+          },
+          "decoded_clipped_metres": {
+            "shape_equal": true,
+            "values": 25600,
+            "different": 0,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "quantiles_all": {
+              "0": 0.0,
+              "0.5": 0.0,
+              "0.9": 0.0,
+              "0.95": 0.0,
+              "0.99": 0.0,
+              "1": 0.0
+            },
+            "quantiles_changed": {}
+          }
+        },
+        "wrist": {
+          "encoded": {
+            "shape_equal": true,
+            "values": 25600,
+            "different": 0,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "quantiles_all": {
+              "0": 0.0,
+              "0.5": 0.0,
+              "0.9": 0.0,
+              "0.95": 0.0,
+              "0.99": 0.0,
+              "1": 0.0
+            },
+            "quantiles_changed": {}
+          },
+          "decoded_clipped_metres": {
+            "shape_equal": true,
+            "values": 25600,
+            "different": 0,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "quantiles_all": {
+              "0": 0.0,
+              "0.5": 0.0,
+              "0.9": 0.0,
+              "0.95": 0.0,
+              "0.99": 0.0,
+              "1": 0.0
+            },
+            "quantiles_changed": {}
+          }
+        }
+      },
+      "render_scalars_equal": {
+        "extent": true,
+        "znear": true,
+        "zfar": true,
+        "simulation_time": true
+      },
+      "extra_arrays": {
+        "cam_fovy": {
+          "shape_equal": true,
+          "values": 2,
+          "different": 0,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "quantiles_all": {
+            "0": 0.0,
+            "0.5": 0.0,
+            "0.9": 0.0,
+            "0.95": 0.0,
+            "0.99": 0.0,
+            "1": 0.0
+          },
+          "quantiles_changed": {}
+        },
+        "cam_xpos": {
+          "shape_equal": true,
+          "values": 6,
+          "different": 0,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "quantiles_all": {
+            "0": 0.0,
+            "0.5": 0.0,
+            "0.9": 0.0,
+            "0.95": 0.0,
+            "0.99": 0.0,
+            "1": 0.0
+          },
+          "quantiles_changed": {}
+        },
+        "cam_xmat": {
+          "shape_equal": true,
+          "values": 18,
+          "different": 0,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "quantiles_all": {
+            "0": 0.0,
+            "0.5": 0.0,
+            "0.9": 0.0,
+            "0.95": 0.0,
+            "0.99": 0.0,
+            "1": 0.0
+          },
+          "quantiles_changed": {}
+        },
+        "geom_xpos": {
+          "shape_equal": true,
+          "values": 306,
+          "different": 0,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "quantiles_all": {
+            "0": 0.0,
+            "0.5": 0.0,
+            "0.9": 0.0,
+            "0.95": 0.0,
+            "0.99": 0.0,
+            "1": 0.0
+          },
+          "quantiles_changed": {}
+        },
+        "geom_xmat": {
+          "shape_equal": true,
+          "values": 918,
+          "different": 0,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "quantiles_all": {
+            "0": 0.0,
+            "0.5": 0.0,
+            "0.9": 0.0,
+            "0.95": 0.0,
+            "0.99": 0.0,
+            "1": 0.0
+          },
+          "quantiles_changed": {}
+        },
+        "geom_rgba": {
+          "shape_equal": true,
+          "values": 408,
+          "different": 0,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "quantiles_all": {
+            "0": 0.0,
+            "0.5": 0.0,
+            "0.9": 0.0,
+            "0.95": 0.0,
+            "0.99": 0.0,
+            "1": 0.0
+          },
+          "quantiles_changed": {}
+        },
+        "geom_pos": {
+          "shape_equal": true,
+          "values": 306,
+          "different": 0,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "quantiles_all": {
+            "0": 0.0,
+            "0.5": 0.0,
+            "0.9": 0.0,
+            "0.95": 0.0,
+            "0.99": 0.0,
+            "1": 0.0
+          },
+          "quantiles_changed": {}
+        },
+        "geom_quat": {
+          "shape_equal": true,
+          "values": 408,
+          "different": 0,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "quantiles_all": {
+            "0": 0.0,
+            "0.5": 0.0,
+            "0.9": 0.0,
+            "0.95": 0.0,
+            "0.99": 0.0,
+            "1": 0.0
+          },
+          "quantiles_changed": {}
+        },
+        "geom_type": {
+          "shape_equal": true,
+          "values": 102,
+          "different": 0,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "quantiles_all": {
+            "0": 0.0,
+            "0.5": 0.0,
+            "0.9": 0.0,
+            "0.95": 0.0,
+            "0.99": 0.0,
+            "1": 0.0
+          },
+          "quantiles_changed": {}
+        }
+      }
+    },
+    {
+      "episode_id": 2,
+      "physical_hash_equal": true,
+      "depth_hash_equal": false,
+      "proprio": {
+        "shape_equal": true,
+        "values": 24,
+        "different": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "quantiles_all": {
+          "0": 0.0,
+          "0.5": 0.0,
+          "0.9": 0.0,
+          "0.95": 0.0,
+          "0.99": 0.0,
+          "1": 0.0
+        },
+        "quantiles_changed": {}
+      },
+      "cameras": {
+        "top": {
+          "encoded": {
+            "shape_equal": true,
+            "values": 25600,
+            "different": 160,
+            "max_abs": 0.000244140625,
+            "mean_abs": 1.52587890625e-06,
+            "quantiles_all": {
+              "0": 0.0,
+              "0.5": 0.0,
+              "0.9": 0.0,
+              "0.95": 0.0,
+              "0.99": 0.0,
+              "1": 0.000244140625
+            },
+            "quantiles_changed": {
+              "0": 0.000244140625,
+              "0.5": 0.000244140625,
+              "0.9": 0.000244140625,
+              "0.95": 0.000244140625,
+              "0.99": 0.000244140625,
+              "1": 0.000244140625
+            }
+          },
+          "decoded_clipped_metres": {
+            "shape_equal": true,
+            "values": 25600,
+            "different": 160,
+            "max_abs": 0.0011962890625001332,
+            "mean_abs": 7.4768066406258325e-06,
+            "quantiles_all": {
+              "0": 0.0,
+              "0.5": 0.0,
+              "0.9": 0.0,
+              "0.95": 0.0,
+              "0.99": 0.0,
+              "1": 0.0011962890625001332
+            },
+            "quantiles_changed": {
+              "0": 0.0011962890625001332,
+              "0.5": 0.0011962890625001332,
+              "0.9": 0.0011962890625001332,
+              "0.95": 0.0011962890625001332,
+              "0.99": 0.0011962890625001332,
+              "1": 0.0011962890625001332
+            }
+          }
+        },
+        "wrist": {
+          "encoded": {
+            "shape_equal": true,
+            "values": 25600,
+            "different": 0,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "quantiles_all": {
+              "0": 0.0,
+              "0.5": 0.0,
+              "0.9": 0.0,
+              "0.95": 0.0,
+              "0.99": 0.0,
+              "1": 0.0
+            },
+            "quantiles_changed": {}
+          },
+          "decoded_clipped_metres": {
+            "shape_equal": true,
+            "values": 25600,
+            "different": 0,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "quantiles_all": {
+              "0": 0.0,
+              "0.5": 0.0,
+              "0.9": 0.0,
+              "0.95": 0.0,
+              "0.99": 0.0,
+              "1": 0.0
+            },
+            "quantiles_changed": {}
+          }
+        }
+      },
+      "render_scalars_equal": {
+        "extent": true,
+        "znear": true,
+        "zfar": true,
+        "simulation_time": true
+      },
+      "extra_arrays": {
+        "cam_fovy": {
+          "shape_equal": true,
+          "values": 2,
+          "different": 0,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "quantiles_all": {
+            "0": 0.0,
+            "0.5": 0.0,
+            "0.9": 0.0,
+            "0.95": 0.0,
+            "0.99": 0.0,
+            "1": 0.0
+          },
+          "quantiles_changed": {}
+        },
+        "cam_xpos": {
+          "shape_equal": true,
+          "values": 6,
+          "different": 0,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "quantiles_all": {
+            "0": 0.0,
+            "0.5": 0.0,
+            "0.9": 0.0,
+            "0.95": 0.0,
+            "0.99": 0.0,
+            "1": 0.0
+          },
+          "quantiles_changed": {}
+        },
+        "cam_xmat": {
+          "shape_equal": true,
+          "values": 18,
+          "different": 0,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "quantiles_all": {
+            "0": 0.0,
+            "0.5": 0.0,
+            "0.9": 0.0,
+            "0.95": 0.0,
+            "0.99": 0.0,
+            "1": 0.0
+          },
+          "quantiles_changed": {}
+        },
+        "geom_xpos": {
+          "shape_equal": true,
+          "values": 306,
+          "different": 0,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "quantiles_all": {
+            "0": 0.0,
+            "0.5": 0.0,
+            "0.9": 0.0,
+            "0.95": 0.0,
+            "0.99": 0.0,
+            "1": 0.0
+          },
+          "quantiles_changed": {}
+        },
+        "geom_xmat": {
+          "shape_equal": true,
+          "values": 918,
+          "different": 0,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "quantiles_all": {
+            "0": 0.0,
+            "0.5": 0.0,
+            "0.9": 0.0,
+            "0.95": 0.0,
+            "0.99": 0.0,
+            "1": 0.0
+          },
+          "quantiles_changed": {}
+        },
+        "geom_rgba": {
+          "shape_equal": true,
+          "values": 408,
+          "different": 0,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "quantiles_all": {
+            "0": 0.0,
+            "0.5": 0.0,
+            "0.9": 0.0,
+            "0.95": 0.0,
+            "0.99": 0.0,
+            "1": 0.0
+          },
+          "quantiles_changed": {}
+        },
+        "geom_pos": {
+          "shape_equal": true,
+          "values": 306,
+          "different": 0,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "quantiles_all": {
+            "0": 0.0,
+            "0.5": 0.0,
+            "0.9": 0.0,
+            "0.95": 0.0,
+            "0.99": 0.0,
+            "1": 0.0
+          },
+          "quantiles_changed": {}
+        },
+        "geom_quat": {
+          "shape_equal": true,
+          "values": 408,
+          "different": 0,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "quantiles_all": {
+            "0": 0.0,
+            "0.5": 0.0,
+            "0.9": 0.0,
+            "0.95": 0.0,
+            "0.99": 0.0,
+            "1": 0.0
+          },
+          "quantiles_changed": {}
+        },
+        "geom_type": {
+          "shape_equal": true,
+          "values": 102,
+          "different": 0,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "quantiles_all": {
+            "0": 0.0,
+            "0.5": 0.0,
+            "0.9": 0.0,
+            "0.95": 0.0,
+            "0.99": 0.0,
+            "1": 0.0
+          },
+          "quantiles_changed": {}
+        }
+      }
+    },
+    {
+      "episode_id": 3,
+      "physical_hash_equal": true,
+      "depth_hash_equal": true,
+      "proprio": {
+        "shape_equal": true,
+        "values": 24,
+        "different": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "quantiles_all": {
+          "0": 0.0,
+          "0.5": 0.0,
+          "0.9": 0.0,
+          "0.95": 0.0,
+          "0.99": 0.0,
+          "1": 0.0
+        },
+        "quantiles_changed": {}
+      },
+      "cameras": {
+        "top": {
+          "encoded": {
+            "shape_equal": true,
+            "values": 25600,
+            "different": 0,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "quantiles_all": {
+              "0": 0.0,
+              "0.5": 0.0,
+              "0.9": 0.0,
+              "0.95": 0.0,
+              "0.99": 0.0,
+              "1": 0.0
+            },
+            "quantiles_changed": {}
+          },
+          "decoded_clipped_metres": {
+            "shape_equal": true,
+            "values": 25600,
+            "different": 0,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "quantiles_all": {
+              "0": 0.0,
+              "0.5": 0.0,
+              "0.9": 0.0,
+              "0.95": 0.0,
+              "0.99": 0.0,
+              "1": 0.0
+            },
+            "quantiles_changed": {}
+          }
+        },
+        "wrist": {
+          "encoded": {
+            "shape_equal": true,
+            "values": 25600,
+            "different": 0,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "quantiles_all": {
+              "0": 0.0,
+              "0.5": 0.0,
+              "0.9": 0.0,
+              "0.95": 0.0,
+              "0.99": 0.0,
+              "1": 0.0
+            },
+            "quantiles_changed": {}
+          },
+          "decoded_clipped_metres": {
+            "shape_equal": true,
+            "values": 25600,
+            "different": 0,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "quantiles_all": {
+              "0": 0.0,
+              "0.5": 0.0,
+              "0.9": 0.0,
+              "0.95": 0.0,
+              "0.99": 0.0,
+              "1": 0.0
+            },
+            "quantiles_changed": {}
+          }
+        }
+      },
+      "render_scalars_equal": {
+        "extent": true,
+        "znear": true,
+        "zfar": true,
+        "simulation_time": true
+      },
+      "extra_arrays": {
+        "cam_fovy": {
+          "shape_equal": true,
+          "values": 2,
+          "different": 0,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "quantiles_all": {
+            "0": 0.0,
+            "0.5": 0.0,
+            "0.9": 0.0,
+            "0.95": 0.0,
+            "0.99": 0.0,
+            "1": 0.0
+          },
+          "quantiles_changed": {}
+        },
+        "cam_xpos": {
+          "shape_equal": true,
+          "values": 6,
+          "different": 0,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "quantiles_all": {
+            "0": 0.0,
+            "0.5": 0.0,
+            "0.9": 0.0,
+            "0.95": 0.0,
+            "0.99": 0.0,
+            "1": 0.0
+          },
+          "quantiles_changed": {}
+        },
+        "cam_xmat": {
+          "shape_equal": true,
+          "values": 18,
+          "different": 0,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "quantiles_all": {
+            "0": 0.0,
+            "0.5": 0.0,
+            "0.9": 0.0,
+            "0.95": 0.0,
+            "0.99": 0.0,
+            "1": 0.0
+          },
+          "quantiles_changed": {}
+        },
+        "geom_xpos": {
+          "shape_equal": true,
+          "values": 306,
+          "different": 0,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "quantiles_all": {
+            "0": 0.0,
+            "0.5": 0.0,
+            "0.9": 0.0,
+            "0.95": 0.0,
+            "0.99": 0.0,
+            "1": 0.0
+          },
+          "quantiles_changed": {}
+        },
+        "geom_xmat": {
+          "shape_equal": true,
+          "values": 918,
+          "different": 0,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "quantiles_all": {
+            "0": 0.0,
+            "0.5": 0.0,
+            "0.9": 0.0,
+            "0.95": 0.0,
+            "0.99": 0.0,
+            "1": 0.0
+          },
+          "quantiles_changed": {}
+        },
+        "geom_rgba": {
+          "shape_equal": true,
+          "values": 408,
+          "different": 0,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "quantiles_all": {
+            "0": 0.0,
+            "0.5": 0.0,
+            "0.9": 0.0,
+            "0.95": 0.0,
+            "0.99": 0.0,
+            "1": 0.0
+          },
+          "quantiles_changed": {}
+        },
+        "geom_pos": {
+          "shape_equal": true,
+          "values": 306,
+          "different": 0,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "quantiles_all": {
+            "0": 0.0,
+            "0.5": 0.0,
+            "0.9": 0.0,
+            "0.95": 0.0,
+            "0.99": 0.0,
+            "1": 0.0
+          },
+          "quantiles_changed": {}
+        },
+        "geom_quat": {
+          "shape_equal": true,
+          "values": 408,
+          "different": 0,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "quantiles_all": {
+            "0": 0.0,
+            "0.5": 0.0,
+            "0.9": 0.0,
+            "0.95": 0.0,
+            "0.99": 0.0,
+            "1": 0.0
+          },
+          "quantiles_changed": {}
+        },
+        "geom_type": {
+          "shape_equal": true,
+          "values": 102,
+          "different": 0,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "quantiles_all": {
+            "0": 0.0,
+            "0.5": 0.0,
+            "0.9": 0.0,
+            "0.95": 0.0,
+            "0.99": 0.0,
+            "1": 0.0
+          },
+          "quantiles_changed": {}
+        }
+      }
+    },
+    {
+      "episode_id": 4,
+      "physical_hash_equal": true,
+      "depth_hash_equal": true,
+      "proprio": {
+        "shape_equal": true,
+        "values": 24,
+        "different": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "quantiles_all": {
+          "0": 0.0,
+          "0.5": 0.0,
+          "0.9": 0.0,
+          "0.95": 0.0,
+          "0.99": 0.0,
+          "1": 0.0
+        },
+        "quantiles_changed": {}
+      },
+      "cameras": {
+        "top": {
+          "encoded": {
+            "shape_equal": true,
+            "values": 25600,
+            "different": 0,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "quantiles_all": {
+              "0": 0.0,
+              "0.5": 0.0,
+              "0.9": 0.0,
+              "0.95": 0.0,
+              "0.99": 0.0,
+              "1": 0.0
+            },
+            "quantiles_changed": {}
+          },
+          "decoded_clipped_metres": {
+            "shape_equal": true,
+            "values": 25600,
+            "different": 0,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "quantiles_all": {
+              "0": 0.0,
+              "0.5": 0.0,
+              "0.9": 0.0,
+              "0.95": 0.0,
+              "0.99": 0.0,
+              "1": 0.0
+            },
+            "quantiles_changed": {}
+          }
+        },
+        "wrist": {
+          "encoded": {
+            "shape_equal": true,
+            "values": 25600,
+            "different": 0,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "quantiles_all": {
+              "0": 0.0,
+              "0.5": 0.0,
+              "0.9": 0.0,
+              "0.95": 0.0,
+              "0.99": 0.0,
+              "1": 0.0
+            },
+            "quantiles_changed": {}
+          },
+          "decoded_clipped_metres": {
+            "shape_equal": true,
+            "values": 25600,
+            "different": 0,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "quantiles_all": {
+              "0": 0.0,
+              "0.5": 0.0,
+              "0.9": 0.0,
+              "0.95": 0.0,
+              "0.99": 0.0,
+              "1": 0.0
+            },
+            "quantiles_changed": {}
+          }
+        }
+      },
+      "render_scalars_equal": {
+        "extent": true,
+        "znear": true,
+        "zfar": true,
+        "simulation_time": true
+      },
+      "extra_arrays": {
+        "cam_fovy": {
+          "shape_equal": true,
+          "values": 2,
+          "different": 0,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "quantiles_all": {
+            "0": 0.0,
+            "0.5": 0.0,
+            "0.9": 0.0,
+            "0.95": 0.0,
+            "0.99": 0.0,
+            "1": 0.0
+          },
+          "quantiles_changed": {}
+        },
+        "cam_xpos": {
+          "shape_equal": true,
+          "values": 6,
+          "different": 0,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "quantiles_all": {
+            "0": 0.0,
+            "0.5": 0.0,
+            "0.9": 0.0,
+            "0.95": 0.0,
+            "0.99": 0.0,
+            "1": 0.0
+          },
+          "quantiles_changed": {}
+        },
+        "cam_xmat": {
+          "shape_equal": true,
+          "values": 18,
+          "different": 0,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "quantiles_all": {
+            "0": 0.0,
+            "0.5": 0.0,
+            "0.9": 0.0,
+            "0.95": 0.0,
+            "0.99": 0.0,
+            "1": 0.0
+          },
+          "quantiles_changed": {}
+        },
+        "geom_xpos": {
+          "shape_equal": true,
+          "values": 306,
+          "different": 0,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "quantiles_all": {
+            "0": 0.0,
+            "0.5": 0.0,
+            "0.9": 0.0,
+            "0.95": 0.0,
+            "0.99": 0.0,
+            "1": 0.0
+          },
+          "quantiles_changed": {}
+        },
+        "geom_xmat": {
+          "shape_equal": true,
+          "values": 918,
+          "different": 0,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "quantiles_all": {
+            "0": 0.0,
+            "0.5": 0.0,
+            "0.9": 0.0,
+            "0.95": 0.0,
+            "0.99": 0.0,
+            "1": 0.0
+          },
+          "quantiles_changed": {}
+        },
+        "geom_rgba": {
+          "shape_equal": true,
+          "values": 408,
+          "different": 0,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "quantiles_all": {
+            "0": 0.0,
+            "0.5": 0.0,
+            "0.9": 0.0,
+            "0.95": 0.0,
+            "0.99": 0.0,
+            "1": 0.0
+          },
+          "quantiles_changed": {}
+        },
+        "geom_pos": {
+          "shape_equal": true,
+          "values": 306,
+          "different": 0,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "quantiles_all": {
+            "0": 0.0,
+            "0.5": 0.0,
+            "0.9": 0.0,
+            "0.95": 0.0,
+            "0.99": 0.0,
+            "1": 0.0
+          },
+          "quantiles_changed": {}
+        },
+        "geom_quat": {
+          "shape_equal": true,
+          "values": 408,
+          "different": 0,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "quantiles_all": {
+            "0": 0.0,
+            "0.5": 0.0,
+            "0.9": 0.0,
+            "0.95": 0.0,
+            "0.99": 0.0,
+            "1": 0.0
+          },
+          "quantiles_changed": {}
+        },
+        "geom_type": {
+          "shape_equal": true,
+          "values": 102,
+          "different": 0,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "quantiles_all": {
+            "0": 0.0,
+            "0.5": 0.0,
+            "0.9": 0.0,
+            "0.95": 0.0,
+            "0.99": 0.0,
+            "1": 0.0
+          },
+          "quantiles_changed": {}
+        }
+      }
+    }
+  ],
+  "pooled_cameras": {
+    "top": {
+      "encoded": {
+        "shape_equal": true,
+        "values": 128000,
+        "different": 160,
+        "max_abs": 0.000244140625,
+        "mean_abs": 3.0517578125e-07,
+        "quantiles_all": {
+          "0": 0.0,
+          "0.5": 0.0,
+          "0.9": 0.0,
+          "0.95": 0.0,
+          "0.99": 0.0,
+          "1": 0.000244140625
+        },
+        "quantiles_changed": {
+          "0": 0.000244140625,
+          "0.5": 0.000244140625,
+          "0.9": 0.000244140625,
+          "0.95": 0.000244140625,
+          "0.99": 0.000244140625,
+          "1": 0.000244140625
+        }
+      },
+      "decoded_clipped_metres": {
+        "shape_equal": true,
+        "values": 128000,
+        "different": 160,
+        "max_abs": 0.0011962890625001332,
+        "mean_abs": 1.4953613281251665e-06,
+        "quantiles_all": {
+          "0": 0.0,
+          "0.5": 0.0,
+          "0.9": 0.0,
+          "0.95": 0.0,
+          "0.99": 0.0,
+          "1": 0.0011962890625001332
+        },
+        "quantiles_changed": {
+          "0": 0.0011962890625001332,
+          "0.5": 0.0011962890625001332,
+          "0.9": 0.0011962890625001332,
+          "0.95": 0.0011962890625001332,
+          "0.99": 0.0011962890625001332,
+          "1": 0.0011962890625001332
+        }
+      }
+    },
+    "wrist": {
+      "encoded": {
+        "shape_equal": true,
+        "values": 128000,
+        "different": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "quantiles_all": {
+          "0": 0.0,
+          "0.5": 0.0,
+          "0.9": 0.0,
+          "0.95": 0.0,
+          "0.99": 0.0,
+          "1": 0.0
+        },
+        "quantiles_changed": {}
+      },
+      "decoded_clipped_metres": {
+        "shape_equal": true,
+        "values": 128000,
+        "different": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "quantiles_all": {
+          "0": 0.0,
+          "0.5": 0.0,
+          "0.9": 0.0,
+          "0.95": 0.0,
+          "0.99": 0.0,
+          "1": 0.0
+        },
+        "quantiles_changed": {}
+      }
+    }
+  },
+  "limitations": [
+    "Depth arrays are policy packet float16 values, dimensionless and clipped to [0,1].",
+    "Decoded metric deltas multiply encoded deltas by each camera far-near. They compare quantized, clipped depths, not original unquantized renderer frames.",
+    "Pixels at 0 or 1 are saturated; their original metric difference cannot be recovered. Equal encoded values may conceal sub-quantization differences.",
+    "This diagnostic repeats only a few initial frames and is separate from the formal success-rate sample. It cannot determine the effect of image deviations on success by itself.",
+    "Physical hashes cover the existing hook fields; extra captured camera/geometry arrays are compared separately. No claim is made that all possible simulator state has been hashed."
+  ]
+}

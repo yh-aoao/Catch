@@ -1,0 +1,5228 @@
+{
+  "complete": true,
+  "planned_episodes": 9000,
+  "seeds": [
+    20261029,
+    20262029,
+    20263029,
+    20264029,
+    20265029
+  ],
+  "episodes_per_seed_per_task": 300,
+  "comparison_direction": "future_minus_belief",
+  "models": {
+    "belief": {
+      "checkpoint": "/home/isee/Catch/distill_best_ckpt/belief_student_best.pth",
+      "checkpoint_sha256": "83a6a4f0ba6c72fcc983464dc8051ede940ff26cd71f494409527cc7b4e02888",
+      "iteration": 10000,
+      "source_exceptions": [],
+      "source_manifest_files": 284,
+      "matching_source_manifest_files": 284,
+      "additional_historical_assets": 57,
+      "tasks": {
+        "throw": {
+          "episodes": 1500,
+          "successes": 1093,
+          "rate": 0.7286666666666667,
+          "conditional_wilson95": [
+            0.7056018582474428,
+            0.7505632487698608
+          ],
+          "mean_reward": 447.52231456729254,
+          "mean_length": 56.854,
+          "termination_counts": {
+            "unspecified": 1205,
+            "ball_left": 295
+          },
+          "metric_versions": {
+            "throw_official": 1500
+          },
+          "auxiliary": {
+            "success": {
+              "successes": 1093,
+              "reported": 1500,
+              "rate": 0.7286666666666667
+            }
+          },
+          "per_seed": {
+            "20261029": {
+              "episodes": 300,
+              "successes": 238,
+              "rate": 0.7933333333333333,
+              "conditional_wilson95": [
+                0.743944983244025,
+                0.8353044736375745
+              ],
+              "mean_reward": 474.93780674898545,
+              "mean_length": 58.626666666666665,
+              "termination_counts": {
+                "unspecified": 249,
+                "ball_left": 51
+              },
+              "metric_versions": {
+                "throw_official": 300
+              },
+              "auxiliary": {
+                "success": {
+                  "successes": 238,
+                  "reported": 300,
+                  "rate": 0.7933333333333333
+                }
+              }
+            },
+            "20262029": {
+              "episodes": 300,
+              "successes": 205,
+              "rate": 0.6833333333333333,
+              "conditional_wilson95": [
+                0.628659261236736,
+                0.7333716493142638
+              ],
+              "mean_reward": 419.3887952687079,
+              "mean_length": 54.86666666666667,
+              "termination_counts": {
+                "unspecified": 252,
+                "ball_left": 48
+              },
+              "metric_versions": {
+                "throw_official": 300
+              },
+              "auxiliary": {
+                "success": {
+                  "successes": 205,
+                  "reported": 300,
+                  "rate": 0.6833333333333333
+                }
+              }
+            },
+            "20263029": {
+              "episodes": 300,
+              "successes": 206,
+              "rate": 0.6866666666666666,
+              "conditional_wilson95": [
+                0.6320976883026915,
+                0.7365156024401446
+              ],
+              "mean_reward": 430.1637140997283,
+              "mean_length": 56.24333333333333,
+              "termination_counts": {
+                "unspecified": 238,
+                "ball_left": 62
+              },
+              "metric_versions": {
+                "throw_official": 300
+              },
+              "auxiliary": {
+                "success": {
+                  "successes": 206,
+                  "reported": 300,
+                  "rate": 0.6866666666666666
+                }
+              }
+            },
+            "20264029": {
+              "episodes": 300,
+              "successes": 233,
+              "rate": 0.7766666666666666,
+              "conditional_wilson95": [
+                0.7262089140024802,
+                0.8201286419199375
+              ],
+              "mean_reward": 486.21193419453385,
+              "mean_length": 57.873333333333335,
+              "termination_counts": {
+                "unspecified": 239,
+                "ball_left": 61
+              },
+              "metric_versions": {
+                "throw_official": 300
+              },
+              "auxiliary": {
+                "success": {
+                  "successes": 233,
+                  "reported": 300,
+                  "rate": 0.7766666666666666
+                }
+              }
+            },
+            "20265029": {
+              "episodes": 300,
+              "successes": 211,
+              "rate": 0.7033333333333334,
+              "conditional_wilson95": [
+                0.6493365822398648,
+                0.7521886094621532
+              ],
+              "mean_reward": 426.9093225245071,
+              "mean_length": 56.66,
+              "termination_counts": {
+                "unspecified": 227,
+                "ball_left": 73
+              },
+              "metric_versions": {
+                "throw_official": 300
+              },
+              "auxiliary": {
+                "success": {
+                  "successes": 211,
+                  "reported": 300,
+                  "rate": 0.7033333333333334
+                }
+              }
+            }
+          },
+          "seed_rate": {
+            "n_seeds": 5,
+            "mean": 0.7286666666666667,
+            "minimum": 0.6833333333333333,
+            "maximum": 0.7933333333333333,
+            "sample_sd": 0.052313159593611484,
+            "t95": [
+              0.6637112997669399,
+              0.7936220335663935
+            ]
+          },
+          "environment_draws": {
+            "20261029": {
+              "episodes": 300,
+              "radii": [
+                0.042530940300638774
+              ],
+              "masses": [
+                0.035
+              ]
+            },
+            "20262029": {
+              "episodes": 300,
+              "radii": [
+                0.04103646601235892
+              ],
+              "masses": [
+                0.035
+              ]
+            },
+            "20263029": {
+              "episodes": 300,
+              "radii": [
+                0.04131249407639956
+              ],
+              "masses": [
+                0.035
+              ]
+            },
+            "20264029": {
+              "episodes": 300,
+              "radii": [
+                0.03500287133448726
+              ],
+              "masses": [
+                0.035
+              ]
+            },
+            "20265029": {
+              "episodes": 300,
+              "radii": [
+                0.0434729253592427
+              ],
+              "masses": [
+                0.035
+              ]
+            }
+          },
+          "protocol": {
+            "variant": "belief",
+            "task": "throw",
+            "seeds": [
+              20261029,
+              20262029,
+              20263029,
+              20264029,
+              20265029
+            ],
+            "episodes_per_seed": 300,
+            "checkpoint": "/home/isee/Catch/distill_best_ckpt/belief_student_best.pth",
+            "checkpoint_sha256": "83a6a4f0ba6c72fcc983464dc8051ede940ff26cd71f494409527cc7b4e02888",
+            "iteration": 10000,
+            "source_audit": "/home/isee/Catch/analysis_artifacts/distill_best_multiseed_20261029_v1/source_audit.json",
+            "source_root": "/tmp/catch_distill_eval_sources_20261029/belief",
+            "source_audit_sha256": "6a3588a6cd5a0cd4be426cfd8e01f743f17d031798fcdb0be0b843d3d3608346",
+            "evaluator_sha256": "ea85a2d321d3e9538365c6b57f0228078f1e8ce1126e77fd78ae25a928f5b089",
+            "capture_hook_sha256": "6b515f2f13d3f1df2815dfeefcd1ee857a9e14d75532a210809686c5656a434e",
+            "source_exceptions": [],
+            "device": "cuda:0",
+            "batch_streams": 5,
+            "policy_batch_size": 1,
+            "deterministic_algorithms": true,
+            "tf32": false,
+            "constructor_seed": "evaluation_seed + 1000000 + TASK_ID*10000",
+            "reset_seed": "constructor_seed + episode_index*100003",
+            "versions": {
+              "torch": "2.11.0+cu128",
+              "numpy": "1.23.0",
+              "mujoco": "3.6.0",
+              "cudnn": 91900,
+              "python": "3.10.20 (main, Mar 11 2026, 17:46:40) [GCC 14.3.0]"
+            },
+            "no_teacher_required": true
+          }
+        },
+        "roll": {
+          "episodes": 1500,
+          "successes": 987,
+          "rate": 0.658,
+          "conditional_wilson95": [
+            0.6336172055362613,
+            0.6815755943561613
+          ],
+          "mean_reward": 227.27025839718928,
+          "mean_length": 60.73466666666667,
+          "termination_counts": {
+            "timeout": 1155,
+            "out_of_bounds": 52,
+            "ball_on_floor": 263,
+            "ball_left": 25,
+            "base_collision": 5
+          },
+          "metric_versions": {
+            "region_retention_v5": 1500
+          },
+          "auxiliary": {
+            "success": {
+              "successes": 0,
+              "reported": 1500,
+              "rate": 0.0
+            },
+            "roll_eval_success": {
+              "successes": 987,
+              "reported": 1500,
+              "rate": 0.658
+            },
+            "roll_caught_once": {
+              "successes": 1318,
+              "reported": 1500,
+              "rate": 0.8786666666666667
+            },
+            "roll_stable_hold": {
+              "successes": 5,
+              "reported": 1500,
+              "rate": 0.0033333333333333335
+            },
+            "roll_holding_at_end": {
+              "successes": 1006,
+              "reported": 1500,
+              "rate": 0.6706666666666666
+            },
+            "roll_final_hold": {
+              "successes": 1006,
+              "reported": 1500,
+              "rate": 0.6706666666666666
+            },
+            "roll_legacy_success": {
+              "successes": 0,
+              "reported": 1500,
+              "rate": 0.0
+            }
+          },
+          "per_seed": {
+            "20261029": {
+              "episodes": 300,
+              "successes": 208,
+              "rate": 0.6933333333333334,
+              "conditional_wilson95": [
+                0.6389838112035251,
+                0.7427942399229839
+              ],
+              "mean_reward": 231.52240231509825,
+              "mean_length": 60.53,
+              "termination_counts": {
+                "timeout": 233,
+                "out_of_bounds": 11,
+                "ball_on_floor": 50,
+                "ball_left": 5,
+                "base_collision": 1
+              },
+              "metric_versions": {
+                "region_retention_v5": 300
+              },
+              "auxiliary": {
+                "success": {
+                  "successes": 0,
+                  "reported": 300,
+                  "rate": 0.0
+                },
+                "roll_eval_success": {
+                  "successes": 208,
+                  "reported": 300,
+                  "rate": 0.6933333333333334
+                },
+                "roll_caught_once": {
+                  "successes": 256,
+                  "reported": 300,
+                  "rate": 0.8533333333333334
+                },
+                "roll_stable_hold": {
+                  "successes": 0,
+                  "reported": 300,
+                  "rate": 0.0
+                },
+                "roll_holding_at_end": {
+                  "successes": 210,
+                  "reported": 300,
+                  "rate": 0.7
+                },
+                "roll_final_hold": {
+                  "successes": 210,
+                  "reported": 300,
+                  "rate": 0.7
+                },
+                "roll_legacy_success": {
+                  "successes": 0,
+                  "reported": 300,
+                  "rate": 0.0
+                }
+              }
+            },
+            "20262029": {
+              "episodes": 300,
+              "successes": 220,
+              "rate": 0.7333333333333333,
+              "conditional_wilson95": [
+                0.680572605868549,
+                0.7801940075599961
+              ],
+              "mean_reward": 234.81004352170805,
+              "mean_length": 61.31333333333333,
+              "termination_counts": {
+                "timeout": 249,
+                "out_of_bounds": 12,
+                "ball_on_floor": 35,
+                "ball_left": 3,
+                "base_collision": 1
+              },
+              "metric_versions": {
+                "region_retention_v5": 300
+              },
+              "auxiliary": {
+                "success": {
+                  "successes": 0,
+                  "reported": 300,
+                  "rate": 0.0
+                },
+                "roll_eval_success": {
+                  "successes": 220,
+                  "reported": 300,
+                  "rate": 0.7333333333333333
+                },
+                "roll_caught_once": {
+                  "successes": 276,
+                  "reported": 300,
+                  "rate": 0.92
+                },
+                "roll_stable_hold": {
+                  "successes": 3,
+                  "reported": 300,
+                  "rate": 0.01
+                },
+                "roll_holding_at_end": {
+                  "successes": 226,
+                  "reported": 300,
+                  "rate": 0.7533333333333333
+                },
+                "roll_final_hold": {
+                  "successes": 226,
+                  "reported": 300,
+                  "rate": 0.7533333333333333
+                },
+                "roll_legacy_success": {
+                  "successes": 0,
+                  "reported": 300,
+                  "rate": 0.0
+                }
+              }
+            },
+            "20263029": {
+              "episodes": 300,
+              "successes": 205,
+              "rate": 0.6833333333333333,
+              "conditional_wilson95": [
+                0.628659261236736,
+                0.7333716493142638
+              ],
+              "mean_reward": 222.3472776993809,
+              "mean_length": 61.01,
+              "termination_counts": {
+                "timeout": 233,
+                "ball_left": 6,
+                "out_of_bounds": 10,
+                "ball_on_floor": 49,
+                "base_collision": 2
+              },
+              "metric_versions": {
+                "region_retention_v5": 300
+              },
+              "auxiliary": {
+                "success": {
+                  "successes": 0,
+                  "reported": 300,
+                  "rate": 0.0
+                },
+                "roll_eval_success": {
+                  "successes": 205,
+                  "reported": 300,
+                  "rate": 0.6833333333333333
+                },
+                "roll_caught_once": {
+                  "successes": 274,
+                  "reported": 300,
+                  "rate": 0.9133333333333333
+                },
+                "roll_stable_hold": {
+                  "successes": 1,
+                  "reported": 300,
+                  "rate": 0.0033333333333333335
+                },
+                "roll_holding_at_end": {
+                  "successes": 211,
+                  "reported": 300,
+                  "rate": 0.7033333333333334
+                },
+                "roll_final_hold": {
+                  "successes": 211,
+                  "reported": 300,
+                  "rate": 0.7033333333333334
+                },
+                "roll_legacy_success": {
+                  "successes": 0,
+                  "reported": 300,
+                  "rate": 0.0
+                }
+              }
+            },
+            "20264029": {
+              "episodes": 300,
+              "successes": 177,
+              "rate": 0.59,
+              "conditional_wilson95": [
+                0.5335482149789318,
+                0.6441760502006498
+              ],
+              "mean_reward": 222.51646089939476,
+              "mean_length": 60.42666666666667,
+              "termination_counts": {
+                "ball_on_floor": 62,
+                "timeout": 226,
+                "ball_left": 5,
+                "out_of_bounds": 6,
+                "base_collision": 1
+              },
+              "metric_versions": {
+                "region_retention_v5": 300
+              },
+              "auxiliary": {
+                "success": {
+                  "successes": 0,
+                  "reported": 300,
+                  "rate": 0.0
+                },
+                "roll_eval_success": {
+                  "successes": 177,
+                  "reported": 300,
+                  "rate": 0.59
+                },
+                "roll_caught_once": {
+                  "successes": 260,
+                  "reported": 300,
+                  "rate": 0.8666666666666667
+                },
+                "roll_stable_hold": {
+                  "successes": 0,
+                  "reported": 300,
+                  "rate": 0.0
+                },
+                "roll_holding_at_end": {
+                  "successes": 178,
+                  "reported": 300,
+                  "rate": 0.5933333333333334
+                },
+                "roll_final_hold": {
+                  "successes": 178,
+                  "reported": 300,
+                  "rate": 0.5933333333333334
+                },
+                "roll_legacy_success": {
+                  "successes": 0,
+                  "reported": 300,
+                  "rate": 0.0
+                }
+              }
+            },
+            "20265029": {
+              "episodes": 300,
+              "successes": 177,
+              "rate": 0.59,
+              "conditional_wilson95": [
+                0.5335482149789318,
+                0.6441760502006498
+              ],
+              "mean_reward": 225.15510755036445,
+              "mean_length": 60.39333333333333,
+              "termination_counts": {
+                "timeout": 214,
+                "ball_on_floor": 67,
+                "ball_left": 6,
+                "out_of_bounds": 13
+              },
+              "metric_versions": {
+                "region_retention_v5": 300
+              },
+              "auxiliary": {
+                "success": {
+                  "successes": 0,
+                  "reported": 300,
+                  "rate": 0.0
+                },
+                "roll_eval_success": {
+                  "successes": 177,
+                  "reported": 300,
+                  "rate": 0.59
+                },
+                "roll_caught_once": {
+                  "successes": 252,
+                  "reported": 300,
+                  "rate": 0.84
+                },
+                "roll_stable_hold": {
+                  "successes": 1,
+                  "reported": 300,
+                  "rate": 0.0033333333333333335
+                },
+                "roll_holding_at_end": {
+                  "successes": 181,
+                  "reported": 300,
+                  "rate": 0.6033333333333334
+                },
+                "roll_final_hold": {
+                  "successes": 181,
+                  "reported": 300,
+                  "rate": 0.6033333333333334
+                },
+                "roll_legacy_success": {
+                  "successes": 0,
+                  "reported": 300,
+                  "rate": 0.0
+                }
+              }
+            }
+          },
+          "seed_rate": {
+            "n_seeds": 5,
+            "mean": 0.658,
+            "minimum": 0.59,
+            "maximum": 0.7333333333333333,
+            "sample_sd": 0.06483311910847213,
+            "t95": [
+              0.5774990501116897,
+              0.7385009498883104
+            ]
+          },
+          "environment_draws": {
+            "20261029": {
+              "episodes": 300,
+              "radii": [
+                0.0423
+              ],
+              "masses": [
+                0.1790375092821374
+              ]
+            },
+            "20262029": {
+              "episodes": 300,
+              "radii": [
+                0.0499
+              ],
+              "masses": [
+                0.17014301718011138
+              ]
+            },
+            "20263029": {
+              "episodes": 300,
+              "radii": [
+                0.0496
+              ],
+              "masses": [
+                0.1122151301617918
+              ]
+            },
+            "20264029": {
+              "episodes": 300,
+              "radii": [
+                0.0326
+              ],
+              "masses": [
+                0.14817771827268472
+              ]
+            },
+            "20265029": {
+              "episodes": 300,
+              "radii": [
+                0.0314
+              ],
+              "masses": [
+                0.19260940588250175
+              ]
+            }
+          },
+          "protocol": {
+            "variant": "belief",
+            "task": "roll",
+            "seeds": [
+              20261029,
+              20262029,
+              20263029,
+              20264029,
+              20265029
+            ],
+            "episodes_per_seed": 300,
+            "checkpoint": "/home/isee/Catch/distill_best_ckpt/belief_student_best.pth",
+            "checkpoint_sha256": "83a6a4f0ba6c72fcc983464dc8051ede940ff26cd71f494409527cc7b4e02888",
+            "iteration": 10000,
+            "source_audit": "/home/isee/Catch/analysis_artifacts/distill_best_multiseed_20261029_v1/source_audit.json",
+            "source_root": "/tmp/catch_distill_eval_sources_20261029/belief",
+            "source_audit_sha256": "6a3588a6cd5a0cd4be426cfd8e01f743f17d031798fcdb0be0b843d3d3608346",
+            "evaluator_sha256": "ea85a2d321d3e9538365c6b57f0228078f1e8ce1126e77fd78ae25a928f5b089",
+            "capture_hook_sha256": "6b515f2f13d3f1df2815dfeefcd1ee857a9e14d75532a210809686c5656a434e",
+            "source_exceptions": [],
+            "device": "cuda:0",
+            "batch_streams": 5,
+            "policy_batch_size": 1,
+            "deterministic_algorithms": true,
+            "tf32": false,
+            "constructor_seed": "evaluation_seed + 1000000 + TASK_ID*10000",
+            "reset_seed": "constructor_seed + episode_index*100003",
+            "versions": {
+              "torch": "2.11.0+cu128",
+              "numpy": "1.23.0",
+              "mujoco": "3.6.0",
+              "cudnn": 91900,
+              "python": "3.10.20 (main, Mar 11 2026, 17:46:40) [GCC 14.3.0]"
+            },
+            "no_teacher_required": true
+          }
+        },
+        "bounce": {
+          "episodes": 1500,
+          "successes": 1071,
+          "rate": 0.714,
+          "conditional_wilson95": [
+            0.6906077002700552,
+            0.736299003381707
+          ],
+          "mean_reward": 565.946375148358,
+          "mean_length": 56.458666666666666,
+          "termination_counts": {
+            "ball_left": 428,
+            "catch_success": 1071,
+            "failure_unspecified": 1
+          },
+          "metric_versions": {
+            "bounce_catch_proximity_v2": 1500
+          },
+          "auxiliary": {
+            "success": {
+              "successes": 1071,
+              "reported": 1500,
+              "rate": 0.714
+            }
+          },
+          "per_seed": {
+            "20261029": {
+              "episodes": 300,
+              "successes": 211,
+              "rate": 0.7033333333333334,
+              "conditional_wilson95": [
+                0.6493365822398648,
+                0.7521886094621532
+              ],
+              "mean_reward": 564.1805174025585,
+              "mean_length": 56.49333333333333,
+              "termination_counts": {
+                "ball_left": 89,
+                "catch_success": 211
+              },
+              "metric_versions": {
+                "bounce_catch_proximity_v2": 300
+              },
+              "auxiliary": {
+                "success": {
+                  "successes": 211,
+                  "reported": 300,
+                  "rate": 0.7033333333333334
+                }
+              }
+            },
+            "20262029": {
+              "episodes": 300,
+              "successes": 217,
+              "rate": 0.7233333333333334,
+              "conditional_wilson95": [
+                0.6701300560341223,
+                0.7708894168189138
+              ],
+              "mean_reward": 572.6868317273936,
+              "mean_length": 56.71666666666667,
+              "termination_counts": {
+                "ball_left": 83,
+                "catch_success": 217
+              },
+              "metric_versions": {
+                "bounce_catch_proximity_v2": 300
+              },
+              "auxiliary": {
+                "success": {
+                  "successes": 217,
+                  "reported": 300,
+                  "rate": 0.7233333333333334
+                }
+              }
+            },
+            "20263029": {
+              "episodes": 300,
+              "successes": 211,
+              "rate": 0.7033333333333334,
+              "conditional_wilson95": [
+                0.6493365822398648,
+                0.7521886094621532
+              ],
+              "mean_reward": 554.0731747266834,
+              "mean_length": 55.86666666666667,
+              "termination_counts": {
+                "catch_success": 211,
+                "ball_left": 89
+              },
+              "metric_versions": {
+                "bounce_catch_proximity_v2": 300
+              },
+              "auxiliary": {
+                "success": {
+                  "successes": 211,
+                  "reported": 300,
+                  "rate": 0.7033333333333334
+                }
+              }
+            },
+            "20264029": {
+              "episodes": 300,
+              "successes": 214,
+              "rate": 0.7133333333333334,
+              "conditional_wilson95": [
+                0.6597183711272249,
+                0.7615539611503023
+              ],
+              "mean_reward": 565.7678049472121,
+              "mean_length": 56.56,
+              "termination_counts": {
+                "ball_left": 85,
+                "catch_success": 214,
+                "failure_unspecified": 1
+              },
+              "metric_versions": {
+                "bounce_catch_proximity_v2": 300
+              },
+              "auxiliary": {
+                "success": {
+                  "successes": 214,
+                  "reported": 300,
+                  "rate": 0.7133333333333334
+                }
+              }
+            },
+            "20265029": {
+              "episodes": 300,
+              "successes": 218,
+              "rate": 0.7266666666666667,
+              "conditional_wilson95": [
+                0.6736074258805683,
+                0.7739944271643041
+              ],
+              "mean_reward": 573.0235469379422,
+              "mean_length": 56.656666666666666,
+              "termination_counts": {
+                "catch_success": 218,
+                "ball_left": 82
+              },
+              "metric_versions": {
+                "bounce_catch_proximity_v2": 300
+              },
+              "auxiliary": {
+                "success": {
+                  "successes": 218,
+                  "reported": 300,
+                  "rate": 0.7266666666666667
+                }
+              }
+            }
+          },
+          "seed_rate": {
+            "n_seeds": 5,
+            "mean": 0.7140000000000001,
+            "minimum": 0.7033333333333334,
+            "maximum": 0.7266666666666667,
+            "sample_sd": 0.010903618155864082,
+            "t95": [
+              0.700461369885692,
+              0.7275386301143082
+            ]
+          },
+          "environment_draws": {
+            "20261029": {
+              "episodes": 300,
+              "radii": [
+                0.04
+              ],
+              "masses": [
+                0.05
+              ]
+            },
+            "20262029": {
+              "episodes": 300,
+              "radii": [
+                0.04
+              ],
+              "masses": [
+                0.05
+              ]
+            },
+            "20263029": {
+              "episodes": 300,
+              "radii": [
+                0.04
+              ],
+              "masses": [
+                0.05
+              ]
+            },
+            "20264029": {
+              "episodes": 300,
+              "radii": [
+                0.04
+              ],
+              "masses": [
+                0.05
+              ]
+            },
+            "20265029": {
+              "episodes": 300,
+              "radii": [
+                0.04
+              ],
+              "masses": [
+                0.05
+              ]
+            }
+          },
+          "protocol": {
+            "variant": "belief",
+            "task": "bounce",
+            "seeds": [
+              20261029,
+              20262029,
+              20263029,
+              20264029,
+              20265029
+            ],
+            "episodes_per_seed": 300,
+            "checkpoint": "/home/isee/Catch/distill_best_ckpt/belief_student_best.pth",
+            "checkpoint_sha256": "83a6a4f0ba6c72fcc983464dc8051ede940ff26cd71f494409527cc7b4e02888",
+            "iteration": 10000,
+            "source_audit": "/home/isee/Catch/analysis_artifacts/distill_best_multiseed_20261029_v1/source_audit.json",
+            "source_root": "/tmp/catch_distill_eval_sources_20261029/belief",
+            "source_audit_sha256": "6a3588a6cd5a0cd4be426cfd8e01f743f17d031798fcdb0be0b843d3d3608346",
+            "evaluator_sha256": "ea85a2d321d3e9538365c6b57f0228078f1e8ce1126e77fd78ae25a928f5b089",
+            "capture_hook_sha256": "6b515f2f13d3f1df2815dfeefcd1ee857a9e14d75532a210809686c5656a434e",
+            "source_exceptions": [],
+            "device": "cuda:0",
+            "batch_streams": 5,
+            "policy_batch_size": 1,
+            "deterministic_algorithms": true,
+            "tf32": false,
+            "constructor_seed": "evaluation_seed + 1000000 + TASK_ID*10000",
+            "reset_seed": "constructor_seed + episode_index*100003",
+            "versions": {
+              "torch": "2.11.0+cu128",
+              "numpy": "1.23.0",
+              "mujoco": "3.6.0",
+              "cudnn": 91900,
+              "python": "3.10.20 (main, Mar 11 2026, 17:46:40) [GCC 14.3.0]"
+            },
+            "no_teacher_required": true
+          }
+        }
+      },
+      "per_seed_macro": {
+        "20261029": 0.73,
+        "20262029": 0.7133333333333334,
+        "20263029": 0.6911111111111111,
+        "20264029": 0.6933333333333334,
+        "20265029": 0.6733333333333333
+      },
+      "macro": {
+        "n_seeds": 5,
+        "mean": 0.7002222222222222,
+        "minimum": 0.6733333333333333,
+        "maximum": 0.73,
+        "sample_sd": 0.02186377577999794,
+        "t95": [
+          0.6730747589713777,
+          0.7273696854730667
+        ]
+      }
+    },
+    "future": {
+      "checkpoint": "/home/isee/Catch/distill_best_ckpt/future_student_last.pth",
+      "checkpoint_sha256": "d0d789a03ae850995f5e7ba524754518afa6891802f3882d8b475dd92c312ae6",
+      "iteration": 10000,
+      "source_exceptions": [
+        {
+          "path": "model_experiments/run.py",
+          "expected": "e6559a801e277e69e8fe37224e579100a253482a7d2b54557c4b3d81ba65a9c9",
+          "actual": "66ffc0bc221d64bb7d66b8c03d2a59c6aeee4a18928db28864a75e4047715c06",
+          "matching": false,
+          "origin": "unavailable_unused_launcher_stub"
+        }
+      ],
+      "source_manifest_files": 254,
+      "matching_source_manifest_files": 253,
+      "additional_historical_assets": 57,
+      "tasks": {
+        "throw": {
+          "episodes": 1500,
+          "successes": 1098,
+          "rate": 0.732,
+          "conditional_wilson95": [
+            0.7090138638881273,
+            0.7538008802577084
+          ],
+          "mean_reward": 448.2616866727,
+          "mean_length": 56.92066666666667,
+          "termination_counts": {
+            "unspecified": 1212,
+            "ball_left": 288
+          },
+          "metric_versions": {
+            "throw_official": 1500
+          },
+          "auxiliary": {
+            "success": {
+              "successes": 1098,
+              "reported": 1500,
+              "rate": 0.732
+            }
+          },
+          "per_seed": {
+            "20261029": {
+              "episodes": 300,
+              "successes": 231,
+              "rate": 0.77,
+              "conditional_wilson95": [
+                0.7191446136117753,
+                0.8140281819269698
+              ],
+              "mean_reward": 468.7505198102932,
+              "mean_length": 57.88,
+              "termination_counts": {
+                "unspecified": 243,
+                "ball_left": 57
+              },
+              "metric_versions": {
+                "throw_official": 300
+              },
+              "auxiliary": {
+                "success": {
+                  "successes": 231,
+                  "reported": 300,
+                  "rate": 0.77
+                }
+              }
+            },
+            "20262029": {
+              "episodes": 300,
+              "successes": 208,
+              "rate": 0.6933333333333334,
+              "conditional_wilson95": [
+                0.6389838112035251,
+                0.7427942399229839
+              ],
+              "mean_reward": 423.17399130978026,
+              "mean_length": 55.736666666666665,
+              "termination_counts": {
+                "unspecified": 250,
+                "ball_left": 50
+              },
+              "metric_versions": {
+                "throw_official": 300
+              },
+              "auxiliary": {
+                "success": {
+                  "successes": 208,
+                  "reported": 300,
+                  "rate": 0.6933333333333334
+                }
+              }
+            },
+            "20263029": {
+              "episodes": 300,
+              "successes": 212,
+              "rate": 0.7066666666666667,
+              "conditional_wilson95": [
+                0.6527939127218992,
+                0.755313659171955
+              ],
+              "mean_reward": 435.705130700261,
+              "mean_length": 56.12,
+              "termination_counts": {
+                "ball_left": 50,
+                "unspecified": 250
+              },
+              "metric_versions": {
+                "throw_official": 300
+              },
+              "auxiliary": {
+                "success": {
+                  "successes": 212,
+                  "reported": 300,
+                  "rate": 0.7066666666666667
+                }
+              }
+            },
+            "20264029": {
+              "episodes": 300,
+              "successes": 241,
+              "rate": 0.8033333333333333,
+              "conditional_wilson95": [
+                0.7546412316550143,
+                0.8443553658020945
+              ],
+              "mean_reward": 494.7335435331377,
+              "mean_length": 58.43333333333333,
+              "termination_counts": {
+                "unspecified": 245,
+                "ball_left": 55
+              },
+              "metric_versions": {
+                "throw_official": 300
+              },
+              "auxiliary": {
+                "success": {
+                  "successes": 241,
+                  "reported": 300,
+                  "rate": 0.8033333333333333
+                }
+              }
+            },
+            "20265029": {
+              "episodes": 300,
+              "successes": 206,
+              "rate": 0.6866666666666666,
+              "conditional_wilson95": [
+                0.6320976883026915,
+                0.7365156024401446
+              ],
+              "mean_reward": 418.9452480100279,
+              "mean_length": 56.43333333333333,
+              "termination_counts": {
+                "unspecified": 224,
+                "ball_left": 76
+              },
+              "metric_versions": {
+                "throw_official": 300
+              },
+              "auxiliary": {
+                "success": {
+                  "successes": 206,
+                  "reported": 300,
+                  "rate": 0.6866666666666666
+                }
+              }
+            }
+          },
+          "seed_rate": {
+            "n_seeds": 5,
+            "mean": 0.732,
+            "minimum": 0.6866666666666666,
+            "maximum": 0.8033333333333333,
+            "sample_sd": 0.051779446801903085,
+            "t95": [
+              0.6677073250591188,
+              0.7962926749408812
+            ]
+          },
+          "environment_draws": {
+            "20261029": {
+              "episodes": 300,
+              "radii": [
+                0.042530940300638774
+              ],
+              "masses": [
+                0.035
+              ]
+            },
+            "20262029": {
+              "episodes": 300,
+              "radii": [
+                0.04103646601235892
+              ],
+              "masses": [
+                0.035
+              ]
+            },
+            "20263029": {
+              "episodes": 300,
+              "radii": [
+                0.04131249407639956
+              ],
+              "masses": [
+                0.035
+              ]
+            },
+            "20264029": {
+              "episodes": 300,
+              "radii": [
+                0.03500287133448726
+              ],
+              "masses": [
+                0.035
+              ]
+            },
+            "20265029": {
+              "episodes": 300,
+              "radii": [
+                0.0434729253592427
+              ],
+              "masses": [
+                0.035
+              ]
+            }
+          },
+          "protocol": {
+            "variant": "future",
+            "task": "throw",
+            "seeds": [
+              20261029,
+              20262029,
+              20263029,
+              20264029,
+              20265029
+            ],
+            "episodes_per_seed": 300,
+            "checkpoint": "/home/isee/Catch/distill_best_ckpt/future_student_last.pth",
+            "checkpoint_sha256": "d0d789a03ae850995f5e7ba524754518afa6891802f3882d8b475dd92c312ae6",
+            "iteration": 10000,
+            "source_audit": "/home/isee/Catch/analysis_artifacts/distill_best_multiseed_20261029_v1/source_audit.json",
+            "source_root": "/tmp/catch_distill_eval_sources_20261029/future",
+            "source_audit_sha256": "6a3588a6cd5a0cd4be426cfd8e01f743f17d031798fcdb0be0b843d3d3608346",
+            "evaluator_sha256": "ea85a2d321d3e9538365c6b57f0228078f1e8ce1126e77fd78ae25a928f5b089",
+            "capture_hook_sha256": "6b515f2f13d3f1df2815dfeefcd1ee857a9e14d75532a210809686c5656a434e",
+            "source_exceptions": [
+              {
+                "path": "model_experiments/run.py",
+                "expected": "e6559a801e277e69e8fe37224e579100a253482a7d2b54557c4b3d81ba65a9c9",
+                "actual": "66ffc0bc221d64bb7d66b8c03d2a59c6aeee4a18928db28864a75e4047715c06",
+                "matching": false,
+                "origin": "unavailable_unused_launcher_stub"
+              }
+            ],
+            "device": "cuda:0",
+            "batch_streams": 5,
+            "policy_batch_size": 1,
+            "deterministic_algorithms": true,
+            "tf32": false,
+            "constructor_seed": "evaluation_seed + 1000000 + TASK_ID*10000",
+            "reset_seed": "constructor_seed + episode_index*100003",
+            "versions": {
+              "torch": "2.11.0+cu128",
+              "numpy": "1.23.0",
+              "mujoco": "3.6.0",
+              "cudnn": 91900,
+              "python": "3.10.20 (main, Mar 11 2026, 17:46:40) [GCC 14.3.0]"
+            },
+            "no_teacher_required": true
+          }
+        },
+        "roll": {
+          "episodes": 1500,
+          "successes": 976,
+          "rate": 0.6506666666666666,
+          "conditional_wilson95": [
+            0.6261826478659365,
+            0.6743809503437155
+          ],
+          "mean_reward": 230.08643662463334,
+          "mean_length": 61.03933333333333,
+          "termination_counts": {
+            "timeout": 1147,
+            "out_of_bounds": 80,
+            "ball_on_floor": 227,
+            "ball_left": 41,
+            "base_collision": 5
+          },
+          "metric_versions": {
+            "region_retention_v5": 1500
+          },
+          "auxiliary": {
+            "success": {
+              "successes": 0,
+              "reported": 1500,
+              "rate": 0.0
+            },
+            "roll_eval_success": {
+              "successes": 976,
+              "reported": 1500,
+              "rate": 0.6506666666666666
+            },
+            "roll_caught_once": {
+              "successes": 1411,
+              "reported": 1500,
+              "rate": 0.9406666666666667
+            },
+            "roll_stable_hold": {
+              "successes": 3,
+              "reported": 1500,
+              "rate": 0.002
+            },
+            "roll_holding_at_end": {
+              "successes": 1011,
+              "reported": 1500,
+              "rate": 0.674
+            },
+            "roll_final_hold": {
+              "successes": 1011,
+              "reported": 1500,
+              "rate": 0.674
+            },
+            "roll_legacy_success": {
+              "successes": 0,
+              "reported": 1500,
+              "rate": 0.0
+            }
+          },
+          "per_seed": {
+            "20261029": {
+              "episodes": 300,
+              "successes": 208,
+              "rate": 0.6933333333333334,
+              "conditional_wilson95": [
+                0.6389838112035251,
+                0.7427942399229839
+              ],
+              "mean_reward": 237.10208472241357,
+              "mean_length": 61.233333333333334,
+              "termination_counts": {
+                "timeout": 242,
+                "out_of_bounds": 14,
+                "ball_on_floor": 38,
+                "ball_left": 5,
+                "base_collision": 1
+              },
+              "metric_versions": {
+                "region_retention_v5": 300
+              },
+              "auxiliary": {
+                "success": {
+                  "successes": 0,
+                  "reported": 300,
+                  "rate": 0.0
+                },
+                "roll_eval_success": {
+                  "successes": 208,
+                  "reported": 300,
+                  "rate": 0.6933333333333334
+                },
+                "roll_caught_once": {
+                  "successes": 284,
+                  "reported": 300,
+                  "rate": 0.9466666666666667
+                },
+                "roll_stable_hold": {
+                  "successes": 1,
+                  "reported": 300,
+                  "rate": 0.0033333333333333335
+                },
+                "roll_holding_at_end": {
+                  "successes": 218,
+                  "reported": 300,
+                  "rate": 0.7266666666666667
+                },
+                "roll_final_hold": {
+                  "successes": 218,
+                  "reported": 300,
+                  "rate": 0.7266666666666667
+                },
+                "roll_legacy_success": {
+                  "successes": 0,
+                  "reported": 300,
+                  "rate": 0.0
+                }
+              }
+            },
+            "20262029": {
+              "episodes": 300,
+              "successes": 212,
+              "rate": 0.7066666666666667,
+              "conditional_wilson95": [
+                0.6527939127218992,
+                0.755313659171955
+              ],
+              "mean_reward": 231.86877852032114,
+              "mean_length": 61.04333333333334,
+              "termination_counts": {
+                "ball_on_floor": 38,
+                "timeout": 232,
+                "out_of_bounds": 20,
+                "ball_left": 10
+              },
+              "metric_versions": {
+                "region_retention_v5": 300
+              },
+              "auxiliary": {
+                "success": {
+                  "successes": 0,
+                  "reported": 300,
+                  "rate": 0.0
+                },
+                "roll_eval_success": {
+                  "successes": 212,
+                  "reported": 300,
+                  "rate": 0.7066666666666667
+                },
+                "roll_caught_once": {
+                  "successes": 283,
+                  "reported": 300,
+                  "rate": 0.9433333333333334
+                },
+                "roll_stable_hold": {
+                  "successes": 1,
+                  "reported": 300,
+                  "rate": 0.0033333333333333335
+                },
+                "roll_holding_at_end": {
+                  "successes": 219,
+                  "reported": 300,
+                  "rate": 0.73
+                },
+                "roll_final_hold": {
+                  "successes": 219,
+                  "reported": 300,
+                  "rate": 0.73
+                },
+                "roll_legacy_success": {
+                  "successes": 0,
+                  "reported": 300,
+                  "rate": 0.0
+                }
+              }
+            },
+            "20263029": {
+              "episodes": 300,
+              "successes": 220,
+              "rate": 0.7333333333333333,
+              "conditional_wilson95": [
+                0.680572605868549,
+                0.7801940075599961
+              ],
+              "mean_reward": 228.4588470416397,
+              "mean_length": 61.306666666666665,
+              "termination_counts": {
+                "timeout": 235,
+                "ball_on_floor": 33,
+                "out_of_bounds": 17,
+                "ball_left": 12,
+                "base_collision": 3
+              },
+              "metric_versions": {
+                "region_retention_v5": 300
+              },
+              "auxiliary": {
+                "success": {
+                  "successes": 0,
+                  "reported": 300,
+                  "rate": 0.0
+                },
+                "roll_eval_success": {
+                  "successes": 220,
+                  "reported": 300,
+                  "rate": 0.7333333333333333
+                },
+                "roll_caught_once": {
+                  "successes": 284,
+                  "reported": 300,
+                  "rate": 0.9466666666666667
+                },
+                "roll_stable_hold": {
+                  "successes": 1,
+                  "reported": 300,
+                  "rate": 0.0033333333333333335
+                },
+                "roll_holding_at_end": {
+                  "successes": 228,
+                  "reported": 300,
+                  "rate": 0.76
+                },
+                "roll_final_hold": {
+                  "successes": 228,
+                  "reported": 300,
+                  "rate": 0.76
+                },
+                "roll_legacy_success": {
+                  "successes": 0,
+                  "reported": 300,
+                  "rate": 0.0
+                }
+              }
+            },
+            "20264029": {
+              "episodes": 300,
+              "successes": 185,
+              "rate": 0.6166666666666667,
+              "conditional_wilson95": [
+                0.5605031391673366,
+                0.669880167546936
+              ],
+              "mean_reward": 226.678835802986,
+              "mean_length": 60.95666666666666,
+              "termination_counts": {
+                "ball_on_floor": 55,
+                "timeout": 226,
+                "ball_left": 9,
+                "base_collision": 1,
+                "out_of_bounds": 9
+              },
+              "metric_versions": {
+                "region_retention_v5": 300
+              },
+              "auxiliary": {
+                "success": {
+                  "successes": 0,
+                  "reported": 300,
+                  "rate": 0.0
+                },
+                "roll_eval_success": {
+                  "successes": 185,
+                  "reported": 300,
+                  "rate": 0.6166666666666667
+                },
+                "roll_caught_once": {
+                  "successes": 279,
+                  "reported": 300,
+                  "rate": 0.93
+                },
+                "roll_stable_hold": {
+                  "successes": 0,
+                  "reported": 300,
+                  "rate": 0.0
+                },
+                "roll_holding_at_end": {
+                  "successes": 189,
+                  "reported": 300,
+                  "rate": 0.63
+                },
+                "roll_final_hold": {
+                  "successes": 189,
+                  "reported": 300,
+                  "rate": 0.63
+                },
+                "roll_legacy_success": {
+                  "successes": 0,
+                  "reported": 300,
+                  "rate": 0.0
+                }
+              }
+            },
+            "20265029": {
+              "episodes": 300,
+              "successes": 151,
+              "rate": 0.5033333333333333,
+              "conditional_wilson95": [
+                0.44707193979203275,
+                0.5595104403998036
+              ],
+              "mean_reward": 226.32363703580623,
+              "mean_length": 60.656666666666666,
+              "termination_counts": {
+                "timeout": 212,
+                "ball_on_floor": 63,
+                "out_of_bounds": 20,
+                "ball_left": 5
+              },
+              "metric_versions": {
+                "region_retention_v5": 300
+              },
+              "auxiliary": {
+                "success": {
+                  "successes": 0,
+                  "reported": 300,
+                  "rate": 0.0
+                },
+                "roll_eval_success": {
+                  "successes": 151,
+                  "reported": 300,
+                  "rate": 0.5033333333333333
+                },
+                "roll_caught_once": {
+                  "successes": 281,
+                  "reported": 300,
+                  "rate": 0.9366666666666666
+                },
+                "roll_stable_hold": {
+                  "successes": 0,
+                  "reported": 300,
+                  "rate": 0.0
+                },
+                "roll_holding_at_end": {
+                  "successes": 157,
+                  "reported": 300,
+                  "rate": 0.5233333333333333
+                },
+                "roll_final_hold": {
+                  "successes": 157,
+                  "reported": 300,
+                  "rate": 0.5233333333333333
+                },
+                "roll_legacy_success": {
+                  "successes": 0,
+                  "reported": 300,
+                  "rate": 0.0
+                }
+              }
+            }
+          },
+          "seed_rate": {
+            "n_seeds": 5,
+            "mean": 0.6506666666666666,
+            "minimum": 0.5033333333333333,
+            "maximum": 0.7333333333333333,
+            "sample_sd": 0.09307702903151419,
+            "t95": [
+              0.5350962706583771,
+              0.7662370626749562
+            ]
+          },
+          "environment_draws": {
+            "20261029": {
+              "episodes": 300,
+              "radii": [
+                0.0423
+              ],
+              "masses": [
+                0.1790375092821374
+              ]
+            },
+            "20262029": {
+              "episodes": 300,
+              "radii": [
+                0.0499
+              ],
+              "masses": [
+                0.17014301718011138
+              ]
+            },
+            "20263029": {
+              "episodes": 300,
+              "radii": [
+                0.0496
+              ],
+              "masses": [
+                0.1122151301617918
+              ]
+            },
+            "20264029": {
+              "episodes": 300,
+              "radii": [
+                0.0326
+              ],
+              "masses": [
+                0.14817771827268472
+              ]
+            },
+            "20265029": {
+              "episodes": 300,
+              "radii": [
+                0.0314
+              ],
+              "masses": [
+                0.19260940588250175
+              ]
+            }
+          },
+          "protocol": {
+            "variant": "future",
+            "task": "roll",
+            "seeds": [
+              20261029,
+              20262029,
+              20263029,
+              20264029,
+              20265029
+            ],
+            "episodes_per_seed": 300,
+            "checkpoint": "/home/isee/Catch/distill_best_ckpt/future_student_last.pth",
+            "checkpoint_sha256": "d0d789a03ae850995f5e7ba524754518afa6891802f3882d8b475dd92c312ae6",
+            "iteration": 10000,
+            "source_audit": "/home/isee/Catch/analysis_artifacts/distill_best_multiseed_20261029_v1/source_audit.json",
+            "source_root": "/tmp/catch_distill_eval_sources_20261029/future",
+            "source_audit_sha256": "6a3588a6cd5a0cd4be426cfd8e01f743f17d031798fcdb0be0b843d3d3608346",
+            "evaluator_sha256": "ea85a2d321d3e9538365c6b57f0228078f1e8ce1126e77fd78ae25a928f5b089",
+            "capture_hook_sha256": "6b515f2f13d3f1df2815dfeefcd1ee857a9e14d75532a210809686c5656a434e",
+            "source_exceptions": [
+              {
+                "path": "model_experiments/run.py",
+                "expected": "e6559a801e277e69e8fe37224e579100a253482a7d2b54557c4b3d81ba65a9c9",
+                "actual": "66ffc0bc221d64bb7d66b8c03d2a59c6aeee4a18928db28864a75e4047715c06",
+                "matching": false,
+                "origin": "unavailable_unused_launcher_stub"
+              }
+            ],
+            "device": "cuda:0",
+            "batch_streams": 5,
+            "policy_batch_size": 1,
+            "deterministic_algorithms": true,
+            "tf32": false,
+            "constructor_seed": "evaluation_seed + 1000000 + TASK_ID*10000",
+            "reset_seed": "constructor_seed + episode_index*100003",
+            "versions": {
+              "torch": "2.11.0+cu128",
+              "numpy": "1.23.0",
+              "mujoco": "3.6.0",
+              "cudnn": 91900,
+              "python": "3.10.20 (main, Mar 11 2026, 17:46:40) [GCC 14.3.0]"
+            },
+            "no_teacher_required": true
+          }
+        },
+        "bounce": {
+          "episodes": 1500,
+          "successes": 1208,
+          "rate": 0.8053333333333333,
+          "conditional_wilson95": [
+            0.7845266382653162,
+            0.8245801227082263
+          ],
+          "mean_reward": 619.8153314614547,
+          "mean_length": 58.69,
+          "termination_counts": {
+            "ball_left": 291,
+            "catch_success": 1208,
+            "failure_unspecified": 1
+          },
+          "metric_versions": {
+            "bounce_catch_proximity_v2": 1500
+          },
+          "auxiliary": {
+            "success": {
+              "successes": 1208,
+              "reported": 1500,
+              "rate": 0.8053333333333333
+            }
+          },
+          "per_seed": {
+            "20261029": {
+              "episodes": 300,
+              "successes": 245,
+              "rate": 0.8166666666666667,
+              "conditional_wilson95": [
+                0.7689713823226987,
+                0.8563547359017554
+              ],
+              "mean_reward": 621.7283185926887,
+              "mean_length": 58.61666666666667,
+              "termination_counts": {
+                "ball_left": 55,
+                "catch_success": 245
+              },
+              "metric_versions": {
+                "bounce_catch_proximity_v2": 300
+              },
+              "auxiliary": {
+                "success": {
+                  "successes": 245,
+                  "reported": 300,
+                  "rate": 0.8166666666666667
+                }
+              }
+            },
+            "20262029": {
+              "episodes": 300,
+              "successes": 240,
+              "rate": 0.8,
+              "conditional_wilson95": [
+                0.7510710762322137,
+                0.8413431410330587
+              ],
+              "mean_reward": 620.5524603689743,
+              "mean_length": 58.74333333333333,
+              "termination_counts": {
+                "catch_success": 240,
+                "ball_left": 60
+              },
+              "metric_versions": {
+                "bounce_catch_proximity_v2": 300
+              },
+              "auxiliary": {
+                "success": {
+                  "successes": 240,
+                  "reported": 300,
+                  "rate": 0.8
+                }
+              }
+            },
+            "20263029": {
+              "episodes": 300,
+              "successes": 248,
+              "rate": 0.8266666666666667,
+              "conditional_wilson95": [
+                0.7797738592974309,
+                0.8652993995025323
+              ],
+              "mean_reward": 633.7027136424853,
+              "mean_length": 59.14333333333333,
+              "termination_counts": {
+                "catch_success": 248,
+                "ball_left": 52
+              },
+              "metric_versions": {
+                "bounce_catch_proximity_v2": 300
+              },
+              "auxiliary": {
+                "success": {
+                  "successes": 248,
+                  "reported": 300,
+                  "rate": 0.8266666666666667
+                }
+              }
+            },
+            "20264029": {
+              "episodes": 300,
+              "successes": 231,
+              "rate": 0.77,
+              "conditional_wilson95": [
+                0.7191446136117753,
+                0.8140281819269698
+              ],
+              "mean_reward": 597.1802659835437,
+              "mean_length": 57.92666666666667,
+              "termination_counts": {
+                "ball_left": 68,
+                "catch_success": 231,
+                "failure_unspecified": 1
+              },
+              "metric_versions": {
+                "bounce_catch_proximity_v2": 300
+              },
+              "auxiliary": {
+                "success": {
+                  "successes": 231,
+                  "reported": 300,
+                  "rate": 0.77
+                }
+              }
+            },
+            "20265029": {
+              "episodes": 300,
+              "successes": 244,
+              "rate": 0.8133333333333334,
+              "conditional_wilson95": [
+                0.7653812201652491,
+                0.8533625178673686
+              ],
+              "mean_reward": 625.9128987195812,
+              "mean_length": 59.02,
+              "termination_counts": {
+                "catch_success": 244,
+                "ball_left": 56
+              },
+              "metric_versions": {
+                "bounce_catch_proximity_v2": 300
+              },
+              "auxiliary": {
+                "success": {
+                  "successes": 244,
+                  "reported": 300,
+                  "rate": 0.8133333333333334
+                }
+              }
+            }
+          },
+          "seed_rate": {
+            "n_seeds": 5,
+            "mean": 0.8053333333333333,
+            "minimum": 0.77,
+            "maximum": 0.8266666666666667,
+            "sample_sd": 0.02193424516848279,
+            "t95": [
+              0.7780983707798318,
+              0.8325682958868349
+            ]
+          },
+          "environment_draws": {
+            "20261029": {
+              "episodes": 300,
+              "radii": [
+                0.04
+              ],
+              "masses": [
+                0.05
+              ]
+            },
+            "20262029": {
+              "episodes": 300,
+              "radii": [
+                0.04
+              ],
+              "masses": [
+                0.05
+              ]
+            },
+            "20263029": {
+              "episodes": 300,
+              "radii": [
+                0.04
+              ],
+              "masses": [
+                0.05
+              ]
+            },
+            "20264029": {
+              "episodes": 300,
+              "radii": [
+                0.04
+              ],
+              "masses": [
+                0.05
+              ]
+            },
+            "20265029": {
+              "episodes": 300,
+              "radii": [
+                0.04
+              ],
+              "masses": [
+                0.05
+              ]
+            }
+          },
+          "protocol": {
+            "variant": "future",
+            "task": "bounce",
+            "seeds": [
+              20261029,
+              20262029,
+              20263029,
+              20264029,
+              20265029
+            ],
+            "episodes_per_seed": 300,
+            "checkpoint": "/home/isee/Catch/distill_best_ckpt/future_student_last.pth",
+            "checkpoint_sha256": "d0d789a03ae850995f5e7ba524754518afa6891802f3882d8b475dd92c312ae6",
+            "iteration": 10000,
+            "source_audit": "/home/isee/Catch/analysis_artifacts/distill_best_multiseed_20261029_v1/source_audit.json",
+            "source_root": "/tmp/catch_distill_eval_sources_20261029/future",
+            "source_audit_sha256": "6a3588a6cd5a0cd4be426cfd8e01f743f17d031798fcdb0be0b843d3d3608346",
+            "evaluator_sha256": "ea85a2d321d3e9538365c6b57f0228078f1e8ce1126e77fd78ae25a928f5b089",
+            "capture_hook_sha256": "6b515f2f13d3f1df2815dfeefcd1ee857a9e14d75532a210809686c5656a434e",
+            "source_exceptions": [
+              {
+                "path": "model_experiments/run.py",
+                "expected": "e6559a801e277e69e8fe37224e579100a253482a7d2b54557c4b3d81ba65a9c9",
+                "actual": "66ffc0bc221d64bb7d66b8c03d2a59c6aeee4a18928db28864a75e4047715c06",
+                "matching": false,
+                "origin": "unavailable_unused_launcher_stub"
+              }
+            ],
+            "device": "cuda:0",
+            "batch_streams": 5,
+            "policy_batch_size": 1,
+            "deterministic_algorithms": true,
+            "tf32": false,
+            "constructor_seed": "evaluation_seed + 1000000 + TASK_ID*10000",
+            "reset_seed": "constructor_seed + episode_index*100003",
+            "versions": {
+              "torch": "2.11.0+cu128",
+              "numpy": "1.23.0",
+              "mujoco": "3.6.0",
+              "cudnn": 91900,
+              "python": "3.10.20 (main, Mar 11 2026, 17:46:40) [GCC 14.3.0]"
+            },
+            "no_teacher_required": true
+          }
+        }
+      },
+      "per_seed_macro": {
+        "20261029": 0.76,
+        "20262029": 0.7333333333333334,
+        "20263029": 0.7555555555555555,
+        "20264029": 0.73,
+        "20265029": 0.6677777777777778
+      },
+      "macro": {
+        "n_seeds": 5,
+        "mean": 0.7293333333333334,
+        "minimum": 0.6677777777777778,
+        "maximum": 0.76,
+        "sample_sd": 0.03685641140600091,
+        "t95": [
+          0.6835700541874791,
+          0.7750966124791877
+        ]
+      }
+    }
+  },
+  "comparisons": {
+    "throw": {
+      "per_seed": {
+        "20261029": {
+          "common_episode_ids": 300,
+          "unmatched_episode_ids": 0,
+          "physical_matches": 300,
+          "physical_mismatches": 0,
+          "initial_depth_matches": 244,
+          "initial_depth_mismatches_with_matching_physics": 56,
+          "future_minus_belief": -0.023333333333333334,
+          "same_depth_future_minus_belief": 0.012295081967213115,
+          "contingency": {
+            "both_success": 194,
+            "future_only": 37,
+            "belief_only": 44,
+            "both_failure": 25
+          },
+          "same_depth_contingency": {
+            "both_success": 158,
+            "future_only": 34,
+            "both_failure": 21,
+            "belief_only": 31
+          }
+        },
+        "20262029": {
+          "common_episode_ids": 300,
+          "unmatched_episode_ids": 0,
+          "physical_matches": 300,
+          "physical_mismatches": 0,
+          "initial_depth_matches": 260,
+          "initial_depth_mismatches_with_matching_physics": 40,
+          "future_minus_belief": 0.01,
+          "same_depth_future_minus_belief": 0.019230769230769232,
+          "contingency": {
+            "both_success": 165,
+            "both_failure": 52,
+            "future_only": 43,
+            "belief_only": 40
+          },
+          "same_depth_contingency": {
+            "both_success": 141,
+            "both_failure": 50,
+            "future_only": 37,
+            "belief_only": 32
+          }
+        },
+        "20263029": {
+          "common_episode_ids": 300,
+          "unmatched_episode_ids": 0,
+          "physical_matches": 300,
+          "physical_mismatches": 0,
+          "initial_depth_matches": 267,
+          "initial_depth_mismatches_with_matching_physics": 33,
+          "future_minus_belief": 0.02,
+          "same_depth_future_minus_belief": 0.0299625468164794,
+          "contingency": {
+            "belief_only": 37,
+            "both_failure": 51,
+            "both_success": 169,
+            "future_only": 43
+          },
+          "same_depth_contingency": {
+            "belief_only": 32,
+            "both_failure": 45,
+            "both_success": 150,
+            "future_only": 40
+          }
+        },
+        "20264029": {
+          "common_episode_ids": 300,
+          "unmatched_episode_ids": 0,
+          "physical_matches": 300,
+          "physical_mismatches": 0,
+          "initial_depth_matches": 235,
+          "initial_depth_mismatches_with_matching_physics": 65,
+          "future_minus_belief": 0.02666666666666667,
+          "same_depth_future_minus_belief": 0.02127659574468085,
+          "contingency": {
+            "both_success": 197,
+            "belief_only": 36,
+            "future_only": 44,
+            "both_failure": 23
+          },
+          "same_depth_contingency": {
+            "both_success": 160,
+            "belief_only": 26,
+            "future_only": 31,
+            "both_failure": 18
+          }
+        },
+        "20265029": {
+          "common_episode_ids": 300,
+          "unmatched_episode_ids": 0,
+          "physical_matches": 300,
+          "physical_mismatches": 0,
+          "initial_depth_matches": 233,
+          "initial_depth_mismatches_with_matching_physics": 67,
+          "future_minus_belief": -0.016666666666666666,
+          "same_depth_future_minus_belief": 0.004291845493562232,
+          "contingency": {
+            "both_success": 160,
+            "both_failure": 43,
+            "belief_only": 51,
+            "future_only": 46
+          },
+          "same_depth_contingency": {
+            "both_success": 127,
+            "both_failure": 29,
+            "belief_only": 38,
+            "future_only": 39
+          }
+        }
+      },
+      "common_episode_ids": 1500,
+      "physical_matches": 1500,
+      "physical_mismatches": 0,
+      "initial_depth_matches": 1239,
+      "initial_depth_mismatches_with_matching_physics": 261,
+      "matched_episode_weighted_difference": 0.0033333333333333335,
+      "same_depth_episode_weighted_difference": 0.01775625504439064,
+      "seed_difference": {
+        "n_seeds": 5,
+        "mean": 0.0033333333333333335,
+        "minimum": -0.023333333333333334,
+        "maximum": 0.02666666666666667,
+        "sample_sd": 0.02223610677354389,
+        "t95": [
+          -0.024276439907612916,
+          0.030943106574279584
+        ]
+      },
+      "same_depth_seed_difference": {
+        "n_seeds": 5,
+        "mean": 0.017411367850540965,
+        "minimum": 0.004291845493562232,
+        "maximum": 0.0299625468164794,
+        "sample_sd": 0.009670581027092345,
+        "t95": [
+          0.005403755547478477,
+          0.029418980153603454
+        ]
+      },
+      "contingency": {
+        "both_success": 885,
+        "future_only": 213,
+        "belief_only": 208,
+        "both_failure": 194
+      },
+      "same_depth_contingency": {
+        "both_success": 736,
+        "future_only": 181,
+        "both_failure": 163,
+        "belief_only": 159
+      },
+      "mismatch_records": [
+        {
+          "seed": 20261029,
+          "episode_id": 2,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20261029,
+          "episode_id": 7,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20261029,
+          "episode_id": 15,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20261029,
+          "episode_id": 25,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20261029,
+          "episode_id": 33,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20261029,
+          "episode_id": 34,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20261029,
+          "episode_id": 38,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20261029,
+          "episode_id": 49,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20261029,
+          "episode_id": 55,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20261029,
+          "episode_id": 59,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20261029,
+          "episode_id": 65,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20261029,
+          "episode_id": 74,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20261029,
+          "episode_id": 83,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20261029,
+          "episode_id": 86,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20261029,
+          "episode_id": 87,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20261029,
+          "episode_id": 92,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20261029,
+          "episode_id": 101,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20261029,
+          "episode_id": 108,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20261029,
+          "episode_id": 110,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20261029,
+          "episode_id": 112,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20261029,
+          "episode_id": 114,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20261029,
+          "episode_id": 115,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20261029,
+          "episode_id": 121,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20261029,
+          "episode_id": 126,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20261029,
+          "episode_id": 150,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20261029,
+          "episode_id": 152,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20261029,
+          "episode_id": 156,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20261029,
+          "episode_id": 166,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20261029,
+          "episode_id": 168,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20261029,
+          "episode_id": 173,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20261029,
+          "episode_id": 176,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20261029,
+          "episode_id": 180,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20261029,
+          "episode_id": 193,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20261029,
+          "episode_id": 219,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20261029,
+          "episode_id": 227,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20261029,
+          "episode_id": 234,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20261029,
+          "episode_id": 235,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20261029,
+          "episode_id": 237,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20261029,
+          "episode_id": 248,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20261029,
+          "episode_id": 253,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20261029,
+          "episode_id": 254,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20261029,
+          "episode_id": 255,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20261029,
+          "episode_id": 258,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20261029,
+          "episode_id": 264,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20261029,
+          "episode_id": 266,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20261029,
+          "episode_id": 267,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20261029,
+          "episode_id": 272,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20261029,
+          "episode_id": 273,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20261029,
+          "episode_id": 275,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20261029,
+          "episode_id": 285,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20261029,
+          "episode_id": 286,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20261029,
+          "episode_id": 287,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20261029,
+          "episode_id": 289,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20261029,
+          "episode_id": 291,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20261029,
+          "episode_id": 294,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20261029,
+          "episode_id": 299,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20262029,
+          "episode_id": 5,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20262029,
+          "episode_id": 19,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20262029,
+          "episode_id": 20,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20262029,
+          "episode_id": 27,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20262029,
+          "episode_id": 31,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20262029,
+          "episode_id": 59,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20262029,
+          "episode_id": 88,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20262029,
+          "episode_id": 89,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20262029,
+          "episode_id": 94,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20262029,
+          "episode_id": 96,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20262029,
+          "episode_id": 99,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20262029,
+          "episode_id": 108,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20262029,
+          "episode_id": 134,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20262029,
+          "episode_id": 135,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20262029,
+          "episode_id": 136,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20262029,
+          "episode_id": 151,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20262029,
+          "episode_id": 152,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20262029,
+          "episode_id": 153,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20262029,
+          "episode_id": 164,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20262029,
+          "episode_id": 173,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20262029,
+          "episode_id": 175,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20262029,
+          "episode_id": 178,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20262029,
+          "episode_id": 180,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20262029,
+          "episode_id": 196,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20262029,
+          "episode_id": 198,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20262029,
+          "episode_id": 206,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20262029,
+          "episode_id": 223,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20262029,
+          "episode_id": 232,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20262029,
+          "episode_id": 242,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20262029,
+          "episode_id": 244,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20262029,
+          "episode_id": 247,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20262029,
+          "episode_id": 249,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20262029,
+          "episode_id": 258,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20262029,
+          "episode_id": 264,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20262029,
+          "episode_id": 265,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20262029,
+          "episode_id": 273,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20262029,
+          "episode_id": 278,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20262029,
+          "episode_id": 286,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20262029,
+          "episode_id": 288,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20262029,
+          "episode_id": 297,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20263029,
+          "episode_id": 12,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20263029,
+          "episode_id": 20,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20263029,
+          "episode_id": 46,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20263029,
+          "episode_id": 54,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20263029,
+          "episode_id": 55,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20263029,
+          "episode_id": 58,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20263029,
+          "episode_id": 64,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20263029,
+          "episode_id": 78,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20263029,
+          "episode_id": 108,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20263029,
+          "episode_id": 109,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20263029,
+          "episode_id": 116,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20263029,
+          "episode_id": 136,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20263029,
+          "episode_id": 152,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20263029,
+          "episode_id": 159,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20263029,
+          "episode_id": 164,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20263029,
+          "episode_id": 165,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20263029,
+          "episode_id": 178,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20263029,
+          "episode_id": 188,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20263029,
+          "episode_id": 190,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20263029,
+          "episode_id": 192,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20263029,
+          "episode_id": 193,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20263029,
+          "episode_id": 196,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20263029,
+          "episode_id": 201,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20263029,
+          "episode_id": 206,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20263029,
+          "episode_id": 217,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20263029,
+          "episode_id": 221,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20263029,
+          "episode_id": 223,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20263029,
+          "episode_id": 244,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20263029,
+          "episode_id": 259,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20263029,
+          "episode_id": 260,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20263029,
+          "episode_id": 270,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20263029,
+          "episode_id": 275,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20263029,
+          "episode_id": 279,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20264029,
+          "episode_id": 2,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20264029,
+          "episode_id": 3,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20264029,
+          "episode_id": 7,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20264029,
+          "episode_id": 8,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20264029,
+          "episode_id": 14,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20264029,
+          "episode_id": 18,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20264029,
+          "episode_id": 19,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20264029,
+          "episode_id": 21,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20264029,
+          "episode_id": 22,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20264029,
+          "episode_id": 24,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20264029,
+          "episode_id": 25,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20264029,
+          "episode_id": 28,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20264029,
+          "episode_id": 33,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20264029,
+          "episode_id": 37,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20264029,
+          "episode_id": 40,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20264029,
+          "episode_id": 61,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20264029,
+          "episode_id": 67,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20264029,
+          "episode_id": 68,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20264029,
+          "episode_id": 71,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20264029,
+          "episode_id": 79,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20264029,
+          "episode_id": 81,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20264029,
+          "episode_id": 82,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20264029,
+          "episode_id": 83,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20264029,
+          "episode_id": 97,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20264029,
+          "episode_id": 99,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20264029,
+          "episode_id": 101,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20264029,
+          "episode_id": 104,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20264029,
+          "episode_id": 105,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20264029,
+          "episode_id": 109,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20264029,
+          "episode_id": 116,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20264029,
+          "episode_id": 118,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20264029,
+          "episode_id": 123,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20264029,
+          "episode_id": 128,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20264029,
+          "episode_id": 129,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20264029,
+          "episode_id": 130,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20264029,
+          "episode_id": 132,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20264029,
+          "episode_id": 133,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20264029,
+          "episode_id": 140,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20264029,
+          "episode_id": 146,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20264029,
+          "episode_id": 153,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20264029,
+          "episode_id": 168,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20264029,
+          "episode_id": 171,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20264029,
+          "episode_id": 172,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20264029,
+          "episode_id": 173,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20264029,
+          "episode_id": 174,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20264029,
+          "episode_id": 179,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20264029,
+          "episode_id": 187,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20264029,
+          "episode_id": 198,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20264029,
+          "episode_id": 201,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20264029,
+          "episode_id": 212,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20264029,
+          "episode_id": 228,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20264029,
+          "episode_id": 231,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20264029,
+          "episode_id": 233,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20264029,
+          "episode_id": 234,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20264029,
+          "episode_id": 239,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20264029,
+          "episode_id": 257,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20264029,
+          "episode_id": 264,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20264029,
+          "episode_id": 265,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20264029,
+          "episode_id": 270,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20264029,
+          "episode_id": 275,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20264029,
+          "episode_id": 276,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20264029,
+          "episode_id": 285,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20264029,
+          "episode_id": 286,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20264029,
+          "episode_id": 287,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20264029,
+          "episode_id": 288,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20265029,
+          "episode_id": 4,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20265029,
+          "episode_id": 7,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20265029,
+          "episode_id": 8,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20265029,
+          "episode_id": 10,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20265029,
+          "episode_id": 11,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20265029,
+          "episode_id": 12,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20265029,
+          "episode_id": 13,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20265029,
+          "episode_id": 15,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20265029,
+          "episode_id": 17,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20265029,
+          "episode_id": 20,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20265029,
+          "episode_id": 25,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20265029,
+          "episode_id": 26,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20265029,
+          "episode_id": 28,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20265029,
+          "episode_id": 33,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20265029,
+          "episode_id": 37,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20265029,
+          "episode_id": 47,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20265029,
+          "episode_id": 52,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20265029,
+          "episode_id": 57,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20265029,
+          "episode_id": 71,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20265029,
+          "episode_id": 72,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20265029,
+          "episode_id": 75,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20265029,
+          "episode_id": 76,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20265029,
+          "episode_id": 88,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20265029,
+          "episode_id": 100,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20265029,
+          "episode_id": 101,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20265029,
+          "episode_id": 107,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20265029,
+          "episode_id": 108,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20265029,
+          "episode_id": 109,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20265029,
+          "episode_id": 111,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20265029,
+          "episode_id": 112,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20265029,
+          "episode_id": 113,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20265029,
+          "episode_id": 117,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20265029,
+          "episode_id": 129,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20265029,
+          "episode_id": 135,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20265029,
+          "episode_id": 142,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20265029,
+          "episode_id": 148,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20265029,
+          "episode_id": 150,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20265029,
+          "episode_id": 153,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20265029,
+          "episode_id": 155,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20265029,
+          "episode_id": 156,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20265029,
+          "episode_id": 157,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20265029,
+          "episode_id": 164,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20265029,
+          "episode_id": 184,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20265029,
+          "episode_id": 186,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20265029,
+          "episode_id": 187,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20265029,
+          "episode_id": 191,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20265029,
+          "episode_id": 194,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20265029,
+          "episode_id": 207,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20265029,
+          "episode_id": 210,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20265029,
+          "episode_id": 218,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20265029,
+          "episode_id": 222,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20265029,
+          "episode_id": 226,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20265029,
+          "episode_id": 233,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20265029,
+          "episode_id": 235,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20265029,
+          "episode_id": 246,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20265029,
+          "episode_id": 248,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20265029,
+          "episode_id": 249,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20265029,
+          "episode_id": 254,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20265029,
+          "episode_id": 261,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20265029,
+          "episode_id": 265,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20265029,
+          "episode_id": 273,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20265029,
+          "episode_id": 279,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20265029,
+          "episode_id": 283,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20265029,
+          "episode_id": 284,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20265029,
+          "episode_id": 292,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20265029,
+          "episode_id": 295,
+          "kind": "initial_depth"
+        },
+        {
+          "seed": 20265029,
+          "episode_id": 298,
+          "kind": "initial_depth"
+        }
+      ]
+    },
+    "roll": {
+      "per_seed": {
+        "20261029": {
+          "common_episode_ids": 300,
+          "unmatched_episode_ids": 0,
+          "physical_matches": 300,
+          "physical_mismatches": 0,
+          "initial_depth_matches": 300,
+          "initial_depth_mismatches_with_matching_physics": 0,
+          "future_minus_belief": 0,
+          "same_depth_future_minus_belief": 0,
+          "contingency": {
+            "both_success": 152,
+            "both_failure": 36,
+            "belief_only": 56,
+            "future_only": 56
+          },
+          "same_depth_contingency": {
+            "both_success": 152,
+            "both_failure": 36,
+            "belief_only": 56,
+            "future_only": 56
+          }
+        },
+        "20262029": {
+          "common_episode_ids": 300,
+          "unmatched_episode_ids": 0,
+          "physical_matches": 300,
+          "physical_mismatches": 0,
+          "initial_depth_matches": 300,
+          "initial_depth_mismatches_with_matching_physics": 0,
+          "future_minus_belief": -0.02666666666666667,
+          "same_depth_future_minus_belief": -0.02666666666666667,
+          "contingency": {
+            "both_failure": 33,
+            "future_only": 47,
+            "both_success": 165,
+            "belief_only": 55
+          },
+          "same_depth_contingency": {
+            "both_failure": 33,
+            "future_only": 47,
+            "both_success": 165,
+            "belief_only": 55
+          }
+        },
+        "20263029": {
+          "common_episode_ids": 300,
+          "unmatched_episode_ids": 0,
+          "physical_matches": 300,
+          "physical_mismatches": 0,
+          "initial_depth_matches": 300,
+          "initial_depth_mismatches_with_matching_physics": 0,
+          "future_minus_belief": 0.05,
+          "same_depth_future_minus_belief": 0.05,
+          "contingency": {
+            "both_success": 170,
+            "belief_only": 35,
+            "both_failure": 45,
+            "future_only": 50
+          },
+          "same_depth_contingency": {
+            "both_success": 170,
+            "belief_only": 35,
+            "both_failure": 45,
+            "future_only": 50
+          }
+        },
+        "20264029": {
+          "common_episode_ids": 300,
+          "unmatched_episode_ids": 0,
+          "physical_matches": 300,
+          "physical_mismatches": 0,
+          "initial_depth_matches": 300,
+          "initial_depth_mismatches_with_matching_physics": 0,
+          "future_minus_belief": 0.02666666666666667,
+          "same_depth_future_minus_belief": 0.02666666666666667,
+          "contingency": {
+            "both_failure": 61,
+            "future_only": 62,
+            "both_success": 123,
+            "belief_only": 54
+          },
+          "same_depth_contingency": {
+            "both_failure": 61,
+            "future_only": 62,
+            "both_success": 123,
+            "belief_only": 54
+          }
+        },
+        "20265029": {
+          "common_episode_ids": 300,
+          "unmatched_episode_ids": 0,
+          "physical_matches": 300,
+          "physical_mismatches": 0,
+          "initial_depth_matches": 300,
+          "initial_depth_mismatches_with_matching_physics": 0,
+          "future_minus_belief": -0.08666666666666667,
+          "same_depth_future_minus_belief": -0.08666666666666667,
+          "contingency": {
+            "both_success": 106,
+            "both_failure": 78,
+            "belief_only": 71,
+            "future_only": 45
+          },
+          "same_depth_contingency": {
+            "both_success": 106,
+            "both_failure": 78,
+            "belief_only": 71,
+            "future_only": 45
+          }
+        }
+      },
+      "common_episode_ids": 1500,
+      "physical_matches": 1500,
+      "physical_mismatches": 0,
+      "initial_depth_matches": 1500,
+      "initial_depth_mismatches_with_matching_physics": 0,
+      "matched_episode_weighted_difference": -0.007333333333333333,
+      "same_depth_episode_weighted_difference": -0.007333333333333333,
+      "seed_difference": {
+        "n_seeds": 5,
+        "mean": -0.007333333333333333,
+        "minimum": -0.08666666666666667,
+        "maximum": 0.05,
+        "sample_sd": 0.0528309673497572,
+        "t95": [
+          -0.07293164348185752,
+          0.058264976815190855
+        ]
+      },
+      "same_depth_seed_difference": {
+        "n_seeds": 5,
+        "mean": -0.007333333333333333,
+        "minimum": -0.08666666666666667,
+        "maximum": 0.05,
+        "sample_sd": 0.0528309673497572,
+        "t95": [
+          -0.07293164348185752,
+          0.058264976815190855
+        ]
+      },
+      "contingency": {
+        "both_success": 716,
+        "both_failure": 253,
+        "belief_only": 271,
+        "future_only": 260
+      },
+      "same_depth_contingency": {
+        "both_success": 716,
+        "both_failure": 253,
+        "belief_only": 271,
+        "future_only": 260
+      },
+      "mismatch_records": []
+    },
+    "bounce": {
+      "per_seed": {
+        "20261029": {
+          "common_episode_ids": 300,
+          "unmatched_episode_ids": 0,
+          "physical_matches": 300,
+          "physical_mismatches": 0,
+          "initial_depth_matches": 300,
+          "initial_depth_mismatches_with_matching_physics": 0,
+          "future_minus_belief": 0.11333333333333333,
+          "same_depth_future_minus_belief": 0.11333333333333333,
+          "contingency": {
+            "both_failure": 29,
+            "both_success": 185,
+            "future_only": 60,
+            "belief_only": 26
+          },
+          "same_depth_contingency": {
+            "both_failure": 29,
+            "both_success": 185,
+            "future_only": 60,
+            "belief_only": 26
+          }
+        },
+        "20262029": {
+          "common_episode_ids": 300,
+          "unmatched_episode_ids": 0,
+          "physical_matches": 300,
+          "physical_mismatches": 0,
+          "initial_depth_matches": 300,
+          "initial_depth_mismatches_with_matching_physics": 0,
+          "future_minus_belief": 0.07666666666666666,
+          "same_depth_future_minus_belief": 0.07666666666666666,
+          "contingency": {
+            "future_only": 60,
+            "both_success": 180,
+            "belief_only": 37,
+            "both_failure": 23
+          },
+          "same_depth_contingency": {
+            "future_only": 60,
+            "both_success": 180,
+            "belief_only": 37,
+            "both_failure": 23
+          }
+        },
+        "20263029": {
+          "common_episode_ids": 300,
+          "unmatched_episode_ids": 0,
+          "physical_matches": 300,
+          "physical_mismatches": 0,
+          "initial_depth_matches": 300,
+          "initial_depth_mismatches_with_matching_physics": 0,
+          "future_minus_belief": 0.12333333333333334,
+          "same_depth_future_minus_belief": 0.12333333333333334,
+          "contingency": {
+            "both_success": 181,
+            "both_failure": 22,
+            "belief_only": 30,
+            "future_only": 67
+          },
+          "same_depth_contingency": {
+            "both_success": 181,
+            "both_failure": 22,
+            "belief_only": 30,
+            "future_only": 67
+          }
+        },
+        "20264029": {
+          "common_episode_ids": 300,
+          "unmatched_episode_ids": 0,
+          "physical_matches": 300,
+          "physical_mismatches": 0,
+          "initial_depth_matches": 300,
+          "initial_depth_mismatches_with_matching_physics": 0,
+          "future_minus_belief": 0.056666666666666664,
+          "same_depth_future_minus_belief": 0.056666666666666664,
+          "contingency": {
+            "both_failure": 32,
+            "belief_only": 37,
+            "both_success": 177,
+            "future_only": 54
+          },
+          "same_depth_contingency": {
+            "both_failure": 32,
+            "belief_only": 37,
+            "both_success": 177,
+            "future_only": 54
+          }
+        },
+        "20265029": {
+          "common_episode_ids": 300,
+          "unmatched_episode_ids": 0,
+          "physical_matches": 300,
+          "physical_mismatches": 0,
+          "initial_depth_matches": 300,
+          "initial_depth_mismatches_with_matching_physics": 0,
+          "future_minus_belief": 0.08666666666666667,
+          "same_depth_future_minus_belief": 0.08666666666666667,
+          "contingency": {
+            "both_success": 186,
+            "both_failure": 24,
+            "future_only": 58,
+            "belief_only": 32
+          },
+          "same_depth_contingency": {
+            "both_success": 186,
+            "both_failure": 24,
+            "future_only": 58,
+            "belief_only": 32
+          }
+        }
+      },
+      "common_episode_ids": 1500,
+      "physical_matches": 1500,
+      "physical_mismatches": 0,
+      "initial_depth_matches": 1500,
+      "initial_depth_mismatches_with_matching_physics": 0,
+      "matched_episode_weighted_difference": 0.09133333333333334,
+      "same_depth_episode_weighted_difference": 0.09133333333333334,
+      "seed_difference": {
+        "n_seeds": 5,
+        "mean": 0.09133333333333334,
+        "minimum": 0.056666666666666664,
+        "maximum": 0.12333333333333334,
+        "sample_sd": 0.027141603981096378,
+        "t95": [
+          0.05763258081647522,
+          0.12503408585019143
+        ]
+      },
+      "same_depth_seed_difference": {
+        "n_seeds": 5,
+        "mean": 0.09133333333333334,
+        "minimum": 0.056666666666666664,
+        "maximum": 0.12333333333333334,
+        "sample_sd": 0.027141603981096378,
+        "t95": [
+          0.05763258081647522,
+          0.12503408585019143
+        ]
+      },
+      "contingency": {
+        "both_failure": 130,
+        "both_success": 909,
+        "future_only": 299,
+        "belief_only": 162
+      },
+      "same_depth_contingency": {
+        "both_failure": 130,
+        "both_success": 909,
+        "future_only": 299,
+        "belief_only": 162
+      },
+      "mismatch_records": []
+    }
+  },
+  "input_sha256": {
+    "/home/isee/Catch/analysis_artifacts/distill_best_multiseed_20261029_v1/formal/belief_throw/protocol.json": "14db20e64a7980419bfe08c961e9af329f32eba85bbb7b47a114e60cd918cf25",
+    "/home/isee/Catch/analysis_artifacts/distill_best_multiseed_20261029_v1/formal/belief_throw/seed_20261029.jsonl": "7a6ff4fc7d352d18cdb5e240e3342e544c205f0145f7c2271bc526f4431638f9",
+    "/home/isee/Catch/analysis_artifacts/distill_best_multiseed_20261029_v1/formal/belief_throw/seed_20262029.jsonl": "e03689e9c78e3363b15f6459404661e470fdc6b8f75d3fb37df5fbdc2786bb93",
+    "/home/isee/Catch/analysis_artifacts/distill_best_multiseed_20261029_v1/formal/belief_throw/seed_20263029.jsonl": "908c1b1664bfedf8672ea406ade185000b3c630481b46b18375835209a39636e",
+    "/home/isee/Catch/analysis_artifacts/distill_best_multiseed_20261029_v1/formal/belief_throw/seed_20264029.jsonl": "3972bf51562f8cd99e22add9d5793e5843cbe796c747e4e30931ae1f4ade8422",
+    "/home/isee/Catch/analysis_artifacts/distill_best_multiseed_20261029_v1/formal/belief_throw/seed_20265029.jsonl": "bb039d4c731c24046e2d536cf4b771764c1a7c3d0cf73c5c0ca6402ac6baece9",
+    "/home/isee/Catch/analysis_artifacts/distill_best_multiseed_20261029_v1/formal/belief_roll/protocol.json": "bac658339dabe1df79ace13a0a515ec6e5246dd82a0e6813bf43188f79f57d4c",
+    "/home/isee/Catch/analysis_artifacts/distill_best_multiseed_20261029_v1/formal/belief_roll/seed_20261029.jsonl": "fa942bebb8c662ee94e39b3a27645a5ec08e94a6988fd2fa2920a93e8de47b49",
+    "/home/isee/Catch/analysis_artifacts/distill_best_multiseed_20261029_v1/formal/belief_roll/seed_20262029.jsonl": "17bceecaf90917fe65ceae2b6fc62ed4ca41d29d71da6620f536bfb27fc2b8c3",
+    "/home/isee/Catch/analysis_artifacts/distill_best_multiseed_20261029_v1/formal/belief_roll/seed_20263029.jsonl": "0c19ca08e2d6c32c90798e1ea921f8fce722210b08b52f3ae84cb71adeeb7979",
+    "/home/isee/Catch/analysis_artifacts/distill_best_multiseed_20261029_v1/formal/belief_roll/seed_20264029.jsonl": "3be4257b2a7f769a1436bcedd42206f4a87e40aab4e8d41169671e8681a22e75",
+    "/home/isee/Catch/analysis_artifacts/distill_best_multiseed_20261029_v1/formal/belief_roll/seed_20265029.jsonl": "858bd685ab111f3fe110a2d5bd24362dc4d09679ed24082a94f71f40366f9b00",
+    "/home/isee/Catch/analysis_artifacts/distill_best_multiseed_20261029_v1/formal/belief_bounce/protocol.json": "354015f5783fa0e9afbcc8ee4ceb15253432110a7fdd2df061a2a66d3699a039",
+    "/home/isee/Catch/analysis_artifacts/distill_best_multiseed_20261029_v1/formal/belief_bounce/seed_20261029.jsonl": "dd8e1685ee9fd0bf825d6c17c39bac128aba738964856602b6f4f44dbef21ba8",
+    "/home/isee/Catch/analysis_artifacts/distill_best_multiseed_20261029_v1/formal/belief_bounce/seed_20262029.jsonl": "b65924cf455024f149cabf5435482c7879aacabb13bf2f0d9c897aa7c7272cf4",
+    "/home/isee/Catch/analysis_artifacts/distill_best_multiseed_20261029_v1/formal/belief_bounce/seed_20263029.jsonl": "a535d2f2d180cd337e270ca9cf1d8bed623b1350c338a29dd767caa779ceb3fc",
+    "/home/isee/Catch/analysis_artifacts/distill_best_multiseed_20261029_v1/formal/belief_bounce/seed_20264029.jsonl": "c772c944e6fe89e3dc236822dfe81deaf59ea09ff1cf62db85e676beeda64d7a",
+    "/home/isee/Catch/analysis_artifacts/distill_best_multiseed_20261029_v1/formal/belief_bounce/seed_20265029.jsonl": "caefbe2c4e9c69e73e0d4bd2d58b29cd2d732d1b12d71d09db5046c5693c399d",
+    "/home/isee/Catch/analysis_artifacts/distill_best_multiseed_20261029_v1/formal/future_throw/protocol.json": "ce1fcb897a74fc901342696a7ac4bc065b390860b1d389f34ae9f2a128d5fa35",
+    "/home/isee/Catch/analysis_artifacts/distill_best_multiseed_20261029_v1/formal/future_throw/seed_20261029.jsonl": "473747fe5cbaefd36e84986863bdd75547c3b6e52f3145acf3629d81141b9db5",
+    "/home/isee/Catch/analysis_artifacts/distill_best_multiseed_20261029_v1/formal/future_throw/seed_20262029.jsonl": "d0403d34a63012dcfa412e85909a0a305c071bf85608d477d9bb22ff9893993c",
+    "/home/isee/Catch/analysis_artifacts/distill_best_multiseed_20261029_v1/formal/future_throw/seed_20263029.jsonl": "51549d1fad3c350fcf40d0d6cd149da83f6006334719fdd4eb9d7e84581ed778",
+    "/home/isee/Catch/analysis_artifacts/distill_best_multiseed_20261029_v1/formal/future_throw/seed_20264029.jsonl": "1817504e3972232817ff40b5bc53d43691f015a5ede859ebf8a7a3b1c379783e",
+    "/home/isee/Catch/analysis_artifacts/distill_best_multiseed_20261029_v1/formal/future_throw/seed_20265029.jsonl": "f4b53b57fb5b4977b830d8006e9b2f0ac0b64b02fb2392386450e1f2ace4f436",
+    "/home/isee/Catch/analysis_artifacts/distill_best_multiseed_20261029_v1/formal/future_roll/protocol.json": "8f0a0b66befed1b2ab5d6f4441eb0d8abbdc36f16ca005568252b6af2364771c",
+    "/home/isee/Catch/analysis_artifacts/distill_best_multiseed_20261029_v1/formal/future_roll/seed_20261029.jsonl": "283e96205d1e1a88c5b43ebb3735dee830318210d1926e7b21d592ba2a973da1",
+    "/home/isee/Catch/analysis_artifacts/distill_best_multiseed_20261029_v1/formal/future_roll/seed_20262029.jsonl": "a7005963af514083d87b727ee23b65bc9309e8ef2bcb9f7b1e45d7a6a1da1a40",
+    "/home/isee/Catch/analysis_artifacts/distill_best_multiseed_20261029_v1/formal/future_roll/seed_20263029.jsonl": "48a1f85d1519952088dc07e9a71d09cd4cfc6c05b396912031641880011934e2",
+    "/home/isee/Catch/analysis_artifacts/distill_best_multiseed_20261029_v1/formal/future_roll/seed_20264029.jsonl": "76dadc5feb5929ae074c8404fcd930c36e252775a97080684e3ca8c7e7e265db",
+    "/home/isee/Catch/analysis_artifacts/distill_best_multiseed_20261029_v1/formal/future_roll/seed_20265029.jsonl": "4bc47add216c620e566e760c2a3f3d3c05de213f0069c0d81b93d19edb0fb2c2",
+    "/home/isee/Catch/analysis_artifacts/distill_best_multiseed_20261029_v1/formal/future_bounce/protocol.json": "12ca47b4b37655e18bf25c8ffd72889467712e5b301e2b695f216a6e7ce7e17b",
+    "/home/isee/Catch/analysis_artifacts/distill_best_multiseed_20261029_v1/formal/future_bounce/seed_20261029.jsonl": "127e98053bc36f8ba3594294b118c02883079b8be6c4671e8253d241084dbeb0",
+    "/home/isee/Catch/analysis_artifacts/distill_best_multiseed_20261029_v1/formal/future_bounce/seed_20262029.jsonl": "4d4065e690a4f19d5de284f73db1771e3b43b4f5bea889afab7a7b37298fc7cd",
+    "/home/isee/Catch/analysis_artifacts/distill_best_multiseed_20261029_v1/formal/future_bounce/seed_20263029.jsonl": "80bcbb99c11f63d70ab2a223577ff6881c2d7dfb8b580b9f365dee531e9a07e6",
+    "/home/isee/Catch/analysis_artifacts/distill_best_multiseed_20261029_v1/formal/future_bounce/seed_20264029.jsonl": "ead35fe5d810e664d0adb2ea223936fb4e638b3600758086b426c6be6e22f6a5",
+    "/home/isee/Catch/analysis_artifacts/distill_best_multiseed_20261029_v1/formal/future_bounce/seed_20265029.jsonl": "b61b804aec4b271ace68f26311251036bc534bd66a95548f666c55c3f593c8a4",
+    "/home/isee/Catch/analysis_artifacts/distill_best_multiseed_20261029_v1/depth_diagnostic/comparison.json": "578a6ff05c77245eb68a64fbbcea151930375d6e556ddfad904279e8adada72a"
+  },
+  "notes": [
+    "Five evaluation/environment seeds, not five independently trained policies.",
+    "Wilson intervals describe episode-level binomial uncertainty conditional on these sampled environments.",
+    "The five-seed t intervals are approximate descriptive intervals with four degrees of freedom, not robust significance tests.",
+    "Roll main success is region_retention_v5 and is distinct from stable holding.",
+    "Per-episode reset reseeds the environment; episode duration does not itself invalidate the reset seed pairing.",
+    "Initial physical and rendered-depth hashes are checked separately."
+  ],
+  "macro_comparison": {
+    "per_seed": {
+      "20261029": 0.03,
+      "20262029": 0.019999999999999997,
+      "20263029": 0.06444444444444444,
+      "20264029": 0.03666666666666667,
+      "20265029": -0.005555555555555556
+    },
+    "seed_difference": {
+      "n_seeds": 5,
+      "mean": 0.02911111111111111,
+      "minimum": -0.005555555555555556,
+      "maximum": 0.06444444444444444,
+      "sample_sd": 0.02545147889176143,
+      "t95": [
+        -0.0024910739298572154,
+        0.06071329615207943
+      ]
+    }
+  },
+  "episodes": 9000,
+  "depth_diagnostic": {
+    "seed": 20261029,
+    "episodes": 5,
+    "physical_pairs_equal": 5,
+    "depth_pairs_equal": 4,
+    "protocols": [
+      {
+        "variant": "belief",
+        "checkpoint": "/home/isee/Catch/distill_best_ckpt/belief_student_best.pth",
+        "checkpoint_sha256": "83a6a4f0ba6c72fcc983464dc8051ede940ff26cd71f494409527cc7b4e02888",
+        "iteration": 10000,
+        "source_audit_sha256": "6a3588a6cd5a0cd4be426cfd8e01f743f17d031798fcdb0be0b843d3d3608346",
+        "script_sha256": "0bdf7b7c794241fd6d608d2eb295fad0e0139d09ceca378669e2ae61a9aed7ad",
+        "capture_hook_sha256": "6b515f2f13d3f1df2815dfeefcd1ee857a9e14d75532a210809686c5656a434e",
+        "task": "throw",
+        "seed": 20261029,
+        "episodes": 5,
+        "device": "cuda:0",
+        "egl_device_id": 0,
+        "deterministic_algorithms": true,
+        "tf32": false,
+        "policy_batch_size": 1,
+        "camera_specs": [
+          {
+            "name": "top",
+            "near": 0.1,
+            "far": 5.0
+          },
+          {
+            "name": "wrist",
+            "near": 0.01,
+            "far": 1.5
+          }
+        ],
+        "depth_encoding": "float16((clip(metric_depth_m, near, far)-near)/(far-near))",
+        "versions": {
+          "torch": "2.11.0+cu128",
+          "numpy": "1.23.0",
+          "mujoco": "3.6.0",
+          "cudnn": 91900,
+          "python": "3.10.20 (main, Mar 11 2026, 17:46:40) [GCC 14.3.0]"
+        }
+      },
+      {
+        "variant": "future",
+        "checkpoint": "/home/isee/Catch/distill_best_ckpt/future_student_last.pth",
+        "checkpoint_sha256": "d0d789a03ae850995f5e7ba524754518afa6891802f3882d8b475dd92c312ae6",
+        "iteration": 10000,
+        "source_audit_sha256": "6a3588a6cd5a0cd4be426cfd8e01f743f17d031798fcdb0be0b843d3d3608346",
+        "script_sha256": "0bdf7b7c794241fd6d608d2eb295fad0e0139d09ceca378669e2ae61a9aed7ad",
+        "capture_hook_sha256": "6b515f2f13d3f1df2815dfeefcd1ee857a9e14d75532a210809686c5656a434e",
+        "task": "throw",
+        "seed": 20261029,
+        "episodes": 5,
+        "device": "cuda:0",
+        "egl_device_id": 0,
+        "deterministic_algorithms": true,
+        "tf32": false,
+        "policy_batch_size": 1,
+        "camera_specs": [
+          {
+            "name": "top",
+            "near": 0.1,
+            "far": 5.0
+          },
+          {
+            "name": "wrist",
+            "near": 0.01,
+            "far": 1.5
+          }
+        ],
+        "depth_encoding": "float16((clip(metric_depth_m, near, far)-near)/(far-near))",
+        "versions": {
+          "torch": "2.11.0+cu128",
+          "numpy": "1.23.0",
+          "mujoco": "3.6.0",
+          "cudnn": 91900,
+          "python": "3.10.20 (main, Mar 11 2026, 17:46:40) [GCC 14.3.0]"
+        }
+      }
+    ],
+    "per_episode": [
+      {
+        "episode_id": 0,
+        "physical_hash_equal": true,
+        "depth_hash_equal": true,
+        "proprio": {
+          "shape_equal": true,
+          "values": 24,
+          "different": 0,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "quantiles_all": {
+            "0": 0.0,
+            "0.5": 0.0,
+            "0.9": 0.0,
+            "0.95": 0.0,
+            "0.99": 0.0,
+            "1": 0.0
+          },
+          "quantiles_changed": {}
+        },
+        "cameras": {
+          "top": {
+            "encoded": {
+              "shape_equal": true,
+              "values": 25600,
+              "different": 0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "quantiles_all": {
+                "0": 0.0,
+                "0.5": 0.0,
+                "0.9": 0.0,
+                "0.95": 0.0,
+                "0.99": 0.0,
+                "1": 0.0
+              },
+              "quantiles_changed": {}
+            },
+            "decoded_clipped_metres": {
+              "shape_equal": true,
+              "values": 25600,
+              "different": 0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "quantiles_all": {
+                "0": 0.0,
+                "0.5": 0.0,
+                "0.9": 0.0,
+                "0.95": 0.0,
+                "0.99": 0.0,
+                "1": 0.0
+              },
+              "quantiles_changed": {}
+            }
+          },
+          "wrist": {
+            "encoded": {
+              "shape_equal": true,
+              "values": 25600,
+              "different": 0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "quantiles_all": {
+                "0": 0.0,
+                "0.5": 0.0,
+                "0.9": 0.0,
+                "0.95": 0.0,
+                "0.99": 0.0,
+                "1": 0.0
+              },
+              "quantiles_changed": {}
+            },
+            "decoded_clipped_metres": {
+              "shape_equal": true,
+              "values": 25600,
+              "different": 0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "quantiles_all": {
+                "0": 0.0,
+                "0.5": 0.0,
+                "0.9": 0.0,
+                "0.95": 0.0,
+                "0.99": 0.0,
+                "1": 0.0
+              },
+              "quantiles_changed": {}
+            }
+          }
+        },
+        "render_scalars_equal": {
+          "extent": true,
+          "znear": true,
+          "zfar": true,
+          "simulation_time": true
+        },
+        "extra_arrays": {
+          "cam_fovy": {
+            "shape_equal": true,
+            "values": 2,
+            "different": 0,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "quantiles_all": {
+              "0": 0.0,
+              "0.5": 0.0,
+              "0.9": 0.0,
+              "0.95": 0.0,
+              "0.99": 0.0,
+              "1": 0.0
+            },
+            "quantiles_changed": {}
+          },
+          "cam_xpos": {
+            "shape_equal": true,
+            "values": 6,
+            "different": 0,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "quantiles_all": {
+              "0": 0.0,
+              "0.5": 0.0,
+              "0.9": 0.0,
+              "0.95": 0.0,
+              "0.99": 0.0,
+              "1": 0.0
+            },
+            "quantiles_changed": {}
+          },
+          "cam_xmat": {
+            "shape_equal": true,
+            "values": 18,
+            "different": 0,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "quantiles_all": {
+              "0": 0.0,
+              "0.5": 0.0,
+              "0.9": 0.0,
+              "0.95": 0.0,
+              "0.99": 0.0,
+              "1": 0.0
+            },
+            "quantiles_changed": {}
+          },
+          "geom_xpos": {
+            "shape_equal": true,
+            "values": 306,
+            "different": 0,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "quantiles_all": {
+              "0": 0.0,
+              "0.5": 0.0,
+              "0.9": 0.0,
+              "0.95": 0.0,
+              "0.99": 0.0,
+              "1": 0.0
+            },
+            "quantiles_changed": {}
+          },
+          "geom_xmat": {
+            "shape_equal": true,
+            "values": 918,
+            "different": 0,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "quantiles_all": {
+              "0": 0.0,
+              "0.5": 0.0,
+              "0.9": 0.0,
+              "0.95": 0.0,
+              "0.99": 0.0,
+              "1": 0.0
+            },
+            "quantiles_changed": {}
+          },
+          "geom_rgba": {
+            "shape_equal": true,
+            "values": 408,
+            "different": 0,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "quantiles_all": {
+              "0": 0.0,
+              "0.5": 0.0,
+              "0.9": 0.0,
+              "0.95": 0.0,
+              "0.99": 0.0,
+              "1": 0.0
+            },
+            "quantiles_changed": {}
+          },
+          "geom_pos": {
+            "shape_equal": true,
+            "values": 306,
+            "different": 0,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "quantiles_all": {
+              "0": 0.0,
+              "0.5": 0.0,
+              "0.9": 0.0,
+              "0.95": 0.0,
+              "0.99": 0.0,
+              "1": 0.0
+            },
+            "quantiles_changed": {}
+          },
+          "geom_quat": {
+            "shape_equal": true,
+            "values": 408,
+            "different": 0,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "quantiles_all": {
+              "0": 0.0,
+              "0.5": 0.0,
+              "0.9": 0.0,
+              "0.95": 0.0,
+              "0.99": 0.0,
+              "1": 0.0
+            },
+            "quantiles_changed": {}
+          },
+          "geom_type": {
+            "shape_equal": true,
+            "values": 102,
+            "different": 0,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "quantiles_all": {
+              "0": 0.0,
+              "0.5": 0.0,
+              "0.9": 0.0,
+              "0.95": 0.0,
+              "0.99": 0.0,
+              "1": 0.0
+            },
+            "quantiles_changed": {}
+          }
+        }
+      },
+      {
+        "episode_id": 1,
+        "physical_hash_equal": true,
+        "depth_hash_equal": true,
+        "proprio": {
+          "shape_equal": true,
+          "values": 24,
+          "different": 0,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "quantiles_all": {
+            "0": 0.0,
+            "0.5": 0.0,
+            "0.9": 0.0,
+            "0.95": 0.0,
+            "0.99": 0.0,
+            "1": 0.0
+          },
+          "quantiles_changed": {}
+        },
+        "cameras": {
+          "top": {
+            "encoded": {
+              "shape_equal": true,
+              "values": 25600,
+              "different": 0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "quantiles_all": {
+                "0": 0.0,
+                "0.5": 0.0,
+                "0.9": 0.0,
+                "0.95": 0.0,
+                "0.99": 0.0,
+                "1": 0.0
+              },
+              "quantiles_changed": {}
+            },
+            "decoded_clipped_metres": {
+              "shape_equal": true,
+              "values": 25600,
+              "different": 0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "quantiles_all": {
+                "0": 0.0,
+                "0.5": 0.0,
+                "0.9": 0.0,
+                "0.95": 0.0,
+                "0.99": 0.0,
+                "1": 0.0
+              },
+              "quantiles_changed": {}
+            }
+          },
+          "wrist": {
+            "encoded": {
+              "shape_equal": true,
+              "values": 25600,
+              "different": 0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "quantiles_all": {
+                "0": 0.0,
+                "0.5": 0.0,
+                "0.9": 0.0,
+                "0.95": 0.0,
+                "0.99": 0.0,
+                "1": 0.0
+              },
+              "quantiles_changed": {}
+            },
+            "decoded_clipped_metres": {
+              "shape_equal": true,
+              "values": 25600,
+              "different": 0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "quantiles_all": {
+                "0": 0.0,
+                "0.5": 0.0,
+                "0.9": 0.0,
+                "0.95": 0.0,
+                "0.99": 0.0,
+                "1": 0.0
+              },
+              "quantiles_changed": {}
+            }
+          }
+        },
+        "render_scalars_equal": {
+          "extent": true,
+          "znear": true,
+          "zfar": true,
+          "simulation_time": true
+        },
+        "extra_arrays": {
+          "cam_fovy": {
+            "shape_equal": true,
+            "values": 2,
+            "different": 0,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "quantiles_all": {
+              "0": 0.0,
+              "0.5": 0.0,
+              "0.9": 0.0,
+              "0.95": 0.0,
+              "0.99": 0.0,
+              "1": 0.0
+            },
+            "quantiles_changed": {}
+          },
+          "cam_xpos": {
+            "shape_equal": true,
+            "values": 6,
+            "different": 0,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "quantiles_all": {
+              "0": 0.0,
+              "0.5": 0.0,
+              "0.9": 0.0,
+              "0.95": 0.0,
+              "0.99": 0.0,
+              "1": 0.0
+            },
+            "quantiles_changed": {}
+          },
+          "cam_xmat": {
+            "shape_equal": true,
+            "values": 18,
+            "different": 0,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "quantiles_all": {
+              "0": 0.0,
+              "0.5": 0.0,
+              "0.9": 0.0,
+              "0.95": 0.0,
+              "0.99": 0.0,
+              "1": 0.0
+            },
+            "quantiles_changed": {}
+          },
+          "geom_xpos": {
+            "shape_equal": true,
+            "values": 306,
+            "different": 0,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "quantiles_all": {
+              "0": 0.0,
+              "0.5": 0.0,
+              "0.9": 0.0,
+              "0.95": 0.0,
+              "0.99": 0.0,
+              "1": 0.0
+            },
+            "quantiles_changed": {}
+          },
+          "geom_xmat": {
+            "shape_equal": true,
+            "values": 918,
+            "different": 0,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "quantiles_all": {
+              "0": 0.0,
+              "0.5": 0.0,
+              "0.9": 0.0,
+              "0.95": 0.0,
+              "0.99": 0.0,
+              "1": 0.0
+            },
+            "quantiles_changed": {}
+          },
+          "geom_rgba": {
+            "shape_equal": true,
+            "values": 408,
+            "different": 0,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "quantiles_all": {
+              "0": 0.0,
+              "0.5": 0.0,
+              "0.9": 0.0,
+              "0.95": 0.0,
+              "0.99": 0.0,
+              "1": 0.0
+            },
+            "quantiles_changed": {}
+          },
+          "geom_pos": {
+            "shape_equal": true,
+            "values": 306,
+            "different": 0,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "quantiles_all": {
+              "0": 0.0,
+              "0.5": 0.0,
+              "0.9": 0.0,
+              "0.95": 0.0,
+              "0.99": 0.0,
+              "1": 0.0
+            },
+            "quantiles_changed": {}
+          },
+          "geom_quat": {
+            "shape_equal": true,
+            "values": 408,
+            "different": 0,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "quantiles_all": {
+              "0": 0.0,
+              "0.5": 0.0,
+              "0.9": 0.0,
+              "0.95": 0.0,
+              "0.99": 0.0,
+              "1": 0.0
+            },
+            "quantiles_changed": {}
+          },
+          "geom_type": {
+            "shape_equal": true,
+            "values": 102,
+            "different": 0,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "quantiles_all": {
+              "0": 0.0,
+              "0.5": 0.0,
+              "0.9": 0.0,
+              "0.95": 0.0,
+              "0.99": 0.0,
+              "1": 0.0
+            },
+            "quantiles_changed": {}
+          }
+        }
+      },
+      {
+        "episode_id": 2,
+        "physical_hash_equal": true,
+        "depth_hash_equal": false,
+        "proprio": {
+          "shape_equal": true,
+          "values": 24,
+          "different": 0,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "quantiles_all": {
+            "0": 0.0,
+            "0.5": 0.0,
+            "0.9": 0.0,
+            "0.95": 0.0,
+            "0.99": 0.0,
+            "1": 0.0
+          },
+          "quantiles_changed": {}
+        },
+        "cameras": {
+          "top": {
+            "encoded": {
+              "shape_equal": true,
+              "values": 25600,
+              "different": 160,
+              "max_abs": 0.000244140625,
+              "mean_abs": 1.52587890625e-06,
+              "quantiles_all": {
+                "0": 0.0,
+                "0.5": 0.0,
+                "0.9": 0.0,
+                "0.95": 0.0,
+                "0.99": 0.0,
+                "1": 0.000244140625
+              },
+              "quantiles_changed": {
+                "0": 0.000244140625,
+                "0.5": 0.000244140625,
+                "0.9": 0.000244140625,
+                "0.95": 0.000244140625,
+                "0.99": 0.000244140625,
+                "1": 0.000244140625
+              }
+            },
+            "decoded_clipped_metres": {
+              "shape_equal": true,
+              "values": 25600,
+              "different": 160,
+              "max_abs": 0.0011962890625001332,
+              "mean_abs": 7.4768066406258325e-06,
+              "quantiles_all": {
+                "0": 0.0,
+                "0.5": 0.0,
+                "0.9": 0.0,
+                "0.95": 0.0,
+                "0.99": 0.0,
+                "1": 0.0011962890625001332
+              },
+              "quantiles_changed": {
+                "0": 0.0011962890625001332,
+                "0.5": 0.0011962890625001332,
+                "0.9": 0.0011962890625001332,
+                "0.95": 0.0011962890625001332,
+                "0.99": 0.0011962890625001332,
+                "1": 0.0011962890625001332
+              }
+            }
+          },
+          "wrist": {
+            "encoded": {
+              "shape_equal": true,
+              "values": 25600,
+              "different": 0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "quantiles_all": {
+                "0": 0.0,
+                "0.5": 0.0,
+                "0.9": 0.0,
+                "0.95": 0.0,
+                "0.99": 0.0,
+                "1": 0.0
+              },
+              "quantiles_changed": {}
+            },
+            "decoded_clipped_metres": {
+              "shape_equal": true,
+              "values": 25600,
+              "different": 0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "quantiles_all": {
+                "0": 0.0,
+                "0.5": 0.0,
+                "0.9": 0.0,
+                "0.95": 0.0,
+                "0.99": 0.0,
+                "1": 0.0
+              },
+              "quantiles_changed": {}
+            }
+          }
+        },
+        "render_scalars_equal": {
+          "extent": true,
+          "znear": true,
+          "zfar": true,
+          "simulation_time": true
+        },
+        "extra_arrays": {
+          "cam_fovy": {
+            "shape_equal": true,
+            "values": 2,
+            "different": 0,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "quantiles_all": {
+              "0": 0.0,
+              "0.5": 0.0,
+              "0.9": 0.0,
+              "0.95": 0.0,
+              "0.99": 0.0,
+              "1": 0.0
+            },
+            "quantiles_changed": {}
+          },
+          "cam_xpos": {
+            "shape_equal": true,
+            "values": 6,
+            "different": 0,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "quantiles_all": {
+              "0": 0.0,
+              "0.5": 0.0,
+              "0.9": 0.0,
+              "0.95": 0.0,
+              "0.99": 0.0,
+              "1": 0.0
+            },
+            "quantiles_changed": {}
+          },
+          "cam_xmat": {
+            "shape_equal": true,
+            "values": 18,
+            "different": 0,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "quantiles_all": {
+              "0": 0.0,
+              "0.5": 0.0,
+              "0.9": 0.0,
+              "0.95": 0.0,
+              "0.99": 0.0,
+              "1": 0.0
+            },
+            "quantiles_changed": {}
+          },
+          "geom_xpos": {
+            "shape_equal": true,
+            "values": 306,
+            "different": 0,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "quantiles_all": {
+              "0": 0.0,
+              "0.5": 0.0,
+              "0.9": 0.0,
+              "0.95": 0.0,
+              "0.99": 0.0,
+              "1": 0.0
+            },
+            "quantiles_changed": {}
+          },
+          "geom_xmat": {
+            "shape_equal": true,
+            "values": 918,
+            "different": 0,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "quantiles_all": {
+              "0": 0.0,
+              "0.5": 0.0,
+              "0.9": 0.0,
+              "0.95": 0.0,
+              "0.99": 0.0,
+              "1": 0.0
+            },
+            "quantiles_changed": {}
+          },
+          "geom_rgba": {
+            "shape_equal": true,
+            "values": 408,
+            "different": 0,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "quantiles_all": {
+              "0": 0.0,
+              "0.5": 0.0,
+              "0.9": 0.0,
+              "0.95": 0.0,
+              "0.99": 0.0,
+              "1": 0.0
+            },
+            "quantiles_changed": {}
+          },
+          "geom_pos": {
+            "shape_equal": true,
+            "values": 306,
+            "different": 0,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "quantiles_all": {
+              "0": 0.0,
+              "0.5": 0.0,
+              "0.9": 0.0,
+              "0.95": 0.0,
+              "0.99": 0.0,
+              "1": 0.0
+            },
+            "quantiles_changed": {}
+          },
+          "geom_quat": {
+            "shape_equal": true,
+            "values": 408,
+            "different": 0,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "quantiles_all": {
+              "0": 0.0,
+              "0.5": 0.0,
+              "0.9": 0.0,
+              "0.95": 0.0,
+              "0.99": 0.0,
+              "1": 0.0
+            },
+            "quantiles_changed": {}
+          },
+          "geom_type": {
+            "shape_equal": true,
+            "values": 102,
+            "different": 0,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "quantiles_all": {
+              "0": 0.0,
+              "0.5": 0.0,
+              "0.9": 0.0,
+              "0.95": 0.0,
+              "0.99": 0.0,
+              "1": 0.0
+            },
+            "quantiles_changed": {}
+          }
+        }
+      },
+      {
+        "episode_id": 3,
+        "physical_hash_equal": true,
+        "depth_hash_equal": true,
+        "proprio": {
+          "shape_equal": true,
+          "values": 24,
+          "different": 0,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "quantiles_all": {
+            "0": 0.0,
+            "0.5": 0.0,
+            "0.9": 0.0,
+            "0.95": 0.0,
+            "0.99": 0.0,
+            "1": 0.0
+          },
+          "quantiles_changed": {}
+        },
+        "cameras": {
+          "top": {
+            "encoded": {
+              "shape_equal": true,
+              "values": 25600,
+              "different": 0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "quantiles_all": {
+                "0": 0.0,
+                "0.5": 0.0,
+                "0.9": 0.0,
+                "0.95": 0.0,
+                "0.99": 0.0,
+                "1": 0.0
+              },
+              "quantiles_changed": {}
+            },
+            "decoded_clipped_metres": {
+              "shape_equal": true,
+              "values": 25600,
+              "different": 0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "quantiles_all": {
+                "0": 0.0,
+                "0.5": 0.0,
+                "0.9": 0.0,
+                "0.95": 0.0,
+                "0.99": 0.0,
+                "1": 0.0
+              },
+              "quantiles_changed": {}
+            }
+          },
+          "wrist": {
+            "encoded": {
+              "shape_equal": true,
+              "values": 25600,
+              "different": 0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "quantiles_all": {
+                "0": 0.0,
+                "0.5": 0.0,
+                "0.9": 0.0,
+                "0.95": 0.0,
+                "0.99": 0.0,
+                "1": 0.0
+              },
+              "quantiles_changed": {}
+            },
+            "decoded_clipped_metres": {
+              "shape_equal": true,
+              "values": 25600,
+              "different": 0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "quantiles_all": {
+                "0": 0.0,
+                "0.5": 0.0,
+                "0.9": 0.0,
+                "0.95": 0.0,
+                "0.99": 0.0,
+                "1": 0.0
+              },
+              "quantiles_changed": {}
+            }
+          }
+        },
+        "render_scalars_equal": {
+          "extent": true,
+          "znear": true,
+          "zfar": true,
+          "simulation_time": true
+        },
+        "extra_arrays": {
+          "cam_fovy": {
+            "shape_equal": true,
+            "values": 2,
+            "different": 0,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "quantiles_all": {
+              "0": 0.0,
+              "0.5": 0.0,
+              "0.9": 0.0,
+              "0.95": 0.0,
+              "0.99": 0.0,
+              "1": 0.0
+            },
+            "quantiles_changed": {}
+          },
+          "cam_xpos": {
+            "shape_equal": true,
+            "values": 6,
+            "different": 0,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "quantiles_all": {
+              "0": 0.0,
+              "0.5": 0.0,
+              "0.9": 0.0,
+              "0.95": 0.0,
+              "0.99": 0.0,
+              "1": 0.0
+            },
+            "quantiles_changed": {}
+          },
+          "cam_xmat": {
+            "shape_equal": true,
+            "values": 18,
+            "different": 0,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "quantiles_all": {
+              "0": 0.0,
+              "0.5": 0.0,
+              "0.9": 0.0,
+              "0.95": 0.0,
+              "0.99": 0.0,
+              "1": 0.0
+            },
+            "quantiles_changed": {}
+          },
+          "geom_xpos": {
+            "shape_equal": true,
+            "values": 306,
+            "different": 0,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "quantiles_all": {
+              "0": 0.0,
+              "0.5": 0.0,
+              "0.9": 0.0,
+              "0.95": 0.0,
+              "0.99": 0.0,
+              "1": 0.0
+            },
+            "quantiles_changed": {}
+          },
+          "geom_xmat": {
+            "shape_equal": true,
+            "values": 918,
+            "different": 0,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "quantiles_all": {
+              "0": 0.0,
+              "0.5": 0.0,
+              "0.9": 0.0,
+              "0.95": 0.0,
+              "0.99": 0.0,
+              "1": 0.0
+            },
+            "quantiles_changed": {}
+          },
+          "geom_rgba": {
+            "shape_equal": true,
+            "values": 408,
+            "different": 0,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "quantiles_all": {
+              "0": 0.0,
+              "0.5": 0.0,
+              "0.9": 0.0,
+              "0.95": 0.0,
+              "0.99": 0.0,
+              "1": 0.0
+            },
+            "quantiles_changed": {}
+          },
+          "geom_pos": {
+            "shape_equal": true,
+            "values": 306,
+            "different": 0,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "quantiles_all": {
+              "0": 0.0,
+              "0.5": 0.0,
+              "0.9": 0.0,
+              "0.95": 0.0,
+              "0.99": 0.0,
+              "1": 0.0
+            },
+            "quantiles_changed": {}
+          },
+          "geom_quat": {
+            "shape_equal": true,
+            "values": 408,
+            "different": 0,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "quantiles_all": {
+              "0": 0.0,
+              "0.5": 0.0,
+              "0.9": 0.0,
+              "0.95": 0.0,
+              "0.99": 0.0,
+              "1": 0.0
+            },
+            "quantiles_changed": {}
+          },
+          "geom_type": {
+            "shape_equal": true,
+            "values": 102,
+            "different": 0,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "quantiles_all": {
+              "0": 0.0,
+              "0.5": 0.0,
+              "0.9": 0.0,
+              "0.95": 0.0,
+              "0.99": 0.0,
+              "1": 0.0
+            },
+            "quantiles_changed": {}
+          }
+        }
+      },
+      {
+        "episode_id": 4,
+        "physical_hash_equal": true,
+        "depth_hash_equal": true,
+        "proprio": {
+          "shape_equal": true,
+          "values": 24,
+          "different": 0,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "quantiles_all": {
+            "0": 0.0,
+            "0.5": 0.0,
+            "0.9": 0.0,
+            "0.95": 0.0,
+            "0.99": 0.0,
+            "1": 0.0
+          },
+          "quantiles_changed": {}
+        },
+        "cameras": {
+          "top": {
+            "encoded": {
+              "shape_equal": true,
+              "values": 25600,
+              "different": 0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "quantiles_all": {
+                "0": 0.0,
+                "0.5": 0.0,
+                "0.9": 0.0,
+                "0.95": 0.0,
+                "0.99": 0.0,
+                "1": 0.0
+              },
+              "quantiles_changed": {}
+            },
+            "decoded_clipped_metres": {
+              "shape_equal": true,
+              "values": 25600,
+              "different": 0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "quantiles_all": {
+                "0": 0.0,
+                "0.5": 0.0,
+                "0.9": 0.0,
+                "0.95": 0.0,
+                "0.99": 0.0,
+                "1": 0.0
+              },
+              "quantiles_changed": {}
+            }
+          },
+          "wrist": {
+            "encoded": {
+              "shape_equal": true,
+              "values": 25600,
+              "different": 0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "quantiles_all": {
+                "0": 0.0,
+                "0.5": 0.0,
+                "0.9": 0.0,
+                "0.95": 0.0,
+                "0.99": 0.0,
+                "1": 0.0
+              },
+              "quantiles_changed": {}
+            },
+            "decoded_clipped_metres": {
+              "shape_equal": true,
+              "values": 25600,
+              "different": 0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "quantiles_all": {
+                "0": 0.0,
+                "0.5": 0.0,
+                "0.9": 0.0,
+                "0.95": 0.0,
+                "0.99": 0.0,
+                "1": 0.0
+              },
+              "quantiles_changed": {}
+            }
+          }
+        },
+        "render_scalars_equal": {
+          "extent": true,
+          "znear": true,
+          "zfar": true,
+          "simulation_time": true
+        },
+        "extra_arrays": {
+          "cam_fovy": {
+            "shape_equal": true,
+            "values": 2,
+            "different": 0,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "quantiles_all": {
+              "0": 0.0,
+              "0.5": 0.0,
+              "0.9": 0.0,
+              "0.95": 0.0,
+              "0.99": 0.0,
+              "1": 0.0
+            },
+            "quantiles_changed": {}
+          },
+          "cam_xpos": {
+            "shape_equal": true,
+            "values": 6,
+            "different": 0,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "quantiles_all": {
+              "0": 0.0,
+              "0.5": 0.0,
+              "0.9": 0.0,
+              "0.95": 0.0,
+              "0.99": 0.0,
+              "1": 0.0
+            },
+            "quantiles_changed": {}
+          },
+          "cam_xmat": {
+            "shape_equal": true,
+            "values": 18,
+            "different": 0,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "quantiles_all": {
+              "0": 0.0,
+              "0.5": 0.0,
+              "0.9": 0.0,
+              "0.95": 0.0,
+              "0.99": 0.0,
+              "1": 0.0
+            },
+            "quantiles_changed": {}
+          },
+          "geom_xpos": {
+            "shape_equal": true,
+            "values": 306,
+            "different": 0,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "quantiles_all": {
+              "0": 0.0,
+              "0.5": 0.0,
+              "0.9": 0.0,
+              "0.95": 0.0,
+              "0.99": 0.0,
+              "1": 0.0
+            },
+            "quantiles_changed": {}
+          },
+          "geom_xmat": {
+            "shape_equal": true,
+            "values": 918,
+            "different": 0,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "quantiles_all": {
+              "0": 0.0,
+              "0.5": 0.0,
+              "0.9": 0.0,
+              "0.95": 0.0,
+              "0.99": 0.0,
+              "1": 0.0
+            },
+            "quantiles_changed": {}
+          },
+          "geom_rgba": {
+            "shape_equal": true,
+            "values": 408,
+            "different": 0,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "quantiles_all": {
+              "0": 0.0,
+              "0.5": 0.0,
+              "0.9": 0.0,
+              "0.95": 0.0,
+              "0.99": 0.0,
+              "1": 0.0
+            },
+            "quantiles_changed": {}
+          },
+          "geom_pos": {
+            "shape_equal": true,
+            "values": 306,
+            "different": 0,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "quantiles_all": {
+              "0": 0.0,
+              "0.5": 0.0,
+              "0.9": 0.0,
+              "0.95": 0.0,
+              "0.99": 0.0,
+              "1": 0.0
+            },
+            "quantiles_changed": {}
+          },
+          "geom_quat": {
+            "shape_equal": true,
+            "values": 408,
+            "different": 0,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "quantiles_all": {
+              "0": 0.0,
+              "0.5": 0.0,
+              "0.9": 0.0,
+              "0.95": 0.0,
+              "0.99": 0.0,
+              "1": 0.0
+            },
+            "quantiles_changed": {}
+          },
+          "geom_type": {
+            "shape_equal": true,
+            "values": 102,
+            "different": 0,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "quantiles_all": {
+              "0": 0.0,
+              "0.5": 0.0,
+              "0.9": 0.0,
+              "0.95": 0.0,
+              "0.99": 0.0,
+              "1": 0.0
+            },
+            "quantiles_changed": {}
+          }
+        }
+      }
+    ],
+    "pooled_cameras": {
+      "top": {
+        "encoded": {
+          "shape_equal": true,
+          "values": 128000,
+          "different": 160,
+          "max_abs": 0.000244140625,
+          "mean_abs": 3.0517578125e-07,
+          "quantiles_all": {
+            "0": 0.0,
+            "0.5": 0.0,
+            "0.9": 0.0,
+            "0.95": 0.0,
+            "0.99": 0.0,
+            "1": 0.000244140625
+          },
+          "quantiles_changed": {
+            "0": 0.000244140625,
+            "0.5": 0.000244140625,
+            "0.9": 0.000244140625,
+            "0.95": 0.000244140625,
+            "0.99": 0.000244140625,
+            "1": 0.000244140625
+          }
+        },
+        "decoded_clipped_metres": {
+          "shape_equal": true,
+          "values": 128000,
+          "different": 160,
+          "max_abs": 0.0011962890625001332,
+          "mean_abs": 1.4953613281251665e-06,
+          "quantiles_all": {
+            "0": 0.0,
+            "0.5": 0.0,
+            "0.9": 0.0,
+            "0.95": 0.0,
+            "0.99": 0.0,
+            "1": 0.0011962890625001332
+          },
+          "quantiles_changed": {
+            "0": 0.0011962890625001332,
+            "0.5": 0.0011962890625001332,
+            "0.9": 0.0011962890625001332,
+            "0.95": 0.0011962890625001332,
+            "0.99": 0.0011962890625001332,
+            "1": 0.0011962890625001332
+          }
+        }
+      },
+      "wrist": {
+        "encoded": {
+          "shape_equal": true,
+          "values": 128000,
+          "different": 0,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "quantiles_all": {
+            "0": 0.0,
+            "0.5": 0.0,
+            "0.9": 0.0,
+            "0.95": 0.0,
+            "0.99": 0.0,
+            "1": 0.0
+          },
+          "quantiles_changed": {}
+        },
+        "decoded_clipped_metres": {
+          "shape_equal": true,
+          "values": 128000,
+          "different": 0,
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "quantiles_all": {
+            "0": 0.0,
+            "0.5": 0.0,
+            "0.9": 0.0,
+            "0.95": 0.0,
+            "0.99": 0.0,
+            "1": 0.0
+          },
+          "quantiles_changed": {}
+        }
+      }
+    },
+    "limitations": [
+      "Depth arrays are policy packet float16 values, dimensionless and clipped to [0,1].",
+      "Decoded metric deltas multiply encoded deltas by each camera far-near. They compare quantized, clipped depths, not original unquantized renderer frames.",
+      "Pixels at 0 or 1 are saturated; their original metric difference cannot be recovered. Equal encoded values may conceal sub-quantization differences.",
+      "This diagnostic repeats only a few initial frames and is separate from the formal success-rate sample. It cannot determine the effect of image deviations on success by itself.",
+      "Physical hashes cover the existing hook fields; extra captured camera/geometry arrays are compared separately. No claim is made that all possible simulator state has been hashed."
+    ]
+  },
+  "report_script_sha256": "e29b14502a34fa13129dd809cfed11dfce84fedae8eb3647eccdf0c5ef55baae",
+  "source_audit_sha256": "6a3588a6cd5a0cd4be426cfd8e01f743f17d031798fcdb0be0b843d3d3608346"
+}

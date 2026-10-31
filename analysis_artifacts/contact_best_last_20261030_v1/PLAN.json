@@ -1,0 +1,30 @@
+{
+  "variant": "contact",
+  "models": {
+    "best": {
+      "checkpoint": "/home/isee/Catch/student_best.pth",
+      "checkpoint_sha256": "381bb98d3605b0396f8cffa025900171da23cbed05d425bf3a0c1f239d42bec3",
+      "iteration": 6000
+    },
+    "last": {
+      "checkpoint": "/home/isee/Catch/student_last.pth",
+      "checkpoint_sha256": "b520de40e69fc4ef79ef522f5caa27f3dda9ffda912723ffc8344f48eaa2ce8b",
+      "iteration": 10000
+    }
+  },
+  "seeds": [
+    20261029
+  ],
+  "episodes_per_task_per_checkpoint": 300,
+  "expected_total_episodes": 1800,
+  "tasks": [
+    "throw",
+    "roll",
+    "bounce"
+  ],
+  "parallel_jobs": 2,
+  "streams_per_job": 1,
+  "policy_batch_size": 1,
+  "user_requested_one_seed": true,
+  "no_training": true
+}

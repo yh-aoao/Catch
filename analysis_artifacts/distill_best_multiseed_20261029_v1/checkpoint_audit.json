@@ -1,0 +1,247 @@
+{
+  "belief": {
+    "iteration": 10000,
+    "schema": "distillation_aux_belief_v1",
+    "config_seed": 123,
+    "config_num_envs_per_task": 8,
+    "added": [
+      "configs/basket_after_hold.yaml",
+      "configs/basket_aim_carry.yaml",
+      "configs/basket_fixed_arm.yaml",
+      "configs/basket_hold.yaml",
+      "configs/basket_hold_arm.yaml",
+      "configs/basket_hold_grip.yaml",
+      "configs/basket_physical_arm.yaml",
+      "distillation_track/__init__.py",
+      "distillation_track/configs/three_tasks.json",
+      "distillation_track/core.py",
+      "distillation_track/environments.py",
+      "distillation_track/metrics.py",
+      "distillation_track/run.py",
+      "distillation_track/teachers.py",
+      "gym_dcmm/algs/ppo_dcmm_5fe75d5f/ppo_dcmm_catch_hold.py",
+      "gym_dcmm/envs/bounce_grasp.py",
+      "gym_dcmm/utils/basket_carry.py",
+      "gym_dcmm/utils/basket_grip.py",
+      "gym_dcmm/utils/basket_hold.py",
+      "gym_dcmm/utils/basket_physical.py"
+    ],
+    "deleted": [
+      "configs/catch.json",
+      "configs/catch_control.json",
+      "configs/catch_position.json",
+      "configs/catch_position_velocity.json",
+      "configs/track.json",
+      "configs/track_control.json",
+      "configs/track_position.json",
+      "configs/track_position_velocity.json"
+    ],
+    "modified": [
+      "configs/config.yaml",
+      "gym_dcmm/algs/ppo_dcmm/ppo_dcmm_basket_two_stage.py",
+      "gym_dcmm/algs/ppo_dcmm/ppo_dcmm_catch_one_stage.py",
+      "gym_dcmm/envs/DcmmVecEnv.py",
+      "gym_dcmm/envs/bounce_physical_v2.py",
+      "gym_dcmm/utils/basket_mobile.py",
+      "gym_dcmm/utils/basket_parking_policy.py",
+      "gym_dcmm/utils/basket_transfer.py"
+    ],
+    "recoverable_sources": {
+      "configs/catch.json": {
+        "kind": "file",
+        "path": "/home/isee/Catch/catch_it_copy/distillation_visual_aux/configs/catch.json"
+      },
+      "configs/catch_control.json": {
+        "kind": "file",
+        "path": "/home/isee/Catch/catch_it_copy/distillation_visual_aux/configs/catch_control.json"
+      },
+      "configs/catch_position.json": {
+        "kind": "file",
+        "path": "/home/isee/Catch/catch_it_copy/distillation_visual_aux/configs/catch_position.json"
+      },
+      "configs/catch_position_velocity.json": {
+        "kind": "file",
+        "path": "/home/isee/Catch/catch_it_copy/distillation_visual_aux/configs/catch_position_velocity.json"
+      },
+      "configs/track.json": {
+        "kind": "file",
+        "path": "/home/isee/Catch/catch_it_copy/distillation_visual_aux/configs/track.json"
+      },
+      "configs/track_control.json": {
+        "kind": "file",
+        "path": "/home/isee/Catch/catch_it_copy/distillation_visual_aux/configs/track_control.json"
+      },
+      "configs/track_position.json": {
+        "kind": "file",
+        "path": "/home/isee/Catch/catch_it_copy/distillation_visual_aux/configs/track_position.json"
+      },
+      "configs/track_position_velocity.json": {
+        "kind": "file",
+        "path": "/home/isee/Catch/catch_it_copy/distillation_visual_aux/configs/track_position_velocity.json"
+      },
+      "configs/config.yaml": {
+        "kind": "git",
+        "commit": "278ca2b4d92489784edee3a55c1fa820181aa525"
+      },
+      "gym_dcmm/algs/ppo_dcmm/ppo_dcmm_basket_two_stage.py": {
+        "kind": "git",
+        "commit": "278ca2b4d92489784edee3a55c1fa820181aa525"
+      },
+      "gym_dcmm/algs/ppo_dcmm/ppo_dcmm_catch_one_stage.py": {
+        "kind": "git",
+        "commit": "278ca2b4d92489784edee3a55c1fa820181aa525"
+      },
+      "gym_dcmm/envs/DcmmVecEnv.py": {
+        "kind": "git",
+        "commit": "278ca2b4d92489784edee3a55c1fa820181aa525"
+      },
+      "gym_dcmm/envs/bounce_physical_v2.py": {
+        "kind": "git",
+        "commit": "278ca2b4d92489784edee3a55c1fa820181aa525"
+      },
+      "gym_dcmm/utils/basket_mobile.py": {
+        "kind": "git",
+        "commit": "278ca2b4d92489784edee3a55c1fa820181aa525"
+      },
+      "gym_dcmm/utils/basket_parking_policy.py": {
+        "kind": "git",
+        "commit": "278ca2b4d92489784edee3a55c1fa820181aa525"
+      },
+      "gym_dcmm/utils/basket_transfer.py": {
+        "kind": "git",
+        "commit": "278ca2b4d92489784edee3a55c1fa820181aa525"
+      }
+    },
+    "unavailable_sources": [],
+    "critical_current_hash_match": {
+      "distillation_aux_belief/core.py": true,
+      "distillation_aux_belief/environments.py": true,
+      "visual_module_experiments/core.py": true,
+      "distillation/environments.py": true,
+      "distillation/metrics.py": true,
+      "gym_dcmm/envs/DcmmVecEnv_roll_645edc4.py": true,
+      "gym_dcmm/agents/MujocoDcmm_roll_645edc4.py": true,
+      "configs/env/DcmmCfg_roll_645edc4.py": true,
+      "configs/env/DcmmCfg_bounce_5fe75d5f.py": true,
+      "gym_dcmm/utils/roll_evaluation.py": true,
+      "gym_dcmm/agents/MujocoDcmm.py": true
+    }
+  },
+  "future": {
+    "iteration": 6000,
+    "schema": "distillation_aux_future_v1",
+    "config_seed": 123,
+    "config_num_envs_per_task": 8,
+    "added": [
+      "configs/basket_after_hold.yaml",
+      "configs/basket_aim_carry.yaml",
+      "configs/basket_fixed_arm.yaml",
+      "configs/basket_hold.yaml",
+      "configs/basket_hold_arm.yaml",
+      "configs/basket_hold_grip.yaml",
+      "configs/basket_mobile.yaml",
+      "configs/basket_mobile_transfer.yaml",
+      "configs/basket_physical_arm.yaml",
+      "configs/basket_stage1.yaml",
+      "configs/basket_stage2.yaml",
+      "configs/basket_throw_first.yaml",
+      "distillation_track/__init__.py",
+      "distillation_track/configs/three_tasks.json",
+      "distillation_track/core.py",
+      "distillation_track/environments.py",
+      "distillation_track/metrics.py",
+      "distillation_track/run.py",
+      "distillation_track/teachers.py",
+      "gym_dcmm/algs/ppo_dcmm/ppo_dcmm_basket_two_stage.py",
+      "gym_dcmm/algs/ppo_dcmm_5fe75d5f/ppo_dcmm_catch_hold.py",
+      "gym_dcmm/envs/bounce_grasp.py",
+      "gym_dcmm/envs/bounce_physical_v2.py",
+      "gym_dcmm/envs/bounce_stable.py",
+      "gym_dcmm/envs/roll_adaptive.py",
+      "gym_dcmm/envs/roll_physical.py",
+      "gym_dcmm/utils/basket_aim.py",
+      "gym_dcmm/utils/basket_carry.py",
+      "gym_dcmm/utils/basket_diagnostics.py",
+      "gym_dcmm/utils/basket_grip.py",
+      "gym_dcmm/utils/basket_hold.py",
+      "gym_dcmm/utils/basket_mobile.py",
+      "gym_dcmm/utils/basket_parking_policy.py",
+      "gym_dcmm/utils/basket_physical.py",
+      "gym_dcmm/utils/basket_policy_mask.py",
+      "gym_dcmm/utils/basket_simple.py",
+      "gym_dcmm/utils/basket_teacher.py",
+      "gym_dcmm/utils/basket_transfer.py",
+      "gym_dcmm/utils/roll_adaptive_wait.py",
+      "gym_dcmm/utils/roll_speed.py",
+      "gym_dcmm/utils/roll_wait_guard.py",
+      "gym_dcmm/utils/worker_errors.py"
+    ],
+    "deleted": [],
+    "modified": [
+      "configs/config.yaml",
+      "configs/env/DcmmCfg.py",
+      "distillation_aux_future/run.py",
+      "gym_dcmm/__init__.py",
+      "gym_dcmm/algs/ppo_dcmm/ppo_dcmm_catch_one_stage.py",
+      "gym_dcmm/envs/DcmmVecEnv.py",
+      "gym_dcmm/envs/DcmmVecEnv_bounce_july22.py",
+      "gym_dcmm/envs/object_test.py",
+      "model_experiments/run.py",
+      "model_experiments/visual_resume.py"
+    ],
+    "recoverable_sources": {
+      "configs/config.yaml": {
+        "kind": "git",
+        "commit": "50ec46fda9b493a9644406c13c0f9e62ff8b34a6"
+      },
+      "configs/env/DcmmCfg.py": {
+        "kind": "git",
+        "commit": "eee6d335227ecc90f38ea8983bfbbdb2f1f50165"
+      },
+      "distillation_aux_future/run.py": {
+        "kind": "git",
+        "commit": "cbe609509857febcbfc39cd37df833572d92f285"
+      },
+      "gym_dcmm/__init__.py": {
+        "kind": "git",
+        "commit": "50ec46fda9b493a9644406c13c0f9e62ff8b34a6"
+      },
+      "gym_dcmm/algs/ppo_dcmm/ppo_dcmm_catch_one_stage.py": {
+        "kind": "git",
+        "commit": "5bf470c436a58c86afef88937846f4e4785f3555"
+      },
+      "gym_dcmm/envs/DcmmVecEnv.py": {
+        "kind": "git",
+        "commit": "eee6d335227ecc90f38ea8983bfbbdb2f1f50165"
+      },
+      "gym_dcmm/envs/DcmmVecEnv_bounce_july22.py": {
+        "kind": "git",
+        "commit": "99bfffdf75e16727f787a77c4e0a3c2c604c1c77"
+      },
+      "gym_dcmm/envs/object_test.py": {
+        "kind": "git",
+        "commit": "18ca8fb95aaba4b54ebcf418975b491653418172"
+      },
+      "model_experiments/visual_resume.py": {
+        "kind": "git",
+        "commit": "eee6d335227ecc90f38ea8983bfbbdb2f1f50165"
+      }
+    },
+    "unavailable_sources": [
+      "model_experiments/run.py"
+    ],
+    "critical_current_hash_match": {
+      "distillation_aux_future/core.py": true,
+      "distillation_aux_future/environments.py": true,
+      "visual_module_experiments/core.py": true,
+      "distillation/environments.py": true,
+      "distillation/metrics.py": true,
+      "gym_dcmm/envs/DcmmVecEnv_roll_645edc4.py": true,
+      "gym_dcmm/agents/MujocoDcmm_roll_645edc4.py": true,
+      "configs/env/DcmmCfg_roll_645edc4.py": true,
+      "configs/env/DcmmCfg_bounce_5fe75d5f.py": true,
+      "gym_dcmm/utils/roll_evaluation.py": true,
+      "gym_dcmm/agents/MujocoDcmm.py": true
+    }
+  }
+}

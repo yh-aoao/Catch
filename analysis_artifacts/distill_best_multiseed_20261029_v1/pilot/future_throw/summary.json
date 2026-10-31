@@ -1,0 +1,148 @@
+{
+  "protocol": {
+    "variant": "future",
+    "task": "throw",
+    "seeds": [
+      20261029,
+      20262029,
+      20263029,
+      20264029,
+      20265029
+    ],
+    "episodes_per_seed": 3,
+    "checkpoint": "/home/isee/Catch/distill_best_ckpt/future_student_last.pth",
+    "checkpoint_sha256": "d0d789a03ae850995f5e7ba524754518afa6891802f3882d8b475dd92c312ae6",
+    "iteration": 10000,
+    "source_audit": "/home/isee/Catch/analysis_artifacts/distill_best_multiseed_20261029_v1/source_audit.json",
+    "source_root": "/tmp/catch_distill_eval_sources_20261029/future",
+    "source_exceptions": [
+      {
+        "path": "model_experiments/run.py",
+        "expected": "e6559a801e277e69e8fe37224e579100a253482a7d2b54557c4b3d81ba65a9c9",
+        "actual": "66ffc0bc221d64bb7d66b8c03d2a59c6aeee4a18928db28864a75e4047715c06",
+        "matching": false,
+        "origin": "unavailable_unused_launcher_stub"
+      }
+    ],
+    "device": "cuda:0",
+    "batch_streams": 5,
+    "deterministic_algorithms": true,
+    "tf32": false,
+    "constructor_seed": "evaluation_seed + 1000000 + TASK_ID*10000",
+    "reset_seed": "constructor_seed + episode_index*100003",
+    "versions": {
+      "torch": "2.11.0+cu128",
+      "numpy": "1.23.0",
+      "python": "3.10.20 (main, Mar 11 2026, 17:46:40) [GCC 14.3.0]"
+    },
+    "no_teacher_required": true
+  },
+  "per_seed": {
+    "20261029": {
+      "success_metric": "success",
+      "successes": 2,
+      "episodes": 3,
+      "requested_episodes": 3,
+      "complete": true,
+      "success_rate": 0.6666666666666666,
+      "auxiliary_metrics": {
+        "success": {
+          "true": 2,
+          "reported": 3,
+          "rate": 0.6666666666666666
+        }
+      },
+      "termination_counts": {
+        "unspecified": 3
+      },
+      "legacy_truncated_rate": 0.6666666666666666,
+      "mean_reward": 394.4352383011595
+    },
+    "20262029": {
+      "success_metric": "success",
+      "successes": 1,
+      "episodes": 3,
+      "requested_episodes": 3,
+      "complete": true,
+      "success_rate": 0.3333333333333333,
+      "auxiliary_metrics": {
+        "success": {
+          "true": 1,
+          "reported": 3,
+          "rate": 0.3333333333333333
+        }
+      },
+      "termination_counts": {
+        "unspecified": 2,
+        "ball_left": 1
+      },
+      "legacy_truncated_rate": 0.3333333333333333,
+      "mean_reward": 228.02670189808006
+    },
+    "20263029": {
+      "success_metric": "success",
+      "successes": 2,
+      "episodes": 3,
+      "requested_episodes": 3,
+      "complete": true,
+      "success_rate": 0.6666666666666666,
+      "auxiliary_metrics": {
+        "success": {
+          "true": 2,
+          "reported": 3,
+          "rate": 0.6666666666666666
+        }
+      },
+      "termination_counts": {
+        "unspecified": 3
+      },
+      "legacy_truncated_rate": 0.6666666666666666,
+      "mean_reward": 395.79590633828394
+    },
+    "20264029": {
+      "success_metric": "success",
+      "successes": 3,
+      "episodes": 3,
+      "requested_episodes": 3,
+      "complete": true,
+      "success_rate": 1.0,
+      "auxiliary_metrics": {
+        "success": {
+          "true": 3,
+          "reported": 3,
+          "rate": 1.0
+        }
+      },
+      "termination_counts": {
+        "unspecified": 3
+      },
+      "legacy_truncated_rate": 1.0,
+      "mean_reward": 596.465919100916
+    },
+    "20265029": {
+      "success_metric": "success",
+      "successes": 2,
+      "episodes": 3,
+      "requested_episodes": 3,
+      "complete": true,
+      "success_rate": 0.6666666666666666,
+      "auxiliary_metrics": {
+        "success": {
+          "true": 2,
+          "reported": 3,
+          "rate": 0.6666666666666666
+        }
+      },
+      "termination_counts": {
+        "unspecified": 2,
+        "ball_left": 1
+      },
+      "legacy_truncated_rate": 0.6666666666666666,
+      "mean_reward": 338.4047971402559
+    }
+  },
+  "successes": 10,
+  "episodes": 15,
+  "seconds": 18.8998293179975,
+  "serial_batch_max_action_error": 5.140900611877441e-07
+}

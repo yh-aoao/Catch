@@ -1,0 +1,43 @@
+{
+  "assumption": "approximately independent Bernoulli evaluation episodes; exploratory, unpaired comparison",
+  "training_seed_uncertainty_included": false,
+  "causal_architecture_effect_identified": false,
+  "comparisons": [
+    {
+      "task": "throw",
+      "comparison": "belief - camera_gate",
+      "successes": [
+        241,
+        185
+      ],
+      "episodes": [
+        300,
+        300
+      ],
+      "difference": 0.18666666666666665,
+      "newcombe_95": [
+        0.11453629295601889,
+        0.25621752834546385
+      ]
+    },
+    {
+      "task": "bounce",
+      "comparison": "camera_gate - belief",
+      "successes": [
+        251,
+        213
+      ],
+      "episodes": [
+        300,
+        300
+      ],
+      "difference": 0.1266666666666667,
+      "newcombe_95": [
+        0.05983983841584718,
+        0.19221819875585874
+      ]
+    }
+  ],
+  "curve_status": "2000/4000/6000/8000 files not yet supplied by user; no curves inferred",
+  "required_files": "per-variant eval_002000.json, eval_004000.json, eval_006000.json, eval_008000.json, eval_010000.json, as available"
+}

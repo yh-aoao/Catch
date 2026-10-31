@@ -1,0 +1,37 @@
+{
+  "variant": "future",
+  "checkpoint": "/home/isee/Catch/distill_best_ckpt/future_student_last.pth",
+  "checkpoint_sha256": "d0d789a03ae850995f5e7ba524754518afa6891802f3882d8b475dd92c312ae6",
+  "iteration": 10000,
+  "source_audit_sha256": "6a3588a6cd5a0cd4be426cfd8e01f743f17d031798fcdb0be0b843d3d3608346",
+  "script_sha256": "0bdf7b7c794241fd6d608d2eb295fad0e0139d09ceca378669e2ae61a9aed7ad",
+  "capture_hook_sha256": "6b515f2f13d3f1df2815dfeefcd1ee857a9e14d75532a210809686c5656a434e",
+  "task": "throw",
+  "seed": 20261029,
+  "episodes": 5,
+  "device": "cuda:0",
+  "egl_device_id": 0,
+  "deterministic_algorithms": true,
+  "tf32": false,
+  "policy_batch_size": 1,
+  "camera_specs": [
+    {
+      "name": "top",
+      "near": 0.1,
+      "far": 5.0
+    },
+    {
+      "name": "wrist",
+      "near": 0.01,
+      "far": 1.5
+    }
+  ],
+  "depth_encoding": "float16((clip(metric_depth_m, near, far)-near)/(far-near))",
+  "versions": {
+    "torch": "2.11.0+cu128",
+    "numpy": "1.23.0",
+    "mujoco": "3.6.0",
+    "cudnn": 91900,
+    "python": "3.10.20 (main, Mar 11 2026, 17:46:40) [GCC 14.3.0]"
+  }
+}

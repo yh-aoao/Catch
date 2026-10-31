@@ -1,0 +1,269 @@
+{
+  "case": "roll_track",
+  "object": "tennis_ball",
+  "checkpoint": "/home/isee/Catch/catch_it_copy/outputs/roll_three_ball_tracking_legacy_reward_v1_seed123/2026-10-28/11:36:06/nn/roll_track_best_reward_27.44.pth",
+  "checkpoint_sha256": "ea8d3dd09238f2c97a605ef495402b2ce37038a07e8bb72fe0a7fabf06759add",
+  "training_config_path": "/home/isee/Catch/catch_it_copy/outputs/roll_three_ball_tracking_legacy_reward_v1_seed123/2026-10-28/11:36:06/resolved_config.yaml",
+  "training_config_sha256": "daf6959cd5486a1936daa57da6607fc13dd9b848d09d2333324d4c605db00fa6",
+  "material_path": "/home/isee/Catch/catch_it_copy/ycb_objects/calibration_data/balls.roll_table_priors_v1.json",
+  "material_sha256": "d6c3da0c92a73ade608f0509e44ab92ab14eafadb40a100a173e4ec899806a14",
+  "material": {
+    "schema": "roll_table_materials_v1",
+    "surface_id": "generic_dry_rigid_table_prior_v1",
+    "status": "simulation_priors_not_measured",
+    "notes": "Sliding friction values are literature-informed engineering priors for different ball covers, not measured on a common table. Rolling/torsional parameters are lengths in metres, chosen low resistance priors; no official YCB rolling coefficients are claimed.",
+    "sources": [
+      "https://www.physics.usyd.edu.au/~cross/PUBLICATIONS/GripSlip.pdf",
+      "https://mujoco.readthedocs.io/en/stable/computation.html#contact"
+    ],
+    "profiles": {
+      "original": {
+        "mass_kg": 0.05,
+        "radius_m": 0.04,
+        "inertia_factor": 0.4,
+        "sliding_friction": 0.4,
+        "torsional_length_m": 0.0001,
+        "rolling_length_m": 0.00015
+      },
+      "tennis_ball": {
+        "mass_kg": 0.058,
+        "radius_m": 0.033275785333333335,
+        "inertia_factor": 0.55,
+        "sliding_friction": 0.5,
+        "torsional_length_m": 0.0001,
+        "rolling_length_m": 0.0003
+      },
+      "baseball": {
+        "mass_kg": 0.138,
+        "radius_m": 0.036176233833333335,
+        "inertia_factor": 0.4,
+        "sliding_friction": 0.3,
+        "torsional_length_m": 0.0001,
+        "rolling_length_m": 0.00012
+      }
+    }
+  },
+  "seed_start": 0,
+  "episodes": 100,
+  "policy": "deterministic mean action, original PPO normalization/clamp/padding/action2dict",
+  "criterion": "roll_eval_success: hand interception after full front-edge departure, no table/floor support; not grasping",
+  "contact_sampling_seconds": 0.002,
+  "mujoco_version": "3.6.0",
+  "torch_version": "2.11.0+cu128",
+  "evaluation_config": {
+    "train": {
+      "seed": 123,
+      "algo": "PPO",
+      "network": {
+        "mlp": {
+          "units": [
+            256,
+            128
+          ]
+        },
+        "separate_value_mlp": true
+      },
+      "ppo": {
+        "name": "Dcmm",
+        "normalize_input": true,
+        "normalize_value": true,
+        "value_bootstrap": true,
+        "num_actors": 1,
+        "reward_scale_value": 0.1,
+        "clip_value_loss": false,
+        "normalize_advantage": true,
+        "gamma": 0.99,
+        "tau": 0.95,
+        "learning_rate": 0.0005,
+        "lr_schedule": "kl",
+        "kl_threshold": 0.016,
+        "save_best_after": 500,
+        "save_frequency": 2000,
+        "grad_norm": 1.0,
+        "entropy_coef": 0.0,
+        "freeze_base": false,
+        "freeze_arm": false,
+        "truncate_grads": true,
+        "e_clip": 0.2,
+        "action_track_denorm": [
+          1.5,
+          0.025,
+          0.01
+        ],
+        "action_catch_denorm": [
+          1.5,
+          0.025,
+          0.15
+        ],
+        "horizon_length": 64,
+        "minibatch_size": 512,
+        "mini_epochs": 6,
+        "critic_coef": 4,
+        "clip_value": true,
+        "bounds_loss_coef": 0.0001,
+        "max_agent_steps": 25000000,
+        "test_num_episodes": 100,
+        "max_test_steps": 10000,
+        "img_dim": [
+          112,
+          112
+        ],
+        "num_frames": 2
+      }
+    },
+    "experiment": "",
+    "seed": 123,
+    "torch_deterministic": true,
+    "rl_device": "cpu",
+    "device_id": -1,
+    "viewer": false,
+    "imshow_cam": false,
+    "test": true,
+    "task": "Tracking",
+    "num_envs": 1,
+    "object_eval": false,
+    "checkpoint_tracking": "",
+    "checkpoint_catching": "",
+    "output_name": "roll_three_ball_tracking_legacy_reward_v1_seed123",
+    "wandb_mode": "disabled",
+    "wandb_entity": "Your_username",
+    "wandb_project": "RL_Dcmm_Catch_Random",
+    "object_motion": "roll",
+    "bounce_physics": "legacy",
+    "bounce_launch": "legacy",
+    "bounce_ball_mode": "fixed",
+    "bounce_ball_weights": null,
+    "bounce_material_file": null,
+    "bounce_v2": {
+      "height": [
+        0.9,
+        1.1
+      ],
+      "distance": [
+        1.6,
+        2.0
+      ],
+      "speed": [
+        1.3,
+        1.7
+      ],
+      "vertical_speed": [
+        -0.2,
+        -0.2
+      ],
+      "heading_degrees": [
+        -15.0,
+        15.0
+      ],
+      "spin_factor": [
+        0.5,
+        1.5
+      ],
+      "damping_ratio": [
+        0.11,
+        0.11
+      ],
+      "ground_friction": 0.3,
+      "time_constant": 0.008,
+      "mass_jitter": 0.1,
+      "radius_jitter": 0.05
+    },
+    "bounce_log": false,
+    "basket_log": false,
+    "basket_freeze_tracking": true,
+    "roll_log": false,
+    "roll_physics": "physical_v1",
+    "roll_material_file": "/home/isee/Catch/catch_it_copy/ycb_objects/calibration_data/balls.roll_table_priors_v1.json",
+    "roll_ball_mode": "mixed",
+    "roll_ball_weights": {
+      "original": 0.6,
+      "tennis_ball": 0.2,
+      "baseball": 0.2
+    },
+    "roll_reward_version": "legacy",
+    "roll_adaptive_wait": {
+      "min_height": 0.38,
+      "max_height": 0.62,
+      "height_band": 0.06,
+      "stand_off": 0.1,
+      "speed_lookahead": 0.08,
+      "hand_margin": 0.03,
+      "xy_weight": 1.0,
+      "xy_scale": 0.3,
+      "progress_weight": 5.0,
+      "height_weight": 1.5,
+      "hand_weight": 4.0,
+      "ready_weight": 0.5,
+      "settle_speed": 0.15,
+      "early_contact_weight": 2.0
+    },
+    "catch_tracking": "",
+    "catch_catching": "",
+    "basket_tracking": "",
+    "basket_fixed_base_training": false,
+    "basket_control_probe": "off",
+    "basket_arm_control": "cartesian",
+    "slide_config": null,
+    "slide_log": false,
+    "basket_reward_version": "legacy",
+    "basket_curriculum_stage": 3,
+    "basket_warm_start": "",
+    "basket_training_stage": "joint",
+    "basket_parking_checkpoint": "",
+    "basket_mask_navigation_updates": false,
+    "basket_mobile": {
+      "target_x_range": [
+        -0.4,
+        0.4
+      ],
+      "target_y_range": [
+        1.35,
+        1.85
+      ],
+      "max_time": 8.0,
+      "max_speed": 0.5,
+      "max_acceleration": 0.8,
+      "position_tolerance": 0.1,
+      "speed_tolerance": 0.1,
+      "settle_seconds": 0.2,
+      "carry_settle_seconds": 0.3,
+      "brake_after_unlock": false,
+      "approach_braking": false,
+      "parking_only": false,
+      "hold_position": false,
+      "settle_contact_grace": 0.0,
+      "release_speed_tolerance": 0.0,
+      "release_position_tolerance": 0.0,
+      "post_ready_seconds": 0.0,
+      "fixed_throw_probability": 0.0
+    },
+    "test_object": "default",
+    "roll_speed": [
+      0.8,
+      1.3
+    ],
+    "roll_wait_guard": false,
+    "ycb_collision": "auto",
+    "ycb_joint_damping": null,
+    "test_env_time": null,
+    "basket_viewer_speed": 1.0,
+    "basket_self_collision_debug": false,
+    "vector_mode": "auto"
+  },
+  "sources": {
+    "ycb_objects/evaluate_trained_balls.py": "0e1264a2b27d116c4f54cd1dfea2b4f672693008b3ae12bae4950cf2be5131b6",
+    "gym_dcmm/envs/roll_physical.py": "45f6822177d7fb11d02763dc98118a1a37a6c12a9cbc75088cfb10cc1e8c82b3",
+    "gym_dcmm/envs/bounce_physical_v2.py": "564e0cd816185fb59634d61950a4f229fbacd76b8f1e4c7835550b869d1c9b58",
+    "gym_dcmm/envs/DcmmVecEnv.py": "33b6c9038aa7c91a7141d048f2dcddbd3c0e84b19a0cb81aaa81628816cef095",
+    "gym_dcmm/utils/roll_evaluation.py": "d449e4193e17153ec1d2bdf1e3c5cb83f2e924650c3f5a337156bfc2e2e95da6",
+    "gym_dcmm/envs/DcmmVecEnv_bounce_july22.py": "bcc29c6ff56ce9a2b05944dffe7f318bdff4e8c7b15d5c2beb9adab26b6e7e36",
+    "gym_dcmm/algs/ppo_dcmm_645edc4/ppo_dcmm_catch_one_stage.py": "a9ebfeca4aaa0533f3393fe833e7983863e487d386f1a2d6c1e1ef6f09089465",
+    "gym_dcmm/algs/ppo_dcmm_645edc4/ppo_dcmm_track.py": "59976be0ca118c46f783fc5780a60c55a51b8e716721ca59145c20fd2d35afac",
+    "gym_dcmm/algs/ppo_dcmm_645edc4/models_track.py": "1a1fb8b1bd658cbbdc608a775342d7039e8a6e5e0bca58b77ba570921e0d94e3",
+    "gym_dcmm/algs/ppo_dcmm_645edc4/utils.py": "4f7dac3a2c2ea83c884c3888dfed9804432b67d451e3c0c8f8f2d908ecc3d738",
+    "gym_dcmm/algs/ppo_dcmm_645edc4/experience.py": "a67f19b6aeeac134bd4b7a6afa7f63efee23a49bbcb85e8cddcadab16eff323a",
+    "gym_dcmm/algs/ppo_dcmm_645edc4/models_catch.py": "52836785dff94b7ec5a8aa91d9aae8f9f31d65beda85ee641e599ad9f12c5047",
+    "gym_dcmm/algs/ppo_dcmm_645edc4/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "gym_dcmm/algs/ppo_dcmm_645edc4/ppo_dcmm_catch_two_stage.py": "3ad421357316ddff4153f7a5d96e80d5c7b0db25a4eb52eb41a41f7fbaaf0a3d"
+  }
+}

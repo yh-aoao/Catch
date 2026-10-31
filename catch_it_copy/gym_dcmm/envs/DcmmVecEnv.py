@@ -177,7 +177,7 @@ class DcmmVecEnv(gym.Env):
         print_contacts=False,
         object_motion="throw", # 新增的参数用来判断物体运动类型（throw/roll）
         bounce_physics="legacy", bounce_launch="legacy", bounce_log=False,
-        basket_log=False, basket_self_collision_debug=False, roll_log=False, basket_fixed_base_training=False, basket_control_probe="off", basket_arm_control="cartesian", basket_reward_version="legacy", basket_curriculum_stage=3, basket_mobile_options=None, basket_eval_hand_flex=None, basket_fixed_hand_flex=None, basket_fixed_arm_drive_bonus=0., basket_fixed_physical=False, basket_carry_reward=False, basket_carry_options=None,
+        basket_log=False, basket_self_collision_debug=False, roll_log=False, basket_fixed_base_training=False, basket_control_probe="off", basket_arm_control="cartesian", basket_reward_version="legacy", basket_curriculum_stage=3, basket_mobile_options=None, basket_eval_hand_flex=None, basket_fixed_hand_flex=None, basket_fixed_arm_drive_bonus=0., basket_fixed_physical=False, basket_carry_reward=False, basket_carry_options=None, basket_finger_reward=False, basket_finger_options=None,
     ):
         # 任务合法性检查（仅支持Tracking/Catching）
         if task not in ["Tracking", "Catching"]:
@@ -214,6 +214,11 @@ class DcmmVecEnv(gym.Env):
         self.basket_carry_reward = bool(basket_carry_reward)
         from gym_dcmm.utils.basket_carry import make_options
         self.basket_carry_options = make_options(basket_carry_options)
+        self.basket_finger_reward = bool(basket_finger_reward)
+        from gym_dcmm.utils.basket_fingers import make_options as finger_options
+        self.basket_finger_options = finger_options(basket_finger_options)
+        if self.basket_finger_reward and not self.basket_carry_reward:
+            raise ValueError('Basket finger coordination requires basket_aim_carry physical preparation')
         if self.basket_carry_reward and not self.basket_fixed_physical:
             raise ValueError('Basket carry shaping needs physical preparation')
         if self.basket_fixed_physical and not (basket_fixed_base_training and basket_reward_version == 'basket_aim_v1' and (basket_fixed_arm_drive_bonus > 0 or self.basket_carry_reward)):
@@ -861,6 +866,11 @@ class DcmmVecEnv(gym.Env):
             from gym_dcmm.utils.basket_carry import measure
             measure(self.Dcmm.model,self.Dcmm.data,self.basket_simple_state['carry'],
                     self.basket_center,self.basket_carry_options)
+        if getattr(self, 'basket_finger_reward', False):
+            from gym_dcmm.utils.basket_fingers import HAND_INDICES, update as update_fingers
+            update_fingers(self.basket_finger_state, self.Dcmm.data.qpos[21:37][HAND_INDICES],
+                float(self.Dcmm.data.time-self.start_time), dt,
+                bool(self.basket_simple_state.get('confirmed')), self.basket_finger_options)
         if getattr(self, 'basket_fixed_physical', False) and not getattr(self,'basket_carry_reward',False) and self.basket_simple_state.get('confirmed'):
             from gym_dcmm.utils.basket_physical import release_quality
             self.basket_simple_state.setdefault('physical_release_quality',
@@ -1764,7 +1774,7 @@ class DcmmVecEnv(gym.Env):
             palm_normal = ee_xmat[:, 1]  # link6 Y轴 = 掌心方向
             palm_up = ee_xmat[:, 2]      # link6 Z轴 ≈ 手指方向
             # 球放在掌心上方：沿法线偏移（离开掌面）+ 沿手指方向偏移（在掌面上方）
-            ball_radius = DcmmCfg.basket_ball_radius
+            ball_radius = self.basket_cfg.basket_ball_radius
             palm_pos = ee_xpos + palm_normal * 0.03 + palm_up * (ball_radius + 0.03)
             if self.mobile_basket:
                 from gym_dcmm.utils.basket_grip import ball_position
@@ -2056,6 +2066,12 @@ class DcmmVecEnv(gym.Env):
                 self.basket_simple_state['carry'] = new_state(
                     self.Dcmm.data.body('link6').xpos-self.Dcmm.data.body('arm_base').xpos,
                     self.basket_preparation['local'])
+            if self.basket_finger_reward:
+                from gym_dcmm.utils.basket_fingers import HAND_INDICES, new_state as finger_state
+                joint_ids = [int(np.flatnonzero(self.Dcmm.model.jnt_qposadr == 21+i)[0])
+                             for i in HAND_INDICES]
+                self.basket_finger_state = finger_state(self.Dcmm.data.qpos[21:37][HAND_INDICES],
+                    self.Dcmm.model.jnt_range[joint_ids], self.basket_finger_options)
             self.basket_arm_self_collision = False
             self.basket_self_contact_details = []
             self.basket_robot_collision = False
@@ -2176,6 +2192,12 @@ class DcmmVecEnv(gym.Env):
                     or getattr(self,'basket_arm_self_collision',False)))
                 terms.update(additions)
                 value += sum(additions.values())
+            if getattr(self, 'basket_finger_reward', False):
+                from gym_dcmm.utils.basket_fingers import reward as finger_reward
+                additions = finger_reward(self.basket_finger_state,
+                    np.asarray(ctrl['hand'])/.15, self.basket_finger_options)
+                terms.update(additions)
+                value += sum(additions.values())
             if getattr(self, 'basket_fixed_arm_drive_bonus', 0.) and not getattr(self,'basket_carry_reward',False):
                 from gym_dcmm.utils.basket_hold import arm_drive_reward
                 drive_terms = arm_drive_reward(self.basket_simple_state.setdefault('arm_drive', {}),
@@ -2228,6 +2250,9 @@ class DcmmVecEnv(gym.Env):
                     carry_position_quality=carry.get('position_quality',1.),
                     carry_local_reference=carry['local_reference'].tolist(),
                     carry_local_error=carry.get('local_error',[0.,0.,0.]))
+            if getattr(self, 'basket_finger_reward', False):
+                info['basket_control'].update(reward_revision='aim_carry_fingers_v1',
+                    finger_coordination=self.basket_finger_state['metrics'])
             info['basket_phase'] = self.basket_phase
             if getattr(self, 'mobile_basket', False):
                 mobile = self.basket_mobile_state

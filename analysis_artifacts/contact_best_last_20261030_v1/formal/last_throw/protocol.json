@@ -1,0 +1,33 @@
+{
+  "variant": "contact",
+  "checkpoint_label": "last",
+  "task": "throw",
+  "seeds": [
+    20261029
+  ],
+  "episodes_per_seed": 300,
+  "checkpoint": "/home/isee/Catch/student_last.pth",
+  "checkpoint_sha256": "b520de40e69fc4ef79ef522f5caa27f3dda9ffda912723ffc8344f48eaa2ce8b",
+  "iteration": 10000,
+  "source_audit": "/home/isee/Catch/analysis_artifacts/contact_best_last_20261030_v1/source_audit.json",
+  "source_root": "/tmp/catch_contact_eval_sources_20261030/contact",
+  "source_audit_sha256": "9278c45481bc2eefcb6ec5b5565a723be4753bf22fba52cd9081fdb454512e97",
+  "evaluator_sha256": "e0aaa075dc2874267086b12c7ab3a7f25dad2e39921a02f6cef44a8f8d02a726",
+  "capture_hook_sha256": "6b515f2f13d3f1df2815dfeefcd1ee857a9e14d75532a210809686c5656a434e",
+  "source_exceptions": [],
+  "device": "cuda:0",
+  "batch_streams": 1,
+  "policy_batch_size": 1,
+  "deterministic_algorithms": true,
+  "tf32": false,
+  "constructor_seed": "evaluation_seed + 1000000 + TASK_ID*10000",
+  "reset_seed": "constructor_seed + episode_index*100003",
+  "versions": {
+    "torch": "2.11.0+cu128",
+    "numpy": "1.23.0",
+    "mujoco": "3.6.0",
+    "cudnn": 91900,
+    "python": "3.10.20 (main, Mar 11 2026, 17:46:40) [GCC 14.3.0]"
+  },
+  "no_teacher_required": true
+}

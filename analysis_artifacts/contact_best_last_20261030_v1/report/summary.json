@@ -1,0 +1,940 @@
+{
+  "complete": true,
+  "episodes": 1800,
+  "episodes_per_checkpoint": 900,
+  "episodes_per_task": 300,
+  "environment_seed": 20261029,
+  "n_environment_seeds": 1,
+  "comparison_direction": "last_minus_best",
+  "models": {
+    "best": {
+      "checkpoint": "/home/isee/Catch/student_best.pth",
+      "checkpoint_sha256": "381bb98d3605b0396f8cffa025900171da23cbed05d425bf3a0c1f239d42bec3",
+      "iteration": 6000,
+      "tasks": {
+        "throw": {
+          "episodes": 300,
+          "successes": 202,
+          "rate": 0.6733333333333333,
+          "conditional_wilson95": [
+            0.6183622089237593,
+            0.7239215610517313
+          ],
+          "mean_reward": 410.55429394593943,
+          "mean_length": 54.89333333333333,
+          "termination_counts": {
+            "unspecified": 238,
+            "ball_left": 62
+          },
+          "metric_versions": {
+            "throw_official": 300
+          },
+          "auxiliary": {
+            "success": {
+              "successes": 202,
+              "reported": 300,
+              "rate": 0.6733333333333333
+            }
+          },
+          "protocol": {
+            "variant": "contact",
+            "checkpoint_label": "best",
+            "task": "throw",
+            "seeds": [
+              20261029
+            ],
+            "episodes_per_seed": 300,
+            "checkpoint": "/home/isee/Catch/student_best.pth",
+            "checkpoint_sha256": "381bb98d3605b0396f8cffa025900171da23cbed05d425bf3a0c1f239d42bec3",
+            "iteration": 6000,
+            "source_audit": "/home/isee/Catch/analysis_artifacts/contact_best_last_20261030_v1/source_audit.json",
+            "source_root": "/tmp/catch_contact_eval_sources_20261030/contact",
+            "source_audit_sha256": "9278c45481bc2eefcb6ec5b5565a723be4753bf22fba52cd9081fdb454512e97",
+            "evaluator_sha256": "e0aaa075dc2874267086b12c7ab3a7f25dad2e39921a02f6cef44a8f8d02a726",
+            "capture_hook_sha256": "6b515f2f13d3f1df2815dfeefcd1ee857a9e14d75532a210809686c5656a434e",
+            "source_exceptions": [],
+            "device": "cuda:0",
+            "batch_streams": 1,
+            "policy_batch_size": 1,
+            "deterministic_algorithms": true,
+            "tf32": false,
+            "constructor_seed": "evaluation_seed + 1000000 + TASK_ID*10000",
+            "reset_seed": "constructor_seed + episode_index*100003",
+            "versions": {
+              "torch": "2.11.0+cu128",
+              "numpy": "1.23.0",
+              "mujoco": "3.6.0",
+              "cudnn": 91900,
+              "python": "3.10.20 (main, Mar 11 2026, 17:46:40) [GCC 14.3.0]"
+            },
+            "no_teacher_required": true
+          },
+          "environment_draw": {
+            "radii": [
+              0.042530940300638774
+            ],
+            "masses": [
+              0.035
+            ]
+          }
+        },
+        "roll": {
+          "episodes": 300,
+          "successes": 210,
+          "rate": 0.7,
+          "conditional_wilson95": [
+            0.6458824752950584,
+            0.749060336215123
+          ],
+          "mean_reward": 242.48546428689917,
+          "mean_length": 61.67333333333333,
+          "termination_counts": {
+            "timeout": 246,
+            "out_of_bounds": 11,
+            "ball_on_floor": 34,
+            "base_collision": 2,
+            "ball_left": 7
+          },
+          "metric_versions": {
+            "region_retention_v5": 300
+          },
+          "auxiliary": {
+            "success": {
+              "successes": 0,
+              "reported": 300,
+              "rate": 0.0
+            },
+            "roll_eval_success": {
+              "successes": 210,
+              "reported": 300,
+              "rate": 0.7
+            },
+            "roll_caught_once": {
+              "successes": 272,
+              "reported": 300,
+              "rate": 0.9066666666666666
+            },
+            "roll_stable_hold": {
+              "successes": 4,
+              "reported": 300,
+              "rate": 0.013333333333333334
+            },
+            "roll_holding_at_end": {
+              "successes": 216,
+              "reported": 300,
+              "rate": 0.72
+            },
+            "roll_final_hold": {
+              "successes": 216,
+              "reported": 300,
+              "rate": 0.72
+            },
+            "roll_legacy_success": {
+              "successes": 0,
+              "reported": 300,
+              "rate": 0.0
+            }
+          },
+          "protocol": {
+            "variant": "contact",
+            "checkpoint_label": "best",
+            "task": "roll",
+            "seeds": [
+              20261029
+            ],
+            "episodes_per_seed": 300,
+            "checkpoint": "/home/isee/Catch/student_best.pth",
+            "checkpoint_sha256": "381bb98d3605b0396f8cffa025900171da23cbed05d425bf3a0c1f239d42bec3",
+            "iteration": 6000,
+            "source_audit": "/home/isee/Catch/analysis_artifacts/contact_best_last_20261030_v1/source_audit.json",
+            "source_root": "/tmp/catch_contact_eval_sources_20261030/contact",
+            "source_audit_sha256": "9278c45481bc2eefcb6ec5b5565a723be4753bf22fba52cd9081fdb454512e97",
+            "evaluator_sha256": "e0aaa075dc2874267086b12c7ab3a7f25dad2e39921a02f6cef44a8f8d02a726",
+            "capture_hook_sha256": "6b515f2f13d3f1df2815dfeefcd1ee857a9e14d75532a210809686c5656a434e",
+            "source_exceptions": [],
+            "device": "cuda:0",
+            "batch_streams": 1,
+            "policy_batch_size": 1,
+            "deterministic_algorithms": true,
+            "tf32": false,
+            "constructor_seed": "evaluation_seed + 1000000 + TASK_ID*10000",
+            "reset_seed": "constructor_seed + episode_index*100003",
+            "versions": {
+              "torch": "2.11.0+cu128",
+              "numpy": "1.23.0",
+              "mujoco": "3.6.0",
+              "cudnn": 91900,
+              "python": "3.10.20 (main, Mar 11 2026, 17:46:40) [GCC 14.3.0]"
+            },
+            "no_teacher_required": true
+          },
+          "environment_draw": {
+            "radii": [
+              0.0423
+            ],
+            "masses": [
+              0.1790375092821374
+            ]
+          }
+        },
+        "bounce": {
+          "episodes": 300,
+          "successes": 194,
+          "rate": 0.6466666666666666,
+          "conditional_wilson95": [
+            0.5910330291100347,
+            0.698591699330765
+          ],
+          "mean_reward": 529.4992800044342,
+          "mean_length": 55.75666666666667,
+          "termination_counts": {
+            "ball_left": 106,
+            "catch_success": 194
+          },
+          "metric_versions": {
+            "bounce_catch_proximity_v2": 300
+          },
+          "auxiliary": {
+            "success": {
+              "successes": 194,
+              "reported": 300,
+              "rate": 0.6466666666666666
+            }
+          },
+          "protocol": {
+            "variant": "contact",
+            "checkpoint_label": "best",
+            "task": "bounce",
+            "seeds": [
+              20261029
+            ],
+            "episodes_per_seed": 300,
+            "checkpoint": "/home/isee/Catch/student_best.pth",
+            "checkpoint_sha256": "381bb98d3605b0396f8cffa025900171da23cbed05d425bf3a0c1f239d42bec3",
+            "iteration": 6000,
+            "source_audit": "/home/isee/Catch/analysis_artifacts/contact_best_last_20261030_v1/source_audit.json",
+            "source_root": "/tmp/catch_contact_eval_sources_20261030/contact",
+            "source_audit_sha256": "9278c45481bc2eefcb6ec5b5565a723be4753bf22fba52cd9081fdb454512e97",
+            "evaluator_sha256": "e0aaa075dc2874267086b12c7ab3a7f25dad2e39921a02f6cef44a8f8d02a726",
+            "capture_hook_sha256": "6b515f2f13d3f1df2815dfeefcd1ee857a9e14d75532a210809686c5656a434e",
+            "source_exceptions": [],
+            "device": "cuda:0",
+            "batch_streams": 1,
+            "policy_batch_size": 1,
+            "deterministic_algorithms": true,
+            "tf32": false,
+            "constructor_seed": "evaluation_seed + 1000000 + TASK_ID*10000",
+            "reset_seed": "constructor_seed + episode_index*100003",
+            "versions": {
+              "torch": "2.11.0+cu128",
+              "numpy": "1.23.0",
+              "mujoco": "3.6.0",
+              "cudnn": 91900,
+              "python": "3.10.20 (main, Mar 11 2026, 17:46:40) [GCC 14.3.0]"
+            },
+            "no_teacher_required": true
+          },
+          "environment_draw": {
+            "radii": [
+              0.04
+            ],
+            "masses": [
+              0.05
+            ]
+          }
+        }
+      },
+      "successes": 606,
+      "episodes": 900,
+      "mean_task_success_rate": 0.6733333333333333,
+      "minimum_task_success_rate": 0.6466666666666666,
+      "minimum_tasks": [
+        "bounce"
+      ],
+      "source_manifest_files": 284,
+      "matching_source_manifest_files": 284,
+      "source_exceptions": [],
+      "additional_historical_assets": 57
+    },
+    "last": {
+      "checkpoint": "/home/isee/Catch/student_last.pth",
+      "checkpoint_sha256": "b520de40e69fc4ef79ef522f5caa27f3dda9ffda912723ffc8344f48eaa2ce8b",
+      "iteration": 10000,
+      "tasks": {
+        "throw": {
+          "episodes": 300,
+          "successes": 216,
+          "rate": 0.72,
+          "conditional_wilson95": [
+            0.666656114789153,
+            0.7677809778720466
+          ],
+          "mean_reward": 441.22401248233587,
+          "mean_length": 57.126666666666665,
+          "termination_counts": {
+            "unspecified": 221,
+            "ball_left": 79
+          },
+          "metric_versions": {
+            "throw_official": 300
+          },
+          "auxiliary": {
+            "success": {
+              "successes": 216,
+              "reported": 300,
+              "rate": 0.72
+            }
+          },
+          "protocol": {
+            "variant": "contact",
+            "checkpoint_label": "last",
+            "task": "throw",
+            "seeds": [
+              20261029
+            ],
+            "episodes_per_seed": 300,
+            "checkpoint": "/home/isee/Catch/student_last.pth",
+            "checkpoint_sha256": "b520de40e69fc4ef79ef522f5caa27f3dda9ffda912723ffc8344f48eaa2ce8b",
+            "iteration": 10000,
+            "source_audit": "/home/isee/Catch/analysis_artifacts/contact_best_last_20261030_v1/source_audit.json",
+            "source_root": "/tmp/catch_contact_eval_sources_20261030/contact",
+            "source_audit_sha256": "9278c45481bc2eefcb6ec5b5565a723be4753bf22fba52cd9081fdb454512e97",
+            "evaluator_sha256": "e0aaa075dc2874267086b12c7ab3a7f25dad2e39921a02f6cef44a8f8d02a726",
+            "capture_hook_sha256": "6b515f2f13d3f1df2815dfeefcd1ee857a9e14d75532a210809686c5656a434e",
+            "source_exceptions": [],
+            "device": "cuda:0",
+            "batch_streams": 1,
+            "policy_batch_size": 1,
+            "deterministic_algorithms": true,
+            "tf32": false,
+            "constructor_seed": "evaluation_seed + 1000000 + TASK_ID*10000",
+            "reset_seed": "constructor_seed + episode_index*100003",
+            "versions": {
+              "torch": "2.11.0+cu128",
+              "numpy": "1.23.0",
+              "mujoco": "3.6.0",
+              "cudnn": 91900,
+              "python": "3.10.20 (main, Mar 11 2026, 17:46:40) [GCC 14.3.0]"
+            },
+            "no_teacher_required": true
+          },
+          "environment_draw": {
+            "radii": [
+              0.042530940300638774
+            ],
+            "masses": [
+              0.035
+            ]
+          }
+        },
+        "roll": {
+          "episodes": 300,
+          "successes": 175,
+          "rate": 0.5833333333333334,
+          "conditional_wilson95": [
+            0.5268355964602695,
+            0.6377239083356395
+          ],
+          "mean_reward": 233.24456150651224,
+          "mean_length": 61.05,
+          "termination_counts": {
+            "timeout": 214,
+            "ball_on_floor": 61,
+            "out_of_bounds": 23,
+            "ball_left": 2
+          },
+          "metric_versions": {
+            "region_retention_v5": 300
+          },
+          "auxiliary": {
+            "success": {
+              "successes": 0,
+              "reported": 300,
+              "rate": 0.0
+            },
+            "roll_eval_success": {
+              "successes": 175,
+              "reported": 300,
+              "rate": 0.5833333333333334
+            },
+            "roll_caught_once": {
+              "successes": 282,
+              "reported": 300,
+              "rate": 0.94
+            },
+            "roll_stable_hold": {
+              "successes": 1,
+              "reported": 300,
+              "rate": 0.0033333333333333335
+            },
+            "roll_holding_at_end": {
+              "successes": 183,
+              "reported": 300,
+              "rate": 0.61
+            },
+            "roll_final_hold": {
+              "successes": 183,
+              "reported": 300,
+              "rate": 0.61
+            },
+            "roll_legacy_success": {
+              "successes": 0,
+              "reported": 300,
+              "rate": 0.0
+            }
+          },
+          "protocol": {
+            "variant": "contact",
+            "checkpoint_label": "last",
+            "task": "roll",
+            "seeds": [
+              20261029
+            ],
+            "episodes_per_seed": 300,
+            "checkpoint": "/home/isee/Catch/student_last.pth",
+            "checkpoint_sha256": "b520de40e69fc4ef79ef522f5caa27f3dda9ffda912723ffc8344f48eaa2ce8b",
+            "iteration": 10000,
+            "source_audit": "/home/isee/Catch/analysis_artifacts/contact_best_last_20261030_v1/source_audit.json",
+            "source_root": "/tmp/catch_contact_eval_sources_20261030/contact",
+            "source_audit_sha256": "9278c45481bc2eefcb6ec5b5565a723be4753bf22fba52cd9081fdb454512e97",
+            "evaluator_sha256": "e0aaa075dc2874267086b12c7ab3a7f25dad2e39921a02f6cef44a8f8d02a726",
+            "capture_hook_sha256": "6b515f2f13d3f1df2815dfeefcd1ee857a9e14d75532a210809686c5656a434e",
+            "source_exceptions": [],
+            "device": "cuda:0",
+            "batch_streams": 1,
+            "policy_batch_size": 1,
+            "deterministic_algorithms": true,
+            "tf32": false,
+            "constructor_seed": "evaluation_seed + 1000000 + TASK_ID*10000",
+            "reset_seed": "constructor_seed + episode_index*100003",
+            "versions": {
+              "torch": "2.11.0+cu128",
+              "numpy": "1.23.0",
+              "mujoco": "3.6.0",
+              "cudnn": 91900,
+              "python": "3.10.20 (main, Mar 11 2026, 17:46:40) [GCC 14.3.0]"
+            },
+            "no_teacher_required": true
+          },
+          "environment_draw": {
+            "radii": [
+              0.0423
+            ],
+            "masses": [
+              0.1790375092821374
+            ]
+          }
+        },
+        "bounce": {
+          "episodes": 300,
+          "successes": 127,
+          "rate": 0.42333333333333334,
+          "conditional_wilson95": [
+            0.3687385228107271,
+            0.47986673277703656
+          ],
+          "mean_reward": 366.66238316354776,
+          "mean_length": 49.08,
+          "termination_counts": {
+            "ball_left": 173,
+            "catch_success": 127
+          },
+          "metric_versions": {
+            "bounce_catch_proximity_v2": 300
+          },
+          "auxiliary": {
+            "success": {
+              "successes": 127,
+              "reported": 300,
+              "rate": 0.42333333333333334
+            }
+          },
+          "protocol": {
+            "variant": "contact",
+            "checkpoint_label": "last",
+            "task": "bounce",
+            "seeds": [
+              20261029
+            ],
+            "episodes_per_seed": 300,
+            "checkpoint": "/home/isee/Catch/student_last.pth",
+            "checkpoint_sha256": "b520de40e69fc4ef79ef522f5caa27f3dda9ffda912723ffc8344f48eaa2ce8b",
+            "iteration": 10000,
+            "source_audit": "/home/isee/Catch/analysis_artifacts/contact_best_last_20261030_v1/source_audit.json",
+            "source_root": "/tmp/catch_contact_eval_sources_20261030/contact",
+            "source_audit_sha256": "9278c45481bc2eefcb6ec5b5565a723be4753bf22fba52cd9081fdb454512e97",
+            "evaluator_sha256": "e0aaa075dc2874267086b12c7ab3a7f25dad2e39921a02f6cef44a8f8d02a726",
+            "capture_hook_sha256": "6b515f2f13d3f1df2815dfeefcd1ee857a9e14d75532a210809686c5656a434e",
+            "source_exceptions": [],
+            "device": "cuda:0",
+            "batch_streams": 1,
+            "policy_batch_size": 1,
+            "deterministic_algorithms": true,
+            "tf32": false,
+            "constructor_seed": "evaluation_seed + 1000000 + TASK_ID*10000",
+            "reset_seed": "constructor_seed + episode_index*100003",
+            "versions": {
+              "torch": "2.11.0+cu128",
+              "numpy": "1.23.0",
+              "mujoco": "3.6.0",
+              "cudnn": 91900,
+              "python": "3.10.20 (main, Mar 11 2026, 17:46:40) [GCC 14.3.0]"
+            },
+            "no_teacher_required": true
+          },
+          "environment_draw": {
+            "radii": [
+              0.04
+            ],
+            "masses": [
+              0.05
+            ]
+          }
+        }
+      },
+      "successes": 518,
+      "episodes": 900,
+      "mean_task_success_rate": 0.5755555555555556,
+      "minimum_task_success_rate": 0.42333333333333334,
+      "minimum_tasks": [
+        "bounce"
+      ],
+      "source_manifest_files": 284,
+      "matching_source_manifest_files": 284,
+      "source_exceptions": [],
+      "additional_historical_assets": 57
+    }
+  },
+  "comparisons": {
+    "throw": {
+      "direction": "last_minus_best",
+      "common_episode_ids": 300,
+      "physical_matches": 300,
+      "physical_mismatches": 0,
+      "initial_depth_matches": 236,
+      "initial_depth_mismatches_with_matching_physics": 64,
+      "last_minus_best": 0.04666666666666667,
+      "same_depth_last_minus_best": 0.038135593220338986,
+      "discordant_pairs": 96,
+      "contingency": {
+        "both_success": 161,
+        "both_failure": 43,
+        "best_only": 41,
+        "last_only": 55
+      },
+      "same_depth_contingency": {
+        "both_success": 123,
+        "both_failure": 36,
+        "best_only": 34,
+        "last_only": 43
+      },
+      "runtime_versions_equal": true,
+      "runtime_versions": {
+        "best": {
+          "torch": "2.11.0+cu128",
+          "numpy": "1.23.0",
+          "mujoco": "3.6.0",
+          "cudnn": 91900,
+          "python": "3.10.20 (main, Mar 11 2026, 17:46:40) [GCC 14.3.0]"
+        },
+        "last": {
+          "torch": "2.11.0+cu128",
+          "numpy": "1.23.0",
+          "mujoco": "3.6.0",
+          "cudnn": 91900,
+          "python": "3.10.20 (main, Mar 11 2026, 17:46:40) [GCC 14.3.0]"
+        }
+      },
+      "mismatch_records": [
+        {
+          "episode_id": 1,
+          "kind": "initial_depth"
+        },
+        {
+          "episode_id": 4,
+          "kind": "initial_depth"
+        },
+        {
+          "episode_id": 9,
+          "kind": "initial_depth"
+        },
+        {
+          "episode_id": 19,
+          "kind": "initial_depth"
+        },
+        {
+          "episode_id": 33,
+          "kind": "initial_depth"
+        },
+        {
+          "episode_id": 37,
+          "kind": "initial_depth"
+        },
+        {
+          "episode_id": 42,
+          "kind": "initial_depth"
+        },
+        {
+          "episode_id": 45,
+          "kind": "initial_depth"
+        },
+        {
+          "episode_id": 48,
+          "kind": "initial_depth"
+        },
+        {
+          "episode_id": 49,
+          "kind": "initial_depth"
+        },
+        {
+          "episode_id": 51,
+          "kind": "initial_depth"
+        },
+        {
+          "episode_id": 53,
+          "kind": "initial_depth"
+        },
+        {
+          "episode_id": 55,
+          "kind": "initial_depth"
+        },
+        {
+          "episode_id": 65,
+          "kind": "initial_depth"
+        },
+        {
+          "episode_id": 68,
+          "kind": "initial_depth"
+        },
+        {
+          "episode_id": 74,
+          "kind": "initial_depth"
+        },
+        {
+          "episode_id": 75,
+          "kind": "initial_depth"
+        },
+        {
+          "episode_id": 82,
+          "kind": "initial_depth"
+        },
+        {
+          "episode_id": 84,
+          "kind": "initial_depth"
+        },
+        {
+          "episode_id": 87,
+          "kind": "initial_depth"
+        },
+        {
+          "episode_id": 94,
+          "kind": "initial_depth"
+        },
+        {
+          "episode_id": 97,
+          "kind": "initial_depth"
+        },
+        {
+          "episode_id": 104,
+          "kind": "initial_depth"
+        },
+        {
+          "episode_id": 106,
+          "kind": "initial_depth"
+        },
+        {
+          "episode_id": 107,
+          "kind": "initial_depth"
+        },
+        {
+          "episode_id": 108,
+          "kind": "initial_depth"
+        },
+        {
+          "episode_id": 112,
+          "kind": "initial_depth"
+        },
+        {
+          "episode_id": 114,
+          "kind": "initial_depth"
+        },
+        {
+          "episode_id": 139,
+          "kind": "initial_depth"
+        },
+        {
+          "episode_id": 140,
+          "kind": "initial_depth"
+        },
+        {
+          "episode_id": 147,
+          "kind": "initial_depth"
+        },
+        {
+          "episode_id": 150,
+          "kind": "initial_depth"
+        },
+        {
+          "episode_id": 156,
+          "kind": "initial_depth"
+        },
+        {
+          "episode_id": 164,
+          "kind": "initial_depth"
+        },
+        {
+          "episode_id": 167,
+          "kind": "initial_depth"
+        },
+        {
+          "episode_id": 171,
+          "kind": "initial_depth"
+        },
+        {
+          "episode_id": 172,
+          "kind": "initial_depth"
+        },
+        {
+          "episode_id": 175,
+          "kind": "initial_depth"
+        },
+        {
+          "episode_id": 176,
+          "kind": "initial_depth"
+        },
+        {
+          "episode_id": 185,
+          "kind": "initial_depth"
+        },
+        {
+          "episode_id": 197,
+          "kind": "initial_depth"
+        },
+        {
+          "episode_id": 201,
+          "kind": "initial_depth"
+        },
+        {
+          "episode_id": 209,
+          "kind": "initial_depth"
+        },
+        {
+          "episode_id": 217,
+          "kind": "initial_depth"
+        },
+        {
+          "episode_id": 219,
+          "kind": "initial_depth"
+        },
+        {
+          "episode_id": 222,
+          "kind": "initial_depth"
+        },
+        {
+          "episode_id": 225,
+          "kind": "initial_depth"
+        },
+        {
+          "episode_id": 227,
+          "kind": "initial_depth"
+        },
+        {
+          "episode_id": 239,
+          "kind": "initial_depth"
+        },
+        {
+          "episode_id": 250,
+          "kind": "initial_depth"
+        },
+        {
+          "episode_id": 252,
+          "kind": "initial_depth"
+        },
+        {
+          "episode_id": 255,
+          "kind": "initial_depth"
+        },
+        {
+          "episode_id": 262,
+          "kind": "initial_depth"
+        },
+        {
+          "episode_id": 271,
+          "kind": "initial_depth"
+        },
+        {
+          "episode_id": 272,
+          "kind": "initial_depth"
+        },
+        {
+          "episode_id": 273,
+          "kind": "initial_depth"
+        },
+        {
+          "episode_id": 277,
+          "kind": "initial_depth"
+        },
+        {
+          "episode_id": 279,
+          "kind": "initial_depth"
+        },
+        {
+          "episode_id": 282,
+          "kind": "initial_depth"
+        },
+        {
+          "episode_id": 285,
+          "kind": "initial_depth"
+        },
+        {
+          "episode_id": 286,
+          "kind": "initial_depth"
+        },
+        {
+          "episode_id": 294,
+          "kind": "initial_depth"
+        },
+        {
+          "episode_id": 298,
+          "kind": "initial_depth"
+        },
+        {
+          "episode_id": 299,
+          "kind": "initial_depth"
+        }
+      ],
+      "all_episode_rate_difference": 0.046666666666666634
+    },
+    "roll": {
+      "direction": "last_minus_best",
+      "common_episode_ids": 300,
+      "physical_matches": 300,
+      "physical_mismatches": 0,
+      "initial_depth_matches": 300,
+      "initial_depth_mismatches_with_matching_physics": 0,
+      "last_minus_best": -0.11666666666666667,
+      "same_depth_last_minus_best": -0.11666666666666667,
+      "discordant_pairs": 139,
+      "contingency": {
+        "both_success": 123,
+        "both_failure": 38,
+        "best_only": 87,
+        "last_only": 52
+      },
+      "same_depth_contingency": {
+        "both_success": 123,
+        "both_failure": 38,
+        "best_only": 87,
+        "last_only": 52
+      },
+      "runtime_versions_equal": true,
+      "runtime_versions": {
+        "best": {
+          "torch": "2.11.0+cu128",
+          "numpy": "1.23.0",
+          "mujoco": "3.6.0",
+          "cudnn": 91900,
+          "python": "3.10.20 (main, Mar 11 2026, 17:46:40) [GCC 14.3.0]"
+        },
+        "last": {
+          "torch": "2.11.0+cu128",
+          "numpy": "1.23.0",
+          "mujoco": "3.6.0",
+          "cudnn": 91900,
+          "python": "3.10.20 (main, Mar 11 2026, 17:46:40) [GCC 14.3.0]"
+        }
+      },
+      "mismatch_records": [],
+      "all_episode_rate_difference": -0.11666666666666659
+    },
+    "bounce": {
+      "direction": "last_minus_best",
+      "common_episode_ids": 300,
+      "physical_matches": 300,
+      "physical_mismatches": 0,
+      "initial_depth_matches": 300,
+      "initial_depth_mismatches_with_matching_physics": 0,
+      "last_minus_best": -0.22333333333333333,
+      "same_depth_last_minus_best": -0.22333333333333333,
+      "discordant_pairs": 131,
+      "contingency": {
+        "both_success": 95,
+        "both_failure": 74,
+        "best_only": 99,
+        "last_only": 32
+      },
+      "same_depth_contingency": {
+        "both_success": 95,
+        "both_failure": 74,
+        "best_only": 99,
+        "last_only": 32
+      },
+      "runtime_versions_equal": true,
+      "runtime_versions": {
+        "best": {
+          "torch": "2.11.0+cu128",
+          "numpy": "1.23.0",
+          "mujoco": "3.6.0",
+          "cudnn": 91900,
+          "python": "3.10.20 (main, Mar 11 2026, 17:46:40) [GCC 14.3.0]"
+        },
+        "last": {
+          "torch": "2.11.0+cu128",
+          "numpy": "1.23.0",
+          "mujoco": "3.6.0",
+          "cudnn": 91900,
+          "python": "3.10.20 (main, Mar 11 2026, 17:46:40) [GCC 14.3.0]"
+        }
+      },
+      "mismatch_records": [],
+      "all_episode_rate_difference": -0.22333333333333327
+    }
+  },
+  "input_sha256": {
+    "/home/isee/Catch/analysis_artifacts/contact_best_last_20261030_v1/formal/best_throw/protocol.json": "ef80c54f7e0a46b9abc29dc08304c25b8cda17b46c5889ec65ee876a1b4328a9",
+    "/home/isee/Catch/analysis_artifacts/contact_best_last_20261030_v1/formal/best_throw/seed_20261029.jsonl": "e8c124c0141a66b19d7ed9b77d7a763d3c9dd4a196481449fdb87071f3b448aa",
+    "/home/isee/Catch/analysis_artifacts/contact_best_last_20261030_v1/formal/best_throw/summary.json": "b09ac22ef69862eb510f93f9e06d4b0290f06d87e058929ad2c8db216e9cb2fb",
+    "/home/isee/Catch/analysis_artifacts/contact_best_last_20261030_v1/formal/best_roll/protocol.json": "11a2abc9b08488b78c9c117a7a64b0e276284b649bbc8d8843deb8da4f6714ae",
+    "/home/isee/Catch/analysis_artifacts/contact_best_last_20261030_v1/formal/best_roll/seed_20261029.jsonl": "a88a5a12f65f186a1974bbc14f331cab55583bb79965e07ddb7543ab89dfd516",
+    "/home/isee/Catch/analysis_artifacts/contact_best_last_20261030_v1/formal/best_roll/summary.json": "643b14abe0be4f410e377d6220cd2d473676d5081e7a0e4f555c87cc26b1e1ec",
+    "/home/isee/Catch/analysis_artifacts/contact_best_last_20261030_v1/formal/best_bounce/protocol.json": "83748ee3afb86bb4ebb332428b5820116f655492c26246c6fad5918644d298e9",
+    "/home/isee/Catch/analysis_artifacts/contact_best_last_20261030_v1/formal/best_bounce/seed_20261029.jsonl": "d3f7ae146b7b2b1f7466df599d069eb358eaaba852df399821ab39ecefeee8ac",
+    "/home/isee/Catch/analysis_artifacts/contact_best_last_20261030_v1/formal/best_bounce/summary.json": "57e4960a0022c9de12a315fe3563e96a2a61e564e17d1251998a4e83fc3a3f3c",
+    "/home/isee/Catch/analysis_artifacts/contact_best_last_20261030_v1/formal/last_throw/protocol.json": "5603cdb4d61c2d7619ddc28dbdc4f8b46b6802ebb33c971a76272bb1c7e5688b",
+    "/home/isee/Catch/analysis_artifacts/contact_best_last_20261030_v1/formal/last_throw/seed_20261029.jsonl": "b2ee1a233d042dabbf56076d96c83d44280e5de468cce7a274ef8fa58853b320",
+    "/home/isee/Catch/analysis_artifacts/contact_best_last_20261030_v1/formal/last_throw/summary.json": "67a15036dda810583587cba76f387c255563768fd16cf7c7a224e709de0b86e0",
+    "/home/isee/Catch/analysis_artifacts/contact_best_last_20261030_v1/formal/last_roll/protocol.json": "f3b9731d84b837b66066b5c765f211375cab479d4157811a59c2dba86b1dc200",
+    "/home/isee/Catch/analysis_artifacts/contact_best_last_20261030_v1/formal/last_roll/seed_20261029.jsonl": "3ef2b0a5be0031e39e6292f23ee8d816c81367012131fe9b5a35e9bc10a40e38",
+    "/home/isee/Catch/analysis_artifacts/contact_best_last_20261030_v1/formal/last_roll/summary.json": "e257dad92e1ae6bca1edeae41028f29a021e58783b93ee6ee546aa6c5a0209d9",
+    "/home/isee/Catch/analysis_artifacts/contact_best_last_20261030_v1/formal/last_bounce/protocol.json": "847aeb90db33c93e1e383b36b1acfd154629cea6d95263c779f84f72a6bd9ead",
+    "/home/isee/Catch/analysis_artifacts/contact_best_last_20261030_v1/formal/last_bounce/seed_20261029.jsonl": "5e0e18d14d71968fa2561190cf0ece0ef66d8ff5198ecc59a3e78931e4e52fc1",
+    "/home/isee/Catch/analysis_artifacts/contact_best_last_20261030_v1/formal/last_bounce/summary.json": "4021b426525bbfa0cce87122bbe8f3d278392a58d3eab29253583cf89c246896",
+    "/home/isee/Catch/analysis_artifacts/contact_best_last_20261030_v1/source_audit.json": "9278c45481bc2eefcb6ec5b5565a723be4753bf22fba52cd9081fdb454512e97"
+  },
+  "notes": [
+    "One environment evaluation seed, not independent training repeats.",
+    "Wilson intervals condition on this sampled environment; no seed-level t interval is reported.",
+    "The original training best criterion is the minimum success rate over the three tasks.",
+    "Raw all-episode rate differences and matched-subset differences are separate quantities.",
+    "Roll region retention is distinct from stable holding.",
+    "The stopped five-seed evaluation and earlier pilots are excluded."
+  ],
+  "comparison_summary": {
+    "original_selection_metric": "minimum_task_success_rate",
+    "minimum_task_preference": "best",
+    "minimum_task_rate_difference": -0.22333333333333327,
+    "mean_task_preference": "best",
+    "mean_task_rate_difference": -0.09777777777777774,
+    "matched_mean_task_difference": -0.09777777777777777,
+    "best_tasks_won": [
+      "roll",
+      "bounce"
+    ],
+    "last_tasks_won": [
+      "throw"
+    ],
+    "tied_tasks": []
+  },
+  "report_script_sha256": "bd63e1a4de1ed33b7e1eb85d02ee31f57010abbb06feda7b238c0f50ac1d5ddd",
+  "shared_statistics_script_sha256": "e29b14502a34fa13129dd809cfed11dfce84fedae8eb3647eccdf0c5ef55baae"
+}

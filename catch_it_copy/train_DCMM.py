@@ -93,14 +93,18 @@ def main(config: DictConfig):
                 or not math.isfinite(float(ycb_joint_damping)) or float(ycb_joint_damping) < 0):
             raise ValueError('ycb_joint_damping requires test=True, a YCB object and finite nonnegative damping')
     if config.test_object != 'default':
-        if not config.test or config.object_motion not in ('throw', 'roll', 'bounce') or config.object_eval:
-            raise ValueError('test_object requires test=True, object_eval=false, throw/roll/bounce')
+        if not config.test or config.object_motion not in ('throw', 'roll', 'bounce', 'basket', 'throw_basket') or config.object_eval:
+            raise ValueError('test_object requires test=True, object_eval=false, throw/roll/bounce/basket')
+        if config.object_motion in ('basket', 'throw_basket') and config.test_object not in ('ycb:tennis_ball', 'ycb:baseball'):
+            raise ValueError('Basket object testing currently supports ycb:tennis_ball and ycb:baseball')
     if config.get('basket_eval_hand_flex') is not None and not (config.test and config.basket_fixed_base_training and config.object_motion in ('basket','throw_basket') and config.basket_reward_version == 'basket_aim_v1'):
         raise ValueError('basket_eval_hand_flex is only for fixed Basket aiming evaluation')
     if (config.get('basket_fixed_hand_flex') is not None or config.get('basket_fixed_arm_drive_bonus',0.)) and not (config.basket_fixed_base_training and config.object_motion in ('basket','throw_basket') and config.basket_reward_version == 'basket_aim_v1'):
         raise ValueError('Fixed grip/arm drive requires fixed Basket aiming task')
     if config.get('basket_fixed_physical',False) and not (config.basket_fixed_base_training and (config.basket_fixed_arm_drive_bonus > 0 or config.get('basket_carry_reward',False)) and config.basket_reward_version == 'basket_aim_v1'):
         raise ValueError('Physical fixed Basket requires fixed aiming and arm-drive reward')
+    if config.get('basket_finger_reward',False) and not config.get('basket_carry_reward',False):
+        raise ValueError('Basket finger coordination requires basket_aim_carry')
     if config.get('basket_carry_reward',False) and not config.get('basket_fixed_physical',False):
         raise ValueError('Basket carry shaping requires collision-free physical preparation')
     mobile_basket = config.basket_reward_version == 'basket_mobile_v1'
@@ -214,7 +218,8 @@ def main(config: DictConfig):
     # Create and wrap the environment
     env_name = 'gym_dcmm/SlideWorld-v0' if config.object_motion == 'slide' else 'gym_dcmm/DcmmVecWorld-v0'
     if config.test_object != 'default':
-        env_name = 'gym_dcmm/ObjectTest-v0'
+        env_name = ('gym_dcmm/BasketObjectTest-v0' if config.object_motion in ('basket', 'throw_basket')
+                    else 'gym_dcmm/ObjectTest-v0')
     if adaptive_roll:
         env_name = 'gym_dcmm/RollAdaptiveWorld-v0'
         print('[roll-reward] version=adaptive_wait_v1; reward-only shaping; no hard command guard', flush=True)
@@ -264,6 +269,8 @@ def main(config: DictConfig):
                         'basket_fixed_physical': bool(config.get('basket_fixed_physical',False)),
                         'basket_carry_reward': bool(config.get('basket_carry_reward',False)),
                         'basket_carry_options': OmegaConf.to_container(config.basket_carry_options,resolve=True),
+                        'basket_finger_reward': bool(config.get('basket_finger_reward',False)),
+                        'basket_finger_options': OmegaConf.to_container(config.basket_finger_options,resolve=True),
                         'basket_reward_version': str(config.basket_reward_version),
                         'basket_mobile_options': OmegaConf.to_container(config.basket_mobile, resolve=True) if mobile_basket else None,
                         'basket_curriculum_stage': int(config.basket_curriculum_stage)}

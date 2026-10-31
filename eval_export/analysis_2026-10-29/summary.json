@@ -1,0 +1,471 @@
+{
+  "date": "2026-10-29",
+  "contract_consistent": true,
+  "contracts": {
+    "throw": {
+      "success_metric": "success",
+      "success_definition": "throw_official",
+      "evaluation_revision": "2026-10-12-bounce-catch-v2",
+      "seed": 123,
+      "stage": "catch",
+      "camera": {
+        "camera": "top",
+        "height": 160,
+        "width": 160,
+        "near": 0.1,
+        "far": 5.0,
+        "gl_backend": "egl",
+        "cameras": [
+          {
+            "name": "top",
+            "near": 0.1,
+            "far": 5.0
+          },
+          {
+            "name": "wrist",
+            "near": 0.01,
+            "far": 1.5
+          }
+        ]
+      },
+      "policy_role": "visual_student"
+    },
+    "roll": {
+      "success_metric": "roll_eval_success",
+      "success_definition": "region_retention_v5",
+      "evaluation_revision": "2026-10-12-bounce-catch-v2",
+      "seed": 123,
+      "stage": "catch",
+      "camera": {
+        "camera": "top",
+        "height": 160,
+        "width": 160,
+        "near": 0.1,
+        "far": 5.0,
+        "gl_backend": "egl",
+        "cameras": [
+          {
+            "name": "top",
+            "near": 0.1,
+            "far": 5.0
+          },
+          {
+            "name": "wrist",
+            "near": 0.01,
+            "far": 1.5
+          }
+        ]
+      },
+      "policy_role": "visual_student"
+    },
+    "bounce": {
+      "success_metric": "success",
+      "success_definition": "bounce_catch_proximity_v2",
+      "evaluation_revision": "2026-10-12-bounce-catch-v2",
+      "seed": 123,
+      "stage": "catch",
+      "camera": {
+        "camera": "top",
+        "height": 160,
+        "width": 160,
+        "near": 0.1,
+        "far": 5.0,
+        "gl_backend": "egl",
+        "cameras": [
+          {
+            "name": "top",
+            "near": 0.1,
+            "far": 5.0
+          },
+          {
+            "name": "wrist",
+            "near": 0.01,
+            "far": 1.5
+          }
+        ]
+      },
+      "policy_role": "visual_student"
+    }
+  },
+  "records_validated": 4500,
+  "iteration_source": "export filename; checkpoint metadata not supplied",
+  "models": [
+    {
+      "model": "belief",
+      "code": "C2",
+      "name": "视觉与历史融合",
+      "iteration_from_filename": 10000,
+      "source": "belief_eval_010000.json",
+      "source_sha256": "95f96c386717b88246b96d53292b256270e3f938e4175df6f1f058497cbc6658",
+      "tasks": {
+        "throw": {
+          "episodes": 300,
+          "successes": 241,
+          "success_rate": 0.8033333333333333,
+          "wilson_95": [
+            0.7546402726922234,
+            0.8443560464424835
+          ],
+          "success_metric": "success",
+          "success_definition": "throw_official",
+          "termination_counts": {
+            "unspecified": 255,
+            "ball_left": 45
+          }
+        },
+        "roll": {
+          "episodes": 300,
+          "successes": 194,
+          "success_rate": 0.6466666666666666,
+          "wilson_95": [
+            0.5910319849316535,
+            0.6985926089356772
+          ],
+          "success_metric": "roll_eval_success",
+          "success_definition": "region_retention_v5",
+          "termination_counts": {
+            "timeout": 219,
+            "out_of_bounds": 12,
+            "ball_on_floor": 63,
+            "ball_left": 6
+          }
+        },
+        "bounce": {
+          "episodes": 300,
+          "successes": 213,
+          "success_rate": 0.71,
+          "wilson_95": [
+            0.6562534723961281,
+            0.7584362870048228
+          ],
+          "success_metric": "success",
+          "success_definition": "bounce_catch_proximity_v2",
+          "termination_counts": {
+            "ball_left": 87,
+            "catch_success": 213
+          }
+        }
+      },
+      "macro_success": 0.7200000000000001,
+      "minimum_success": 0.6466666666666666,
+      "task_spread": 0.15666666666666673,
+      "total_successes": 648,
+      "total_episodes": 900,
+      "roll_diagnostics": {
+        "roll_caught_once": 261,
+        "roll_final_hold": 199,
+        "roll_stable_hold": 0,
+        "success": 0,
+        "success_contact_at_end": 118,
+        "success_relative_speed_mean": 0.30420930111460903,
+        "success_contact_fraction_mean": 0.38232852265188494,
+        "success_end_reasons": {
+          "timeout": 194
+        },
+        "legacy_truncated_rate": 0.7333333333333333
+      }
+    },
+    {
+      "model": "future",
+      "code": "C1",
+      "name": "未来运动预测",
+      "iteration_from_filename": 10000,
+      "source": "future_eval_010000.json",
+      "source_sha256": "3b3ee3e92f2105747015aff82a079c791529c37d39b43d8d053d5906ae6fe0e5",
+      "tasks": {
+        "throw": {
+          "episodes": 300,
+          "successes": 234,
+          "success_rate": 0.78,
+          "wilson_95": [
+            0.7297464012422271,
+            0.8231732779590409
+          ],
+          "success_metric": "success",
+          "success_definition": "throw_official",
+          "termination_counts": {
+            "unspecified": 243,
+            "ball_left": 57
+          }
+        },
+        "roll": {
+          "episodes": 300,
+          "successes": 181,
+          "success_rate": 0.6033333333333334,
+          "wilson_95": [
+            0.5470035716380164,
+            0.657050119495785
+          ],
+          "success_metric": "roll_eval_success",
+          "success_definition": "region_retention_v5",
+          "termination_counts": {
+            "timeout": 215,
+            "out_of_bounds": 18,
+            "ball_on_floor": 57,
+            "ball_left": 9,
+            "base_collision": 1
+          }
+        },
+        "bounce": {
+          "episodes": 300,
+          "successes": 229,
+          "success_rate": 0.7633333333333333,
+          "wilson_95": [
+            0.712095744869948,
+            0.8079120486645778
+          ],
+          "success_metric": "success",
+          "success_definition": "bounce_catch_proximity_v2",
+          "termination_counts": {
+            "catch_success": 229,
+            "ball_left": 71
+          }
+        }
+      },
+      "macro_success": 0.7155555555555555,
+      "minimum_success": 0.6033333333333334,
+      "task_spread": 0.17666666666666664,
+      "total_successes": 644,
+      "total_episodes": 900,
+      "roll_diagnostics": {
+        "roll_caught_once": 277,
+        "roll_final_hold": 190,
+        "roll_stable_hold": 0,
+        "success": 0,
+        "success_contact_at_end": 107,
+        "success_relative_speed_mean": 0.2945086740097219,
+        "success_contact_fraction_mean": 0.3730102018114217,
+        "success_end_reasons": {
+          "timeout": 181
+        },
+        "legacy_truncated_rate": 0.7233333333333334
+      }
+    },
+    {
+      "model": "contact",
+      "code": "C4",
+      "name": "接触辅助预测",
+      "iteration_from_filename": 6000,
+      "source": "contact_eval_006000.json",
+      "source_sha256": "57c2571c3cc7f4742eb7cc8f18b19d785f12a21177c90776de3bd9482e0e4d68",
+      "tasks": {
+        "throw": {
+          "episodes": 300,
+          "successes": 202,
+          "success_rate": 0.6733333333333333,
+          "wilson_95": [
+            0.6183611701576165,
+            0.7239224407765018
+          ],
+          "success_metric": "success",
+          "success_definition": "throw_official",
+          "termination_counts": {
+            "unspecified": 242,
+            "ball_left": 58
+          }
+        },
+        "roll": {
+          "episodes": 300,
+          "successes": 203,
+          "success_rate": 0.6766666666666666,
+          "wilson_95": [
+            0.6217905083935192,
+            0.7270754796739475
+          ],
+          "success_metric": "roll_eval_success",
+          "success_definition": "region_retention_v5",
+          "termination_counts": {
+            "timeout": 242,
+            "out_of_bounds": 15,
+            "ball_on_floor": 38,
+            "ball_left": 5
+          }
+        },
+        "bounce": {
+          "episodes": 300,
+          "successes": 210,
+          "success_rate": 0.7,
+          "wilson_95": [
+            0.6458814453011743,
+            0.7490611826997313
+          ],
+          "success_metric": "success",
+          "success_definition": "bounce_catch_proximity_v2",
+          "termination_counts": {
+            "ball_left": 90,
+            "catch_success": 210
+          }
+        }
+      },
+      "macro_success": 0.6833333333333332,
+      "minimum_success": 0.6733333333333333,
+      "task_spread": 0.026666666666666616,
+      "total_successes": 615,
+      "total_episodes": 900,
+      "roll_diagnostics": {
+        "roll_caught_once": 282,
+        "roll_final_hold": 210,
+        "roll_stable_hold": 0,
+        "success": 0,
+        "success_contact_at_end": 115,
+        "success_relative_speed_mean": 0.2849826517068516,
+        "success_contact_fraction_mean": 0.3731881388281995,
+        "success_end_reasons": {
+          "timeout": 203
+        },
+        "legacy_truncated_rate": 0.81
+      }
+    },
+    {
+      "model": "spatial",
+      "code": "C3",
+      "name": "空间定位",
+      "iteration_from_filename": 10000,
+      "source": "spatial_eval_010000.json",
+      "source_sha256": "038a343788d5184272d4a8c2df4eb5c402fa4f74e5eb0e61dfc9a8528053898f",
+      "tasks": {
+        "throw": {
+          "episodes": 300,
+          "successes": 226,
+          "success_rate": 0.7533333333333333,
+          "wilson_95": [
+            0.7015536959202178,
+            0.7987069662142627
+          ],
+          "success_metric": "success",
+          "success_definition": "throw_official",
+          "termination_counts": {
+            "unspecified": 255,
+            "ball_left": 45
+          }
+        },
+        "roll": {
+          "episodes": 300,
+          "successes": 172,
+          "success_rate": 0.5733333333333334,
+          "wilson_95": [
+            0.5167848970036207,
+            0.6280273999300449
+          ],
+          "success_metric": "roll_eval_success",
+          "success_definition": "region_retention_v5",
+          "termination_counts": {
+            "timeout": 208,
+            "out_of_bounds": 20,
+            "ball_on_floor": 64,
+            "base_collision": 1,
+            "ball_left": 7
+          }
+        },
+        "bounce": {
+          "episodes": 300,
+          "successes": 214,
+          "success_rate": 0.7133333333333334,
+          "wilson_95": [
+            0.6597173468493974,
+            0.7615547896849021
+          ],
+          "success_metric": "success",
+          "success_definition": "bounce_catch_proximity_v2",
+          "termination_counts": {
+            "ball_left": 86,
+            "catch_success": 214
+          }
+        }
+      },
+      "macro_success": 0.68,
+      "minimum_success": 0.5733333333333334,
+      "task_spread": 0.17999999999999994,
+      "total_successes": 612,
+      "total_episodes": 900,
+      "roll_diagnostics": {
+        "roll_caught_once": 276,
+        "roll_final_hold": 179,
+        "roll_stable_hold": 0,
+        "success": 0,
+        "success_contact_at_end": 101,
+        "success_relative_speed_mean": 0.3070453496372343,
+        "success_contact_fraction_mean": 0.36256479624438676,
+        "success_end_reasons": {
+          "timeout": 172
+        },
+        "legacy_truncated_rate": 0.7033333333333334
+      }
+    },
+    {
+      "model": "camera_gate",
+      "code": "C5",
+      "name": "位置辅助＋相机门控",
+      "iteration_from_filename": 10000,
+      "source": "camera_gate_eval_010000.json",
+      "source_sha256": "07ec4568dbb92723e3545ebe506cff9c3f48a405cb949b642cf79f0d992023c6",
+      "tasks": {
+        "throw": {
+          "episodes": 300,
+          "successes": 185,
+          "success_rate": 0.6166666666666667,
+          "wilson_95": [
+            0.5605020926949223,
+            0.6698811069722727
+          ],
+          "success_metric": "success",
+          "success_definition": "throw_official",
+          "termination_counts": {
+            "unspecified": 197,
+            "ball_left": 103
+          }
+        },
+        "roll": {
+          "episodes": 300,
+          "successes": 167,
+          "success_rate": 0.5566666666666666,
+          "wilson_95": [
+            0.5000863411296723,
+            0.611814070137251
+          ],
+          "success_metric": "roll_eval_success",
+          "success_definition": "region_retention_v5",
+          "termination_counts": {
+            "timeout": 212,
+            "out_of_bounds": 26,
+            "ball_on_floor": 58,
+            "ball_left": 4
+          }
+        },
+        "bounce": {
+          "episodes": 300,
+          "successes": 251,
+          "success_rate": 0.8366666666666667,
+          "wilson_95": [
+            0.7906259121631731,
+            0.8741941783050182
+          ],
+          "success_metric": "success",
+          "success_definition": "bounce_catch_proximity_v2",
+          "termination_counts": {
+            "catch_success": 251,
+            "ball_left": 49
+          }
+        }
+      },
+      "macro_success": 0.6699999999999999,
+      "minimum_success": 0.5566666666666666,
+      "task_spread": 0.28,
+      "total_successes": 603,
+      "total_episodes": 900,
+      "roll_diagnostics": {
+        "roll_caught_once": 271,
+        "roll_final_hold": 176,
+        "roll_stable_hold": 0,
+        "success": 0,
+        "success_contact_at_end": 100,
+        "success_relative_speed_mean": 0.2947349127650688,
+        "success_contact_fraction_mean": 0.3845617775692611,
+        "success_end_reasons": {
+          "timeout": 167
+        },
+        "legacy_truncated_rate": 0.7166666666666667
+      }
+    }
+  ]
+}

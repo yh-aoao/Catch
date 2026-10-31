@@ -18,11 +18,11 @@ train:
     normalize_advantage: true
     gamma: 0.99
     tau: 0.95
-    learning_rate: 0.0005
+    learning_rate: 5.0e-05
     lr_schedule: kl
     kl_threshold: 0.016
     save_best_after: 500
-    save_frequency: 1
+    save_frequency: 2000
     grad_norm: 1.0
     entropy_coef: 0.0
     freeze_base: false
@@ -36,16 +36,16 @@ train:
     action_catch_denorm:
     - 1.5
     - 0.025
-    - 0.08
-    horizon_length: 32
-    minibatch_size: 64
-    mini_epochs: 1
+    - 0.15
+    horizon_length: 64
+    minibatch_size: 512
+    mini_epochs: 6
     critic_coef: 4
     clip_value: true
     bounds_loss_coef: 0.0001
-    max_agent_steps: 256
-    test_num_episodes: 100
-    max_test_steps: 64
+    max_agent_steps: 500000
+    test_num_episodes: 30
+    max_test_steps: 10000
     img_dim:
     - 112
     - 112
@@ -53,33 +53,32 @@ train:
 experiment: ''
 seed: 0
 torch_deterministic: true
-rl_device: cpu
+rl_device: cuda:5
 device_id: -1
-viewer: false
+viewer: true
 imshow_cam: false
 test: true
-task: Catching_TwoStage
+task: Catching_OneStage
 num_envs: 1
 object_eval: false
 checkpoint_tracking: ''
-checkpoint_catching: /home/isee/Catch/catch_it_copy/outputs/bounce_hold_final_resume_20261029/2026-10-29/01:13:36/nn/bounce_catch_last.pth
-output_name: bounce_hold_video_tennis_ball
+checkpoint_catching: /home/isee/Catch/catch_it_copy/outputs/BasketAimCarry/2026-10-29/01:23:05/nn/throw_basket_catch_best_reward_38.38.pth
+output_name: basket_video_original
 wandb_mode: disabled
 wandb_entity: Your_username
 wandb_project: RL_Dcmm_Catch_Random
-object_motion: bounce
-bounce_physics: physical_v2
-bounce_launch: baseball_intercept_v1
-bounce_grasp_version: controlled_hold_v1
-bounce_grasp:
-  reward_discount: 0.99
+object_motion: throw_basket
+bounce_physics: legacy
+bounce_launch: legacy
+bounce_grasp_version: legacy
+bounce_grasp: {}
 bounce_grasp_training:
   track_lr_scale: 0.1
-  freeze_track_steps: 192
+  freeze_track_steps: 500000
   freeze_track_normalization: true
 bounce_ball_mode: fixed
 bounce_ball_weights: null
-bounce_material_file: /home/isee/Catch/catch_it_copy/ycb_objects/calibration_data/balls.three_ball_training_v1.json
+bounce_material_file: null
 bounce_v2:
   height:
   - 0.9
@@ -107,7 +106,7 @@ bounce_v2:
   mass_jitter: 0.1
   radius_jitter: 0.05
 bounce_log: false
-basket_log: false
+basket_log: true
 basket_freeze_tracking: true
 roll_log: false
 roll_physics: legacy
@@ -133,12 +132,12 @@ roll_adaptive_wait:
 catch_tracking: ''
 catch_catching: ''
 basket_tracking: ''
-basket_fixed_base_training: false
+basket_fixed_base_training: true
 basket_control_probe: 'off'
-basket_arm_control: cartesian
+basket_arm_control: joint_velocity
 slide_config: null
 slide_log: false
-basket_reward_version: legacy
+basket_reward_version: basket_aim_v1
 basket_curriculum_stage: 3
 basket_warm_start: ''
 basket_training_stage: joint
@@ -195,7 +194,7 @@ basket_mobile:
   - 0.0
   - 0.03
   - 0.07
-test_object: ycb:tennis_ball
+test_object: default
 roll_speed: null
 roll_wait_guard: false
 ycb_collision: auto
@@ -203,11 +202,28 @@ ycb_joint_damping: null
 test_env_time: null
 basket_viewer_speed: 1.0
 basket_self_collision_debug: false
-vector_mode: auto
+vector_mode: sync
 basket_eval_hand_flex: null
-basket_fixed_hand_flex: null
+basket_fixed_hand_flex:
+- 0.8
+- 0.7
+- 0.7
 basket_fixed_arm_drive_bonus: 0.0
-basket_freeze_input_normalization: false
-basket_fixed_physical: false
-basket_carry_reward: false
-basket_carry_options: {}
+basket_freeze_input_normalization: true
+basket_fixed_physical: true
+basket_carry_reward: true
+basket_carry_options:
+  forward_distance: 0.06
+  forward_speed: 0.3
+  forward_bonus: 6.0
+  position_bonus: 2.0
+  slip_cost: 2.0
+  release_bonus: 4.0
+  local_tolerance:
+  - 0.008
+  - 0.015
+  - 0.01
+  local_sigma:
+  - 0.015
+  - 0.02
+  - 0.015

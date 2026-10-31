@@ -1,0 +1,25 @@
+# Fine-tune the proven Basket actor with soft finger coordination penalties.
+defaults:
+  - basket_aim_carry
+  - _self_
+basket_finger_reward: true
+checkpoint_catching: /home/isee/Catch/catch_it_copy/outputs/BasketAimCarry/2026-10-29/01:23:05/nn/throw_basket_catch_best_reward_38.38.pth
+output_name: BasketFingerSync
+basket_finger_options:
+  sync_weight: 2.0
+  coupling_weight: 1.0
+  extension_weight: 2.0
+  post_release_weight: 1.0
+  smooth_weight: 0.01
+  sync_tolerance: 0.20
+  coupling_tolerance: 0.25
+  extension_margin: 0.05
+  limit_margin: 0.03
+  extension_scale: 0.25
+  post_release_ramp: 0.15
+  long_open: [0.0, 0.0, 0.0]
+  thumb_open: [0.0, 0.0, 0.0]
+train:
+  ppo:
+    learning_rate: 0.00003
+    max_agent_steps: 500000

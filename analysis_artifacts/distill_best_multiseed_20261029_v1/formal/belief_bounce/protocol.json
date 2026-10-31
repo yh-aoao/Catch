@@ -1,0 +1,36 @@
+{
+  "variant": "belief",
+  "task": "bounce",
+  "seeds": [
+    20261029,
+    20262029,
+    20263029,
+    20264029,
+    20265029
+  ],
+  "episodes_per_seed": 300,
+  "checkpoint": "/home/isee/Catch/distill_best_ckpt/belief_student_best.pth",
+  "checkpoint_sha256": "83a6a4f0ba6c72fcc983464dc8051ede940ff26cd71f494409527cc7b4e02888",
+  "iteration": 10000,
+  "source_audit": "/home/isee/Catch/analysis_artifacts/distill_best_multiseed_20261029_v1/source_audit.json",
+  "source_root": "/tmp/catch_distill_eval_sources_20261029/belief",
+  "source_audit_sha256": "6a3588a6cd5a0cd4be426cfd8e01f743f17d031798fcdb0be0b843d3d3608346",
+  "evaluator_sha256": "ea85a2d321d3e9538365c6b57f0228078f1e8ce1126e77fd78ae25a928f5b089",
+  "capture_hook_sha256": "6b515f2f13d3f1df2815dfeefcd1ee857a9e14d75532a210809686c5656a434e",
+  "source_exceptions": [],
+  "device": "cuda:0",
+  "batch_streams": 5,
+  "policy_batch_size": 1,
+  "deterministic_algorithms": true,
+  "tf32": false,
+  "constructor_seed": "evaluation_seed + 1000000 + TASK_ID*10000",
+  "reset_seed": "constructor_seed + episode_index*100003",
+  "versions": {
+    "torch": "2.11.0+cu128",
+    "numpy": "1.23.0",
+    "mujoco": "3.6.0",
+    "cudnn": 91900,
+    "python": "3.10.20 (main, Mar 11 2026, 17:46:40) [GCC 14.3.0]"
+  },
+  "no_teacher_required": true
+}

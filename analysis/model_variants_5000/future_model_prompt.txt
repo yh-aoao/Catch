@@ -1,0 +1,38 @@
+Use case: scientific-educational, precise diagram edit.
+Input image 1 is the EDIT TARGET: the user's existing Aux neural-network diagram. Create its Future-model extension, keeping the recognizable rounded rectangular nodes, thin orthogonal arrows, Chinese dark-blue sans-serif text, white background, pale-blue original backbone and pale-orange original training auxiliary branch. Reflow and enlarge the canvas as needed for spacious legibility, landscape around 2600x1500. This is a precise scientific architecture diagram, no decorative illustration, no robot photo, no watermark.
+
+Title: "Future 模型结构（基于原 Aux 扩展）"
+Small legend: "蓝色：原 Aux 主干   绿色：Future 新增模块   虚线框：仅训练监督"
+
+Preserve the original left-to-right input backbone and its exact information:
+"Top 深度图" -> "CNN" -> "特征拼接"
+"Wrist 深度图" -> separate "CNN" -> same "特征拼接"
+"机器人自身状态" -> same concat
+"上一步执行动作" -> same concat
+"特征拼接" -> "GRU\n时序记忆 h_t（256维）"
+The GRU is NOT a new module. Preserve blue.
+The final blue output path is a NEW green summation circle containing "+" (residual fusion) -> blue "MLP\n动作输出" -> blue "机器人动作\nTrack：8维\nCatch：20维".
+There must be a clear direct blue residual bypass arrow from GRU output h_t to the "+" circle, labelled "h_t".
+Immediately before the action MLP, the "+" has exactly TWO incoming information sources: the original h_t and the projected Future prediction, and ONE output into the action MLP.
+
+Add this green Future inference branch, outside all training-only dashed frames, positioned ABOVE the GRU-to-action route with generous room:
+GRU h_t -> green "MLP 未来预测头\n256 → 128 → 9" -> green "未来 1 / 3 / 5 策略步\n三维位移预测（共9维）" -> green "线性映射\n9 → 256" -> the "+" circle.
+All four arrows in this branch must be visible, correct direction, and terminate at the actual intended box. The prediction describes WORLD-FRAME DISPLACEMENTS relative to current time, not future absolute position. Put a short green caption by the branch: "训练与测试均使用". Do not put this green inference branch inside a training-only box.
+
+Retain the original pale-orange training auxiliary branch BELOW the backbone, beneath the GRU on the left:
+Arrow from ORIGINAL GRU h_t (before the sum) down into an orange dashed rounded frame labelled "原 Aux：仅训练监督".
+Inside: "MLP 辅助预测头" -> "当前小球位置预测（3维）" -> "位置辅助损失 × 0.1".
+"仿真小球真实位置" is a separate label node with arrow to this loss only, NEVER to the policy/input/GRU/action nodes.
+This retains the POSITION component of the existing auxiliary head, only the position component is shown because velocity loss weight is zero.
+
+Add a SECOND separate dashed training-supervision frame on the lower RIGHT, visually aligned with the old Aux branch, labelled "Future：仅训练监督".
+The green 9-D predicted-displacement box above sends a thin downward arrow into "未来位移损失 × 0.1" in this right-hand frame. An independent node "仿真轨迹生成的真实未来位移" sends an arrow into the SAME loss. Keep the loss and ground truth separated visibly. There is no information arrow from this ground truth into any policy node.
+Keep prediction-to-projection green inference connection distinct and unobstructed by this downward loss connection.
+No ground truth node connects to an action input. Loss branches are supervision only.
+
+At the bottom place these clear footnotes, in small legible dark-blue type:
+"动作特征 = h_t + Linear(未来位移预测)"
+"原 Aux 位置辅助头只提供训练监督；Future 预测直接参与动作决策"
+"图中展示启用的位置监督；速度辅助损失权重为 0"
+
+Accuracy constraints: exact readable Chinese labels, avoid garbled or repeated text. Graph is a directed acyclic dataflow except implicit GRU memory, no visible spurious loops. Keep the original Aux modules blue/orange, and ONLY added Future head, predicted displacement, projection and residual-add node green. Branching at original h_t must be unambiguous. Do NOT route original Aux prediction into residual sum. Do NOT omit the direct h_t bypass. Do NOT label the Future prediction branch as training-only. Ensure all arrows have enough whitespace, no arrow crossing text, no overlaps, no cropped edges.

@@ -1,0 +1,26 @@
+{
+  "variant": "contact",
+  "checkpoint": "/home/isee/Catch/student_best.pth",
+  "checkpoint_sha256": "381bb98d3605b0396f8cffa025900171da23cbed05d425bf3a0c1f239d42bec3",
+  "iteration": 6000,
+  "seeds": [
+    20261029,
+    20262029,
+    20263029,
+    20264029,
+    20265029
+  ],
+  "episodes_per_seed_per_task": 300,
+  "expected_total_episodes": 4500,
+  "tasks": [
+    "throw",
+    "roll",
+    "bounce"
+  ],
+  "parallel_jobs": 2,
+  "streams_per_job": 5,
+  "policy_batch_size": 1,
+  "original_weights_unchanged": true,
+  "no_training": true,
+  "references": "distill_best_multiseed_20261029_v1: same seed and episode protocol; different training iteration"
+}

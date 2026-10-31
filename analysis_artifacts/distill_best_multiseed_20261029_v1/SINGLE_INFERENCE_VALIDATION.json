@@ -1,0 +1,31 @@
+{
+  "serial_reference": "serial_check/future_throw",
+  "parallel_single_inference": "parallel_single_inference_check/future_throw",
+  "checks": [
+    {
+      "episode_id": 0,
+      "physical_equal": true,
+      "depth_equal": true,
+      "success_equal": true,
+      "reward_equal": true,
+      "length_equal": true
+    },
+    {
+      "episode_id": 1,
+      "physical_equal": true,
+      "depth_equal": true,
+      "success_equal": true,
+      "reward_equal": true,
+      "length_equal": true
+    },
+    {
+      "episode_id": 2,
+      "physical_equal": true,
+      "depth_equal": true,
+      "success_equal": true,
+      "reward_equal": true,
+      "length_equal": true
+    }
+  ],
+  "result": "3/3 identical initial states, images, outcomes, lengths and rewards; serial inference retained for formal run"
+}

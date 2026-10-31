@@ -1,0 +1,140 @@
+{
+  "protocol": {
+    "variant": "belief",
+    "task": "throw",
+    "seeds": [
+      20261029,
+      20262029,
+      20263029,
+      20264029,
+      20265029
+    ],
+    "episodes_per_seed": 3,
+    "checkpoint": "/home/isee/Catch/distill_best_ckpt/belief_student_best.pth",
+    "checkpoint_sha256": "83a6a4f0ba6c72fcc983464dc8051ede940ff26cd71f494409527cc7b4e02888",
+    "iteration": 10000,
+    "source_audit": "/home/isee/Catch/analysis_artifacts/distill_best_multiseed_20261029_v1/source_audit.json",
+    "source_root": "/tmp/catch_distill_eval_sources_20261029/belief",
+    "source_exceptions": [],
+    "device": "cuda:0",
+    "batch_streams": 5,
+    "deterministic_algorithms": true,
+    "tf32": false,
+    "constructor_seed": "evaluation_seed + 1000000 + TASK_ID*10000",
+    "reset_seed": "constructor_seed + episode_index*100003",
+    "versions": {
+      "torch": "2.11.0+cu128",
+      "numpy": "1.23.0",
+      "python": "3.10.20 (main, Mar 11 2026, 17:46:40) [GCC 14.3.0]"
+    },
+    "no_teacher_required": true
+  },
+  "per_seed": {
+    "20261029": {
+      "success_metric": "success",
+      "successes": 3,
+      "episodes": 3,
+      "requested_episodes": 3,
+      "complete": true,
+      "success_rate": 1.0,
+      "auxiliary_metrics": {
+        "success": {
+          "true": 3,
+          "reported": 3,
+          "rate": 1.0
+        }
+      },
+      "termination_counts": {
+        "unspecified": 3
+      },
+      "legacy_truncated_rate": 1.0,
+      "mean_reward": 583.422638802711
+    },
+    "20262029": {
+      "success_metric": "success",
+      "successes": 1,
+      "episodes": 3,
+      "requested_episodes": 3,
+      "complete": true,
+      "success_rate": 0.3333333333333333,
+      "auxiliary_metrics": {
+        "success": {
+          "true": 1,
+          "reported": 3,
+          "rate": 0.3333333333333333
+        }
+      },
+      "termination_counts": {
+        "unspecified": 1,
+        "ball_left": 2
+      },
+      "legacy_truncated_rate": 0.3333333333333333,
+      "mean_reward": 225.32863961841466
+    },
+    "20263029": {
+      "success_metric": "success",
+      "successes": 2,
+      "episodes": 3,
+      "requested_episodes": 3,
+      "complete": true,
+      "success_rate": 0.6666666666666666,
+      "auxiliary_metrics": {
+        "success": {
+          "true": 2,
+          "reported": 3,
+          "rate": 0.6666666666666666
+        }
+      },
+      "termination_counts": {
+        "unspecified": 3
+      },
+      "legacy_truncated_rate": 0.6666666666666666,
+      "mean_reward": 403.2688945633404
+    },
+    "20264029": {
+      "success_metric": "success",
+      "successes": 3,
+      "episodes": 3,
+      "requested_episodes": 3,
+      "complete": true,
+      "success_rate": 1.0,
+      "auxiliary_metrics": {
+        "success": {
+          "true": 3,
+          "reported": 3,
+          "rate": 1.0
+        }
+      },
+      "termination_counts": {
+        "unspecified": 3
+      },
+      "legacy_truncated_rate": 1.0,
+      "mean_reward": 580.3645394661554
+    },
+    "20265029": {
+      "success_metric": "success",
+      "successes": 1,
+      "episodes": 3,
+      "requested_episodes": 3,
+      "complete": true,
+      "success_rate": 0.3333333333333333,
+      "auxiliary_metrics": {
+        "success": {
+          "true": 1,
+          "reported": 3,
+          "rate": 0.3333333333333333
+        }
+      },
+      "termination_counts": {
+        "unspecified": 2,
+        "ball_left": 1
+      },
+      "legacy_truncated_rate": 0.3333333333333333,
+      "mean_reward": 253.27332082032316
+    }
+  },
+  "successes": 10,
+  "episodes": 15,
+  "seconds": 21.141402762994403,
+  "serial_batch_max_action_error": 1.7881393432617188e-07
+}

@@ -1,0 +1,164 @@
+{
+  "roll_track_original": {
+    "episodes": 100,
+    "successes": 82,
+    "success_rate": 0.82,
+    "wilson_95_interval": [
+      0.7333264161369926,
+      0.8829977450105364
+    ],
+    "environment_successes": 64,
+    "hand_contact_episodes": 82,
+    "continuous_hand_contact_0p3s": 0,
+    "successes_with_continuous_contact_0p3s": 0,
+    "reasons": {
+      "track_touch": 64,
+      "collision_or_failure": 35,
+      "timeout": 1
+    },
+    "mean_reward": 26.950470330951227,
+    "mean_episode_sim_seconds": 1.827139999999995,
+    "wall_seconds": 99.40503535899916,
+    "case": "roll_track",
+    "object": "original"
+  },
+  "roll_track_tennis_ball": {
+    "episodes": 100,
+    "successes": 81,
+    "success_rate": 0.81,
+    "wilson_95_interval": [
+      0.7222115462093562,
+      0.8748524849023126
+    ],
+    "environment_successes": 54,
+    "hand_contact_episodes": 81,
+    "continuous_hand_contact_0p3s": 0,
+    "successes_with_continuous_contact_0p3s": 0,
+    "reasons": {
+      "track_touch": 54,
+      "collision_or_failure": 42,
+      "timeout": 4
+    },
+    "mean_reward": 26.633377117717018,
+    "mean_episode_sim_seconds": 1.8779599999999936,
+    "wall_seconds": 105.84548270000232,
+    "case": "roll_track",
+    "object": "tennis_ball"
+  },
+  "roll_track_baseball": {
+    "episodes": 100,
+    "successes": 84,
+    "success_rate": 0.84,
+    "wilson_95_interval": [
+      0.7557973061072976,
+      0.8990471151119521
+    ],
+    "environment_successes": 65,
+    "hand_contact_episodes": 84,
+    "continuous_hand_contact_0p3s": 0,
+    "successes_with_continuous_contact_0p3s": 0,
+    "reasons": {
+      "track_touch": 65,
+      "collision_or_failure": 34,
+      "timeout": 1
+    },
+    "mean_reward": 26.347440307451507,
+    "mean_episode_sim_seconds": 1.815619999999995,
+    "wall_seconds": 102.68206629699853,
+    "case": "roll_track",
+    "object": "baseball"
+  },
+  "bounce_catch_original": {
+    "episodes": 100,
+    "successes": 38,
+    "success_rate": 0.38,
+    "wilson_95_interval": [
+      0.29097599252478734,
+      0.47790244704488916
+    ],
+    "environment_successes": 38,
+    "hand_contact_episodes": 90,
+    "continuous_hand_contact_0p3s": 45,
+    "successes_with_continuous_contact_0p3s": 35,
+    "reasons": {
+      "ball_left": 56,
+      "catch_success": 38,
+      "failure_unspecified": 6
+    },
+    "mean_reward": 487.32298898092455,
+    "mean_episode_sim_seconds": 1.9214400000000353,
+    "wall_seconds": 484.9491579329988,
+    "case": "bounce_catch",
+    "object": "original"
+  },
+  "bounce_catch_tennis_ball": {
+    "episodes": 100,
+    "successes": 44,
+    "success_rate": 0.44,
+    "wilson_95_interval": [
+      0.34672026630160796,
+      0.5377189534832302
+    ],
+    "environment_successes": 44,
+    "hand_contact_episodes": 86,
+    "continuous_hand_contact_0p3s": 39,
+    "successes_with_continuous_contact_0p3s": 37,
+    "reasons": {
+      "ball_left": 45,
+      "catch_success": 44,
+      "failure_unspecified": 11
+    },
+    "mean_reward": 450.1440342741548,
+    "mean_episode_sim_seconds": 1.8579000000000536,
+    "wall_seconds": 469.5064532940014,
+    "case": "bounce_catch",
+    "object": "tennis_ball"
+  },
+  "bounce_catch_baseball": {
+    "episodes": 100,
+    "successes": 40,
+    "success_rate": 0.4,
+    "wilson_95_interval": [
+      0.3094012864324589,
+      0.4979974132089382
+    ],
+    "environment_successes": 40,
+    "hand_contact_episodes": 90,
+    "continuous_hand_contact_0p3s": 44,
+    "successes_with_continuous_contact_0p3s": 38,
+    "reasons": {
+      "ball_left": 60,
+      "catch_success": 40
+    },
+    "mean_reward": 503.58927303146464,
+    "mean_episode_sim_seconds": 1.650000000000103,
+    "wall_seconds": 418.07717139899614,
+    "case": "bounce_catch",
+    "object": "baseball"
+  },
+  "basket": {
+    "episodes": 100,
+    "successes": 97,
+    "success_rate": 0.97,
+    "wilson_95_interval": [
+      0.9154806357094724,
+      0.9897454759759611
+    ],
+    "basket_scores": 97,
+    "basket_hits": 97,
+    "safe_basket_successes": 97,
+    "confirmed_launches": 100,
+    "safe_launches": 100,
+    "released_episodes": 100,
+    "hand_contact_episodes": 100,
+    "dangerous_robot_collision_episodes": 0,
+    "reasons": {
+      "basket_score": 97,
+      "not_a_throw": 1,
+      "ball_on_floor": 2
+    },
+    "mean_reward": 39.99645069336234,
+    "mean_policy_sim_seconds": 0.6463800000000005,
+    "wall_seconds": 39.989836941997055
+  }
+}

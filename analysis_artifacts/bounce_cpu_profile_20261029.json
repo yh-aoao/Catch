@@ -1,0 +1,119 @@
+{
+  "default_torch_threads": 24,
+  "policy_sim_interval_ms": 40,
+  "physics_dt_ms": 0.125,
+  "substeps_per_control": 16,
+  "physics_steps_per_policy": 320,
+  "inference_threads_24": {
+    "median_ms": 0.095954499556683,
+    "mean_ms": 0.09655724970798474,
+    "min_ms": 0.09443500312045217,
+    "max_ms": 0.0996369999484159
+  },
+  "inference_threads_1": {
+    "median_ms": 0.09637900075176731,
+    "mean_ms": 0.09670045074017253,
+    "min_ms": 0.0950679968809709,
+    "max_ms": 0.09948600200004876
+  },
+  "actual_policy_with_adapter_threads1_ms": 0.4161671337593968,
+  "headless_physics_env_step_threads1": {
+    "mean_ms": 83.37287816708947,
+    "median_ms": 79.98574999874108
+  },
+  "profile_20_env_steps": {
+    "total_seconds": 2.4977359709999987,
+    "top_cumulative": [
+      {
+        "function": "('/home/isee/Catch/catch_it_copy/gym_dcmm/envs/bounce_physical_v2.py', 243, 'step')",
+        "calls": 20,
+        "self_seconds": 7.2926e-05,
+        "cumulative_seconds": 2.497696452
+      },
+      {
+        "function": "('/home/isee/Catch/catch_it_copy/gym_dcmm/envs/DcmmVecEnv.py', 8744, 'step')",
+        "calls": 20,
+        "self_seconds": 0.00032045800000000003,
+        "cumulative_seconds": 2.497607223
+      },
+      {
+        "function": "('/home/isee/Catch/catch_it_copy/gym_dcmm/envs/DcmmVecEnv.py', 8461, '_step_mujoco_simulation')",
+        "calls": 20,
+        "self_seconds": 0.009891266000000001,
+        "cumulative_seconds": 2.493351799
+      },
+      {
+        "function": "('~', 0, '<built-in method mujoco._functions.mj_step>')",
+        "calls": 400,
+        "self_seconds": 2.129253785,
+        "cumulative_seconds": 2.129253785
+      },
+      {
+        "function": "('/home/isee/Catch/catch_it_copy/gym_dcmm/agents/MujocoDcmm_bounce_5fe75d5f.py', 247, 'move_ee_pose')",
+        "calls": 20,
+        "self_seconds": 0.0009730320000000001,
+        "cumulative_seconds": 0.260707401
+      },
+      {
+        "function": "('/home/isee/Catch/catch_it_copy/gym_dcmm/agents/MujocoDcmm_bounce_5fe75d5f.py', 274, 'ik_arm_solve')",
+        "calls": 20,
+        "self_seconds": 7.194e-05,
+        "cumulative_seconds": 0.259327391
+      },
+      {
+        "function": "('/home/isee/Catch/catch_it_copy/gym_dcmm/utils/ik_pkg/ik_arm.py', 440, 'solve')",
+        "calls": 20,
+        "self_seconds": 8.8795e-05,
+        "cumulative_seconds": 0.25889379700000004
+      },
+      {
+        "function": "('/home/isee/Catch/catch_it_copy/gym_dcmm/utils/ik_pkg/ik_arm.py', 72, 'solve')",
+        "calls": 20,
+        "self_seconds": 0.0023593670000000002,
+        "cumulative_seconds": 0.258799848
+      },
+      {
+        "function": "('/home/isee/Catch/catch_it_copy/gym_dcmm/utils/ik_pkg/ik_arm.py', 200, 'wrap')",
+        "calls": 2020,
+        "self_seconds": 0.0028071750000000003,
+        "cumulative_seconds": 0.256435373
+      },
+      {
+        "function": "('/home/isee/Catch/catch_it_copy/gym_dcmm/utils/ik_pkg/ik_arm.py', 224, 'step')",
+        "calls": 2020,
+        "self_seconds": 0.07782013800000001,
+        "cumulative_seconds": 0.253212469
+      },
+      {
+        "function": "('~', 0, '<built-in method numpy.core._multiarray_umath.implement_array_function>')",
+        "calls": 35154,
+        "self_seconds": 0.017840613,
+        "cumulative_seconds": 0.074695379
+      },
+      {
+        "function": "('/home/isee/miniconda3/envs/dcmm/lib/python3.10/site-packages/qpsolvers/solve_qp.py', 20, 'solve_qp')",
+        "calls": 2020,
+        "self_seconds": 0.0016325110000000001,
+        "cumulative_seconds": 0.072229481
+      },
+      {
+        "function": "('/home/isee/miniconda3/envs/dcmm/lib/python3.10/site-packages/qpsolvers/solve_problem.py', 19, 'solve_problem')",
+        "calls": 2020,
+        "self_seconds": 0.001984314,
+        "cumulative_seconds": 0.065412036
+      },
+      {
+        "function": "('/home/isee/miniconda3/envs/dcmm/lib/python3.10/site-packages/qpsolvers/solvers/quadprog_.py', 29, 'quadprog_solve_problem')",
+        "calls": 2020,
+        "self_seconds": 0.035769573,
+        "cumulative_seconds": 0.062811659
+      },
+      {
+        "function": "('/home/isee/Catch/catch_it_copy/gym_dcmm/envs/DcmmVecEnv.py', 7205, '_get_ctrl')",
+        "calls": 400,
+        "self_seconds": 0.0025938510000000003,
+        "cumulative_seconds": 0.05472499
+      }
+    ]
+  }
+}

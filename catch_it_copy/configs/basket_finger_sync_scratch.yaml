@@ -1,0 +1,14 @@
+# Train the coordinated Basket policy from random initialization.
+defaults:
+  - basket_finger_sync
+  - _self_
+checkpoint_catching: ''
+checkpoint_tracking: ''
+basket_warm_start: ''
+basket_parking_checkpoint: ''
+basket_freeze_input_normalization: false
+output_name: BasketFingerSyncScratch
+train:
+  ppo:
+    learning_rate: 0.0003
+    max_agent_steps: 2000000

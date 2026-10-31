@@ -1,5 +1,21 @@
 # Basket 手指协同微调
 
+## 更新：按用户要求从零训练
+
+使用新增配置 `basket_finger_sync_scratch`。它继承同一套手指协同奖励和物理持球准备，显式清空 Catching、Tracking、warm-start 和 parking 权重路径；网络随机初始化。观测归一化统计从头更新，不继承微调配置的冻结设置。学习率 `3e-4`，训练预算先设 200 万步。
+
+```bash
+cd /home/isee/Catch/catch_it_copy
+OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 \
+python3 train_DCMM.py --config-name basket_finger_sync_scratch \
+  test=False num_envs=32 vector_mode=async device_id=0 \
+  checkpoint_catching='' basket_warm_start='' \
+  viewer=false basket_log=false basket_self_collision_debug=false \
+  train.ppo.max_agent_steps=2000000 output_name=BasketFingerSyncScratch
+```
+
+本次只做配置解析验证，未启动训练。以下内容保留为此前微调方案与奖励实现的记录；从零训练请使用上面的新配置。
+
 新增配置 `basket_finger_sync`，从已验证的 38.38 权重初始化。沿用 `basket_aim_carry` 的完整进框奖励、机械臂前送、持球位置奖励，以及无重叠放球和自然稳定准备。观测仍为 35 维，动作仍为机械臂 6＋手指 12 维，无需改变原权重动作含义。
 
 ## 五项新增惩罚

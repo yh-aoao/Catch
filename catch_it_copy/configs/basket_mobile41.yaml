@@ -1,9 +1,9 @@
-# Learn base navigation, preserving the verified 41.30 arm/hand skill verbatim.
+# Stage two: new base actor plus trainable arm/hand actor initialized from 41.30.
 defaults:
   - basket_finger_sync_scratch
   - _self_
 task: Catching_TwoStage
-basket_training_stage: navigate_throw
+basket_training_stage: mobile_joint
 basket_reward_version: basket_mobile_v1
 basket_fixed_base_training: false
 basket_fixed_hand_flex: null
@@ -17,10 +17,11 @@ checkpoint_catching: ''
 checkpoint_tracking: ''
 basket_throw_checkpoint: /home/isee/Catch/11-1/throw_basket_catch_best_reward_41.30.pth
 basket_freeze_input_normalization: false
-basket_mask_navigation_updates: true
-output_name: BasketMobile41
+basket_mask_navigation_updates: false
+basket_throw_lr_scale: 0.1
+output_name: BasketMobile41Joint
 basket_mobile:
-  preserve_fixed_throw: true
+  preserve_fixed_throw: true # physical/reward conventions only; both actors trainable
   target_x_range: [-0.20, 0.20]
   target_y_range: [1.15, 1.55]
   max_time: 10.0
@@ -37,7 +38,7 @@ basket_mobile:
   release_speed_tolerance: 0.15 # allow arm reaction after the strict 0.04 m/s parking gate
   release_position_tolerance: 0.08
   post_ready_seconds: 2.5
-  fixed_throw_probability: 0.0
+  fixed_throw_probability: 0.30
   collision_free_spawn: true
   hold_hand_flex: [0.8, 0.7, 0.7]
   hold_thumb_flex: [0.4, 0.4, 0.4]

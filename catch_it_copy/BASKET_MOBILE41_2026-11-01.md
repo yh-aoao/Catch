@@ -1,42 +1,48 @@
-# Basket 41.30 → 移动底座版本
+# Basket 41.30 → 第二阶段联合强化学习
 
-新配置：`configs/basket_mobile41.yaml`。没有启动训练，也没有执行任何优化器更新。
+当前 `configs/basket_mobile41.yaml` 已改为 `basket_training_stage: mobile_joint`，不再冻结机械臂/手指 actor。旧的 `navigate_throw` 冻结实现保留供历史实验使用，默认脚本不再选择它。
 
-## 策略结构
+没有启动训练，没有执行优化器更新。
 
-- 复用 `/home/isee/Catch/11-1/throw_basket_catch_best_reward_41.30.pth` 的机械臂/手指 actor、35 维观测归一化，冻结其参数。使用确定性动作。
-- 新增独立的底座 actor/critic：51 维观测、2 维 XY 速度动作，从随机初始化训练；归一化重新统计。
-- 这是在已学会抛球技能之上学习移动，不是从零重学抛球，也不是让 41.30 的机械臂参数在第一版中继续更新。
-- 两个策略一并保存到新 checkpoint；测试时不再读取原始 41.30 文件。固定底座模型不能直接作为这个模式的 `checkpoint_catching`。
-- PPO 的底座 actor 仅在导航阶段计算动作损失；停车后的回报仍通过优势估计训练之前的导航动作，critic 学习整个回合。
+## 第一阶段与第二阶段
 
-## 环境衔接
+第一阶段是现有固定底座模型 `/home/isee/Catch/11-1/throw_basket_catch_best_reward_41.30.pth`，不需要重训。
 
-重置时以新手型进行无外力辅助的物理持球准备。此后不设置球位置/速度、不绑定球。移动期间使用原托球关节目标；到位并稳定后切换到冻结抛球 actor。只重置前送奖励的计量起点，不重置机器人或球状态。
+第二阶段创建底座策略，继承41.30的机械臂/手指 actor及其探索标准差，底座和机械臂/手指均参加PPO更新。独立critic从头学习整个移动抛球回合的价值。
 
-框位置每回合随机，回合内静止。第一版范围 X=[-0.20,0.20]m、Y=[1.15,1.55]m。停车目标保持原固定抛球的框到 arm_base 间距，由实际初始 arm_base 位置标定。
+| 部分 | 初始化 | 第二阶段更新 | 初始学习率 |
+|---|---|---|---|
+| 底座XY策略 | 随机 | 是，导航阶段 | 3e-4 |
+| 机械臂6+手指12策略 | 41.30 | 是，停车后抛球阶段及复习回合 | 3e-5 |
+| 整个回合的critic | 随机 | 是，所有阶段 | 3e-4 |
 
-底座速度≤0.30m/s，加速度≤0.35m/s²。XY 位置各轴误差<0.04m、速度<0.04m/s，连续稳定0.30s后抛球。到位停车带速度包络；离开到位容差即恢复位置修正，避免旧的停车滞回带造成无法解锁。
+训练的20维动作是base2+arm6+hand12。导航时执行底座动作，手臂/手指保持已有托球目标；停车后执行机械臂/手指策略，底座制动。两个策略在同一次第二阶段PPO训练中持续更新，并非把抛球actor冻结。
 
-抛球阶段底座指令为零；加速度限制逐步归零。最后接触时速度资格放宽到0.15m/s，位置各轴容差0.08m，用于容纳机械臂前送反作用。它不替代抛球开始前的严格停车条件。导航最多10s，到位后另给2.5s抛球/飞行窗口。
+未执行的动作通道不计入PPO概率、熵或KL。只有一种阶段的minibatch会清除另一个actor的梯度（设为None），避免Adam动量更新没有执行动作的分支。critic继续学习所有阶段。
 
-## 奖励
+机械臂/手指归一化统计沿用第一阶段，不随移动样本重算；冻结的是坐标变换的统计量，actor权重和探索标准差可训练。底座归一化从头统计。学习率调度始终保持机械臂/底座0.1比例。
 
-保留原有效抛出、飞行推进、弹道瞄准、真实投进、碰撞、机械臂平滑，以及前送/持球、手指协同项。前送奖励只在解锁后计量，底座移动不赚机械臂前送奖励。碰撞成本沿用40。
+每回合有30%概率在原固定框位置复习抛球，70%概率随机框位置训练移动后抛球。复习回合也执行物理持球准备，不辅助固定球。终端日志分别报告Mobile SR和Replay SR，最佳成功率模型按Mobile SR选取。
 
-叠加现有移动任务的有符号距离进展、位置/速度误差、停车一次性奖励、制动、底座控制/动作平滑、时间和失败成本。导航时增加球相对初始稳定掌内位置的滑移成本：`-2*(1-exp(-sum((超出容差的局部偏差/sigma)^2)))*dt`，不奖励站着无限等待。
+## 移动环境及奖励
 
-## 训练命令
+框位置每回合随机、回合内静止。默认范围X=[-0.20,0.20]m，Y=[1.15,1.55]m。停车点保持原固定抛球的框到arm_base间距，由实际初始位置标定。
 
-激活 dcmm 环境后：
+底座速度≤0.30m/s，加速度≤0.35m/s²。XY各轴误差<0.04m、底座速度<0.04m/s，连续稳定0.30s后进入抛球。导航最多10s，到位后另给2.5s抛球和飞行。最后接触时释放资格为各轴位置误差<0.08m、底座速度<0.15m/s，以容纳机械臂前送反作用，不替代开始抛球前的严格停车条件。
+
+保留原有效抛出、飞行推进、弹道瞄准、真实投进、碰撞、机械臂平滑、前送/持球和手指协同奖励，叠加导航进展、位置/速度误差、停车、制动、底座控制/平滑、时间/失败成本以及导航中的掌内滑移成本。前送奖励从停车解锁后的机械臂相对底座运动计量，底座移动不赚机械臂前送奖励。
+
+配置中的历史名称`preserve_fixed_throw: true`表示继续使用41.30的物理准备和奖励约定；是否冻结actor由训练器决定，当前`mobile_joint`不会冻结actor。
+
+## 训练
+
+激活dcmm环境，先同步最新代码到实际训练服务器，再执行：
 
 ```bash
 cd ~/Catch/catch_it_copy
 bash scripts/train_basket_mobile41.sh \
   ../11-1/throw_basket_catch_best_reward_41.30.pth
 ```
-
-脚本用32个异步环境、GPU0、步数上限1000000000000，可手动停止。输出为 `outputs/BasketMobile41/日期/时间/nn/`，包含 last、best_reward 和 best_success 模型。不要把原始41.30填入 checkpoint_catching；本版本的来源参数是 basket_throw_checkpoint。
 
 等价命令：
 
@@ -47,30 +53,44 @@ python3 train_DCMM.py --config-name basket_mobile41 \
   basket_throw_checkpoint="$(realpath ../11-1/throw_basket_catch_best_reward_41.30.pth)" \
   checkpoint_catching='' basket_warm_start='' \
   viewer=false basket_log=false basket_self_collision_debug=false \
-  train.ppo.max_agent_steps=1000000000000 output_name=BasketMobile41
+  train.ppo.max_agent_steps=1000000000000 output_name=BasketMobile41Joint
 ```
 
-## 测试命令
+32个异步环境、GPU0、1万亿步上限，手动停止。来源参数是`basket_throw_checkpoint`，不要把原始41.30填入`checkpoint_catching`。新权重保存在`outputs/BasketMobile41Joint/日期/时间/nn/`，包括last、best_reward和best_success。新权重内含两个actor和两套归一化，无需原始41.30文件即可测试。
+
+新联合权重与之前冻结版本的checkpoint结构不同，不能混用。
+
+## 测试纯移动任务
 
 ```bash
 python3 train_DCMM.py --config-name basket_mobile41 \
   test=True num_envs=1 vector_mode=sync device_id=0 \
   checkpoint_catching=/完整路径/移动训练输出/nn/throw_basket_catch_best_success.pth \
-  basket_throw_checkpoint='' viewer=true basket_viewer_speed=1.0 basket_log=true \
-  train.ppo.test_num_episodes=100 output_name=BasketMobile41_Test
+  basket_throw_checkpoint='' basket_mobile.fixed_throw_probability=0.0 \
+  viewer=true basket_viewer_speed=1.0 basket_log=true \
+  train.ppo.test_num_episodes=100 output_name=BasketMobile41Joint_Test
 ```
 
-优先看 parking_success、qualified_release、safe_basket_success 三个指标。41.30原始训练奖励和叠加移动成本后的奖励不可直接比较。
+观察parking_success、qualified_release、safe_basket_success，以及训练日志的Mobile SR/Replay SR。移动版本增加了奖励项和成本，其总奖励不直接与固定版本41.30比较。
 
-## 验证（仅推理和构造，不训练）
+## 本次验证
 
-- 87项 Basket 回归/新测试通过，覆盖原actor输出一致性、归一化冻结、导航时屏蔽抛球、动作通道分离、停车解锁/制动、停车滞回边界、滑移奖励单次结算、权重导出重载。
-- 已用实际41.30构造新PPO，确认被冻结actor不在优化器参数中；新权重可内嵌加载原actor，随后执行一次向量环境动作。没有调用 train/train_epoch/optimizer.step。
-- 在原投篮位置通过新结构推理10回合：10/10安全投进。
-- 在默认随机目标范围，由诊断用比例底座控制器导航，再由冻结41.30抛球，seed0..9：10/10安全投进。**这验证环境/技能链路，不是训练后的底座策略成功率；实际底座actor还未训练。**
-- CLI test=True 使用临时的未训练底座 checkpoint，验证配置、嵌入actor读取和回合结束均正常；该随机底座回合超时，符合未训练状态。临时权重不属于可用训练成果。
-- Python编译、shell语法和git diff --check通过。
+- 94项Basket测试通过：包括源actor输出/标准差一致、两套统计、联合动作与存储维度、阶段概率屏蔽、两个actor的非零PPO梯度、单阶段清理梯度、KL尺度、保存重载，以及已有Basket回归测试。
+- 用真实41.30构造联合训练器，确认所有actor参数在优化器中、没有重复注册、学习率比例10:1。对合成样本只执行反向传播，未执行optimizer.step。
+- 新联合checkpoint的CLI推理加载通过，测试时原始41.30路径置空，固定复习10回合安全投进10/10；说明继承与加载未破坏初始抛球，不代表第二阶段训练后的移动成功率。
+- 编译、shell语法、git diff --check通过。
 
-记录：`/home/isee/Catch/analysis_artifacts/basket_mobile41_20261101/`。
+本次没有启动训练。诊断文件在`/home/isee/Catch/analysis_artifacts/basket_mobile_joint_20261101/`。
 
-服务器运行前需同步本次代码，新增与修改文件包括：configs/basket_mobile41.yaml、configs/config.yaml、train_DCMM.py、gym_dcmm/envs/DcmmVecEnv.py、gym_dcmm/utils/basket_mobile.py、gym_dcmm/utils/basket_throw_policy.py、gym_dcmm/algs/ppo_dcmm/ppo_dcmm_catch_one_stage.py、gym_dcmm/algs/ppo_dcmm/ppo_dcmm_basket_two_stage.py、scripts/train_basket_mobile41.sh；测试文件 tests/test_basket_mobile41.py。
+本次需同步的文件：
+
+- `configs/basket_mobile41.yaml`
+- `configs/config.yaml`
+- `train_DCMM.py`
+- `gym_dcmm/algs/ppo_dcmm/ppo_dcmm_catch_one_stage.py`
+- 新增`gym_dcmm/algs/ppo_dcmm/basket_mobile_joint.py`
+- 新增`gym_dcmm/algs/ppo_dcmm/ppo_dcmm_basket_mobile_joint.py`
+- `scripts/train_basket_mobile41.sh`
+- 新增`tests/test_basket_mobile_joint.py`
+
+如果服务器此前尚未同步移动版本，还需同步前一版修改的`gym_dcmm/envs/DcmmVecEnv.py`、`gym_dcmm/utils/basket_mobile.py`、`gym_dcmm/utils/basket_throw_policy.py`等移动支持文件。

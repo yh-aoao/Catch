@@ -65,7 +65,7 @@ class PPO_Catch_OneStage(object):
         if self.fixed_basket:
             # Learn only arm + hand; insert the two zero base commands at execution.
             self.actions_num = self.full_action_dim - 2
-        if self.mobile_basket and self.basket_training_stage != 'joint':
+        if self.mobile_basket and self.basket_training_stage not in ('joint', 'mobile_joint'):
             self.actions_num = 2 if self.basket_training_stage in ('parking', 'navigate_throw') else 18
         # ---- Model ----
         net_config = {
@@ -429,7 +429,8 @@ class PPO_Catch_OneStage(object):
         stage = getattr(self, 'basket_training_stage', 'joint')
         layout = {'joint': 'base2_arm6_hand12', 'parking': 'base2_parking',
                   'throw': 'frozen_base2_arm6_hand12', 'hold':'held_arm6_hand12',
-                  'navigate_throw': 'base2_frozen_fixed35_arm18'}[stage]
+                  'navigate_throw': 'base2_frozen_fixed35_arm18',
+                  'mobile_joint': 'joint_base2_arm18_phase_v1'}[stage]
         if self.mobile_basket and (checkpoint.get('basket_reward_version') != 'basket_mobile_v1'
                 or checkpoint.get('basket_arm_control') != 'joint_velocity'
                 or checkpoint.get('basket_observation_version') != 'mobile51_v1'
@@ -575,6 +576,8 @@ class PPO_Catch_OneStage(object):
 
                 self.optimizer.zero_grad()
                 loss.backward(retain_graph=True)
+                if hasattr(self.model, 'clear_inactive_gradients'):
+                    self.model.clear_inactive_gradients(obs)
                 if not has_valid_action:
                     from gym_dcmm.utils.basket_policy_mask import clear_actor_gradients
                     clear_actor_gradients(self.model)
@@ -584,7 +587,9 @@ class PPO_Catch_OneStage(object):
                 self.optimizer.step()
 
                 with torch.no_grad():
-                    if valid_action is None:
+                    if hasattr(self.model, 'policy_kl'):
+                        kl_dist = self.model.policy_kl(obs,mu.detach(),sigma.detach(),old_mu,old_sigma)
+                    elif valid_action is None:
                         kl_dist = policy_kl(mu.detach(), sigma.detach(), old_mu, old_sigma)
                     elif has_valid_action:
                         kl_dist = policy_kl(mu.detach()[valid_action], sigma.detach()[valid_action],
@@ -612,7 +617,7 @@ class PPO_Catch_OneStage(object):
                 self.last_lr = self.adjust_learning_rate_cos(mini_ep)
 
             for param_group in self.optimizer.param_groups:
-                    param_group['lr'] = self.last_lr
+                    param_group['lr'] = self.last_lr * param_group.get('lr_scale', 1.)
 
         self.rl_train_time += (time.time() - _t)
         return a_losses, c_losses, b_losses, entropies, kls

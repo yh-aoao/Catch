@@ -113,25 +113,25 @@ def main(config: DictConfig):
     basket_stage = str(config.get('basket_training_stage', 'joint'))
     if config.get('basket_pose_eval_override', False) and not (config.test and mobile_basket and basket_stage == 'hold'):
         raise ValueError('basket_pose_eval_override is only for Basket hold-policy evaluation')
-    if basket_stage not in ('joint', 'parking', 'throw', 'hold', 'navigate_throw') or (basket_stage != 'joint' and not mobile_basket):
-        raise ValueError('Basket training stage must be joint, parking or throw; staged training requires Mobile Basket')
+    if basket_stage not in ('joint', 'parking', 'throw', 'hold', 'navigate_throw', 'mobile_joint') or (basket_stage != 'joint' and not mobile_basket):
+        raise ValueError('Invalid Basket training stage; staged training requires Mobile Basket')
     warm_start = str(config.get('basket_warm_start', ''))
     if warm_start and not mobile_basket:
         raise ValueError('basket_warm_start is only supported by basket_mobile_v1')
     if warm_start and not config.test:
         config.basket_warm_start = to_absolute_path(warm_start)
     if mobile_basket:
-        if preserved_mobile != (basket_stage == 'navigate_throw'):
-            raise ValueError('preserve_fixed_throw requires navigate_throw stage and vice versa')
+        if preserved_mobile != (basket_stage in ('navigate_throw', 'mobile_joint')):
+            raise ValueError('preserve_fixed_throw physical protocol requires navigate_throw or mobile_joint stage')
         if preserved_mobile:
             if not (config.basket_fixed_physical and config.basket_carry_reward and config.basket_finger_reward
                     and config.basket_mobile.brake_after_unlock):
-                raise ValueError('navigate_throw requires physical/carry/finger rewards and brake_after_unlock')
+                raise ValueError('Mobile41 requires physical/carry/finger rewards and brake_after_unlock')
             if warm_start:
-                raise ValueError('navigate_throw uses basket_throw_checkpoint, not basket_warm_start')
+                raise ValueError('Mobile41 uses basket_throw_checkpoint, not basket_warm_start')
             if not config.test:
                 if not config.basket_throw_checkpoint:
-                    raise ValueError('navigate_throw needs basket_throw_checkpoint (fixed35 arm18)')
+                    raise ValueError('Mobile41 needs basket_throw_checkpoint (fixed35 arm18)')
                 config.basket_throw_checkpoint = to_absolute_path(config.basket_throw_checkpoint)
         expected_task = 'Catching_OneStage' if basket_stage == 'joint' else 'Catching_TwoStage'
         if (config.object_motion not in ('basket', 'throw_basket') or config.basket_fixed_base_training
@@ -154,7 +154,9 @@ def main(config: DictConfig):
             raise ValueError('Leave checkpoint_catching empty for Mobile training; use basket_warm_start for explicit fixed-base actor migration')
         if config.test and not config.checkpoint_catching:
             raise ValueError('Mobile evaluation requires a basket_mobile_v1 checkpoint')
-        if basket_stage == 'navigate_throw':
+        if basket_stage == 'mobile_joint':
+            print('[basket-mobile41-joint] new base actor + trainable 41.30 arm/hand; physical carry -> park -> throw', flush=True)
+        elif basket_stage == 'navigate_throw':
             print('[basket-mobile41] train base2; frozen fixed35 arm18 throw; physical carry -> park -> throw', flush=True)
         elif basket_stage == 'hold':
             print('[basket-hold] fixed base command and fixed near target; physical hold -> throw; policy=arm18; initialization=' + ('actor_transfer' if warm_start else 'scratch'), flush=True)
@@ -340,7 +342,10 @@ def main(config: DictConfig):
     PPO = TrackingAgent if config.task == 'Tracking' else \
           TwoStageAgent if config.task == 'Catching_TwoStage' else \
           OneStageAgent
-    if mobile_basket and basket_stage != 'joint':
+    if mobile_basket and basket_stage == 'mobile_joint':
+        from gym_dcmm.algs.ppo_dcmm.ppo_dcmm_basket_mobile_joint import PPO_Basket_MobileJoint
+        PPO = PPO_Basket_MobileJoint
+    elif mobile_basket and basket_stage != 'joint':
         from gym_dcmm.algs.ppo_dcmm.ppo_dcmm_basket_two_stage import PPO_Basket_TwoStage
         PPO = PPO_Basket_TwoStage
     agent = PPO(env, output_dif, full_config=config)

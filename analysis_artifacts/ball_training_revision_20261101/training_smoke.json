@@ -1,0 +1,66 @@
+[
+  {
+    "label": "roll_track",
+    "command": [
+      "bash",
+      "scripts/train_roll_three_ball_equal_v2.sh",
+      "task=Tracking",
+      "device_id=-1",
+      "num_envs=2",
+      "train.ppo.num_actors=2",
+      "vector_mode=sync",
+      "train.ppo.horizon_length=8",
+      "train.ppo.minibatch_size=16",
+      "train.ppo.mini_epochs=1",
+      "train.ppo.max_agent_steps=64",
+      "train.ppo.save_best_after=0",
+      "train.ppo.save_frequency=1",
+      "output_name=equal_posture_smoke_roll_track_20261101"
+    ],
+    "checkpoint": "/home/isee/Catch/catch_it_copy/outputs/equal_posture_smoke_roll_track_20261101/2026-11-01/17:49:11/nn/roll_track_last.pth",
+    "returncode": 0
+  },
+  {
+    "label": "bounce_track",
+    "command": [
+      "bash",
+      "scripts/train_bounce_three_ball_equal_v2.sh",
+      "task=Tracking",
+      "device_id=-1",
+      "num_envs=2",
+      "train.ppo.num_actors=2",
+      "vector_mode=sync",
+      "train.ppo.horizon_length=8",
+      "train.ppo.minibatch_size=16",
+      "train.ppo.mini_epochs=1",
+      "train.ppo.max_agent_steps=64",
+      "train.ppo.save_best_after=0",
+      "train.ppo.save_frequency=1",
+      "output_name=equal_posture_smoke_bounce_track_20261101"
+    ],
+    "checkpoint": "/home/isee/Catch/catch_it_copy/outputs/equal_posture_smoke_bounce_track_20261101/2026-11-01/17:49:11/nn/bounce_track_last.pth",
+    "returncode": 0
+  },
+  {
+    "label": "bounce_catch",
+    "command": [
+      "bash",
+      "scripts/train_bounce_three_ball_equal_v2.sh",
+      "task=Catching_TwoStage",
+      "device_id=-1",
+      "num_envs=2",
+      "train.ppo.num_actors=2",
+      "vector_mode=sync",
+      "train.ppo.horizon_length=8",
+      "train.ppo.minibatch_size=16",
+      "train.ppo.mini_epochs=1",
+      "train.ppo.max_agent_steps=64",
+      "train.ppo.save_best_after=0",
+      "train.ppo.save_frequency=1",
+      "output_name=equal_posture_smoke_bounce_catch_20261101",
+      "checkpoint_tracking=/home/isee/Catch/catch_it_copy/outputs/equal_posture_smoke_bounce_track_20261101/2026-11-01/17:49:11/nn/bounce_track_last.pth"
+    ],
+    "checkpoint": "/home/isee/Catch/catch_it_copy/outputs/equal_posture_smoke_bounce_catch_20261101/2026-11-01/17:49:19/nn/bounce_catch_last.pth",
+    "returncode": 0
+  }
+]

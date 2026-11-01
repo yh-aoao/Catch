@@ -53,6 +53,15 @@ class GraspConfig:
     hand_action_weight: float = .02
     hand_smooth_weight: float = .03
     joint_limit_weight: float = 2.
+    # Opt-in posture profile; zero weights preserve the original hold recipe.
+    finger_backfold_weight: float = 0.
+    finger_prepare_sync_weight: float = 0.
+    finger_contact_weight: float = 0.
+    thumb_opposition_weight: float = 0.
+    finger_backfold_margin: float = .01
+    finger_backfold_scale: float = .03
+    finger_sync_deadband: float = .35
+    finger_sync_scale: float = .5
 
 
 def configuration(options=None):
@@ -62,7 +71,8 @@ def configuration(options=None):
             raise ValueError('Invalid bounce_grasp option: ' + key)
     for key in ('target_step', 'target_tracking_error', 'torque_limit',
                 'limit_time_constant', 'hold_seconds', 'hold_speed',
-                'near_distance', 'max_joint_violation'):
+                'near_distance', 'max_joint_violation',
+                'finger_backfold_scale', 'finger_sync_scale'):
         if getattr(cfg, key) <= 0:
             raise ValueError(key + ' must be positive')
     if not 1 <= cfg.min_contact_groups <= 5 or int(cfg.min_contact_groups) != cfg.min_contact_groups:
@@ -137,6 +147,21 @@ def contact_span(directions):
     return 0. if len(directions) < 2 else float(np.clip((1.-np.min(directions @ directions.T))*.5, 0., 1.))
 
 
+def finger_posture_costs(joints, tip_heights, cfg):
+    """Three-finger costs in the palm frame; thumb is anatomically separate.
+
+    Heights are along palm +Z relative to each finger base, not world up.
+    The consistency deadband permits useful differences between the fingers.
+    """
+    fingers = np.asarray(joints, dtype=float).reshape(12)[:9].reshape(3, 3)
+    heights = np.asarray(tip_heights, dtype=float).reshape(3)
+    backfold = np.clip((-cfg.finger_backfold_margin-heights)/cfg.finger_backfold_scale, 0., 1.)
+    deviation = np.abs(fingers-np.median(fingers, axis=0))
+    disagreement = np.clip((deviation-cfg.finger_sync_deadband)/cfg.finger_sync_scale, 0., 1.)
+    return dict(backfold=float(np.mean(backfold**2)),
+                prepare_sync=float(np.mean(disagreement**2)))
+
+
 class BounceGraspEnv(BounceEnv):
     def __init__(self, bounce_grasp=None, **kwargs):
         if kwargs.get('task') != 'Catching' or kwargs.get('object_motion') != 'bounce':
@@ -169,6 +194,9 @@ class BounceGraspEnv(BounceEnv):
         self._hand_geoms = set(hand_collision_ids(model, self._palm_id).tolist())
         self._object_geoms = set(np.flatnonzero(model.geom_bodyid == model.body(self.object_name).id).tolist())
         roots = [('mcp_joint', 1), ('mcp_joint_2', 2), ('mcp_joint_3', 3), ('pip_4', 4)]
+        self._finger_bases = [model.body(name).id for name, _ in roots[:3]]
+        self._finger_tips = [model.geom(name).id for name in
+                             ('fingertip_', 'fingertip_2_', 'fingertip_3_')]
         root_ids = {model.body(name).id: group for name, group in roots}
         self._contact_groups = {self._palm_id: 0}
         for geom in self._hand_geoms:
@@ -229,6 +257,8 @@ class BounceGraspEnv(BounceEnv):
         self._wrap_score_sum = 0.
         self._span_sum = 0.
         self._groups_sum = 0.
+        self._finger_coverage_sum = 0.
+        self._thumb_opposition_sum = 0.
         self._collision_in_step = False
         self._max_violation_in_step = 0.
 
@@ -238,7 +268,13 @@ class BounceGraspEnv(BounceEnv):
         self.Dcmm.target_hand_qpos[:] = np.clip(self.Dcmm.target_hand_qpos, self._target_low, self._target_high)
         self._reset_grasp_state()
         info['bounce_grasp_version'] = VERSION
+        info['bounce_grasp_reward_profile'] = self._reward_profile()
         return obs, info
+
+    def _reward_profile(self):
+        return ('finger_coordination_v2' if any(getattr(self.grasp_cfg, name) > 0 for name in
+                ('finger_backfold_weight', 'finger_prepare_sync_weight',
+                 'finger_contact_weight', 'thumb_opposition_weight')) else 'base_v1')
 
     def _get_ctrl(self):
         ctrl = super()._get_ctrl()
@@ -307,13 +343,19 @@ class BounceGraspEnv(BounceEnv):
                           and span >= self.grasp_cfg.min_contact_span
                           and speed <= self.grasp_cfg.hold_speed
                           and violation <= self.grasp_cfg.max_joint_violation)
+        finger_count = len(groups.intersection((1, 2, 3)))
+        tip_heights = []
+        if self.grasp_cfg.finger_backfold_weight > 0:
+            tip_heights = [float(rotation[:, 2] @ (data.geom_xpos[tip]-data.xpos[base]))
+                           for tip, base in zip(self._finger_tips, self._finger_bases)]
         return dict(hand_contact=hand_contact, floor_contact=floor_contact,
                     external_support=external_support, off_ground=off_ground,
                     capture=capture, contact_groups=len(groups), contact_span=span,
                     relative_speed=speed, palm_dot=palm_dot, distance=distance,
                     local_ball=local.tolist(), joint_violation=violation,
                     target_violation=target_violation, valid_hold=valid_hold,
-                    collision=collision)
+                    collision=collision, finger_contact_groups=finger_count,
+                    thumb_contact=bool(4 in groups), finger_tip_heights=tip_heights)
 
     def _get_contacts(self):
         contacts = super()._get_contacts()
@@ -337,6 +379,9 @@ class BounceGraspEnv(BounceEnv):
             if state['hand_contact'] and state['capture']:
                 self._wrap_score_sum += (.5*min(1., state['contact_groups']/3.)
                                          + .5*state['contact_span'])
+                fingers = state.get('finger_contact_groups', 0)
+                self._finger_coverage_sum += min(1., fingers/2.)
+                self._thumb_opposition_sum += float(fingers > 0 and state.get('thumb_contact', False))
             self._collision_in_step |= state['collision']
             self._max_violation_in_step = max(self._max_violation_in_step, state['joint_violation'])
             self._last_grasp_state = state
@@ -356,7 +401,7 @@ class BounceGraspEnv(BounceEnv):
         ready = np.tile([.15, .1, .1], 4)
         ready[9:] = [.2, .2, .1]
         shape_score = float(np.exp(-np.mean(((q-ready)/.5)**2)))
-        return dict(
+        terms = dict(
             position=cfg.position_weight/(1.+(distance/.35)**2),
             precision=cfg.approach_weight/(1.+(distance/cfg.near_distance)**2),
             palm=cfg.palm_weight*near*.25*(state['palm_dot']+1.)**2,
@@ -365,6 +410,11 @@ class BounceGraspEnv(BounceEnv):
             contact=cfg.contact_weight*contact_fraction,
             wrap=cfg.wrap_weight*self._wrap_score_sum/count,
             hold=cfg.hold_weight*min(1., self._hold_time/cfg.hold_seconds))
+        if cfg.finger_contact_weight > 0:
+            terms['finger_coverage'] = cfg.finger_contact_weight*self._finger_coverage_sum/count
+        if cfg.thumb_opposition_weight > 0:
+            terms['thumb_opposition'] = cfg.thumb_opposition_weight*self._thumb_opposition_sum/count
+        return terms
 
     def compute_reward(self, obs, info, ctrl):
         cfg = self.grasp_cfg
@@ -389,6 +439,17 @@ class BounceGraspEnv(BounceEnv):
             collision=-10. if self._collision_in_step else 0.,
             success=cfg.success_bonus if info['success'] else 0.,
             failure=-cfg.failure_penalty if terminal and not info['success'] else 0.)
+        if cfg.finger_backfold_weight > 0 or cfg.finger_prepare_sync_weight > 0:
+            state = self._last_grasp_state
+            costs = finger_posture_costs(self.Dcmm.data.qpos[21+MOVABLE],
+                state['finger_tip_heights'] if cfg.finger_backfold_weight > 0 else np.zeros(3), cfg)
+            near = float(np.exp(-(state['distance']/cfg.near_distance)**2))
+            contact_fraction = self._contact_ticks/max(1, self._sample_count)
+            terms['finger_backfold'] = -cfg.finger_backfold_weight*near*costs['backfold']
+            # Only prepare with similar finger openings. Once in contact,
+            # fingers may take different angles to match the ball position.
+            terms['finger_prepare_sync'] = -cfg.finger_prepare_sync_weight*near*(1.-contact_fraction)*costs['prepare_sync']
+            info['bounce_grasp_finger_posture'] = dict(costs, near=near, contact_fraction=contact_fraction)
         self._previous_potential = next_potential
         self._previous_hand_action = hand_action.copy()
         info['bounce_grasp_reward_terms'] = terms
@@ -437,6 +498,7 @@ class BounceGraspEnv(BounceEnv):
         info.update(success=success, success_version='bounce_controlled_hold_v1',
                     bounce_grasp_terminal=bool(self.terminated or truncated),
                     bounce_grasp_version=VERSION, terminated_reason=self.terminated_reason or ('timeout' if truncated else None),
+                    bounce_grasp_reward_profile=self._reward_profile(),
                     bounce_grasp_hold_seconds=float(self._hold_time),
                     bounce_grasp_max_hold_seconds=float(self._max_hold_time),
                     bounce_grasp_hold_reached=self._success_latched,
@@ -452,7 +514,8 @@ class BounceGraspEnv(BounceEnv):
         info['ctrl_params'] = np.concatenate((self.k_arm, self.k_drive, self.k_hand,
             [len(self.action_buffer[k]) for k in ('base', 'arm', 'hand')]))
         if self.terminated or truncated:
-            summary = dict(version=VERSION, episode=self.episode_count, success=success,
+            summary = dict(version=VERSION, reward_profile=self._reward_profile(),
+                episode=self.episode_count, success=success,
                 reason=info['terminated_reason'], physics=getattr(self, 'bounce_v2_episode', {}),
                 policy_steps=self.steps, control_ticks=self._episode_ticks,
                 max_hold_seconds=self._max_hold_time, sums=self._reward_sums.copy(),
@@ -479,13 +542,18 @@ def write_provenance(output, config):
              'gym_dcmm/algs/ppo_dcmm_5fe75d5f/ppo_dcmm_catch_hold.py',
              'gym_dcmm/algs/ppo_dcmm_5fe75d5f/ppo_dcmm_catch_two_stage.py',
              'gym_dcmm/algs/ppo_dcmm_5fe75d5f/models_catch.py',
-             'scripts/train_bounce_three_ball_hold_v1.sh']
+             'scripts/train_bounce_three_ball_hold_v1.sh',
+             'scripts/train_bounce_three_ball_equal_v2.sh']
     checkpoints = {}
     for key in ('checkpoint_tracking', 'checkpoint_catching'):
         if config.get(key):
             path = Path(config[key]).resolve()
             checkpoints[key] = dict(path=str(path), sha256=hashlib.sha256(path.read_bytes()).hexdigest())
-    result = dict(version=VERSION, options=asdict(configuration(config.get('bounce_grasp'))),
+    options = configuration(config.get('bounce_grasp'))
+    profile = ('finger_coordination_v2' if any(getattr(options, name) > 0 for name in
+               ('finger_backfold_weight', 'finger_prepare_sync_weight',
+                'finger_contact_weight', 'thumb_opposition_weight')) else 'base_v1')
+    result = dict(version=VERSION, reward_profile=profile, options=asdict(options),
         training_options=config.get('bounce_grasp_training', {}), checkpoints=checkpoints,
         baseline_manifest='backups/bounce_before_controlled_hold_20261028_195129/manifest.json',
         success='continuous real multi-region hand contact, capture geometry, low relative speed, no external support, valid joints; not proximity',

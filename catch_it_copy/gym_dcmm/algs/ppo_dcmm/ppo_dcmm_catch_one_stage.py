@@ -44,8 +44,9 @@ class PPO_Catch_OneStage(object):
         self.finger_options = finger_options(full_config.get('basket_finger_options', {}))
         self.basket_training_stage = str(full_config.get('basket_training_stage', 'joint'))
         self.parking_policy = None
+        self.throw_policy = None
         self.pose_eval_override = bool(full_config.get('basket_pose_eval_override',False))
-        self.mask_navigation_updates = bool(full_config.get('basket_mask_navigation_updates', False)) and self.basket_training_stage in ('throw','hold')
+        self.mask_navigation_updates = bool(full_config.get('basket_mask_navigation_updates', False)) and self.basket_training_stage in ('throw','hold','navigate_throw')
         self.basket_reward_version = str(full_config.get('basket_reward_version', 'legacy'))
         self.mobile_seed = int(full_config.seed) if int(full_config.seed) >= 0 else None
         self.mobile_base_scale = float(full_config.get('basket_mobile', {}).get('max_speed', .5))
@@ -65,7 +66,7 @@ class PPO_Catch_OneStage(object):
             # Learn only arm + hand; insert the two zero base commands at execution.
             self.actions_num = self.full_action_dim - 2
         if self.mobile_basket and self.basket_training_stage != 'joint':
-            self.actions_num = 2 if self.basket_training_stage == 'parking' else 18
+            self.actions_num = 2 if self.basket_training_stage in ('parking', 'navigate_throw') else 18
         # ---- Model ----
         net_config = {
             'actor_units': self.network_config.mlp.units,
@@ -86,6 +87,16 @@ class PPO_Catch_OneStage(object):
                 full_config.basket_warm_start, self.device)
             self.input_normalization_frozen = True
             print('[basket-transfer] imported arm18 actor; critic fresh; normalization frozen; source=' + self.basket_transfer_metadata['source_name'], flush=True)
+        if self.mobile_basket and self.basket_training_stage == 'navigate_throw' and not full_config.test:
+            from gym_dcmm.utils.basket_throw_policy import FrozenThrowPolicy
+            source = torch.load(full_config.basket_throw_checkpoint, map_location=self.device)
+            self.throw_policy = FrozenThrowPolicy(source, self.finger_options, self.carry_options, self.device)
+            import hashlib
+            with open(full_config.basket_throw_checkpoint, 'rb') as stream:
+                digest = hashlib.sha256(stream.read()).hexdigest()
+            self.basket_transfer_metadata = dict(version='frozen_fixed35_throw_base2_v1',
+                source_name=os.path.basename(full_config.basket_throw_checkpoint), source_sha256=digest)
+            print('[basket-mobile41] loaded frozen throwing actor: ' + full_config.basket_throw_checkpoint, flush=True)
         if self.mobile_basket and self.basket_training_stage == 'throw' and not full_config.test:
             from gym_dcmm.utils.basket_parking_policy import FrozenParkingPolicy
             source = torch.load(full_config.basket_parking_checkpoint, map_location=self.device)
@@ -359,7 +370,10 @@ class PPO_Catch_OneStage(object):
                 episode_success=float(self.episode_success.get_mean()),
                 grouped_success={key: float(meter.get_mean()) for key,meter in self.mobile_group_metrics.items()},
                 grouped_counts={key: int(len(meter)) for key,meter in self.mobile_group_metrics.items()})
-            if self.basket_training_stage == 'parking':
+            if self.basket_training_stage == 'navigate_throw':
+                weights['action_layout'] = 'base2_frozen_fixed35_arm18'
+                weights['throw_policy'] = self.throw_policy.export()
+            elif self.basket_training_stage == 'parking':
                 weights['action_layout'] = 'base2_parking'
             elif self.basket_training_stage == 'throw':
                 weights['action_layout'] = 'frozen_base2_arm6_hand12'
@@ -377,6 +391,9 @@ class PPO_Catch_OneStage(object):
             raise ValueError('Basket checkpoint action semantics differ: Cartesian and joint-velocity policies cannot be interchanged')
         self._load_compatible_model_state(checkpoint['model'])
         self._load_compatible_running_stats(checkpoint)
+        if self.mobile_basket and self.basket_training_stage == 'navigate_throw':
+            from gym_dcmm.utils.basket_throw_policy import FrozenThrowPolicy
+            self.throw_policy = FrozenThrowPolicy(checkpoint['throw_policy'], self.finger_options, self.carry_options, self.device)
 
     def restore_test(self, fn):
         checkpoint = torch.load(fn, map_location = self.device)
@@ -389,6 +406,9 @@ class PPO_Catch_OneStage(object):
         if self.mobile_basket:
             self.basket_transfer_metadata = checkpoint.get('basket_transfer', {})
             self.input_normalization_frozen = bool(checkpoint.get('input_normalization_frozen', False))
+            if self.basket_training_stage == 'navigate_throw':
+                from gym_dcmm.utils.basket_throw_policy import FrozenThrowPolicy
+                self.throw_policy = FrozenThrowPolicy(checkpoint['throw_policy'], self.finger_options, self.carry_options, self.device)
             if self.basket_training_stage == 'throw':
                 from gym_dcmm.utils.basket_parking_policy import FrozenParkingPolicy
                 self.parking_policy = FrozenParkingPolicy(checkpoint['parking_policy'], self.mobile_options, self.device)
@@ -408,7 +428,8 @@ class PPO_Catch_OneStage(object):
             raise ValueError('This checkpoint requires basket_physical_arm: physical preparation and qualified release')
         stage = getattr(self, 'basket_training_stage', 'joint')
         layout = {'joint': 'base2_arm6_hand12', 'parking': 'base2_parking',
-                  'throw': 'frozen_base2_arm6_hand12', 'hold':'held_arm6_hand12'}[stage]
+                  'throw': 'frozen_base2_arm6_hand12', 'hold':'held_arm6_hand12',
+                  'navigate_throw': 'base2_frozen_fixed35_arm18'}[stage]
         if self.mobile_basket and (checkpoint.get('basket_reward_version') != 'basket_mobile_v1'
                 or checkpoint.get('basket_arm_control') != 'joint_velocity'
                 or checkpoint.get('basket_observation_version') != 'mobile51_v1'
@@ -501,7 +522,10 @@ class PPO_Catch_OneStage(object):
                 value_preds, old_action_log_probs, advantage, old_mu, old_sigma, \
                     returns, actions, obs = self.storage[i]
 
-                valid_action = obs[:,47] > .5 if self.mask_navigation_updates else None
+                valid_action = None
+                if self.mask_navigation_updates:
+                    valid_action = (obs[:,47] < .5 if self.basket_training_stage == 'navigate_throw'
+                                    else obs[:,47] > .5)
                 has_valid_action = valid_action is None or bool(valid_action.any())
 
                 obs = self.running_mean_std(obs)
@@ -614,6 +638,11 @@ class PPO_Catch_OneStage(object):
     def action2dict(self, actions):
         actions = actions.cpu().numpy()
         stage = getattr(self, 'basket_training_stage', 'joint')
+        if getattr(self, 'mobile_basket', False) and stage == 'navigate_throw':
+            throw = self.throw_policy.actions(self.obs['obs']).cpu().numpy()
+            return dict(base=actions[:, :2]*self.mobile_base_scale,
+                        arm=throw[:, :6]*self.action_catch_denorm[1],
+                        hand=throw[:, 6:18]*self.action_catch_denorm[2])
         if getattr(self, 'mobile_basket', False) and stage == 'parking':
             return dict(base=actions[:, :2]*self.mobile_base_scale,
                         arm=np.zeros((len(actions), 6)), hand=np.zeros((len(actions), 12)))

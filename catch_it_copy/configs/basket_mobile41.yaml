@@ -1,0 +1,51 @@
+# Learn base navigation, preserving the verified 41.30 arm/hand skill verbatim.
+defaults:
+  - basket_finger_sync_scratch
+  - _self_
+task: Catching_TwoStage
+basket_training_stage: navigate_throw
+basket_reward_version: basket_mobile_v1
+basket_fixed_base_training: false
+basket_fixed_hand_flex: null
+basket_fixed_arm_drive_bonus: 0.0
+basket_fixed_physical: true
+basket_carry_reward: true
+basket_finger_reward: true
+basket_warm_start: ''
+basket_parking_checkpoint: ''
+checkpoint_catching: ''
+checkpoint_tracking: ''
+basket_throw_checkpoint: /home/isee/Catch/11-1/throw_basket_catch_best_reward_41.30.pth
+basket_freeze_input_normalization: false
+basket_mask_navigation_updates: true
+output_name: BasketMobile41
+basket_mobile:
+  preserve_fixed_throw: true
+  target_x_range: [-0.20, 0.20]
+  target_y_range: [1.15, 1.55]
+  max_time: 10.0
+  max_speed: 0.30
+  max_acceleration: 0.35
+  position_tolerance: 0.04
+  speed_tolerance: 0.04
+  settle_seconds: 0.30
+  carry_settle_seconds: 0.10
+  brake_after_unlock: true
+  approach_braking: true
+  hold_position: true
+  settle_contact_grace: 0.03
+  release_speed_tolerance: 0.15 # allow arm reaction after the strict 0.04 m/s parking gate
+  release_position_tolerance: 0.08
+  post_ready_seconds: 2.5
+  fixed_throw_probability: 0.0
+  collision_free_spawn: true
+  hold_hand_flex: [0.8, 0.7, 0.7]
+  hold_thumb_flex: [0.4, 0.4, 0.4]
+  hold_arm_offset_deg: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  hold_ball_local: [0.0, 0.03, 0.07]
+train:
+  ppo:
+    learning_rate: 0.0003
+    max_agent_steps: 1000000000000
+    max_test_steps: 1000000
+    test_num_episodes: 100

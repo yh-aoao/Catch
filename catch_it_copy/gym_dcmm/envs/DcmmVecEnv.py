@@ -221,7 +221,7 @@ class DcmmVecEnv(gym.Env):
             raise ValueError('Basket finger coordination requires basket_aim_carry physical preparation')
         if self.basket_carry_reward and not self.basket_fixed_physical:
             raise ValueError('Basket carry shaping needs physical preparation')
-        if self.basket_fixed_physical and not (basket_fixed_base_training and basket_reward_version == 'basket_aim_v1' and (basket_fixed_arm_drive_bonus > 0 or self.basket_carry_reward)):
+        if self.basket_fixed_physical and not ((basket_fixed_base_training and basket_reward_version == 'basket_aim_v1' and (basket_fixed_arm_drive_bonus > 0 or self.basket_carry_reward)) or (self.mobile_basket and self.basket_cfg.mobile_preserve_fixed_throw and self.basket_carry_reward)):
             raise ValueError('Physical fixed Basket needs fixed aiming and arm drive')
         if not np.isfinite(self.basket_fixed_arm_drive_bonus) or self.basket_fixed_arm_drive_bonus < 0:
             raise ValueError('basket_fixed_arm_drive_bonus must be finite and nonnegative')
@@ -818,10 +818,17 @@ class DcmmVecEnv(gym.Env):
                                      for g in self.contacts['object_contacts']))
             if getattr(self, 'mobile_basket', False):
                 from gym_dcmm.utils.basket_mobile import update_physics
+                was_unlocked = self.basket_mobile_state['unlocked']
                 update_physics(self.basket_mobile_state, self.basket_simple_state,
                     self._basket_parking_state(), position, self.Dcmm.data.qvel[36:39],
                     self.basket_center, float(self.Dcmm.data.time-self.start_time),
                     dt, touching, other_contact, cfg, gravity=self.Dcmm.model.opt.gravity)
+                if (cfg.mobile_preserve_fixed_throw and not was_unlocked
+                        and self.basket_mobile_state['unlocked']):
+                    from gym_dcmm.utils.basket_carry import new_state
+                    self.basket_simple_state['carry'] = new_state(
+                        self.Dcmm.data.body('link6').xpos-self.Dcmm.data.body('arm_base').xpos,
+                        self.basket_preparation['local'])
                 if (cfg.mobile_arm_drive_bonus and touching and self.basket_mobile_state['unlocked']
                         and not self.basket_simple_state.get('confirmed') and not other_contact
                         and not getattr(self, 'basket_arm_self_collision', False)
@@ -839,6 +846,15 @@ class DcmmVecEnv(gym.Env):
                     proximal_velocity = jac[:,columns] @ self.Dcmm.data.qvel[columns]
                     arm_drive_progress(self.basket_mobile_state, palm.xpos-base.xpos,
                         proximal_velocity, self.Dcmm.data.qvel[36:39], direction, cfg.mobile_arm_drive_bonus)
+                if cfg.mobile_preserve_fixed_throw and not self.basket_mobile_state['unlocked']:
+                    from gym_dcmm.utils.basket_grip import palm_coordinates
+                    local = palm_coordinates(self.Dcmm.data, position)
+                    excess = np.maximum(np.abs(local-np.asarray(self.basket_preparation['local']))
+                        - np.asarray(self.basket_carry_options['local_tolerance']), 0.)
+                    loss = 1.-float(np.exp(-np.sum((excess/np.asarray(
+                        self.basket_carry_options['local_sigma']))**2)))
+                    self.basket_mobile_state['carry_slip_pending'] = (
+                        self.basket_mobile_state.get('carry_slip_pending', 0.)-2.*loss*dt)
                 if cfg.mobile_parking_only and self.basket_mobile_state['unlocked']:
                     self.terminated = True
                     self.terminated_reason = 'parking_score'
@@ -859,7 +875,9 @@ class DcmmVecEnv(gym.Env):
             measure_arm_drive(self.Dcmm.model, self.Dcmm.data,
                 self.basket_simple_state.setdefault('arm_drive', {}), self.basket_center,
                 self.basket_fixed_arm_drive_bonus)
-        if (getattr(self,'basket_carry_reward',False) and touching and not other_contact
+        if (getattr(self,'basket_carry_reward',False)
+                and (not self.mobile_basket or self.basket_mobile_state['unlocked'])
+                and touching and not other_contact
                 and not self.basket_simple_state.get('confirmed')
                 and not getattr(self,'basket_arm_self_collision',False)
                 and not getattr(self,'basket_robot_collision',False)):

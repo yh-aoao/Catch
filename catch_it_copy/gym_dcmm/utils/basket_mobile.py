@@ -9,7 +9,7 @@ DEFAULTS = dict(target_x_range=[-.4, .4], target_y_range=[1.35, 1.85],
                 max_time=8., max_speed=.5, max_acceleration=.8,
                 position_tolerance=.10, speed_tolerance=.10, settle_seconds=.20,
                 carry_settle_seconds=.30, brake_after_unlock=False, approach_braking=False,
-                parking_only=False, hold_position=False, settle_contact_grace=0.,
+                preserve_fixed_throw=False, parking_only=False, hold_position=False, settle_contact_grace=0.,
                 release_speed_tolerance=0., release_position_tolerance=0.,
                 post_ready_seconds=0., fixed_throw_probability=0., hold_only=False,
                 hold_time_range=[0.,0.], collision_free_spawn=False, hold_aim_bonus=0.,
@@ -37,7 +37,7 @@ def make_config(base, options=None):
         values[key]=array.copy()
     if values['target_y_range'][0] < 1.05:
         raise ValueError('Mobile target_y_range must stay >= 1.05m')
-    booleans = {'brake_after_unlock', 'approach_braking', 'parking_only', 'hold_position', 'hold_only', 'collision_free_spawn'}
+    booleans = {'preserve_fixed_throw', 'brake_after_unlock', 'approach_braking', 'parking_only', 'hold_position', 'hold_only', 'collision_free_spawn'}
     optional_nonnegative = {'settle_contact_grace', 'release_speed_tolerance',
                             'release_position_tolerance', 'post_ready_seconds', 'fixed_throw_probability', 'hold_aim_bonus', 'arm_drive_bonus'}
     for key in booleans:
@@ -63,7 +63,7 @@ def make_config(base, options=None):
     cfg.basket_track_max_speed = values['max_speed']
     cfg.basket_track_slowdown_gain = 1.5
     cfg.basket_max_time = values['max_time']
-    cfg.basket_simple_collision_cost = 60.
+    cfg.basket_simple_collision_cost = 40. if values['preserve_fixed_throw'] else 60.
     cfg.basket_fail_dist = max(float(base.basket_fail_dist),
                               float(np.hypot(max(abs(values['target_x_range'])),
                                              values['target_y_range'][1])) + 1.)
@@ -157,7 +157,8 @@ def base_command(state, requested, dt, cfg, parking=None):
             raise ValueError('Position braking requires measured parking state')
         if parking['in_position']:
             state['parking_brake_latched'] = True
-        elif np.max(np.abs(parking['error_world'])) > 1.5*cfg.basket_track_position_tolerance:
+        elif np.max(np.abs(parking['error_world'])) > (
+                1. if cfg.mobile_preserve_fixed_throw else 1.5)*cfg.basket_track_position_tolerance:
             state['parking_brake_latched'] = False
         if state.get('parking_brake_latched'):
             requested[:] = 0.
@@ -200,6 +201,8 @@ def reward(state, launch, parking, done, success, elapsed, cfg, *,
     terms.update(navigation=0., navigation_distance=0., navigation_velocity=0.,
                  parked=state.pop('ready_pending', 0.), braking=0.,
                  base_control=0., base_smoothness=0., time=-.15*dt, task_failure=0.)
+    if cfg.mobile_preserve_fixed_throw:
+        terms['navigation_slip'] = state.pop('carry_slip_pending', 0.)
     if cfg.mobile_hold_aim_bonus:
         terms['held_aim_progress'] = state.pop('held_aim_pending', 0.)
     if cfg.mobile_arm_drive_bonus:

@@ -110,6 +110,7 @@ basket_curriculum_stage: 3
 basket_warm_start: ''
 basket_training_stage: joint # joint / parking / throw (separate frozen parking actor)
 basket_parking_checkpoint: ''
+basket_throw_checkpoint: '' # frozen fixed35 throwing actor for navigate_throw
 basket_mask_navigation_updates: false
 basket_pose_eval_override: false # test-only: explicitly compare a new carry pose with existing weights
 
@@ -126,6 +127,7 @@ basket_mobile:
   carry_settle_seconds: 0.30
   brake_after_unlock: false
   approach_braking: false
+  preserve_fixed_throw: false
   parking_only: false
   hold_position: false
   settle_contact_grace: 0.0

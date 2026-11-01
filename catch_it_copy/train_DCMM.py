@@ -101,7 +101,9 @@ def main(config: DictConfig):
         raise ValueError('basket_eval_hand_flex is only for fixed Basket aiming evaluation')
     if (config.get('basket_fixed_hand_flex') is not None or config.get('basket_fixed_arm_drive_bonus',0.)) and not (config.basket_fixed_base_training and config.object_motion in ('basket','throw_basket') and config.basket_reward_version == 'basket_aim_v1'):
         raise ValueError('Fixed grip/arm drive requires fixed Basket aiming task')
-    if config.get('basket_fixed_physical',False) and not (config.basket_fixed_base_training and (config.basket_fixed_arm_drive_bonus > 0 or config.get('basket_carry_reward',False)) and config.basket_reward_version == 'basket_aim_v1'):
+    preserved_mobile = (config.basket_reward_version == 'basket_mobile_v1'
+        and bool(config.basket_mobile.get('preserve_fixed_throw', False)))
+    if config.get('basket_fixed_physical',False) and not ((config.basket_fixed_base_training and (config.basket_fixed_arm_drive_bonus > 0 or config.get('basket_carry_reward',False)) and config.basket_reward_version == 'basket_aim_v1') or (preserved_mobile and config.get('basket_carry_reward',False))):
         raise ValueError('Physical fixed Basket requires fixed aiming and arm-drive reward')
     if config.get('basket_finger_reward',False) and not config.get('basket_carry_reward',False):
         raise ValueError('Basket finger coordination requires basket_aim_carry')
@@ -111,7 +113,7 @@ def main(config: DictConfig):
     basket_stage = str(config.get('basket_training_stage', 'joint'))
     if config.get('basket_pose_eval_override', False) and not (config.test and mobile_basket and basket_stage == 'hold'):
         raise ValueError('basket_pose_eval_override is only for Basket hold-policy evaluation')
-    if basket_stage not in ('joint', 'parking', 'throw', 'hold') or (basket_stage != 'joint' and not mobile_basket):
+    if basket_stage not in ('joint', 'parking', 'throw', 'hold', 'navigate_throw') or (basket_stage != 'joint' and not mobile_basket):
         raise ValueError('Basket training stage must be joint, parking or throw; staged training requires Mobile Basket')
     warm_start = str(config.get('basket_warm_start', ''))
     if warm_start and not mobile_basket:
@@ -119,6 +121,18 @@ def main(config: DictConfig):
     if warm_start and not config.test:
         config.basket_warm_start = to_absolute_path(warm_start)
     if mobile_basket:
+        if preserved_mobile != (basket_stage == 'navigate_throw'):
+            raise ValueError('preserve_fixed_throw requires navigate_throw stage and vice versa')
+        if preserved_mobile:
+            if not (config.basket_fixed_physical and config.basket_carry_reward and config.basket_finger_reward
+                    and config.basket_mobile.brake_after_unlock):
+                raise ValueError('navigate_throw requires physical/carry/finger rewards and brake_after_unlock')
+            if warm_start:
+                raise ValueError('navigate_throw uses basket_throw_checkpoint, not basket_warm_start')
+            if not config.test:
+                if not config.basket_throw_checkpoint:
+                    raise ValueError('navigate_throw needs basket_throw_checkpoint (fixed35 arm18)')
+                config.basket_throw_checkpoint = to_absolute_path(config.basket_throw_checkpoint)
         expected_task = 'Catching_OneStage' if basket_stage == 'joint' else 'Catching_TwoStage'
         if (config.object_motion not in ('basket', 'throw_basket') or config.basket_fixed_base_training
                 or config.basket_arm_control != 'joint_velocity' or config.task != expected_task
@@ -140,7 +154,9 @@ def main(config: DictConfig):
             raise ValueError('Leave checkpoint_catching empty for Mobile training; use basket_warm_start for explicit fixed-base actor migration')
         if config.test and not config.checkpoint_catching:
             raise ValueError('Mobile evaluation requires a basket_mobile_v1 checkpoint')
-        if basket_stage == 'hold':
+        if basket_stage == 'navigate_throw':
+            print('[basket-mobile41] train base2; frozen fixed35 arm18 throw; physical carry -> park -> throw', flush=True)
+        elif basket_stage == 'hold':
             print('[basket-hold] fixed base command and fixed near target; physical hold -> throw; policy=arm18; initialization=' + ('actor_transfer' if warm_start else 'scratch'), flush=True)
         else:
             print('[basket-mobile-v1] random target per episode; physical carry -> settle -> throw; policy=base2+arm6+hand12; initialization=' + ('fixed_actor_transfer' if warm_start else 'scratch'), flush=True)

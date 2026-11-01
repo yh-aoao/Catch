@@ -19,7 +19,12 @@ basket_throw_checkpoint: /home/isee/Catch/11-1/throw_basket_catch_best_reward_41
 basket_freeze_input_normalization: false
 basket_mask_navigation_updates: false
 basket_throw_lr_scale: 0.1
-output_name: BasketMobile41Joint
+basket_joint_options:
+  base_kl_limit: 0.02
+  throw_kl_limit: 0.01
+  replay_loss_weight: 0.50
+  reference_weight: 0.05
+output_name: BasketMobile41JointStable
 basket_mobile:
   preserve_fixed_throw: true # physical/reward conventions only; both actors trainable
   target_x_range: [-0.20, 0.20]
@@ -46,7 +51,8 @@ basket_mobile:
   hold_ball_local: [0.0, 0.03, 0.07]
 train:
   ppo:
-    learning_rate: 0.0003
+    learning_rate: 0.0001
+    lr_schedule: fixed
     max_agent_steps: 1000000000000
     max_test_steps: 1000000
     test_num_episodes: 100

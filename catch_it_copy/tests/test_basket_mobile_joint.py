@@ -84,11 +84,12 @@ class JointMobileTests(unittest.TestCase):
         normalizer.load_state_dict(self.norm.state_dict(),strict=True)
         torch.testing.assert_close(model.act_inference(dict(obs=normalizer(raw))),expected)
 
-    def test_kl_is_not_diluted_by_inactive_channels(self):
+    def test_kl_sums_active_dimensions_and_ignores_inactive_channels(self):
         obs=self.norm(self.observations([0]*4));old=self.model.act(dict(obs=obs))
         mu=old['mus'].clone();mu[:,:2]+=.1
         sigma=old['sigmas']
-        expected=(torch.log(sigma[:,:2]/sigma[:,:2]+1e-5)+.1**2/(2*sigma[:,:2]**2)).mean()
+        expected=(.1**2/(2*sigma[:,:2]**2)).sum(-1).mean()
+        self.assertAlmostEqual(float(self.model.policy_kl(obs,old['mus'],sigma,old['mus'],sigma)),0.,places=6)
         torch.testing.assert_close(self.model.policy_kl(obs,mu,sigma,old['mus'],sigma),expected)
 
 if __name__=='__main__':unittest.main()

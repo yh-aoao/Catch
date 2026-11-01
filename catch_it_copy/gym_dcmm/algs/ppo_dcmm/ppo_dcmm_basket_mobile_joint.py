@@ -1,4 +1,6 @@
 """Second-stage Basket PPO: both navigation and inherited throwing keep learning."""
+import copy
+import time
 import hashlib
 import os
 
@@ -15,6 +17,8 @@ class PPO_Basket_MobileJoint(PPO_Catch_OneStage):
         if not full_config.train.network.get('separate_value_mlp', True):
             raise ValueError('Joint Basket requires a separate critic')
         super().__init__(env,output_dif,full_config)
+        if self.obs_shape != (51,) or self.storage.obs_dim != 51:
+            raise ValueError('Joint Basket expects 51 policy inputs; rehearsal metadata must be excluded')
         self.model = JointActorCritic(list(self.network_config.mlp.units)).to(self.device)
         self.running_mean_std = JointNormalizer().to(self.device)
         self.input_normalization_frozen = False
@@ -35,6 +39,154 @@ class PPO_Basket_MobileJoint(PPO_Catch_OneStage):
             dict(params=throw,lr=self.init_lr*self.throw_lr_scale,lr_scale=self.throw_lr_scale,name='throw'),
             dict(params=critic,lr=self.init_lr,lr_scale=1.,name='critic')],eps=1e-5)
         print('[basket-mobile41-joint] PPO actions=20; throw/base learning-rate ratio='+str(self.throw_lr_scale),flush=True)
+        from .basket_joint_stability import options
+        self.joint_options=options(full_config.get('basket_joint_options',{}))
+        if self.lr_schedule not in ('fixed','kl'):
+            raise ValueError('Stable joint Basket supports fixed or capped kl learning rates')
+        self.reference_actor=copy.deepcopy(self.model.throw_actor).eval().requires_grad_(False)
+        self.reference_mu=copy.deepcopy(self.model.throw_mu).eval().requires_grad_(False)
+        self.reference_sigma=self.model.throw_sigma.detach().clone()
+        self.storage.storage_dict['rehearsal']=torch.zeros(
+            (self.horizon_length,self.num_actors),dtype=torch.bool,device=self.device)
+        self.initial_group_lrs={g['name']:g['lr'] for g in self.optimizer.param_groups}
+        print('[basket-joint-stable] schedule='+self.lr_schedule+
+            '; LR ceilings: base='+str(self.init_lr)+' throw='+str(self.init_lr*self.throw_lr_scale)+
+            '; summed KL limits='+str(self.joint_options)+'; reference actor is a loss target only',flush=True)
+
+    def obs2tensor(self,obs):
+        if 'basket_rehearsal' not in obs:
+            raise ValueError('Joint Basket needs rehearsal metadata; sync the updated DcmmVecEnv.py')
+        self.current_rehearsal=torch.as_tensor(obs['basket_rehearsal'],
+            dtype=torch.bool,device=self.device).reshape(-1)
+        return super().obs2tensor(obs)
+
+    def store_rollout_context(self,index):
+        self.storage.update_data('rehearsal',index,self.current_rehearsal)
+
+    def reference_kl(self,processed,mu,sigma,replay):
+        from .basket_joint_stability import gaussian_kl
+        if not replay.any():return mu.sum()*0.
+        with torch.no_grad():
+            reference=torch.tanh(self.reference_mu(self.reference_actor(processed[replay,51:86])))
+            std=self.reference_sigma.exp().expand_as(reference)
+        return gaussian_kl(reference,std,mu[replay,2:],sigma[replay,2:]).mean()
+
+    def training_status(self):
+        def rate(key):
+            meter=self.mobile_metrics[key]
+            return f'{meter.get_mean():.2%}' if len(meter) else 'n/a'
+        rates={g['name']:g['lr'] for g in self.optimizer.param_groups}
+        return (f" | Park SR: {rate('parking_success')} | Release SR: {rate('qualified_release')}"
+            +f" | Base LR: {rates['base']:.2e} | Throw LR: {rates['throw']:.2e}"
+            +f" | Base KL: {self.extra_info.get('basket_joint/base_kl_sum',0.):.4f}"
+            +f" | Throw KL: {self.extra_info.get('basket_joint/throw_kl_sum',0.):.4f}")
+
+    def train_epoch(self):
+        from .basket_joint_stability import (balanced_loss,normalize_advantages,
+            masks,gaussian_kl,group_mean,bounded_lr)
+        for group in self.optimizer.param_groups:
+            group['lr']=min(group['lr'],self.initial_group_lrs[group['name']])
+        started=time.time()
+        self.set_eval()
+        self.play_steps()
+        self.data_collect_time+=time.time()-started
+        started=time.time()
+        self.set_train()
+        # The rollout's behavior probabilities used these exact statistics.
+        # Never mutate normalization inside the PPO epochs/minibatches.
+        self.running_mean_std.eval()
+        data=self.storage.data_dict
+        all_groups=masks(data['obses'],data['rehearsal'])
+        population_counts=tuple(int(group.sum()) for group in all_groups)
+        loss_weights=dict(population_counts=population_counts,population_size=len(data['obses']))
+        advantage=(data['returns']-data['values']).reshape(-1)
+        if self.normalize_advantage:
+            advantage=normalize_advantages(advantage,all_groups)
+        data['advantages']=advantage
+        stop_base=stop_throw=False
+        losses_a,losses_c,losses_b,entropies,kls=[],[],[],[],[]
+        base_params,throw_params,critic_params=self.model.actor_groups()
+        for _ in range(self.mini_epochs_num):
+            for index in range(len(self.storage)):
+                old_value,old_logp,adv,old_mu,old_sigma,returns,actions,raw=self.storage[index]
+                start,end=self.storage.last_range
+                groups=masks(raw,data['rehearsal'][start:end])
+                processed=self.running_mean_std(raw)
+                result=self.model(dict(obs=processed,prev_actions=actions))
+                with torch.no_grad():
+                    base_kl=gaussian_kl(old_mu[:,:2],old_sigma[:,:2],
+                        result['mus'][:,:2],result['sigmas'][:,:2])
+                    throw_kl=gaussian_kl(old_mu[:,2:],old_sigma[:,2:],
+                        result['mus'][:,2:],result['sigmas'][:,2:])
+                    stop_base=stop_base or bool(group_mean(base_kl,groups[0])>self.joint_options['base_kl_limit'])
+                    stop_throw=stop_throw or bool(group_mean(throw_kl,groups[1]|groups[2])>self.joint_options['throw_kl_limit'])
+                ratio=torch.exp(old_logp-result['prev_neglogp'])
+                surrogate=torch.maximum(-adv*ratio,-adv*ratio.clamp(1.-self.e_clip,1.+self.e_clip))
+                actor_loss=balanced_loss(surrogate,groups,self.joint_options['replay_loss_weight'],**loss_weights)
+                entropy=balanced_loss(result['entropy'],groups,self.joint_options['replay_loss_weight'],**loss_weights)
+                value=result['values']
+                critic=(value-returns).square()
+                if self.clip_value_loss:
+                    clipped=old_value+(value-old_value).clamp(-self.e_clip,self.e_clip)
+                    critic=torch.maximum(critic,(clipped-returns).square())
+                critic_loss=critic.mean()
+                bound=(result['mus'].abs()-1.1).clamp_min(0.).square().sum(-1)
+                bound_loss=balanced_loss(bound,groups,self.joint_options['replay_loss_weight'],**loss_weights)
+                reference=self.reference_kl(processed,result['mus'],result['sigmas'],groups[2])
+                reference=reference*int(groups[2].sum())/max(population_counts[2],1)*len(data['obses'])/len(raw)
+                loss=(actor_loss+.5*self.critic_coef*critic_loss-self.entropy_coef*entropy
+                    +self.bounds_loss_coef*bound_loss+self.joint_options['reference_weight']*reference)
+                self.optimizer.zero_grad(set_to_none=True)
+                loss.backward()
+                for active,parameters in (
+                        (not stop_base and bool(groups[0].any()),base_params),
+                        (not stop_throw and bool((groups[1]|groups[2]).any()),throw_params)):
+                    if not active:
+                        for parameter in parameters:parameter.grad=None
+                if self.truncate_grads:
+                    for parameters in (base_params,throw_params,critic_params):
+                        torch.nn.utils.clip_grad_norm_(parameters,self.grad_norm)
+                self.optimizer.step()
+                losses_a.append(actor_loss.detach());losses_c.append(critic_loss.detach())
+                losses_b.append(bound_loss.detach());entropies.append(entropy.detach())
+                # Never overwrite old_mu/old_sigma: the anchor is the collected policy,
+                # not the distribution from the previous optimization pass.
+            with torch.no_grad():
+                processed=self.running_mean_std(data['obses'])
+                result=self.model(dict(obs=processed,prev_actions=data['actions']))
+                base_kl=gaussian_kl(data['mus'][:,:2],data['sigmas'][:,:2],result['mus'][:,:2],result['sigmas'][:,:2])
+                throw_kl=gaussian_kl(data['mus'][:,2:],data['sigmas'][:,2:],result['mus'][:,2:],result['sigmas'][:,2:])
+                bkl=float(group_mean(base_kl,all_groups[0]))
+                tkl=float(group_mean(throw_kl,all_groups[1]|all_groups[2]))
+                stop_base=stop_base or bkl>self.joint_options['base_kl_limit']
+                stop_throw=stop_throw or tkl>self.joint_options['throw_kl_limit']
+                ref=float(self.reference_kl(processed,result['mus'],result['sigmas'],all_groups[2]))
+                kls.append(result['mus'].new_tensor(max(bkl,tkl)))
+        for group in self.optimizer.param_groups:
+            name=group['name'];initial=self.initial_group_lrs[name]
+            if self.lr_schedule=='kl' and name in ('base','throw'):
+                present=all_groups[0].any() if name=='base' else (all_groups[1]|all_groups[2]).any()
+                if present:
+                    group['lr']=bounded_lr(group['lr'],initial,bkl if name=='base' else tkl,
+                        self.joint_options[name+'_kl_limit'])
+            group['lr']=min(group['lr'],initial)
+            self.extra_info['basket_joint/'+name+'_lr']=group['lr']
+        self.last_lr=self.optimizer.param_groups[0]['lr']
+        self.extra_info.update({
+            'basket_joint/base_kl_sum':bkl,'basket_joint/throw_kl_sum':tkl,
+            'basket_joint/replay_reference_kl':ref,
+            'basket_joint/base_update_stopped':float(stop_base),
+            'basket_joint/throw_update_stopped':float(stop_throw),
+            'basket_joint/navigation_samples':int(all_groups[0].sum()),
+            'basket_joint/mobile_throw_samples':int(all_groups[1].sum()),
+            'basket_joint/replay_throw_samples':int(all_groups[2].sum())})
+        # Update only new base statistics, once per collected rollout, after PPO.
+        self.running_mean_std.navigation.train()
+        self.running_mean_std.navigation(data['obses'])
+        self.running_mean_std.eval()
+        self.rl_train_time+=time.time()-started
+        return losses_a,losses_c,losses_b,entropies,kls
+
 
     def save(self,name):
         weights=dict(model=self.model.state_dict(),running_mean_std=self.running_mean_std.state_dict(),
@@ -46,6 +198,9 @@ class PPO_Basket_MobileJoint(PPO_Catch_OneStage):
             basket_fixed_protocol='aim_carry_fingers_v1',basket_finger_options=self.finger_options,
             basket_carry_options=self.carry_options,basket_transfer=self.basket_transfer_metadata,
             basket_throw_lr_scale=self.throw_lr_scale,input_normalization_frozen=False,
+            joint_stability_version='balanced_reference_kl_v2',basket_joint_options=self.joint_options,
+            reference_actor=self.reference_actor.state_dict(),reference_mu=self.reference_mu.state_dict(),
+            reference_sigma=self.reference_sigma,
             training_metrics=dict(agent_steps=int(self.agent_steps),epoch=int(self.epoch_num),
                 episode_reward=float(self.episode_rewards.get_mean()),
                 episode_success=float(self.episode_success.get_mean()),
@@ -62,3 +217,7 @@ class PPO_Basket_MobileJoint(PPO_Catch_OneStage):
         self.running_mean_std.load_state_dict(checkpoint['running_mean_std'],strict=True)
         self.value_mean_std.load_state_dict(checkpoint['value_mean_std'],strict=True)
         self.basket_transfer_metadata=checkpoint.get('basket_transfer',{})
+        if 'reference_actor' in checkpoint:
+            self.reference_actor.load_state_dict(checkpoint['reference_actor'],strict=True)
+            self.reference_mu.load_state_dict(checkpoint['reference_mu'],strict=True)
+            self.reference_sigma=checkpoint['reference_sigma'].detach().clone().to(self.device)

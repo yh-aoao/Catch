@@ -377,6 +377,9 @@ class DcmmVecEnv(gym.Env):
         if self.mobile_basket:
             self.observation_space.spaces['mobile'] = spaces.Box(
                 -np.inf, np.inf, shape=(16,), dtype=np.float32)
+            if self.basket_cfg.mobile_preserve_fixed_throw:
+                self.observation_space.spaces['basket_rehearsal'] = spaces.Box(
+                    0., 1., shape=(1,), dtype=np.float32)
 
         # ===================== 定义动作空间（gym.spaces.Dict）=====================
         # 动作空间维度说明：总计2+6+12=20维
@@ -425,7 +428,9 @@ class DcmmVecEnv(gym.Env):
         self.actions_high = np.concatenate([base_high, arm_high, hand_high])
 
         # 计算不同任务的观测/动作维度
-        self.obs_dim = get_total_dimension(self.observation_space)  # 总观测维度（44）
+        # Episode labels are rollout metadata, not policy input dimensions.
+        self.obs_dim = get_total_dimension(self.observation_space) - (
+            1 if 'basket_rehearsal' in self.observation_space.spaces else 0)
         self.act_dim = get_total_dimension(self.action_space)      # 总动作维度（20）
         self.obs_t_dim = self.obs_dim - 12 - 6  # 跟踪任务观测维度（18）
         self.act_t_dim = self.act_dim - 12      # 跟踪任务动作维度（8）
@@ -783,6 +788,10 @@ class DcmmVecEnv(gym.Env):
             obs['mobile'] = observation(self.basket_mobile_state,
                 self.Dcmm.data.qpos[15:21], self.Dcmm.data.qvel[14:20],
                 self.Dcmm.data.time-self.start_time, self.basket_cfg)
+            if self.basket_cfg.mobile_preserve_fixed_throw:
+                # Rollout metadata only; not part of the 51 policy inputs.
+                obs['basket_rehearsal'] = np.array([
+                    float(getattr(self, 'basket_rehearsal_episode', False))], dtype=np.float32)
 
         # 更新历史位置
         self.prev_ee_pos3d = ee_pos3d

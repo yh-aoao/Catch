@@ -1,5 +1,7 @@
 # Basket 41.30 → 第二阶段联合强化学习
 
+当前已应用[联合训练稳定性修正](BASKET_JOINT_STABILITY_2026-11-01.md)：固定学习率、分策略KL保护、复习损失平衡和原策略软约束。启动前请同步全部修改。
+
 当前 `configs/basket_mobile41.yaml` 已改为 `basket_training_stage: mobile_joint`，不再冻结机械臂/手指 actor。旧的 `navigate_throw` 冻结实现保留供历史实验使用，默认脚本不再选择它。
 
 没有启动训练，没有执行优化器更新。
@@ -12,15 +14,15 @@
 
 | 部分 | 初始化 | 第二阶段更新 | 初始学习率 |
 |---|---|---|---|
-| 底座XY策略 | 随机 | 是，导航阶段 | 3e-4 |
-| 机械臂6+手指12策略 | 41.30 | 是，停车后抛球阶段及复习回合 | 3e-5 |
-| 整个回合的critic | 随机 | 是，所有阶段 | 3e-4 |
+| 底座XY策略 | 随机 | 是，导航阶段 | 1e-4 |
+| 机械臂6+手指12策略 | 41.30 | 是，停车后抛球阶段及复习回合 | 1e-5 |
+| 整个回合的critic | 随机 | 是，所有阶段 | 1e-4 |
 
 训练的20维动作是base2+arm6+hand12。导航时执行底座动作，手臂/手指保持已有托球目标；停车后执行机械臂/手指策略，底座制动。两个策略在同一次第二阶段PPO训练中持续更新，并非把抛球actor冻结。
 
 未执行的动作通道不计入PPO概率、熵或KL。只有一种阶段的minibatch会清除另一个actor的梯度（设为None），避免Adam动量更新没有执行动作的分支。critic继续学习所有阶段。
 
-机械臂/手指归一化统计沿用第一阶段，不随移动样本重算；冻结的是坐标变换的统计量，actor权重和探索标准差可训练。底座归一化从头统计。学习率调度始终保持机械臂/底座0.1比例。
+机械臂/手指归一化统计沿用第一阶段，不随移动样本重算；冻结的是坐标变换的统计量，actor权重和探索标准差可训练。底座归一化从头统计。默认固定学习率，机械臂为底座的0.1；可选KL调度分别控制两组且不超过初始上限。
 
 每回合有30%概率在原固定框位置复习抛球，70%概率随机框位置训练移动后抛球。复习回合也执行物理持球准备，不辅助固定球。终端日志分别报告Mobile SR和Replay SR，最佳成功率模型按Mobile SR选取。
 
@@ -53,10 +55,10 @@ python3 train_DCMM.py --config-name basket_mobile41 \
   basket_throw_checkpoint="$(realpath ../11-1/throw_basket_catch_best_reward_41.30.pth)" \
   checkpoint_catching='' basket_warm_start='' \
   viewer=false basket_log=false basket_self_collision_debug=false \
-  train.ppo.max_agent_steps=1000000000000 output_name=BasketMobile41Joint
+  train.ppo.max_agent_steps=1000000000000 output_name=BasketMobile41JointStable
 ```
 
-32个异步环境、GPU0、1万亿步上限，手动停止。来源参数是`basket_throw_checkpoint`，不要把原始41.30填入`checkpoint_catching`。新权重保存在`outputs/BasketMobile41Joint/日期/时间/nn/`，包括last、best_reward和best_success。新权重内含两个actor和两套归一化，无需原始41.30文件即可测试。
+32个异步环境、GPU0、1万亿步上限，手动停止。来源参数是`basket_throw_checkpoint`，不要把原始41.30填入`checkpoint_catching`。新权重保存在`outputs/BasketMobile41JointStable/日期/时间/nn/`，包括last、best_reward和best_success。新权重内含两个actor和两套归一化，无需原始41.30文件即可测试。
 
 新联合权重与之前冻结版本的checkpoint结构不同，不能混用。
 

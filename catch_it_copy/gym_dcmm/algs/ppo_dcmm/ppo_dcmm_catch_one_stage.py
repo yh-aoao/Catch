@@ -286,6 +286,8 @@ class PPO_Catch_OneStage(object):
                 info_string += ' | HeldThrow SR: ' + (f'{mean_success:.2%}' if len(self.episode_success) else 'n/a')
             if self.fixed_physical:
                 info_string += (' | Basket SR: ' if self.carry_reward else ' | QualifiedThrow SR: ') + (f'{mean_success:.2%}' if len(self.episode_success) else 'n/a')
+            if hasattr(self, 'training_status'):
+                info_string += self.training_status()
             print(info_string)
 
             self.write_stats(a_losses, c_losses, b_losses, entropies, kls)
@@ -699,6 +701,8 @@ class PPO_Catch_OneStage(object):
         for n in range(self.horizon_length):
             res_dict = self.model_act(self.obs)
             # Collect o_t
+            if hasattr(self, 'store_rollout_context'):
+                self.store_rollout_context(n)
             self.storage.update_data('obses', n, self.obs['obs'])
             for k in ['actions', 'neglogpacs', 'values', 'mus', 'sigmas']:
                 self.storage.update_data(k, n, res_dict[k])

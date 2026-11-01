@@ -17,4 +17,4 @@ python3 train_DCMM.py --config-name basket_mobile41 \
   checkpoint_catching='' basket_warm_start='' \
   viewer=false basket_log=false basket_self_collision_debug=false \
   train.ppo.max_agent_steps=1000000000000 \
-  output_name=BasketMobile41Joint "$@"
+  output_name=BasketMobile41JointStable "$@"

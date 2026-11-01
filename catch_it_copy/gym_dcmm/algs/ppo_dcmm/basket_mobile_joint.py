@@ -100,8 +100,7 @@ class JointActorCritic(nn.Module):
                 for parameter in parameters:parameter.grad=None
 
     def policy_kl(self, obs, mu, sigma, old_mu, old_sigma):
+        from .basket_joint_stability import gaussian_kl
         mask=self.action_mask(obs)
-        per_action=(torch.log(old_sigma/sigma+1e-5)
-            +(sigma.square()+(old_mu-mu).square())/(2.*old_sigma.square())-.5)
-        # Do not dilute a two-action navigation KL by eighteen unused hand actions.
-        return ((per_action*mask).sum(-1)/mask.sum(-1).clamp_min(1)).mean()
+        # Inactive channels are constants; sum active dimensions as in original PPO.
+        return gaussian_kl(old_mu,old_sigma,mu,sigma).mean()

@@ -1,0 +1,2586 @@
+{
+  "label": "User-selected current best Roll/Bounce baseline, 2026-11-02",
+  "created_at": "2026-11-02T20:16:42.086714+08:00",
+  "project": "/home/isee/Catch/catch_it_copy",
+  "git_commit": "bad9fddb3a0b3b65185011ca219d617681b1183a",
+  "git_status": "?? analysis_artifacts/bounce_replay_baseball_20261102_201231_507204/\n?? analysis_artifacts/bounce_replay_original_20261102_201110_824026/\n?? analysis_artifacts/bounce_replay_tennis_ball_20261102_201351_103200/\n?? catch_it_copy/backups/roll_bounce_best_20261102_201641/\n",
+  "config_provenance": "Server resolved_config.yaml absent; evaluation configs reconstructed from equal-v2 commands. Exact checkpoint bytes and current verified evaluation code/assets saved. Cannot certify historical server code/config identity.",
+  "files": {
+    "snapshot/analysis/evaluate_catch_balls_20261102.py": {
+      "bytes": 16275,
+      "sha256": "421bf2b346dd670e6b49338e874c3887bfaba54d1827adbd8ba242f6d36a4a1a"
+    },
+    "snapshot/analysis/probe_catch_hand_20261102.py": {
+      "bytes": 17742,
+      "sha256": "babd646e1f82a9612415c2346cb12517a1c514756915c9c3b917c24ad29b0f6c"
+    },
+    "snapshot/analysis/report_catch_eval_20261102.py": {
+      "bytes": 6770,
+      "sha256": "32c10d68a3b21066c8f782f8b30751ae6fd1476d36cdb5bd1aad6d9bb4083813"
+    },
+    "snapshot/analysis/run_catch_eval_20261102.py": {
+      "bytes": 1182,
+      "sha256": "fc89cd752b96c50def8ce875974be838e70d6303572297a1f327a484554e556e"
+    },
+    "snapshot/analysis/run_catch_hand_probes_20261102.py": {
+      "bytes": 1229,
+      "sha256": "ce8b0af1ab1d67cc8720a5c5665835efbdea7935580c00b4b7aae985aa7d150a"
+    },
+    "snapshot/evaluation/COMPLETE": {
+      "bytes": 92,
+      "sha256": "35ba77ed026502ee28eb704917128191fbdc4dcef489fe115121ae850bbb1755"
+    },
+    "snapshot/evaluation/REPORT.md": {
+      "bytes": 6666,
+      "sha256": "04736cce6914cd9055b1b13cde8882a673390b10bbc61746722c837d7d71c7c3"
+    },
+    "snapshot/evaluation/bounce_baseball/COMPLETE": {
+      "bytes": 10,
+      "sha256": "d3be030801b90ea8057d3997d9845c7f850cc7b784450645d5ec2811cc927d7a"
+    },
+    "snapshot/evaluation/bounce_baseball/agent/tb/events.out.tfevents.1793619962.isee-KUANGSHI-Series": {
+      "bytes": 40,
+      "sha256": "873056d70f75b6f725661e5d022e54bbdaf3f9d7345ef9282868a9ffeabc13cb"
+    },
+    "snapshot/evaluation/bounce_baseball/episodes.jsonl": {
+      "bytes": 761051,
+      "sha256": "3238ddc8b259aae514a65b58b988d093608edb7d0df1d2132737a8c1665a3f9f"
+    },
+    "snapshot/evaluation/bounce_baseball/provenance.json": {
+      "bytes": 9602,
+      "sha256": "446bbae6914b7e827a274fb15c8d739a1d92289756aaeb2b2a4e44a2c0209e25"
+    },
+    "snapshot/evaluation/bounce_baseball/source_hashes.json": {
+      "bytes": 5031,
+      "sha256": "0d59b5effc6c9f787ff6befd83b78cc491e60fbc3a20c604189080082a84f593"
+    },
+    "snapshot/evaluation/bounce_baseball/summary.json": {
+      "bytes": 486,
+      "sha256": "ea3723505abdf2973fdb696e6da0bf79b1b80c1f534c367331623893d67cd045"
+    },
+    "snapshot/evaluation/bounce_baseball.log": {
+      "bytes": 5293,
+      "sha256": "3d3942f4eca9e368262f67b880719f741a075e3820f46a0dd625925519866ffc"
+    },
+    "snapshot/evaluation/bounce_config_reconstructed.yaml": {
+      "bytes": 4680,
+      "sha256": "5015d64f99bae940111cf584cbb728a7d9c44aff6b7357b8eb3566f522f8f810"
+    },
+    "snapshot/evaluation/bounce_original/COMPLETE": {
+      "bytes": 10,
+      "sha256": "d3be030801b90ea8057d3997d9845c7f850cc7b784450645d5ec2811cc927d7a"
+    },
+    "snapshot/evaluation/bounce_original/agent/tb/events.out.tfevents.1793619962.isee-KUANGSHI-Series": {
+      "bytes": 40,
+      "sha256": "72c1e06817073c1466860b4699c03778cdf2fd07a4c62a7ec7b0bcab86b87d22"
+    },
+    "snapshot/evaluation/bounce_original/episodes.jsonl": {
+      "bytes": 740835,
+      "sha256": "f98e2332c19ad9308a511ba35af65178bdf9aa7d7a3538193ab3d59d30b0c4c0"
+    },
+    "snapshot/evaluation/bounce_original/provenance.json": {
+      "bytes": 9561,
+      "sha256": "8f866a209778fd447ec527f65e11899b74cdc17474f8bc6333962a7e4a59fc15"
+    },
+    "snapshot/evaluation/bounce_original/source_hashes.json": {
+      "bytes": 5031,
+      "sha256": "0d59b5effc6c9f787ff6befd83b78cc491e60fbc3a20c604189080082a84f593"
+    },
+    "snapshot/evaluation/bounce_original/summary.json": {
+      "bytes": 510,
+      "sha256": "e8bad09cb6105958fd3fcab251881f6ff7caf8e343649bd9d3bc426c16abfa3f"
+    },
+    "snapshot/evaluation/bounce_original.log": {
+      "bytes": 5462,
+      "sha256": "44aa794a25d6e887e5cb9302b9a8b4bb0a77731523016b62f6bbed2d522f3472"
+    },
+    "snapshot/evaluation/bounce_tennis_ball/COMPLETE": {
+      "bytes": 10,
+      "sha256": "d3be030801b90ea8057d3997d9845c7f850cc7b784450645d5ec2811cc927d7a"
+    },
+    "snapshot/evaluation/bounce_tennis_ball/agent/tb/events.out.tfevents.1793619962.isee-KUANGSHI-Series": {
+      "bytes": 40,
+      "sha256": "7932a9a7e66f81ecfb781364d4e4c3de0c6c0e2e855a31789e5121d9da1256b1"
+    },
+    "snapshot/evaluation/bounce_tennis_ball/episodes.jsonl": {
+      "bytes": 745248,
+      "sha256": "9cef827f9f1f19250fbec46ffbb7a9a5aa048fcbc8f93b079f85d82ba62b119f"
+    },
+    "snapshot/evaluation/bounce_tennis_ball/provenance.json": {
+      "bytes": 9611,
+      "sha256": "58683e8e405eeeaffe65dacfddc97f5b697ffe6262026699581b3171acb5585c"
+    },
+    "snapshot/evaluation/bounce_tennis_ball/source_hashes.json": {
+      "bytes": 5031,
+      "sha256": "0d59b5effc6c9f787ff6befd83b78cc491e60fbc3a20c604189080082a84f593"
+    },
+    "snapshot/evaluation/bounce_tennis_ball/summary.json": {
+      "bytes": 487,
+      "sha256": "33efa1e485234b63396e22f18488ce4237f585cff2ae18cc5f9039f8a18646ca"
+    },
+    "snapshot/evaluation/bounce_tennis_ball.log": {
+      "bytes": 5313,
+      "sha256": "56b1fcd802c562b570b60f108ea2714e50c013dec03761810dad6c13381431b7"
+    },
+    "snapshot/evaluation/evaluation_notes.json": {
+      "bytes": 714,
+      "sha256": "c641b04da31775cad30c34afc0db6ca1fcdfddad7ff6cc605b009a946135e141"
+    },
+    "snapshot/evaluation/hand_probe_summary.json": {
+      "bytes": 2214,
+      "sha256": "a1adf9142e521d77901539978f023424172059d146c6299d094e8c786ea7088a"
+    },
+    "snapshot/evaluation/hand_probes/bounce_baseball/COMPLETE": {
+      "bytes": 10,
+      "sha256": "d3be030801b90ea8057d3997d9845c7f850cc7b784450645d5ec2811cc927d7a"
+    },
+    "snapshot/evaluation/hand_probes/bounce_baseball/agent/tb/events.out.tfevents.1793620581.isee-KUANGSHI-Series": {
+      "bytes": 40,
+      "sha256": "c2c02ba8f299e46e65210f9f00dba7e53fa1cfbfcde5988e93d659569b95ecb5"
+    },
+    "snapshot/evaluation/hand_probes/bounce_baseball/episodes.jsonl": {
+      "bytes": 75406,
+      "sha256": "f98e03959abf6b457166acbce8411287fe797703f0055b5e9dfb2fcc5f73fe8d"
+    },
+    "snapshot/evaluation/hand_probes/bounce_baseball/provenance.json": {
+      "bytes": 9601,
+      "sha256": "52174947b203c2300936f62c457fc552dae1a7c4facc6b1b820d895f8f7ef856"
+    },
+    "snapshot/evaluation/hand_probes/bounce_baseball/source_hashes.json": {
+      "bytes": 5031,
+      "sha256": "0d59b5effc6c9f787ff6befd83b78cc491e60fbc3a20c604189080082a84f593"
+    },
+    "snapshot/evaluation/hand_probes/bounce_baseball/summary.json": {
+      "bytes": 477,
+      "sha256": "6a037f0fe6481f58ee693d7be3a6d650a64b11a08d30430d19ed2da8696fe446"
+    },
+    "snapshot/evaluation/hand_probes/bounce_baseball.log": {
+      "bytes": 1404,
+      "sha256": "b8b2afc99eccb74196d33b81e8770a4c5df084817c42e6f6b427d8309ac96d9e"
+    },
+    "snapshot/evaluation/hand_probes/bounce_original/COMPLETE": {
+      "bytes": 10,
+      "sha256": "d3be030801b90ea8057d3997d9845c7f850cc7b784450645d5ec2811cc927d7a"
+    },
+    "snapshot/evaluation/hand_probes/bounce_original/agent/tb/events.out.tfevents.1793620579.isee-KUANGSHI-Series": {
+      "bytes": 40,
+      "sha256": "ef7f6e65480d63e695d1f796147c37ff73f1f09f79797a970e4dd56082729d61"
+    },
+    "snapshot/evaluation/hand_probes/bounce_original/episodes.jsonl": {
+      "bytes": 68967,
+      "sha256": "aad4e196210b2610a228e5e64d501f29358da7d00f8b2cdfab2ec2997572b130"
+    },
+    "snapshot/evaluation/hand_probes/bounce_original/provenance.json": {
+      "bytes": 9560,
+      "sha256": "cbff983d9fa14aaa470ef6ef41d89cb79b8bbf7957da6b88d3814fc009ba2d13"
+    },
+    "snapshot/evaluation/hand_probes/bounce_original/source_hashes.json": {
+      "bytes": 5031,
+      "sha256": "0d59b5effc6c9f787ff6befd83b78cc491e60fbc3a20c604189080082a84f593"
+    },
+    "snapshot/evaluation/hand_probes/bounce_original/summary.json": {
+      "bytes": 477,
+      "sha256": "d590ac3a8aa3c7f95937a702b8d88bc14f7eeff5d0585925f71553cec5533d14"
+    },
+    "snapshot/evaluation/hand_probes/bounce_original.log": {
+      "bytes": 1404,
+      "sha256": "0c5e3320c977a55a065eba8963b4a440b227190b310b8dc79233216970a8c63e"
+    },
+    "snapshot/evaluation/hand_probes/bounce_tennis_ball/COMPLETE": {
+      "bytes": 10,
+      "sha256": "d3be030801b90ea8057d3997d9845c7f850cc7b784450645d5ec2811cc927d7a"
+    },
+    "snapshot/evaluation/hand_probes/bounce_tennis_ball/agent/tb/events.out.tfevents.1793620580.isee-KUANGSHI-Series": {
+      "bytes": 40,
+      "sha256": "af6b4322d5d256874eaa47cec731119a519d4f1e1eb9e99926026edb7b9f6eba"
+    },
+    "snapshot/evaluation/hand_probes/bounce_tennis_ball/episodes.jsonl": {
+      "bytes": 80405,
+      "sha256": "86f15fc0a17d18ecc31a8457f82c833edb0294ee3acf19070b965620ca6d02e9"
+    },
+    "snapshot/evaluation/hand_probes/bounce_tennis_ball/provenance.json": {
+      "bytes": 9610,
+      "sha256": "29a294f8c1affb693470193d840f0a116168ebf763db9e90e17ef95562fd028e"
+    },
+    "snapshot/evaluation/hand_probes/bounce_tennis_ball/source_hashes.json": {
+      "bytes": 5031,
+      "sha256": "0d59b5effc6c9f787ff6befd83b78cc491e60fbc3a20c604189080082a84f593"
+    },
+    "snapshot/evaluation/hand_probes/bounce_tennis_ball/summary.json": {
+      "bytes": 479,
+      "sha256": "a07cda0a916f732671f8d8b9511adf650b03bb70e4c036a79ca7986b3fbc7771"
+    },
+    "snapshot/evaluation/hand_probes/bounce_tennis_ball.log": {
+      "bytes": 1406,
+      "sha256": "d7724473cecaa4a2dc5b403449017664e044eec922e2219e1b80930d2809b2c9"
+    },
+    "snapshot/evaluation/hand_probes/roll_baseball/COMPLETE": {
+      "bytes": 10,
+      "sha256": "d3be030801b90ea8057d3997d9845c7f850cc7b784450645d5ec2811cc927d7a"
+    },
+    "snapshot/evaluation/hand_probes/roll_baseball/agent/tb/events.out.tfevents.1793620553.isee-KUANGSHI-Series": {
+      "bytes": 40,
+      "sha256": "0ced0cffa2f0717ce6f804cf1d354ce7ad178e448efc4c403976744cd343ed4a"
+    },
+    "snapshot/evaluation/hand_probes/roll_baseball/episodes.jsonl": {
+      "bytes": 28839,
+      "sha256": "edfe92476198b008724f141639d98187d1703f126d1c901873b51c0cbe318d76"
+    },
+    "snapshot/evaluation/hand_probes/roll_baseball/provenance.json": {
+      "bytes": 8840,
+      "sha256": "48f781041f5bd471c8296a9622232002a65b4c759971254c572952a0578af1c1"
+    },
+    "snapshot/evaluation/hand_probes/roll_baseball/source_hashes.json": {
+      "bytes": 5130,
+      "sha256": "22efc2c6b3f29649f94390fc65189d5392a89959080203a1db58aae252cb1ecf"
+    },
+    "snapshot/evaluation/hand_probes/roll_baseball/summary.json": {
+      "bytes": 448,
+      "sha256": "24c10e2454a1378b9037e5e7844fb25675748e961b23fc2f90f17fa7ad7df3fc"
+    },
+    "snapshot/evaluation/hand_probes/roll_baseball.log": {
+      "bytes": 1664,
+      "sha256": "c4f76535dcbb092e67b0e3c3e4f6eb503190c50499f6162e753e2e7231d2b15c"
+    },
+    "snapshot/evaluation/hand_probes/roll_original/COMPLETE": {
+      "bytes": 10,
+      "sha256": "d3be030801b90ea8057d3997d9845c7f850cc7b784450645d5ec2811cc927d7a"
+    },
+    "snapshot/evaluation/hand_probes/roll_original/agent/tb/events.out.tfevents.1793620553.isee-KUANGSHI-Series": {
+      "bytes": 40,
+      "sha256": "06b60a431b58865028beed4cda3ae84efc882155ff49f4008f89b49f98534e98"
+    },
+    "snapshot/evaluation/hand_probes/roll_original/episodes.jsonl": {
+      "bytes": 28775,
+      "sha256": "00c75a5b4691760b80445d9d1ca9a1e18f646ced351d1d73ca257890748d76e0"
+    },
+    "snapshot/evaluation/hand_probes/roll_original/provenance.json": {
+      "bytes": 8799,
+      "sha256": "cbecaa20c294bdcc7f191d955f2bffaca5789cfa0eac47f3b6b7e5fa251e310f"
+    },
+    "snapshot/evaluation/hand_probes/roll_original/source_hashes.json": {
+      "bytes": 5035,
+      "sha256": "810d1e59afad3bcecd4e4ac8dd9c21ce07b766307804ff47f56162a34a7bcf58"
+    },
+    "snapshot/evaluation/hand_probes/roll_original/summary.json": {
+      "bytes": 427,
+      "sha256": "0e9ad9b366ebc5dfeb09612d056dcbe026aa6a8e04ce5b8fc98e3ed7b27d6842"
+    },
+    "snapshot/evaluation/hand_probes/roll_original.log": {
+      "bytes": 1647,
+      "sha256": "083cc5c491be6a913f2441e5636492c9f35efd9c231c632efe8d6ad8a525d138"
+    },
+    "snapshot/evaluation/hand_probes/roll_tennis_ball/COMPLETE": {
+      "bytes": 10,
+      "sha256": "d3be030801b90ea8057d3997d9845c7f850cc7b784450645d5ec2811cc927d7a"
+    },
+    "snapshot/evaluation/hand_probes/roll_tennis_ball/agent/tb/events.out.tfevents.1793620553.isee-KUANGSHI-Series": {
+      "bytes": 40,
+      "sha256": "aa1ae14ebd70e90654af5f30ff29b862c16e299158d1c82bc9b1b58d02a72664"
+    },
+    "snapshot/evaluation/hand_probes/roll_tennis_ball/episodes.jsonl": {
+      "bytes": 29115,
+      "sha256": "25ac52e97ac69015024ff7fa6b3ae724dfc6fbe4045409e0c3638b9a43fba01b"
+    },
+    "snapshot/evaluation/hand_probes/roll_tennis_ball/provenance.json": {
+      "bytes": 8852,
+      "sha256": "9a367aceeca7bf40a0268151421f972253a5c669c6f59d476f7f4c7eceff42bb"
+    },
+    "snapshot/evaluation/hand_probes/roll_tennis_ball/source_hashes.json": {
+      "bytes": 5130,
+      "sha256": "22efc2c6b3f29649f94390fc65189d5392a89959080203a1db58aae252cb1ecf"
+    },
+    "snapshot/evaluation/hand_probes/roll_tennis_ball/summary.json": {
+      "bytes": 452,
+      "sha256": "5010c71ee862a76b1533814de170eab9b73bf5dc476b4c8004f7ecb843fcb5ea"
+    },
+    "snapshot/evaluation/hand_probes/roll_tennis_ball.log": {
+      "bytes": 1668,
+      "sha256": "9d4c4cfad46810f59de1e596c2d6d9dc84d8e606796eab7b43a29bfa03860deb"
+    },
+    "snapshot/evaluation/hand_probes/run_status.json": {
+      "bytes": 416,
+      "sha256": "b2d5711b02848f2f09b6442a7cc611e0b662fa8605956905e6ae282604a386d6"
+    },
+    "snapshot/evaluation/roll_baseball/COMPLETE": {
+      "bytes": 10,
+      "sha256": "d3be030801b90ea8057d3997d9845c7f850cc7b784450645d5ec2811cc927d7a"
+    },
+    "snapshot/evaluation/roll_baseball/agent/tb/events.out.tfevents.1793619962.isee-KUANGSHI-Series": {
+      "bytes": 40,
+      "sha256": "804a2956b3e2f67e4f9d3d4c6a70858bb1c85cb3b979a028c57f4513ff36620d"
+    },
+    "snapshot/evaluation/roll_baseball/episodes.jsonl": {
+      "bytes": 277608,
+      "sha256": "fbaae2057549181418d9518104ea2049abf821f7ce973e2c4b1b34b10daa5839"
+    },
+    "snapshot/evaluation/roll_baseball/provenance.json": {
+      "bytes": 8841,
+      "sha256": "062d329b49d2b611692d4b16c17983966b76b85bd20dc16e3bc3b13c66f5be91"
+    },
+    "snapshot/evaluation/roll_baseball/source_hashes.json": {
+      "bytes": 5130,
+      "sha256": "22efc2c6b3f29649f94390fc65189d5392a89959080203a1db58aae252cb1ecf"
+    },
+    "snapshot/evaluation/roll_baseball/summary.json": {
+      "bytes": 504,
+      "sha256": "4523a4b43ae0ea0fdb1a57077ce89a6300192bed1ddd79d3632b0a750be8d99b"
+    },
+    "snapshot/evaluation/roll_baseball.log": {
+      "bytes": 5678,
+      "sha256": "ea173e541eb491d3bc29ed39e2ae6e6c4d937cbb388e94d621472ccd17a10024"
+    },
+    "snapshot/evaluation/roll_comparison_to_252.json": {
+      "bytes": 626,
+      "sha256": "2b6a87d1d0589b29972e5bb691d32d585318394f0e25832611a0099bcc312a8c"
+    },
+    "snapshot/evaluation/roll_config_reconstructed.yaml": {
+      "bytes": 4472,
+      "sha256": "8743fc01f381bd34143612b30cd2a75c4b88e82cca7f1beb1969caeadca7f3b5"
+    },
+    "snapshot/evaluation/roll_original/COMPLETE": {
+      "bytes": 10,
+      "sha256": "d3be030801b90ea8057d3997d9845c7f850cc7b784450645d5ec2811cc927d7a"
+    },
+    "snapshot/evaluation/roll_original/agent/tb/events.out.tfevents.1793619962.isee-KUANGSHI-Series": {
+      "bytes": 40,
+      "sha256": "56accf7ba1f8c3a3c1580f6406f3026abcc7f0fb17f8157d3ab3b687353fcbb3"
+    },
+    "snapshot/evaluation/roll_original/episodes.jsonl": {
+      "bytes": 271616,
+      "sha256": "02fc3cacfcfb74b32e47ed0d05c221326ef9cbff27dc4b41add8e3be6485fe74"
+    },
+    "snapshot/evaluation/roll_original/provenance.json": {
+      "bytes": 8800,
+      "sha256": "7b3de65d653fe34cd2bed11dd76f5e69041238ec33633bec66fae8fbb1a7ebef"
+    },
+    "snapshot/evaluation/roll_original/source_hashes.json": {
+      "bytes": 5035,
+      "sha256": "810d1e59afad3bcecd4e4ac8dd9c21ce07b766307804ff47f56162a34a7bcf58"
+    },
+    "snapshot/evaluation/roll_original/summary.json": {
+      "bytes": 524,
+      "sha256": "bf1add7250bad607664d04e2df5db80135323cf4272f3e8b5251022889fa5663"
+    },
+    "snapshot/evaluation/roll_original.log": {
+      "bytes": 5754,
+      "sha256": "5115a4b97ec9e15b3bde75a924ad578f8e207d9bc8bc0a35ee634f86c7b3baad"
+    },
+    "snapshot/evaluation/roll_tennis_ball/COMPLETE": {
+      "bytes": 10,
+      "sha256": "d3be030801b90ea8057d3997d9845c7f850cc7b784450645d5ec2811cc927d7a"
+    },
+    "snapshot/evaluation/roll_tennis_ball/agent/tb/events.out.tfevents.1793619962.isee-KUANGSHI-Series": {
+      "bytes": 40,
+      "sha256": "70865fb45648a74e49f68aaa69ee12a56be43f57e50b2c78b1bc8c5366e3eac7"
+    },
+    "snapshot/evaluation/roll_tennis_ball/episodes.jsonl": {
+      "bytes": 276483,
+      "sha256": "26c2032d071771c2f5e9baad11cc32b54696ec1abc0825f9c73d02c355398ac4"
+    },
+    "snapshot/evaluation/roll_tennis_ball/provenance.json": {
+      "bytes": 8853,
+      "sha256": "1e42bcdf7e2a83dfb45413b531e2f3cb7469728f8f3dd23432518a9b7bd468b8"
+    },
+    "snapshot/evaluation/roll_tennis_ball/source_hashes.json": {
+      "bytes": 5130,
+      "sha256": "22efc2c6b3f29649f94390fc65189d5392a89959080203a1db58aae252cb1ecf"
+    },
+    "snapshot/evaluation/roll_tennis_ball/summary.json": {
+      "bytes": 527,
+      "sha256": "7de1b3413872f6e5ddc1c58876608d3272ea5d590398b4674d2fd446a599c168"
+    },
+    "snapshot/evaluation/roll_tennis_ball.log": {
+      "bytes": 5835,
+      "sha256": "e5f4c74cb11b6d1ca641ccd4e9631cf9320579758623cd1f87eb4e43f38d7f7e"
+    },
+    "snapshot/evaluation/run_status.json": {
+      "bytes": 416,
+      "sha256": "b2d5711b02848f2f09b6442a7cc611e0b662fa8605956905e6ae282604a386d6"
+    },
+    "snapshot/evaluation/summary.csv": {
+      "bytes": 366,
+      "sha256": "582172c4f3c8ce7d2783f40a8d723f1d78d4620dac8b5544fec53c6fcbb1d69a"
+    },
+    "snapshot/evaluation/summary_all.json": {
+      "bytes": 6936,
+      "sha256": "9776ec6028ca05467b2740cabac1cbcd7fabc8c710264f76042ea30bf4fc22d9"
+    },
+    "snapshot/models/bounce_catch_best_reward_-0.73.pth": {
+      "bytes": 1505330,
+      "sha256": "b955c3b4fc397074152da7d6c09aeed6fc036bbaffa7176baa8b7e9322d688fd"
+    },
+    "snapshot/models/bounce_track_best_reward_20.04.pth": {
+      "bytes": 314990,
+      "sha256": "5858d4f930f92370b2c19faf0f32d753918914c6925ad8106b8d036151338f61"
+    },
+    "snapshot/models/roll_catch_best_reward_250.65.pth": {
+      "bytes": 497557,
+      "sha256": "132ea9d64426efe9600e4f916a3df55189beafd1395aa33be8a75d70756dce33"
+    },
+    "snapshot/models/roll_track_best_reward_30.07.pth": {
+      "bytes": 314944,
+      "sha256": "9dc5c3d2c4ee0aae51e43618d035fadee72e05aaad58e89e325a30a6461e6f61"
+    },
+    "snapshot/project/BALL_LITERATURE_PRIORS_2026-10-27.md": {
+      "bytes": 4168,
+      "sha256": "9159096bb8e1109dee09f46b7d6e754ca21efd8c848bb8e153c53b47cd7b62e0"
+    },
+    "snapshot/project/BALL_REAL_MATERIALS_2026-10-27.md": {
+      "bytes": 5471,
+      "sha256": "bf4ee614b395e6be490ff0ad72b710fc26d6508a1a2b55fcec7626a098a96963"
+    },
+    "snapshot/project/BASEBALL_INTERCEPT_V1_2026-10-27.md": {
+      "bytes": 2313,
+      "sha256": "b95dfd2e0bf5a6c112f9ad7b7cbd960dee656712ce72d5d488d57714479cfcbc"
+    },
+    "snapshot/project/BASKET_AIM_CARRY_2026-10-28.md": {
+      "bytes": 4877,
+      "sha256": "9d6cd6a16e9ad1582203976bf4f88b94268d497c76e6bd22e8c3ab7842e43e43"
+    },
+    "snapshot/project/BASKET_AIM_CARRY_EVAL_2026-10-29.md": {
+      "bytes": 2846,
+      "sha256": "b5862dfaf201a1d04988b23df597fcf4d09afe960fcbb11c8ab56647f3ca80cf"
+    },
+    "snapshot/project/BASKET_AIM_V1.md": {
+      "bytes": 2028,
+      "sha256": "f211c1cb6b1ee08252e8e82b6215bff8b226ddcbf870c31fee38136975efa35a"
+    },
+    "snapshot/project/BASKET_ARM_DRIVE_2026-10-28.md": {
+      "bytes": 5633,
+      "sha256": "19dca59108e1887561b751761aabf42aa1b797f997398d71cd4674c02103972f"
+    },
+    "snapshot/project/BASKET_BALLISTIC_REDESIGN_2026-09-24.md": {
+      "bytes": 1839,
+      "sha256": "e6413dd16a3b23ca89a1822c70aab13be77d21741743f88edbbf1e7f3b68db04"
+    },
+    "snapshot/project/BASKET_BASE_TRACKING.md": {
+      "bytes": 6277,
+      "sha256": "a6cc97301378f217ef6ea69e1e2b6d44a8f48377fff3dfc2bb97930c5c4daf93"
+    },
+    "snapshot/project/BASKET_CATCH_AUDIT.md": {
+      "bytes": 5317,
+      "sha256": "6ec951705991a93ba67e639a795fe2ac55dce48781edaec0fe78608b2e1423b5"
+    },
+    "snapshot/project/BASKET_CONTROL_PROBE_2026-10-02.md": {
+      "bytes": 9346,
+      "sha256": "ad5e3adcbd1a0b36691221a2247c7edb39ee53d96f7061fb76ff3bff4b391ca5"
+    },
+    "snapshot/project/BASKET_FAILURE_AUDIT_2026-10-28.md": {
+      "bytes": 4489,
+      "sha256": "faff928131cffcbf82441559799bd42d636f84328ca145d9575b583d14b4a79a"
+    },
+    "snapshot/project/BASKET_FINGER_SYNC_2026-10-31.md": {
+      "bytes": 5198,
+      "sha256": "3e49a0650d6d6dd3894440181911fda22fcbfd78628f443d3b8ea7968dc49f00"
+    },
+    "snapshot/project/BASKET_FIXED_BASELINE.md": {
+      "bytes": 2353,
+      "sha256": "66e581a1bc71bb75eecc3e5b04a08984fe5963b39071cfd15daf2fd95907d94e"
+    },
+    "snapshot/project/BASKET_GRIP_2026-10-28.md": {
+      "bytes": 5818,
+      "sha256": "78de01735f543da9bffa67d9fba62b48ef9a52379ec5601bc439cc3c57cf1fce"
+    },
+    "snapshot/project/BASKET_HOLD_2026-10-28.md": {
+      "bytes": 5385,
+      "sha256": "131e4f431401ced10370df1d3014075bf54ef7fd29d29921af7e1df3eb8a71d4"
+    },
+    "snapshot/project/BASKET_JOINT_STABILITY_2026-11-01.md": {
+      "bytes": 4803,
+      "sha256": "b8e3838b2478d1c5162d1c312c0bc757a0053a440864950aacaf8129af15287b"
+    },
+    "snapshot/project/BASKET_JOINT_TWO_STAGE.md": {
+      "bytes": 5699,
+      "sha256": "3d646647b71d2989b3768d871e174f9905985a8210ab95757b05a22e77fe19a4"
+    },
+    "snapshot/project/BASKET_LAUNCH_SIMPLE_V1.md": {
+      "bytes": 5472,
+      "sha256": "b22889b4cbe2e7463ede1e83ea56c126bb2406bf8ae7cb96acbc34195fff5f2e"
+    },
+    "snapshot/project/BASKET_LAUNCH_V3.md": {
+      "bytes": 4586,
+      "sha256": "1b335975fb967bb5f812961f5bd27067703e2d3394eec5424cc6cbf469f34cac"
+    },
+    "snapshot/project/BASKET_LAUNCH_V4.md": {
+      "bytes": 2918,
+      "sha256": "c2edad4a418a7a119d99856bfe770ad4c88bc0da1558192b8bec65d55f21483b"
+    },
+    "snapshot/project/BASKET_LAUNCH_V5.md": {
+      "bytes": 2300,
+      "sha256": "7347ff7ea17a590c0915055d2afa8cef4ae709cadac0826e5bf936d0022fe1c9"
+    },
+    "snapshot/project/BASKET_MOBILE41_2026-11-01.md": {
+      "bytes": 6564,
+      "sha256": "0ed3cd78452bab3231d03118740c9a15b842f657078e02b5bff261f553cc8958"
+    },
+    "snapshot/project/BASKET_MOBILE_TRANSFER.md": {
+      "bytes": 6024,
+      "sha256": "06bb5697cd220b43c502d5953db0340faddf8b9aa641dce5415a527b7ac4283e"
+    },
+    "snapshot/project/BASKET_MOBILE_V1.md": {
+      "bytes": 8371,
+      "sha256": "8f37e972ca7584a1201427d347645375fa055f57e668b96a3b9d9ad66803c071"
+    },
+    "snapshot/project/BASKET_PHYSICAL_ARM_2026-10-28.md": {
+      "bytes": 4747,
+      "sha256": "d916df3578af7c78e9ae7b21f77e62fde9dc93b36462cd383b2cfad8a86bd365"
+    },
+    "snapshot/project/BASKET_PHYSICAL_THROW.md": {
+      "bytes": 3283,
+      "sha256": "773001d4e17ebfbfcd429c079708f881733e05afb727eb096864c3ffc1b6824c"
+    },
+    "snapshot/project/BASKET_RL_THROWING_LITERATURE_2026-09-21.md": {
+      "bytes": 7453,
+      "sha256": "7f489a5c1ef6ffd823310623d5ce6a32713ea1e560cddb69c8a79433b61ebe71"
+    },
+    "snapshot/project/BASKET_SINGLE_BALL_2026-11-02.md": {
+      "bytes": 6419,
+      "sha256": "5d8db20fb7bf0e8528d7792423370b103dcfe633624fbe4965999129368e7dcc"
+    },
+    "snapshot/project/BASKET_THREE_BALL_BALLISTIC_2026-11-02.md": {
+      "bytes": 5276,
+      "sha256": "a22f53b054287e2174d217024eac0ac3db5289e7c5d61d6dcd567ae6858e351d"
+    },
+    "snapshot/project/BASKET_THREE_BALL_FIXED_2026-11-02.md": {
+      "bytes": 4471,
+      "sha256": "814f0be0f7b52bc5bd2edc3330cdf5f8c2827bf42e3b663751c8fe214a6a0a3f"
+    },
+    "snapshot/project/BASKET_THROW_FIRST.md": {
+      "bytes": 5315,
+      "sha256": "433eda7ee03ea62ca2e1d6db7262414611c74bda277e3c5c0561558468136fff"
+    },
+    "snapshot/project/BASKET_TWO_STAGE.md": {
+      "bytes": 4604,
+      "sha256": "875c9afa061019be9dce15454922b64a1d2bd8677172efc6f97236b99533a971"
+    },
+    "snapshot/project/BOUNCE_3A36F5F_RESTORE.md": {
+      "bytes": 4423,
+      "sha256": "733957197279dda9b248053567ae6c88532d92459d879a7f8e3d179872c2eebe"
+    },
+    "snapshot/project/BOUNCE_61709FC_RESTORE.md": {
+      "bytes": 4492,
+      "sha256": "d4b25c05db9b9da344322a30e01f4473d729d6452c558b50a04c01e75328111f"
+    },
+    "snapshot/project/BOUNCE_CATCH_SUCCESS_FIX_2026-10-12.md": {
+      "bytes": 2074,
+      "sha256": "22c811bf979521255725df839e4dd64df22ed782887a19b2fc1298dfc3d805d4"
+    },
+    "snapshot/project/BOUNCE_CONTROLLED_HOLD_V1_2026-10-29.md": {
+      "bytes": 7324,
+      "sha256": "5c51bd88ae2bf42c7b5a14afc55f1b3180dc205f7546cd77208f9c1426200714"
+    },
+    "snapshot/project/BOUNCE_PHYSICAL_V2_2026-10-27.md": {
+      "bytes": 5392,
+      "sha256": "c77411f949eefe5bea1d85ffc9e9c329d690790a9cb2cb13dc3da75a5c3a8f9f"
+    },
+    "snapshot/project/BOUNCE_PRESETS.md": {
+      "bytes": 5774,
+      "sha256": "b1a724d6107f9dd4658fd146e44d0fc8638c0a25a96a5051028fe38d21b25cf9"
+    },
+    "snapshot/project/BOUNCE_REACHABILITY_DIAGNOSIS_2026-10-27.md": {
+      "bytes": 4168,
+      "sha256": "6b9760dfce05c8657f52f29944309b5f396af787b22ac11ab367fa9221605366"
+    },
+    "snapshot/project/BOUNCE_REALTIME_VIEWER_2026-10-29.md": {
+      "bytes": 3142,
+      "sha256": "664e24d79e850c6ec718b2c08b6292286fec62af62bbaff086570453e1daf59f"
+    },
+    "snapshot/project/BOUNCE_THREE_BALL_TRAINING_V1_2026-10-27.md": {
+      "bytes": 4309,
+      "sha256": "80870d037255a194b511f23d9e6d220de11af54f752d325bccd1fd0855b2c743"
+    },
+    "snapshot/project/CLAUDE.md": {
+      "bytes": 16919,
+      "sha256": "59ba851d367a4d8b25876ca8a51b84774662c3e645618ccff4bfcf51be96c9b3"
+    },
+    "snapshot/project/DISTILLATION_BASELINE_COMPARISON_2026-10-20.md": {
+      "bytes": 1963,
+      "sha256": "52b9dd064ce1278801d38d590cdb7a803e0a0def7c44d690734b9fa6cfe9e4df"
+    },
+    "snapshot/project/DISTILLATION_RESULTS_2026-10-18.md": {
+      "bytes": 10823,
+      "sha256": "95dcf9f95d2973fff7e580adbea242524a56290fb448b17080c2acfa1f232fb5"
+    },
+    "snapshot/project/DISTILLATION_RESULTS_2026-10-19.md": {
+      "bytes": 3462,
+      "sha256": "b7d547b61b20a99c4ed26f4ac95e6f325907ee0b4f10f005d8fbf8a95c1d2b4d"
+    },
+    "snapshot/project/DISTILLATION_RESULTS_2026-10-20.md": {
+      "bytes": 2259,
+      "sha256": "214ec672cb11c83cc47cc3a6be1271f762539e16f96e5e826f0795c56ec19a8b"
+    },
+    "snapshot/project/DISTILLATION_RUN_ANALYSIS_2026-10-12.md": {
+      "bytes": 3855,
+      "sha256": "282fbff464c36e1c42de0541af5ee66fe04f19dd4a1a2ed917419a72346deb86"
+    },
+    "snapshot/project/DISTILLATION_THROW_ROLL_BOUNCE_HANDOFF_2026-10-02.md": {
+      "bytes": 13783,
+      "sha256": "794e1295c21e898597bbca85d39dffcb0a7d30775c51e39459b9d6e0fe86c390"
+    },
+    "snapshot/project/DISTILLATION_UPDATE_2026-10-11.md": {
+      "bytes": 3882,
+      "sha256": "f6e8830c047e8de7bf535fccdb6c8639e795d164c380b57ebc95200c8c9c1de9"
+    },
+    "snapshot/project/MAIN_ENV_MIGRATION.md": {
+      "bytes": 1640,
+      "sha256": "e91e17fe70f32510c89144cb5e1323cf2504f723c48a9d3001929ea141040215"
+    },
+    "snapshot/project/MODEL_EXPERIMENTS_2026-10-17.md": {
+      "bytes": 4995,
+      "sha256": "0202cf85291c1567246966ff2ffca7d3a192b909139a97393adbe1a3cd45fbb4"
+    },
+    "snapshot/project/PRETRAIN_ROLL_BOUNCE_2026-10-27.md": {
+      "bytes": 5832,
+      "sha256": "05a09de0e9d45d9a84bd5461d2888ad7e42b8c69094f4302215efbfe8c42cb2a"
+    },
+    "snapshot/project/README.md": {
+      "bytes": 9001,
+      "sha256": "6102f8ef45ffa8e332e3a659e6e2aad05601edbd429788eec006e099e2dc5d26"
+    },
+    "snapshot/project/REWARD_PROVENANCE_AND_BOUNCE_TRAINING_2026-11-01.md": {
+      "bytes": 5520,
+      "sha256": "7c7a1e52f7a1f5dd5c48ed1dbe961a0608974a40b3d616a0345af0379bedd2db"
+    },
+    "snapshot/project/ROLL_645EDC4_RESTORE.md": {
+      "bytes": 2375,
+      "sha256": "1549e97dd141f090ccfb5434e457357901ba296c2d5b35a107f77f604ffda232"
+    },
+    "snapshot/project/ROLL_ADAPTIVE_WAIT_V1_2026-10-27.md": {
+      "bytes": 10223,
+      "sha256": "219d6c6c58d11362d974a0831a54100e1eb2c95577d8fd1c1aa0e16956c31699"
+    },
+    "snapshot/project/ROLL_ARM_BASE_COLLISION.md": {
+      "bytes": 4851,
+      "sha256": "303677a4b1753bca4dda8c4ffc85e27f0a75bf53df15c686ab1eb14038b03f85"
+    },
+    "snapshot/project/ROLL_BASKET_CATCH_2026-09-19.md": {
+      "bytes": 2060,
+      "sha256": "4db9fa54c0c43c71116c7f1683db69cf85715b5fef4a0b5d131ac513c07f6840"
+    },
+    "snapshot/project/ROLL_BASKET_HISTORY_AUDIT_2026-09-16.md": {
+      "bytes": 2734,
+      "sha256": "defd0e8c3b9f12d4014982b8191fc7b16f5c0c56bc0bb7d977d21a06890fd9b8"
+    },
+    "snapshot/project/ROLL_BASKET_HOLD_AND_STAND.md": {
+      "bytes": 4785,
+      "sha256": "64f40ccd2cb6d141132477304293a93e2e5a205abacc3f37f8133889ca15cd47"
+    },
+    "snapshot/project/ROLL_BASKET_REACH_THROW_UPDATE.md": {
+      "bytes": 3377,
+      "sha256": "a3ef113008ccb66811583f289848bbdea17b9c0975747689406df577ac5ec73b"
+    },
+    "snapshot/project/ROLL_BASKET_REDESIGN_2026-09-14.md": {
+      "bytes": 7792,
+      "sha256": "2289226082b72b3c922805ff77ae298f792a68ca3a741cb64d96960f3883538e"
+    },
+    "snapshot/project/ROLL_CATCH_GRIP_V1_2026-10-09.md": {
+      "bytes": 4228,
+      "sha256": "fd41f49213a5008f4a20f0e1158815d08b6da845852c5186f6a6b768bfaefa5b"
+    },
+    "snapshot/project/ROLL_EVALUATION_2026-09-22.md": {
+      "bytes": 3994,
+      "sha256": "7e4fd0417810952a258aa01d987cfcd3f9c934fb6295e710e672245124b4546b"
+    },
+    "snapshot/project/ROLL_INTERCEPTION.md": {
+      "bytes": 6235,
+      "sha256": "748878a7d3ca87f3261ab73e28bdbd85c57b161664efadcc6a8d701b07947fd6"
+    },
+    "snapshot/project/ROLL_PHYSICAL_V1_2026-10-27.md": {
+      "bytes": 5640,
+      "sha256": "8d0df70751a0b023a84e5e038381fc98f3cc177da647a3284ea85bb30c4a0894"
+    },
+    "snapshot/project/ROLL_RETRAIN_IDEA_2026-10-26.md": {
+      "bytes": 1863,
+      "sha256": "25a5d4485a45c5812394249ffc85ae785a6abc38643c29fcfe941b1d0c913b64"
+    },
+    "snapshot/project/ROLL_THREE_BALL_TRAINING_V1_2026-10-27.md": {
+      "bytes": 4041,
+      "sha256": "7f65abfac8cf59a4320aa36787958c42c6e600ee618c7fe52d1a922fdc034783"
+    },
+    "snapshot/project/ROLL_TRACK_07C176F_RESTORE.md": {
+      "bytes": 1387,
+      "sha256": "40ed3c3c7beb7976cdb7388ac011a8ccbe3027cbf07856fd24b6ad91d84c79c6"
+    },
+    "snapshot/project/ROLL_TRACK_B66666C_RESTORE.md": {
+      "bytes": 1682,
+      "sha256": "a5e06515ece3c9d53d4aabf3b3031ab73359fbed3a081cc1ed29e089fa4fbefe"
+    },
+    "snapshot/project/SUCCESS_CRITERIA_2026-10-10.md": {
+      "bytes": 5583,
+      "sha256": "c117371c89adcc007884a697579c208f1125f16070addc6daddf56bdc4c58de7"
+    },
+    "snapshot/project/TEST_OBJECTS.md": {
+      "bytes": 2868,
+      "sha256": "9093a4300a6c4f4681414d059b8ef4402509e68c871aef2459c820d09a25ba2f"
+    },
+    "snapshot/project/THREE_BALL_EQUAL_TRAINING_2026-11-01.md": {
+      "bytes": 5769,
+      "sha256": "bcfa8f8376e2424a6d880da793646cbb34e49b2eb01de376fd9562ff1582c9e6"
+    },
+    "snapshot/project/THREE_TASK_THREE_BALL_TEST_2026-10-30.md": {
+      "bytes": 3783,
+      "sha256": "97abcc15e931fef12de7c133682e621457ac8bd02da2abb6fac745f3ad154080"
+    },
+    "snapshot/project/VISUAL_10000_AND_BASKET_REVIEW_2026-10-20.md": {
+      "bytes": 5029,
+      "sha256": "11bf3058cf0d29828bdb4aff435ce7414564c8f98bb3bacf113afa342cf64eeb"
+    },
+    "snapshot/project/YCB_CALIBRATION_2026-10-27.md": {
+      "bytes": 6763,
+      "sha256": "648d153832dd73fa4a20f8afc78a45b2e9cbef39298ed9cb5edde1814c68cec4"
+    },
+    "snapshot/project/YCB_GENERALIZATION_DIAGNOSIS_2026-10-27.md": {
+      "bytes": 12638,
+      "sha256": "87ca9dd6bb931071d3d2fbf5ebd4f94bc60a81021d42d93694f63b68907a2a2f"
+    },
+    "snapshot/project/YCB_ROLL_DIAGNOSIS_2026-10-26.md": {
+      "bytes": 7017,
+      "sha256": "a7a05683affe17b590ca7de073bf1460461c353ff7064adf33bfdb80d3190dd3"
+    },
+    "snapshot/project/YCB_TESTING.md": {
+      "bytes": 11666,
+      "sha256": "650ce09d6deabea8dcb684cb55eb64ba9d5aa661e660ab709e92a8317a1b29ce"
+    },
+    "snapshot/project/assets/media/imgs/depth_screenshot.png": {
+      "bytes": 10343,
+      "sha256": "d45ffbbf484dfb2df27a0bfd84bcfe79e81889b8faafed0f700a1a996e701a9f"
+    },
+    "snapshot/project/assets/media/imgs/rbg_screenshot.png": {
+      "bytes": 96045,
+      "sha256": "2e1eddfc017116e1e5869bfc9362196c2f6edd7ba9bd1149253298b836c9a49e"
+    },
+    "snapshot/project/assets/media/imgs/real_robot.png": {
+      "bytes": 674808,
+      "sha256": "e15818ce805b4e5be4096f61cc8c3a1183a95d054a8f67fcbe0f9178381cd3f1"
+    },
+    "snapshot/project/assets/media/imgs/screenshot.png": {
+      "bytes": 1186707,
+      "sha256": "bdf8d83f507cd0ec3173e101717368cfb590d2d09c8e94d5057558bd98aebc3d"
+    },
+    "snapshot/project/assets/media/videos/teaser.gif": {
+      "bytes": 11413613,
+      "sha256": "bb8f8ca4708dbe5c571ce7d10366a264380b6e062ce357aee718a19e1ee05082"
+    },
+    "snapshot/project/assets/media/videos/train.gif": {
+      "bytes": 13372263,
+      "sha256": "dce27dee860c3012a3eb892b7c6ec894b6e4783c9ece2a7c3fb326ccd79c7b62"
+    },
+    "snapshot/project/assets/meshes/Arm_base_Link.STL": {
+      "bytes": 116384,
+      "sha256": "93ed8900479bc0fdfcfd87f2306306117519a5b0845ce05d0bbc81232a20943d"
+    },
+    "snapshot/project/assets/meshes/Box_Link.STL": {
+      "bytes": 533484,
+      "sha256": "7655a1f586d2472cfe55f6ede714c434f5a1c05938b1240c3b54e7bdb7170bb5"
+    },
+    "snapshot/project/assets/meshes/Camera_Link.STL": {
+      "bytes": 425984,
+      "sha256": "297ff5cfa27c16cee74247452cd3bf65e2e9c05e2eafe5b7bb8f12b6cb35273c"
+    },
+    "snapshot/project/assets/meshes/Suspension1_Link.STL": {
+      "bytes": 805284,
+      "sha256": "5573edd118abb6eb75f24c841657978b04c1577f20255e16f449ecaf5689d3e3"
+    },
+    "snapshot/project/assets/meshes/Suspension2_Link.STL": {
+      "bytes": 807384,
+      "sha256": "c17d425ef9643796ab883287dc961f076c24580cc3dd3d08d6c9e3c41b012e2d"
+    },
+    "snapshot/project/assets/meshes/Suspension3_Link.STL": {
+      "bytes": 807284,
+      "sha256": "967cdd8ed90ba99c89ac11229934d8b5f7a13dcd4767af1c31d2009896b834d5"
+    },
+    "snapshot/project/assets/meshes/Suspension4_Link.STL": {
+      "bytes": 757384,
+      "sha256": "ffd89a418ce53e3d7e8ed736a0586d508a556b9ac8440c3d54be9bf1e0bceffc"
+    },
+    "snapshot/project/assets/meshes/Wheel1_Link.STL": {
+      "bytes": 1359484,
+      "sha256": "77d31cb692e03983b5ffe752afd0db82bb59cd28b63d9f5e7a780fa603019e95"
+    },
+    "snapshot/project/assets/meshes/Wheel2_Link.STL": {
+      "bytes": 1374784,
+      "sha256": "2ee7980fc98919d40d1f1e68e0d3c2b820fe2ef5287ee73144f1ad0e56188dcb"
+    },
+    "snapshot/project/assets/meshes/Wheel3_Link.STL": {
+      "bytes": 1359484,
+      "sha256": "24adb1e616e0747e72285f29af889d85fac3f63b6d00347e9662a093003cda7f"
+    },
+    "snapshot/project/assets/meshes/Wheel4_Link.STL": {
+      "bytes": 1374784,
+      "sha256": "6ad96eeb3c545a96f3115b15d5b7c6ead671b3d495eef8e7e48e795afb2251f9"
+    },
+    "snapshot/project/assets/meshes/a1_Link.STL": {
+      "bytes": 23484,
+      "sha256": "9cf7622723eb3e6f71ff9719e08d19aaa991df5ef252984c844b9bc61a621cd4"
+    },
+    "snapshot/project/assets/meshes/a2_Link.STL": {
+      "bytes": 23484,
+      "sha256": "a860755bb436bc3099e8b70821d436a8916f18a771d9fc1be2e1de9cf95201ce"
+    },
+    "snapshot/project/assets/meshes/a3_Link.STL": {
+      "bytes": 23484,
+      "sha256": "f44f19befe7fa8fc55178a1abbcce22cc1400a7d096e769c04b3bd96955eae4c"
+    },
+    "snapshot/project/assets/meshes/a4_Link.STL": {
+      "bytes": 23484,
+      "sha256": "ba51dc3efb21a494d67956209ba124021f091f5b8895f2acbfc13bba4930a35b"
+    },
+    "snapshot/project/assets/meshes/a5_Link.STL": {
+      "bytes": 23484,
+      "sha256": "4ebf2fa40b83710db2aca10e210bcbb4cf7eec321545f1da8bb7139fb52d3f1a"
+    },
+    "snapshot/project/assets/meshes/base.stl": {
+      "bytes": 123284,
+      "sha256": "d3d61f2888bc39eecb8583babc7dddccb92f2ccd55aa32cd6f1dce6193feb3b6"
+    },
+    "snapshot/project/assets/meshes/base_link copy.stl": {
+      "bytes": 2100984,
+      "sha256": "a1e64740094f15966789040947911e54391eb1768fee4dc5f8aa5684b97a0653"
+    },
+    "snapshot/project/assets/meshes/base_link.STL": {
+      "bytes": 3766584,
+      "sha256": "167471bd61c282b0d55a78b00bfa987a4ad188df460bce1e96d205ad47b5bdee"
+    },
+    "snapshot/project/assets/meshes/benchy.stl": {
+      "bytes": 11257784,
+      "sha256": "2e711e21e3c5fe1b9b6d615c396c4e5b11edfca3d4dfceb9c072aad9a6499e17"
+    },
+    "snapshot/project/assets/meshes/bottle.msh": {
+      "bytes": 14272,
+      "sha256": "16203cc4564fe8dc2c1e5a6bdbd20ff87561f016f3b11a2fb6445e144cf80fa6"
+    },
+    "snapshot/project/assets/meshes/bottle.mtl": {
+      "bytes": 238,
+      "sha256": "e427f17d7d05eb45adaf1e2bd7fd249bc3fe56437ba8e348cbdf147cd384b996"
+    },
+    "snapshot/project/assets/meshes/bottle.obj": {
+      "bytes": 8999,
+      "sha256": "92353bf012eaea33c1e0d78d391fa61e083d53c57325e68d3410b31649c43da9"
+    },
+    "snapshot/project/assets/meshes/bottle.stl": {
+      "bytes": 6684,
+      "sha256": "f2b6ca097b2d0d43b255fe3d605c8628117459b1d7369220ddf62ced5e84d962"
+    },
+    "snapshot/project/assets/meshes/bowl.stl": {
+      "bytes": 250084,
+      "sha256": "3106486a500b9ab1f8e4d158b2b009ea1938f6f09dcef332a6b54a2d8e4e99fe"
+    },
+    "snapshot/project/assets/meshes/bread.msh": {
+      "bytes": 11248,
+      "sha256": "befe24f2e5876b3bf7df07c92622c52691ec818d73c9594cb68b6fc43a1cb8d3"
+    },
+    "snapshot/project/assets/meshes/bread.mtl": {
+      "bytes": 265,
+      "sha256": "d776116483420a01ef53fd8f941583255a56467f521768027bfcd0123b7be527"
+    },
+    "snapshot/project/assets/meshes/bread.obj": {
+      "bytes": 8026,
+      "sha256": "fb11db62e9da167ebf91ff4bed4d07a2f8d8210d5333df1bf01e18217a37cc1a"
+    },
+    "snapshot/project/assets/meshes/bread.stl": {
+      "bytes": 5284,
+      "sha256": "7c6646bcf9ec086d972d4d89141e8bb8081f14170306376bae59d3be59a6ace2"
+    },
+    "snapshot/project/assets/meshes/can.msh": {
+      "bytes": 103264,
+      "sha256": "3a0e736201604130d47abe6f93e9173b11b1d49df6e2f7093537a435c061cbb8"
+    },
+    "snapshot/project/assets/meshes/can.mtl": {
+      "bytes": 264,
+      "sha256": "292e64f3385432e11d55dae641f29b6855e4fe4e2d1d48baf7e7ea218a5e9d85"
+    },
+    "snapshot/project/assets/meshes/can.obj": {
+      "bytes": 77216,
+      "sha256": "1904183501b49346131ed46bd1ee6fbf2c14f394c233ef9df048758c9a4b5118"
+    },
+    "snapshot/project/assets/meshes/can.stl": {
+      "bytes": 47884,
+      "sha256": "cb459d8f0dcfc855aadc91815462d69ba58b4f5bcc289631043f17eccbf937d3"
+    },
+    "snapshot/project/assets/meshes/car.STL": {
+      "bytes": 35531584,
+      "sha256": "72e358c7fce6ad7d33a1c66f7e960c4fa3151cf4f5e7371ea7add6e0434f069f"
+    },
+    "snapshot/project/assets/meshes/cereal.msh": {
+      "bytes": 12328,
+      "sha256": "baee1abe4b11299a3cacab3db566273953f6444241c92a32ba3c8dcbf7fe8d5d"
+    },
+    "snapshot/project/assets/meshes/cereal.mtl": {
+      "bytes": 266,
+      "sha256": "485789398b0ef6b1c147956be55419ea06396686e69a4fb244bdbcdededda341"
+    },
+    "snapshot/project/assets/meshes/cereal.obj": {
+      "bytes": 11709,
+      "sha256": "8377fc93fca888314fe6a47bfe392fc8eb6db8f5c0cb796ffce8f9e47f589bff"
+    },
+    "snapshot/project/assets/meshes/cereal.stl": {
+      "bytes": 5784,
+      "sha256": "fd415818056831cb6fa4b40112280f463de8624b06e23d188a7e0f83ae5be1df"
+    },
+    "snapshot/project/assets/meshes/cube.obj": {
+      "bytes": 788,
+      "sha256": "56a9cb677cb4f267f49c879af58db1d24d0160688781c90498bdd6a879e87dd4"
+    },
+    "snapshot/project/assets/meshes/cup.stl": {
+      "bytes": 200084,
+      "sha256": "014f1627609f989db2081ebf64d3c13d97f44b63ec3cc35b86b51e193785e678"
+    },
+    "snapshot/project/assets/meshes/cylinder.msh": {
+      "bytes": 27232,
+      "sha256": "41061b9ceee866bcc115470d0e3fca91f013f2b1b93b5aa03f8357a9025c37a3"
+    },
+    "snapshot/project/assets/meshes/cylinder.obj": {
+      "bytes": 23189,
+      "sha256": "6d8c3cbd3c7e45f6fbb324c2c890a0fce966196813e2f4567356c814c053a56e"
+    },
+    "snapshot/project/assets/meshes/dip.stl": {
+      "bytes": 1538284,
+      "sha256": "9222f0ee1fa0077c70a219f7952df6f4208b003ad06a608e006cd0d8057d4b1c"
+    },
+    "snapshot/project/assets/meshes/fingertip.stl": {
+      "bytes": 562684,
+      "sha256": "e149e01e395b58950332dc2e2bda4b51b5557328a73c80b990d184c2e84dcc53"
+    },
+    "snapshot/project/assets/meshes/hand_link.STL": {
+      "bytes": 163884,
+      "sha256": "4060e1ae52bca21367e15a1dfab16bc7c2e81849566631b7f55e2cf376b7bc85"
+    },
+    "snapshot/project/assets/meshes/hand_link_left.STL": {
+      "bytes": 433984,
+      "sha256": "9f66c1cb8d27b9f07e49101a7997a49c60d3cc3ccbc8de96065322df68f47a0b"
+    },
+    "snapshot/project/assets/meshes/handles.msh": {
+      "bytes": 14272,
+      "sha256": "84d98eb8a8e406de6745280af4461b13b9e4e1475451aa27674de3ae27c5a486"
+    },
+    "snapshot/project/assets/meshes/handles.mtl": {
+      "bytes": 238,
+      "sha256": "e427f17d7d05eb45adaf1e2bd7fd249bc3fe56437ba8e348cbdf147cd384b996"
+    },
+    "snapshot/project/assets/meshes/handles.obj": {
+      "bytes": 9695,
+      "sha256": "a14962cb87de19cfa50bfc8d0fff4aab01d82f0bb7460b0894770cc635ff635d"
+    },
+    "snapshot/project/assets/meshes/handles.stl": {
+      "bytes": 17484,
+      "sha256": "e5564bb9bfc069a3834f87e6761c5e5797856fe8b932928aa19efebb1568625a"
+    },
+    "snapshot/project/assets/meshes/l1_Link.STL": {
+      "bytes": 7984,
+      "sha256": "1ca61dd3edbc564a2c8f2f74d9ef38166d39d2891e052a1f8f0a9992bfb3a08c"
+    },
+    "snapshot/project/assets/meshes/l2_Link.STL": {
+      "bytes": 7984,
+      "sha256": "34cff18a8ec794c37443164d2062befe6c42441a35a25f88450791de2085e213"
+    },
+    "snapshot/project/assets/meshes/l3_Link.STL": {
+      "bytes": 6284,
+      "sha256": "ed679cb1a7179abf959059f63c1447c17b65b620b897c4471be1d277830a6b31"
+    },
+    "snapshot/project/assets/meshes/l4_Link.STL": {
+      "bytes": 7984,
+      "sha256": "c043b060beb4d21fa534a7afc4ab6368487f9710b9f4368dd236dcb26add1126"
+    },
+    "snapshot/project/assets/meshes/l5_Link.STL": {
+      "bytes": 7984,
+      "sha256": "b753ba42872e181cc645ff5e4bbb32626ea0a226139e8a1ed8dc747c354f5df6"
+    },
+    "snapshot/project/assets/meshes/l6_Link.STL": {
+      "bytes": 10084,
+      "sha256": "48da6277ae7b7c2efdfe396a216e58ce21106a2a638a74f0ba6e70066e882652"
+    },
+    "snapshot/project/assets/meshes/l7_Link.STL": {
+      "bytes": 10084,
+      "sha256": "72846ad4e8fe7f253114b29a53e3713d8ed2ab6818b17a670e6668d71173ce27"
+    },
+    "snapshot/project/assets/meshes/lemon.msh": {
+      "bytes": 57040,
+      "sha256": "2a2dfa73cb1e6650180bdb67fe253c565c409cdc6d89f70937017afe5555780b"
+    },
+    "snapshot/project/assets/meshes/lemon.mtl": {
+      "bytes": 265,
+      "sha256": "e4457f44c4aacbe345e57c7e73ed87656f06b3dfba225e32ed427d2b79c79d34"
+    },
+    "snapshot/project/assets/meshes/lemon.obj": {
+      "bytes": 51035,
+      "sha256": "97cbc7113211f9525427cfd9087b891fb32eef55a5f691b1227c4f498e5bd99e"
+    },
+    "snapshot/project/assets/meshes/lemon.stl": {
+      "bytes": 26484,
+      "sha256": "bcaa216283267fff9621f524d609b59aad279971dbb52cb263680f03fc1f79db"
+    },
+    "snapshot/project/assets/meshes/link1.stl": {
+      "bytes": 188084,
+      "sha256": "103a81f9f00c217247f8b6c8f19b3afcbc9288852082389044d88a4a321cd8cd"
+    },
+    "snapshot/project/assets/meshes/link2.stl": {
+      "bytes": 1305984,
+      "sha256": "20ef55e34f8a63bb65108ed3134c4b22d911b55cd496ca5562b3978cba88ac77"
+    },
+    "snapshot/project/assets/meshes/link3.stl": {
+      "bytes": 212484,
+      "sha256": "f1503bc0c1fe8d39f4c509dba7288d9130954a35a1bcbaa0fca95d083fed3ffe"
+    },
+    "snapshot/project/assets/meshes/link4.stl": {
+      "bytes": 228984,
+      "sha256": "2a9952085fef91045380dac9825d9ad5a75867196933bc2cb1c3a635c23b0b7e"
+    },
+    "snapshot/project/assets/meshes/link5.stl": {
+      "bytes": 383034,
+      "sha256": "bfca01aae4255803ba2f5391c93836b91e1761e069275e38a9656ff2d53f45a4"
+    },
+    "snapshot/project/assets/meshes/link6.stl": {
+      "bytes": 129884,
+      "sha256": "b90cb1b373e65c035d7965bde92f4e2aedacdbbd57785a9018cd996b6b0b688e"
+    },
+    "snapshot/project/assets/meshes/link_0.0.STL": {
+      "bytes": 57584,
+      "sha256": "32b90a6744d472a6ffaee02cbf32eb8a5600b1da0944e86aeb9f53503a9f8ac9"
+    },
+    "snapshot/project/assets/meshes/link_1.0.STL": {
+      "bytes": 70084,
+      "sha256": "e3dfb35b6682f62f18ca6ed0b39cb94ff627b68e0e3373cf7212390574604680"
+    },
+    "snapshot/project/assets/meshes/link_12.0_left.STL": {
+      "bytes": 217084,
+      "sha256": "1749ba567bf36729a81eaecf384bc4f5483be8c496af54d230500b96f1d81dcc"
+    },
+    "snapshot/project/assets/meshes/link_12.0_right.STL": {
+      "bytes": 204284,
+      "sha256": "c5418fc127311eefee1d8ee69dfcfde2157d038286900bee91608d2701b00f13"
+    },
+    "snapshot/project/assets/meshes/link_13.0.STL": {
+      "bytes": 22484,
+      "sha256": "e906896afc078a12c9c377e3a2b07f375583d3b869581f9962030cabc888be29"
+    },
+    "snapshot/project/assets/meshes/link_14.0.STL": {
+      "bytes": 46884,
+      "sha256": "a9e4983e4bff7fc7d868b4965c9865edb2669b946434095703766202b5de01ff"
+    },
+    "snapshot/project/assets/meshes/link_15.0.STL": {
+      "bytes": 43284,
+      "sha256": "bf963adb775b79b27649f4f5dff4ced58ef676ce86cc677de49d3810382d11e0"
+    },
+    "snapshot/project/assets/meshes/link_2.0.STL": {
+      "bytes": 52884,
+      "sha256": "9c98477c65b45f5a3de1df0e1b54281da2385f4eafd057d103ab40893771c2d0"
+    },
+    "snapshot/project/assets/meshes/link_3.0.STL": {
+      "bytes": 18084,
+      "sha256": "fe333088176395aa7d8a913aa953d3cd649c4c77753224239b78b2c99e3e314c"
+    },
+    "snapshot/project/assets/meshes/mcp_joint.stl": {
+      "bytes": 1608784,
+      "sha256": "56af82c57b469d491f544d6de12e2696b4284b50e89ca271502aaa0631f04b59"
+    },
+    "snapshot/project/assets/meshes/milk.msh": {
+      "bytes": 26152,
+      "sha256": "92dbdf689a2fc2a46ddf3d5390cac3bde7fba9bfec642e6693acf205a201a40d"
+    },
+    "snapshot/project/assets/meshes/milk.mtl": {
+      "bytes": 267,
+      "sha256": "e3a9c63bea5ebf37805dcd187627773757d056bf82fed26e4c0298c99c3b21ef"
+    },
+    "snapshot/project/assets/meshes/milk.obj": {
+      "bytes": 20373,
+      "sha256": "15f99744f9c5a73e50750f1f3e44208d084bff5686f96281349ed73ab38666c8"
+    },
+    "snapshot/project/assets/meshes/milk.stl": {
+      "bytes": 12184,
+      "sha256": "e7880b8da658d7612990cbafa83fb8d358005319a5cab7be6db6993b4b830b6b"
+    },
+    "snapshot/project/assets/meshes/modified_tip.STL": {
+      "bytes": 118584,
+      "sha256": "1f7fceaec59d0f5b61651b53ca5da0546442602cf5898cfc4a546717e7a47188"
+    },
+    "snapshot/project/assets/meshes/p1_Link.STL": {
+      "bytes": 167484,
+      "sha256": "8b83aef41f2b9ffc7c122a2ba980f3acb6d508dde301c03c1f291d41ef0f2519"
+    },
+    "snapshot/project/assets/meshes/palm_lower.stl": {
+      "bytes": 4347184,
+      "sha256": "eae47756f1a1978b255a36c0b75c24c0af886d10026c2950a2b0acef66f09c8c"
+    },
+    "snapshot/project/assets/meshes/pip.stl": {
+      "bytes": 1051084,
+      "sha256": "b778405c95127023c8b110e6e2f5a181ad8a46dadc2ac98d3f038debae52ef33"
+    },
+    "snapshot/project/assets/meshes/simple_base_link.stl": {
+      "bytes": 1564984,
+      "sha256": "100ac27ed0c46ac9ed175eed151849af9c129853839071d9d77fcd5e6a5ab172"
+    },
+    "snapshot/project/assets/meshes/sphere8.obj": {
+      "bytes": 46933,
+      "sha256": "114f2371259557ac546250c63690045bf9fb9dd89171c56124a2df9374d120fb"
+    },
+    "snapshot/project/assets/meshes/suspension_1_1.stl": {
+      "bytes": 767284,
+      "sha256": "54eb01f72d59ef76b525188def050f092018f9fe5101649a6fce95ad34d20ae0"
+    },
+    "snapshot/project/assets/meshes/suspension_2_1.stl": {
+      "bytes": 767084,
+      "sha256": "21e95ca28dfa58c0687b43f2ca572bedeab4d29a7ca5bac57f74b6123df9d842"
+    },
+    "snapshot/project/assets/meshes/suspension_3_1.stl": {
+      "bytes": 767284,
+      "sha256": "be1c255a981ffa761fbdab62bec6ec914007a7f32a374ef6782f2b4c63ef52c6"
+    },
+    "snapshot/project/assets/meshes/suspension_4_1.stl": {
+      "bytes": 767084,
+      "sha256": "b493102d1f5635ec049406a43e09a1ca4de96c1ba03413201650775c5a20f30c"
+    },
+    "snapshot/project/assets/meshes/table_leg.STL": {
+      "bytes": 7484,
+      "sha256": "f9a096d285eb9ca863380f1760b5e659c6ee6e1a43641907bf70bbf12863d2cf"
+    },
+    "snapshot/project/assets/meshes/table_top.STL": {
+      "bytes": 3884,
+      "sha256": "badff3fe8c00e2ba4b4e53cf06c69b7112de7d69b092db8d710fc31367e6813b"
+    },
+    "snapshot/project/assets/meshes/thumb_dip.stl": {
+      "bytes": 1451484,
+      "sha256": "7261cf99cd44ae42360dc72a417c2526a73ec8ff4c446858042d6d0675b4f2bf"
+    },
+    "snapshot/project/assets/meshes/thumb_fingertip.stl": {
+      "bytes": 1111984,
+      "sha256": "b43c5a13cf67a25da5ea64afafdcae2179b53971f940375c94656919d717dfb0"
+    },
+    "snapshot/project/assets/meshes/thumb_pip.stl": {
+      "bytes": 468884,
+      "sha256": "40532d5d555e150748f8563fb378ab3d0839b9221eb5ef108e86fde01a98dfe0"
+    },
+    "snapshot/project/assets/meshes/ufo.stl": {
+      "bytes": 1389284,
+      "sha256": "bab935f0cddde7976a67b72789d9c04f397a8311118de60b61153614b7320fdc"
+    },
+    "snapshot/project/assets/meshes/wheel_1_1.stl": {
+      "bytes": 2532684,
+      "sha256": "92d21986907defd2af426160d473cfe55ac042b7e9f558e81a138943c664369a"
+    },
+    "snapshot/project/assets/meshes/wheel_2_1.stl": {
+      "bytes": 2532684,
+      "sha256": "5e3003354e250bdd1f39c9e4ed8f5eb32772aee64aada92686a99b4013e1a77f"
+    },
+    "snapshot/project/assets/meshes/wheel_3_1.stl": {
+      "bytes": 2532684,
+      "sha256": "b2fdf965c9f07ec2caf04486b72c0ce83c57ce71da24f149fa30be63c22adf39"
+    },
+    "snapshot/project/assets/meshes/wheel_4_1.stl": {
+      "bytes": 2532684,
+      "sha256": "478266e88575f09ef9a537044595eb90a0cd282bc49b60cff3f25b7413bcb238"
+    },
+    "snapshot/project/assets/meshes/winnercup.stl": {
+      "bytes": 223784,
+      "sha256": "7cabb652bc692bf6c7de729f8d181b633a63c1e7baf390f3476e416e46d8417e"
+    },
+    "snapshot/project/assets/objects/bottle.stl": {
+      "bytes": 6684,
+      "sha256": "f2b6ca097b2d0d43b255fe3d605c8628117459b1d7369220ddf62ced5e84d962"
+    },
+    "snapshot/project/assets/objects/bowl.stl": {
+      "bytes": 250084,
+      "sha256": "3106486a500b9ab1f8e4d158b2b009ea1938f6f09dcef332a6b54a2d8e4e99fe"
+    },
+    "snapshot/project/assets/objects/bread.stl": {
+      "bytes": 5284,
+      "sha256": "7c6646bcf9ec086d972d4d89141e8bb8081f14170306376bae59d3be59a6ace2"
+    },
+    "snapshot/project/assets/objects/cup.stl": {
+      "bytes": 200084,
+      "sha256": "014f1627609f989db2081ebf64d3c13d97f44b63ec3cc35b86b51e193785e678"
+    },
+    "snapshot/project/assets/objects/lemon.stl": {
+      "bytes": 26484,
+      "sha256": "bcaa216283267fff9621f524d609b59aad279971dbb52cb263680f03fc1f79db"
+    },
+    "snapshot/project/assets/objects/milk.stl": {
+      "bytes": 12184,
+      "sha256": "e7880b8da658d7612990cbafa83fb8d358005319a5cab7be6db6993b4b830b6b"
+    },
+    "snapshot/project/assets/objects/winnercup.stl": {
+      "bytes": 223784,
+      "sha256": "7cabb652bc692bf6c7de729f8d181b633a63c1e7baf390f3476e416e46d8417e"
+    },
+    "snapshot/project/assets/textures/background_texture_metal_rust.jpg": {
+      "bytes": 558738,
+      "sha256": "3b84efccaea73fc9801a05e40b61f14967d6e73bf8867d91597cab3c383a3489"
+    },
+    "snapshot/project/assets/textures/blue-wood.png": {
+      "bytes": 201294,
+      "sha256": "9b1eab21395a05d7463751f9075b16bc4fba8fd4be42938bda25ea634a345884"
+    },
+    "snapshot/project/assets/textures/brass-ambra.png": {
+      "bytes": 1720843,
+      "sha256": "246007818045b92276631294bb61d797806f2381d7044e98b6e3c4465f8e085c"
+    },
+    "snapshot/project/assets/textures/bread.png": {
+      "bytes": 518677,
+      "sha256": "22814a06ae3c7dc097801887e6aec97f830b7368b611cab56d1c4ad5ae57bddc"
+    },
+    "snapshot/project/assets/textures/can.png": {
+      "bytes": 586402,
+      "sha256": "9d1b29ff348a4425f84bb0de6b46139446b7e950058348d52fced0a707558e02"
+    },
+    "snapshot/project/assets/textures/ceramic.png": {
+      "bytes": 1442030,
+      "sha256": "beef464a2aa9143ba6a25a44adcbfd1f1aff16c5969edbf08019b61025388402"
+    },
+    "snapshot/project/assets/textures/cereal.png": {
+      "bytes": 542717,
+      "sha256": "aa0be8e701b41b3a7284bcd1e6e18adb541d007d00b2dbfe69772620bea790c8"
+    },
+    "snapshot/project/assets/textures/clay.png": {
+      "bytes": 634465,
+      "sha256": "0ea2ced7f0f07996292314e3f3f5df68c4d8c5b2cbf2180c899ed269906fdcd2"
+    },
+    "snapshot/project/assets/textures/cream-plaster.png": {
+      "bytes": 696397,
+      "sha256": "5f989033f089158b2c8f0f1f7881f6922b018a5b154558b2edcc9f41a21ab983"
+    },
+    "snapshot/project/assets/textures/dark-wood.png": {
+      "bytes": 239227,
+      "sha256": "5da8dbf7af06ecd251840aceec25fedcfa98267041cea289b2829c982e008dc3"
+    },
+    "snapshot/project/assets/textures/dirt.png": {
+      "bytes": 533543,
+      "sha256": "b410966a8e0c1d52e2847bdb61aa51c6291efcd7e92839923637d0dcdb91e973"
+    },
+    "snapshot/project/assets/textures/glass.png": {
+      "bytes": 89051,
+      "sha256": "9e12c4e1ed663ba3b690a701626e80189be02228f6d29c985273f15da4de423a"
+    },
+    "snapshot/project/assets/textures/gray-felt.png": {
+      "bytes": 1037473,
+      "sha256": "04c1b483f04be0bd3d26a42ca530c05244cf4b52c0ccb027dbb8fc2bee41ca05"
+    },
+    "snapshot/project/assets/textures/gray-plaster.png": {
+      "bytes": 474599,
+      "sha256": "7ee7520ebf6118051ced809cb9754983e7537a40f8d5271d5cb2fabdd71c33bd"
+    },
+    "snapshot/project/assets/textures/gray-woodgrain.png": {
+      "bytes": 267843,
+      "sha256": "b9e65c147f2683dbcfe6279b359db649aef0cb40ef8b1e3ed5ba6f29fab6b3d0"
+    },
+    "snapshot/project/assets/textures/green-wood.png": {
+      "bytes": 83480,
+      "sha256": "e4fd42ec6dea58f46aa96fc1d78d57c52450a6497dcad887ae8e2ff8c4af3797"
+    },
+    "snapshot/project/assets/textures/lemon.png": {
+      "bytes": 1919770,
+      "sha256": "93a21938e5fe8d62a042c5591b13b9bec75d94791f7d08f375beb60fce523610"
+    },
+    "snapshot/project/assets/textures/light-gray-floor-tile.png": {
+      "bytes": 73373,
+      "sha256": "a2aae4ba3b38c3ab9851eca9ad6e76cef9357ef75b3e9a4b280f694ca30acbc5"
+    },
+    "snapshot/project/assets/textures/light-gray-plaster.png": {
+      "bytes": 516639,
+      "sha256": "d0bdaf13b44ab6ef3122451f6b3853e40bdf20bb9be7662649683ba525dfe191"
+    },
+    "snapshot/project/assets/textures/light-wood.png": {
+      "bytes": 801173,
+      "sha256": "967be64bdb170d36283bc43c2ae5d525ec88f78bc837dc7d0efc9a28d68caad1"
+    },
+    "snapshot/project/assets/textures/metal.png": {
+      "bytes": 196878,
+      "sha256": "93784216a66b52be9c8ccc3732e50f511815291e32f34f97bd139ed7229061fa"
+    },
+    "snapshot/project/assets/textures/metal_wall_iron_fence.jpg": {
+      "bytes": 1633264,
+      "sha256": "d723f6b9afd4d7744d7ea37356725bb0c8279f7eab099fb113fdc182f4b93d2d"
+    },
+    "snapshot/project/assets/textures/particle_board_paint_aged.jpg": {
+      "bytes": 1300848,
+      "sha256": "c3e1ca8a547fc998c779d50b6716dd193ffe166db2fbb27b2acfb84ef192ff1b"
+    },
+    "snapshot/project/assets/textures/pebble_stone_texture_nature.jpg": {
+      "bytes": 3810189,
+      "sha256": "0dccb2530bad54214853d821aff983ea682b382d7a3ae4a3ad95be4cfff178c8"
+    },
+    "snapshot/project/assets/textures/pink-plaster.png": {
+      "bytes": 553251,
+      "sha256": "c6f8435c8aec555fa89ee72d472d652f31ce1afc0e07372e9857b0aa50f6e029"
+    },
+    "snapshot/project/assets/textures/plaster-wall-4k.jpg": {
+      "bytes": 7339061,
+      "sha256": "595a1d35d6a5c3dcf0a706e845d95c54b76bd29723edbd328fae82c49a27f9c3"
+    },
+    "snapshot/project/assets/textures/plywood-4k.jpg": {
+      "bytes": 11405393,
+      "sha256": "0d7d907a23739763ea23e27791693df2708a3abfc8b2dc83c911ac7ea497a6e2"
+    },
+    "snapshot/project/assets/textures/red-wood.png": {
+      "bytes": 1797019,
+      "sha256": "d42411e594d6be26c4876ada623b163af6621402462b244d86eaf6e72aca6494"
+    },
+    "snapshot/project/assets/textures/soda.png": {
+      "bytes": 627792,
+      "sha256": "2774d29c6c16e1a3b3156e6679897a1695127ec59463d2de1a7ffd7f11b41b4d"
+    },
+    "snapshot/project/assets/textures/steel-brushed.png": {
+      "bytes": 275192,
+      "sha256": "43f30e7a2d0e8085aa15f58623b1753a003f93e5fe336eeaf65c146f955a81d5"
+    },
+    "snapshot/project/assets/textures/steel-scratched.png": {
+      "bytes": 391216,
+      "sha256": "7e22a111d516cc84addde9b2b18353d8a6ec521b9b79ec5e9c169e2d9000d3fe"
+    },
+    "snapshot/project/assets/textures/texture_background_wall_paint_2.jpg": {
+      "bytes": 555079,
+      "sha256": "1f0ec9ba199ed73eecbed76db369beb4319bfef8cb7099ec8c33a6213b98daef"
+    },
+    "snapshot/project/assets/textures/texture_background_wall_paint_3.jpg": {
+      "bytes": 530233,
+      "sha256": "2c7b1c0a02f477ec5a54481be69d2b0bc90b85b4df8aa8309588074612bd89c8"
+    },
+    "snapshot/project/assets/textures/texture_stone_stone_texture_0.jpg": {
+      "bytes": 1277029,
+      "sha256": "4ae44d4542d98f85f079db9a57aa7d8da4b0b68665062a40f6e037f1a72de8a1"
+    },
+    "snapshot/project/assets/textures/texture_wood_brown_1033760.jpg": {
+      "bytes": 415912,
+      "sha256": "67da5cb3ffdc9fdce39372969cfe11ff1c7ad7b97f33fc1de82fea7585d718d0"
+    },
+    "snapshot/project/assets/textures/white-bricks.png": {
+      "bytes": 1458770,
+      "sha256": "864e2bfb462939212c4141a060eb4c3f34c891b6909873797b08f8c4185433d1"
+    },
+    "snapshot/project/assets/textures/white-plaster.png": {
+      "bytes": 624094,
+      "sha256": "a35c03edcef74c940400dd39e2384d05169d1d15ac247166b3b7a930acd70f03"
+    },
+    "snapshot/project/assets/textures/wood-tiles.png": {
+      "bytes": 1460776,
+      "sha256": "18d87069529422d832559ce969858576dd46f83efc3dfd9e5ffbf26d740be123"
+    },
+    "snapshot/project/assets/textures/wood-varnished-panels.png": {
+      "bytes": 466710,
+      "sha256": "67b48dc99b89004d98cb0811f170d39993e7e205cc8d5bd3d01a4be137e33a85"
+    },
+    "snapshot/project/assets/textures/yellow-plaster.png": {
+      "bytes": 477879,
+      "sha256": "7f98027e5dd4ad845a1a20f302b183c62b8e8fab54799634c5143c1dde0d0362"
+    },
+    "snapshot/project/assets/urdf/tmpca4ng016.xml": {
+      "bytes": 37264,
+      "sha256": "e2cfc15beef4fd6b2f9dbbd3ca02acdc0fe3f896f285e531ed319fc2834f6776"
+    },
+    "snapshot/project/assets/urdf/x1_xarm6_leap_right_object.xml": {
+      "bytes": 39564,
+      "sha256": "b13a04e1bd4413cf986d131a5b1b32f843c58539ccd6e2bdf4d3aa8e73762030"
+    },
+    "snapshot/project/assets/urdf/x1_xarm6_leap_right_unseen_object.xml": {
+      "bytes": 39556,
+      "sha256": "575a8adbf9827e63c8c1d9d03f2ab940eb27421549d83f65f70f438af4997114"
+    },
+    "snapshot/project/assets/urdf/xarm6_right.xml": {
+      "bytes": 6758,
+      "sha256": "2bb9c136d12430543553b3e96c54303e5edbab6962ba0f02042f8816bd6f2d68"
+    },
+    "snapshot/project/assets/urdf_july22/x1_xarm6_leap_right_object.xml": {
+      "bytes": 39556,
+      "sha256": "59e303b1016094c754aa8e188e7212b89ed85593024be853587c391df72a178a"
+    },
+    "snapshot/project/assets/urdf_july22/x1_xarm6_leap_right_unseen_object.xml": {
+      "bytes": 39556,
+      "sha256": "575a8adbf9827e63c8c1d9d03f2ab940eb27421549d83f65f70f438af4997114"
+    },
+    "snapshot/project/assets/urdf_july22/xarm6_right.xml": {
+      "bytes": 6758,
+      "sha256": "2bb9c136d12430543553b3e96c54303e5edbab6962ba0f02042f8816bd6f2d68"
+    },
+    "snapshot/project/assets/ycb/UPSTREAM_LICENSE": {
+      "bytes": 1066,
+      "sha256": "900da6c77e31f709a7eed29d73b6a9fdd86dcb4d213d686f9e6dcd3db59ef1f8"
+    },
+    "snapshot/project/assets/ycb/baseball/texture_map.png": {
+      "bytes": 548496,
+      "sha256": "5a9cb00a3d3cc22367d4aab7d2b2f984df7e410f79910c8baa85dc1551629944"
+    },
+    "snapshot/project/assets/ycb/baseball/textured.obj": {
+      "bytes": 1579749,
+      "sha256": "e4e93049964dfbed4190c05bee66bdfd0dad41b7ab403d485fecc7925f364d95"
+    },
+    "snapshot/project/assets/ycb/baseball/textured_coacd_0.stl": {
+      "bytes": 1684,
+      "sha256": "e219f7d58062262ab8f05be6c480faa70dab936fae7dc6445583fe6cccf8af34"
+    },
+    "snapshot/project/assets/ycb/baseball.provenance.json": {
+      "bytes": 584,
+      "sha256": "17c938c0d31a13b507d0710f8365dc7156051d05d0d4f4d77f3bd88ae1d8cfc2"
+    },
+    "snapshot/project/assets/ycb/baseball.xml": {
+      "bytes": 965,
+      "sha256": "1f61ef414f61812ca1c0cec751dcfd03c54455163efddbe3374ded6eeb5de5df"
+    },
+    "snapshot/project/assets/ycb/tennis_ball/texture_map.png": {
+      "bytes": 417314,
+      "sha256": "3e356a7214c7da051a280d3145c6b19f0a04e9cc9eaeecc1f67c428d387a4735"
+    },
+    "snapshot/project/assets/ycb/tennis_ball/textured.obj": {
+      "bytes": 1580973,
+      "sha256": "8de0ccff14fa81683bb7ed0cc0757b90e660d53893eece06686a2cc738e21412"
+    },
+    "snapshot/project/assets/ycb/tennis_ball/textured_coacd_0.stl": {
+      "bytes": 1684,
+      "sha256": "aebdac4094e30c12551dd77109e8fc71d8637a4643003a7b9325da09927d5cd1"
+    },
+    "snapshot/project/assets/ycb/tennis_ball.provenance.json": {
+      "bytes": 596,
+      "sha256": "4be5ee049658a7db21c99e1dc26b586cf4908e5d76cc6bf7ddf90ca86c3bfd58"
+    },
+    "snapshot/project/assets/ycb/tennis_ball.xml": {
+      "bytes": 1015,
+      "sha256": "879d1292905569187b2fe691c62b90313881d72954327f06ac29b2c366ae75b7"
+    },
+    "snapshot/project/assets/ycb/tomato_soup_can/texture_map.png": {
+      "bytes": 950859,
+      "sha256": "2450de31dec607ff9a25d1deb292df036f161e09fc178a42826b2c12362f5b43"
+    },
+    "snapshot/project/assets/ycb/tomato_soup_can/textured.obj": {
+      "bytes": 1593324,
+      "sha256": "490b83e2945448f35d02645dfc31e38818786da7e2cab9485487e4bf74d8f7c6"
+    },
+    "snapshot/project/assets/ycb/tomato_soup_can/textured_coacd_0.stl": {
+      "bytes": 1684,
+      "sha256": "6db634116c177c544075b9b3dd8449f296f09aa39e4985a627542993ad138ab2"
+    },
+    "snapshot/project/assets/ycb/tomato_soup_can/textured_coacd_1.stl": {
+      "bytes": 1684,
+      "sha256": "e3bdd70e9fece18bf01c76936cd965e8d93cda4ab58a32ee065253f1f2d3bad9"
+    },
+    "snapshot/project/assets/ycb/tomato_soup_can/textured_coacd_2.stl": {
+      "bytes": 1684,
+      "sha256": "8bd6607b3ea52b6389c3e9e1144726b49dc774fc8a83c7c53cc3f56bffad3eb8"
+    },
+    "snapshot/project/assets/ycb/tomato_soup_can/textured_coacd_3.stl": {
+      "bytes": 1684,
+      "sha256": "77d5e6e0f00dcba5ab0e1a52d9c5013228d548e5536b2023096e663e653df78d"
+    },
+    "snapshot/project/assets/ycb/tomato_soup_can/textured_coacd_4.stl": {
+      "bytes": 1684,
+      "sha256": "8dfcf0c302ff7932e874143fbd49fcb15c448619cd8bc3c0259076e2d096cd23"
+    },
+    "snapshot/project/assets/ycb/tomato_soup_can.provenance.json": {
+      "bytes": 1060,
+      "sha256": "f82b5c63e88e49bbb81a75d687b80b0fd1b92bbc2614f4b4a7391ec02b042b42"
+    },
+    "snapshot/project/assets/ycb/tomato_soup_can.xml": {
+      "bytes": 2177,
+      "sha256": "b1429e5db08eacd0e768cdd018a2a67deeb99addba147370fb22488813f15907"
+    },
+    "snapshot/project/basket_grip_sweep.py": {
+      "bytes": 8601,
+      "sha256": "0e15c4edd74dd7cdd040d9153274e16526d0235eb55008b148677fec5079ab3d"
+    },
+    "snapshot/project/basket_hold_probe.py": {
+      "bytes": 3412,
+      "sha256": "18aef2cc63c81dd295d5156da6b442b50bcd567fbffb2ac84a6fcf3d29be2d01"
+    },
+    "snapshot/project/basket_mobile_probe.py": {
+      "bytes": 4070,
+      "sha256": "20e4c640a28459d6d2561bbfac4af127abb66fa476ebb6d3353d73a048bc72cc"
+    },
+    "snapshot/project/basket_throw_probe.py": {
+      "bytes": 17008,
+      "sha256": "6712b514a4fc4b2cc80a89b6ae092783ab8f51eeda08c6ed60802661f65e6111"
+    },
+    "snapshot/project/catch_throw_demo.py": {
+      "bytes": 5120,
+      "sha256": "8f9f019f0ee683d031f2b1ff56ae7aba8176f9d67c15ced150ca31ead425e920"
+    },
+    "snapshot/project/compute_throw_force_ik.py": {
+      "bytes": 1598,
+      "sha256": "7510df42a86748822408a199802c3a31fe86c82de71948b7ad3449c1a495dd70"
+    },
+    "snapshot/project/configs/__init__.py": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "snapshot/project/configs/basket_after_hold.yaml": {
+      "bytes": 317,
+      "sha256": "ef4b5876076eaf940aa1696ef8672e45fcd8b45143bdca9aaa7e0e23c8bb12dc"
+    },
+    "snapshot/project/configs/basket_aim_carry.yaml": {
+      "bytes": 733,
+      "sha256": "5a7f7d04c04631a4577ce4842f427b83a7c7938957c0bdd02b5397e241963783"
+    },
+    "snapshot/project/configs/basket_ballistic.yaml": {
+      "bytes": 471,
+      "sha256": "63f8063086bf87a6acf766f643d760eaaa04769a2ed00d6d35c4f7427a039370"
+    },
+    "snapshot/project/configs/basket_finger_sync.yaml": {
+      "bytes": 727,
+      "sha256": "5a4f6054d1e9b567d6081ead3733f262ce3d51609ab8f6807fd333457700ab52"
+    },
+    "snapshot/project/configs/basket_finger_sync_scratch.yaml": {
+      "bytes": 357,
+      "sha256": "0225106a76b28587d3237b9cdd8d763748b540b61491297ec0c7d44d24d42cef"
+    },
+    "snapshot/project/configs/basket_fixed.yaml": {
+      "bytes": 311,
+      "sha256": "486bb0e412b6ed925a021c3539dfe60acb74418438f6ff372b9560c4561ab349"
+    },
+    "snapshot/project/configs/basket_fixed_arm.yaml": {
+      "bytes": 489,
+      "sha256": "8c51e0d60b2f86c9f307022a6de607be0854e59a9b6ce787a5ec66c7d686eb20"
+    },
+    "snapshot/project/configs/basket_hold.yaml": {
+      "bytes": 351,
+      "sha256": "cf822ffcd37cba85184d4ae0430cb4ea07411750e5d2fdd3829dfaeaf316077a"
+    },
+    "snapshot/project/configs/basket_hold_arm.yaml": {
+      "bytes": 176,
+      "sha256": "6d73a64e1861aebb24c988e24fe109f121ea81969a9ef299afcaff95b8fc8ad7"
+    },
+    "snapshot/project/configs/basket_hold_grip.yaml": {
+      "bytes": 187,
+      "sha256": "9c2f732f7532ab0dd77984e73c18bfb1f05647f16145bf482215e31ec905f08e"
+    },
+    "snapshot/project/configs/basket_mobile.yaml": {
+      "bytes": 504,
+      "sha256": "3593e6f40622a0d77d8a1a0ea131859791c3adf883cd951bdf61a373c377d086"
+    },
+    "snapshot/project/configs/basket_mobile41.yaml": {
+      "bytes": 1822,
+      "sha256": "ff42dbc67ed52fbb122f097d5f57eae915965baba8c69c59dcae284fa3416b71"
+    },
+    "snapshot/project/configs/basket_mobile_transfer.yaml": {
+      "bytes": 402,
+      "sha256": "1079491d26f84caf41484fb43e9603d268ff6371110890f48a2b453f7bf6aaf0"
+    },
+    "snapshot/project/configs/basket_physical_arm.yaml": {
+      "bytes": 325,
+      "sha256": "96db20ebb0a1b780ea19c0951ea33c759c98312d85bad4a4dd7195f149c2e4e7"
+    },
+    "snapshot/project/configs/basket_single_baseball.yaml": {
+      "bytes": 120,
+      "sha256": "5946e87128fc931cf6b287efa3d0244546c4bfb7bb208dbcf82a1fea2b2a5063"
+    },
+    "snapshot/project/configs/basket_single_delivery.yaml": {
+      "bytes": 129,
+      "sha256": "903d89edba7c6b4a7d2c5d7725b74fd2f203a7c8b45985d312496ee6f70f739c"
+    },
+    "snapshot/project/configs/basket_single_original.yaml": {
+      "bytes": 120,
+      "sha256": "6a27ee401c78bd187b985191790a7abaeafaeea28baf7e587b9c4fe11602d342"
+    },
+    "snapshot/project/configs/basket_single_tennis.yaml": {
+      "bytes": 121,
+      "sha256": "fea7a06b5e2a16a49c654c4f76a52c7535ae7d940f68f41267acd80b86e72b0f"
+    },
+    "snapshot/project/configs/basket_stage1.yaml": {
+      "bytes": 235,
+      "sha256": "8a3ad6770531e9dfaee315299045181d852b037fecae5a24aa5c64b741a5c814"
+    },
+    "snapshot/project/configs/basket_stage2.yaml": {
+      "bytes": 163,
+      "sha256": "7c5f898386a7c280a950137cf2a5968c5a4ebf988cf7c672070639c4b21651f6"
+    },
+    "snapshot/project/configs/basket_three_ball.yaml": {
+      "bytes": 606,
+      "sha256": "5f1f07ffbd22c89f2e2ef1671edfc77be53511328dac72805a9419c63c85aab1"
+    },
+    "snapshot/project/configs/basket_three_ball_ballistic.yaml": {
+      "bytes": 341,
+      "sha256": "ae9df2b2a02629b300782b411ea12555af8de4734b0dfa17eae77797963dfb4d"
+    },
+    "snapshot/project/configs/basket_throw_first.yaml": {
+      "bytes": 377,
+      "sha256": "d6b9f8d67eb22108944ed4e75dcf761949f1a26eeaadaf1423b4134fd1675d29"
+    },
+    "snapshot/project/configs/config.yaml": {
+      "bytes": 7456,
+      "sha256": "626f6bd6e2e1086c0888cf5878e7d117bbc8b226f1393bcae3438fc88e759f42"
+    },
+    "snapshot/project/configs/env/DcmmCfg.py": {
+      "bytes": 24037,
+      "sha256": "a3b895a71ef4c08fdd806c466e934a87f174a9564c85c4c1ca6d8da4da1a80e1"
+    },
+    "snapshot/project/configs/env/DcmmCfg_bounce_3a36f5f.py": {
+      "bytes": 16254,
+      "sha256": "bbca7aa5e82c91654fc9d0b4ae80513daf44fe47a9246b6a040fa0eab980cedd"
+    },
+    "snapshot/project/configs/env/DcmmCfg_bounce_5fe75d5f.py": {
+      "bytes": 14671,
+      "sha256": "2c7dd7312bc8c9b2f75b558c707ecfc056015a5ecd230211d726f9a0a78c8536"
+    },
+    "snapshot/project/configs/env/DcmmCfg_bounce_61709fc.py": {
+      "bytes": 14670,
+      "sha256": "c86937e5e575f3ceec75fdf010fda695aa08745cc6f0fdace8973007fb2e6113"
+    },
+    "snapshot/project/configs/env/DcmmCfg_bounce_july22.py": {
+      "bytes": 12503,
+      "sha256": "06d112f42628190753e257a4023b10515c53cfcf266012f61ef4c9b293c1b664"
+    },
+    "snapshot/project/configs/env/DcmmCfg_roll_645edc4.py": {
+      "bytes": 20515,
+      "sha256": "8d1021ed189abb7e89aa3639d09eb7bd66398ed616f08bcdf3ba2596c361aef0"
+    },
+    "snapshot/project/configs/env/DcmmCfg_roll_track_07c176f.py": {
+      "bytes": 18983,
+      "sha256": "1a7bf4c6685c6334aa574b76230f73d7c7eff74ddc88c07d681c29b980512dd0"
+    },
+    "snapshot/project/configs/env/DcmmCfg_roll_track_b66666c.py": {
+      "bytes": 19414,
+      "sha256": "1a06197982f4ff740c35d6e5442dc43bcdc268d176e3fdec463ad9fc5a2a1599"
+    },
+    "snapshot/project/configs/env/__init__.py": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "snapshot/project/configs/env/bounce_presets.py": {
+      "bytes": 4344,
+      "sha256": "fd28c30b51200a4d6ad4064eb9bb7bd308e0554b1a9351037c8c3a5dc2c460e1"
+    },
+    "snapshot/project/configs/train/DcmmPPO.yaml": {
+      "bytes": 1237,
+      "sha256": "24b38442bdddc431f3a6ab9e6b52d9f30c0a49933eebeeb5e8ea13494ac736ee"
+    },
+    "snapshot/project/debug_roll_step.py": {
+      "bytes": 1584,
+      "sha256": "ea9401843b0ac24b74883b259e035311482b1d9db385ffe7921e349b54732959"
+    },
+    "snapshot/project/fix_path.py": {
+      "bytes": 36,
+      "sha256": "e4fe45157da2bfc54d7258c572b7db90b4598420cbd35254cbc90711d36c80a2"
+    },
+    "snapshot/project/gym_dcmm/__init__.py": {
+      "bytes": 1020,
+      "sha256": "556da148a7f8ba27dccafbda620c39eae9f7d1236f870febbe1b9b7f27f9b3dc"
+    },
+    "snapshot/project/gym_dcmm/agents/MujocoDcmm.py": {
+      "bytes": 16715,
+      "sha256": "d858db764a5a8ee8cb6764b8f2dbd0a4dc240ed1e4284292d7dd98d4da21a471"
+    },
+    "snapshot/project/gym_dcmm/agents/MujocoDcmm_bounce_3a36f5f.py": {
+      "bytes": 15734,
+      "sha256": "bb3580cf65dcab77f3ad09261549c5cea22f6cade8358dc10eccb2f2915662f4"
+    },
+    "snapshot/project/gym_dcmm/agents/MujocoDcmm_bounce_5fe75d5f.py": {
+      "bytes": 15736,
+      "sha256": "27926a1fab5ffa55f3721d82154ddf1aa9305506606cf25247f8b61bcc0037fc"
+    },
+    "snapshot/project/gym_dcmm/agents/MujocoDcmm_bounce_61709fc.py": {
+      "bytes": 15734,
+      "sha256": "4eeeef9d126fc4b9de3ab894ab2d470c5dbc9e883348a4fe5e817662403de5ee"
+    },
+    "snapshot/project/gym_dcmm/agents/MujocoDcmm_roll_645edc4.py": {
+      "bytes": 15732,
+      "sha256": "0b189a7fcc4cf0b631e27ad2deb819bc25f23501349aaa3a29dcb0d6e69c2575"
+    },
+    "snapshot/project/gym_dcmm/agents/MujocoDcmm_roll_track_07c176f.py": {
+      "bytes": 15738,
+      "sha256": "bacd80289d7c1d87372f50a2b52b34f3bee302ad6b235ea6b5ab874216682c83"
+    },
+    "snapshot/project/gym_dcmm/agents/MujocoDcmm_roll_track_b66666c.py": {
+      "bytes": 15738,
+      "sha256": "325a66ccc6271e5b116722fa6f29004138476233458d66a133d7340151431074"
+    },
+    "snapshot/project/gym_dcmm/agents/__init__.py": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "snapshot/project/gym_dcmm/algs/__init__.py": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "snapshot/project/gym_dcmm/algs/ppo_dcmm/__init__.py": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "snapshot/project/gym_dcmm/algs/ppo_dcmm/basket_joint_stability.py": {
+      "bytes": 3166,
+      "sha256": "a325938030124255c12d2c7bfdfa640d4c9d95915ac4e59a57e9cb14fee245e1"
+    },
+    "snapshot/project/gym_dcmm/algs/ppo_dcmm/basket_mixed_policy.py": {
+      "bytes": 3684,
+      "sha256": "3953ed3b6a4421f1176bf266b0ae33555094a692616a2e1807272d7cc74a9849"
+    },
+    "snapshot/project/gym_dcmm/algs/ppo_dcmm/basket_mobile_joint.py": {
+      "bytes": 4746,
+      "sha256": "1c3bf5f358ee0e447725bf384cfc5eade771b3292cf900f4a10e274ee80a20d4"
+    },
+    "snapshot/project/gym_dcmm/algs/ppo_dcmm/experience.py": {
+      "bytes": 4603,
+      "sha256": "a67f19b6aeeac134bd4b7a6afa7f63efee23a49bbcb85e8cddcadab16eff323a"
+    },
+    "snapshot/project/gym_dcmm/algs/ppo_dcmm/models_catch.py": {
+      "bytes": 5629,
+      "sha256": "35767f7294f5cf644995916456a3d20daf2d6a0ad6b2f2bd8951bfde21cc0e66"
+    },
+    "snapshot/project/gym_dcmm/algs/ppo_dcmm/models_track.py": {
+      "bytes": 4476,
+      "sha256": "1a1fb8b1bd658cbbdc608a775342d7039e8a6e5e0bca58b77ba570921e0d94e3"
+    },
+    "snapshot/project/gym_dcmm/algs/ppo_dcmm/ppo_dcmm_basket_mixed.py": {
+      "bytes": 13258,
+      "sha256": "777d305f77d71bbf19fa88267289e112d7a1679a0a5ccee38b6b4c7e60c6ca7b"
+    },
+    "snapshot/project/gym_dcmm/algs/ppo_dcmm/ppo_dcmm_basket_mobile_joint.py": {
+      "bytes": 14518,
+      "sha256": "1b30099e5f4ce47c315548116a0ab980982d0e318dd82ef46d1e06b072a51643"
+    },
+    "snapshot/project/gym_dcmm/algs/ppo_dcmm/ppo_dcmm_basket_two_stage.py": {
+      "bytes": 708,
+      "sha256": "362cfe69d50be78b1c735e1097cff6ce0f3239a635d7df26f13d94cf7b5e129a"
+    },
+    "snapshot/project/gym_dcmm/algs/ppo_dcmm/ppo_dcmm_catch_one_stage.py": {
+      "bytes": 49350,
+      "sha256": "7a7d49a4991c7fc1f9503c241d104819e7a3a231c1c997fbffe114f09574dea6"
+    },
+    "snapshot/project/gym_dcmm/algs/ppo_dcmm/ppo_dcmm_catch_one_stage_old.py": {
+      "bytes": 25114,
+      "sha256": "bbfe868e7a548450112d9a878c6ee4c98f69be0abed894d00ac74dd725b7d51f"
+    },
+    "snapshot/project/gym_dcmm/algs/ppo_dcmm/ppo_dcmm_catch_two_stage.py": {
+      "bytes": 32261,
+      "sha256": "438b0df9c8b44ea5823aeb26d82f38a6ea5a3b595006ebea730117d91f7d9806"
+    },
+    "snapshot/project/gym_dcmm/algs/ppo_dcmm/ppo_dcmm_catch_two_stage_old.py": {
+      "bytes": 27506,
+      "sha256": "8e155f4fa1c0c1d0a25559a804d398328e42af6b9d90b15ee838f0b830ebb406"
+    },
+    "snapshot/project/gym_dcmm/algs/ppo_dcmm/ppo_dcmm_track.py": {
+      "bytes": 30104,
+      "sha256": "38087b66aa838c90d91ce2409fc516ea8a65bc8aeca13e1d3a6bae4397257cdd"
+    },
+    "snapshot/project/gym_dcmm/algs/ppo_dcmm/ppo_dcmm_track_old.py": {
+      "bytes": 25481,
+      "sha256": "443aece74f6e4e2e34dc2c9950975f7221f61281380a9176bc0dde325bec4299"
+    },
+    "snapshot/project/gym_dcmm/algs/ppo_dcmm/utils.py": {
+      "bytes": 4633,
+      "sha256": "4f7dac3a2c2ea83c884c3888dfed9804432b67d451e3c0c8f8f2d908ecc3d738"
+    },
+    "snapshot/project/gym_dcmm/algs/ppo_dcmm_3a36f5f/__init__.py": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "snapshot/project/gym_dcmm/algs/ppo_dcmm_3a36f5f/experience.py": {
+      "bytes": 4603,
+      "sha256": "a67f19b6aeeac134bd4b7a6afa7f63efee23a49bbcb85e8cddcadab16eff323a"
+    },
+    "snapshot/project/gym_dcmm/algs/ppo_dcmm_3a36f5f/models_catch.py": {
+      "bytes": 4946,
+      "sha256": "42de90f24c40cef500fc2f223e4e9c643764c39ed0f329326e4d274ab6fbc520"
+    },
+    "snapshot/project/gym_dcmm/algs/ppo_dcmm_3a36f5f/models_track.py": {
+      "bytes": 4476,
+      "sha256": "1a1fb8b1bd658cbbdc608a775342d7039e8a6e5e0bca58b77ba570921e0d94e3"
+    },
+    "snapshot/project/gym_dcmm/algs/ppo_dcmm_3a36f5f/ppo_dcmm_catch_one_stage.py": {
+      "bytes": 26999,
+      "sha256": "7c272e3d7d89b4994286ee29346b8dc9e99c72982fc2d4bc43c627e4201dbc85"
+    },
+    "snapshot/project/gym_dcmm/algs/ppo_dcmm_3a36f5f/ppo_dcmm_catch_two_stage.py": {
+      "bytes": 30846,
+      "sha256": "7408ca0baa632edb719c7b476a3208ced5e1f31f2d833d8fc01f4f59a61b460e"
+    },
+    "snapshot/project/gym_dcmm/algs/ppo_dcmm_3a36f5f/ppo_dcmm_track.py": {
+      "bytes": 26689,
+      "sha256": "3fcb7cf8a4db63744c9d6704d892911b7b5afa6f64e661e8f97c7a69eca6a735"
+    },
+    "snapshot/project/gym_dcmm/algs/ppo_dcmm_3a36f5f/utils.py": {
+      "bytes": 4633,
+      "sha256": "4f7dac3a2c2ea83c884c3888dfed9804432b67d451e3c0c8f8f2d908ecc3d738"
+    },
+    "snapshot/project/gym_dcmm/algs/ppo_dcmm_5fe75d5f/__init__.py": {
+      "bytes": 1,
+      "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    "snapshot/project/gym_dcmm/algs/ppo_dcmm_5fe75d5f/experience.py": {
+      "bytes": 4603,
+      "sha256": "a67f19b6aeeac134bd4b7a6afa7f63efee23a49bbcb85e8cddcadab16eff323a"
+    },
+    "snapshot/project/gym_dcmm/algs/ppo_dcmm_5fe75d5f/models_catch.py": {
+      "bytes": 4947,
+      "sha256": "fb4473b1be83c02a799d5be29bc6ae95ee7f6bd56ea731221947924fab2e4b70"
+    },
+    "snapshot/project/gym_dcmm/algs/ppo_dcmm_5fe75d5f/models_track.py": {
+      "bytes": 4477,
+      "sha256": "4d0e5519c51de2279bfd6029d9a624c81808f7113cc4e16ff3f25d769cfcad4c"
+    },
+    "snapshot/project/gym_dcmm/algs/ppo_dcmm_5fe75d5f/ppo_dcmm_catch_hold.py": {
+      "bytes": 12880,
+      "sha256": "f1d89682c9ec1d09bcca0295b65aaf262eee7dca8cbbc83323c3fbfd8c857405"
+    },
+    "snapshot/project/gym_dcmm/algs/ppo_dcmm_5fe75d5f/ppo_dcmm_catch_one_stage.py": {
+      "bytes": 27057,
+      "sha256": "08852a46346a9e2d0e54a6a92065f856cd137b3fe0fe9e3c862c2631f1d64dea"
+    },
+    "snapshot/project/gym_dcmm/algs/ppo_dcmm_5fe75d5f/ppo_dcmm_catch_two_stage.py": {
+      "bytes": 30904,
+      "sha256": "7a16b0c6ce3fbc14a1bc0bf2c501a3790662d7745b4b9f134110baf4661a750b"
+    },
+    "snapshot/project/gym_dcmm/algs/ppo_dcmm_5fe75d5f/ppo_dcmm_track.py": {
+      "bytes": 26610,
+      "sha256": "b3f238fe50d4fe8396bb6161a7f4ed3720d3bffaf3aae54b242d00f2bf18b2b7"
+    },
+    "snapshot/project/gym_dcmm/algs/ppo_dcmm_5fe75d5f/utils.py": {
+      "bytes": 4634,
+      "sha256": "2d588f3b9382d99cde78010a0406a43cdf908c14263db9175e7fea9387284ed9"
+    },
+    "snapshot/project/gym_dcmm/algs/ppo_dcmm_61709fc/__init__.py": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "snapshot/project/gym_dcmm/algs/ppo_dcmm_61709fc/experience.py": {
+      "bytes": 4603,
+      "sha256": "a67f19b6aeeac134bd4b7a6afa7f63efee23a49bbcb85e8cddcadab16eff323a"
+    },
+    "snapshot/project/gym_dcmm/algs/ppo_dcmm_61709fc/models_catch.py": {
+      "bytes": 4946,
+      "sha256": "42de90f24c40cef500fc2f223e4e9c643764c39ed0f329326e4d274ab6fbc520"
+    },
+    "snapshot/project/gym_dcmm/algs/ppo_dcmm_61709fc/models_track.py": {
+      "bytes": 4476,
+      "sha256": "1a1fb8b1bd658cbbdc608a775342d7039e8a6e5e0bca58b77ba570921e0d94e3"
+    },
+    "snapshot/project/gym_dcmm/algs/ppo_dcmm_61709fc/ppo_dcmm_catch_one_stage.py": {
+      "bytes": 26919,
+      "sha256": "104b1ddaf9905f15a0653073723274609a77ec9359de64ba0c8926b4000635c0"
+    },
+    "snapshot/project/gym_dcmm/algs/ppo_dcmm_61709fc/ppo_dcmm_catch_two_stage.py": {
+      "bytes": 30766,
+      "sha256": "46fbed30330f9233ca8dbe2d4c557eb73759d169f23d0f27c3518b36bf75d6fc"
+    },
+    "snapshot/project/gym_dcmm/algs/ppo_dcmm_61709fc/ppo_dcmm_track.py": {
+      "bytes": 26609,
+      "sha256": "6e5bf4ec2fa601667a5b20bd61ea796112fad79f5b0e46dfe4e3e6d9495fb697"
+    },
+    "snapshot/project/gym_dcmm/algs/ppo_dcmm_61709fc/utils.py": {
+      "bytes": 4633,
+      "sha256": "4f7dac3a2c2ea83c884c3888dfed9804432b67d451e3c0c8f8f2d908ecc3d738"
+    },
+    "snapshot/project/gym_dcmm/algs/ppo_dcmm_645edc4/__init__.py": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "snapshot/project/gym_dcmm/algs/ppo_dcmm_645edc4/experience.py": {
+      "bytes": 4603,
+      "sha256": "a67f19b6aeeac134bd4b7a6afa7f63efee23a49bbcb85e8cddcadab16eff323a"
+    },
+    "snapshot/project/gym_dcmm/algs/ppo_dcmm_645edc4/models_catch.py": {
+      "bytes": 5123,
+      "sha256": "52836785dff94b7ec5a8aa91d9aae8f9f31d65beda85ee641e599ad9f12c5047"
+    },
+    "snapshot/project/gym_dcmm/algs/ppo_dcmm_645edc4/models_track.py": {
+      "bytes": 4476,
+      "sha256": "1a1fb8b1bd658cbbdc608a775342d7039e8a6e5e0bca58b77ba570921e0d94e3"
+    },
+    "snapshot/project/gym_dcmm/algs/ppo_dcmm_645edc4/ppo_dcmm_catch_one_stage.py": {
+      "bytes": 27379,
+      "sha256": "a9ebfeca4aaa0533f3393fe833e7983863e487d386f1a2d6c1e1ef6f09089465"
+    },
+    "snapshot/project/gym_dcmm/algs/ppo_dcmm_645edc4/ppo_dcmm_catch_two_stage.py": {
+      "bytes": 31856,
+      "sha256": "3ad421357316ddff4153f7a5d96e80d5c7b0db25a4eb52eb41a41f7fbaaf0a3d"
+    },
+    "snapshot/project/gym_dcmm/algs/ppo_dcmm_645edc4/ppo_dcmm_track.py": {
+      "bytes": 30486,
+      "sha256": "59976be0ca118c46f783fc5780a60c55a51b8e716721ca59145c20fd2d35afac"
+    },
+    "snapshot/project/gym_dcmm/algs/ppo_dcmm_645edc4/utils.py": {
+      "bytes": 4633,
+      "sha256": "4f7dac3a2c2ea83c884c3888dfed9804432b67d451e3c0c8f8f2d908ecc3d738"
+    },
+    "snapshot/project/gym_dcmm/algs/ppo_dcmm_july22/__init__.py": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "snapshot/project/gym_dcmm/algs/ppo_dcmm_july22/experience.py": {
+      "bytes": 4603,
+      "sha256": "a67f19b6aeeac134bd4b7a6afa7f63efee23a49bbcb85e8cddcadab16eff323a"
+    },
+    "snapshot/project/gym_dcmm/algs/ppo_dcmm_july22/models_catch.py": {
+      "bytes": 4946,
+      "sha256": "42de90f24c40cef500fc2f223e4e9c643764c39ed0f329326e4d274ab6fbc520"
+    },
+    "snapshot/project/gym_dcmm/algs/ppo_dcmm_july22/models_track.py": {
+      "bytes": 4476,
+      "sha256": "1a1fb8b1bd658cbbdc608a775342d7039e8a6e5e0bca58b77ba570921e0d94e3"
+    },
+    "snapshot/project/gym_dcmm/algs/ppo_dcmm_july22/ppo_dcmm_catch_one_stage.py": {
+      "bytes": 27231,
+      "sha256": "19ca42a85a3d4454b53bc895438931b3f245dc85c86c2fac163b230bd399aacd"
+    },
+    "snapshot/project/gym_dcmm/algs/ppo_dcmm_july22/ppo_dcmm_catch_two_stage.py": {
+      "bytes": 31124,
+      "sha256": "4e3b7c883510fb572037b1b7b762f2f397c0de65414e28c6ec73d779a27eb851"
+    },
+    "snapshot/project/gym_dcmm/algs/ppo_dcmm_july22/ppo_dcmm_track.py": {
+      "bytes": 27084,
+      "sha256": "2e37514d41dcd4ebc54d389397c347284ffca6d918a63f71c4b4083550911f92"
+    },
+    "snapshot/project/gym_dcmm/algs/ppo_dcmm_july22/utils.py": {
+      "bytes": 4633,
+      "sha256": "4f7dac3a2c2ea83c884c3888dfed9804432b67d451e3c0c8f8f2d908ecc3d738"
+    },
+    "snapshot/project/gym_dcmm/envs/DcmmVecEnv.py": {
+      "bytes": 502377,
+      "sha256": "f9efd9d0e1ada8a6f3c0a9aeefaff1d85b56cb75169090cbc74ab1e7aa26a48c"
+    },
+    "snapshot/project/gym_dcmm/envs/DcmmVecEnv.py.bak-20260910-121543-430199": {
+      "bytes": 163904,
+      "sha256": "d6f40eadd4b7111d3d213dfab69b232a9014aaec9e4a13b4569b5d5348e1c8f7"
+    },
+    "snapshot/project/gym_dcmm/envs/DcmmVecEnv_bounce.py": {
+      "bytes": 93437,
+      "sha256": "44e29d109d202a62ab883105c2925a88180ca71960f4634245d4546c2fd9db0d"
+    },
+    "snapshot/project/gym_dcmm/envs/DcmmVecEnv_bounce_3a36f5f.py": {
+      "bytes": 147611,
+      "sha256": "e005d2d918e016e4bdc28e302585981272e6227af01c261f264a0fa8bd0e48b3"
+    },
+    "snapshot/project/gym_dcmm/envs/DcmmVecEnv_bounce_5fe75d5f.py": {
+      "bytes": 134984,
+      "sha256": "ebc4ba717752e0809bc6088a52d54c811c9d8ec7b61a46bed108d801633eb719"
+    },
+    "snapshot/project/gym_dcmm/envs/DcmmVecEnv_bounce_61709fc.py": {
+      "bytes": 136610,
+      "sha256": "e4120256fc838e3f872fea9e76b7a53749ba8c6c416b1d2ccaa46e69b7b05763"
+    },
+    "snapshot/project/gym_dcmm/envs/DcmmVecEnv_bounce_july22.py": {
+      "bytes": 115087,
+      "sha256": "bcc29c6ff56ce9a2b05944dffe7f318bdff4e8c7b15d5c2beb9adab26b6e7e36"
+    },
+    "snapshot/project/gym_dcmm/envs/DcmmVecEnv_new.py": {
+      "bytes": 73240,
+      "sha256": "9183964a58b052705435b60810b09eebbd08cb71a199dc5d107d50bb07181b84"
+    },
+    "snapshot/project/gym_dcmm/envs/DcmmVecEnv_record.py": {
+      "bytes": 82641,
+      "sha256": "8e226ac938d1dd07185d735c0964c161de46fb9f8642d2d1687e89953f2ae1b1"
+    },
+    "snapshot/project/gym_dcmm/envs/DcmmVecEnv_roll1.py": {
+      "bytes": 72386,
+      "sha256": "9acbbf3c4c3b89285d8a07b06aa18b0fdb7fa394766e59234b6d90ce27412c2a"
+    },
+    "snapshot/project/gym_dcmm/envs/DcmmVecEnv_roll2.py": {
+      "bytes": 75795,
+      "sha256": "afd6b5376464ffe269a235606f81269794c2f86a7b39951dfba837334a596be7"
+    },
+    "snapshot/project/gym_dcmm/envs/DcmmVecEnv_roll_645edc4.py": {
+      "bytes": 174747,
+      "sha256": "fac469c8c8ff75ad3e3ef23a0b9e1840e115aba796ccc6b2403ba4ae109fe53f"
+    },
+    "snapshot/project/gym_dcmm/envs/DcmmVecEnv_roll_track_07c176f.py": {
+      "bytes": 165789,
+      "sha256": "35fd04de31f0a77a338c6bfd9ed898e43d012ce8bc12b7dce0e2dcf568b8b711"
+    },
+    "snapshot/project/gym_dcmm/envs/DcmmVecEnv_roll_track_b66666c.py": {
+      "bytes": 167024,
+      "sha256": "e2a2adc77ebaf2f3df4be7773034bce50b8eaecac86656780dc4576656ba2064"
+    },
+    "snapshot/project/gym_dcmm/envs/__init__.py": {
+      "bytes": 47,
+      "sha256": "17af99e8f3e200417715595d4016dc61c2eb4f7f80fcbcaed35fb43ca561bc99"
+    },
+    "snapshot/project/gym_dcmm/envs/basket_mixed.py": {
+      "bytes": 10392,
+      "sha256": "613cc03b96eec93b8ba340b78179aa45ea0737d872672b173dccfdcbe697abdb"
+    },
+    "snapshot/project/gym_dcmm/envs/basket_object_test.py": {
+      "bytes": 4474,
+      "sha256": "a2173b288211c6869e010deed4094a62ba4290755dcdc0a369e57079c2a2f5ad"
+    },
+    "snapshot/project/gym_dcmm/envs/bounce_compat.py": {
+      "bytes": 1060,
+      "sha256": "60c8ee4783b62fbe767b7ef0c0c65c70920d8ba465801c0696e8a2928f995e81"
+    },
+    "snapshot/project/gym_dcmm/envs/bounce_grasp.py": {
+      "bytes": 29781,
+      "sha256": "f130370f930c412d7fbf9793e12ed12cae91c34551a6d317e03164b58a482582"
+    },
+    "snapshot/project/gym_dcmm/envs/bounce_physical_v2.py": {
+      "bytes": 15339,
+      "sha256": "564e0cd816185fb59634d61950a4f229fbacd76b8f1e4c7835550b869d1c9b58"
+    },
+    "snapshot/project/gym_dcmm/envs/bounce_stable.py": {
+      "bytes": 2809,
+      "sha256": "f361c918d8f0b38976406b956d26869848e2e42c3f4c058d8b203ca678ff84f6"
+    },
+    "snapshot/project/gym_dcmm/envs/object_test.py": {
+      "bytes": 8238,
+      "sha256": "6b2ec54124cd166dad10851ef14ebd1728c519e287f71d5be0b5d3a99f289e1a"
+    },
+    "snapshot/project/gym_dcmm/envs/roll_adaptive.py": {
+      "bytes": 7822,
+      "sha256": "1cb304449bbf7ae81ca55a191cfee16f07ef69f77f5b217cb230622258e44971"
+    },
+    "snapshot/project/gym_dcmm/envs/roll_compat.py": {
+      "bytes": 1081,
+      "sha256": "e9d645643e866678bf3f58cc28dd9fa8bce53dbb47ab909a2663c36b3a8b8f1d"
+    },
+    "snapshot/project/gym_dcmm/envs/roll_physical.py": {
+      "bytes": 9707,
+      "sha256": "45f6822177d7fb11d02763dc98118a1a37a6c12a9cbc75088cfb10cc1e8c82b3"
+    },
+    "snapshot/project/gym_dcmm/utils/basket_aim.py": {
+      "bytes": 2194,
+      "sha256": "47f551b9a02099e78854b65fd93947abe4b8295ce9fc4cb9e4bb1d4394452962"
+    },
+    "snapshot/project/gym_dcmm/utils/basket_carry.py": {
+      "bytes": 4746,
+      "sha256": "b75c0675d93eb65c53be8e2353854da8b740d1c8803d96baab92eba20cc230bb"
+    },
+    "snapshot/project/gym_dcmm/utils/basket_catching.py": {
+      "bytes": 10288,
+      "sha256": "14f2f27f0d8f3f91aab0d1526326f49755dc3311f26466bfa9ca7ea67de03f4b"
+    },
+    "snapshot/project/gym_dcmm/utils/basket_delivery.py": {
+      "bytes": 2705,
+      "sha256": "267e49099a1f044eab27042ef494e5e9d1e6ff8be314074235189256f424b201"
+    },
+    "snapshot/project/gym_dcmm/utils/basket_diagnostics.py": {
+      "bytes": 3384,
+      "sha256": "2aa801c02b53b7eee5ae02b4b46a89a9918fc4475df2f1e89a7f6d2e277df7ef"
+    },
+    "snapshot/project/gym_dcmm/utils/basket_fingers.py": {
+      "bytes": 5910,
+      "sha256": "cac76c3938881227e6348be0b4fa6ded25ae5bd04882fe6b564ad0e59e988dce"
+    },
+    "snapshot/project/gym_dcmm/utils/basket_grip.py": {
+      "bytes": 1464,
+      "sha256": "5d7b72599da0f3600deab3e3cfb43a88c5db75e80eb5a333e33a06ddae624311"
+    },
+    "snapshot/project/gym_dcmm/utils/basket_hold.py": {
+      "bytes": 3668,
+      "sha256": "331ba209a37b62c8fe6935263ead2b9500a2be4212ef2c3c1f94578a73e51255"
+    },
+    "snapshot/project/gym_dcmm/utils/basket_launch.py": {
+      "bytes": 4799,
+      "sha256": "8d0516a4055e207a91b53f6fdca9dbcaf641112431a7cd20b067299cffb9d324"
+    },
+    "snapshot/project/gym_dcmm/utils/basket_mobile.py": {
+      "bytes": 14828,
+      "sha256": "7b563e62b59c6c37ccb593e4d0f2d5949df695ece3fd589f5abbb69bba31d54c"
+    },
+    "snapshot/project/gym_dcmm/utils/basket_parking_policy.py": {
+      "bytes": 2869,
+      "sha256": "e6afef5acb06f64dcae6271b4f04e4e2651b0e138f4827ac9f5cec48b2b4e362"
+    },
+    "snapshot/project/gym_dcmm/utils/basket_physical.py": {
+      "bytes": 2470,
+      "sha256": "6732bf77c1cb3c47eeca6e6b19df930f1fa154b0a40037857f7242a2e4e5a290"
+    },
+    "snapshot/project/gym_dcmm/utils/basket_policy_mask.py": {
+      "bytes": 701,
+      "sha256": "1cdbacc81d1c32bc8ab6b7e315ff05807eb0eb1b855060db4fe68ec3d63254a8"
+    },
+    "snapshot/project/gym_dcmm/utils/basket_simple.py": {
+      "bytes": 3937,
+      "sha256": "d0fb9c7bda31fcbfbdb2077e44ce5cb69f9bf261b9b4062f880fee1ce968d84e"
+    },
+    "snapshot/project/gym_dcmm/utils/basket_teacher.py": {
+      "bytes": 3146,
+      "sha256": "960cfaf9acd2deb7706870391d3cfc665efbbcdaeb048e3b00220582612ea39e"
+    },
+    "snapshot/project/gym_dcmm/utils/basket_throw_policy.py": {
+      "bytes": 2841,
+      "sha256": "78f78901d73fbefdb69d525e126fa16d4ecaf2aab2188c1ce72a0aea85ea6d0b"
+    },
+    "snapshot/project/gym_dcmm/utils/basket_tracking.py": {
+      "bytes": 2380,
+      "sha256": "6abc9bf509ff3d4c493a3b8f8a762152370572f4206eb7abdfda617c82bb1dab"
+    },
+    "snapshot/project/gym_dcmm/utils/basket_transfer.py": {
+      "bytes": 3941,
+      "sha256": "3026d28fbed4bbe0201524c6359ebec2c0bd89d72500f25e7c0c32b08d457d40"
+    },
+    "snapshot/project/gym_dcmm/utils/failure_diagnostics.py": {
+      "bytes": 1515,
+      "sha256": "1ba67f6ba12a6ff0a47850c5dcceb87f900686370e7efdbf87f439fd357699bd"
+    },
+    "snapshot/project/gym_dcmm/utils/ik_pkg/ik_arm.py": {
+      "bytes": 15989,
+      "sha256": "a45dec306d1291b081e2667c7f48cafcbd61e421f8d65993eb4109e331b5d6aa"
+    },
+    "snapshot/project/gym_dcmm/utils/ik_pkg/ik_base.py": {
+      "bytes": 3619,
+      "sha256": "00c07fac30ce01fbb05f6470f61adfd2865a3e1e4a480965d00f33684c6ce6ac"
+    },
+    "snapshot/project/gym_dcmm/utils/pid.py": {
+      "bytes": 3432,
+      "sha256": "43a0390ddf368a920a252152748a30f52cecc605a6f0963e8cbf81cdbcd47f8e"
+    },
+    "snapshot/project/gym_dcmm/utils/roll_adaptive_wait.py": {
+      "bytes": 4622,
+      "sha256": "9f6261d7140caebc0b8a22dab3be897df3f11944525a36ec90d9ed1fa51ecf6a"
+    },
+    "snapshot/project/gym_dcmm/utils/roll_evaluation.py": {
+      "bytes": 13848,
+      "sha256": "d449e4193e17153ec1d2bdf1e3c5cb83f2e924650c3f5a337156bfc2e2e95da6"
+    },
+    "snapshot/project/gym_dcmm/utils/roll_grasp.py": {
+      "bytes": 5743,
+      "sha256": "b6375ddddd858f1934eaa9654529bbe4dece9c925048d4d74cccc664bfc1e3d8"
+    },
+    "snapshot/project/gym_dcmm/utils/roll_rewards.py": {
+      "bytes": 8042,
+      "sha256": "0e75b8adae9f42dd11310d536263302301894f1b73a071f0a6a6391f72281cc9"
+    },
+    "snapshot/project/gym_dcmm/utils/roll_rewards_07c176f.py": {
+      "bytes": 7643,
+      "sha256": "edeaebeb24f7651cb9420d75330a339eb8c5370fd0964f6f14a7f4c6036a1db7"
+    },
+    "snapshot/project/gym_dcmm/utils/roll_speed.py": {
+      "bytes": 1210,
+      "sha256": "c1e5c59d824aa0e99ee7a62dc7ebedc57d500b1debb18f42fb67aa1801b8f7ec"
+    },
+    "snapshot/project/gym_dcmm/utils/roll_wait_guard.py": {
+      "bytes": 3758,
+      "sha256": "2bd5b90327ad5a5c53911ba6069932e1c315ddc9b89bd223c1a2fe6824419328"
+    },
+    "snapshot/project/gym_dcmm/utils/roll_waiting.py": {
+      "bytes": 1472,
+      "sha256": "2b6b5cb9b356f54a5b63809da31098e8c2268074bf80aaf023a84e4d8870a419"
+    },
+    "snapshot/project/gym_dcmm/utils/roll_waiting_07c176f.py": {
+      "bytes": 1413,
+      "sha256": "1502f518a5d849150a090b02c74fde2d73cbe1cf8cae07e4d8bcbd73f89870a2"
+    },
+    "snapshot/project/gym_dcmm/utils/roll_waiting_b66666c.py": {
+      "bytes": 1413,
+      "sha256": "1502f518a5d849150a090b02c74fde2d73cbe1cf8cae07e4d8bcbd73f89870a2"
+    },
+    "snapshot/project/gym_dcmm/utils/test_objects.py": {
+      "bytes": 977,
+      "sha256": "80f7088bb7038b0df8bbb79ab256c6f620ed2f828b1dc4dc356d1a3727a822b0"
+    },
+    "snapshot/project/gym_dcmm/utils/util.py": {
+      "bytes": 5580,
+      "sha256": "e42a59ced936931d5fe07231b0e6ea82265082678f4dae91d5d3644ae783c659"
+    },
+    "snapshot/project/gym_dcmm/utils/worker_errors.py": {
+      "bytes": 686,
+      "sha256": "1aa099e2a5b26635c2770f578256c01568acaa1728258aacb511eb80f3912d03"
+    },
+    "snapshot/project/realsense_camera.py": {
+      "bytes": 14527,
+      "sha256": "3a00be4067af835a710c9b7dacc38fe566bf309a78515f8ce6dab4df730a7b87"
+    },
+    "snapshot/project/realsense_ros2_node.py": {
+      "bytes": 5960,
+      "sha256": "29b1fbd0a1ddbf31fa0f5d9ecaaeff9c4d74d65b433fcf83b563fe774b0f4216"
+    },
+    "snapshot/project/requirements.txt": {
+      "bytes": 175,
+      "sha256": "46ddfc5316771bcf0bf22a0f587c3566ef1a91fbf30e73bfb7d8fa469152b035"
+    },
+    "snapshot/project/scripts/test_basket_three_ball.sh": {
+      "bytes": 1430,
+      "sha256": "da07b7fd3089035cdd230570fe456afe9a5e2e61aa57d06c43aba948fc6ee37a"
+    },
+    "snapshot/project/scripts/test_bounce_three_ball_catch_v1.sh": {
+      "bytes": 1838,
+      "sha256": "ebf27675e52cd5bfc9e3c83ae5f48ea4fee02e6c520d0074f4636aec12e6d6b1"
+    },
+    "snapshot/project/scripts/test_bounce_three_ball_hold_v1.sh": {
+      "bytes": 1734,
+      "sha256": "7a5a6bd9389d044b5298cc208e514b7dbd3be058e9bc3c6a61994d44b6337e62"
+    },
+    "snapshot/project/scripts/test_roll_catch_252.sh": {
+      "bytes": 1308,
+      "sha256": "186e915f8122f36e4ceab6e6404cf9a5dd04ab02fa5160a26b964251be27efc7"
+    },
+    "snapshot/project/scripts/train_basket_mobile41.sh": {
+      "bytes": 888,
+      "sha256": "6c92002b100c628fb0e7c6e325df7665854359ce5e51985a9e9d537617515a21"
+    },
+    "snapshot/project/scripts/train_basket_single.sh": {
+      "bytes": 867,
+      "sha256": "fc027379e0962cd7046e7869364e9174bc2eec68812c5aedeeafb08889b09cff"
+    },
+    "snapshot/project/scripts/train_basket_three_ball.sh": {
+      "bytes": 834,
+      "sha256": "9a0dbb5ba99346b2b3999be0745baf2dcf6cc20927503d17ced60e842e1cac66"
+    },
+    "snapshot/project/scripts/train_basket_three_ball_ballistic.sh": {
+      "bytes": 605,
+      "sha256": "68e46344379000613234cb5d0d77963bdd50f280e806a58fc59169f857a42c83"
+    },
+    "snapshot/project/scripts/train_bounce_three_ball_equal_v2.sh": {
+      "bytes": 1511,
+      "sha256": "3513f1602dd24c0cf642beb58a6401e879c7d245972e816fa2dd8685f846d270"
+    },
+    "snapshot/project/scripts/train_bounce_three_ball_hold_v1.sh": {
+      "bytes": 2332,
+      "sha256": "117cb948d1082ef516a8b6a940633dc88cfa6c3175b926c9e2ab611ce09224da"
+    },
+    "snapshot/project/scripts/train_bounce_three_ball_v1.sh": {
+      "bytes": 863,
+      "sha256": "6b77e3d422c021b39a3162e8a3de54d0ebe41618716729a262d7437e6ff10498"
+    },
+    "snapshot/project/scripts/train_roll_three_ball_equal_v2.sh": {
+      "bytes": 728,
+      "sha256": "94c7fa4877c85abcab154c0b7bbf047b0b7539f5e71f8df5401f632062d56b9a"
+    },
+    "snapshot/project/scripts/train_roll_three_ball_v1.sh": {
+      "bytes": 1971,
+      "sha256": "1115ab56be9b43ac6394f0cbe932c063456fb7f38e457201f16993d4054de53c"
+    },
+    "snapshot/project/scripts/view_bounce_realtime.sh": {
+      "bytes": 710,
+      "sha256": "888e318de202674bdf41eb5974fc9e1e8be48d0ba9dd893aa9723865ea1016de"
+    },
+    "snapshot/project/setup.py": {
+      "bytes": 861,
+      "sha256": "8760c2c69d33225f0f9708daf3733d9e79e42db382193ab1b4ec727945ac8ee1"
+    },
+    "snapshot/project/temp.py": {
+      "bytes": 1355,
+      "sha256": "b72f46e0e2b5c8fa347ebb7713cf563062126d77d04e740d3eafe62438c8d29a"
+    },
+    "snapshot/project/temp_copy.py": {
+      "bytes": 1074,
+      "sha256": "4f42c07f6c8bebba460e1990debd4d2d7a8c189c597907ecc415db265aa24e86"
+    },
+    "snapshot/project/tests/test_ball_materials.py": {
+      "bytes": 4298,
+      "sha256": "cf38c48e5393cc84973f4465a29ef7ba745605008465e93989375273615928e8"
+    },
+    "snapshot/project/tests/test_basket_aim.py": {
+      "bytes": 1605,
+      "sha256": "ef5536185370ecf4d080f749d49f1750bef4cee34a8c332d2425b0d8f99fc65f"
+    },
+    "snapshot/project/tests/test_basket_ballistic_configs.py": {
+      "bytes": 2314,
+      "sha256": "dd375081fc21f92e70fcb523b899713764e9b91396d184bcafcfbaf918558d14"
+    },
+    "snapshot/project/tests/test_basket_base_tracking.py": {
+      "bytes": 9067,
+      "sha256": "67310350c50b7acc5187fb1fee64cecdad7d16cd5c93fbbd76ad164e28f135c8"
+    },
+    "snapshot/project/tests/test_basket_carry.py": {
+      "bytes": 4745,
+      "sha256": "eeb69eef95e3fd2cd9744b133abb1662382db9b48cb0c8e88ccfc6fa08c68beb"
+    },
+    "snapshot/project/tests/test_basket_catching.py": {
+      "bytes": 20682,
+      "sha256": "40d1e38090f760d1d86df021bf1116e1976ef7fc73e75aacd440bd7a1a0ded87"
+    },
+    "snapshot/project/tests/test_basket_control.py": {
+      "bytes": 7391,
+      "sha256": "9ae98fcea36bfd1b908bf6a53897d3772a9e6ab330ea17f5d4328a6c3c585b5d"
+    },
+    "snapshot/project/tests/test_basket_delivery.py": {
+      "bytes": 5491,
+      "sha256": "a5e621e227aa982589ca0a4139e6ae5c4a378ec3d64f55b4a5e2e94e167a42f7"
+    },
+    "snapshot/project/tests/test_basket_diagnostics.py": {
+      "bytes": 1359,
+      "sha256": "76df391aa4cfef3548303dfb166060769724d85a2bd5239ad0bfbe294bb0cdfa"
+    },
+    "snapshot/project/tests/test_basket_fingers.py": {
+      "bytes": 5711,
+      "sha256": "282ad9e58c2e0bc6f173be0acee9b9ab8651ae7dd5f335308fca44e199dc2c3e"
+    },
+    "snapshot/project/tests/test_basket_fixed_policy.py": {
+      "bytes": 2197,
+      "sha256": "f11765e0770805883be2e48f79ca3cc895da13843d5c4015c26a48a3bc13c100"
+    },
+    "snapshot/project/tests/test_basket_grip.py": {
+      "bytes": 1630,
+      "sha256": "a93a27c972269b94136541858c5b80b684b0bf8ec14dfb21c41f292aab9255c2"
+    },
+    "snapshot/project/tests/test_basket_hold.py": {
+      "bytes": 6245,
+      "sha256": "143780fb24c42122d7aef8a0f9519d5bba13d87610b487008f03829291b2fd8a"
+    },
+    "snapshot/project/tests/test_basket_joint_stability.py": {
+      "bytes": 3555,
+      "sha256": "d6e5d7a72eee5ce28f84c502acee3b5a6f7bb76dfada8f698be9d3d7d4f47b8b"
+    },
+    "snapshot/project/tests/test_basket_joint_update.py": {
+      "bytes": 4435,
+      "sha256": "5eb686808d32a571ef6861b0788aa87e2f3f16aa1a0e310fcafef6628be3af17"
+    },
+    "snapshot/project/tests/test_basket_launch_v4.py": {
+      "bytes": 1122,
+      "sha256": "20703ab2048b8bf24a2272498748d81e00e7b4652f4f701d46b2154b998fcbd0"
+    },
+    "snapshot/project/tests/test_basket_launch_v5.py": {
+      "bytes": 1362,
+      "sha256": "37cc37d137b01eb199d1c82b166c7002d465e75605869671bdd98dde543a3474"
+    },
+    "snapshot/project/tests/test_basket_mixed.py": {
+      "bytes": 7213,
+      "sha256": "3954c1cb69256c5ca6070638e24229512b2b1c699a1187a95b2b213b131c5aa8"
+    },
+    "snapshot/project/tests/test_basket_mixed_update.py": {
+      "bytes": 4433,
+      "sha256": "9bf7106352d047d8ba74cd68f1012143fcee7171fab8c63c581a4ad24947bb4b"
+    },
+    "snapshot/project/tests/test_basket_mobile.py": {
+      "bytes": 11156,
+      "sha256": "10e92ba24a8603733ea5e251afd0934ab3c5ab63277c8a10c7dd5b5ef9403cb5"
+    },
+    "snapshot/project/tests/test_basket_mobile41.py": {
+      "bytes": 5970,
+      "sha256": "a651132dde04a8239463e8e99cd7f6262d416d1577793318a8767ba8b9ed9639"
+    },
+    "snapshot/project/tests/test_basket_mobile_joint.py": {
+      "bytes": 5641,
+      "sha256": "01a9ee8ffe5fb4720db1264db312f9fd4f80fe292b31a551f2b555dc42f6cac0"
+    },
+    "snapshot/project/tests/test_basket_object_test.py": {
+      "bytes": 3181,
+      "sha256": "51cdb54cb819f70054c048c4db0619bb7104e28fb33db1e25366ab2c345b85d7"
+    },
+    "snapshot/project/tests/test_basket_physical.py": {
+      "bytes": 2708,
+      "sha256": "8a56badadf0a84dbdeef15da698fb49c19ffe59a9fb44f633b387ae36875cced"
+    },
+    "snapshot/project/tests/test_basket_simple.py": {
+      "bytes": 6101,
+      "sha256": "1ce7f5a866aff8b3dd9da5ff9a0262c53cbf153bda19ad52aa0fd72c1c15c799"
+    },
+    "snapshot/project/tests/test_basket_throw_first.py": {
+      "bytes": 4402,
+      "sha256": "e8e35e1d329b9205b7c47c07dd83994c89da8f315b02f16a6024b2c1959c6b76"
+    },
+    "snapshot/project/tests/test_basket_transfer.py": {
+      "bytes": 4335,
+      "sha256": "3ffb149157c30391ea5659d76562a11f6ed17708045dcf17eb4045540d3031a7"
+    },
+    "snapshot/project/tests/test_basket_two_stage.py": {
+      "bytes": 4763,
+      "sha256": "95ed664c55f62804b39636c1c4ad08e66834d74be50fa6e5a882d0626f1c11de"
+    },
+    "snapshot/project/tests/test_bounce_3a36f5f.py": {
+      "bytes": 5844,
+      "sha256": "64a7044d2ff5263a67861751e680a55383bfe881ea5dd22243553728cf4ece06"
+    },
+    "snapshot/project/tests/test_bounce_61709fc.py": {
+      "bytes": 5844,
+      "sha256": "d2d035d8f0485fc5a66c26dcf35ff9746a406d51462144040d2e76b526b629eb"
+    },
+    "snapshot/project/tests/test_bounce_finger_posture.py": {
+      "bytes": 5630,
+      "sha256": "99943f0552bfe0285bc0f58b4669abd6d8420fa70344b631974ce58c825827ed"
+    },
+    "snapshot/project/tests/test_bounce_grasp.py": {
+      "bytes": 21538,
+      "sha256": "b4339284cd168a232ff2d7a9a706635d67acb68de9480dac0476df21c5c6605f"
+    },
+    "snapshot/project/tests/test_bounce_headless.py": {
+      "bytes": 2347,
+      "sha256": "89a3e44583af221602b6d1ef2cbf6fd7c8601646d0468a59856cd487784f8ba1"
+    },
+    "snapshot/project/tests/test_bounce_hold_policy.py": {
+      "bytes": 9406,
+      "sha256": "3f8c8e7394b7619a4f265efe2d4bdeba1452c1e2b23318a238eb1b1994078c7c"
+    },
+    "snapshot/project/tests/test_bounce_physical_v2.py": {
+      "bytes": 6942,
+      "sha256": "39da00ac674485d155e8a22bf2a5786f504951027540bd937b68d32004493a3d"
+    },
+    "snapshot/project/tests/test_bounce_presets.py": {
+      "bytes": 6570,
+      "sha256": "455288563bda33da391f4d534473e65c2ab44148d214b42e665b3439e8dba466"
+    },
+    "snapshot/project/tests/test_bounce_stability.py": {
+      "bytes": 1781,
+      "sha256": "28c69c14f28b39870e5ad0874965ac02a1611b26896ddedb53874363eb1df8dd"
+    },
+    "snapshot/project/tests/test_bounce_stable_runtime.py": {
+      "bytes": 2662,
+      "sha256": "df912c7550b84a13c068a7357a01f4a7e8d7fff96881f3d42a67797734d76288"
+    },
+    "snapshot/project/tests/test_bounce_tracking_metrics.py": {
+      "bytes": 6267,
+      "sha256": "9750c2bd02268938398a26fac96cd8bc07d6602ec4695fb307f73f9856a1c138"
+    },
+    "snapshot/project/tests/test_bounce_viewer_replay.py": {
+      "bytes": 3153,
+      "sha256": "ec08eb84f5b956202fb518c64d7f94d9c5a3f1b6d80d1f7d211596bad702ee3b"
+    },
+    "snapshot/project/tests/test_failure_diagnostics.py": {
+      "bytes": 1815,
+      "sha256": "c9c86d12beebd407452d286fdb0952cfb2712056c030849d4823d2b5099f7184"
+    },
+    "snapshot/project/tests/test_main_historical_envs.py": {
+      "bytes": 5709,
+      "sha256": "feff5e0f628ac08ec666bc5c5d8b8adc4b88ecfd3024fa8473a1324b50dcd675"
+    },
+    "snapshot/project/tests/test_resume_cuda_rng.py": {
+      "bytes": 1795,
+      "sha256": "dc31fffc9d1169a580754da6b78f5b4464199d703ca362bf145a4f5606d0e8fa"
+    },
+    "snapshot/project/tests/test_roll_645edc4.py": {
+      "bytes": 1387,
+      "sha256": "cc0aa25a4eea2c18c93dcb119a5573250e2ee17fd0789fe1daaf4d258cd7a324"
+    },
+    "snapshot/project/tests/test_roll_adaptive_wait.py": {
+      "bytes": 7606,
+      "sha256": "2e25b68044665f94dbca6283577101d648bac587563813fee69c87954d87af01"
+    },
+    "snapshot/project/tests/test_roll_evaluation.py": {
+      "bytes": 7138,
+      "sha256": "00b6f8697b84636d77abccfd22046bf997504611447ce84943f6ce9bf42929e8"
+    },
+    "snapshot/project/tests/test_roll_grasp.py": {
+      "bytes": 6937,
+      "sha256": "1e205d472f2b311e9820547498680292b65bc593ea483625dee1ed102b4865f8"
+    },
+    "snapshot/project/tests/test_roll_physical.py": {
+      "bytes": 3990,
+      "sha256": "f0cf1d74f299b6d45c9775855b20b338f0eb88acb0e6a9ba3954e2c470c54422"
+    },
+    "snapshot/project/tests/test_roll_rewards.py": {
+      "bytes": 22033,
+      "sha256": "c095b905eff7b92e16ec016f1cd6047a478c5c1bf2938c8621aebbf4ff4f7198"
+    },
+    "snapshot/project/tests/test_roll_wait_guard.py": {
+      "bytes": 3588,
+      "sha256": "87f77d5828f4163865e542b22785c27e449ee996fb19d035243d6ec551dadc35"
+    },
+    "snapshot/project/tests/test_slide_and_launch.py": {
+      "bytes": 7505,
+      "sha256": "f1b964b7b452019e17eb63b18ee66796334894865bf7ba257bb1c70d23ca3632"
+    },
+    "snapshot/project/tests/test_success_criteria_revision.py": {
+      "bytes": 7243,
+      "sha256": "89f946f7a670a179a9babdc30f188a379543db778087685982ce0b7497109374"
+    },
+    "snapshot/project/tests/test_tracking_checkpoint_metrics.py": {
+      "bytes": 6675,
+      "sha256": "62a1c995843b65d41adc67a02c838ef523cd12d4abf2d0f1df10bc19dc3d7888"
+    },
+    "snapshot/project/tests/test_visual_resume.py": {
+      "bytes": 2003,
+      "sha256": "b15321966edbac50e3fe72d1cab2a163f4a9d37838c0526692d90d43da1bf544"
+    },
+    "snapshot/project/tests/test_visual_worker_seeds.py": {
+      "bytes": 1637,
+      "sha256": "20e4ca35adb90bb2ba2367854992a6281fbe3fd47b21a09b01f8e05df0aeb9e3"
+    },
+    "snapshot/project/tests/test_worker_errors.py": {
+      "bytes": 813,
+      "sha256": "1c4fc4639dee99481599dcce9df85314217f08b47f4816c3f6a17a7d7f25c6a1"
+    },
+    "snapshot/project/tests/test_ycb_calibration.py": {
+      "bytes": 2492,
+      "sha256": "0bccc13cad975850248168b4944e2aa7c4ce67af221cd5b699ceaed35cf5ae2d"
+    },
+    "snapshot/project/tests/test_ycb_objects.py": {
+      "bytes": 2843,
+      "sha256": "d1a69fea07d5e7eedee6bcb677d6ef110624a2371dd130cbf9b87de9447f15e0"
+    },
+    "snapshot/project/tests/test_ycb_runtime.py": {
+      "bytes": 10021,
+      "sha256": "2208b3961b1f15fd5d86a4bc2acc3c44165a37d0a4ab03f60bd72ac18cb4e8c2"
+    },
+    "snapshot/project/train_DCMM.py": {
+      "bytes": 29731,
+      "sha256": "3ee0ba61d3820966432d5145d6db29ef89d1563b28659d63ff5f83c6aca44e0a"
+    },
+    "snapshot/project/verify_throw_force_pose.py": {
+      "bytes": 2478,
+      "sha256": "650c2b764598c02e0a3f38803afcaaaf2ca2cd0e41d022de620eeaf56e13ac9a"
+    },
+    "snapshot/project/ycb_objects/__init__.py": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "snapshot/project/ycb_objects/audit.py": {
+      "bytes": 2949,
+      "sha256": "03b071bbe35595f26b6772f02b6ac7c320bd9586637c0d19c2467d079a728e35"
+    },
+    "snapshot/project/ycb_objects/bounce_grasp_validation.py": {
+      "bytes": 5452,
+      "sha256": "dac438019dc3bcf302ed4f2702ab55325358b2983ecc52f22996f17393c74ba0"
+    },
+    "snapshot/project/ycb_objects/bounce_pretrain_validation.py": {
+      "bytes": 2491,
+      "sha256": "806933efd80d6dab1af3cbd8e3a7a1558ace813faa3e8e95a1917adeb62a43cc"
+    },
+    "snapshot/project/ycb_objects/bounce_stability.py": {
+      "bytes": 5007,
+      "sha256": "738530cc015ceee9ad469c6aafbfe999f133e593a51fd94ed66f6266587c1b38"
+    },
+    "snapshot/project/ycb_objects/bounce_viewer_replay.py": {
+      "bytes": 20195,
+      "sha256": "caa66d65a9cb6af2180c75cb6b602e1ab5ad3934786000c9703e7e7ae22631e5"
+    },
+    "snapshot/project/ycb_objects/calibration.py": {
+      "bytes": 9892,
+      "sha256": "b8d340d96aa08cfdc4463c9463252732956b212c326c138e7660455dbfa52bb1"
+    },
+    "snapshot/project/ycb_objects/calibration_data/balls.hard_floor_literature_v1.json": {
+      "bytes": 7346,
+      "sha256": "38ec46dd0862f92adba9b060b349bef70ada99a81edca0a01f55a00dd515e6d6"
+    },
+    "snapshot/project/ycb_objects/calibration_data/balls.roll_table_priors_v1.json": {
+      "bytes": 1112,
+      "sha256": "d6c3da0c92a73ade608f0509e44ab92ab14eafadb40a100a173e4ec899806a14"
+    },
+    "snapshot/project/ycb_objects/calibration_data/balls.three_ball_training_v1.json": {
+      "bytes": 7777,
+      "sha256": "4f8b6b5397ae56eae3c46af8a2e96d348e8477511cb56a1960d575f60083488e"
+    },
+    "snapshot/project/ycb_objects/calibration_data/baseball.material_measurements.json": {
+      "bytes": 1962,
+      "sha256": "1f0700d4a74c57970d26217ee134d4af5077cb2199755846b94b67ca18f92b78"
+    },
+    "snapshot/project/ycb_objects/calibration_data/baseball.measurements.json": {
+      "bytes": 1072,
+      "sha256": "1ec6dc22013b312aead9615b24402b4e9a21bcbf5001b8ca611d2c8b75e5a5db"
+    },
+    "snapshot/project/ycb_objects/calibration_data/tennis_ball.material_measurements.json": {
+      "bytes": 1965,
+      "sha256": "8bf295d97591d4f763197267004764905cdaa9cd68f4d935b81b85afdda5ce53"
+    },
+    "snapshot/project/ycb_objects/calibration_data/tennis_ball.measurements.json": {
+      "bytes": 1075,
+      "sha256": "9014f2900342ad3e6fe0e2bcc8466e471a330452e9e64ec0138254a82ba22b58"
+    },
+    "snapshot/project/ycb_objects/download.py": {
+      "bytes": 1620,
+      "sha256": "fb72e6c68d66780a14e4ab5241fa88c98efbfb170e01d4546df8aa71455dc477"
+    },
+    "snapshot/project/ycb_objects/evaluate_trained_balls.py": {
+      "bytes": 10446,
+      "sha256": "0e1264a2b27d116c4f54cd1dfea2b4f672693008b3ae12bae4950cf2be5131b6"
+    },
+    "snapshot/project/ycb_objects/generalization_probe.py": {
+      "bytes": 11263,
+      "sha256": "bb932cbc01c7dfa65d99f4edb0473d17fe25d7692a5c7617f555bc491befb4fa"
+    },
+    "snapshot/project/ycb_objects/literature_materials.py": {
+      "bytes": 4057,
+      "sha256": "24aad4cdd6b1403ec7d339ff6ca00b371379d9abb0e024162cb255c59881e5e1"
+    },
+    "snapshot/project/ycb_objects/loader.py": {
+      "bytes": 5067,
+      "sha256": "e621955932e2d55d7325c533f4b4e7eb5f3fcef8c263505d3a8965045302211f"
+    },
+    "snapshot/project/ycb_objects/materials.py": {
+      "bytes": 7972,
+      "sha256": "0a82e7c69ee062358d7b38581f90229bb823a568f8cb20a2ddcaf11cb9cd6edf"
+    },
+    "snapshot/project/ycb_objects/roll_physics_validation.py": {
+      "bytes": 4551,
+      "sha256": "0c8c84161221e42c8fa48912fcd63379ab514f199d9ace71962cea05ca19ee26"
+    },
+    "snapshot/project/ycb_objects/roll_policy_probe.py": {
+      "bytes": 6383,
+      "sha256": "b21b3786a66489cb5713b8dc05ea029b90ad4d85eb630aafceadba00e23c0dc4"
+    },
+    "snapshot/project/ycb_objects/roll_probe.py": {
+      "bytes": 6338,
+      "sha256": "3368bcdc49af3e72f7d9f8970cdddb0fbdc5aebc561dfe2668529c8cf4e269ea"
+    },
+    "snapshot/project/ycb_objects/viewer.py": {
+      "bytes": 760,
+      "sha256": "587c2a0861680fa89f0e5067191a03234c9b64b368887af1892ef7daba5dc7ac"
+    },
+    "snapshot/validation_before_training.json": {
+      "bytes": 493,
+      "sha256": "9be95052916dbb0288e111354e35fa79fbd1cffde43b98a2c41fbec2fd71f345"
+    }
+  }
+}

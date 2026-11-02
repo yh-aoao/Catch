@@ -16,6 +16,10 @@ from gym_dcmm.utils.basket_mobile import terminal_records
 
 class PPO_Basket_Mixed(PPO_Catch_OneStage):
     def __init__(self,env,output_dif,full_config):
+        self.ball_mode=str(full_config.basket_mixed_ball)
+        self.delivery_version=str(full_config.get('basket_delivery_version','legacy'))
+        from gym_dcmm.utils.basket_delivery import make_options as delivery_options
+        self.delivery_options=delivery_options(full_config.get('basket_delivery_options',{}))
         super().__init__(env,output_dif,full_config)
         if not self.fixed_basket or self.obs_shape!=(37,) or self.actions_num!=18:
             raise ValueError('Three-ball PPO requires fixed37/arm18')
@@ -24,10 +28,14 @@ class PPO_Basket_Mixed(PPO_Catch_OneStage):
         self.input_normalization_frozen=bool(full_config.get('basket_mixed_source',''))
         self.mixed_options=make_options(full_config.basket_mixed_options)
         self.ball_protocol=self.env.call('mixed_protocol')[0]
+        if any(version!=self.delivery_version for version in self.env.call('delivery_version')):
+            raise ValueError('Environment and trainer delivery reward versions differ')
+        if any(options!=self.delivery_options for options in self.env.call('delivery_options')):
+            raise ValueError('Environment and trainer delivery reward options differ')
         self.source_metadata=dict(kind='scratch')
         if not full_config.test and full_config.basket_mixed_source:
             path=full_config.basket_mixed_source
-            checkpoint=torch.load(path,map_location=self.device)
+            checkpoint=torch.load(path,map_location=self.device,weights_only=False)
             kind=import_throw(self.model,self.running_mean_std,checkpoint,self.finger_options,self.carry_options)
             with open(path,'rb') as stream:digest=hashlib.sha256(stream.read()).hexdigest()
             self.source_metadata=dict(kind=kind,name=os.path.basename(path),sha256=digest)
@@ -59,15 +67,18 @@ class PPO_Basket_Mixed(PPO_Catch_OneStage):
             if len(meter):self.extra_info['basket_mixed/'+name+'_success']=meter.get_mean()
             self.extra_info['basket_mixed/'+name+'_episodes']=len(meter)
 
-    def selection_success_meter(self):return self.macro_success
+    def selection_success_meter(self):
+        return (self.macro_success if self.ball_mode=='mixed' else self.per_ball[NAMES.index(self.ball_mode)])
 
     def training_status(self):
         text=''
         for name,meter in zip(NAMES,self.per_ball):
             value=f'{meter.get_mean():.2%}' if len(meter) else 'n/a'
             text+=' | '+name+' SR: '+value
-        macro=f'{self.macro_success.get_mean():.2%}' if len(self.macro_success) else 'n/a'
-        return text+' | Macro SR: '+macro+f" | LR: {self.init_lr:.2e} | PPO KL: {self.extra_info.get('basket_mixed/kl_max',0.):.4f}"
+        meter=self.selection_success_meter()
+        macro=f'{meter.get_mean():.2%}' if len(meter) else 'n/a'
+        return (text+(' | Macro SR: ' if self.ball_mode=='mixed' else ' | Task SR: ')+macro+f" | LR: {self.init_lr:.2e} | PPO KL: {self.extra_info.get('basket_mixed/kl_max',0.):.4f}"
+            +f" | Actor updates: {self.extra_info.get('basket_mixed/actor_updates',0)}/{self.extra_info.get('basket_mixed/actor_attempts',0)}")
 
     def train_epoch(self):
         started=time.time();self.set_eval();self.play_steps()
@@ -81,6 +92,7 @@ class PPO_Basket_Mixed(PPO_Catch_OneStage):
         critic=list(self.model.value_mlp.parameters())+list(self.model.value.parameters())
         a_losses,c_losses,b_losses,entropies,kls=[],[],[],[],[];stopped=False
         kl_by_ball=[0.,0.,0.]
+        actor_updates=0
         for _ in range(self.mini_epochs_num):
             for index in range(len(self.storage)):
                 old_value,old_logp,adv,old_mu,old_sigma,returns,actions,raw=self.storage[index]
@@ -114,6 +126,7 @@ class PPO_Basket_Mixed(PPO_Catch_OneStage):
                 if self.truncate_grads:
                     for parameters in (actor,critic):torch.nn.utils.clip_grad_norm_(parameters,self.grad_norm)
                 self.optimizer.step()
+                if not stopped:actor_updates+=1
                 a_losses.append(a_loss.detach());c_losses.append(c_loss.detach());b_losses.append(b_loss.detach());entropies.append(entropy.detach())
             with torch.no_grad():
                 result=self.model(dict(obs=self.running_mean_std(data['obses']),prev_actions=data['actions']))
@@ -124,7 +137,9 @@ class PPO_Basket_Mixed(PPO_Catch_OneStage):
         for name,count,kl in zip(NAMES,counts,kl_by_ball):
             self.extra_info['basket_mixed/'+name+'_samples']=count
             self.extra_info['basket_mixed/'+name+'_kl']=kl
-        self.extra_info.update({'basket_mixed/kl_max':max(kl_by_ball),'basket_mixed/actor_stopped':float(stopped)})
+        self.extra_info.update({'basket_mixed/kl_max':max(kl_by_ball),'basket_mixed/actor_stopped':float(stopped),
+            'basket_mixed/actor_updates':actor_updates,
+            'basket_mixed/actor_attempts':self.mini_epochs_num*len(self.storage)})
         if not self.input_normalization_frozen:
             self.running_mean_std.original.train()
             self.running_mean_std.original(data['obses'][:,:35])
@@ -137,7 +152,8 @@ class PPO_Basket_Mixed(PPO_Catch_OneStage):
             value_mean_std=self.value_mean_std.state_dict(),reference=(self.reference.state_dict() if self.reference is not None else None),
             input_normalization_frozen=self.input_normalization_frozen,
             basket_mixed_protocol='mixed37_known_radius_mass_v1',basket_mixed_options=self.mixed_options,
-            basket_ball_protocol=self.ball_protocol,
+            basket_ball_protocol=self.ball_protocol,basket_delivery_version=self.delivery_version,
+            basket_delivery_options=self.delivery_options,basket_trained_ball=self.ball_mode,
             basket_fixed_protocol='aim_carry_fingers_v1',basket_finger_options=self.finger_options,
             basket_carry_options=self.carry_options,basket_arm_control='joint_velocity',action_layout='arm6_hand12',
             source_metadata=self.source_metadata,training_metrics=dict(agent_steps=int(self.agent_steps),
@@ -149,9 +165,16 @@ class PPO_Basket_Mixed(PPO_Catch_OneStage):
             for name,meter in zip(NAMES,self.per_ball)})
 
     def restore_test(self,path):
-        checkpoint=torch.load(path,map_location=self.device)
+        checkpoint=torch.load(path,map_location=self.device,weights_only=False)
         if checkpoint.get('basket_mixed_protocol')!='mixed37_known_radius_mass_v1':
             raise ValueError('Use a newly trained three-ball checkpoint for testing; old weights are initialization only')
+        if checkpoint.get('basket_delivery_version','legacy')!=self.delivery_version:
+            raise ValueError('Use the checkpoint training reward preset (legacy or ballistic_v2)')
+        if self.delivery_version!='legacy' and checkpoint.get('basket_delivery_options')!=self.delivery_options:
+            raise ValueError('Delivery reward options differ from training')
+        trained_ball=checkpoint.get('basket_trained_ball','mixed')
+        if trained_ball!='mixed' and trained_ball!=self.ball_mode:
+            raise ValueError('Single-ball checkpoint requires its matching ball preset')
         self._validate_mobile_checkpoint(checkpoint)
         if checkpoint.get('basket_mixed_options')!=self.mixed_options:raise ValueError('Use matching three-ball grip/options')
         if checkpoint.get('basket_ball_protocol')!=self.ball_protocol:raise ValueError('Three-ball physical parameters differ from training')

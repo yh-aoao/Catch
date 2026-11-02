@@ -94,6 +94,12 @@ def main(config: DictConfig):
             raise ValueError('ycb_joint_damping requires test=True, a YCB object and finite nonnegative damping')
     mixed_ball = str(config.get('basket_mixed_ball','off'))
     mixed_basket = mixed_ball != 'off'
+    delivery_version=str(config.get('basket_delivery_version','legacy'))
+    delivery_options=config.get('basket_delivery_options',{})
+    delivery_options=(OmegaConf.to_container(delivery_options,resolve=True)
+                      if OmegaConf.is_config(delivery_options) else dict(delivery_options))
+    if delivery_version != 'legacy' and not mixed_basket:
+        raise ValueError('ballistic_v2 requires a Basket mixed/single ball environment')
     if mixed_basket:
         if (mixed_ball not in ('mixed','original','tennis_ball','baseball')
                 or config.task != 'Catching_OneStage' or config.object_motion not in ('basket','throw_basket')
@@ -313,7 +319,9 @@ def main(config: DictConfig):
                         'basket_curriculum_stage': int(config.basket_curriculum_stage)}
                        if config.object_motion in ('basket', 'throw_basket') else {}),
                     **({'basket_mixed_ball': mixed_ball,
-                        'basket_mixed_options': OmegaConf.to_container(config.basket_mixed_options,resolve=True)}
+                        'basket_mixed_options': OmegaConf.to_container(config.basket_mixed_options,resolve=True),
+                        'basket_delivery_version':delivery_version,
+                        'basket_delivery_options':delivery_options}
                        if mixed_basket else {}),
                     **({'test_object': str(config.test_object), 'ycb_joint_damping': ycb_joint_damping,
                         'ycb_collision': ycb_collision, 'roll_speed': roll_speed,

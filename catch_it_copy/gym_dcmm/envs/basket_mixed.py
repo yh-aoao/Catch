@@ -28,7 +28,8 @@ def make_options(options=None):
 
 
 class BasketMixedEnv(DcmmVecEnv):
-    def __init__(self,basket_mixed_ball='mixed',basket_mixed_options=None,**kwargs):
+    def __init__(self,basket_mixed_ball='mixed',basket_mixed_options=None,
+                 basket_delivery_version='legacy',basket_delivery_options=None,**kwargs):
         if basket_mixed_ball not in ('mixed',)+NAMES:raise ValueError('Unknown Basket mixed ball mode')
         if not (kwargs.get('object_motion') in ('basket','throw_basket') and kwargs.get('task')=='Catching'
                 and kwargs.get('basket_fixed_base_training') and kwargs.get('basket_fixed_physical')
@@ -36,6 +37,12 @@ class BasketMixedEnv(DcmmVecEnv):
                 and kwargs.get('basket_reward_version')=='basket_aim_v1'
                 and kwargs.get('basket_arm_control')=='joint_velocity'):
             raise ValueError('Three-ball training requires fixed physical Basket finger/carry joint-velocity task')
+        from gym_dcmm.utils.basket_delivery import make_options as delivery_options,new_state
+        if basket_delivery_version not in ('legacy','ballistic_v2'):
+            raise ValueError('Invalid Basket delivery reward version')
+        self.delivery_version=basket_delivery_version
+        self.delivery_options=delivery_options(basket_delivery_options)
+        self.delivery_state=new_state()
         self.ball_mode=basket_mixed_ball
         self.mixed_options=make_options(basket_mixed_options)
         self.profiles=json.loads(PRIORS.read_text())['profiles']
@@ -111,7 +118,54 @@ class BasketMixedEnv(DcmmVecEnv):
             basket_ball_protocol='mixed37_known_radius_mass_v1')
 
     def reset(self,**kwargs):
-        obs,info=super().reset(**kwargs);info.update(self._ball_info());return obs,info
+        obs,info=super().reset(**kwargs)
+        from gym_dcmm.utils.basket_delivery import new_state,quality
+        q,_=quality(self.Dcmm.data.qpos[37:40],self.Dcmm.data.qvel[36:39],
+            self.basket_center,self.Dcmm.model.opt.gravity,self.basket_cfg.basket_tilt_deg,self.delivery_options)
+        self.delivery_state=new_state(q)
+        info.update(self._ball_info());return obs,info
+
+    def _basket_check_flight(self,previous):
+        super()._basket_check_flight(previous)
+        if self.delivery_version!='ballistic_v2':return
+        from gym_dcmm.utils.basket_delivery import quality,observe
+        from gym_dcmm.utils.roll_rewards import hand_collision_ids
+        hands=hand_collision_ids(self.Dcmm.model,self.hand_start_id)
+        contacts=self.contacts['object_contacts']
+        touching=bool(np.any(np.isin(contacts,hands)))
+        other=bool(np.any(~np.isin(contacts,hands)))
+        unsafe=bool(self.basket_arm_self_collision or self.basket_robot_collision or other)
+        launch=self.basket_simple_state
+        if touching and not launch.get('confirmed') and not unsafe:
+            q,error=quality(self.Dcmm.data.qpos[37:40],self.Dcmm.data.qvel[36:39],
+                self.basket_center,self.Dcmm.model.opt.gravity,self.basket_cfg.basket_tilt_deg,self.delivery_options)
+            observe(self.delivery_state,q,error,self.delivery_options)
+        if launch.get('confirmed') and 'release_quality' not in self.delivery_state:
+            candidate=launch['candidate']
+            q,error=quality(candidate['position'],candidate['velocity'],self.basket_center,
+                self.Dcmm.model.opt.gravity,self.basket_cfg.basket_tilt_deg,self.delivery_options)
+            self.delivery_state.update(release_quality=q,release_error=-1. if error is None else error)
+
+    def compute_reward(self,obs,info,ctrl):
+        value=super().compute_reward(obs,info,ctrl)
+        if self.delivery_version!='ballistic_v2':return value
+        from gym_dcmm.utils.basket_delivery import adjustments
+        terms=info['basket_reward_terms'];old=terms.copy()
+        collision=bool(info.get('robot_dangerous_collision',False))
+        done=bool(self.terminated or info['env_time']>self.basket_cfg.basket_max_time)
+        terms.update(adjustments(self.delivery_state,old,self.delivery_options,
+            done=done,success=bool(info.get('safe_basket_success',False)),collision=collision))
+        for key,amount in terms.items():
+            delta=amount-old.get(key,0.)
+            value+=delta
+            self.basket_reward_totals[key]=self.basket_reward_totals.get(key,0.)+delta
+        info['basket_reward_totals']=self.basket_reward_totals.copy()
+        state=self.delivery_state
+        info['basket_control'].update(reward_revision='basket_delivery_v2',
+            ballistic_quality=state.get('quality',0.),ballistic_best=state.get('best',0.),
+            release_ballistic_quality=state.get('release_quality',0.),
+            release_ballistic_error=state.get('release_error',-1.))
+        return value
 
     def step(self,action):
         obs,reward,done,truncated,info=super().step(action)

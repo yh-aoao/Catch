@@ -17,3 +17,5 @@ register(id="gym_dcmm/RollAdaptiveWorld-v0", entry_point="gym_dcmm.envs.roll_ada
 register(id="gym_dcmm/RollPhysicalWorld-v1", entry_point="gym_dcmm.envs.roll_physical:make_roll_physical")
 register(id="gym_dcmm/BounceStableWorld-v0", entry_point="gym_dcmm.envs.bounce_stable:make_bounce_stable")
 register(id="gym_dcmm/BouncePhysicalWorld-v2", entry_point="gym_dcmm.envs.bounce_physical_v2:make_bounce_physical_v2")
+
+register(id="gym_dcmm/BasketMixed-v0", entry_point="gym_dcmm.envs.basket_mixed:BasketMixedEnv")

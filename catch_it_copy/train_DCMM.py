@@ -92,6 +92,23 @@ def main(config: DictConfig):
         if (not config.test or not str(config.test_object).startswith('ycb:')
                 or not math.isfinite(float(ycb_joint_damping)) or float(ycb_joint_damping) < 0):
             raise ValueError('ycb_joint_damping requires test=True, a YCB object and finite nonnegative damping')
+    mixed_ball = str(config.get('basket_mixed_ball','off'))
+    mixed_basket = mixed_ball != 'off'
+    if mixed_basket:
+        if (mixed_ball not in ('mixed','original','tennis_ball','baseball')
+                or config.task != 'Catching_OneStage' or config.object_motion not in ('basket','throw_basket')
+                or not config.basket_fixed_base_training or not config.basket_fixed_physical
+                or not config.basket_carry_reward or not config.basket_finger_reward
+                or config.test_object != 'default' or config.object_eval or config.basket_warm_start):
+            raise ValueError('basket_three_ball needs fixed physical finger/carry Basket, no test_object or mobile warm start')
+        if not config.train.network.get('separate_value_mlp',True):
+            raise ValueError('Three-ball Basket requires a separate critic')
+        if config.test:
+            if not config.checkpoint_catching:raise ValueError('Three-ball testing needs its trained checkpoint_catching')
+        else:
+            if config.checkpoint_catching:raise ValueError('Three-ball initialization uses basket_mixed_source')
+            if not config.basket_mixed_source:raise ValueError('Supply a fixed41 or mobile joint basket_mixed_source')
+            config.basket_mixed_source=to_absolute_path(config.basket_mixed_source)
     if config.test_object != 'default':
         if not config.test or config.object_motion not in ('throw', 'roll', 'bounce', 'basket', 'throw_basket') or config.object_eval:
             raise ValueError('test_object requires test=True, object_eval=false, throw/roll/bounce/basket')
@@ -252,6 +269,8 @@ def main(config: DictConfig):
         print('[bounce-physics] physical_v2: consistent sphere inertia; zero armature; explicit ground pair; '
               'catch=' + bounce_grasp_version, flush=True)
         print('[bounce-launch] mode=' + str(config.bounce_launch) + '; baseball_intercept_v1 applies only when the sampled ball is baseball', flush=True)
+    if mixed_basket:
+        env_name='gym_dcmm/BasketMixed-v0'
     task = 'Tracking' if config.task == 'Tracking' else 'Catching'
     print("config.num_envs: ", config.num_envs)
     # Single-environment evaluation keeps Viewer and exceptions in the main process.
@@ -293,6 +312,9 @@ def main(config: DictConfig):
                         'basket_mobile_options': OmegaConf.to_container(config.basket_mobile, resolve=True) if mobile_basket else None,
                         'basket_curriculum_stage': int(config.basket_curriculum_stage)}
                        if config.object_motion in ('basket', 'throw_basket') else {}),
+                    **({'basket_mixed_ball': mixed_ball,
+                        'basket_mixed_options': OmegaConf.to_container(config.basket_mixed_options,resolve=True)}
+                       if mixed_basket else {}),
                     **({'test_object': str(config.test_object), 'ycb_joint_damping': ycb_joint_damping,
                         'ycb_collision': ycb_collision, 'roll_speed': roll_speed,
                         'roll_wait_guard': roll_wait_guard}
@@ -342,7 +364,10 @@ def main(config: DictConfig):
     PPO = TrackingAgent if config.task == 'Tracking' else \
           TwoStageAgent if config.task == 'Catching_TwoStage' else \
           OneStageAgent
-    if mobile_basket and basket_stage == 'mobile_joint':
+    if mixed_basket:
+        from gym_dcmm.algs.ppo_dcmm.ppo_dcmm_basket_mixed import PPO_Basket_Mixed
+        PPO = PPO_Basket_Mixed
+    elif mobile_basket and basket_stage == 'mobile_joint':
         from gym_dcmm.algs.ppo_dcmm.ppo_dcmm_basket_mobile_joint import PPO_Basket_MobileJoint
         PPO = PPO_Basket_MobileJoint
     elif mobile_basket and basket_stage != 'joint':

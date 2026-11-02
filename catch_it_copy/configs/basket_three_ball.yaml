@@ -1,0 +1,22 @@
+# Fixed-base three-ball skill with known radius/mass, initialized from fixed41 or mobile joint throw actor.
+defaults:
+  - basket_finger_sync_scratch
+  - _self_
+basket_mixed_ball: mixed
+basket_mixed_source: /home/isee/Catch/11-1/throw_basket_catch_best_reward_41.30.pth
+basket_freeze_input_normalization: true
+checkpoint_catching: ''
+checkpoint_tracking: ''
+basket_warm_start: ''
+basket_mixed_options:
+  weights: [1.0, 1.0, 1.0]
+  original_hand: [0.8, 0.7, 0.7]
+  tennis_hand: [1.0, 0.9, 0.9]
+  baseball_hand: [0.8, 0.7, 0.7]
+output_name: BasketThreeBallFixed
+train:
+  ppo:
+    learning_rate: 0.00003
+    lr_schedule: fixed
+    max_agent_steps: 1000000000000
+    max_test_steps: 1000000

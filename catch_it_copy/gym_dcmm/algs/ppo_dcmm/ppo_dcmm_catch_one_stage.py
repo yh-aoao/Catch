@@ -312,7 +312,8 @@ class PPO_Catch_OneStage(object):
                     self.save(os.path.join(self.nn_dir, checkpoint_name))
                 self.save(os.path.join(self.nn_dir, f'{ckpt_prefix}_last'))
 
-            success_meter = self.mobile_group_metrics.get('mobile_success', self.episode_success)
+            success_meter = (self.selection_success_meter() if hasattr(self, 'selection_success_meter')
+                             else self.mobile_group_metrics.get('mobile_success', self.episode_success))
             # Short replay episodes finish first. Their early reward average is
             # not representative of the mixed task or mobile performance.
             reward_eligible = (len(success_meter) >= 50 if self.mobile_group_metrics

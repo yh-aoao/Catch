@@ -21,24 +21,27 @@ class PPO_Basket_Mixed(PPO_Catch_OneStage):
             raise ValueError('Three-ball PPO requires fixed37/arm18')
         if self.lr_schedule!='fixed':raise ValueError('Three-ball initialization uses a fixed learning rate')
         self.running_mean_std=MixedNormalizer().to(self.device)
-        self.input_normalization_frozen=True
+        self.input_normalization_frozen=bool(full_config.get('basket_mixed_source',''))
         self.mixed_options=make_options(full_config.basket_mixed_options)
         self.ball_protocol=self.env.call('mixed_protocol')[0]
-        self.source_metadata={}
-        if not full_config.test:
+        self.source_metadata=dict(kind='scratch')
+        if not full_config.test and full_config.basket_mixed_source:
             path=full_config.basket_mixed_source
             checkpoint=torch.load(path,map_location=self.device)
             kind=import_throw(self.model,self.running_mean_std,checkpoint,self.finger_options,self.carry_options)
             with open(path,'rb') as stream:digest=hashlib.sha256(stream.read()).hexdigest()
             self.source_metadata=dict(kind=kind,name=os.path.basename(path),sha256=digest)
             print('[basket-three-ball] inherited trainable throw actor from '+path+' ('+kind+')',flush=True)
-        self.reference=copy.deepcopy(self.model).eval().requires_grad_(False)
+        self.reference=(copy.deepcopy(self.model).eval().requires_grad_(False)
+                        if self.input_normalization_frozen else None)
+        if not full_config.test and not full_config.basket_mixed_source:
+            print('[basket-three-ball] SCRATCH: random actor/critic; fresh normalization; no old-policy loss',flush=True)
         self.per_ball=[AverageScalarMeter(200) for _ in NAMES]
         self.macro_success=MacroSuccess(self.per_ball)
         self.storage.storage_dict['ball_id']=torch.zeros((self.horizon_length,self.num_actors),dtype=torch.long,device=self.device)
-        self.kl_limit=.01;self.reference_weight=.05
+        self.kl_limit=.01;self.reference_weight=.05 if self.reference is not None else 0.
         # Parent optimizer already references the same trainable model. Critic is fresh.
-        print('[basket-three-ball] equal rollout loss per ball; fixed LR='+str(self.init_lr)+'; original-ball reference KL weight=0.05',flush=True)
+        print('[basket-three-ball] equal rollout loss per ball; fixed LR='+str(self.init_lr)+'; original-ball reference KL weight='+str(self.reference_weight),flush=True)
 
     def obs2tensor(self,obs):
         raw=super().obs2tensor(obs)
@@ -100,7 +103,7 @@ class PPO_Basket_Mixed(PPO_Catch_OneStage):
                 b_loss=stratified_mean(bound,batch_labels,counts,len(labels))
                 original=batch_labels==0
                 reference=result['mus'].sum()*0.
-                if original.any():
+                if self.reference is not None and original.any():
                     with torch.no_grad():mu,std,_=self.reference._actor_critic(dict(obs=processed[original]))
                     reference=gaussian_kl(mu,std.exp(),result['mus'][original],result['sigmas'][original]).sum()
                     reference=reference/max(counts[0],1)*len(labels)/len(raw)
@@ -122,12 +125,17 @@ class PPO_Basket_Mixed(PPO_Catch_OneStage):
             self.extra_info['basket_mixed/'+name+'_samples']=count
             self.extra_info['basket_mixed/'+name+'_kl']=kl
         self.extra_info.update({'basket_mixed/kl_max':max(kl_by_ball),'basket_mixed/actor_stopped':float(stopped)})
+        if not self.input_normalization_frozen:
+            self.running_mean_std.original.train()
+            self.running_mean_std.original(data['obses'][:,:35])
+            self.running_mean_std.original.eval()
         self.rl_train_time+=time.time()-started
         return a_losses,c_losses,b_losses,entropies,kls
 
     def save(self,name):
         torch.save(dict(model=self.model.state_dict(),running_mean_std=self.running_mean_std.state_dict(),
-            value_mean_std=self.value_mean_std.state_dict(),reference=self.reference.state_dict(),
+            value_mean_std=self.value_mean_std.state_dict(),reference=(self.reference.state_dict() if self.reference is not None else None),
+            input_normalization_frozen=self.input_normalization_frozen,
             basket_mixed_protocol='mixed37_known_radius_mass_v1',basket_mixed_options=self.mixed_options,
             basket_ball_protocol=self.ball_protocol,
             basket_fixed_protocol='aim_carry_fingers_v1',basket_finger_options=self.finger_options,
@@ -150,5 +158,10 @@ class PPO_Basket_Mixed(PPO_Catch_OneStage):
         self.model.load_state_dict(checkpoint['model'],strict=True)
         self.running_mean_std.load_state_dict(checkpoint['running_mean_std'],strict=True)
         self.value_mean_std.load_state_dict(checkpoint['value_mean_std'],strict=True)
-        self.reference.load_state_dict(checkpoint['reference'],strict=True)
+        self.input_normalization_frozen=bool(checkpoint.get('input_normalization_frozen',True))
+        if checkpoint.get('reference') is not None:
+            self.reference=copy.deepcopy(self.model).eval().requires_grad_(False)
+            self.reference.load_state_dict(checkpoint['reference'],strict=True)
+        else:self.reference=None
+        self.reference_weight=.05 if self.reference is not None else 0.
         self.source_metadata=checkpoint.get('source_metadata',{})

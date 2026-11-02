@@ -107,8 +107,8 @@ def main(config: DictConfig):
             if not config.checkpoint_catching:raise ValueError('Three-ball testing needs its trained checkpoint_catching')
         else:
             if config.checkpoint_catching:raise ValueError('Three-ball initialization uses basket_mixed_source')
-            if not config.basket_mixed_source:raise ValueError('Supply a fixed41 or mobile joint basket_mixed_source')
-            config.basket_mixed_source=to_absolute_path(config.basket_mixed_source)
+            if config.basket_mixed_source:
+                config.basket_mixed_source=to_absolute_path(config.basket_mixed_source)
     if config.test_object != 'default':
         if not config.test or config.object_motion not in ('throw', 'roll', 'bounce', 'basket', 'throw_basket') or config.object_eval:
             raise ValueError('test_object requires test=True, object_eval=false, throw/roll/bounce/basket')

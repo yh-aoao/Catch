@@ -1,0 +1,53 @@
+{
+  "roll": {
+    "num_envs": 28,
+    "objects": [
+      "original",
+      "tennis_ball",
+      "baseball",
+      "orange",
+      "apple",
+      "lemon",
+      "tomato_soup_can"
+    ],
+    "per_object_slots": 4,
+    "minibatch_size": 896,
+    "max_agent_steps": 1000000000,
+    "smoke_checkpoint": "/home/isee/Catch/catch_it_copy/outputs/all_targets_smoke_roll_20261104/2026-11-04/01:15:09/nn/roll_track_last.pth"
+  },
+  "bounce": {
+    "num_envs": 24,
+    "objects": [
+      "original",
+      "tennis_ball",
+      "baseball",
+      "racquetball",
+      "golf_ball",
+      "softball"
+    ],
+    "per_object_slots": 4,
+    "minibatch_size": 768,
+    "max_agent_steps": 1000000000,
+    "smoke_checkpoint": "/home/isee/Catch/catch_it_copy/outputs/all_targets_smoke_bounce_20261104/2026-11-04/01:15:09/nn/bounce_track_last.pth"
+  },
+  "unit_tests": 11,
+  "formal_training_started": false,
+  "training_smoke": [
+    {
+      "motion": "roll",
+      "num_envs": 7,
+      "exit": 0
+    },
+    {
+      "motion": "bounce",
+      "num_envs": 6,
+      "exit": 0
+    }
+  ],
+  "sources": {
+    "gym_dcmm/envs/object_benchmark.py": "6cfa03768fbb6a179bb500130cbbd41ff19c9daab8f69362413e6e7a61377029",
+    "scripts/train_all_targets_track_v1.sh": "dc6570b7bf6b26ac5b48d3d00e93c5932c0fa61d6786b818c117220928baf8a0",
+    "ycb_objects/calibration_data/object_benchmark_all_targets_v1.json": "31151a8303e5cd01701f96d896f5f1528f75fc70b537869b704a3e0101adbacc",
+    "tests/test_all_targets_benchmark.py": "2fb7bb03d5b36f298d7a38d8799e1dc233a836c546ab8d14fbfbbdab2d6f8811"
+  }
+}

@@ -118,15 +118,24 @@ def precompute(checkpoint, config_path, object_name, episodes, seed, output):
     cfg.rl_device, cfg.device_id = 'cpu', -1
     cfg.viewer = cfg.imshow_cam = False
     cfg.checkpoint_tracking = cfg.checkpoint_catching = ''
-    material = ROOT/'ycb_objects/calibration_data/balls.three_ball_training_v1.json'
-    cfg.bounce_material_file = str(material)
+    benchmark = cfg.get('object_benchmark', 'off') == 'bounce_v1'
+    material = (Path(cfg.get('benchmark_catalog') or ROOT/'ycb_objects/calibration_data/object_benchmark_v1.json') if benchmark else
+                ROOT/'ycb_objects/calibration_data/balls.three_ball_training_v1.json')
+    cfg.bounce_material_file = None if benchmark else str(material)
+    cfg.bounce_ball_mode, cfg.bounce_ball_weights = 'fixed', None
     output.mkdir(parents=True, exist_ok=False)
     torch.set_num_threads(1)
     torch.manual_seed(seed)
     name = 'default' if object_name == 'original' else 'ycb:'+object_name
-    env = make_bounce_physical_v2(task='Catching', object_motion='bounce',
+    factory = make_bounce_physical_v2
+    extra = {}
+    if benchmark:
+        from gym_dcmm.envs.object_benchmark import make_object_benchmark
+        factory = make_object_benchmark
+        extra = dict(object_benchmark='bounce_v1', benchmark_catalog=str(material))
+    env = factory(task='Catching', object_motion='bounce', **extra,
         test_object=name, bounce_launch=cfg.bounce_launch,
-        bounce_v2=OmegaConf.to_container(cfg.bounce_v2), bounce_material_file=material,
+        bounce_v2=OmegaConf.to_container(cfg.bounce_v2), bounce_material_file=None if benchmark else material,
         bounce_grasp_version=version,
         bounce_grasp=OmegaConf.to_container(cfg.bounce_grasp) if cfg.get('bounce_grasp') else None,
         viewer=False, render_mode=None, object_eval=False, env_time=2.5, steps_per_policy=20)
@@ -223,6 +232,8 @@ def precompute(checkpoint, config_path, object_name, episodes, seed, output):
         env.close()
     source_paths = ['ycb_objects/bounce_viewer_replay.py', 'gym_dcmm/envs/bounce_physical_v2.py',
                     'gym_dcmm/envs/DcmmVecEnv.py', 'gym_dcmm/agents/MujocoDcmm_bounce_5fe75d5f.py']
+    if benchmark:
+        source_paths += ['gym_dcmm/envs/object_benchmark.py', 'ycb_objects/benchmark_geometry.py']
     manifest = dict(version='exact_bounce_replay_v1', mode='recorded_state_playback_not_live_policy',
         object=object_name, checkpoint=str(checkpoint.resolve()), checkpoint_sha256=sha256(checkpoint),
         config=str(config_path.resolve()), config_sha256=sha256(config_path),
@@ -347,7 +358,7 @@ def playback(directory, speed=1., fps=60., once=False, max_playback_seconds=None
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--object', choices=['original', 'tennis_ball', 'baseball'], default='original')
+    parser.add_argument('--object', choices=['original', 'tennis_ball', 'baseball', 'racquetball', 'golf_ball', 'softball'], default='original')
     parser.add_argument('--checkpoint', type=Path, default=DEFAULT_CHECKPOINT)
     parser.add_argument('--config', type=Path)
     parser.add_argument('--episodes', type=int, default=3)

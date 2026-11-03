@@ -102,7 +102,9 @@ def inject(xml,shape,profile,surface):
     for node in source.findall('./worldbody/body/*'):
         if node.tag in ('geom','inertial'):body.append(copy.deepcopy(node))
     joint=body.find('joint')
-    if joint is None:joint=body.find('freejoint')
+    if joint is None:
+        joint=body.find('freejoint')
+        joint.tag='joint';joint.set('type','free')
     joint.attrib.update(damping='0',armature='0')
     for g in body.findall('geom'):
         g.set('solref','.02 1');g.set('solimp','.9 .95 .001 .5 2')
@@ -129,7 +131,8 @@ def bounds(shape,rotation):
 
 def roll_state(shape,speed,heading,yaw=0.):
     velocity=np.array([speed*np.sin(heading),-speed*np.cos(heading),0.])
-    axis=np.array([-velocity[1],velocity[0],0.]);axis=axis/max(np.linalg.norm(axis),1e-12)
+    axis=np.array([-velocity[1],velocity[0],0.])
+    axis=axis/np.linalg.norm(axis) if np.linalg.norm(axis)>1e-12 else np.array([1.,0.,0.])
     if shape['kind']=='cylinder':rotation=align([0,0,1],axis)@Rotation.from_rotvec([0,0,yaw]).as_matrix()
     elif np.max(shape['extents'])/np.min(shape['extents'])>1.3:
         rotation=align(shape['long_axis'],axis)@Rotation.from_rotvec(shape['long_axis']*yaw).as_matrix()

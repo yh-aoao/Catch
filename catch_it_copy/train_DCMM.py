@@ -286,15 +286,17 @@ def main(config: DictConfig):
         print('[roll-reward] version=adaptive_wait_v1; reward-only shaping; no hard command guard', flush=True)
     if physical_roll:
         env_name='gym_dcmm/RollPhysicalWorld-v1'
-        print('[roll-physics] physical_v1: consistent inertia; zero armature/damping; separate table contact; condim=6 rolling resistance',flush=True)
+        if benchmark == 'off':
+            print('[roll-physics] physical_v1: consistent inertia; zero armature/damping; separate table contact; condim=6 rolling resistance',flush=True)
     if stable_bounce:
         env_name = 'gym_dcmm/BounceStableWorld-v0'
         print('[bounce-physics] stable_v1: RK4 dt=0.000125; control=0.002; policy=0.04 s; reward unchanged', flush=True)
     if physical_bounce:
         env_name = 'gym_dcmm/BouncePhysicalWorld-v2'
-        print('[bounce-physics] physical_v2: consistent sphere inertia; zero armature; explicit ground pair; '
-              'catch=' + bounce_grasp_version, flush=True)
-        print('[bounce-launch] mode=' + str(config.bounce_launch) + '; baseball_intercept_v1 applies only when the sampled ball is baseball', flush=True)
+        if benchmark == 'off':
+            print('[bounce-physics] physical_v2: consistent sphere inertia; zero armature; explicit ground pair; '
+                  'catch=' + bounce_grasp_version, flush=True)
+            print('[bounce-launch] mode=' + str(config.bounce_launch) + '; baseball_intercept_v1 applies only when the sampled ball is baseball', flush=True)
     if mixed_basket:
         env_name='gym_dcmm/BasketMixed-v0'
     if benchmark != 'off':
@@ -311,9 +313,16 @@ def main(config: DictConfig):
         vector_mode = requested_vector_mode
     print('[environment] vector_mode=' + vector_mode, flush=True)
 
-    env = gym.make_vec(env_name, num_envs=int(config.num_envs), vectorization_mode=vector_mode,
+    vector_factory = gym.make_vec
+    if benchmark != 'off':
+        from gym_dcmm.envs.object_benchmark import make_benchmark_vector
+        def vector_factory(_id, num_envs, vectorization_mode, **environment_options):
+            return make_benchmark_vector(num_envs, benchmark_backend=vectorization_mode, **environment_options)
+    env = vector_factory(env_name, num_envs=int(config.num_envs),
+                    vectorization_mode=vector_mode,
                     **({'object_benchmark':benchmark,'benchmark_catalog':config.get('benchmark_catalog'),
-                        'benchmark_options':OmegaConf.to_container(config.benchmark_options,resolve=True)}
+                        'benchmark_options':OmegaConf.to_container(config.benchmark_options,resolve=True),
+                        'benchmark_seed':int(config.seed)}
                        if benchmark!='off' else {}),
                     task=task, camera_name=["top"],
                     render_per_step=False,

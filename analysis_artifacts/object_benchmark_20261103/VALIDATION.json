@@ -1,0 +1,226 @@
+{
+  "status": "complete",
+  "formal_training_started": false,
+  "catalog_sha256": "c5bcc12638f8ed66d31ec49a36cd33fb448534e3a1e5359578d536db28741fba",
+  "passive_motion_trials": 70,
+  "half_timestep_trials": 7,
+  "unit_tests": 45,
+  "training_smoke": [
+    {
+      "motion": "roll",
+      "task": "Tracking",
+      "exit": 0
+    },
+    {
+      "motion": "roll",
+      "task": "Catching_TwoStage",
+      "exit": 0
+    },
+    {
+      "motion": "bounce",
+      "task": "Tracking",
+      "exit": 0
+    },
+    {
+      "motion": "bounce",
+      "task": "Catching_TwoStage",
+      "exit": 0
+    }
+  ],
+  "viewer_smoke": [
+    {
+      "object": "racquetball",
+      "exit": 0,
+      "recording_check": {
+        "object": "racquetball",
+        "episodes": 2,
+        "terminal_frames_exact": true,
+        "successes": 1
+      }
+    },
+    {
+      "object": "golf_ball",
+      "exit": 0,
+      "recording_check": {
+        "object": "golf_ball",
+        "episodes": 2,
+        "terminal_frames_exact": true,
+        "successes": 1
+      }
+    },
+    {
+      "object": "softball",
+      "exit": 0,
+      "recording_check": {
+        "object": "softball",
+        "episodes": 2,
+        "terminal_frames_exact": true,
+        "successes": 0
+      }
+    }
+  ],
+  "baseline_regression": [
+    {
+      "task": "roll",
+      "ball": "original",
+      "exit": 0,
+      "checks": {
+        "initial": true,
+        "final": true,
+        "reward": true,
+        "success": true
+      }
+    },
+    {
+      "task": "roll",
+      "ball": "tennis_ball",
+      "exit": 0,
+      "checks": {
+        "initial": true,
+        "final": true,
+        "reward": true,
+        "success": true
+      }
+    },
+    {
+      "task": "roll",
+      "ball": "baseball",
+      "exit": 0,
+      "checks": {
+        "initial": true,
+        "final": true,
+        "reward": true,
+        "success": true
+      }
+    },
+    {
+      "task": "bounce",
+      "ball": "original",
+      "exit": 0,
+      "checks": {
+        "initial": true,
+        "final": true,
+        "reward": true,
+        "success": true
+      }
+    },
+    {
+      "task": "bounce",
+      "ball": "tennis_ball",
+      "exit": 0,
+      "checks": {
+        "initial": true,
+        "final": true,
+        "reward": true,
+        "success": true
+      }
+    },
+    {
+      "task": "bounce",
+      "ball": "baseball",
+      "exit": 0,
+      "checks": {
+        "initial": true,
+        "final": true,
+        "reward": true,
+        "success": true
+      }
+    }
+  ],
+  "source_sha256": {
+    "train_DCMM.py": "a67ae12b591f39163e3db329a4bd4082a1d37d1be9fd8439d6e9ee4a13fad90e",
+    "configs/config.yaml": "adb154c2c3473cf174a2211e5fbd41099e4487163d12d896ec15942f5d3b8593",
+    "configs/benchmark_bounce_viewer_v1.yaml": "b59913296ddb69f07157c1d7886404e3ffe2b54e1d89eb72fd195606b52f92d1",
+    "gym_dcmm/__init__.py": "65174e5b71f75c014dbd9e60d55a4fb0f7c425b1efd0173400ee982d6483f9ef",
+    "gym_dcmm/envs/object_benchmark.py": "61328b2827a9a11b010da8f477bf1d7da46edebb43490a724e8181da1f354180",
+    "gym_dcmm/utils/roll_evaluation.py": "9b952076a427417ba7307c4439bb4ecd143ec42005456c57425eb113edde83b8",
+    "ycb_objects/benchmark_geometry.py": "be7b50d388fc8b2213d24dfbdf1ec8615a12b939521a6b0ddecf857493726dd3",
+    "ycb_objects/bounce_viewer_replay.py": "0e036730bb8761246dd5108b3859d3a6865abc95c31c62496c33b111117c2fc4",
+    "scripts/view_object_benchmark.sh": "c27fe972029b205bd57236db8bce4f8251716cb3cf1cd34d46718743ab1413c2",
+    "scripts/train_object_benchmark.sh": "2e90f4541043c9b3c437d168fbf56a1db55213d51ccc20315084336eefe3f443",
+    "tests/test_object_benchmark.py": "c210ab07f4ba7828450a22d30d3edcd7308148121d36dccc147925faf9e5caac"
+  },
+  "asset_provenance": {
+    "orange": {
+      "repository": "https://raw.githubusercontent.com/elpis-lab/YCB_Dataset/9e8c6488a2ff673d9aa48a91492fb89423c1b106/",
+      "revision": "9e8c6488a2ff673d9aa48a91492fb89423c1b106",
+      "files": {
+        "orange.xml": "a8aedf029d734f39da28fbf8d8aa49cd918e3a386177ca4e90c76abd24bee2c4",
+        "orange/textured.obj": "6c0fa6a6e8a9105b0bb6d5ca8bf76b0fee961da549db4627eece90b9c3c0b962",
+        "orange/textured_coacd_0.stl": "2175b134e13411add309afff576cd328705da351d3b0b0d297b97fe1cd47203d",
+        "orange/textured_coacd_1.stl": "4f5a86113dce85caa802062c734e6c431b696a23cee2de8adad200bbdc824071",
+        "orange/textured_coacd_2.stl": "94231337a4d8efc732761fbdc5132fd227b6f6b7ad496be090d35d241157c739",
+        "orange/texture_map.png": "2edec4a6dab80f273491d8282af9b3f7729201877a0f0a1b100905e2ddd38681"
+      }
+    },
+    "apple": {
+      "repository": "https://raw.githubusercontent.com/elpis-lab/YCB_Dataset/9e8c6488a2ff673d9aa48a91492fb89423c1b106/",
+      "revision": "9e8c6488a2ff673d9aa48a91492fb89423c1b106",
+      "files": {
+        "apple.xml": "40c1c2ef9289a987530506080f85368e16ebb33ffe59198d170710c553571529",
+        "apple/textured.obj": "1d7f4626fed5c41bbf0f4f8b4936ae84b2b50cca9a0b2ceade0cf27f91ae8848",
+        "apple/textured_coacd_0.stl": "911b3e22e1059a93c313b7262c6384d57fff48f5e8e6997c19f107cbedfab518",
+        "apple/textured_coacd_1.stl": "ce36994283708fc20b24983baa6ce31957be8db6506049105e8f7209b154218f",
+        "apple/textured_coacd_2.stl": "aff6a7d8e3b93eaa49ed40b01c8bc8464913d597ad910447921dc4a5a93154c9",
+        "apple/textured_coacd_3.stl": "6ccf36e26816be7b22b757cd1bfffeafa1590e53f3672db021b2ae4eee875259",
+        "apple/textured_coacd_4.stl": "47324da9b10187c2cea7d9ef8750414175d3e29eb69cf34804349469d4429498",
+        "apple/texture_map.png": "6a4a3a4e8dd69b27bda0ab1f5da220835aee56cfb4cd2dc8e01506a9040609d1"
+      }
+    },
+    "lemon": {
+      "repository": "https://raw.githubusercontent.com/elpis-lab/YCB_Dataset/9e8c6488a2ff673d9aa48a91492fb89423c1b106/",
+      "revision": "9e8c6488a2ff673d9aa48a91492fb89423c1b106",
+      "files": {
+        "lemon.xml": "a18462bae433ad5856c6f4904c2fa360c0335e9cd7e1683f0b07a769916f31d3",
+        "lemon/textured.obj": "50c0f7709348722dbec049ecd32ad8c2e1feae50bd3cc5aae47e8e1f61e5b6bb",
+        "lemon/textured_coacd_0.stl": "5ff830edd0dde90fb64815059aa280f0efb3f699be23f3068db417c3b8ecaf33",
+        "lemon/textured_coacd_1.stl": "c89f88732dc305ba17aa9f7474612a8cc0396202ddb0ad468ebf9cd7cf6bb9c8",
+        "lemon/texture_map.png": "218621e0e049c777a2a7dc41920a34b32417f70119e846bcd20b6532bd6c3db0"
+      }
+    },
+    "tomato_soup_can": {
+      "repository": "https://raw.githubusercontent.com/elpis-lab/YCB_Dataset/9e8c6488a2ff673d9aa48a91492fb89423c1b106/",
+      "revision": "9e8c6488a2ff673d9aa48a91492fb89423c1b106",
+      "files": {
+        "tomato_soup_can.xml": "b1429e5db08eacd0e768cdd018a2a67deeb99addba147370fb22488813f15907",
+        "tomato_soup_can/textured.obj": "490b83e2945448f35d02645dfc31e38818786da7e2cab9485487e4bf74d8f7c6",
+        "tomato_soup_can/textured_coacd_0.stl": "6db634116c177c544075b9b3dd8449f296f09aa39e4985a627542993ad138ab2",
+        "tomato_soup_can/textured_coacd_1.stl": "e3bdd70e9fece18bf01c76936cd965e8d93cda4ab58a32ee065253f1f2d3bad9",
+        "tomato_soup_can/textured_coacd_2.stl": "8bd6607b3ea52b6389c3e9e1144726b49dc774fc8a83c7c53cc3f56bffad3eb8",
+        "tomato_soup_can/textured_coacd_3.stl": "77d5e6e0f00dcba5ab0e1a52d9c5013228d548e5536b2023096e663e653df78d",
+        "tomato_soup_can/textured_coacd_4.stl": "8dfcf0c302ff7932e874143fbd49fcb15c448619cd8bc3c0259076e2d096cd23",
+        "tomato_soup_can/texture_map.png": "2450de31dec607ff9a25d1deb292df036f161e09fc178a42826b2c12362f5b43"
+      }
+    },
+    "racquetball": {
+      "repository": "https://raw.githubusercontent.com/elpis-lab/YCB_Dataset/9e8c6488a2ff673d9aa48a91492fb89423c1b106/",
+      "revision": "9e8c6488a2ff673d9aa48a91492fb89423c1b106",
+      "files": {
+        "racquetball.xml": "10663941132df425e3b9fe4f7cf405112dc23fed5ddb5efc4ad7dd67dfc19e55",
+        "racquetball/textured.obj": "4aa6e1bed79d7a93d4212382441c17ea4621f6dbddcec329058f7a7053d1488c",
+        "racquetball/textured_coacd_0.stl": "6d885cccb565e8d75ed6c07cf0ddce0568b6dadc4e9cba6861f8536a06dba19a",
+        "racquetball/texture_map.png": "a5d618a8543d251324f73de67a0b58b367f35ec992fd9b2c9c58ab0871dbf69d"
+      }
+    },
+    "golf_ball": {
+      "repository": "https://raw.githubusercontent.com/elpis-lab/YCB_Dataset/9e8c6488a2ff673d9aa48a91492fb89423c1b106/",
+      "revision": "9e8c6488a2ff673d9aa48a91492fb89423c1b106",
+      "files": {
+        "golf_ball.xml": "d82e7fdc636ff243286d25e812730d908278eff7958ecd1220d93c93110e640e",
+        "golf_ball/textured.obj": "35e0a626ed18a7ecb2d1eaea83919eed1dec687c06d290a4279c917a0fa19dbc",
+        "golf_ball/textured_coacd_0.stl": "9b65d12992a93b39fd4174eca7367d008f31b58ea84f8c0e3ba8a5a46d40b9f4",
+        "golf_ball/texture_map.png": "cd0ae6a0337d03ce381753219a4e06c8f155c70bba48ce0b010896bfd47f4f9d"
+      }
+    },
+    "softball": {
+      "repository": "https://raw.githubusercontent.com/elpis-lab/YCB_Dataset/9e8c6488a2ff673d9aa48a91492fb89423c1b106/",
+      "revision": "9e8c6488a2ff673d9aa48a91492fb89423c1b106",
+      "files": {
+        "softball.xml": "070a6a024ca334ab3ac0f598e6bfa76653a27b9e9c4e66d5237fd81d203c3cdd",
+        "softball/textured.obj": "f086b0fbcff8d8847b0480ddab0520656ba28def43642ee7a4cf50b342dd2c30",
+        "softball/textured_coacd_0.stl": "d5b67fb05761fce012781d823ebd1dc8c1f4b61773edea82084f0a897e42bf0d",
+        "softball/texture_map.png": "096cdfc3028d11316023c39469915b95f5a673e751202401b60fa7d7f76b63c8"
+      }
+    }
+  }
+}

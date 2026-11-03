@@ -8,31 +8,86 @@ import random
 import xml.etree.ElementTree as ET
 import mujoco
 import numpy as np
+import gymnasium as gym
 from ycb_objects.benchmark_geometry import geometry,inject,bounds,roll_state
 from ycb_objects.loader import remap_contacts
 from gym_dcmm.utils.roll_speed import speed_range
 
 ROOT=Path(__file__).resolve().parents[2]
 DEFAULT_CATALOG=ROOT/'ycb_objects/calibration_data/object_benchmark_v1.json'
+LEGACY_OBJECTS={'original','tennis_ball','baseball'}
 
 
 def catalog(path=None):
     path=Path(path or DEFAULT_CATALOG).resolve();raw=path.read_bytes();data=json.loads(raw)
     if data.get('schema')!='object_motion_benchmark_v1':raise ValueError('Invalid benchmark catalog schema')
-    allowed={'roll':{'orange','apple','lemon','tomato_soup_can'},'bounce':{'racquetball','golf_ball','softball'}}
+    allowed={'roll':{'orange','apple','lemon','tomato_soup_can'}|LEGACY_OBJECTS,
+             'bounce':{'racquetball','golf_ball','softball'}|LEGACY_OBJECTS}
     for motion,names in allowed.items():
         if not data.get(motion) or set(data[motion])-names:raise ValueError('Invalid benchmark objects: '+motion)
         for name,p in data[motion].items():
+            if name in LEGACY_OBJECTS:
+                if p!={'route':'three_ball_baseline'}:
+                    raise ValueError('Legacy objects must use the unchanged three_ball_baseline route')
+                continue
             for key,lo,hi in [('sliding_friction',0,3),('torsional_length_m',0,.005),('rolling_length_m',0,.005)]:
                 value=p.get(key,0.)
                 if not isinstance(value,(int,float)) or not math.isfinite(value) or not lo<=value<=hi:raise ValueError('Invalid '+name+'.'+key)
+            if motion=='roll' and p.get('speed_mps') is not None:
+                speed_range(p['speed_mps'])
             if motion=='bounce':
-                for key,lo,hi in [('normal_cor_target',.2,.95),('damping_ratio',.04,1.),('time_constant',.008,.05),('inertia_factor',.1,2/3),('horizontal_retention_prior',.2,1.)]:
+                for key,lo,hi in [('normal_cor_target',.2,.95),('damping_ratio',.04,1.),('time_constant',.003,.05),('inertia_factor',.1,2/3),('horizontal_retention_prior',.2,1.)]:
                     if not lo<=float(p[key])<=hi:raise ValueError('Invalid '+name+'.'+key)
     return dict(data,path=str(path),sha256=hashlib.sha256(raw).hexdigest())
 
 
-def choose(motion,test_object,mode,weights,data):
+class LegacyBenchmarkTarget(gym.Wrapper):
+    """Attach sampling metadata without replacing old physics/reward/reset logic."""
+    def __init__(self,env,name,data):
+        super().__init__(env)
+        self.benchmark_object=name
+        self.benchmark_profile=data[env.object_motion][name]
+        self.benchmark_catalog=data
+        self.benchmark_episode=dict(object=name,route='three_ball_baseline',sampling='fixed_object_per_environment')
+
+    def _annotate(self,info):
+        physics=(getattr(self.env,'roll_physics_episode',None) if self.env.object_motion=='roll'
+                 else getattr(self.env,'bounce_v2_episode',None))
+        self.benchmark_episode=dict(object=self.benchmark_object,route='three_ball_baseline',
+                                    sampling='fixed_object_per_environment',physics=physics)
+        info['object_benchmark']=self.benchmark_episode
+
+    def reset(self,**kwargs):
+        obs,info=self.env.reset(**kwargs);self._annotate(info)
+        return obs,info
+
+    def step(self,action):
+        obs,reward,terminated,truncated,info=self.env.step(action);self._annotate(info)
+        return obs,reward,terminated,truncated,info
+
+
+def legacy_target(motion,name,data,kwargs):
+    parameters=dict(kwargs)
+    parameters.update(test_object='default' if name=='original' else 'ycb:'+name)
+    parameters[motion+'_ball_mode']='fixed'
+    parameters[motion+'_ball_weights']=None
+    if motion=='roll':
+        from gym_dcmm.envs.roll_physical import make_roll_physical,DEFAULT_MATERIALS
+        parameters['roll_physics']='physical_v1'
+        parameters['roll_material_file']=str(DEFAULT_MATERIALS)
+        if parameters.get('roll_speed') is None:
+            parameters['roll_speed']=[.8,1.3]
+        factory=make_roll_physical
+    else:
+        from gym_dcmm.envs.bounce_physical_v2 import make_bounce_physical_v2
+        parameters['bounce_physics']='physical_v2'
+        parameters['bounce_launch']='baseball_intercept_v1'
+        parameters['bounce_material_file']=str(ROOT/'ycb_objects/calibration_data/balls.three_ball_training_v1.json')
+        factory=make_bounce_physical_v2
+    return LegacyBenchmarkTarget(factory(**parameters),name,data)
+
+
+def choose(motion,test_object,mode,weights,data,slot=None,num_slots=None):
     names=list(data[motion])
     if mode not in ('fixed','mixed'):raise ValueError('Benchmark mode must be fixed or mixed')
     if mode=='mixed':
@@ -43,9 +98,13 @@ def choose(motion,test_object,mode,weights,data):
             names=list(weights);values=np.asarray(list(weights.values()),dtype=float)
             if not np.isfinite(values).all() or (values<0).any() or values.sum()<=0:raise ValueError('Invalid benchmark weights')
             probabilities=values/values.sum()
+        if slot is not None:
+            probabilities=np.full(len(names),1/len(names)) if probabilities is None else probabilities
+            index=min(len(names)-1,int(np.searchsorted(np.cumsum(probabilities),(slot+.5)/num_slots)))
+            return names[index]
         return str(np.random.choice(names,p=probabilities))
     if weights is not None:raise ValueError('Weights require mixed benchmark')
-    name=test_object.removeprefix('ycb:')
+    name='original' if test_object in ('default','sphere') else test_object.removeprefix('ycb:')
     if name not in names:raise ValueError('Choose a benchmark '+motion+' object from '+str(names))
     return name
 
@@ -76,22 +135,36 @@ def bounce_launch(profile,radius,rng=np.random):
 
 
 def make_object_benchmark(object_benchmark='off',benchmark_catalog=None,benchmark_options=None,
-                          test_object='default',**kwargs):
+                          test_object='default',benchmark_slot=None,benchmark_num_envs=None,
+                          benchmark_seed=123,**kwargs):
     motion=kwargs.get('object_motion');kind=str(object_benchmark)
-    if kind!=motion+'_v1' or motion not in ('roll','bounce') or kwargs.get('object_eval',False):raise ValueError('Invalid benchmark motion/object_eval')
+    if motion not in ('roll','bounce') or kind!=motion+'_v1' or kwargs.get('object_eval',False):raise ValueError('Invalid benchmark motion/object_eval')
     if kwargs.get('roll_wait_guard',False) or kwargs.get('roll_reward_version','legacy')!='legacy':raise ValueError('Benchmark uses legacy Roll reward with no hard guard')
+    if kwargs.get('ycb_collision','auto')!='auto' or kwargs.get('ycb_joint_damping') is not None:
+        raise ValueError('Benchmark owns collision geometry and free-joint damping')
+    if kwargs.get(motion+'_material_file'):
+        raise ValueError('Use benchmark_catalog; clear the legacy material_file for this benchmark')
     opts=dict(benchmark_options or {})
     if set(opts)-{'heading_degrees','distance_m'}:raise ValueError('Unknown benchmark options')
+    for key,default,low,high in [('heading_degrees',[-10,10],-30,30),('distance_m',[2.,2.2],1.1,3.5)]:
+        value=np.asarray(opts.get(key,default),dtype=float)
+        if value.shape!=(2,) or not np.isfinite(value).all() or not low<=value[0]<=value[1]<=high:raise ValueError('Invalid benchmark '+key)
+    if benchmark_slot is not None:
+        if not 0<=benchmark_slot<benchmark_num_envs:raise ValueError('Invalid benchmark slot')
+        if benchmark_seed>=0:
+            np.random.seed(benchmark_seed+benchmark_slot);random.seed(benchmark_seed+benchmark_slot)
     data=catalog(benchmark_catalog)
     mode=kwargs.get(motion+'_ball_mode','fixed');weights=kwargs.get(motion+'_ball_weights')
-    selected=choose(motion,test_object,mode,weights,data);profile=data[motion][selected]
+    selected=choose(motion,test_object,mode,weights,data,benchmark_slot,benchmark_num_envs);profile=data[motion][selected]
+    if selected in LEGACY_OBJECTS:
+        return legacy_target(motion,selected,data,kwargs)
     shape=geometry(selected,profile['kind'],profile.get('inertia_factor',.4))
     if motion=='roll':
         if kwargs.get('task')=='Tracking':
             from gym_dcmm.envs.DcmmVecEnv import RollTrackingEnv as Base
         else:
             from gym_dcmm.envs.DcmmVecEnv_roll_645edc4 import DcmmVecEnv as Base
-        speed=speed_range(kwargs.get('roll_speed')) or (.8,1.3)
+        speed=speed_range(kwargs.get('roll_speed')) or speed_range(profile.get('speed_mps')) or (.8,1.3)
     elif kwargs.get('task')=='Tracking':
         from gym_dcmm.envs.DcmmVecEnv_bounce_july22 import DcmmVecEnv as Base
     elif kwargs.get('bounce_grasp_version','legacy')=='controlled_hold_v1':
@@ -115,14 +188,15 @@ def make_object_benchmark(object_benchmark='off',benchmark_catalog=None,benchmar
             super()._reset_simulation()
             model,d=self.Dcmm.model,self.Dcmm.data
             if motion=='roll':
-                heading_range=opts.get('heading_degrees',[-10,10]);distance=opts.get('distance_m',[2.0,2.2])
+                heading_range=opts.get('heading_degrees',[-10,10]);distance=opts.get('distance_m',profile.get('distance_m',[2.0,2.2]))
                 initial=roll_state(shape,float(np.random.uniform(*speed)),math.radians(np.random.uniform(*heading_range)),np.random.uniform(-math.pi,math.pi))
                 table=model.geom('table_surface').id
                 top=float(d.geom_xpos[table,2]+model.geom_size[table,2])
                 self.object_pos3d=np.array([np.random.uniform(-.15,.15),np.random.uniform(*distance),top+initial['clearance']+.0003])
                 self.object_q=initial['quat'];self.object_vel6d=initial['velocity']
                 description=dict(no_slip_error=initial['no_slip_error'],support_point=initial['support'].tolist(),
-                                 axis_world=initial['rotation'][:,2].tolist(),initial_support_clearance=.0003)
+                                 axis_world=initial['rotation'][:,2].tolist(),initial_support_clearance=.0003,
+                                 configured_speed_mps=list(speed),configured_distance_m=list(distance))
             else:
                 from gym_dcmm.envs.bounce_physical_v2 import DT,SUBSTEPS
                 model.opt.timestep=DT;model.opt.integrator=mujoco.mjtIntegrator.mjINT_RK4
@@ -166,12 +240,26 @@ def make_object_benchmark(object_benchmark='off',benchmark_catalog=None,benchmar
     env=BenchmarkObject(**parameters)
     env.roll_log=bool(kwargs.get('roll_log',False))
     env.benchmark_shape=shape;env.benchmark_profile=profile;env.benchmark_catalog=data
+    env.benchmark_object=selected
     return env
+
+
+def make_benchmark_vector(num_envs,benchmark_backend='async',**kwargs):
+    """Explicit ranks avoid identical shape choices in forked vector workers."""
+    from functools import partial
+    from gymnasium.experimental.vector import SyncVectorEnv,AsyncVectorEnv
+    kwargs.pop('max_episode_steps',None)
+    factories=[partial(make_object_benchmark,benchmark_slot=i,benchmark_num_envs=num_envs,**kwargs) for i in range(num_envs)]
+    if benchmark_backend=='sync':return SyncVectorEnv(factories)
+    if benchmark_backend=='async':return AsyncVectorEnv(factories)
+    raise ValueError('Unknown benchmark vector backend')
 
 
 def write_provenance(output,config):
     data=catalog(config.get('benchmark_catalog'))
-    names=['train_DCMM.py','configs/config.yaml','gym_dcmm/envs/object_benchmark.py','ycb_objects/benchmark_geometry.py','gym_dcmm/utils/roll_evaluation.py']
+    names=['train_DCMM.py','configs/config.yaml','gym_dcmm/envs/object_benchmark.py','ycb_objects/benchmark_geometry.py','gym_dcmm/utils/roll_evaluation.py',
+           'gym_dcmm/envs/roll_physical.py','gym_dcmm/envs/bounce_physical_v2.py',
+           'ycb_objects/calibration_data/balls.roll_table_priors_v1.json','ycb_objects/calibration_data/balls.three_ball_training_v1.json']
     result=dict(version=config['object_benchmark'],catalog=data,options=config.get('benchmark_options'),
                 sampling='one_object_sampled_at_environment_creation_no_mesh_recompile_on_reset',
                 reward='existing task reward; shape-aware departure for non-spheres',

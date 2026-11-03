@@ -14,25 +14,57 @@
       "kind": "convex",
       "sliding_friction": 0.4,
       "torsional_length_m": 0.0001,
-      "rolling_length_m": 2e-05
+      "rolling_length_m": 2e-05,
+      "time_constant": 0.008,
+      "distance_m": [
+        2.0,
+        2.2
+      ],
+      "speed_mps": [
+        1.1,
+        1.4
+      ]
     },
     "apple": {
       "kind": "convex",
       "sliding_friction": 0.4,
       "torsional_length_m": 0.0001,
-      "rolling_length_m": 2e-05
+      "rolling_length_m": 2e-05,
+      "time_constant": 0.008,
+      "distance_m": [
+        2.0,
+        2.2
+      ],
+      "speed_mps": [
+        1.6,
+        1.9
+      ]
     },
     "lemon": {
       "kind": "convex",
       "sliding_friction": 0.45,
       "torsional_length_m": 0.0001,
-      "rolling_length_m": 2e-05
+      "rolling_length_m": 2e-05,
+      "time_constant": 0.008,
+      "distance_m": [
+        2.0,
+        2.2
+      ],
+      "speed_mps": [
+        1.4,
+        1.7
+      ]
     },
     "tomato_soup_can": {
       "kind": "cylinder",
       "sliding_friction": 0.3,
       "torsional_length_m": 0.0001,
-      "rolling_length_m": 2e-05
+      "rolling_length_m": 2e-05,
+      "time_constant": 0.008,
+      "distance_m": [
+        2.0,
+        2.2
+      ]
     }
   },
   "bounce": {
@@ -89,8 +121,8 @@
       "inertia_factor": 0.4,
       "sliding_friction": 0.35,
       "torsional_length_m": 0.0001,
-      "time_constant": 0.008,
-      "damping_ratio": 0.30813882047179664,
+      "time_constant": 0.004,
+      "damping_ratio": 0.31060281083544805,
       "normal_cor_target": 0.44,
       "cor_basis": "Literature/standard-test informed prior; not a measured YCB softball/floor pair",
       "launch_height_m": [
@@ -104,7 +136,7 @@
       "horizontal_retention_prior": 0.75,
       "numerical_validation": {
         "passed": true,
-        "peak_refinement_error_m": 0.0014932429467385266,
+        "peak_refinement_error_m": 0.0030220591917469175,
         "calibration": "simulation-only fit to nominal COR; not real measurements"
       }
     }

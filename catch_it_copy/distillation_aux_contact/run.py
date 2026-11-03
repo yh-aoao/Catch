@@ -313,6 +313,8 @@ def train(config, teachers, adapters, output, resume=None, allow_source_changes=
             checkpoint = package(student, config, metadata, iteration)
             atomic_save(output / 'student_last.pth', checkpoint)
             if iteration % config['eval_every'] == 0 or iteration == config['iterations']:
+                # Keep the exact evaluated weights even when last/best later change.
+                atomic_save(output / ('student_%06d.pth' % iteration), checkpoint)
                 saved_rng = rng_state()
                 results = evaluate(config, adapters, student=student,
                                    output_file=output / ('eval_%06d.json' % iteration))

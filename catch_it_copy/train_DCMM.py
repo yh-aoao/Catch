@@ -22,6 +22,21 @@ OmegaConf.register_new_resolver('resolve_default', lambda default, arg: default 
 
 @hydra.main(config_name='config', config_path='configs')
 def main(config: DictConfig):
+    benchmark = str(config.get('object_benchmark', 'off'))
+    if benchmark not in ('off', 'roll_v1', 'bounce_v1'):
+        raise ValueError('Unknown object_benchmark')
+    if benchmark != 'off':
+        if benchmark != str(config.object_motion)+'_v1' or config.object_eval:
+            raise ValueError('Benchmark must match object_motion, object_eval=false')
+        expected = 'physical_v1' if config.object_motion == 'roll' else 'physical_v2'
+        if str(config.get(str(config.object_motion)+'_physics')) != expected:
+            raise ValueError('Benchmark requires '+expected)
+        if config.object_motion=='roll' and str(config.get('roll_reward_version','legacy'))!='legacy':
+            raise ValueError('New object benchmark preserves legacy Roll reward')
+        if config.get('benchmark_catalog'):
+            config.benchmark_catalog=to_absolute_path(config.benchmark_catalog)
+    elif config.get('benchmark_catalog') or config.get('benchmark_options'):
+        raise ValueError('benchmark_catalog/options require object_benchmark')
     roll_physics=str(config.get('roll_physics','legacy'))
     if roll_physics not in ('legacy','physical_v1'):
         raise ValueError('roll_physics must be legacy or physical_v1')
@@ -282,6 +297,9 @@ def main(config: DictConfig):
         print('[bounce-launch] mode=' + str(config.bounce_launch) + '; baseball_intercept_v1 applies only when the sampled ball is baseball', flush=True)
     if mixed_basket:
         env_name='gym_dcmm/BasketMixed-v0'
+    if benchmark != 'off':
+        env_name='gym_dcmm/ObjectBenchmark-v1'
+        print('[object-benchmark] '+benchmark+'; real collision shapes; per-environment object; existing task rewards',flush=True)
     task = 'Tracking' if config.task == 'Tracking' else 'Catching'
     print("config.num_envs: ", config.num_envs)
     # Single-environment evaluation keeps Viewer and exceptions in the main process.
@@ -294,6 +312,9 @@ def main(config: DictConfig):
     print('[environment] vector_mode=' + vector_mode, flush=True)
 
     env = gym.make_vec(env_name, num_envs=int(config.num_envs), vectorization_mode=vector_mode,
+                    **({'object_benchmark':benchmark,'benchmark_catalog':config.get('benchmark_catalog'),
+                        'benchmark_options':OmegaConf.to_container(config.benchmark_options,resolve=True)}
+                       if benchmark!='off' else {}),
                     task=task, camera_name=["top"],
                     render_per_step=False,
                     render_mode = None if (physical_bounce or physical_roll or config.get('basket_carry_reward',False)) and not config.viewer and not config.imshow_cam else "rgb_array",
@@ -359,10 +380,13 @@ def main(config: DictConfig):
     output_dif = os.path.join(output_dif, current_datetime_str)
     os.makedirs(output_dif, exist_ok=True)
     OmegaConf.save(config, os.path.join(output_dif, 'resolved_config.yaml'), resolve=True)
-    if physical_roll:
+    if benchmark != 'off':
+        from gym_dcmm.envs.object_benchmark import write_provenance
+        write_provenance(output_dif,OmegaConf.to_container(config,resolve=True))
+    if physical_roll and benchmark == 'off':
         from gym_dcmm.envs.roll_physical import write_provenance
         write_provenance(output_dif,OmegaConf.to_container(config,resolve=True))
-    if physical_bounce:
+    if physical_bounce and benchmark == 'off':
         from gym_dcmm.envs.bounce_physical_v2 import write_provenance
         write_provenance(output_dif, OmegaConf.to_container(config, resolve=True))
     if controlled_bounce:

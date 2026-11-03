@@ -144,12 +144,14 @@ def observe(env, cfg):
     hand = bool(np.any(np.isin(contacts, hand_collision_ids(model, env.hand_start_id))))
     edge = cfg.roll_table_pos[1] - cfg.roll_table_size[1]
     state = getattr(env, '_roll_eval', {})
-    clear = departure(state, position[1] + radius < edge,
+    shape_bounds = getattr(env, '_benchmark_world_bounds', None)
+    high = shape_bounds()[1] if shape_bounds is not None else position + radius
+    clear = departure(state, high[1] < edge,
                       env.table_geom_id in contacts, env.floor_id in contacts,
-                      below_table=(env.task == 'Catching' and position[2] + radius <
+                      below_table=(env.task == 'Catching' and high[2] <
                                    cfg.roll_table_pos[2] + cfg.roll_table_size[2] - .005))
     if env.task == 'Tracking':
-        clear = clear and bool(position[1] + radius < edge)
+        clear = clear and bool(high[1] < edge)
     if env.task == 'Catching':
         near, local, reason = catch_region(position, data.geom_xpos[env.hand_start_id], radius=radius)
         state.update(ball_palm_world_delta=local, region_unmet=reason)

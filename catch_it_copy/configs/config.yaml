@@ -68,6 +68,9 @@ bounce_log: False        # print baseline identity; no later outcome diagnostics
 basket_log: False        # print parking error, speed, reward terms and terminal reason
 basket_freeze_tracking: True # TwoStage basket: preserve pretrained parking actor and normalization
 roll_log: False          # Roll 645edc4 baseline identity; newer diagnostics inactive
+object_benchmark: "off" # off / roll_v1 / bounce_v1; isolated new YCB objects
+benchmark_catalog: null # defaults to ycb_objects/calibration_data/object_benchmark_v1.json
+benchmark_options: {} # roll: heading_degrees, distance_m
 roll_physics: legacy # legacy / physical_v1; independent sphere inertia and table materials
 roll_material_file: null # null uses bundled balls.roll_table_priors_v1.json in physical_v1
 roll_ball_mode: fixed # physical_v1: fixed / mixed

@@ -1,0 +1,23 @@
+{
+  "roll": {
+    "viewer_preference": "best",
+    "checkpoint": "/home/isee/Catch/11-3/roll_catch_best_reward_262.02.pth",
+    "primary_successes": 243,
+    "episodes": 300,
+    "stable_hold_episodes": 0,
+    "caveat": "Do not replace the 11-02 stable-grasp baseline solely on region retention. Previous stable_hold counts were 21/23/27 per 100."
+  },
+  "bounce": {
+    "viewer_preference": "last",
+    "checkpoint": "/home/isee/Catch/11-3/bounce_catch_last.pth",
+    "successes": 224,
+    "episodes": 300,
+    "criterion": "controlled_hold_v1, continuous 0.3s"
+  },
+  "viewer_validation": {
+    "script": "catch_it_copy/scripts/view_roll_bounce_20261103.sh",
+    "roll_config_resolved": true,
+    "bounce_last_seed0_precomputed_and_frames_restored_exactly": true
+  },
+  "training_modified": false
+}

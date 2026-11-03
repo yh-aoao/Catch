@@ -69,3 +69,30 @@ class MacroSuccess:
     def __len__(self):
         return sum(len(m) for m in self.meters) if all(len(m)>=20 for m in self.meters) else 0
     def get_mean(self):return sum(m.get_mean() for m in self.meters)/len(self.meters)
+
+
+def single_ball_fixed35(checkpoint,ball,protocol,delivery_version,delivery_options):
+    """Exactly absorb constant physical inputs into the first-layer biases."""
+    import copy
+    if (checkpoint.get('basket_mixed_protocol')!='mixed37_known_radius_mass_v1'
+            or checkpoint.get('basket_trained_ball')!=ball
+            or checkpoint.get('basket_ball_protocol')!=protocol
+            or checkpoint.get('basket_delivery_version')!=delivery_version
+            or checkpoint.get('basket_delivery_options')!=delivery_options):
+        raise ValueError('Single mobile source must match ball, physics and delivery reward')
+    profile=protocol[ball]
+    # Match MixedNormalizer's float32 arithmetic, including physical input rounding.
+    physical=torch.tensor([[profile['radius_m'],profile['mass_kg']]],dtype=torch.float32)
+    constant=torch.cat(((physical[:,:1]-.04)/.01,
+                        torch.log(physical[:,1:]/.05)),dim=-1)[0]
+    result=copy.deepcopy(checkpoint)
+    state=result['model']
+    for prefix in ('actor_mlp','value_mlp'):
+        key=prefix+'.mlp.0.weight';bias=prefix+'.mlp.0.bias'
+        weight=state[key]
+        if weight.shape[1]!=37:raise ValueError('Expected single-ball fixed37 checkpoint')
+        state[bias]=state[bias]+weight[:,35:]@constant.to(weight)
+        state[key]=weight[:,:35].clone()
+    result['running_mean_std']={k[len('original.'):]:v
+        for k,v in checkpoint['running_mean_std'].items() if k.startswith('original.')}
+    return result

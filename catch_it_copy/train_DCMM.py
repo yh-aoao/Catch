@@ -100,8 +100,13 @@ def main(config: DictConfig):
                       if OmegaConf.is_config(delivery_options) else dict(delivery_options))
     if delivery_version != 'legacy' and not mixed_basket:
         raise ValueError('ballistic_v2 requires a Basket mixed/single ball environment')
+    single_mobile=(mixed_basket and config.basket_reward_version=='basket_mobile_v1'
+                   and config.basket_training_stage=='mobile_joint'
+                   and mixed_ball in ('tennis_ball','baseball'))
+    if single_mobile and (config.test_object!='default' or config.object_eval or config.basket_mixed_source):
+        raise ValueError('Single mobile uses basket_throw_checkpoint and its native ball physics')
     if mixed_basket:
-        if (mixed_ball not in ('mixed','original','tennis_ball','baseball')
+        if not single_mobile and (mixed_ball not in ('mixed','original','tennis_ball','baseball')
                 or config.task != 'Catching_OneStage' or config.object_motion not in ('basket','throw_basket')
                 or not config.basket_fixed_base_training or not config.basket_fixed_physical
                 or not config.basket_carry_reward or not config.basket_finger_reward
@@ -372,7 +377,7 @@ def main(config: DictConfig):
     PPO = TrackingAgent if config.task == 'Tracking' else \
           TwoStageAgent if config.task == 'Catching_TwoStage' else \
           OneStageAgent
-    if mixed_basket:
+    if mixed_basket and not single_mobile:
         from gym_dcmm.algs.ppo_dcmm.ppo_dcmm_basket_mixed import PPO_Basket_Mixed
         PPO = PPO_Basket_Mixed
     elif mobile_basket and basket_stage == 'mobile_joint':

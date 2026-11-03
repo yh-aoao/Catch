@@ -1,4 +1,4 @@
-"""Fixed-base three-ball training; analytic sphere dynamics, physical preparation."""
+"""Conditional fixed-base throws and single-ball mobile training with shared sphere physics."""
 import json
 from pathlib import Path
 from types import SimpleNamespace
@@ -31,7 +31,16 @@ class BasketMixedEnv(DcmmVecEnv):
     def __init__(self,basket_mixed_ball='mixed',basket_mixed_options=None,
                  basket_delivery_version='legacy',basket_delivery_options=None,**kwargs):
         if basket_mixed_ball not in ('mixed',)+NAMES:raise ValueError('Unknown Basket mixed ball mode')
-        if not (kwargs.get('object_motion') in ('basket','throw_basket') and kwargs.get('task')=='Catching'
+        mobile=kwargs.get('basket_reward_version')=='basket_mobile_v1'
+        self.single_mobile=mobile
+        if mobile and not (kwargs.get('object_motion') in ('basket','throw_basket')
+                and kwargs.get('task')=='Catching' and not kwargs.get('basket_fixed_base_training')
+                and kwargs.get('basket_fixed_physical') and kwargs.get('basket_carry_reward')
+                and kwargs.get('basket_finger_reward') and kwargs.get('basket_arm_control')=='joint_velocity'):
+            raise ValueError('Single mobile requires physical finger/carry mobile Basket')
+        if mobile and basket_mixed_ball not in ('tennis_ball','baseball'):
+            raise ValueError('Mobile single-ball requires tennis_ball or baseball')
+        if not mobile and not (kwargs.get('object_motion') in ('basket','throw_basket') and kwargs.get('task')=='Catching'
                 and kwargs.get('basket_fixed_base_training') and kwargs.get('basket_fixed_physical')
                 and kwargs.get('basket_carry_reward') and kwargs.get('basket_finger_reward')
                 and kwargs.get('basket_reward_version')=='basket_aim_v1'
@@ -62,6 +71,8 @@ class BasketMixedEnv(DcmmVecEnv):
         self.mixed_protocol=dict(version='mixed37_known_radius_mass_v1',
             original={k:(v.tolist() if isinstance(v,np.ndarray) else v) for k,v in self._original.items()},
             tennis_ball=self.profiles['tennis_ball'],baseball=self.profiles['baseball'])
+        if mobile:
+            return # Ball is constant; policy uses the existing mobile51 interface.
         self.observation_space.spaces['basket_ball_properties']=spaces.Box(0.,np.inf,shape=(2,),dtype=np.float32)
         self.observation_space.spaces['basket_ball_id']=spaces.Box(0.,2.,shape=(1,),dtype=np.float32)
         # Physical properties enter policy; categorical identity is logging metadata only.
@@ -99,6 +110,8 @@ class BasketMixedEnv(DcmmVecEnv):
         self.random_mass=float(mass)
         self.basket_cfg.basket_ball_radius=float(radius);self.basket_cfg.basket_ball_mass=float(mass)
         hand_key=('original_hand','tennis_hand','baseball_hand')[self.ball_index]
+        if self.single_mobile:
+            self.basket_cfg.mobile_hold_hand_flex=self.mixed_options[hand_key]
         self.basket_grip_cfg=SimpleNamespace(mobile_hold_hand_flex=self.mixed_options[hand_key],
             mobile_hold_thumb_flex=[.4,.4,.4])
         # Recompute collision bounds and mass constants before resetting/settling.
@@ -106,6 +119,8 @@ class BasketMixedEnv(DcmmVecEnv):
 
     def _get_obs(self):
         obs=super()._get_obs()
+        if self.single_mobile:
+            return obs
         obs['basket_ball_properties']=np.array([self.basket_cfg.basket_ball_radius,
             self.basket_cfg.basket_ball_mass],dtype=np.float32)
         obs['basket_ball_id']=np.array([self.ball_index],dtype=np.float32)
@@ -136,7 +151,8 @@ class BasketMixedEnv(DcmmVecEnv):
         other=bool(np.any(~np.isin(contacts,hands)))
         unsafe=bool(self.basket_arm_self_collision or self.basket_robot_collision or other)
         launch=self.basket_simple_state
-        if touching and not launch.get('confirmed') and not unsafe:
+        active=not self.single_mobile or self.basket_mobile_state.get('unlocked',False)
+        if touching and active and not launch.get('confirmed') and not unsafe:
             q,error=quality(self.Dcmm.data.qpos[37:40],self.Dcmm.data.qvel[36:39],
                 self.basket_center,self.Dcmm.model.opt.gravity,self.basket_cfg.basket_tilt_deg,self.delivery_options)
             observe(self.delivery_state,q,error,self.delivery_options)
@@ -152,7 +168,14 @@ class BasketMixedEnv(DcmmVecEnv):
         from gym_dcmm.utils.basket_delivery import adjustments
         terms=info['basket_reward_terms'];old=terms.copy()
         collision=bool(info.get('robot_dangerous_collision',False))
-        done=bool(self.terminated or info['env_time']>self.basket_cfg.basket_max_time)
+        deadline=self.basket_cfg.basket_max_time
+        if self.single_mobile:
+            from gym_dcmm.utils.basket_mobile import episode_deadline
+            deadline=episode_deadline(self.basket_mobile_state,self.basket_cfg)
+        done=bool(self.terminated or info['env_time']>deadline)
+        # ballistic_v2 already charges a terminal miss; avoid a second mobile miss cost.
+        if self.single_mobile:
+            terms['task_failure']=0.
         terms.update(adjustments(self.delivery_state,old,self.delivery_options,
             done=done,success=bool(info.get('safe_basket_success',False)),collision=collision))
         for key,amount in terms.items():

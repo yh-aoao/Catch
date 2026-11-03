@@ -22,9 +22,28 @@ class PPO_Basket_MobileJoint(PPO_Catch_OneStage):
         self.model = JointActorCritic(list(self.network_config.mlp.units)).to(self.device)
         self.running_mean_std = JointNormalizer().to(self.device)
         self.input_normalization_frozen = False
+        self.single_ball=str(full_config.get('basket_mixed_ball','off'))
+        self.single_ball_protocol=None
+        if self.single_ball!='off':
+            from gym_dcmm.utils.basket_delivery import make_options
+            self.single_ball_protocol=self.env.call('mixed_protocol')[0]
+            self.delivery_version=str(full_config.basket_delivery_version)
+            self.delivery_options=make_options(full_config.basket_delivery_options)
+            if any(p!=self.single_ball_protocol for p in self.env.call('mixed_protocol')):
+                raise ValueError('Mobile workers disagree on ball physics')
+            if any(v!=self.delivery_version for v in self.env.call('delivery_version')):
+                raise ValueError('Mobile workers disagree on delivery reward')
+            if any(o!=self.delivery_options for o in self.env.call('delivery_options')):
+                raise ValueError('Mobile workers disagree on delivery options')
         if not full_config.test:
             source_path=full_config.basket_throw_checkpoint
-            checkpoint=torch.load(source_path,map_location=self.device)
+            checkpoint=torch.load(source_path,map_location=self.device,weights_only=False)
+            if self.single_ball!='off':
+                from .basket_mixed_policy import single_ball_fixed35
+                if checkpoint.get('basket_mixed_options')!=dict(full_config.basket_mixed_options):
+                    raise ValueError('Source ball grip differs from mobile configuration')
+                checkpoint=single_ball_fixed35(checkpoint,self.single_ball,self.single_ball_protocol,
+                    self.delivery_version,self.delivery_options)
             self.model.import_throw(checkpoint,self.running_mean_std,self.finger_options,self.carry_options)
             with open(source_path,'rb') as stream:digest=hashlib.sha256(stream.read()).hexdigest()
             self.basket_transfer_metadata=dict(version='joint_fixed35_throw_base2_v1',
@@ -206,10 +225,21 @@ class PPO_Basket_MobileJoint(PPO_Catch_OneStage):
                 episode_success=float(self.episode_success.get_mean()),
                 grouped_success={k:float(v.get_mean()) for k,v in self.mobile_group_metrics.items()},
                 grouped_counts={k:int(len(v)) for k,v in self.mobile_group_metrics.items()}))
+        if self.single_ball!='off':
+            weights.update(basket_trained_ball=self.single_ball,basket_ball_protocol=self.single_ball_protocol,
+                basket_delivery_version=self.delivery_version,basket_delivery_options=self.delivery_options)
         torch.save(weights,f'{name}.pth')
 
     def restore_test(self,fn):
-        checkpoint=torch.load(fn,map_location=self.device)
+        checkpoint=torch.load(fn,map_location=self.device,weights_only=False)
+        if self.single_ball!='off':
+            if (checkpoint.get('basket_trained_ball')!=self.single_ball
+                    or checkpoint.get('basket_ball_protocol')!=self.single_ball_protocol
+                    or checkpoint.get('basket_delivery_version')!=self.delivery_version
+                    or checkpoint.get('basket_delivery_options')!=self.delivery_options):
+                raise ValueError('Use matching single-ball mobile checkpoint and reward preset')
+        elif checkpoint.get('basket_trained_ball') in ('tennis_ball','baseball'):
+            raise ValueError('Single-ball mobile checkpoint requires its matching ball preset')
         self._validate_mobile_checkpoint(checkpoint)
         if checkpoint.get('joint_actor_version') != 'phase_conditioned_base2_arm18_v1':
             raise ValueError('Use the new jointly trained BasketMobile41 checkpoint, not the frozen version')

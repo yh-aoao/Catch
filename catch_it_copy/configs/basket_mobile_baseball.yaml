@@ -1,0 +1,26 @@
+# Stage two: learned navigation and continuing single-ball throw PPO.
+defaults:
+  - basket_mobile41
+  - _self_
+basket_mixed_ball: baseball
+basket_mixed_source: ''
+basket_mixed_options:
+  weights: [1.0, 1.0, 1.0]
+  original_hand: [0.8, 0.7, 0.7]
+  tennis_hand: [1.0, 0.9, 0.9]
+  baseball_hand: [0.8, 0.7, 0.7]
+basket_delivery_version: ballistic_v2
+basket_delivery_options:
+  aim_sigma: 0.35
+  progress_bonus: 8.0
+  miss_cost: 8.0
+  launch_scale: 0.4
+  flight_scale: 0.6
+basket_carry_options:
+  forward_bonus: 2.0
+  position_bonus: 1.0
+  release_bonus: 2.0
+basket_throw_checkpoint: /home/isee/Catch/11-3/BasketBaseballBallisticScratch/2026-11-02/20:06:12/nn/throw_basket_catch_last.pth
+basket_mobile:
+  hold_hand_flex: [0.8, 0.7, 0.7]
+output_name: BasketBaseballMobileJoint

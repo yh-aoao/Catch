@@ -117,7 +117,7 @@ def main(config: DictConfig):
         raise ValueError('ballistic_v2 requires a Basket mixed/single ball environment')
     single_mobile=(mixed_basket and config.basket_reward_version=='basket_mobile_v1'
                    and config.basket_training_stage=='mobile_joint'
-                   and mixed_ball in ('tennis_ball','baseball'))
+                   and mixed_ball in ('mixed','tennis_ball','baseball'))
     if single_mobile and (config.test_object!='default' or config.object_eval or config.basket_mixed_source):
         raise ValueError('Single mobile uses basket_throw_checkpoint and its native ball physics')
     if mixed_basket:
@@ -198,7 +198,7 @@ def main(config: DictConfig):
         if config.test and not config.checkpoint_catching:
             raise ValueError('Mobile evaluation requires a basket_mobile_v1 checkpoint')
         if basket_stage == 'mobile_joint':
-            print('[basket-mobile41-joint] new base actor + trainable 41.30 arm/hand; physical carry -> park -> throw', flush=True)
+            print('[basket-mobile41-joint] new base actor + trainable pretrained arm/hand; physical carry -> park -> throw', flush=True)
         elif basket_stage == 'navigate_throw':
             print('[basket-mobile41] train base2; frozen fixed35 arm18 throw; physical carry -> park -> throw', flush=True)
         elif basket_stage == 'hold':

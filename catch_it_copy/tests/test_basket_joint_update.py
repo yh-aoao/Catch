@@ -12,10 +12,10 @@ from gym_dcmm.algs.ppo_dcmm.experience import ExperienceBuffer
 
 
 class JointUpdateTests(unittest.TestCase):
-    def agent(self):
+    def agent(self,conditioned=False):
         torch.manual_seed(123)
         a=PPO_Basket_MobileJoint.__new__(PPO_Basket_MobileJoint)
-        a.model=JointActorCritic([16,8]);a.running_mean_std=JointNormalizer().eval()
+        a.model=JointActorCritic([16,8],conditioned);a.running_mean_std=JointNormalizer(conditioned).eval()
         a.reference_actor=copy.deepcopy(a.model.throw_actor).requires_grad_(False)
         a.reference_mu=copy.deepcopy(a.model.throw_mu).requires_grad_(False)
         a.reference_sigma=a.model.throw_sigma.detach().clone()
@@ -23,8 +23,9 @@ class JointUpdateTests(unittest.TestCase):
         a.normalize_advantage=True;a.mini_epochs_num=2;a.e_clip=.2
         a.clip_value_loss=True;a.critic_coef=4.;a.entropy_coef=0.;a.bounds_loss_coef=.0001
         a.truncate_grads=True;a.grad_norm=1.;a.lr_schedule='fixed'
-        a.storage=ExperienceBuffer(1,12,12,4,51,20,'cpu')
-        raw=torch.randn(12,51);raw[:,47]=torch.tensor([0.]*4+[1.]*8)
+        a.storage=ExperienceBuffer(1,12,12,4,53 if conditioned else 51,20,'cpu')
+        raw=torch.randn(12,53 if conditioned else 51);raw[:,47]=torch.tensor([0.]*4+[1.]*8)
+        if conditioned:raw[:,51:53]=torch.tensor([.0333,.058])
         with torch.no_grad():old=a.model.act(dict(obs=a.running_mean_std(raw)))
         a.storage.data_dict=dict(obses=raw,actions=old['actions'],mus=old['mus'],sigmas=old['sigmas'],
             neglogpacs=old['neglogpacs'],values=old['values'],returns=old['values']+torch.arange(12.)[:,None],
@@ -59,6 +60,18 @@ class JointUpdateTests(unittest.TestCase):
         self.assertTrue(all(p.grad is None for p in a.reference_actor.parameters()))
         for k,v in parameters.items():torch.testing.assert_close(a.model.state_dict()[k],v)
         self.assertEqual(a.extra_info['basket_joint/replay_throw_samples'],4)
+
+    def test_conditioned_three_ball_update_has_gradients_without_optimizer_updates(self):
+        a=self.agent(True)
+        before={k:v.clone() for k,v in a.model.state_dict().items()}
+        anchor=a.storage.data_dict['mus'].clone()
+        a.train_epoch()
+        torch.testing.assert_close(anchor,a.storage.data_dict['mus'])
+        for k,v in before.items():torch.testing.assert_close(v,a.model.state_dict()[k])
+        self.assertTrue(any(s['gradients'][0]>0 for s in a.snapshots))
+        self.assertTrue(any(s['gradients'][1]>0 for s in a.snapshots))
+        self.assertEqual(float(a.running_mean_std.throwing.original.count),1.)
+        self.assertEqual(float(a.running_mean_std.navigation.count),13.)
 
     def test_large_base_kl_stops_only_base_updates(self):
         a=self.agent();a.storage.data_dict['mus'][:4,:2]+=1.

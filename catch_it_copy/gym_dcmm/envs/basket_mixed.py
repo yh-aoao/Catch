@@ -38,7 +38,7 @@ class BasketMixedEnv(DcmmVecEnv):
                 and kwargs.get('basket_fixed_physical') and kwargs.get('basket_carry_reward')
                 and kwargs.get('basket_finger_reward') and kwargs.get('basket_arm_control')=='joint_velocity'):
             raise ValueError('Single mobile requires physical finger/carry mobile Basket')
-        if mobile and basket_mixed_ball not in ('tennis_ball','baseball'):
+        if mobile and basket_mixed_ball not in ('mixed','tennis_ball','baseball'):
             raise ValueError('Mobile single-ball requires tennis_ball or baseball')
         if not mobile and not (kwargs.get('object_motion') in ('basket','throw_basket') and kwargs.get('task')=='Catching'
                 and kwargs.get('basket_fixed_base_training') and kwargs.get('basket_fixed_physical')
@@ -71,13 +71,13 @@ class BasketMixedEnv(DcmmVecEnv):
         self.mixed_protocol=dict(version='mixed37_known_radius_mass_v1',
             original={k:(v.tolist() if isinstance(v,np.ndarray) else v) for k,v in self._original.items()},
             tennis_ball=self.profiles['tennis_ball'],baseball=self.profiles['baseball'])
-        if mobile:
+        if mobile and self.ball_mode!='mixed':
             return # Ball is constant; policy uses the existing mobile51 interface.
         self.observation_space.spaces['basket_ball_properties']=spaces.Box(0.,np.inf,shape=(2,),dtype=np.float32)
         self.observation_space.spaces['basket_ball_id']=spaces.Box(0.,2.,shape=(1,),dtype=np.float32)
         # Physical properties enter policy; categorical identity is logging metadata only.
         self.obs_dim+=2;self.obs_c_dim+=2;self.obs_t_dim+=2
-        print('[basket-three-ball] obs=37 actor=arm18; known radius/mass; mode='+self.ball_mode,flush=True)
+        print('[basket-three-ball] obs='+str(self.obs_c_dim)+'; known radius/mass; mode='+self.ball_mode,flush=True)
 
     def _reset_simulation(self):
         if self.ball_mode=='mixed':
@@ -119,7 +119,7 @@ class BasketMixedEnv(DcmmVecEnv):
 
     def _get_obs(self):
         obs=super()._get_obs()
-        if self.single_mobile:
+        if self.single_mobile and self.ball_mode!='mixed':
             return obs
         obs['basket_ball_properties']=np.array([self.basket_cfg.basket_ball_radius,
             self.basket_cfg.basket_ball_mass],dtype=np.float32)

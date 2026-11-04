@@ -436,7 +436,7 @@ class PPO_Catch_OneStage(object):
                   'mobile_joint': 'joint_base2_arm18_phase_v1'}[stage]
         if self.mobile_basket and (checkpoint.get('basket_reward_version') != 'basket_mobile_v1'
                 or checkpoint.get('basket_arm_control') != 'joint_velocity'
-                or checkpoint.get('basket_observation_version') != 'mobile51_v1'
+                or checkpoint.get('basket_observation_version') != ('mobile53_properties_v1' if getattr(self,'conditioned',False) else 'mobile51_v1')
                 or checkpoint.get('action_layout') != layout
                 or checkpoint.get('basket_training_stage', 'joint') != stage):
             raise ValueError('Mobile Basket requires its own 51-observation/20-action checkpoint; fixed-base weights need an explicit migration')

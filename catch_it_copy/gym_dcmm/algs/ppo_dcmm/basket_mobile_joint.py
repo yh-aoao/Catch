@@ -12,10 +12,16 @@ class JointNormalizer(nn.Module):
     Frozen normalization statistics do not freeze any actor parameters.
     The final column is the raw phase flag, never normalized.
     """
-    def __init__(self):
+    def __init__(self, conditioned=False):
         super().__init__()
-        self.navigation = RunningMeanStd((51,))
-        self.throwing = RunningMeanStd((35,))
+        self.navigation_dim=53 if conditioned else 51
+        self.conditioned=conditioned
+        self.navigation = RunningMeanStd((self.navigation_dim,))
+        if conditioned:
+            from .basket_mixed_policy import MixedNormalizer
+            self.throwing=MixedNormalizer()
+        else:
+            self.throwing = RunningMeanStd((35,))
         self.throwing.eval()
 
     def train(self, mode=True):
@@ -26,16 +32,20 @@ class JointNormalizer(nn.Module):
     def forward(self, raw):
         fixed = raw[:, :35].clone()
         fixed[:, 34] += .2
+        if self.conditioned:
+            fixed=torch.cat((fixed,raw[:,51:53]),dim=-1)
         return torch.cat((self.navigation(raw), self.throwing(fixed), raw[:,47:48]), dim=-1)
 
 
 class JointActorCritic(nn.Module):
-    def __init__(self, units):
+    def __init__(self, units, conditioned=False):
         super().__init__()
         self.separate_value_mlp = True
+        self.navigation_dim=53 if conditioned else 51
+        self.throw_dim=37 if conditioned else 35
         self.navigation = ActorCritic(dict(actor_units=list(units), actions_num=2,
-            input_shape=(51,), separate_value_mlp=True))
-        self.throw_actor = MLP(list(units), 35)
+            input_shape=(self.navigation_dim,), separate_value_mlp=True))
+        self.throw_actor = MLP(list(units), self.throw_dim)
         self.throw_mu = nn.Linear(units[-1],18)
         self.throw_sigma = nn.Parameter(torch.zeros(18))
 
@@ -45,6 +55,19 @@ class JointActorCritic(nn.Module):
 
     def import_throw(self, checkpoint, normalizer, finger_options, carry_options):
         # Validate dimensions, action semantics and reward contract before loading.
+        if self.throw_dim==37:
+            if (checkpoint.get('basket_fixed_protocol')!='aim_carry_fingers_v1'
+                    or checkpoint.get('basket_finger_options')!=finger_options
+                    or checkpoint.get('basket_carry_options')!=carry_options
+                    or checkpoint.get('basket_arm_control')!='joint_velocity'
+                    or checkpoint.get('action_layout')!='arm6_hand12'):
+                raise ValueError('Mixed mobile source finger/carry/action protocol mismatch')
+            state=checkpoint['model']
+            self.throw_actor.load_state_dict({k[len('actor_mlp.'):]:v for k,v in state.items() if k.startswith('actor_mlp.')},strict=True)
+            self.throw_mu.load_state_dict({k[len('mu.'):]:v for k,v in state.items() if k.startswith('mu.')},strict=True)
+            with torch.no_grad():self.throw_sigma.copy_(state['sigma'])
+            normalizer.throwing.load_state_dict(checkpoint['running_mean_std'],strict=True)
+            return
         from gym_dcmm.utils.basket_throw_policy import FrozenThrowPolicy
         validated = FrozenThrowPolicy(checkpoint,finger_options,carry_options,
                                       self.throw_sigma.device)
@@ -66,8 +89,8 @@ class JointActorCritic(nn.Module):
         return torch.cat(((~throwing).expand(-1,2),throwing.expand(-1,18)),dim=-1)
 
     def _distribution(self, obs):
-        base_mu,_,value = self.navigation._actor_critic(dict(obs=obs[:,:51]))
-        throw_mu = torch.tanh(self.throw_mu(self.throw_actor(obs[:,51:86])))
+        base_mu,_,value = self.navigation._actor_critic(dict(obs=obs[:,:self.navigation_dim]))
+        throw_mu = torch.tanh(self.throw_mu(self.throw_actor(obs[:,self.navigation_dim:self.navigation_dim+self.throw_dim])))
         mask = self.action_mask(obs)
         mu = torch.cat((base_mu,throw_mu),dim=-1).masked_fill(~mask,0.)
         logstd = self.sigma.expand_as(mu).masked_fill(~mask,0.)

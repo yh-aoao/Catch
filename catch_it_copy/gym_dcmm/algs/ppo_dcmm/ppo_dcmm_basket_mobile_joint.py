@@ -17,10 +17,12 @@ class PPO_Basket_MobileJoint(PPO_Catch_OneStage):
         if not full_config.train.network.get('separate_value_mlp', True):
             raise ValueError('Joint Basket requires a separate critic')
         super().__init__(env,output_dif,full_config)
-        if self.obs_shape != (51,) or self.storage.obs_dim != 51:
+        self.conditioned=str(full_config.get('basket_mixed_ball','off'))=='mixed'
+        self.navigation_dim=53 if self.conditioned else 51
+        if self.obs_shape != (self.navigation_dim,) or self.storage.obs_dim != self.navigation_dim:
             raise ValueError('Joint Basket expects 51 policy inputs; rehearsal metadata must be excluded')
-        self.model = JointActorCritic(list(self.network_config.mlp.units)).to(self.device)
-        self.running_mean_std = JointNormalizer().to(self.device)
+        self.model = JointActorCritic(list(self.network_config.mlp.units),self.conditioned).to(self.device)
+        self.running_mean_std = JointNormalizer(self.conditioned).to(self.device)
         self.input_normalization_frozen = False
         self.single_ball=str(full_config.get('basket_mixed_ball','off'))
         self.single_ball_protocol=None
@@ -42,11 +44,19 @@ class PPO_Basket_MobileJoint(PPO_Catch_OneStage):
                 from .basket_mixed_policy import single_ball_fixed35
                 if checkpoint.get('basket_mixed_options')!=dict(full_config.basket_mixed_options):
                     raise ValueError('Source ball grip differs from mobile configuration')
-                checkpoint=single_ball_fixed35(checkpoint,self.single_ball,self.single_ball_protocol,
-                    self.delivery_version,self.delivery_options)
+                if self.conditioned:
+                    if (checkpoint.get('basket_mixed_protocol')!='mixed37_known_radius_mass_v1'
+                            or checkpoint.get('basket_trained_ball')!='mixed'
+                            or checkpoint.get('basket_ball_protocol')!=self.single_ball_protocol
+                            or checkpoint.get('basket_delivery_version')!=self.delivery_version
+                            or checkpoint.get('basket_delivery_options')!=self.delivery_options):
+                        raise ValueError('Mixed mobile source must match three-ball physics and ballistic reward')
+                else:
+                    checkpoint=single_ball_fixed35(checkpoint,self.single_ball,self.single_ball_protocol,
+                        self.delivery_version,self.delivery_options)
             self.model.import_throw(checkpoint,self.running_mean_std,self.finger_options,self.carry_options)
             with open(source_path,'rb') as stream:digest=hashlib.sha256(stream.read()).hexdigest()
-            self.basket_transfer_metadata=dict(version='joint_fixed35_throw_base2_v1',
+            self.basket_transfer_metadata=dict(version='joint_fixed37_throw_base2_v1' if self.conditioned else 'joint_fixed35_throw_base2_v1',
                 source_name=os.path.basename(source_path),source_sha256=digest)
             print('[basket-mobile41-joint] arm18 initialized from '+source_path+'; base2 and arm18 both trainable',flush=True)
         base,throw,critic=self.model.actor_groups()
@@ -68,6 +78,9 @@ class PPO_Basket_MobileJoint(PPO_Catch_OneStage):
         self.storage.storage_dict['rehearsal']=torch.zeros(
             (self.horizon_length,self.num_actors),dtype=torch.bool,device=self.device)
         self.initial_group_lrs={g['name']:g['lr'] for g in self.optimizer.param_groups}
+        if self.conditioned:
+            from .utils import AverageScalarMeter
+            self.ball_mobile_meters={name:AverageScalarMeter(200) for name in ('original','tennis_ball','baseball')}
         print('[basket-joint-stable] schedule='+self.lr_schedule+
             '; LR ceilings: base='+str(self.init_lr)+' throw='+str(self.init_lr*self.throw_lr_scale)+
             '; summed KL limits='+str(self.joint_options)+'; reference actor is a loss target only',flush=True)
@@ -77,7 +90,20 @@ class PPO_Basket_MobileJoint(PPO_Catch_OneStage):
             raise ValueError('Joint Basket needs rehearsal metadata; sync the updated DcmmVecEnv.py')
         self.current_rehearsal=torch.as_tensor(obs['basket_rehearsal'],
             dtype=torch.bool,device=self.device).reshape(-1)
-        return super().obs2tensor(obs)
+        raw=super().obs2tensor(obs)
+        if self.conditioned:
+            properties=torch.as_tensor(obs['basket_ball_properties'],dtype=torch.float32,device=self.device)
+            raw=torch.cat((raw,properties),dim=-1)
+        return raw
+
+    def _update_mobile_metrics(self,infos,dones):
+        super()._update_mobile_metrics(infos,dones)
+        if self.conditioned:
+            from gym_dcmm.utils.basket_mobile import terminal_records
+            for record in terminal_records(infos,dones):
+                if not record.get('basket_rehearsal',False):
+                    self.ball_mobile_meters[record['basket_ball']].update(
+                        torch.tensor([float(record.get('safe_basket_success',False))]))
 
     def store_rollout_context(self,index):
         self.storage.update_data('rehearsal',index,self.current_rehearsal)
@@ -86,7 +112,7 @@ class PPO_Basket_MobileJoint(PPO_Catch_OneStage):
         from .basket_joint_stability import gaussian_kl
         if not replay.any():return mu.sum()*0.
         with torch.no_grad():
-            reference=torch.tanh(self.reference_mu(self.reference_actor(processed[replay,51:86])))
+            reference=torch.tanh(self.reference_mu(self.reference_actor(processed[replay,self.model.navigation_dim:self.model.navigation_dim+self.model.throw_dim])))
             std=self.reference_sigma.exp().expand_as(reference)
         return gaussian_kl(reference,std,mu[replay,2:],sigma[replay,2:]).mean()
 
@@ -95,7 +121,11 @@ class PPO_Basket_MobileJoint(PPO_Catch_OneStage):
             meter=self.mobile_metrics[key]
             return f'{meter.get_mean():.2%}' if len(meter) else 'n/a'
         rates={g['name']:g['lr'] for g in self.optimizer.param_groups}
-        return (f" | Park SR: {rate('parking_success')} | Release SR: {rate('qualified_release')}"
+        ball_status=''
+        if self.conditioned:
+            for name,meter in self.ball_mobile_meters.items():
+                ball_status+=' | '+name+' Mobile SR: '+(f'{meter.get_mean():.2%}' if len(meter) else 'n/a')
+        return (ball_status+f" | Park SR: {rate('parking_success')} | Release SR: {rate('qualified_release')}"
             +f" | Base LR: {rates['base']:.2e} | Throw LR: {rates['throw']:.2e}"
             +f" | Base KL: {self.extra_info.get('basket_joint/base_kl_sum',0.):.4f}"
             +f" | Throw KL: {self.extra_info.get('basket_joint/throw_kl_sum',0.):.4f}")
@@ -212,7 +242,8 @@ class PPO_Basket_MobileJoint(PPO_Catch_OneStage):
             value_mean_std=self.value_mean_std.state_dict(),
             joint_actor_version='phase_conditioned_base2_arm18_v1',
             action_layout='joint_base2_arm18_phase_v1',basket_training_stage='mobile_joint',
-            basket_reward_version=self.basket_reward_version,basket_observation_version='mobile51_v1',
+            basket_reward_version=self.basket_reward_version,
+            basket_observation_version='mobile53_properties_v1' if self.conditioned else 'mobile51_v1',
             basket_arm_control=self.basket_arm_control,basket_mobile_options=self.mobile_options,
             basket_fixed_protocol='aim_carry_fingers_v1',basket_finger_options=self.finger_options,
             basket_carry_options=self.carry_options,basket_transfer=self.basket_transfer_metadata,
@@ -227,11 +258,14 @@ class PPO_Basket_MobileJoint(PPO_Catch_OneStage):
                 grouped_counts={k:int(len(v)) for k,v in self.mobile_group_metrics.items()}))
         if self.single_ball!='off':
             weights.update(basket_trained_ball=self.single_ball,basket_ball_protocol=self.single_ball_protocol,
-                basket_delivery_version=self.delivery_version,basket_delivery_options=self.delivery_options)
+                basket_delivery_version=self.delivery_version,basket_delivery_options=self.delivery_options,
+                basket_conditioned_mobile=self.conditioned)
         torch.save(weights,f'{name}.pth')
 
     def restore_test(self,fn):
         checkpoint=torch.load(fn,map_location=self.device,weights_only=False)
+        if bool(checkpoint.get('basket_conditioned_mobile',False))!=self.conditioned:
+            raise ValueError('Checkpoint and mobile physical-input layout differ')
         if self.single_ball!='off':
             if (checkpoint.get('basket_trained_ball')!=self.single_ball
                     or checkpoint.get('basket_ball_protocol')!=self.single_ball_protocol

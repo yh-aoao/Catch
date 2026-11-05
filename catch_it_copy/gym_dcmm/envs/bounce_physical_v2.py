@@ -106,7 +106,7 @@ def _xml(xml, name, cfg, resource=None):
 def make_bounce_physical_v2(test_object='default', bounce_physics=VERSION,
                             bounce_launch='legacy', bounce_ball_mode='fixed',
                             bounce_v2=None, bounce_material_file=None, bounce_ball_weights=None,
-                            bounce_grasp_version='legacy', bounce_grasp=None, **kwargs):
+                            bounce_grasp_version='legacy', bounce_grasp=None, benchmark_visual_scale=1., **kwargs):
     if bounce_physics != VERSION or kwargs.get('object_motion') != 'bounce':
         raise ValueError('physical_v2 requires object_motion=bounce')
     if bounce_launch not in ('legacy', 'baseball_intercept_v1') or kwargs.get('object_eval', False):
@@ -152,7 +152,11 @@ def make_bounce_physical_v2(test_object='default', bounce_physics=VERSION,
 
     class PhysicalBounce(Base):
         def _reset_object_bounce(self):
-            return _xml(super()._reset_object_bounce(), name, cfg, resource)
+            xml=_xml(super()._reset_object_bounce(), name, cfg, resource)
+            if benchmark_visual_scale!=1.:
+                from ycb_objects.benchmark_randomization import scale_object_visuals
+                xml=scale_object_visuals(xml,benchmark_visual_scale)
+            return xml
 
         def _reset_simulation(self):
             super()._reset_simulation()

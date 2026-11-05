@@ -391,7 +391,7 @@ def main(config: DictConfig):
     OmegaConf.save(config, os.path.join(output_dif, 'resolved_config.yaml'), resolve=True)
     if benchmark != 'off':
         from gym_dcmm.envs.object_benchmark import write_provenance
-        write_provenance(output_dif,OmegaConf.to_container(config,resolve=True))
+        write_provenance(output_dif,OmegaConf.to_container(config,resolve=True),env=env)
     if physical_roll and benchmark == 'off':
         from gym_dcmm.envs.roll_physical import write_provenance
         write_provenance(output_dif,OmegaConf.to_container(config,resolve=True))

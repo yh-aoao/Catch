@@ -66,7 +66,7 @@ def table_pair(xml,profile,resource=None):
 def make_roll_physical(roll_physics=VERSION,roll_material_file=None,roll_ball_mode='fixed',
                        roll_ball_weights=None,roll_reward_version='legacy',roll_adaptive_wait=None,
                        test_object='default',roll_speed=None,roll_wait_guard=False,
-                       ycb_collision='auto',ycb_joint_damping=None,**kwargs):
+                       ycb_collision='auto',ycb_joint_damping=None,benchmark_visual_scale=1.,**kwargs):
     if roll_physics!=VERSION or kwargs.get('object_motion')!='roll' or kwargs.get('object_eval',False):
         raise ValueError('physical_v1 requires object_motion=roll, object_eval=false')
     if roll_wait_guard or ycb_collision=='mesh' or ycb_joint_damping is not None:
@@ -103,7 +103,11 @@ def make_roll_physical(roll_physics=VERSION,roll_material_file=None,roll_ball_mo
 
     class PhysicalRoll(Base):
         def _reset_object_roll(self):
-            return table_pair(super()._reset_object_roll(),catalog[name],resource)
+            xml=table_pair(super()._reset_object_roll(),catalog[name],resource)
+            if benchmark_visual_scale!=1.:
+                from ycb_objects.benchmark_randomization import scale_object_visuals
+                xml=scale_object_visuals(xml,benchmark_visual_scale)
+            return xml
 
         def _reset_simulation(self):
             super()._reset_simulation()

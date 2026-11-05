@@ -55,6 +55,8 @@ class LegacyBenchmarkTarget(gym.Wrapper):
                  else getattr(self.env,'bounce_v2_episode',None))
         self.benchmark_episode=dict(object=self.benchmark_object,route='three_ball_baseline',
                                     sampling='fixed_object_per_environment',physics=physics)
+        if 'benchmark_randomization' in self.__dict__:
+            self.benchmark_episode['randomization']=self.benchmark_randomization
         info['object_benchmark']=self.benchmark_episode
 
     def reset(self,**kwargs):
@@ -66,7 +68,7 @@ class LegacyBenchmarkTarget(gym.Wrapper):
         return obs,reward,terminated,truncated,info
 
 
-def legacy_target(motion,name,data,kwargs):
+def legacy_target(motion,name,data,kwargs,draw=None):
     parameters=dict(kwargs)
     parameters.update(test_object='default' if name=='original' else 'ycb:'+name)
     parameters[motion+'_ball_mode']='fixed'
@@ -84,7 +86,15 @@ def legacy_target(motion,name,data,kwargs):
         parameters['bounce_launch']='baseball_intercept_v1'
         parameters['bounce_material_file']=str(ROOT/'ycb_objects/calibration_data/balls.three_ball_training_v1.json')
         factory=make_bounce_physical_v2
-    return LegacyBenchmarkTarget(factory(**parameters),name,data)
+    if draw is None:
+        env=factory(**parameters)
+    else:
+        from ycb_objects.benchmark_randomization import legacy_environment
+        env=legacy_environment(factory,parameters,parameters[motion+'_material_file'],name,motion,draw)
+    wrapped=LegacyBenchmarkTarget(env,name,data)
+    if draw is not None:
+        wrapped.benchmark_randomization=draw
+    return wrapped
 
 
 def choose(motion,test_object,mode,weights,data,slot=None,num_slots=None):
@@ -145,7 +155,9 @@ def make_object_benchmark(object_benchmark='off',benchmark_catalog=None,benchmar
     if kwargs.get(motion+'_material_file'):
         raise ValueError('Use benchmark_catalog; clear the legacy material_file for this benchmark')
     opts=dict(benchmark_options or {})
-    if set(opts)-{'heading_degrees','distance_m'}:raise ValueError('Unknown benchmark options')
+    if set(opts)-{'heading_degrees','distance_m','domain_randomization'}:raise ValueError('Unknown benchmark options')
+    dr=opts.get('domain_randomization','off')
+    if dr not in ('off','physical_dr_v1'):raise ValueError('Unknown benchmark domain_randomization')
     for key,default,low,high in [('heading_degrees',[-10,10],-30,30),('distance_m',[2.,2.2],1.1,3.5)]:
         value=np.asarray(opts.get(key,default),dtype=float)
         if value.shape!=(2,) or not np.isfinite(value).all() or not low<=value[0]<=value[1]<=high:raise ValueError('Invalid benchmark '+key)
@@ -156,9 +168,15 @@ def make_object_benchmark(object_benchmark='off',benchmark_catalog=None,benchmar
     data=catalog(benchmark_catalog)
     mode=kwargs.get(motion+'_ball_mode','fixed');weights=kwargs.get(motion+'_ball_weights')
     selected=choose(motion,test_object,mode,weights,data,benchmark_slot,benchmark_num_envs);profile=data[motion][selected]
+    draw=None
+    if dr!='off':
+        from ycb_objects.benchmark_randomization import sample,material,scaled_geometry
+        draw=sample(motion)
     if selected in LEGACY_OBJECTS:
-        return legacy_target(motion,selected,data,kwargs)
+        return legacy_target(motion,selected,data,kwargs,draw)
     shape=geometry(selected,profile['kind'],profile.get('inertia_factor',.4))
+    if draw is not None:
+        shape=scaled_geometry(shape,draw);profile=material(profile,draw)
     if motion=='roll':
         if kwargs.get('task')=='Tracking':
             from gym_dcmm.envs.DcmmVecEnv import RollTrackingEnv as Base
@@ -210,6 +228,7 @@ def make_object_benchmark(object_benchmark='off',benchmark_catalog=None,benchmar
                 dimensions_m=shape['extents'],inertia=shape['inertia'].tolist(),inertia_basis=shape['inertia_basis'],
                 surface_id=data['surface_id'],material=profile,launch=description,
                 sampling='fixed_object_per_environment',status=data['status'])
+            if draw is not None:self.benchmark_episode['randomization']=draw
             # Keep compatibility with the current Bounce hold episode logger.
             if motion=='bounce':self.bounce_v2_episode=self.benchmark_episode
 
@@ -241,6 +260,7 @@ def make_object_benchmark(object_benchmark='off',benchmark_catalog=None,benchmar
     env.roll_log=bool(kwargs.get('roll_log',False))
     env.benchmark_shape=shape;env.benchmark_profile=profile;env.benchmark_catalog=data
     env.benchmark_object=selected
+    if draw is not None:env.benchmark_randomization=draw
     return env
 
 
@@ -255,13 +275,16 @@ def make_benchmark_vector(num_envs,benchmark_backend='async',**kwargs):
     raise ValueError('Unknown benchmark vector backend')
 
 
-def write_provenance(output,config):
+def write_provenance(output,config,env=None):
     data=catalog(config.get('benchmark_catalog'))
-    names=['train_DCMM.py','configs/config.yaml','gym_dcmm/envs/object_benchmark.py','ycb_objects/benchmark_geometry.py','gym_dcmm/utils/roll_evaluation.py',
+    names=['train_DCMM.py','configs/config.yaml','gym_dcmm/envs/object_benchmark.py','ycb_objects/benchmark_geometry.py','ycb_objects/benchmark_randomization.py','gym_dcmm/utils/roll_evaluation.py',
            'gym_dcmm/envs/roll_physical.py','gym_dcmm/envs/bounce_physical_v2.py',
            'ycb_objects/calibration_data/balls.roll_table_priors_v1.json','ycb_objects/calibration_data/balls.three_ball_training_v1.json']
     result=dict(version=config['object_benchmark'],catalog=data,options=config.get('benchmark_options'),
                 sampling='one_object_sampled_at_environment_creation_no_mesh_recompile_on_reset',
                 reward='existing task reward; shape-aware departure for non-spheres',
                 sources={n:hashlib.sha256((ROOT/n).read_bytes()).hexdigest() for n in names})
+    if env is not None and config.get('benchmark_options',{}).get('domain_randomization','off')!='off':
+        result['environment_samples']=[dict(slot=i,object=name,randomization=draw)
+            for i,(name,draw) in enumerate(zip(env.call('benchmark_object'),env.call('benchmark_randomization')))]
     (Path(output)/'object_benchmark_provenance.json').write_text(json.dumps(result,indent=2))

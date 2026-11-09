@@ -1,0 +1,12 @@
+# Fixed base; random hoop fore-aft offsets, starting from the trained mixed actor.
+defaults:
+  - basket_three_ball_ballistic
+  - _self_
+basket_mixed_source: /home/isee/Catch/11-4/throw_basket_catch_best_reward_33.25.pth
+basket_range:
+  y_offset_range: [-0.10, 0.10]
+  original_probability: 0.30
+output_name: BasketThreeBallRange
+train:
+  ppo:
+    learning_rate: 0.00001

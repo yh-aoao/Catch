@@ -36,12 +36,28 @@ class PPO_Basket_Mixed(PPO_Catch_OneStage):
         if not full_config.test and full_config.basket_mixed_source:
             path=full_config.basket_mixed_source
             checkpoint=torch.load(path,map_location=self.device,weights_only=False)
-            kind=import_throw(self.model,self.running_mean_std,checkpoint,self.finger_options,self.carry_options)
+            if checkpoint.get('basket_mixed_protocol')=='mixed37_known_radius_mass_v1':
+                if (checkpoint.get('basket_trained_ball','mixed')!=self.ball_mode
+                        or checkpoint.get('basket_ball_protocol')!=self.ball_protocol
+                        or checkpoint.get('basket_mixed_options')!=self.mixed_options
+                        or checkpoint.get('basket_delivery_version','legacy')!=self.delivery_version
+                        or checkpoint.get('basket_delivery_options')!=self.delivery_options
+                        or checkpoint.get('basket_finger_options')!=self.finger_options
+                        or checkpoint.get('basket_carry_options')!=self.carry_options
+                        or checkpoint.get('basket_arm_control')!='joint_velocity'
+                        or checkpoint.get('action_layout')!='arm6_hand12'):
+                    raise ValueError('Range practice source must match ball, physics and reward protocol')
+                self.model.load_state_dict(checkpoint['model'],strict=True)
+                self.running_mean_std.load_state_dict(checkpoint['running_mean_std'],strict=True)
+                self.value_mean_std.load_state_dict(checkpoint['value_mean_std'],strict=True)
+                kind='fixed37'
+            else:
+                kind=import_throw(self.model,self.running_mean_std,checkpoint,self.finger_options,self.carry_options)
             with open(path,'rb') as stream:digest=hashlib.sha256(stream.read()).hexdigest()
             self.source_metadata=dict(kind=kind,name=os.path.basename(path),sha256=digest)
             print('[basket-three-ball] inherited trainable throw actor from '+path+' ('+kind+')',flush=True)
         self.reference=(copy.deepcopy(self.model).eval().requires_grad_(False)
-                        if self.input_normalization_frozen else None)
+                        if self.input_normalization_frozen and not full_config.get('basket_range') else None)
         if not full_config.test and not full_config.basket_mixed_source:
             print('[basket-three-ball] SCRATCH: random actor/critic; fresh normalization; no old-policy loss',flush=True)
         self.per_ball=[AverageScalarMeter(200) for _ in NAMES]
@@ -152,6 +168,7 @@ class PPO_Basket_Mixed(PPO_Catch_OneStage):
             value_mean_std=self.value_mean_std.state_dict(),reference=(self.reference.state_dict() if self.reference is not None else None),
             input_normalization_frozen=self.input_normalization_frozen,
             basket_mixed_protocol='mixed37_known_radius_mass_v1',basket_mixed_options=self.mixed_options,
+            basket_range=self.env.call('range_options')[0],
             basket_ball_protocol=self.ball_protocol,basket_delivery_version=self.delivery_version,
             basket_delivery_options=self.delivery_options,basket_trained_ball=self.ball_mode,
             basket_fixed_protocol='aim_carry_fingers_v1',basket_finger_options=self.finger_options,

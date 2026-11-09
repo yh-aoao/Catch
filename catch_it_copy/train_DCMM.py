@@ -356,7 +356,8 @@ def main(config: DictConfig):
                     **({'basket_mixed_ball': mixed_ball,
                         'basket_mixed_options': OmegaConf.to_container(config.basket_mixed_options,resolve=True),
                         'basket_delivery_version':delivery_version,
-                        'basket_delivery_options':delivery_options}
+                        'basket_delivery_options':delivery_options,
+                        'basket_range':OmegaConf.to_container(config.basket_range,resolve=True) if config.get('basket_range') else {}}
                        if mixed_basket else {}),
                     **({'test_object': str(config.test_object), 'ycb_joint_damping': ycb_joint_damping,
                         'ycb_collision': ycb_collision, 'roll_speed': roll_speed,

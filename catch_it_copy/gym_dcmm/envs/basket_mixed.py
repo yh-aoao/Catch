@@ -29,10 +29,19 @@ def make_options(options=None):
 
 class BasketMixedEnv(DcmmVecEnv):
     def __init__(self,basket_mixed_ball='mixed',basket_mixed_options=None,
-                 basket_delivery_version='legacy',basket_delivery_options=None,**kwargs):
+                 basket_delivery_version='legacy',basket_delivery_options=None,basket_range=None,**kwargs):
         if basket_mixed_ball not in ('mixed',)+NAMES:raise ValueError('Unknown Basket mixed ball mode')
         mobile=kwargs.get('basket_reward_version')=='basket_mobile_v1'
         self.single_mobile=mobile
+        self.range_options=dict(basket_range or {})
+        if self.range_options:
+            if mobile:raise ValueError('Range practice requires fixed base')
+            if set(self.range_options)-{'y_offset_range','original_probability'}:raise ValueError('Unknown range options')
+            bounds=np.asarray(self.range_options.get('y_offset_range',[-.10,.10]),dtype=float)
+            probability=float(self.range_options.get('original_probability',.3))
+            if bounds.shape!=(2,) or not np.isfinite(bounds).all() or bounds[0]>bounds[1] or not 0<=probability<=1:
+                raise ValueError('Invalid range or rehearsal probability')
+            self.range_options=dict(y_offset_range=bounds.tolist(),original_probability=probability)
         if mobile and not (kwargs.get('object_motion') in ('basket','throw_basket')
                 and kwargs.get('task')=='Catching' and not kwargs.get('basket_fixed_base_training')
                 and kwargs.get('basket_fixed_physical') and kwargs.get('basket_carry_reward')
@@ -86,7 +95,18 @@ class BasketMixedEnv(DcmmVecEnv):
         else:self.ball_index=NAMES.index(self.ball_mode)
         self.ball_name=NAMES[self.ball_index]
         self._apply_ball()
-        super()._reset_simulation()
+        if self.range_options:
+            baseline=self.basket_cfg.basket_center.copy()
+            self.range_rehearsal=bool(self.np_random.random()<self.range_options['original_probability'])
+            offset=0. if self.range_rehearsal else float(self.np_random.uniform(*self.range_options['y_offset_range']))
+            self.basket_cfg.basket_center=baseline.copy()
+            self.basket_cfg.basket_center[1]+=offset
+            try:
+                super()._reset_simulation()
+            finally:
+                self.basket_cfg.basket_center=baseline
+        else:
+            super()._reset_simulation()
 
     def _apply_ball(self):
         model=self.Dcmm.model;geom=self.object_id;body=self._ball_body;original=self._original
@@ -130,7 +150,9 @@ class BasketMixedEnv(DcmmVecEnv):
         return dict(basket_ball=self.ball_name,basket_ball_index=self.ball_index,
             basket_ball_radius=float(self.basket_cfg.basket_ball_radius),
             basket_ball_mass=float(self.basket_cfg.basket_ball_mass),
-            basket_ball_protocol='mixed37_known_radius_mass_v1')
+            basket_ball_protocol='mixed37_known_radius_mass_v1',
+            basket_target_y=float(self.basket_center[1]),
+            basket_range_rehearsal=bool(getattr(self,'range_rehearsal',False)))
 
     def reset(self,**kwargs):
         obs,info=super().reset(**kwargs)

@@ -57,6 +57,7 @@ class _BranchAdam(torch.optim.Adam):
 
 class PPO_Catch_Hold(PPO_Catch_TwoStage):
     def __init__(self, env, output_dif, full_config):
+        self.catch_warm_start = bool(full_config.get('catch_warm_start', False))
         self.hold_training = training_options(full_config.get('bounce_grasp_training'))
         super().__init__(env, output_dif, full_config)
         self._track_parameters = (list(self.model.actor_mlp_t.parameters()) +
@@ -148,7 +149,12 @@ class PPO_Catch_Hold(PPO_Catch_TwoStage):
         version = checkpoint.get('bounce_grasp_version')
         if version is not None and version != VERSION:
             raise ValueError('Cannot resume a different Bounce grasp version: ' + str(version))
-        if version == VERSION:
+        if self.catch_warm_start:
+            for name in ('running_mean_std_track', 'running_mean_std_hand', 'value_mean_std'):
+                if name not in checkpoint:
+                    raise ValueError('Catch warm start requires '+name)
+            print('[catch-warm-start] full Bounce Catch weights and normalization loaded; new optimizer/progress')
+        elif version == VERSION:
             saved_options = training_options(checkpoint.get('bounce_grasp_training'))
             if saved_options != self.hold_training:
                 raise ValueError('Resume requires the saved bounce_grasp_training options')

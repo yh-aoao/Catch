@@ -19,6 +19,7 @@ from tensorboardX import SummaryWriter
 
 class PPO_Catch_TwoStage(object):
     def __init__(self, env, output_dif, full_config):
+        self.catch_warm_start = bool(full_config.get('catch_warm_start', False))
         self.rank = -1
         self.device = full_config['rl_device']
         self.network_config = full_config.train.network
@@ -274,6 +275,12 @@ class PPO_Catch_TwoStage(object):
         if not fn:
             return
         checkpoint = torch.load(fn, map_location = self.device)
+        if self.catch_warm_start:
+            self.model.load_state_dict(checkpoint['model'], strict=True)
+            for key in ('running_mean_std_track','running_mean_std_hand','value_mean_std'):
+                getattr(self,key).load_state_dict(checkpoint[key], strict=True)
+            print('[catch-warm-start] full Roll Catch weights and normalization loaded; new optimizer/progress')
+            return
         self._load_compatible_model_state(checkpoint['model'])
         # 兼容 OneStage checkpoint（只有 running_mean_std）和 TwoStage checkpoint
         if 'running_mean_std_track' in checkpoint:

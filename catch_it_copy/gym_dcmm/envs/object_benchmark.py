@@ -287,4 +287,10 @@ def write_provenance(output,config,env=None):
     if env is not None and config.get('benchmark_options',{}).get('domain_randomization','off')!='off':
         result['environment_samples']=[dict(slot=i,object=name,randomization=draw)
             for i,(name,draw) in enumerate(zip(env.call('benchmark_object'),env.call('benchmark_randomization')))]
+    if config.get('catch_warm_start',False):
+        checkpoint=Path(config['checkpoint_catching']).resolve()
+        result['catch_warm_start']=dict(source=str(checkpoint),sha256=hashlib.sha256(checkpoint.read_bytes()).hexdigest(),
+            initialization='full Catch model and all normalization statistics; fresh optimizer, counters, best score and RNG')
+        for n in ['gym_dcmm/algs/ppo_dcmm_645edc4/ppo_dcmm_catch_two_stage.py','gym_dcmm/algs/ppo_dcmm_5fe75d5f/ppo_dcmm_catch_hold.py']:
+            result['sources'][n]=hashlib.sha256((ROOT/n).read_bytes()).hexdigest()
     (Path(output)/'object_benchmark_provenance.json').write_text(json.dumps(result,indent=2))

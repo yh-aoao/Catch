@@ -18,6 +18,7 @@ num_envs: 32 # This should be no more than 2x your CPUs (1x is recommended)
 object_eval: False
 # used to set checkpoint path
 checkpoint_tracking: ''
+catch_warm_start: false # full Catch weights/stats only; new optimizer and progress
 checkpoint_catching: ''
 
 # wandb config

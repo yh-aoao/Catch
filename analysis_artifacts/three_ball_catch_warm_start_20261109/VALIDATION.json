@@ -1,0 +1,52 @@
+{
+  "smoke_runs": [
+    {
+      "motion": "roll",
+      "variant": "dr",
+      "checkpoint": "/home/isee/Catch/catch_it_copy/outputs/catch_warm_smoke_roll_dr_20261109/2026-11-09/16:24:32/nn/roll_catch_last.pth",
+      "source": {
+        "source": "/home/isee/Catch/11-5/roll_catch_best_reward_270.37.pth",
+        "sha256": "966011743c774100d28680ecb43f0b6cb4c5e5373dba3948649e72c56d4d2b5c",
+        "initialization": "full Catch model and all normalization statistics; fresh optimizer, counters, best score and RNG"
+      },
+      "finite": true
+    },
+    {
+      "motion": "roll",
+      "variant": "fixed",
+      "checkpoint": "/home/isee/Catch/catch_it_copy/outputs/catch_warm_smoke_roll_fixed_20261109/2026-11-09/16:24:32/nn/roll_catch_last.pth",
+      "source": {
+        "source": "/home/isee/Catch/11-5/roll_catch_best_reward_270.37.pth",
+        "sha256": "966011743c774100d28680ecb43f0b6cb4c5e5373dba3948649e72c56d4d2b5c",
+        "initialization": "full Catch model and all normalization statistics; fresh optimizer, counters, best score and RNG"
+      },
+      "finite": true
+    },
+    {
+      "motion": "bounce",
+      "variant": "dr",
+      "checkpoint": "/home/isee/Catch/catch_it_copy/outputs/catch_warm_smoke_bounce_dr_20261109/2026-11-09/16:24:42/nn/bounce_catch_last.pth",
+      "source": {
+        "source": "/home/isee/Catch/11-5/bounce_catch_best_reward_13.68.pth",
+        "sha256": "7d7ca9b8459dcb9ab6a545ce257b6659c908a45eaae9948c5429a2d292adf748",
+        "initialization": "full Catch model and all normalization statistics; fresh optimizer, counters, best score and RNG"
+      },
+      "finite": true
+    },
+    {
+      "motion": "bounce",
+      "variant": "fixed",
+      "checkpoint": "/home/isee/Catch/catch_it_copy/outputs/catch_warm_smoke_bounce_fixed_20261109/2026-11-09/16:24:42/nn/bounce_catch_last.pth",
+      "source": {
+        "source": "/home/isee/Catch/11-5/bounce_catch_best_reward_13.68.pth",
+        "sha256": "7d7ca9b8459dcb9ab6a545ce257b6659c908a45eaae9948c5429a2d292adf748",
+        "initialization": "full Catch model and all normalization statistics; fresh optimizer, counters, best score and RNG"
+      },
+      "finite": true
+    }
+  ],
+  "resume_regression_tests": 5,
+  "model_and_stats_loaded_exactly": true,
+  "paired_configs_match": true,
+  "formal_training_started": false
+}

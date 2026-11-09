@@ -1,0 +1,965 @@
+[
+  {
+    "motion": "roll",
+    "object": "original",
+    "successes": 8,
+    "episodes": 20,
+    "success_rate": 0.4,
+    "stable_hold_episodes": 0,
+    "reasons": {
+      "ball_left": 3,
+      "ball_on_floor": 5,
+      "out_of_bounds": 1,
+      "timeout": 9,
+      "base_collision": 2
+    },
+    "slots": [
+      {
+        "slot": 0,
+        "episodes": 5,
+        "successes": 3,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.026781712933732,
+          "mass_scale": 1.0229859363147162,
+          "friction_scale": 0.8818013296000147,
+          "rolling_scale": 0.8505534847419334,
+          "damping_scale": 1.0
+        }
+      },
+      {
+        "slot": 1,
+        "episodes": 5,
+        "successes": 1,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0256739801382022,
+          "mass_scale": 1.050844164286673,
+          "friction_scale": 1.1122068592837577,
+          "rolling_scale": 0.9197835364937789,
+          "damping_scale": 1.0
+        }
+      },
+      {
+        "slot": 2,
+        "episodes": 5,
+        "successes": 3,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0169572918099654,
+          "mass_scale": 1.0196718988204032,
+          "friction_scale": 0.9305754087073278,
+          "rolling_scale": 0.9676521705171753,
+          "damping_scale": 1.0
+        }
+      },
+      {
+        "slot": 3,
+        "episodes": 5,
+        "successes": 1,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 0.9733400778132805,
+          "mass_scale": 0.9709707499734517,
+          "friction_scale": 0.878371807486391,
+          "rolling_scale": 1.102546022595014,
+          "damping_scale": 1.0
+        }
+      }
+    ],
+    "checkpoint": "/home/isee/Catch/11-9/roll_catch_best_reward_212.69.pth",
+    "checkpoint_sha256": "0a9a40acb9ec59dd179e9add2bbbdfa227c462cd9dbad3aa51a48bd21b112757"
+  },
+  {
+    "motion": "roll",
+    "object": "tennis_ball",
+    "successes": 9,
+    "episodes": 20,
+    "success_rate": 0.45,
+    "stable_hold_episodes": 3,
+    "reasons": {
+      "timeout": 13,
+      "ball_on_floor": 5,
+      "ball_left": 1,
+      "out_of_bounds": 1
+    },
+    "slots": [
+      {
+        "slot": 0,
+        "episodes": 5,
+        "successes": 2,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.026781712933732,
+          "mass_scale": 1.0229859363147162,
+          "friction_scale": 0.8818013296000147,
+          "rolling_scale": 0.8505534847419334,
+          "damping_scale": 1.0
+        }
+      },
+      {
+        "slot": 1,
+        "episodes": 5,
+        "successes": 3,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0256739801382022,
+          "mass_scale": 1.050844164286673,
+          "friction_scale": 1.1122068592837577,
+          "rolling_scale": 0.9197835364937789,
+          "damping_scale": 1.0
+        }
+      },
+      {
+        "slot": 2,
+        "episodes": 5,
+        "successes": 2,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0169572918099654,
+          "mass_scale": 1.0196718988204032,
+          "friction_scale": 0.9305754087073278,
+          "rolling_scale": 0.9676521705171753,
+          "damping_scale": 1.0
+        }
+      },
+      {
+        "slot": 3,
+        "episodes": 5,
+        "successes": 2,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 0.9733400778132805,
+          "mass_scale": 0.9709707499734517,
+          "friction_scale": 0.878371807486391,
+          "rolling_scale": 1.102546022595014,
+          "damping_scale": 1.0
+        }
+      }
+    ],
+    "checkpoint": "/home/isee/Catch/11-9/roll_catch_best_reward_212.69.pth",
+    "checkpoint_sha256": "0a9a40acb9ec59dd179e9add2bbbdfa227c462cd9dbad3aa51a48bd21b112757"
+  },
+  {
+    "motion": "roll",
+    "object": "baseball",
+    "successes": 9,
+    "episodes": 20,
+    "success_rate": 0.45,
+    "stable_hold_episodes": 1,
+    "reasons": {
+      "ball_left": 1,
+      "timeout": 10,
+      "ball_on_floor": 7,
+      "out_of_bounds": 1,
+      "base_collision": 1
+    },
+    "slots": [
+      {
+        "slot": 0,
+        "episodes": 5,
+        "successes": 0,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.026781712933732,
+          "mass_scale": 1.0229859363147162,
+          "friction_scale": 0.8818013296000147,
+          "rolling_scale": 0.8505534847419334,
+          "damping_scale": 1.0
+        }
+      },
+      {
+        "slot": 1,
+        "episodes": 5,
+        "successes": 3,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0256739801382022,
+          "mass_scale": 1.050844164286673,
+          "friction_scale": 1.1122068592837577,
+          "rolling_scale": 0.9197835364937789,
+          "damping_scale": 1.0
+        }
+      },
+      {
+        "slot": 2,
+        "episodes": 5,
+        "successes": 3,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0169572918099654,
+          "mass_scale": 1.0196718988204032,
+          "friction_scale": 0.9305754087073278,
+          "rolling_scale": 0.9676521705171753,
+          "damping_scale": 1.0
+        }
+      },
+      {
+        "slot": 3,
+        "episodes": 5,
+        "successes": 3,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 0.9733400778132805,
+          "mass_scale": 0.9709707499734517,
+          "friction_scale": 0.878371807486391,
+          "rolling_scale": 1.102546022595014,
+          "damping_scale": 1.0
+        }
+      }
+    ],
+    "checkpoint": "/home/isee/Catch/11-9/roll_catch_best_reward_212.69.pth",
+    "checkpoint_sha256": "0a9a40acb9ec59dd179e9add2bbbdfa227c462cd9dbad3aa51a48bd21b112757"
+  },
+  {
+    "motion": "roll",
+    "object": "orange",
+    "successes": 15,
+    "episodes": 20,
+    "success_rate": 0.75,
+    "stable_hold_episodes": 4,
+    "reasons": {
+      "timeout": 16,
+      "ball_on_floor": 2,
+      "ball_left": 2
+    },
+    "slots": [
+      {
+        "slot": 0,
+        "episodes": 5,
+        "successes": 5,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.026781712933732,
+          "mass_scale": 1.0229859363147162,
+          "friction_scale": 0.8818013296000147,
+          "rolling_scale": 0.8505534847419334,
+          "damping_scale": 1.0
+        }
+      },
+      {
+        "slot": 1,
+        "episodes": 5,
+        "successes": 4,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0256739801382022,
+          "mass_scale": 1.050844164286673,
+          "friction_scale": 1.1122068592837577,
+          "rolling_scale": 0.9197835364937789,
+          "damping_scale": 1.0
+        }
+      },
+      {
+        "slot": 2,
+        "episodes": 5,
+        "successes": 3,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0169572918099654,
+          "mass_scale": 1.0196718988204032,
+          "friction_scale": 0.9305754087073278,
+          "rolling_scale": 0.9676521705171753,
+          "damping_scale": 1.0
+        }
+      },
+      {
+        "slot": 3,
+        "episodes": 5,
+        "successes": 3,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 0.9733400778132805,
+          "mass_scale": 0.9709707499734517,
+          "friction_scale": 0.878371807486391,
+          "rolling_scale": 1.102546022595014,
+          "damping_scale": 1.0
+        }
+      }
+    ],
+    "checkpoint": "/home/isee/Catch/11-9/roll_catch_best_reward_212.69.pth",
+    "checkpoint_sha256": "0a9a40acb9ec59dd179e9add2bbbdfa227c462cd9dbad3aa51a48bd21b112757"
+  },
+  {
+    "motion": "roll",
+    "object": "apple",
+    "successes": 7,
+    "episodes": 20,
+    "success_rate": 0.35,
+    "stable_hold_episodes": 2,
+    "reasons": {
+      "ball_on_floor": 8,
+      "catch_success": 1,
+      "ball_left": 3,
+      "timeout": 7,
+      "base_collision": 1
+    },
+    "slots": [
+      {
+        "slot": 0,
+        "episodes": 5,
+        "successes": 3,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.026781712933732,
+          "mass_scale": 1.0229859363147162,
+          "friction_scale": 0.8818013296000147,
+          "rolling_scale": 0.8505534847419334,
+          "damping_scale": 1.0
+        }
+      },
+      {
+        "slot": 1,
+        "episodes": 5,
+        "successes": 2,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0256739801382022,
+          "mass_scale": 1.050844164286673,
+          "friction_scale": 1.1122068592837577,
+          "rolling_scale": 0.9197835364937789,
+          "damping_scale": 1.0
+        }
+      },
+      {
+        "slot": 2,
+        "episodes": 5,
+        "successes": 1,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0169572918099654,
+          "mass_scale": 1.0196718988204032,
+          "friction_scale": 0.9305754087073278,
+          "rolling_scale": 0.9676521705171753,
+          "damping_scale": 1.0
+        }
+      },
+      {
+        "slot": 3,
+        "episodes": 5,
+        "successes": 1,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 0.9733400778132805,
+          "mass_scale": 0.9709707499734517,
+          "friction_scale": 0.878371807486391,
+          "rolling_scale": 1.102546022595014,
+          "damping_scale": 1.0
+        }
+      }
+    ],
+    "checkpoint": "/home/isee/Catch/11-9/roll_catch_best_reward_212.69.pth",
+    "checkpoint_sha256": "0a9a40acb9ec59dd179e9add2bbbdfa227c462cd9dbad3aa51a48bd21b112757"
+  },
+  {
+    "motion": "roll",
+    "object": "lemon",
+    "successes": 12,
+    "episodes": 20,
+    "success_rate": 0.6,
+    "stable_hold_episodes": 3,
+    "reasons": {
+      "ball_on_floor": 6,
+      "timeout": 13,
+      "ball_left": 1
+    },
+    "slots": [
+      {
+        "slot": 0,
+        "episodes": 5,
+        "successes": 2,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.026781712933732,
+          "mass_scale": 1.0229859363147162,
+          "friction_scale": 0.8818013296000147,
+          "rolling_scale": 0.8505534847419334,
+          "damping_scale": 1.0
+        }
+      },
+      {
+        "slot": 1,
+        "episodes": 5,
+        "successes": 2,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0256739801382022,
+          "mass_scale": 1.050844164286673,
+          "friction_scale": 1.1122068592837577,
+          "rolling_scale": 0.9197835364937789,
+          "damping_scale": 1.0
+        }
+      },
+      {
+        "slot": 2,
+        "episodes": 5,
+        "successes": 4,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0169572918099654,
+          "mass_scale": 1.0196718988204032,
+          "friction_scale": 0.9305754087073278,
+          "rolling_scale": 0.9676521705171753,
+          "damping_scale": 1.0
+        }
+      },
+      {
+        "slot": 3,
+        "episodes": 5,
+        "successes": 4,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 0.9733400778132805,
+          "mass_scale": 0.9709707499734517,
+          "friction_scale": 0.878371807486391,
+          "rolling_scale": 1.102546022595014,
+          "damping_scale": 1.0
+        }
+      }
+    ],
+    "checkpoint": "/home/isee/Catch/11-9/roll_catch_best_reward_212.69.pth",
+    "checkpoint_sha256": "0a9a40acb9ec59dd179e9add2bbbdfa227c462cd9dbad3aa51a48bd21b112757"
+  },
+  {
+    "motion": "roll",
+    "object": "tomato_soup_can",
+    "successes": 2,
+    "episodes": 20,
+    "success_rate": 0.1,
+    "stable_hold_episodes": 0,
+    "reasons": {
+      "ball_on_floor": 16,
+      "ball_left": 1,
+      "timeout": 2,
+      "out_of_bounds": 1
+    },
+    "slots": [
+      {
+        "slot": 0,
+        "episodes": 5,
+        "successes": 0,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.026781712933732,
+          "mass_scale": 1.0229859363147162,
+          "friction_scale": 0.8818013296000147,
+          "rolling_scale": 0.8505534847419334,
+          "damping_scale": 1.0
+        }
+      },
+      {
+        "slot": 1,
+        "episodes": 5,
+        "successes": 1,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0256739801382022,
+          "mass_scale": 1.050844164286673,
+          "friction_scale": 1.1122068592837577,
+          "rolling_scale": 0.9197835364937789,
+          "damping_scale": 1.0
+        }
+      },
+      {
+        "slot": 2,
+        "episodes": 5,
+        "successes": 1,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0169572918099654,
+          "mass_scale": 1.0196718988204032,
+          "friction_scale": 0.9305754087073278,
+          "rolling_scale": 0.9676521705171753,
+          "damping_scale": 1.0
+        }
+      },
+      {
+        "slot": 3,
+        "episodes": 5,
+        "successes": 0,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 0.9733400778132805,
+          "mass_scale": 0.9709707499734517,
+          "friction_scale": 0.878371807486391,
+          "rolling_scale": 1.102546022595014,
+          "damping_scale": 1.0
+        }
+      }
+    ],
+    "checkpoint": "/home/isee/Catch/11-9/roll_catch_best_reward_212.69.pth",
+    "checkpoint_sha256": "0a9a40acb9ec59dd179e9add2bbbdfa227c462cd9dbad3aa51a48bd21b112757"
+  },
+  {
+    "motion": "bounce",
+    "object": "original",
+    "successes": 4,
+    "episodes": 20,
+    "success_rate": 0.2,
+    "stable_hold_episodes": 0,
+    "reasons": {
+      "controlled_hold": 4,
+      "timeout": 6,
+      "out_of_bounds": 9,
+      "base_collision": 1
+    },
+    "slots": [
+      {
+        "slot": 0,
+        "episodes": 5,
+        "successes": 2,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.026781712933732,
+          "mass_scale": 1.0229859363147162,
+          "friction_scale": 0.8818013296000147,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9252767423709667
+        }
+      },
+      {
+        "slot": 1,
+        "episodes": 5,
+        "successes": 1,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0256739801382022,
+          "mass_scale": 1.050844164286673,
+          "friction_scale": 1.1122068592837577,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9598917682468895
+        }
+      },
+      {
+        "slot": 2,
+        "episodes": 5,
+        "successes": 1,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0169572918099654,
+          "mass_scale": 1.0196718988204032,
+          "friction_scale": 0.9305754087073278,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9838260852585877
+        }
+      },
+      {
+        "slot": 3,
+        "episodes": 5,
+        "successes": 0,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 0.9733400778132805,
+          "mass_scale": 0.9709707499734517,
+          "friction_scale": 0.878371807486391,
+          "rolling_scale": 1.0,
+          "damping_scale": 1.051273011297507
+        }
+      }
+    ],
+    "checkpoint": "/home/isee/Catch/11-9/bounce_catch_best_reward_-14.97.pth",
+    "checkpoint_sha256": "9355563c107feca6290666b5ab7ca2b0ad2e2c3666b2251cd99d10d4553e7a50"
+  },
+  {
+    "motion": "bounce",
+    "object": "tennis_ball",
+    "successes": 8,
+    "episodes": 20,
+    "success_rate": 0.4,
+    "stable_hold_episodes": 0,
+    "reasons": {
+      "base_collision": 1,
+      "timeout": 7,
+      "controlled_hold": 8,
+      "out_of_bounds": 4
+    },
+    "slots": [
+      {
+        "slot": 0,
+        "episodes": 5,
+        "successes": 2,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.026781712933732,
+          "mass_scale": 1.0229859363147162,
+          "friction_scale": 0.8818013296000147,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9252767423709667
+        }
+      },
+      {
+        "slot": 1,
+        "episodes": 5,
+        "successes": 1,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0256739801382022,
+          "mass_scale": 1.050844164286673,
+          "friction_scale": 1.1122068592837577,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9598917682468895
+        }
+      },
+      {
+        "slot": 2,
+        "episodes": 5,
+        "successes": 3,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0169572918099654,
+          "mass_scale": 1.0196718988204032,
+          "friction_scale": 0.9305754087073278,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9838260852585877
+        }
+      },
+      {
+        "slot": 3,
+        "episodes": 5,
+        "successes": 2,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 0.9733400778132805,
+          "mass_scale": 0.9709707499734517,
+          "friction_scale": 0.878371807486391,
+          "rolling_scale": 1.0,
+          "damping_scale": 1.051273011297507
+        }
+      }
+    ],
+    "checkpoint": "/home/isee/Catch/11-9/bounce_catch_best_reward_-14.97.pth",
+    "checkpoint_sha256": "9355563c107feca6290666b5ab7ca2b0ad2e2c3666b2251cd99d10d4553e7a50"
+  },
+  {
+    "motion": "bounce",
+    "object": "baseball",
+    "successes": 1,
+    "episodes": 20,
+    "success_rate": 0.05,
+    "stable_hold_episodes": 0,
+    "reasons": {
+      "out_of_bounds": 6,
+      "controlled_hold": 1,
+      "timeout": 11,
+      "base_collision": 2
+    },
+    "slots": [
+      {
+        "slot": 0,
+        "episodes": 5,
+        "successes": 1,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.026781712933732,
+          "mass_scale": 1.0229859363147162,
+          "friction_scale": 0.8818013296000147,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9252767423709667
+        }
+      },
+      {
+        "slot": 1,
+        "episodes": 5,
+        "successes": 0,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0256739801382022,
+          "mass_scale": 1.050844164286673,
+          "friction_scale": 1.1122068592837577,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9598917682468895
+        }
+      },
+      {
+        "slot": 2,
+        "episodes": 5,
+        "successes": 0,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0169572918099654,
+          "mass_scale": 1.0196718988204032,
+          "friction_scale": 0.9305754087073278,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9838260852585877
+        }
+      },
+      {
+        "slot": 3,
+        "episodes": 5,
+        "successes": 0,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 0.9733400778132805,
+          "mass_scale": 0.9709707499734517,
+          "friction_scale": 0.878371807486391,
+          "rolling_scale": 1.0,
+          "damping_scale": 1.051273011297507
+        }
+      }
+    ],
+    "checkpoint": "/home/isee/Catch/11-9/bounce_catch_best_reward_-14.97.pth",
+    "checkpoint_sha256": "9355563c107feca6290666b5ab7ca2b0ad2e2c3666b2251cd99d10d4553e7a50"
+  },
+  {
+    "motion": "bounce",
+    "object": "racquetball",
+    "successes": 7,
+    "episodes": 20,
+    "success_rate": 0.35,
+    "stable_hold_episodes": 0,
+    "reasons": {
+      "controlled_hold": 7,
+      "out_of_bounds": 5,
+      "base_collision": 5,
+      "timeout": 3
+    },
+    "slots": [
+      {
+        "slot": 0,
+        "episodes": 5,
+        "successes": 2,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.026781712933732,
+          "mass_scale": 1.0229859363147162,
+          "friction_scale": 0.8818013296000147,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9252767423709667
+        }
+      },
+      {
+        "slot": 1,
+        "episodes": 5,
+        "successes": 1,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0256739801382022,
+          "mass_scale": 1.050844164286673,
+          "friction_scale": 1.1122068592837577,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9598917682468895
+        }
+      },
+      {
+        "slot": 2,
+        "episodes": 5,
+        "successes": 2,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0169572918099654,
+          "mass_scale": 1.0196718988204032,
+          "friction_scale": 0.9305754087073278,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9838260852585877
+        }
+      },
+      {
+        "slot": 3,
+        "episodes": 5,
+        "successes": 2,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 0.9733400778132805,
+          "mass_scale": 0.9709707499734517,
+          "friction_scale": 0.878371807486391,
+          "rolling_scale": 1.0,
+          "damping_scale": 1.051273011297507
+        }
+      }
+    ],
+    "checkpoint": "/home/isee/Catch/11-9/bounce_catch_best_reward_-14.97.pth",
+    "checkpoint_sha256": "9355563c107feca6290666b5ab7ca2b0ad2e2c3666b2251cd99d10d4553e7a50"
+  },
+  {
+    "motion": "bounce",
+    "object": "golf_ball",
+    "successes": 9,
+    "episodes": 20,
+    "success_rate": 0.45,
+    "stable_hold_episodes": 0,
+    "reasons": {
+      "controlled_hold": 9,
+      "out_of_bounds": 4,
+      "timeout": 5,
+      "base_collision": 2
+    },
+    "slots": [
+      {
+        "slot": 0,
+        "episodes": 5,
+        "successes": 1,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.026781712933732,
+          "mass_scale": 1.0229859363147162,
+          "friction_scale": 0.8818013296000147,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9252767423709667
+        }
+      },
+      {
+        "slot": 1,
+        "episodes": 5,
+        "successes": 2,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0256739801382022,
+          "mass_scale": 1.050844164286673,
+          "friction_scale": 1.1122068592837577,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9598917682468895
+        }
+      },
+      {
+        "slot": 2,
+        "episodes": 5,
+        "successes": 3,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0169572918099654,
+          "mass_scale": 1.0196718988204032,
+          "friction_scale": 0.9305754087073278,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9838260852585877
+        }
+      },
+      {
+        "slot": 3,
+        "episodes": 5,
+        "successes": 3,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 0.9733400778132805,
+          "mass_scale": 0.9709707499734517,
+          "friction_scale": 0.878371807486391,
+          "rolling_scale": 1.0,
+          "damping_scale": 1.051273011297507
+        }
+      }
+    ],
+    "checkpoint": "/home/isee/Catch/11-9/bounce_catch_best_reward_-14.97.pth",
+    "checkpoint_sha256": "9355563c107feca6290666b5ab7ca2b0ad2e2c3666b2251cd99d10d4553e7a50"
+  },
+  {
+    "motion": "bounce",
+    "object": "softball",
+    "successes": 10,
+    "episodes": 20,
+    "success_rate": 0.5,
+    "stable_hold_episodes": 0,
+    "reasons": {
+      "controlled_hold": 10,
+      "out_of_bounds": 4,
+      "timeout": 5,
+      "base_collision": 1
+    },
+    "slots": [
+      {
+        "slot": 0,
+        "episodes": 5,
+        "successes": 2,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.026781712933732,
+          "mass_scale": 1.0229859363147162,
+          "friction_scale": 0.8818013296000147,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9252767423709667
+        }
+      },
+      {
+        "slot": 1,
+        "episodes": 5,
+        "successes": 3,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0256739801382022,
+          "mass_scale": 1.050844164286673,
+          "friction_scale": 1.1122068592837577,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9598917682468895
+        }
+      },
+      {
+        "slot": 2,
+        "episodes": 5,
+        "successes": 4,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0169572918099654,
+          "mass_scale": 1.0196718988204032,
+          "friction_scale": 0.9305754087073278,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9838260852585877
+        }
+      },
+      {
+        "slot": 3,
+        "episodes": 5,
+        "successes": 1,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 0.9733400778132805,
+          "mass_scale": 0.9709707499734517,
+          "friction_scale": 0.878371807486391,
+          "rolling_scale": 1.0,
+          "damping_scale": 1.051273011297507
+        }
+      }
+    ],
+    "checkpoint": "/home/isee/Catch/11-9/bounce_catch_best_reward_-14.97.pth",
+    "checkpoint_sha256": "9355563c107feca6290666b5ab7ca2b0ad2e2c3666b2251cd99d10d4553e7a50"
+  }
+]

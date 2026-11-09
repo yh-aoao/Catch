@@ -1,0 +1,1488 @@
+{
+  "motion": "bounce",
+  "object": "racquetball",
+  "seed": 41000,
+  "episodes": 20,
+  "successes": 20,
+  "instances": [
+    {
+      "version": "physical_dr_v1",
+      "sampling": "environment_creation",
+      "size_scale": 1.026781712933732,
+      "mass_scale": 1.0229859363147162,
+      "friction_scale": 0.8818013296000147,
+      "rolling_scale": 1.0,
+      "damping_scale": 0.9252767423709667
+    },
+    {
+      "version": "physical_dr_v1",
+      "sampling": "environment_creation",
+      "size_scale": 1.0256739801382022,
+      "mass_scale": 1.050844164286673,
+      "friction_scale": 1.1122068592837577,
+      "rolling_scale": 1.0,
+      "damping_scale": 0.9598917682468895
+    },
+    {
+      "version": "physical_dr_v1",
+      "sampling": "environment_creation",
+      "size_scale": 1.0169572918099654,
+      "mass_scale": 1.0196718988204032,
+      "friction_scale": 0.9305754087073278,
+      "rolling_scale": 1.0,
+      "damping_scale": 0.9838260852585877
+    },
+    {
+      "version": "physical_dr_v1",
+      "sampling": "environment_creation",
+      "size_scale": 0.9733400778132805,
+      "mass_scale": 0.9709707499734517,
+      "friction_scale": 0.878371807486391,
+      "rolling_scale": 1.0,
+      "damping_scale": 1.051273011297507
+    }
+  ],
+  "records": [
+    {
+      "slot": 3,
+      "episode": 0,
+      "success": true,
+      "reason": "track_touch",
+      "steps": 18,
+      "reward": 18.43152329652137,
+      "legacy_success": true,
+      "physics": {
+        "version": "bounce_v1",
+        "object": "racquetball",
+        "shape": "sphere",
+        "mass_kg": 0.03980980074891152,
+        "dimensions_m": [
+          0.05420111974447227,
+          0.05420111974447227,
+          0.05420111974447227
+        ],
+        "inertia": [
+          1.9491949207922753e-05,
+          1.9491949207922753e-05,
+          1.9491949207922753e-05
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "sphere",
+          "inertia_factor": 0.6666666666666666,
+          "sliding_friction": 0.4831044941175151,
+          "torsional_length_m": 0.0001,
+          "time_constant": 0.008,
+          "damping_ratio": 0.0600522788819818,
+          "normal_cor_target": 0.84,
+          "cor_basis": "Approximation from specified rebound-height ratio 0.68-0.72; generic floor transfer unmeasured",
+          "launch_height_m": [
+            0.9,
+            1.2
+          ],
+          "rebound_apex_m": [
+            0.65,
+            0.85
+          ],
+          "horizontal_retention_prior": 0.65,
+          "numerical_validation": {
+            "passed": true,
+            "peak_refinement_error_m": 0.006634457365296775,
+            "calibration": "simulation-only fit to nominal COR; not real measurements"
+          }
+        },
+        "launch": {
+          "requested_apex_clearance_m": 0.6787191965159639,
+          "nominal_cor": 0.84,
+          "predicted_apex_y": 0.594686874896128,
+          "downward_speed": 0.9904544411531511,
+          "horizontal_speed": 2.218808851377538,
+          "predicted_first_impact_seconds": 0.34187566570049904,
+          "predicted_apex_seconds": 0.7138607794830718,
+          "horizontal_retention_prior": 0.65
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 0.9733400778132805,
+          "mass_scale": 0.9709707499734517,
+          "friction_scale": 0.878371807486391,
+          "rolling_scale": 1.0,
+          "damping_scale": 1.051273011297507
+        }
+      }
+    },
+    {
+      "slot": 1,
+      "episode": 0,
+      "success": true,
+      "reason": "track_touch",
+      "steps": 19,
+      "reward": 18.715681093263797,
+      "legacy_success": true,
+      "physics": {
+        "version": "bounce_v1",
+        "object": "racquetball",
+        "shape": "sphere",
+        "mass_kg": 0.0430846107357536,
+        "dimensions_m": [
+          0.057115369523420285,
+          0.057115369523420285,
+          0.057115369523420285
+        ],
+        "inertia": [
+          2.342485465948952e-05,
+          2.342485465948952e-05,
+          2.342485465948952e-05
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "sphere",
+          "inertia_factor": 0.6666666666666666,
+          "sliding_friction": 0.6117137726060669,
+          "torsional_length_m": 0.0001,
+          "time_constant": 0.008,
+          "damping_ratio": 0.054832272439045676,
+          "normal_cor_target": 0.84,
+          "cor_basis": "Approximation from specified rebound-height ratio 0.68-0.72; generic floor transfer unmeasured",
+          "launch_height_m": [
+            0.9,
+            1.2
+          ],
+          "rebound_apex_m": [
+            0.65,
+            0.85
+          ],
+          "horizontal_retention_prior": 0.65,
+          "numerical_validation": {
+            "passed": true,
+            "peak_refinement_error_m": 0.006634457365296775,
+            "calibration": "simulation-only fit to nominal COR; not real measurements"
+          }
+        },
+        "launch": {
+          "requested_apex_clearance_m": 0.6632689999005469,
+          "nominal_cor": 0.84,
+          "predicted_apex_y": 0.6222043738851675,
+          "downward_speed": 0.9904544411531511,
+          "horizontal_speed": 2.0097626438858014,
+          "predicted_first_impact_seconds": 0.3368063064590186,
+          "predicted_apex_seconds": 0.7045331584787478,
+          "horizontal_retention_prior": 0.65
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0256739801382022,
+          "mass_scale": 1.050844164286673,
+          "friction_scale": 1.1122068592837577,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9598917682468895
+        }
+      }
+    },
+    {
+      "slot": 0,
+      "episode": 0,
+      "success": true,
+      "reason": "track_touch",
+      "steps": 21,
+      "reward": 20.434314015072744,
+      "legacy_success": true,
+      "physics": {
+        "version": "bounce_v1",
+        "object": "racquetball",
+        "shape": "sphere",
+        "mass_kg": 0.04194242338890337,
+        "dimensions_m": [
+          0.057177054395197345,
+          0.057177054395197345,
+          0.057177054395197345
+        ],
+        "inertia": [
+          2.2853137119800536e-05,
+          2.2853137119800536e-05,
+          2.2853137119800536e-05
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "sphere",
+          "inertia_factor": 0.6666666666666666,
+          "sliding_friction": 0.48499073128000814,
+          "torsional_length_m": 0.0001,
+          "time_constant": 0.008,
+          "damping_ratio": 0.052854944794305386,
+          "normal_cor_target": 0.84,
+          "cor_basis": "Approximation from specified rebound-height ratio 0.68-0.72; generic floor transfer unmeasured",
+          "launch_height_m": [
+            0.9,
+            1.2
+          ],
+          "rebound_apex_m": [
+            0.65,
+            0.85
+          ],
+          "horizontal_retention_prior": 0.65,
+          "numerical_validation": {
+            "passed": true,
+            "peak_refinement_error_m": 0.006634457365296775,
+            "calibration": "simulation-only fit to nominal COR; not real measurements"
+          }
+        },
+        "launch": {
+          "requested_apex_clearance_m": 0.7500048510114236,
+          "nominal_cor": 0.84,
+          "predicted_apex_y": 0.5896240079298722,
+          "downward_speed": 0.9904544411531511,
+          "horizontal_speed": 1.9499259926896253,
+          "predicted_first_impact_seconds": 0.3645507779806409,
+          "predicted_apex_seconds": 0.7555829860785328,
+          "horizontal_retention_prior": 0.65
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.026781712933732,
+          "mass_scale": 1.0229859363147162,
+          "friction_scale": 0.8818013296000147,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9252767423709667
+        }
+      }
+    },
+    {
+      "slot": 2,
+      "episode": 0,
+      "success": true,
+      "reason": "track_touch",
+      "steps": 23,
+      "reward": 20.664509130545856,
+      "legacy_success": true,
+      "physics": {
+        "version": "bounce_v1",
+        "object": "racquetball",
+        "shape": "sphere",
+        "mass_kg": 0.04180654785163653,
+        "dimensions_m": [
+          0.0566299746664496,
+          0.0566299746664496,
+          0.0566299746664496
+        ],
+        "inertia": [
+          2.234527952390137e-05,
+          2.234527952390137e-05,
+          2.234527952390137e-05
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "sphere",
+          "inertia_factor": 0.6666666666666666,
+          "sliding_friction": 0.5118164747890304,
+          "torsional_length_m": 0.0001,
+          "time_constant": 0.008,
+          "damping_ratio": 0.056199481779141164,
+          "normal_cor_target": 0.84,
+          "cor_basis": "Approximation from specified rebound-height ratio 0.68-0.72; generic floor transfer unmeasured",
+          "launch_height_m": [
+            0.9,
+            1.2
+          ],
+          "rebound_apex_m": [
+            0.65,
+            0.85
+          ],
+          "horizontal_retention_prior": 0.65,
+          "numerical_validation": {
+            "passed": true,
+            "peak_refinement_error_m": 0.006634457365296775,
+            "calibration": "simulation-only fit to nominal COR; not real measurements"
+          }
+        },
+        "launch": {
+          "requested_apex_clearance_m": 0.7369226332485427,
+          "nominal_cor": 0.84,
+          "predicted_apex_y": 0.7977637005440875,
+          "downward_speed": 0.9904544411531511,
+          "horizontal_speed": 1.5561461382531476,
+          "predicted_first_impact_seconds": 0.3604729688677246,
+          "predicted_apex_seconds": 0.7480798173107669,
+          "horizontal_retention_prior": 0.65
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0169572918099654,
+          "mass_scale": 1.0196718988204032,
+          "friction_scale": 0.9305754087073278,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9838260852585877
+        }
+      }
+    },
+    {
+      "slot": 1,
+      "episode": 1,
+      "success": true,
+      "reason": "track_touch",
+      "steps": 19,
+      "reward": 19.161499802941194,
+      "legacy_success": true,
+      "physics": {
+        "version": "bounce_v1",
+        "object": "racquetball",
+        "shape": "sphere",
+        "mass_kg": 0.0430846107357536,
+        "dimensions_m": [
+          0.057115369523420285,
+          0.057115369523420285,
+          0.057115369523420285
+        ],
+        "inertia": [
+          2.342485465948952e-05,
+          2.342485465948952e-05,
+          2.342485465948952e-05
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "sphere",
+          "inertia_factor": 0.6666666666666666,
+          "sliding_friction": 0.6117137726060669,
+          "torsional_length_m": 0.0001,
+          "time_constant": 0.008,
+          "damping_ratio": 0.054832272439045676,
+          "normal_cor_target": 0.84,
+          "cor_basis": "Approximation from specified rebound-height ratio 0.68-0.72; generic floor transfer unmeasured",
+          "launch_height_m": [
+            0.9,
+            1.2
+          ],
+          "rebound_apex_m": [
+            0.65,
+            0.85
+          ],
+          "horizontal_retention_prior": 0.65,
+          "numerical_validation": {
+            "passed": true,
+            "peak_refinement_error_m": 0.006634457365296775,
+            "calibration": "simulation-only fit to nominal COR; not real measurements"
+          }
+        },
+        "launch": {
+          "requested_apex_clearance_m": 0.6647044401865151,
+          "nominal_cor": 0.84,
+          "predicted_apex_y": 0.5711892853066566,
+          "downward_speed": 0.9904544411531511,
+          "horizontal_speed": 2.1806866839312873,
+          "predicted_first_impact_seconds": 0.33727975928132925,
+          "predicted_apex_seconds": 0.7054043116717994,
+          "horizontal_retention_prior": 0.65
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0256739801382022,
+          "mass_scale": 1.050844164286673,
+          "friction_scale": 1.1122068592837577,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9598917682468895
+        }
+      }
+    },
+    {
+      "slot": 0,
+      "episode": 1,
+      "success": true,
+      "reason": "track_touch",
+      "steps": 22,
+      "reward": 20.52686287568097,
+      "legacy_success": true,
+      "physics": {
+        "version": "bounce_v1",
+        "object": "racquetball",
+        "shape": "sphere",
+        "mass_kg": 0.04194242338890337,
+        "dimensions_m": [
+          0.057177054395197345,
+          0.057177054395197345,
+          0.057177054395197345
+        ],
+        "inertia": [
+          2.2853137119800536e-05,
+          2.2853137119800536e-05,
+          2.2853137119800536e-05
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "sphere",
+          "inertia_factor": 0.6666666666666666,
+          "sliding_friction": 0.48499073128000814,
+          "torsional_length_m": 0.0001,
+          "time_constant": 0.008,
+          "damping_ratio": 0.052854944794305386,
+          "normal_cor_target": 0.84,
+          "cor_basis": "Approximation from specified rebound-height ratio 0.68-0.72; generic floor transfer unmeasured",
+          "launch_height_m": [
+            0.9,
+            1.2
+          ],
+          "rebound_apex_m": [
+            0.65,
+            0.85
+          ],
+          "horizontal_retention_prior": 0.65,
+          "numerical_validation": {
+            "passed": true,
+            "peak_refinement_error_m": 0.006634457365296775,
+            "calibration": "simulation-only fit to nominal COR; not real measurements"
+          }
+        },
+        "launch": {
+          "requested_apex_clearance_m": 0.7475016546386082,
+          "nominal_cor": 0.84,
+          "predicted_apex_y": 0.6471310910632496,
+          "downward_speed": 0.9904544411531511,
+          "horizontal_speed": 1.9180778600776691,
+          "predicted_first_impact_seconds": 0.3637732841996525,
+          "predicted_apex_seconds": 0.7541523975215141,
+          "horizontal_retention_prior": 0.65
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.026781712933732,
+          "mass_scale": 1.0229859363147162,
+          "friction_scale": 0.8818013296000147,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9252767423709667
+        }
+      }
+    },
+    {
+      "slot": 3,
+      "episode": 1,
+      "success": true,
+      "reason": "track_touch",
+      "steps": 25,
+      "reward": 22.42017234522003,
+      "legacy_success": true,
+      "physics": {
+        "version": "bounce_v1",
+        "object": "racquetball",
+        "shape": "sphere",
+        "mass_kg": 0.03980980074891152,
+        "dimensions_m": [
+          0.05420111974447227,
+          0.05420111974447227,
+          0.05420111974447227
+        ],
+        "inertia": [
+          1.9491949207922753e-05,
+          1.9491949207922753e-05,
+          1.9491949207922753e-05
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "sphere",
+          "inertia_factor": 0.6666666666666666,
+          "sliding_friction": 0.4831044941175151,
+          "torsional_length_m": 0.0001,
+          "time_constant": 0.008,
+          "damping_ratio": 0.0600522788819818,
+          "normal_cor_target": 0.84,
+          "cor_basis": "Approximation from specified rebound-height ratio 0.68-0.72; generic floor transfer unmeasured",
+          "launch_height_m": [
+            0.9,
+            1.2
+          ],
+          "rebound_apex_m": [
+            0.65,
+            0.85
+          ],
+          "horizontal_retention_prior": 0.65,
+          "numerical_validation": {
+            "passed": true,
+            "peak_refinement_error_m": 0.006634457365296775,
+            "calibration": "simulation-only fit to nominal COR; not real measurements"
+          }
+        },
+        "launch": {
+          "requested_apex_clearance_m": 0.8316746113184098,
+          "nominal_cor": 0.84,
+          "predicted_apex_y": 0.5750539838633825,
+          "downward_speed": 0.9904544411531511,
+          "horizontal_speed": 1.6471753826247066,
+          "predicted_first_impact_seconds": 0.3892414627928609,
+          "predicted_apex_seconds": 0.8010138461330176,
+          "horizontal_retention_prior": 0.65
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 0.9733400778132805,
+          "mass_scale": 0.9709707499734517,
+          "friction_scale": 0.878371807486391,
+          "rolling_scale": 1.0,
+          "damping_scale": 1.051273011297507
+        }
+      }
+    },
+    {
+      "slot": 2,
+      "episode": 1,
+      "success": true,
+      "reason": "track_touch",
+      "steps": 25,
+      "reward": 22.31285680925888,
+      "legacy_success": true,
+      "physics": {
+        "version": "bounce_v1",
+        "object": "racquetball",
+        "shape": "sphere",
+        "mass_kg": 0.04180654785163653,
+        "dimensions_m": [
+          0.0566299746664496,
+          0.0566299746664496,
+          0.0566299746664496
+        ],
+        "inertia": [
+          2.234527952390137e-05,
+          2.234527952390137e-05,
+          2.234527952390137e-05
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "sphere",
+          "inertia_factor": 0.6666666666666666,
+          "sliding_friction": 0.5118164747890304,
+          "torsional_length_m": 0.0001,
+          "time_constant": 0.008,
+          "damping_ratio": 0.056199481779141164,
+          "normal_cor_target": 0.84,
+          "cor_basis": "Approximation from specified rebound-height ratio 0.68-0.72; generic floor transfer unmeasured",
+          "launch_height_m": [
+            0.9,
+            1.2
+          ],
+          "rebound_apex_m": [
+            0.65,
+            0.85
+          ],
+          "horizontal_retention_prior": 0.65,
+          "numerical_validation": {
+            "passed": true,
+            "peak_refinement_error_m": 0.006634457365296775,
+            "calibration": "simulation-only fit to nominal COR; not real measurements"
+          }
+        },
+        "launch": {
+          "requested_apex_clearance_m": 0.846814861466877,
+          "nominal_cor": 0.84,
+          "predicted_apex_y": 0.6539522772681037,
+          "downward_speed": 1.2576338372205165,
+          "horizontal_speed": 1.404418680675016,
+          "predicted_first_impact_seconds": 0.3664479052454064,
+          "predicted_apex_seconds": 0.7819514466979528,
+          "horizontal_retention_prior": 0.65
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0169572918099654,
+          "mass_scale": 1.0196718988204032,
+          "friction_scale": 0.9305754087073278,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9838260852585877
+        }
+      }
+    },
+    {
+      "slot": 0,
+      "episode": 2,
+      "success": true,
+      "reason": "track_touch",
+      "steps": 20,
+      "reward": 19.74395775107721,
+      "legacy_success": true,
+      "physics": {
+        "version": "bounce_v1",
+        "object": "racquetball",
+        "shape": "sphere",
+        "mass_kg": 0.04194242338890337,
+        "dimensions_m": [
+          0.057177054395197345,
+          0.057177054395197345,
+          0.057177054395197345
+        ],
+        "inertia": [
+          2.2853137119800536e-05,
+          2.2853137119800536e-05,
+          2.2853137119800536e-05
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "sphere",
+          "inertia_factor": 0.6666666666666666,
+          "sliding_friction": 0.48499073128000814,
+          "torsional_length_m": 0.0001,
+          "time_constant": 0.008,
+          "damping_ratio": 0.052854944794305386,
+          "normal_cor_target": 0.84,
+          "cor_basis": "Approximation from specified rebound-height ratio 0.68-0.72; generic floor transfer unmeasured",
+          "launch_height_m": [
+            0.9,
+            1.2
+          ],
+          "rebound_apex_m": [
+            0.65,
+            0.85
+          ],
+          "horizontal_retention_prior": 0.65,
+          "numerical_validation": {
+            "passed": true,
+            "peak_refinement_error_m": 0.006634457365296775,
+            "calibration": "simulation-only fit to nominal COR; not real measurements"
+          }
+        },
+        "launch": {
+          "requested_apex_clearance_m": 0.6750896041455401,
+          "nominal_cor": 0.84,
+          "predicted_apex_y": 0.5618906086507179,
+          "downward_speed": 0.9904544411531511,
+          "horizontal_speed": 1.723197066956614,
+          "predicted_first_impact_seconds": 0.340689990360676,
+          "predicted_apex_seconds": 0.7116791368577974,
+          "horizontal_retention_prior": 0.65
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.026781712933732,
+          "mass_scale": 1.0229859363147162,
+          "friction_scale": 0.8818013296000147,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9252767423709667
+        }
+      }
+    },
+    {
+      "slot": 1,
+      "episode": 2,
+      "success": true,
+      "reason": "track_touch",
+      "steps": 25,
+      "reward": 22.586776440852745,
+      "legacy_success": true,
+      "physics": {
+        "version": "bounce_v1",
+        "object": "racquetball",
+        "shape": "sphere",
+        "mass_kg": 0.0430846107357536,
+        "dimensions_m": [
+          0.057115369523420285,
+          0.057115369523420285,
+          0.057115369523420285
+        ],
+        "inertia": [
+          2.342485465948952e-05,
+          2.342485465948952e-05,
+          2.342485465948952e-05
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "sphere",
+          "inertia_factor": 0.6666666666666666,
+          "sliding_friction": 0.6117137726060669,
+          "torsional_length_m": 0.0001,
+          "time_constant": 0.008,
+          "damping_ratio": 0.054832272439045676,
+          "normal_cor_target": 0.84,
+          "cor_basis": "Approximation from specified rebound-height ratio 0.68-0.72; generic floor transfer unmeasured",
+          "launch_height_m": [
+            0.9,
+            1.2
+          ],
+          "rebound_apex_m": [
+            0.65,
+            0.85
+          ],
+          "horizontal_retention_prior": 0.65,
+          "numerical_validation": {
+            "passed": true,
+            "peak_refinement_error_m": 0.006634457365296775,
+            "calibration": "simulation-only fit to nominal COR; not real measurements"
+          }
+        },
+        "launch": {
+          "requested_apex_clearance_m": 0.800193560113517,
+          "nominal_cor": 0.84,
+          "predicted_apex_y": 0.7926411052827612,
+          "downward_speed": 0.9904544411531511,
+          "horizontal_speed": 1.6512731528545048,
+          "predicted_first_impact_seconds": 0.3798741913307707,
+          "predicted_apex_seconds": 0.7837780666427716,
+          "horizontal_retention_prior": 0.65
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0256739801382022,
+          "mass_scale": 1.050844164286673,
+          "friction_scale": 1.1122068592837577,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9598917682468895
+        }
+      }
+    },
+    {
+      "slot": 3,
+      "episode": 2,
+      "success": true,
+      "reason": "track_touch",
+      "steps": 22,
+      "reward": 20.91447102715274,
+      "legacy_success": true,
+      "physics": {
+        "version": "bounce_v1",
+        "object": "racquetball",
+        "shape": "sphere",
+        "mass_kg": 0.03980980074891152,
+        "dimensions_m": [
+          0.05420111974447227,
+          0.05420111974447227,
+          0.05420111974447227
+        ],
+        "inertia": [
+          1.9491949207922753e-05,
+          1.9491949207922753e-05,
+          1.9491949207922753e-05
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "sphere",
+          "inertia_factor": 0.6666666666666666,
+          "sliding_friction": 0.4831044941175151,
+          "torsional_length_m": 0.0001,
+          "time_constant": 0.008,
+          "damping_ratio": 0.0600522788819818,
+          "normal_cor_target": 0.84,
+          "cor_basis": "Approximation from specified rebound-height ratio 0.68-0.72; generic floor transfer unmeasured",
+          "launch_height_m": [
+            0.9,
+            1.2
+          ],
+          "rebound_apex_m": [
+            0.65,
+            0.85
+          ],
+          "horizontal_retention_prior": 0.65,
+          "numerical_validation": {
+            "passed": true,
+            "peak_refinement_error_m": 0.006634457365296775,
+            "calibration": "simulation-only fit to nominal COR; not real measurements"
+          }
+        },
+        "launch": {
+          "requested_apex_clearance_m": 0.8259559530011663,
+          "nominal_cor": 0.84,
+          "predicted_apex_y": 0.7671608533911631,
+          "downward_speed": 1.8682217122423086,
+          "horizontal_speed": 1.9635991973205138,
+          "predicted_first_impact_seconds": 0.29807642529609546,
+          "predicted_apex_seconds": 0.7084306774157167,
+          "horizontal_retention_prior": 0.65
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 0.9733400778132805,
+          "mass_scale": 0.9709707499734517,
+          "friction_scale": 0.878371807486391,
+          "rolling_scale": 1.0,
+          "damping_scale": 1.051273011297507
+        }
+      }
+    },
+    {
+      "slot": 2,
+      "episode": 2,
+      "success": true,
+      "reason": "track_touch",
+      "steps": 23,
+      "reward": 21.34000227349954,
+      "legacy_success": true,
+      "physics": {
+        "version": "bounce_v1",
+        "object": "racquetball",
+        "shape": "sphere",
+        "mass_kg": 0.04180654785163653,
+        "dimensions_m": [
+          0.0566299746664496,
+          0.0566299746664496,
+          0.0566299746664496
+        ],
+        "inertia": [
+          2.234527952390137e-05,
+          2.234527952390137e-05,
+          2.234527952390137e-05
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "sphere",
+          "inertia_factor": 0.6666666666666666,
+          "sliding_friction": 0.5118164747890304,
+          "torsional_length_m": 0.0001,
+          "time_constant": 0.008,
+          "damping_ratio": 0.056199481779141164,
+          "normal_cor_target": 0.84,
+          "cor_basis": "Approximation from specified rebound-height ratio 0.68-0.72; generic floor transfer unmeasured",
+          "launch_height_m": [
+            0.9,
+            1.2
+          ],
+          "rebound_apex_m": [
+            0.65,
+            0.85
+          ],
+          "horizontal_retention_prior": 0.65,
+          "numerical_validation": {
+            "passed": true,
+            "peak_refinement_error_m": 0.006634457365296775,
+            "calibration": "simulation-only fit to nominal COR; not real measurements"
+          }
+        },
+        "launch": {
+          "requested_apex_clearance_m": 0.659926267769238,
+          "nominal_cor": 0.84,
+          "predicted_apex_y": 0.7486923266311082,
+          "downward_speed": 0.9904544411531511,
+          "horizontal_speed": 1.3146428169287723,
+          "predicted_first_impact_seconds": 0.33570177990012084,
+          "predicted_apex_seconds": 0.7025008296103759,
+          "horizontal_retention_prior": 0.65
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0169572918099654,
+          "mass_scale": 1.0196718988204032,
+          "friction_scale": 0.9305754087073278,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9838260852585877
+        }
+      }
+    },
+    {
+      "slot": 0,
+      "episode": 3,
+      "success": true,
+      "reason": "track_touch",
+      "steps": 21,
+      "reward": 20.374022321758435,
+      "legacy_success": true,
+      "physics": {
+        "version": "bounce_v1",
+        "object": "racquetball",
+        "shape": "sphere",
+        "mass_kg": 0.04194242338890337,
+        "dimensions_m": [
+          0.057177054395197345,
+          0.057177054395197345,
+          0.057177054395197345
+        ],
+        "inertia": [
+          2.2853137119800536e-05,
+          2.2853137119800536e-05,
+          2.2853137119800536e-05
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "sphere",
+          "inertia_factor": 0.6666666666666666,
+          "sliding_friction": 0.48499073128000814,
+          "torsional_length_m": 0.0001,
+          "time_constant": 0.008,
+          "damping_ratio": 0.052854944794305386,
+          "normal_cor_target": 0.84,
+          "cor_basis": "Approximation from specified rebound-height ratio 0.68-0.72; generic floor transfer unmeasured",
+          "launch_height_m": [
+            0.9,
+            1.2
+          ],
+          "rebound_apex_m": [
+            0.65,
+            0.85
+          ],
+          "horizontal_retention_prior": 0.65,
+          "numerical_validation": {
+            "passed": true,
+            "peak_refinement_error_m": 0.006634457365296775,
+            "calibration": "simulation-only fit to nominal COR; not real measurements"
+          }
+        },
+        "launch": {
+          "requested_apex_clearance_m": 0.6572216814806963,
+          "nominal_cor": 0.84,
+          "predicted_apex_y": 0.6482265717958514,
+          "downward_speed": 0.9904544411531511,
+          "horizontal_speed": 1.5792457343984523,
+          "predicted_first_impact_seconds": 0.3348060645826286,
+          "predicted_apex_seconds": 0.7008527134261902,
+          "horizontal_retention_prior": 0.65
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.026781712933732,
+          "mass_scale": 1.0229859363147162,
+          "friction_scale": 0.8818013296000147,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9252767423709667
+        }
+      }
+    },
+    {
+      "slot": 1,
+      "episode": 3,
+      "success": true,
+      "reason": "track_touch",
+      "steps": 22,
+      "reward": 20.861587970635593,
+      "legacy_success": true,
+      "physics": {
+        "version": "bounce_v1",
+        "object": "racquetball",
+        "shape": "sphere",
+        "mass_kg": 0.0430846107357536,
+        "dimensions_m": [
+          0.057115369523420285,
+          0.057115369523420285,
+          0.057115369523420285
+        ],
+        "inertia": [
+          2.342485465948952e-05,
+          2.342485465948952e-05,
+          2.342485465948952e-05
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "sphere",
+          "inertia_factor": 0.6666666666666666,
+          "sliding_friction": 0.6117137726060669,
+          "torsional_length_m": 0.0001,
+          "time_constant": 0.008,
+          "damping_ratio": 0.054832272439045676,
+          "normal_cor_target": 0.84,
+          "cor_basis": "Approximation from specified rebound-height ratio 0.68-0.72; generic floor transfer unmeasured",
+          "launch_height_m": [
+            0.9,
+            1.2
+          ],
+          "rebound_apex_m": [
+            0.65,
+            0.85
+          ],
+          "horizontal_retention_prior": 0.65,
+          "numerical_validation": {
+            "passed": true,
+            "peak_refinement_error_m": 0.006634457365296775,
+            "calibration": "simulation-only fit to nominal COR; not real measurements"
+          }
+        },
+        "launch": {
+          "requested_apex_clearance_m": 0.8072808570607835,
+          "nominal_cor": 0.84,
+          "predicted_apex_y": 0.6701057239508972,
+          "downward_speed": 1.7103296315768497,
+          "horizontal_speed": 1.7135632695833662,
+          "predicted_first_impact_seconds": 0.30861711000664804,
+          "predicted_apex_seconds": 0.7143057260946537,
+          "horizontal_retention_prior": 0.65
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0256739801382022,
+          "mass_scale": 1.050844164286673,
+          "friction_scale": 1.1122068592837577,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9598917682468895
+        }
+      }
+    },
+    {
+      "slot": 3,
+      "episode": 3,
+      "success": true,
+      "reason": "track_touch",
+      "steps": 25,
+      "reward": 23.36821722799951,
+      "legacy_success": true,
+      "physics": {
+        "version": "bounce_v1",
+        "object": "racquetball",
+        "shape": "sphere",
+        "mass_kg": 0.03980980074891152,
+        "dimensions_m": [
+          0.05420111974447227,
+          0.05420111974447227,
+          0.05420111974447227
+        ],
+        "inertia": [
+          1.9491949207922753e-05,
+          1.9491949207922753e-05,
+          1.9491949207922753e-05
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "sphere",
+          "inertia_factor": 0.6666666666666666,
+          "sliding_friction": 0.4831044941175151,
+          "torsional_length_m": 0.0001,
+          "time_constant": 0.008,
+          "damping_ratio": 0.0600522788819818,
+          "normal_cor_target": 0.84,
+          "cor_basis": "Approximation from specified rebound-height ratio 0.68-0.72; generic floor transfer unmeasured",
+          "launch_height_m": [
+            0.9,
+            1.2
+          ],
+          "rebound_apex_m": [
+            0.65,
+            0.85
+          ],
+          "horizontal_retention_prior": 0.65,
+          "numerical_validation": {
+            "passed": true,
+            "peak_refinement_error_m": 0.006634457365296775,
+            "calibration": "simulation-only fit to nominal COR; not real measurements"
+          }
+        },
+        "launch": {
+          "requested_apex_clearance_m": 0.7956315352120316,
+          "nominal_cor": 0.84,
+          "predicted_apex_y": 0.685712881910224,
+          "downward_speed": 0.9904544411531511,
+          "horizontal_speed": 1.3407181914297508,
+          "predicted_first_impact_seconds": 0.37850156710293553,
+          "predicted_apex_seconds": 0.7812524380635549,
+          "horizontal_retention_prior": 0.65
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 0.9733400778132805,
+          "mass_scale": 0.9709707499734517,
+          "friction_scale": 0.878371807486391,
+          "rolling_scale": 1.0,
+          "damping_scale": 1.051273011297507
+        }
+      }
+    },
+    {
+      "slot": 2,
+      "episode": 3,
+      "success": true,
+      "reason": "track_touch",
+      "steps": 22,
+      "reward": 19.982108850007123,
+      "legacy_success": true,
+      "physics": {
+        "version": "bounce_v1",
+        "object": "racquetball",
+        "shape": "sphere",
+        "mass_kg": 0.04180654785163653,
+        "dimensions_m": [
+          0.0566299746664496,
+          0.0566299746664496,
+          0.0566299746664496
+        ],
+        "inertia": [
+          2.234527952390137e-05,
+          2.234527952390137e-05,
+          2.234527952390137e-05
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "sphere",
+          "inertia_factor": 0.6666666666666666,
+          "sliding_friction": 0.5118164747890304,
+          "torsional_length_m": 0.0001,
+          "time_constant": 0.008,
+          "damping_ratio": 0.056199481779141164,
+          "normal_cor_target": 0.84,
+          "cor_basis": "Approximation from specified rebound-height ratio 0.68-0.72; generic floor transfer unmeasured",
+          "launch_height_m": [
+            0.9,
+            1.2
+          ],
+          "rebound_apex_m": [
+            0.65,
+            0.85
+          ],
+          "horizontal_retention_prior": 0.65,
+          "numerical_validation": {
+            "passed": true,
+            "peak_refinement_error_m": 0.006634457365296775,
+            "calibration": "simulation-only fit to nominal COR; not real measurements"
+          }
+        },
+        "launch": {
+          "requested_apex_clearance_m": 0.8212647002236138,
+          "nominal_cor": 0.84,
+          "predicted_apex_y": 0.6861126650928174,
+          "downward_speed": 1.7716974891443351,
+          "horizontal_speed": 1.921380805560082,
+          "predicted_first_impact_seconds": 0.30652648425422313,
+          "predicted_apex_seconds": 0.7157137148077137,
+          "horizontal_retention_prior": 0.65
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0169572918099654,
+          "mass_scale": 1.0196718988204032,
+          "friction_scale": 0.9305754087073278,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9838260852585877
+        }
+      }
+    },
+    {
+      "slot": 0,
+      "episode": 4,
+      "success": true,
+      "reason": "track_touch",
+      "steps": 25,
+      "reward": 21.737433781591573,
+      "legacy_success": true,
+      "physics": {
+        "version": "bounce_v1",
+        "object": "racquetball",
+        "shape": "sphere",
+        "mass_kg": 0.04194242338890337,
+        "dimensions_m": [
+          0.057177054395197345,
+          0.057177054395197345,
+          0.057177054395197345
+        ],
+        "inertia": [
+          2.2853137119800536e-05,
+          2.2853137119800536e-05,
+          2.2853137119800536e-05
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "sphere",
+          "inertia_factor": 0.6666666666666666,
+          "sliding_friction": 0.48499073128000814,
+          "torsional_length_m": 0.0001,
+          "time_constant": 0.008,
+          "damping_ratio": 0.052854944794305386,
+          "normal_cor_target": 0.84,
+          "cor_basis": "Approximation from specified rebound-height ratio 0.68-0.72; generic floor transfer unmeasured",
+          "launch_height_m": [
+            0.9,
+            1.2
+          ],
+          "rebound_apex_m": [
+            0.65,
+            0.85
+          ],
+          "horizontal_retention_prior": 0.65,
+          "numerical_validation": {
+            "passed": true,
+            "peak_refinement_error_m": 0.006634457365296775,
+            "calibration": "simulation-only fit to nominal COR; not real measurements"
+          }
+        },
+        "launch": {
+          "requested_apex_clearance_m": 0.7816849606502724,
+          "nominal_cor": 0.84,
+          "predicted_apex_y": 0.8319896561608029,
+          "downward_speed": 0.9904544411531511,
+          "horizontal_speed": 1.4757438538428986,
+          "predicted_first_impact_seconds": 0.3742807300641819,
+          "predicted_apex_seconds": 0.7734860979122482,
+          "horizontal_retention_prior": 0.65
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.026781712933732,
+          "mass_scale": 1.0229859363147162,
+          "friction_scale": 0.8818013296000147,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9252767423709667
+        }
+      }
+    },
+    {
+      "slot": 1,
+      "episode": 4,
+      "success": true,
+      "reason": "track_touch",
+      "steps": 24,
+      "reward": 21.33012978194045,
+      "legacy_success": true,
+      "physics": {
+        "version": "bounce_v1",
+        "object": "racquetball",
+        "shape": "sphere",
+        "mass_kg": 0.0430846107357536,
+        "dimensions_m": [
+          0.057115369523420285,
+          0.057115369523420285,
+          0.057115369523420285
+        ],
+        "inertia": [
+          2.342485465948952e-05,
+          2.342485465948952e-05,
+          2.342485465948952e-05
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "sphere",
+          "inertia_factor": 0.6666666666666666,
+          "sliding_friction": 0.6117137726060669,
+          "torsional_length_m": 0.0001,
+          "time_constant": 0.008,
+          "damping_ratio": 0.054832272439045676,
+          "normal_cor_target": 0.84,
+          "cor_basis": "Approximation from specified rebound-height ratio 0.68-0.72; generic floor transfer unmeasured",
+          "launch_height_m": [
+            0.9,
+            1.2
+          ],
+          "rebound_apex_m": [
+            0.65,
+            0.85
+          ],
+          "horizontal_retention_prior": 0.65,
+          "numerical_validation": {
+            "passed": true,
+            "peak_refinement_error_m": 0.006634457365296775,
+            "calibration": "simulation-only fit to nominal COR; not real measurements"
+          }
+        },
+        "launch": {
+          "requested_apex_clearance_m": 0.8082487501072991,
+          "nominal_cor": 0.84,
+          "predicted_apex_y": 0.8369767172985744,
+          "downward_speed": 1.6294124712378701,
+          "horizontal_speed": 1.8080448313416464,
+          "predicted_first_impact_seconds": 0.31715498472405107,
+          "predicted_apex_seconds": 0.7230867290624692,
+          "horizontal_retention_prior": 0.65
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0256739801382022,
+          "mass_scale": 1.050844164286673,
+          "friction_scale": 1.1122068592837577,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9598917682468895
+        }
+      }
+    },
+    {
+      "slot": 2,
+      "episode": 4,
+      "success": true,
+      "reason": "track_touch",
+      "steps": 19,
+      "reward": 18.629008829127166,
+      "legacy_success": true,
+      "physics": {
+        "version": "bounce_v1",
+        "object": "racquetball",
+        "shape": "sphere",
+        "mass_kg": 0.04180654785163653,
+        "dimensions_m": [
+          0.0566299746664496,
+          0.0566299746664496,
+          0.0566299746664496
+        ],
+        "inertia": [
+          2.234527952390137e-05,
+          2.234527952390137e-05,
+          2.234527952390137e-05
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "sphere",
+          "inertia_factor": 0.6666666666666666,
+          "sliding_friction": 0.5118164747890304,
+          "torsional_length_m": 0.0001,
+          "time_constant": 0.008,
+          "damping_ratio": 0.056199481779141164,
+          "normal_cor_target": 0.84,
+          "cor_basis": "Approximation from specified rebound-height ratio 0.68-0.72; generic floor transfer unmeasured",
+          "launch_height_m": [
+            0.9,
+            1.2
+          ],
+          "rebound_apex_m": [
+            0.65,
+            0.85
+          ],
+          "horizontal_retention_prior": 0.65,
+          "numerical_validation": {
+            "passed": true,
+            "peak_refinement_error_m": 0.006634457365296775,
+            "calibration": "simulation-only fit to nominal COR; not real measurements"
+          }
+        },
+        "launch": {
+          "requested_apex_clearance_m": 0.7707001445832723,
+          "nominal_cor": 0.84,
+          "predicted_apex_y": 0.5512813483721022,
+          "downward_speed": 1.7996647539415984,
+          "horizontal_speed": 2.302356691807213,
+          "predicted_first_impact_seconds": 0.28844136260559616,
+          "predicted_apex_seconds": 0.6848318414767579,
+          "horizontal_retention_prior": 0.65
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0169572918099654,
+          "mass_scale": 1.0196718988204032,
+          "friction_scale": 0.9305754087073278,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9838260852585877
+        }
+      }
+    },
+    {
+      "slot": 3,
+      "episode": 4,
+      "success": true,
+      "reason": "track_touch",
+      "steps": 22,
+      "reward": 20.6291001922518,
+      "legacy_success": true,
+      "physics": {
+        "version": "bounce_v1",
+        "object": "racquetball",
+        "shape": "sphere",
+        "mass_kg": 0.03980980074891152,
+        "dimensions_m": [
+          0.05420111974447227,
+          0.05420111974447227,
+          0.05420111974447227
+        ],
+        "inertia": [
+          1.9491949207922753e-05,
+          1.9491949207922753e-05,
+          1.9491949207922753e-05
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "sphere",
+          "inertia_factor": 0.6666666666666666,
+          "sliding_friction": 0.4831044941175151,
+          "torsional_length_m": 0.0001,
+          "time_constant": 0.008,
+          "damping_ratio": 0.0600522788819818,
+          "normal_cor_target": 0.84,
+          "cor_basis": "Approximation from specified rebound-height ratio 0.68-0.72; generic floor transfer unmeasured",
+          "launch_height_m": [
+            0.9,
+            1.2
+          ],
+          "rebound_apex_m": [
+            0.65,
+            0.85
+          ],
+          "horizontal_retention_prior": 0.65,
+          "numerical_validation": {
+            "passed": true,
+            "peak_refinement_error_m": 0.006634457365296775,
+            "calibration": "simulation-only fit to nominal COR; not real measurements"
+          }
+        },
+        "launch": {
+          "requested_apex_clearance_m": 0.7354962579036332,
+          "nominal_cor": 0.84,
+          "predicted_apex_y": 0.7485280513015037,
+          "downward_speed": 1.0819697859390978,
+          "horizontal_speed": 1.8902993846777476,
+          "predicted_first_impact_seconds": 0.3506973965666918,
+          "predicted_apex_seconds": 0.737928940588813,
+          "horizontal_retention_prior": 0.65
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 0.9733400778132805,
+          "mass_scale": 0.9709707499734517,
+          "friction_scale": 0.878371807486391,
+          "rolling_scale": 1.0,
+          "damping_scale": 1.051273011297507
+        }
+      }
+    }
+  ],
+  "checkpoint": "/home/isee/Catch/11-6/bounce_track_best_reward_19.43.pth"
+}

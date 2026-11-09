@@ -1,0 +1,121 @@
+{
+  "joint": {
+    "original": {
+      "checkpoint": "/home/isee/Catch/11-5/throw_basket_catch_best_reward_37.56.pth",
+      "episodes": 200,
+      "successes": 160,
+      "success_rate": 0.8,
+      "wilson95": [
+        0.7391436038882958,
+        0.8495487925607118
+      ],
+      "failures": {
+        "ball_on_floor": 34,
+        "not_a_throw": 6
+      },
+      "dangerous_collisions": 0,
+      "mean_steps": 92.75
+    },
+    "tennis_ball": {
+      "checkpoint": "/home/isee/Catch/11-5/throw_basket_catch_best_reward_37.56.pth",
+      "episodes": 200,
+      "successes": 146,
+      "success_rate": 0.73,
+      "wilson95": [
+        0.664564384587978,
+        0.7867664526895944
+      ],
+      "failures": {
+        "ball_on_floor": 54
+      },
+      "dangerous_collisions": 0,
+      "mean_steps": 98.71
+    },
+    "baseball": {
+      "checkpoint": "/home/isee/Catch/11-5/throw_basket_catch_best_reward_37.56.pth",
+      "episodes": 200,
+      "successes": 183,
+      "success_rate": 0.915,
+      "wilson95": [
+        0.8681031145576462,
+        0.9462547005301477
+      ],
+      "failures": {
+        "ball_on_floor": 17
+      },
+      "dangerous_collisions": 0,
+      "mean_steps": 93.235
+    },
+    "macro_success": 0.8150000000000001
+  },
+  "single": {
+    "original": {
+      "checkpoint": "/home/isee/Catch/11-4/throw_basket_catch_best_reward_47.35.pth",
+      "episodes": 200,
+      "successes": 185,
+      "success_rate": 0.925,
+      "wilson95": [
+        0.8799554020266798,
+        0.9540254929427476
+      ],
+      "failures": {
+        "base_collision": 3,
+        "ball_on_floor": 10,
+        "premature_release": 2
+      },
+      "dangerous_collisions": 3,
+      "mean_steps": 87.53
+    },
+    "tennis_ball": {
+      "checkpoint": "/home/isee/Catch/11-6/throw_basket_catch_best_reward_43.08.pth",
+      "episodes": 200,
+      "successes": 153,
+      "success_rate": 0.765,
+      "wilson95": [
+        0.7015850701327535,
+        0.8184265467305365
+      ],
+      "failures": {
+        "ball_on_floor": 44,
+        "timeout": 2,
+        "not_a_throw": 1
+      },
+      "dangerous_collisions": 0,
+      "mean_steps": 92.41
+    },
+    "baseball": {
+      "checkpoint": "/home/isee/Catch/11-5/throw_basket_catch_best_reward_49.19.pth",
+      "episodes": 200,
+      "successes": 192,
+      "success_rate": 0.96,
+      "wilson95": [
+        0.9230670617058012,
+        0.9795946128493436
+      ],
+      "failures": {
+        "ball_on_floor": 5,
+        "timeout": 3
+      },
+      "dangerous_collisions": 0,
+      "mean_steps": 89.505
+    },
+    "macro_success": 0.8833333333333333
+  },
+  "paired": {
+    "original": {
+      "joint_only": 13,
+      "single_only": 38,
+      "single_minus_joint": 0.125
+    },
+    "tennis_ball": {
+      "joint_only": 23,
+      "single_only": 30,
+      "single_minus_joint": 0.035
+    },
+    "baseball": {
+      "joint_only": 8,
+      "single_only": 17,
+      "single_minus_joint": 0.045
+    }
+  }
+}

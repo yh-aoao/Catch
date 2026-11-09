@@ -1,0 +1,768 @@
+{
+  "motion": "bounce",
+  "object": "tennis_ball",
+  "seed": 41000,
+  "episodes": 20,
+  "successes": 16,
+  "instances": [
+    {
+      "version": "physical_dr_v1",
+      "sampling": "environment_creation",
+      "size_scale": 1.026781712933732,
+      "mass_scale": 1.0229859363147162,
+      "friction_scale": 0.8818013296000147,
+      "rolling_scale": 1.0,
+      "damping_scale": 0.9252767423709667
+    },
+    {
+      "version": "physical_dr_v1",
+      "sampling": "environment_creation",
+      "size_scale": 1.0256739801382022,
+      "mass_scale": 1.050844164286673,
+      "friction_scale": 1.1122068592837577,
+      "rolling_scale": 1.0,
+      "damping_scale": 0.9598917682468895
+    },
+    {
+      "version": "physical_dr_v1",
+      "sampling": "environment_creation",
+      "size_scale": 1.0169572918099654,
+      "mass_scale": 1.0196718988204032,
+      "friction_scale": 0.9305754087073278,
+      "rolling_scale": 1.0,
+      "damping_scale": 0.9838260852585877
+    },
+    {
+      "version": "physical_dr_v1",
+      "sampling": "environment_creation",
+      "size_scale": 0.9733400778132805,
+      "mass_scale": 0.9709707499734517,
+      "friction_scale": 0.878371807486391,
+      "rolling_scale": 1.0,
+      "damping_scale": 1.051273011297507
+    }
+  ],
+  "records": [
+    {
+      "slot": 2,
+      "episode": 0,
+      "success": true,
+      "reason": "track_touch",
+      "steps": 21,
+      "reward": 19.98242869049391,
+      "legacy_success": true,
+      "physics": {
+        "object": "tennis_ball",
+        "route": "three_ball_baseline",
+        "sampling": "fixed_object_per_environment",
+        "physics": {
+          "profile": "tennis_ball",
+          "mass": 0.05914097013158339,
+          "radius": 0.033840052535436434,
+          "launch_profile": "physical_v2_default",
+          "inertia_factor": 0.55,
+          "damping_ratio": 0.096178301865682,
+          "time_constant": 0.008,
+          "sliding_friction": 0.4652877043536639,
+          "torsional_friction": 0.005,
+          "material_status": "simulation_prior/simulation_prior",
+          "surface_id": "generic_dry_rigid_floor_literature_approx_v1"
+        },
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0169572918099654,
+          "mass_scale": 1.0196718988204032,
+          "friction_scale": 0.9305754087073278,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9838260852585877
+        }
+      }
+    },
+    {
+      "slot": 0,
+      "episode": 0,
+      "success": false,
+      "reason": "early_contact",
+      "steps": 24,
+      "reward": 16.82592984516241,
+      "legacy_success": false,
+      "physics": {
+        "object": "tennis_ball",
+        "route": "three_ball_baseline",
+        "sampling": "fixed_object_per_environment",
+        "physics": {
+          "profile": "tennis_ball",
+          "mass": 0.05933318430625355,
+          "radius": 0.034166967863775155,
+          "launch_profile": "physical_v2_default",
+          "inertia_factor": 0.55,
+          "damping_ratio": 0.09045455001699744,
+          "time_constant": 0.008,
+          "sliding_friction": 0.44090066480000734,
+          "torsional_friction": 0.005,
+          "material_status": "simulation_prior/simulation_prior",
+          "surface_id": "generic_dry_rigid_floor_literature_approx_v1"
+        },
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.026781712933732,
+          "mass_scale": 1.0229859363147162,
+          "friction_scale": 0.8818013296000147,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9252767423709667
+        }
+      }
+    },
+    {
+      "slot": 1,
+      "episode": 0,
+      "success": true,
+      "reason": "track_touch",
+      "steps": 25,
+      "reward": 22.37043926918362,
+      "legacy_success": true,
+      "physics": {
+        "object": "tennis_ball",
+        "route": "three_ball_baseline",
+        "sampling": "fixed_object_per_environment",
+        "physics": {
+          "profile": "tennis_ball",
+          "mass": 0.06094896152862704,
+          "radius": 0.034130107185064415,
+          "launch_profile": "physical_v2_default",
+          "inertia_factor": 0.55,
+          "damping_ratio": 0.09383849607989111,
+          "time_constant": 0.008,
+          "sliding_friction": 0.5561034296418789,
+          "torsional_friction": 0.005,
+          "material_status": "simulation_prior/simulation_prior",
+          "surface_id": "generic_dry_rigid_floor_literature_approx_v1"
+        },
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0256739801382022,
+          "mass_scale": 1.050844164286673,
+          "friction_scale": 1.1122068592837577,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9598917682468895
+        }
+      }
+    },
+    {
+      "slot": 3,
+      "episode": 0,
+      "success": true,
+      "reason": "track_touch",
+      "steps": 25,
+      "reward": 20.51394261172485,
+      "legacy_success": true,
+      "physics": {
+        "object": "tennis_ball",
+        "route": "three_ball_baseline",
+        "sampling": "fixed_object_per_environment",
+        "physics": {
+          "profile": "tennis_ball",
+          "mass": 0.0563163034984602,
+          "radius": 0.032388655485644686,
+          "launch_profile": "physical_v2_default",
+          "inertia_factor": 0.55,
+          "damping_ratio": 0.10277187659365691,
+          "time_constant": 0.008,
+          "sliding_friction": 0.4391859037431955,
+          "torsional_friction": 0.005,
+          "material_status": "simulation_prior/simulation_prior",
+          "surface_id": "generic_dry_rigid_floor_literature_approx_v1"
+        },
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 0.9733400778132805,
+          "mass_scale": 0.9709707499734517,
+          "friction_scale": 0.878371807486391,
+          "rolling_scale": 1.0,
+          "damping_scale": 1.051273011297507
+        }
+      }
+    },
+    {
+      "slot": 2,
+      "episode": 1,
+      "success": true,
+      "reason": "track_touch",
+      "steps": 23,
+      "reward": 20.669098246795116,
+      "legacy_success": true,
+      "physics": {
+        "object": "tennis_ball",
+        "route": "three_ball_baseline",
+        "sampling": "fixed_object_per_environment",
+        "physics": {
+          "profile": "tennis_ball",
+          "mass": 0.05914097013158339,
+          "radius": 0.033840052535436434,
+          "launch_profile": "physical_v2_default",
+          "inertia_factor": 0.55,
+          "damping_ratio": 0.096178301865682,
+          "time_constant": 0.008,
+          "sliding_friction": 0.4652877043536639,
+          "torsional_friction": 0.005,
+          "material_status": "simulation_prior/simulation_prior",
+          "surface_id": "generic_dry_rigid_floor_literature_approx_v1"
+        },
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0169572918099654,
+          "mass_scale": 1.0196718988204032,
+          "friction_scale": 0.9305754087073278,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9838260852585877
+        }
+      }
+    },
+    {
+      "slot": 0,
+      "episode": 1,
+      "success": true,
+      "reason": "track_touch",
+      "steps": 23,
+      "reward": 21.199031070253945,
+      "legacy_success": true,
+      "physics": {
+        "object": "tennis_ball",
+        "route": "three_ball_baseline",
+        "sampling": "fixed_object_per_environment",
+        "physics": {
+          "profile": "tennis_ball",
+          "mass": 0.05933318430625355,
+          "radius": 0.034166967863775155,
+          "launch_profile": "physical_v2_default",
+          "inertia_factor": 0.55,
+          "damping_ratio": 0.09045455001699744,
+          "time_constant": 0.008,
+          "sliding_friction": 0.44090066480000734,
+          "torsional_friction": 0.005,
+          "material_status": "simulation_prior/simulation_prior",
+          "surface_id": "generic_dry_rigid_floor_literature_approx_v1"
+        },
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.026781712933732,
+          "mass_scale": 1.0229859363147162,
+          "friction_scale": 0.8818013296000147,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9252767423709667
+        }
+      }
+    },
+    {
+      "slot": 3,
+      "episode": 1,
+      "success": true,
+      "reason": "track_touch",
+      "steps": 22,
+      "reward": 20.363679440209772,
+      "legacy_success": true,
+      "physics": {
+        "object": "tennis_ball",
+        "route": "three_ball_baseline",
+        "sampling": "fixed_object_per_environment",
+        "physics": {
+          "profile": "tennis_ball",
+          "mass": 0.0563163034984602,
+          "radius": 0.032388655485644686,
+          "launch_profile": "physical_v2_default",
+          "inertia_factor": 0.55,
+          "damping_ratio": 0.10277187659365691,
+          "time_constant": 0.008,
+          "sliding_friction": 0.4391859037431955,
+          "torsional_friction": 0.005,
+          "material_status": "simulation_prior/simulation_prior",
+          "surface_id": "generic_dry_rigid_floor_literature_approx_v1"
+        },
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 0.9733400778132805,
+          "mass_scale": 0.9709707499734517,
+          "friction_scale": 0.878371807486391,
+          "rolling_scale": 1.0,
+          "damping_scale": 1.051273011297507
+        }
+      }
+    },
+    {
+      "slot": 1,
+      "episode": 1,
+      "success": false,
+      "reason": "early_contact",
+      "steps": 24,
+      "reward": 21.061991226027896,
+      "legacy_success": false,
+      "physics": {
+        "object": "tennis_ball",
+        "route": "three_ball_baseline",
+        "sampling": "fixed_object_per_environment",
+        "physics": {
+          "profile": "tennis_ball",
+          "mass": 0.06094896152862704,
+          "radius": 0.034130107185064415,
+          "launch_profile": "physical_v2_default",
+          "inertia_factor": 0.55,
+          "damping_ratio": 0.09383849607989111,
+          "time_constant": 0.008,
+          "sliding_friction": 0.5561034296418789,
+          "torsional_friction": 0.005,
+          "material_status": "simulation_prior/simulation_prior",
+          "surface_id": "generic_dry_rigid_floor_literature_approx_v1"
+        },
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0256739801382022,
+          "mass_scale": 1.050844164286673,
+          "friction_scale": 1.1122068592837577,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9598917682468895
+        }
+      }
+    },
+    {
+      "slot": 2,
+      "episode": 2,
+      "success": true,
+      "reason": "track_touch",
+      "steps": 21,
+      "reward": 20.233139006487033,
+      "legacy_success": true,
+      "physics": {
+        "object": "tennis_ball",
+        "route": "three_ball_baseline",
+        "sampling": "fixed_object_per_environment",
+        "physics": {
+          "profile": "tennis_ball",
+          "mass": 0.05914097013158339,
+          "radius": 0.033840052535436434,
+          "launch_profile": "physical_v2_default",
+          "inertia_factor": 0.55,
+          "damping_ratio": 0.096178301865682,
+          "time_constant": 0.008,
+          "sliding_friction": 0.4652877043536639,
+          "torsional_friction": 0.005,
+          "material_status": "simulation_prior/simulation_prior",
+          "surface_id": "generic_dry_rigid_floor_literature_approx_v1"
+        },
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0169572918099654,
+          "mass_scale": 1.0196718988204032,
+          "friction_scale": 0.9305754087073278,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9838260852585877
+        }
+      }
+    },
+    {
+      "slot": 3,
+      "episode": 2,
+      "success": true,
+      "reason": "track_touch",
+      "steps": 21,
+      "reward": 19.810547756799718,
+      "legacy_success": true,
+      "physics": {
+        "object": "tennis_ball",
+        "route": "three_ball_baseline",
+        "sampling": "fixed_object_per_environment",
+        "physics": {
+          "profile": "tennis_ball",
+          "mass": 0.0563163034984602,
+          "radius": 0.032388655485644686,
+          "launch_profile": "physical_v2_default",
+          "inertia_factor": 0.55,
+          "damping_ratio": 0.10277187659365691,
+          "time_constant": 0.008,
+          "sliding_friction": 0.4391859037431955,
+          "torsional_friction": 0.005,
+          "material_status": "simulation_prior/simulation_prior",
+          "surface_id": "generic_dry_rigid_floor_literature_approx_v1"
+        },
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 0.9733400778132805,
+          "mass_scale": 0.9709707499734517,
+          "friction_scale": 0.878371807486391,
+          "rolling_scale": 1.0,
+          "damping_scale": 1.051273011297507
+        }
+      }
+    },
+    {
+      "slot": 1,
+      "episode": 2,
+      "success": true,
+      "reason": "track_touch",
+      "steps": 23,
+      "reward": 20.111863174684686,
+      "legacy_success": true,
+      "physics": {
+        "object": "tennis_ball",
+        "route": "three_ball_baseline",
+        "sampling": "fixed_object_per_environment",
+        "physics": {
+          "profile": "tennis_ball",
+          "mass": 0.06094896152862704,
+          "radius": 0.034130107185064415,
+          "launch_profile": "physical_v2_default",
+          "inertia_factor": 0.55,
+          "damping_ratio": 0.09383849607989111,
+          "time_constant": 0.008,
+          "sliding_friction": 0.5561034296418789,
+          "torsional_friction": 0.005,
+          "material_status": "simulation_prior/simulation_prior",
+          "surface_id": "generic_dry_rigid_floor_literature_approx_v1"
+        },
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0256739801382022,
+          "mass_scale": 1.050844164286673,
+          "friction_scale": 1.1122068592837577,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9598917682468895
+        }
+      }
+    },
+    {
+      "slot": 0,
+      "episode": 2,
+      "success": true,
+      "reason": "track_touch",
+      "steps": 27,
+      "reward": 21.435346942951433,
+      "legacy_success": true,
+      "physics": {
+        "object": "tennis_ball",
+        "route": "three_ball_baseline",
+        "sampling": "fixed_object_per_environment",
+        "physics": {
+          "profile": "tennis_ball",
+          "mass": 0.05933318430625355,
+          "radius": 0.034166967863775155,
+          "launch_profile": "physical_v2_default",
+          "inertia_factor": 0.55,
+          "damping_ratio": 0.09045455001699744,
+          "time_constant": 0.008,
+          "sliding_friction": 0.44090066480000734,
+          "torsional_friction": 0.005,
+          "material_status": "simulation_prior/simulation_prior",
+          "surface_id": "generic_dry_rigid_floor_literature_approx_v1"
+        },
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.026781712933732,
+          "mass_scale": 1.0229859363147162,
+          "friction_scale": 0.8818013296000147,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9252767423709667
+        }
+      }
+    },
+    {
+      "slot": 2,
+      "episode": 3,
+      "success": true,
+      "reason": "track_touch",
+      "steps": 24,
+      "reward": 21.447092637712196,
+      "legacy_success": true,
+      "physics": {
+        "object": "tennis_ball",
+        "route": "three_ball_baseline",
+        "sampling": "fixed_object_per_environment",
+        "physics": {
+          "profile": "tennis_ball",
+          "mass": 0.05914097013158339,
+          "radius": 0.033840052535436434,
+          "launch_profile": "physical_v2_default",
+          "inertia_factor": 0.55,
+          "damping_ratio": 0.096178301865682,
+          "time_constant": 0.008,
+          "sliding_friction": 0.4652877043536639,
+          "torsional_friction": 0.005,
+          "material_status": "simulation_prior/simulation_prior",
+          "surface_id": "generic_dry_rigid_floor_literature_approx_v1"
+        },
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0169572918099654,
+          "mass_scale": 1.0196718988204032,
+          "friction_scale": 0.9305754087073278,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9838260852585877
+        }
+      }
+    },
+    {
+      "slot": 3,
+      "episode": 3,
+      "success": true,
+      "reason": "track_touch",
+      "steps": 23,
+      "reward": 21.118108089044725,
+      "legacy_success": true,
+      "physics": {
+        "object": "tennis_ball",
+        "route": "three_ball_baseline",
+        "sampling": "fixed_object_per_environment",
+        "physics": {
+          "profile": "tennis_ball",
+          "mass": 0.0563163034984602,
+          "radius": 0.032388655485644686,
+          "launch_profile": "physical_v2_default",
+          "inertia_factor": 0.55,
+          "damping_ratio": 0.10277187659365691,
+          "time_constant": 0.008,
+          "sliding_friction": 0.4391859037431955,
+          "torsional_friction": 0.005,
+          "material_status": "simulation_prior/simulation_prior",
+          "surface_id": "generic_dry_rigid_floor_literature_approx_v1"
+        },
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 0.9733400778132805,
+          "mass_scale": 0.9709707499734517,
+          "friction_scale": 0.878371807486391,
+          "rolling_scale": 1.0,
+          "damping_scale": 1.051273011297507
+        }
+      }
+    },
+    {
+      "slot": 1,
+      "episode": 3,
+      "success": true,
+      "reason": "track_touch",
+      "steps": 23,
+      "reward": 20.01768794623231,
+      "legacy_success": true,
+      "physics": {
+        "object": "tennis_ball",
+        "route": "three_ball_baseline",
+        "sampling": "fixed_object_per_environment",
+        "physics": {
+          "profile": "tennis_ball",
+          "mass": 0.06094896152862704,
+          "radius": 0.034130107185064415,
+          "launch_profile": "physical_v2_default",
+          "inertia_factor": 0.55,
+          "damping_ratio": 0.09383849607989111,
+          "time_constant": 0.008,
+          "sliding_friction": 0.5561034296418789,
+          "torsional_friction": 0.005,
+          "material_status": "simulation_prior/simulation_prior",
+          "surface_id": "generic_dry_rigid_floor_literature_approx_v1"
+        },
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0256739801382022,
+          "mass_scale": 1.050844164286673,
+          "friction_scale": 1.1122068592837577,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9598917682468895
+        }
+      }
+    },
+    {
+      "slot": 0,
+      "episode": 3,
+      "success": true,
+      "reason": "track_touch",
+      "steps": 23,
+      "reward": 21.31597354820463,
+      "legacy_success": true,
+      "physics": {
+        "object": "tennis_ball",
+        "route": "three_ball_baseline",
+        "sampling": "fixed_object_per_environment",
+        "physics": {
+          "profile": "tennis_ball",
+          "mass": 0.05933318430625355,
+          "radius": 0.034166967863775155,
+          "launch_profile": "physical_v2_default",
+          "inertia_factor": 0.55,
+          "damping_ratio": 0.09045455001699744,
+          "time_constant": 0.008,
+          "sliding_friction": 0.44090066480000734,
+          "torsional_friction": 0.005,
+          "material_status": "simulation_prior/simulation_prior",
+          "surface_id": "generic_dry_rigid_floor_literature_approx_v1"
+        },
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.026781712933732,
+          "mass_scale": 1.0229859363147162,
+          "friction_scale": 0.8818013296000147,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9252767423709667
+        }
+      }
+    },
+    {
+      "slot": 2,
+      "episode": 4,
+      "success": false,
+      "reason": "early_contact",
+      "steps": 23,
+      "reward": 21.215736002108873,
+      "legacy_success": false,
+      "physics": {
+        "object": "tennis_ball",
+        "route": "three_ball_baseline",
+        "sampling": "fixed_object_per_environment",
+        "physics": {
+          "profile": "tennis_ball",
+          "mass": 0.05914097013158339,
+          "radius": 0.033840052535436434,
+          "launch_profile": "physical_v2_default",
+          "inertia_factor": 0.55,
+          "damping_ratio": 0.096178301865682,
+          "time_constant": 0.008,
+          "sliding_friction": 0.4652877043536639,
+          "torsional_friction": 0.005,
+          "material_status": "simulation_prior/simulation_prior",
+          "surface_id": "generic_dry_rigid_floor_literature_approx_v1"
+        },
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0169572918099654,
+          "mass_scale": 1.0196718988204032,
+          "friction_scale": 0.9305754087073278,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9838260852585877
+        }
+      }
+    },
+    {
+      "slot": 3,
+      "episode": 4,
+      "success": true,
+      "reason": "track_touch",
+      "steps": 24,
+      "reward": 21.106069132474357,
+      "legacy_success": true,
+      "physics": {
+        "object": "tennis_ball",
+        "route": "three_ball_baseline",
+        "sampling": "fixed_object_per_environment",
+        "physics": {
+          "profile": "tennis_ball",
+          "mass": 0.0563163034984602,
+          "radius": 0.032388655485644686,
+          "launch_profile": "physical_v2_default",
+          "inertia_factor": 0.55,
+          "damping_ratio": 0.10277187659365691,
+          "time_constant": 0.008,
+          "sliding_friction": 0.4391859037431955,
+          "torsional_friction": 0.005,
+          "material_status": "simulation_prior/simulation_prior",
+          "surface_id": "generic_dry_rigid_floor_literature_approx_v1"
+        },
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 0.9733400778132805,
+          "mass_scale": 0.9709707499734517,
+          "friction_scale": 0.878371807486391,
+          "rolling_scale": 1.0,
+          "damping_scale": 1.051273011297507
+        }
+      }
+    },
+    {
+      "slot": 1,
+      "episode": 4,
+      "success": false,
+      "reason": "early_contact",
+      "steps": 22,
+      "reward": 20.5045766594901,
+      "legacy_success": false,
+      "physics": {
+        "object": "tennis_ball",
+        "route": "three_ball_baseline",
+        "sampling": "fixed_object_per_environment",
+        "physics": {
+          "profile": "tennis_ball",
+          "mass": 0.06094896152862704,
+          "radius": 0.034130107185064415,
+          "launch_profile": "physical_v2_default",
+          "inertia_factor": 0.55,
+          "damping_ratio": 0.09383849607989111,
+          "time_constant": 0.008,
+          "sliding_friction": 0.5561034296418789,
+          "torsional_friction": 0.005,
+          "material_status": "simulation_prior/simulation_prior",
+          "surface_id": "generic_dry_rigid_floor_literature_approx_v1"
+        },
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0256739801382022,
+          "mass_scale": 1.050844164286673,
+          "friction_scale": 1.1122068592837577,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9598917682468895
+        }
+      }
+    },
+    {
+      "slot": 0,
+      "episode": 4,
+      "success": true,
+      "reason": "track_touch",
+      "steps": 21,
+      "reward": 19.83992715518314,
+      "legacy_success": true,
+      "physics": {
+        "object": "tennis_ball",
+        "route": "three_ball_baseline",
+        "sampling": "fixed_object_per_environment",
+        "physics": {
+          "profile": "tennis_ball",
+          "mass": 0.05933318430625355,
+          "radius": 0.034166967863775155,
+          "launch_profile": "physical_v2_default",
+          "inertia_factor": 0.55,
+          "damping_ratio": 0.09045455001699744,
+          "time_constant": 0.008,
+          "sliding_friction": 0.44090066480000734,
+          "torsional_friction": 0.005,
+          "material_status": "simulation_prior/simulation_prior",
+          "surface_id": "generic_dry_rigid_floor_literature_approx_v1"
+        },
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.026781712933732,
+          "mass_scale": 1.0229859363147162,
+          "friction_scale": 0.8818013296000147,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9252767423709667
+        }
+      }
+    }
+  ],
+  "checkpoint": "/home/isee/Catch/11-6/bounce_track_best_reward_19.43.pth"
+}

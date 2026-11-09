@@ -1,0 +1,768 @@
+{
+  "motion": "bounce",
+  "object": "original",
+  "seed": 41000,
+  "episodes": 20,
+  "successes": 18,
+  "instances": [
+    {
+      "version": "physical_dr_v1",
+      "sampling": "environment_creation",
+      "size_scale": 1.026781712933732,
+      "mass_scale": 1.0229859363147162,
+      "friction_scale": 0.8818013296000147,
+      "rolling_scale": 1.0,
+      "damping_scale": 0.9252767423709667
+    },
+    {
+      "version": "physical_dr_v1",
+      "sampling": "environment_creation",
+      "size_scale": 1.0256739801382022,
+      "mass_scale": 1.050844164286673,
+      "friction_scale": 1.1122068592837577,
+      "rolling_scale": 1.0,
+      "damping_scale": 0.9598917682468895
+    },
+    {
+      "version": "physical_dr_v1",
+      "sampling": "environment_creation",
+      "size_scale": 1.0169572918099654,
+      "mass_scale": 1.0196718988204032,
+      "friction_scale": 0.9305754087073278,
+      "rolling_scale": 1.0,
+      "damping_scale": 0.9838260852585877
+    },
+    {
+      "version": "physical_dr_v1",
+      "sampling": "environment_creation",
+      "size_scale": 0.9733400778132805,
+      "mass_scale": 0.9709707499734517,
+      "friction_scale": 0.878371807486391,
+      "rolling_scale": 1.0,
+      "damping_scale": 1.051273011297507
+    }
+  ],
+  "records": [
+    {
+      "slot": 2,
+      "episode": 0,
+      "success": true,
+      "reason": "track_touch",
+      "steps": 20,
+      "reward": 19.25322995352955,
+      "legacy_success": true,
+      "physics": {
+        "object": "original",
+        "route": "three_ball_baseline",
+        "sampling": "fixed_object_per_environment",
+        "physics": {
+          "profile": "original",
+          "mass": 0.050983594941020165,
+          "radius": 0.040678291672398614,
+          "launch_profile": "physical_v2_default",
+          "inertia_factor": 0.4,
+          "damping_ratio": 0.10822086937844465,
+          "time_constant": 0.008,
+          "sliding_friction": 0.27917262261219833,
+          "torsional_friction": 0.005,
+          "material_status": "simulation_prior/simulation_prior",
+          "surface_id": "generic_dry_rigid_floor_literature_approx_v1"
+        },
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0169572918099654,
+          "mass_scale": 1.0196718988204032,
+          "friction_scale": 0.9305754087073278,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9838260852585877
+        }
+      }
+    },
+    {
+      "slot": 0,
+      "episode": 0,
+      "success": false,
+      "reason": "early_contact",
+      "steps": 23,
+      "reward": 20.8806660356392,
+      "legacy_success": false,
+      "physics": {
+        "object": "original",
+        "route": "three_ball_baseline",
+        "sampling": "fixed_object_per_environment",
+        "physics": {
+          "profile": "original",
+          "mass": 0.051149296815735816,
+          "radius": 0.04107126851734928,
+          "launch_profile": "physical_v2_default",
+          "inertia_factor": 0.4,
+          "damping_ratio": 0.10178044166080634,
+          "time_constant": 0.008,
+          "sliding_friction": 0.2645403988800044,
+          "torsional_friction": 0.005,
+          "material_status": "simulation_prior/simulation_prior",
+          "surface_id": "generic_dry_rigid_floor_literature_approx_v1"
+        },
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.026781712933732,
+          "mass_scale": 1.0229859363147162,
+          "friction_scale": 0.8818013296000147,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9252767423709667
+        }
+      }
+    },
+    {
+      "slot": 1,
+      "episode": 0,
+      "success": true,
+      "reason": "track_touch",
+      "steps": 24,
+      "reward": 21.38154727309465,
+      "legacy_success": true,
+      "physics": {
+        "object": "original",
+        "route": "three_ball_baseline",
+        "sampling": "fixed_object_per_environment",
+        "physics": {
+          "profile": "original",
+          "mass": 0.052542208214333655,
+          "radius": 0.04102695920552809,
+          "launch_profile": "physical_v2_default",
+          "inertia_factor": 0.4,
+          "damping_ratio": 0.10558809450715785,
+          "time_constant": 0.008,
+          "sliding_friction": 0.3336620577851273,
+          "torsional_friction": 0.005,
+          "material_status": "simulation_prior/simulation_prior",
+          "surface_id": "generic_dry_rigid_floor_literature_approx_v1"
+        },
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0256739801382022,
+          "mass_scale": 1.050844164286673,
+          "friction_scale": 1.1122068592837577,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9598917682468895
+        }
+      }
+    },
+    {
+      "slot": 3,
+      "episode": 0,
+      "success": true,
+      "reason": "track_touch",
+      "steps": 24,
+      "reward": 21.450876134654862,
+      "legacy_success": true,
+      "physics": {
+        "object": "original",
+        "route": "three_ball_baseline",
+        "sampling": "fixed_object_per_environment",
+        "physics": {
+          "profile": "original",
+          "mass": 0.048548537498672585,
+          "radius": 0.03893360311253122,
+          "launch_profile": "physical_v2_default",
+          "inertia_factor": 0.4,
+          "damping_ratio": 0.11564003124272577,
+          "time_constant": 0.008,
+          "sliding_friction": 0.2635115422459173,
+          "torsional_friction": 0.005,
+          "material_status": "simulation_prior/simulation_prior",
+          "surface_id": "generic_dry_rigid_floor_literature_approx_v1"
+        },
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 0.9733400778132805,
+          "mass_scale": 0.9709707499734517,
+          "friction_scale": 0.878371807486391,
+          "rolling_scale": 1.0,
+          "damping_scale": 1.051273011297507
+        }
+      }
+    },
+    {
+      "slot": 2,
+      "episode": 1,
+      "success": true,
+      "reason": "track_touch",
+      "steps": 24,
+      "reward": 20.775941008931827,
+      "legacy_success": true,
+      "physics": {
+        "object": "original",
+        "route": "three_ball_baseline",
+        "sampling": "fixed_object_per_environment",
+        "physics": {
+          "profile": "original",
+          "mass": 0.050983594941020165,
+          "radius": 0.040678291672398614,
+          "launch_profile": "physical_v2_default",
+          "inertia_factor": 0.4,
+          "damping_ratio": 0.10822086937844465,
+          "time_constant": 0.008,
+          "sliding_friction": 0.27917262261219833,
+          "torsional_friction": 0.005,
+          "material_status": "simulation_prior/simulation_prior",
+          "surface_id": "generic_dry_rigid_floor_literature_approx_v1"
+        },
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0169572918099654,
+          "mass_scale": 1.0196718988204032,
+          "friction_scale": 0.9305754087073278,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9838260852585877
+        }
+      }
+    },
+    {
+      "slot": 1,
+      "episode": 1,
+      "success": true,
+      "reason": "track_touch",
+      "steps": 21,
+      "reward": 19.4040502054533,
+      "legacy_success": true,
+      "physics": {
+        "object": "original",
+        "route": "three_ball_baseline",
+        "sampling": "fixed_object_per_environment",
+        "physics": {
+          "profile": "original",
+          "mass": 0.052542208214333655,
+          "radius": 0.04102695920552809,
+          "launch_profile": "physical_v2_default",
+          "inertia_factor": 0.4,
+          "damping_ratio": 0.10558809450715785,
+          "time_constant": 0.008,
+          "sliding_friction": 0.3336620577851273,
+          "torsional_friction": 0.005,
+          "material_status": "simulation_prior/simulation_prior",
+          "surface_id": "generic_dry_rigid_floor_literature_approx_v1"
+        },
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0256739801382022,
+          "mass_scale": 1.050844164286673,
+          "friction_scale": 1.1122068592837577,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9598917682468895
+        }
+      }
+    },
+    {
+      "slot": 3,
+      "episode": 1,
+      "success": true,
+      "reason": "track_touch",
+      "steps": 21,
+      "reward": 19.643214862683134,
+      "legacy_success": true,
+      "physics": {
+        "object": "original",
+        "route": "three_ball_baseline",
+        "sampling": "fixed_object_per_environment",
+        "physics": {
+          "profile": "original",
+          "mass": 0.048548537498672585,
+          "radius": 0.03893360311253122,
+          "launch_profile": "physical_v2_default",
+          "inertia_factor": 0.4,
+          "damping_ratio": 0.11564003124272577,
+          "time_constant": 0.008,
+          "sliding_friction": 0.2635115422459173,
+          "torsional_friction": 0.005,
+          "material_status": "simulation_prior/simulation_prior",
+          "surface_id": "generic_dry_rigid_floor_literature_approx_v1"
+        },
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 0.9733400778132805,
+          "mass_scale": 0.9709707499734517,
+          "friction_scale": 0.878371807486391,
+          "rolling_scale": 1.0,
+          "damping_scale": 1.051273011297507
+        }
+      }
+    },
+    {
+      "slot": 0,
+      "episode": 1,
+      "success": true,
+      "reason": "track_touch",
+      "steps": 23,
+      "reward": 20.407586252887615,
+      "legacy_success": true,
+      "physics": {
+        "object": "original",
+        "route": "three_ball_baseline",
+        "sampling": "fixed_object_per_environment",
+        "physics": {
+          "profile": "original",
+          "mass": 0.051149296815735816,
+          "radius": 0.04107126851734928,
+          "launch_profile": "physical_v2_default",
+          "inertia_factor": 0.4,
+          "damping_ratio": 0.10178044166080634,
+          "time_constant": 0.008,
+          "sliding_friction": 0.2645403988800044,
+          "torsional_friction": 0.005,
+          "material_status": "simulation_prior/simulation_prior",
+          "surface_id": "generic_dry_rigid_floor_literature_approx_v1"
+        },
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.026781712933732,
+          "mass_scale": 1.0229859363147162,
+          "friction_scale": 0.8818013296000147,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9252767423709667
+        }
+      }
+    },
+    {
+      "slot": 0,
+      "episode": 2,
+      "success": true,
+      "reason": "track_touch",
+      "steps": 20,
+      "reward": 18.994122088000946,
+      "legacy_success": true,
+      "physics": {
+        "object": "original",
+        "route": "three_ball_baseline",
+        "sampling": "fixed_object_per_environment",
+        "physics": {
+          "profile": "original",
+          "mass": 0.051149296815735816,
+          "radius": 0.04107126851734928,
+          "launch_profile": "physical_v2_default",
+          "inertia_factor": 0.4,
+          "damping_ratio": 0.10178044166080634,
+          "time_constant": 0.008,
+          "sliding_friction": 0.2645403988800044,
+          "torsional_friction": 0.005,
+          "material_status": "simulation_prior/simulation_prior",
+          "surface_id": "generic_dry_rigid_floor_literature_approx_v1"
+        },
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.026781712933732,
+          "mass_scale": 1.0229859363147162,
+          "friction_scale": 0.8818013296000147,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9252767423709667
+        }
+      }
+    },
+    {
+      "slot": 1,
+      "episode": 2,
+      "success": true,
+      "reason": "track_touch",
+      "steps": 23,
+      "reward": 19.78753804409424,
+      "legacy_success": true,
+      "physics": {
+        "object": "original",
+        "route": "three_ball_baseline",
+        "sampling": "fixed_object_per_environment",
+        "physics": {
+          "profile": "original",
+          "mass": 0.052542208214333655,
+          "radius": 0.04102695920552809,
+          "launch_profile": "physical_v2_default",
+          "inertia_factor": 0.4,
+          "damping_ratio": 0.10558809450715785,
+          "time_constant": 0.008,
+          "sliding_friction": 0.3336620577851273,
+          "torsional_friction": 0.005,
+          "material_status": "simulation_prior/simulation_prior",
+          "surface_id": "generic_dry_rigid_floor_literature_approx_v1"
+        },
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0256739801382022,
+          "mass_scale": 1.050844164286673,
+          "friction_scale": 1.1122068592837577,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9598917682468895
+        }
+      }
+    },
+    {
+      "slot": 2,
+      "episode": 2,
+      "success": true,
+      "reason": "track_touch",
+      "steps": 24,
+      "reward": 11.396817841839596,
+      "legacy_success": true,
+      "physics": {
+        "object": "original",
+        "route": "three_ball_baseline",
+        "sampling": "fixed_object_per_environment",
+        "physics": {
+          "profile": "original",
+          "mass": 0.050983594941020165,
+          "radius": 0.040678291672398614,
+          "launch_profile": "physical_v2_default",
+          "inertia_factor": 0.4,
+          "damping_ratio": 0.10822086937844465,
+          "time_constant": 0.008,
+          "sliding_friction": 0.27917262261219833,
+          "torsional_friction": 0.005,
+          "material_status": "simulation_prior/simulation_prior",
+          "surface_id": "generic_dry_rigid_floor_literature_approx_v1"
+        },
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0169572918099654,
+          "mass_scale": 1.0196718988204032,
+          "friction_scale": 0.9305754087073278,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9838260852585877
+        }
+      }
+    },
+    {
+      "slot": 3,
+      "episode": 2,
+      "success": true,
+      "reason": "track_touch",
+      "steps": 28,
+      "reward": 23.62985483266444,
+      "legacy_success": true,
+      "physics": {
+        "object": "original",
+        "route": "three_ball_baseline",
+        "sampling": "fixed_object_per_environment",
+        "physics": {
+          "profile": "original",
+          "mass": 0.048548537498672585,
+          "radius": 0.03893360311253122,
+          "launch_profile": "physical_v2_default",
+          "inertia_factor": 0.4,
+          "damping_ratio": 0.11564003124272577,
+          "time_constant": 0.008,
+          "sliding_friction": 0.2635115422459173,
+          "torsional_friction": 0.005,
+          "material_status": "simulation_prior/simulation_prior",
+          "surface_id": "generic_dry_rigid_floor_literature_approx_v1"
+        },
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 0.9733400778132805,
+          "mass_scale": 0.9709707499734517,
+          "friction_scale": 0.878371807486391,
+          "rolling_scale": 1.0,
+          "damping_scale": 1.051273011297507
+        }
+      }
+    },
+    {
+      "slot": 0,
+      "episode": 3,
+      "success": true,
+      "reason": "track_touch",
+      "steps": 22,
+      "reward": 20.113227824605723,
+      "legacy_success": true,
+      "physics": {
+        "object": "original",
+        "route": "three_ball_baseline",
+        "sampling": "fixed_object_per_environment",
+        "physics": {
+          "profile": "original",
+          "mass": 0.051149296815735816,
+          "radius": 0.04107126851734928,
+          "launch_profile": "physical_v2_default",
+          "inertia_factor": 0.4,
+          "damping_ratio": 0.10178044166080634,
+          "time_constant": 0.008,
+          "sliding_friction": 0.2645403988800044,
+          "torsional_friction": 0.005,
+          "material_status": "simulation_prior/simulation_prior",
+          "surface_id": "generic_dry_rigid_floor_literature_approx_v1"
+        },
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.026781712933732,
+          "mass_scale": 1.0229859363147162,
+          "friction_scale": 0.8818013296000147,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9252767423709667
+        }
+      }
+    },
+    {
+      "slot": 1,
+      "episode": 3,
+      "success": true,
+      "reason": "track_touch",
+      "steps": 24,
+      "reward": 21.191546618940457,
+      "legacy_success": true,
+      "physics": {
+        "object": "original",
+        "route": "three_ball_baseline",
+        "sampling": "fixed_object_per_environment",
+        "physics": {
+          "profile": "original",
+          "mass": 0.052542208214333655,
+          "radius": 0.04102695920552809,
+          "launch_profile": "physical_v2_default",
+          "inertia_factor": 0.4,
+          "damping_ratio": 0.10558809450715785,
+          "time_constant": 0.008,
+          "sliding_friction": 0.3336620577851273,
+          "torsional_friction": 0.005,
+          "material_status": "simulation_prior/simulation_prior",
+          "surface_id": "generic_dry_rigid_floor_literature_approx_v1"
+        },
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0256739801382022,
+          "mass_scale": 1.050844164286673,
+          "friction_scale": 1.1122068592837577,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9598917682468895
+        }
+      }
+    },
+    {
+      "slot": 2,
+      "episode": 3,
+      "success": true,
+      "reason": "track_touch",
+      "steps": 24,
+      "reward": 20.157518103438306,
+      "legacy_success": true,
+      "physics": {
+        "object": "original",
+        "route": "three_ball_baseline",
+        "sampling": "fixed_object_per_environment",
+        "physics": {
+          "profile": "original",
+          "mass": 0.050983594941020165,
+          "radius": 0.040678291672398614,
+          "launch_profile": "physical_v2_default",
+          "inertia_factor": 0.4,
+          "damping_ratio": 0.10822086937844465,
+          "time_constant": 0.008,
+          "sliding_friction": 0.27917262261219833,
+          "torsional_friction": 0.005,
+          "material_status": "simulation_prior/simulation_prior",
+          "surface_id": "generic_dry_rigid_floor_literature_approx_v1"
+        },
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0169572918099654,
+          "mass_scale": 1.0196718988204032,
+          "friction_scale": 0.9305754087073278,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9838260852585877
+        }
+      }
+    },
+    {
+      "slot": 3,
+      "episode": 3,
+      "success": true,
+      "reason": "track_touch",
+      "steps": 21,
+      "reward": 19.564303362488964,
+      "legacy_success": true,
+      "physics": {
+        "object": "original",
+        "route": "three_ball_baseline",
+        "sampling": "fixed_object_per_environment",
+        "physics": {
+          "profile": "original",
+          "mass": 0.048548537498672585,
+          "radius": 0.03893360311253122,
+          "launch_profile": "physical_v2_default",
+          "inertia_factor": 0.4,
+          "damping_ratio": 0.11564003124272577,
+          "time_constant": 0.008,
+          "sliding_friction": 0.2635115422459173,
+          "torsional_friction": 0.005,
+          "material_status": "simulation_prior/simulation_prior",
+          "surface_id": "generic_dry_rigid_floor_literature_approx_v1"
+        },
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 0.9733400778132805,
+          "mass_scale": 0.9709707499734517,
+          "friction_scale": 0.878371807486391,
+          "rolling_scale": 1.0,
+          "damping_scale": 1.051273011297507
+        }
+      }
+    },
+    {
+      "slot": 0,
+      "episode": 4,
+      "success": true,
+      "reason": "track_touch",
+      "steps": 22,
+      "reward": 19.694040045412002,
+      "legacy_success": true,
+      "physics": {
+        "object": "original",
+        "route": "three_ball_baseline",
+        "sampling": "fixed_object_per_environment",
+        "physics": {
+          "profile": "original",
+          "mass": 0.051149296815735816,
+          "radius": 0.04107126851734928,
+          "launch_profile": "physical_v2_default",
+          "inertia_factor": 0.4,
+          "damping_ratio": 0.10178044166080634,
+          "time_constant": 0.008,
+          "sliding_friction": 0.2645403988800044,
+          "torsional_friction": 0.005,
+          "material_status": "simulation_prior/simulation_prior",
+          "surface_id": "generic_dry_rigid_floor_literature_approx_v1"
+        },
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.026781712933732,
+          "mass_scale": 1.0229859363147162,
+          "friction_scale": 0.8818013296000147,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9252767423709667
+        }
+      }
+    },
+    {
+      "slot": 2,
+      "episode": 4,
+      "success": true,
+      "reason": "track_touch",
+      "steps": 19,
+      "reward": 18.226038856871966,
+      "legacy_success": true,
+      "physics": {
+        "object": "original",
+        "route": "three_ball_baseline",
+        "sampling": "fixed_object_per_environment",
+        "physics": {
+          "profile": "original",
+          "mass": 0.050983594941020165,
+          "radius": 0.040678291672398614,
+          "launch_profile": "physical_v2_default",
+          "inertia_factor": 0.4,
+          "damping_ratio": 0.10822086937844465,
+          "time_constant": 0.008,
+          "sliding_friction": 0.27917262261219833,
+          "torsional_friction": 0.005,
+          "material_status": "simulation_prior/simulation_prior",
+          "surface_id": "generic_dry_rigid_floor_literature_approx_v1"
+        },
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0169572918099654,
+          "mass_scale": 1.0196718988204032,
+          "friction_scale": 0.9305754087073278,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9838260852585877
+        }
+      }
+    },
+    {
+      "slot": 1,
+      "episode": 4,
+      "success": false,
+      "reason": "early_contact",
+      "steps": 21,
+      "reward": 15.452229161729289,
+      "legacy_success": false,
+      "physics": {
+        "object": "original",
+        "route": "three_ball_baseline",
+        "sampling": "fixed_object_per_environment",
+        "physics": {
+          "profile": "original",
+          "mass": 0.052542208214333655,
+          "radius": 0.04102695920552809,
+          "launch_profile": "physical_v2_default",
+          "inertia_factor": 0.4,
+          "damping_ratio": 0.10558809450715785,
+          "time_constant": 0.008,
+          "sliding_friction": 0.3336620577851273,
+          "torsional_friction": 0.005,
+          "material_status": "simulation_prior/simulation_prior",
+          "surface_id": "generic_dry_rigid_floor_literature_approx_v1"
+        },
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0256739801382022,
+          "mass_scale": 1.050844164286673,
+          "friction_scale": 1.1122068592837577,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9598917682468895
+        }
+      }
+    },
+    {
+      "slot": 3,
+      "episode": 4,
+      "success": true,
+      "reason": "track_touch",
+      "steps": 22,
+      "reward": 20.076221302636455,
+      "legacy_success": true,
+      "physics": {
+        "object": "original",
+        "route": "three_ball_baseline",
+        "sampling": "fixed_object_per_environment",
+        "physics": {
+          "profile": "original",
+          "mass": 0.048548537498672585,
+          "radius": 0.03893360311253122,
+          "launch_profile": "physical_v2_default",
+          "inertia_factor": 0.4,
+          "damping_ratio": 0.11564003124272577,
+          "time_constant": 0.008,
+          "sliding_friction": 0.2635115422459173,
+          "torsional_friction": 0.005,
+          "material_status": "simulation_prior/simulation_prior",
+          "surface_id": "generic_dry_rigid_floor_literature_approx_v1"
+        },
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 0.9733400778132805,
+          "mass_scale": 0.9709707499734517,
+          "friction_scale": 0.878371807486391,
+          "rolling_scale": 1.0,
+          "damping_scale": 1.051273011297507
+        }
+      }
+    }
+  ],
+  "checkpoint": "/home/isee/Catch/11-6/bounce_track_best_reward_19.43.pth"
+}

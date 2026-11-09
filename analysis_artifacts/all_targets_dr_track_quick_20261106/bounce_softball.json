@@ -1,0 +1,1488 @@
+{
+  "motion": "bounce",
+  "object": "softball",
+  "seed": 41000,
+  "episodes": 20,
+  "successes": 20,
+  "instances": [
+    {
+      "version": "physical_dr_v1",
+      "sampling": "environment_creation",
+      "size_scale": 1.026781712933732,
+      "mass_scale": 1.0229859363147162,
+      "friction_scale": 0.8818013296000147,
+      "rolling_scale": 1.0,
+      "damping_scale": 0.9252767423709667
+    },
+    {
+      "version": "physical_dr_v1",
+      "sampling": "environment_creation",
+      "size_scale": 1.0256739801382022,
+      "mass_scale": 1.050844164286673,
+      "friction_scale": 1.1122068592837577,
+      "rolling_scale": 1.0,
+      "damping_scale": 0.9598917682468895
+    },
+    {
+      "version": "physical_dr_v1",
+      "sampling": "environment_creation",
+      "size_scale": 1.0169572918099654,
+      "mass_scale": 1.0196718988204032,
+      "friction_scale": 0.9305754087073278,
+      "rolling_scale": 1.0,
+      "damping_scale": 0.9838260852585877
+    },
+    {
+      "version": "physical_dr_v1",
+      "sampling": "environment_creation",
+      "size_scale": 0.9733400778132805,
+      "mass_scale": 0.9709707499734517,
+      "friction_scale": 0.878371807486391,
+      "rolling_scale": 1.0,
+      "damping_scale": 1.051273011297507
+    }
+  ],
+  "records": [
+    {
+      "slot": 3,
+      "episode": 0,
+      "success": true,
+      "reason": "track_touch",
+      "steps": 14,
+      "reward": 16.34272932497206,
+      "legacy_success": true,
+      "physics": {
+        "version": "bounce_v1",
+        "object": "softball",
+        "shape": "sphere",
+        "mass_kg": 0.18545541324492928,
+        "dimensions_m": [
+          0.09265577268958722,
+          0.09265577268958722,
+          0.09265577268958722
+        ],
+        "inertia": [
+          0.00015921518240529295,
+          0.00015921518240529295,
+          0.00015921518240529295
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "sphere",
+          "inertia_factor": 0.4,
+          "sliding_friction": 0.30743013262023683,
+          "torsional_length_m": 0.0001,
+          "time_constant": 0.004,
+          "damping_ratio": 0.3265283522644514,
+          "normal_cor_target": 0.44,
+          "cor_basis": "Literature/standard-test informed prior; not a measured YCB softball/floor pair",
+          "launch_height_m": [
+            1.2,
+            1.5
+          ],
+          "rebound_apex_m": [
+            0.5,
+            0.65
+          ],
+          "horizontal_retention_prior": 0.75,
+          "numerical_validation": {
+            "passed": true,
+            "peak_refinement_error_m": 0.0030220591917469175,
+            "calibration": "simulation-only fit to nominal COR; not real measurements"
+          }
+        },
+        "launch": {
+          "requested_apex_clearance_m": 0.521539397386973,
+          "nominal_cor": 0.44,
+          "predicted_apex_y": 0.594686874896128,
+          "downward_speed": 5.242161834794316,
+          "horizontal_speed": 2.869701862020196,
+          "predicted_first_impact_seconds": 0.2067215269680107,
+          "predicted_apex_seconds": 0.5328014460622227,
+          "horizontal_retention_prior": 0.75
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 0.9733400778132805,
+          "mass_scale": 0.9709707499734517,
+          "friction_scale": 0.878371807486391,
+          "rolling_scale": 1.0,
+          "damping_scale": 1.051273011297507
+        }
+      }
+    },
+    {
+      "slot": 1,
+      "episode": 0,
+      "success": true,
+      "reason": "track_touch",
+      "steps": 16,
+      "reward": 17.48924620167843,
+      "legacy_success": true,
+      "physics": {
+        "version": "bounce_v1",
+        "object": "softball",
+        "shape": "sphere",
+        "mass_kg": 0.20071123537875454,
+        "dimensions_m": [
+          0.09763762668728854,
+          0.09763762668728854,
+          0.09763762668728854
+        ],
+        "inertia": [
+          0.00019134015113851004,
+          0.00019134015113851004,
+          0.00019134015113851004
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "sphere",
+          "inertia_factor": 0.4,
+          "sliding_friction": 0.3892724007493152,
+          "torsional_length_m": 0.0001,
+          "time_constant": 0.004,
+          "damping_ratio": 0.2981450813152924,
+          "normal_cor_target": 0.44,
+          "cor_basis": "Literature/standard-test informed prior; not a measured YCB softball/floor pair",
+          "launch_height_m": [
+            1.2,
+            1.5
+          ],
+          "rebound_apex_m": [
+            0.5,
+            0.65
+          ],
+          "horizontal_retention_prior": 0.75,
+          "numerical_validation": {
+            "passed": true,
+            "peak_refinement_error_m": 0.0030220591917469175,
+            "calibration": "simulation-only fit to nominal COR; not real measurements"
+          }
+        },
+        "launch": {
+          "requested_apex_clearance_m": 0.5099517499254101,
+          "nominal_cor": 0.44,
+          "predicted_apex_y": 0.6222043738851675,
+          "downward_speed": 5.1508996574806725,
+          "horizontal_speed": 2.574172512921609,
+          "predicted_first_impact_seconds": 0.20774541904850807,
+          "predicted_apex_seconds": 0.5301825419916759,
+          "horizontal_retention_prior": 0.75
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0256739801382022,
+          "mass_scale": 1.050844164286673,
+          "friction_scale": 1.1122068592837577,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9598917682468895
+        }
+      }
+    },
+    {
+      "slot": 0,
+      "episode": 0,
+      "success": true,
+      "reason": "track_touch",
+      "steps": 17,
+      "reward": 18.729185707885705,
+      "legacy_success": true,
+      "physics": {
+        "version": "bounce_v1",
+        "object": "softball",
+        "shape": "sphere",
+        "mass_kg": 0.1953903138361108,
+        "dimensions_m": [
+          0.09774307579027215,
+          0.09774307579027215,
+          0.09774307579027215
+        ],
+        "inertia": [
+          0.0001866702173420025,
+          0.0001866702173420025,
+          0.0001866702173420025
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "sphere",
+          "inertia_factor": 0.4,
+          "sliding_friction": 0.3086304653600051,
+          "torsional_length_m": 0.0001,
+          "time_constant": 0.004,
+          "damping_ratio": 0.287393556981089,
+          "normal_cor_target": 0.44,
+          "cor_basis": "Literature/standard-test informed prior; not a measured YCB softball/floor pair",
+          "launch_height_m": [
+            1.2,
+            1.5
+          ],
+          "rebound_apex_m": [
+            0.5,
+            0.65
+          ],
+          "horizontal_retention_prior": 0.75,
+          "numerical_validation": {
+            "passed": true,
+            "peak_refinement_error_m": 0.0030220591917469175,
+            "calibration": "simulation-only fit to nominal COR; not real measurements"
+          }
+        },
+        "launch": {
+          "requested_apex_clearance_m": 0.5750036382585677,
+          "nominal_cor": 0.44,
+          "predicted_apex_y": 0.5896240079298722,
+          "downward_speed": 5.6181770514557225,
+          "horizontal_speed": 2.6100326704190366,
+          "predicted_first_impact_seconds": 0.20545064177261563,
+          "predicted_apex_seconds": 0.5478364779385521,
+          "horizontal_retention_prior": 0.75
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.026781712933732,
+          "mass_scale": 1.0229859363147162,
+          "friction_scale": 0.8818013296000147,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9252767423709667
+        }
+      }
+    },
+    {
+      "slot": 2,
+      "episode": 0,
+      "success": true,
+      "reason": "track_touch",
+      "steps": 19,
+      "reward": 19.584609134417565,
+      "legacy_success": true,
+      "physics": {
+        "version": "bounce_v1",
+        "object": "softball",
+        "shape": "sphere",
+        "mass_kg": 0.19475733267469703,
+        "dimensions_m": [
+          0.09680785350650925,
+          0.09680785350650925,
+          0.09680785350650925
+        ],
+        "inertia": [
+          0.0001825219077550817,
+          0.0001825219077550817,
+          0.0001825219077550817
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "sphere",
+          "inertia_factor": 0.4,
+          "sliding_friction": 0.32570139304756474,
+          "torsional_length_m": 0.0001,
+          "time_constant": 0.004,
+          "damping_ratio": 0.3055791474545525,
+          "normal_cor_target": 0.44,
+          "cor_basis": "Literature/standard-test informed prior; not a measured YCB softball/floor pair",
+          "launch_height_m": [
+            1.2,
+            1.5
+          ],
+          "rebound_apex_m": [
+            0.5,
+            0.65
+          ],
+          "horizontal_retention_prior": 0.75,
+          "numerical_validation": {
+            "passed": true,
+            "peak_refinement_error_m": 0.0030220591917469175,
+            "calibration": "simulation-only fit to nominal COR; not real measurements"
+          }
+        },
+        "launch": {
+          "requested_apex_clearance_m": 0.565191974936407,
+          "nominal_cor": 0.44,
+          "predicted_apex_y": 0.7977637005440875,
+          "downward_speed": 5.279989562092803,
+          "horizontal_speed": 1.9535084540695928,
+          "predicted_first_impact_seconds": 0.23325678802482633,
+          "predicted_apex_seconds": 0.5727088784581794,
+          "horizontal_retention_prior": 0.75
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0169572918099654,
+          "mass_scale": 1.0196718988204032,
+          "friction_scale": 0.9305754087073278,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9838260852585877
+        }
+      }
+    },
+    {
+      "slot": 3,
+      "episode": 1,
+      "success": true,
+      "reason": "track_touch",
+      "steps": 17,
+      "reward": 18.158600105555294,
+      "legacy_success": true,
+      "physics": {
+        "version": "bounce_v1",
+        "object": "softball",
+        "shape": "sphere",
+        "mass_kg": 0.18545541324492928,
+        "dimensions_m": [
+          0.09265577268958722,
+          0.09265577268958722,
+          0.09265577268958722
+        ],
+        "inertia": [
+          0.00015921518240529295,
+          0.00015921518240529295,
+          0.00015921518240529295
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "sphere",
+          "inertia_factor": 0.4,
+          "sliding_friction": 0.30743013262023683,
+          "torsional_length_m": 0.0001,
+          "time_constant": 0.004,
+          "damping_ratio": 0.3265283522644514,
+          "normal_cor_target": 0.44,
+          "cor_basis": "Literature/standard-test informed prior; not a measured YCB softball/floor pair",
+          "launch_height_m": [
+            1.2,
+            1.5
+          ],
+          "rebound_apex_m": [
+            0.5,
+            0.65
+          ],
+          "horizontal_retention_prior": 0.75,
+          "numerical_validation": {
+            "passed": true,
+            "peak_refinement_error_m": 0.0030220591917469175,
+            "calibration": "simulation-only fit to nominal COR; not real measurements"
+          }
+        },
+        "launch": {
+          "requested_apex_clearance_m": 0.5206440546598511,
+          "nominal_cor": 0.44,
+          "predicted_apex_y": 0.725251613890606,
+          "downward_speed": 5.052624886528996,
+          "horizontal_speed": 2.121017580738212,
+          "predicted_first_impact_seconds": 0.22540591692951592,
+          "predicted_apex_seconds": 0.5512058200801092,
+          "horizontal_retention_prior": 0.75
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 0.9733400778132805,
+          "mass_scale": 0.9709707499734517,
+          "friction_scale": 0.878371807486391,
+          "rolling_scale": 1.0,
+          "damping_scale": 1.051273011297507
+        }
+      }
+    },
+    {
+      "slot": 0,
+      "episode": 1,
+      "success": true,
+      "reason": "track_touch",
+      "steps": 17,
+      "reward": 17.913089982622395,
+      "legacy_success": true,
+      "physics": {
+        "version": "bounce_v1",
+        "object": "softball",
+        "shape": "sphere",
+        "mass_kg": 0.1953903138361108,
+        "dimensions_m": [
+          0.09774307579027215,
+          0.09774307579027215,
+          0.09774307579027215
+        ],
+        "inertia": [
+          0.0001866702173420025,
+          0.0001866702173420025,
+          0.0001866702173420025
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "sphere",
+          "inertia_factor": 0.4,
+          "sliding_friction": 0.3086304653600051,
+          "torsional_length_m": 0.0001,
+          "time_constant": 0.004,
+          "damping_ratio": 0.287393556981089,
+          "normal_cor_target": 0.44,
+          "cor_basis": "Literature/standard-test informed prior; not a measured YCB softball/floor pair",
+          "launch_height_m": [
+            1.2,
+            1.5
+          ],
+          "rebound_apex_m": [
+            0.5,
+            0.65
+          ],
+          "horizontal_retention_prior": 0.75,
+          "numerical_validation": {
+            "passed": true,
+            "peak_refinement_error_m": 0.0030220591917469175,
+            "calibration": "simulation-only fit to nominal COR; not real measurements"
+          }
+        },
+        "launch": {
+          "requested_apex_clearance_m": 0.6329897925889955,
+          "nominal_cor": 0.44,
+          "predicted_apex_y": 0.6423931796251061,
+          "downward_speed": 6.189114652422574,
+          "horizontal_speed": 2.672238234247032,
+          "predicted_first_impact_seconds": 0.18554502877000104,
+          "predicted_apex_seconds": 0.5447801979085092,
+          "horizontal_retention_prior": 0.75
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.026781712933732,
+          "mass_scale": 1.0229859363147162,
+          "friction_scale": 0.8818013296000147,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9252767423709667
+        }
+      }
+    },
+    {
+      "slot": 1,
+      "episode": 1,
+      "success": true,
+      "reason": "track_touch",
+      "steps": 18,
+      "reward": 18.945510943410603,
+      "legacy_success": true,
+      "physics": {
+        "version": "bounce_v1",
+        "object": "softball",
+        "shape": "sphere",
+        "mass_kg": 0.20071123537875454,
+        "dimensions_m": [
+          0.09763762668728854,
+          0.09763762668728854,
+          0.09763762668728854
+        ],
+        "inertia": [
+          0.00019134015113851004,
+          0.00019134015113851004,
+          0.00019134015113851004
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "sphere",
+          "inertia_factor": 0.4,
+          "sliding_friction": 0.3892724007493152,
+          "torsional_length_m": 0.0001,
+          "time_constant": 0.004,
+          "damping_ratio": 0.2981450813152924,
+          "normal_cor_target": 0.44,
+          "cor_basis": "Literature/standard-test informed prior; not a measured YCB softball/floor pair",
+          "launch_height_m": [
+            1.2,
+            1.5
+          ],
+          "rebound_apex_m": [
+            0.5,
+            0.65
+          ],
+          "horizontal_retention_prior": 0.75,
+          "numerical_validation": {
+            "passed": true,
+            "peak_refinement_error_m": 0.0030220591917469175,
+            "calibration": "simulation-only fit to nominal COR; not real measurements"
+          }
+        },
+        "launch": {
+          "requested_apex_clearance_m": 0.5575749583117403,
+          "nominal_cor": 0.44,
+          "predicted_apex_y": 0.7744696734331393,
+          "downward_speed": 5.45337829709466,
+          "horizontal_speed": 2.1737631952705954,
+          "predicted_first_impact_seconds": 0.21036588118866995,
+          "predicted_apex_seconds": 0.5475228373848396,
+          "horizontal_retention_prior": 0.75
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0256739801382022,
+          "mass_scale": 1.050844164286673,
+          "friction_scale": 1.1122068592837577,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9598917682468895
+        }
+      }
+    },
+    {
+      "slot": 2,
+      "episode": 1,
+      "success": true,
+      "reason": "track_touch",
+      "steps": 17,
+      "reward": 18.217585197165914,
+      "legacy_success": true,
+      "physics": {
+        "version": "bounce_v1",
+        "object": "softball",
+        "shape": "sphere",
+        "mass_kg": 0.19475733267469703,
+        "dimensions_m": [
+          0.09680785350650925,
+          0.09680785350650925,
+          0.09680785350650925
+        ],
+        "inertia": [
+          0.0001825219077550817,
+          0.0001825219077550817,
+          0.0001825219077550817
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "sphere",
+          "inertia_factor": 0.4,
+          "sliding_friction": 0.32570139304756474,
+          "torsional_length_m": 0.0001,
+          "time_constant": 0.004,
+          "damping_ratio": 0.3055791474545525,
+          "normal_cor_target": 0.44,
+          "cor_basis": "Literature/standard-test informed prior; not a measured YCB softball/floor pair",
+          "launch_height_m": [
+            1.2,
+            1.5
+          ],
+          "rebound_apex_m": [
+            0.5,
+            0.65
+          ],
+          "horizontal_retention_prior": 0.75,
+          "numerical_validation": {
+            "passed": true,
+            "peak_refinement_error_m": 0.0030220591917469175,
+            "calibration": "simulation-only fit to nominal COR; not real measurements"
+          }
+        },
+        "launch": {
+          "requested_apex_clearance_m": 0.595061214805201,
+          "nominal_cor": 0.44,
+          "predicted_apex_y": 0.6104076503129364,
+          "downward_speed": 5.951954557549223,
+          "horizontal_speed": 2.1190956336404416,
+          "predicted_first_impact_seconds": 0.18488200629094073,
+          "predicted_apex_seconds": 0.5331882955137618,
+          "horizontal_retention_prior": 0.75
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0169572918099654,
+          "mass_scale": 1.0196718988204032,
+          "friction_scale": 0.9305754087073278,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9838260852585877
+        }
+      }
+    },
+    {
+      "slot": 3,
+      "episode": 2,
+      "success": true,
+      "reason": "track_touch",
+      "steps": 17,
+      "reward": 18.291872948176525,
+      "legacy_success": true,
+      "physics": {
+        "version": "bounce_v1",
+        "object": "softball",
+        "shape": "sphere",
+        "mass_kg": 0.18545541324492928,
+        "dimensions_m": [
+          0.09265577268958722,
+          0.09265577268958722,
+          0.09265577268958722
+        ],
+        "inertia": [
+          0.00015921518240529295,
+          0.00015921518240529295,
+          0.00015921518240529295
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "sphere",
+          "inertia_factor": 0.4,
+          "sliding_friction": 0.30743013262023683,
+          "torsional_length_m": 0.0001,
+          "time_constant": 0.004,
+          "damping_ratio": 0.3265283522644514,
+          "normal_cor_target": 0.44,
+          "cor_basis": "Literature/standard-test informed prior; not a measured YCB softball/floor pair",
+          "launch_height_m": [
+            1.2,
+            1.5
+          ],
+          "rebound_apex_m": [
+            0.5,
+            0.65
+          ],
+          "horizontal_retention_prior": 0.75,
+          "numerical_validation": {
+            "passed": true,
+            "peak_refinement_error_m": 0.0030220591917469175,
+            "calibration": "simulation-only fit to nominal COR; not real measurements"
+          }
+        },
+        "launch": {
+          "requested_apex_clearance_m": 0.6133125145625918,
+          "nominal_cor": 0.44,
+          "predicted_apex_y": 0.7034175704406832,
+          "downward_speed": 5.962245187406687,
+          "horizontal_speed": 2.0919958682641937,
+          "predicted_first_impact_seconds": 0.19588110693887983,
+          "predicted_apex_seconds": 0.5494885577492695,
+          "horizontal_retention_prior": 0.75
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 0.9733400778132805,
+          "mass_scale": 0.9709707499734517,
+          "friction_scale": 0.878371807486391,
+          "rolling_scale": 1.0,
+          "damping_scale": 1.051273011297507
+        }
+      }
+    },
+    {
+      "slot": 0,
+      "episode": 2,
+      "success": true,
+      "reason": "track_touch",
+      "steps": 18,
+      "reward": 18.990820342572114,
+      "legacy_success": true,
+      "physics": {
+        "version": "bounce_v1",
+        "object": "softball",
+        "shape": "sphere",
+        "mass_kg": 0.1953903138361108,
+        "dimensions_m": [
+          0.09774307579027215,
+          0.09774307579027215,
+          0.09774307579027215
+        ],
+        "inertia": [
+          0.0001866702173420025,
+          0.0001866702173420025,
+          0.0001866702173420025
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "sphere",
+          "inertia_factor": 0.4,
+          "sliding_friction": 0.3086304653600051,
+          "torsional_length_m": 0.0001,
+          "time_constant": 0.004,
+          "damping_ratio": 0.287393556981089,
+          "normal_cor_target": 0.44,
+          "cor_basis": "Literature/standard-test informed prior; not a measured YCB softball/floor pair",
+          "launch_height_m": [
+            1.2,
+            1.5
+          ],
+          "rebound_apex_m": [
+            0.5,
+            0.65
+          ],
+          "horizontal_retention_prior": 0.75,
+          "numerical_validation": {
+            "passed": true,
+            "peak_refinement_error_m": 0.0030220591917469175,
+            "calibration": "simulation-only fit to nominal COR; not real measurements"
+          }
+        },
+        "launch": {
+          "requested_apex_clearance_m": 0.5587098732357318,
+          "nominal_cor": 0.44,
+          "predicted_apex_y": 0.6454644138972775,
+          "downward_speed": 5.464863353234747,
+          "horizontal_speed": 2.1413327685432586,
+          "predicted_first_impact_seconds": 0.20997458206278627,
+          "predicted_apex_seconds": 0.5474744965825721,
+          "horizontal_retention_prior": 0.75
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.026781712933732,
+          "mass_scale": 1.0229859363147162,
+          "friction_scale": 0.8818013296000147,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9252767423709667
+        }
+      }
+    },
+    {
+      "slot": 1,
+      "episode": 2,
+      "success": true,
+      "reason": "track_touch",
+      "steps": 19,
+      "reward": 19.196701553193567,
+      "legacy_success": true,
+      "physics": {
+        "version": "bounce_v1",
+        "object": "softball",
+        "shape": "sphere",
+        "mass_kg": 0.20071123537875454,
+        "dimensions_m": [
+          0.09763762668728854,
+          0.09763762668728854,
+          0.09763762668728854
+        ],
+        "inertia": [
+          0.00019134015113851004,
+          0.00019134015113851004,
+          0.00019134015113851004
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "sphere",
+          "inertia_factor": 0.4,
+          "sliding_friction": 0.3892724007493152,
+          "torsional_length_m": 0.0001,
+          "time_constant": 0.004,
+          "damping_ratio": 0.2981450813152924,
+          "normal_cor_target": 0.44,
+          "cor_basis": "Literature/standard-test informed prior; not a measured YCB softball/floor pair",
+          "launch_height_m": [
+            1.2,
+            1.5
+          ],
+          "rebound_apex_m": [
+            0.5,
+            0.65
+          ],
+          "horizontal_retention_prior": 0.75,
+          "numerical_validation": {
+            "passed": true,
+            "peak_refinement_error_m": 0.0030220591917469175,
+            "calibration": "simulation-only fit to nominal COR; not real measurements"
+          }
+        },
+        "launch": {
+          "requested_apex_clearance_m": 0.5362221020825295,
+          "nominal_cor": 0.44,
+          "predicted_apex_y": 0.7574842533787779,
+          "downward_speed": 5.042839425561465,
+          "horizontal_speed": 1.992129579183678,
+          "predicted_first_impact_seconds": 0.23739923599250307,
+          "predicted_apex_seconds": 0.5680373001601977,
+          "horizontal_retention_prior": 0.75
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0256739801382022,
+          "mass_scale": 1.050844164286673,
+          "friction_scale": 1.1122068592837577,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9598917682468895
+        }
+      }
+    },
+    {
+      "slot": 2,
+      "episode": 2,
+      "success": true,
+      "reason": "track_touch",
+      "steps": 18,
+      "reward": 18.99327838485551,
+      "legacy_success": true,
+      "physics": {
+        "version": "bounce_v1",
+        "object": "softball",
+        "shape": "sphere",
+        "mass_kg": 0.19475733267469703,
+        "dimensions_m": [
+          0.09680785350650925,
+          0.09680785350650925,
+          0.09680785350650925
+        ],
+        "inertia": [
+          0.0001825219077550817,
+          0.0001825219077550817,
+          0.0001825219077550817
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "sphere",
+          "inertia_factor": 0.4,
+          "sliding_friction": 0.32570139304756474,
+          "torsional_length_m": 0.0001,
+          "time_constant": 0.004,
+          "damping_ratio": 0.3055791474545525,
+          "normal_cor_target": 0.44,
+          "cor_basis": "Literature/standard-test informed prior; not a measured YCB softball/floor pair",
+          "launch_height_m": [
+            1.2,
+            1.5
+          ],
+          "rebound_apex_m": [
+            0.5,
+            0.65
+          ],
+          "horizontal_retention_prior": 0.75,
+          "numerical_validation": {
+            "passed": true,
+            "peak_refinement_error_m": 0.0030220591917469175,
+            "calibration": "simulation-only fit to nominal COR; not real measurements"
+          }
+        },
+        "launch": {
+          "requested_apex_clearance_m": 0.5326502298580952,
+          "nominal_cor": 0.44,
+          "predicted_apex_y": 0.6582369020642026,
+          "downward_speed": 5.235528569334928,
+          "horizontal_speed": 1.9007747547817244,
+          "predicted_first_impact_seconds": 0.2152501671050759,
+          "predicted_apex_seconds": 0.5447851713660053,
+          "horizontal_retention_prior": 0.75
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0169572918099654,
+          "mass_scale": 1.0196718988204032,
+          "friction_scale": 0.9305754087073278,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9838260852585877
+        }
+      }
+    },
+    {
+      "slot": 3,
+      "episode": 3,
+      "success": true,
+      "reason": "track_touch",
+      "steps": 15,
+      "reward": 16.833031257208788,
+      "legacy_success": true,
+      "physics": {
+        "version": "bounce_v1",
+        "object": "softball",
+        "shape": "sphere",
+        "mass_kg": 0.18545541324492928,
+        "dimensions_m": [
+          0.09265577268958722,
+          0.09265577268958722,
+          0.09265577268958722
+        ],
+        "inertia": [
+          0.00015921518240529295,
+          0.00015921518240529295,
+          0.00015921518240529295
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "sphere",
+          "inertia_factor": 0.4,
+          "sliding_friction": 0.30743013262023683,
+          "torsional_length_m": 0.0001,
+          "time_constant": 0.004,
+          "damping_ratio": 0.3265283522644514,
+          "normal_cor_target": 0.44,
+          "cor_basis": "Literature/standard-test informed prior; not a measured YCB softball/floor pair",
+          "launch_height_m": [
+            1.2,
+            1.5
+          ],
+          "rebound_apex_m": [
+            0.5,
+            0.65
+          ],
+          "horizontal_retention_prior": 0.75,
+          "numerical_validation": {
+            "passed": true,
+            "peak_refinement_error_m": 0.0030220591917469175,
+            "calibration": "simulation-only fit to nominal COR; not real measurements"
+          }
+        },
+        "launch": {
+          "requested_apex_clearance_m": 0.5394277272774092,
+          "nominal_cor": 0.44,
+          "predicted_apex_y": 0.5803139901361016,
+          "downward_speed": 5.336766686095884,
+          "horizontal_speed": 2.7886393908509053,
+          "predicted_first_impact_seconds": 0.20968003207241992,
+          "predicted_apex_seconds": 0.5413049283333355,
+          "horizontal_retention_prior": 0.75
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 0.9733400778132805,
+          "mass_scale": 0.9709707499734517,
+          "friction_scale": 0.878371807486391,
+          "rolling_scale": 1.0,
+          "damping_scale": 1.051273011297507
+        }
+      }
+    },
+    {
+      "slot": 0,
+      "episode": 3,
+      "success": true,
+      "reason": "track_touch",
+      "steps": 15,
+      "reward": 16.553296096255025,
+      "legacy_success": true,
+      "physics": {
+        "version": "bounce_v1",
+        "object": "softball",
+        "shape": "sphere",
+        "mass_kg": 0.1953903138361108,
+        "dimensions_m": [
+          0.09774307579027215,
+          0.09774307579027215,
+          0.09774307579027215
+        ],
+        "inertia": [
+          0.0001866702173420025,
+          0.0001866702173420025,
+          0.0001866702173420025
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "sphere",
+          "inertia_factor": 0.4,
+          "sliding_friction": 0.3086304653600051,
+          "torsional_length_m": 0.0001,
+          "time_constant": 0.004,
+          "damping_ratio": 0.287393556981089,
+          "normal_cor_target": 0.44,
+          "cor_basis": "Literature/standard-test informed prior; not a measured YCB softball/floor pair",
+          "launch_height_m": [
+            1.2,
+            1.5
+          ],
+          "rebound_apex_m": [
+            0.5,
+            0.65
+          ],
+          "horizontal_retention_prior": 0.75,
+          "numerical_validation": {
+            "passed": true,
+            "peak_refinement_error_m": 0.0030220591917469175,
+            "calibration": "simulation-only fit to nominal COR; not real measurements"
+          }
+        },
+        "launch": {
+          "requested_apex_clearance_m": 0.5932083692242305,
+          "nominal_cor": 0.44,
+          "predicted_apex_y": 0.5629177510120705,
+          "downward_speed": 5.989956871362301,
+          "horizontal_speed": 2.6790429950756094,
+          "predicted_first_impact_seconds": 0.17977479834769045,
+          "predicted_apex_seconds": 0.5275384031374339,
+          "horizontal_retention_prior": 0.75
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.026781712933732,
+          "mass_scale": 1.0229859363147162,
+          "friction_scale": 0.8818013296000147,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9252767423709667
+        }
+      }
+    },
+    {
+      "slot": 1,
+      "episode": 3,
+      "success": true,
+      "reason": "track_touch",
+      "steps": 17,
+      "reward": 18.603193072599836,
+      "legacy_success": true,
+      "physics": {
+        "version": "bounce_v1",
+        "object": "softball",
+        "shape": "sphere",
+        "mass_kg": 0.20071123537875454,
+        "dimensions_m": [
+          0.09763762668728854,
+          0.09763762668728854,
+          0.09763762668728854
+        ],
+        "inertia": [
+          0.00019134015113851004,
+          0.00019134015113851004,
+          0.00019134015113851004
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "sphere",
+          "inertia_factor": 0.4,
+          "sliding_friction": 0.3892724007493152,
+          "torsional_length_m": 0.0001,
+          "time_constant": 0.004,
+          "damping_ratio": 0.2981450813152924,
+          "normal_cor_target": 0.44,
+          "cor_basis": "Literature/standard-test informed prior; not a measured YCB softball/floor pair",
+          "launch_height_m": [
+            1.2,
+            1.5
+          ],
+          "rebound_apex_m": [
+            0.5,
+            0.65
+          ],
+          "horizontal_retention_prior": 0.75,
+          "numerical_validation": {
+            "passed": true,
+            "peak_refinement_error_m": 0.0030220591917469175,
+            "calibration": "simulation-only fit to nominal COR; not real measurements"
+          }
+        },
+        "launch": {
+          "requested_apex_clearance_m": 0.5841004542782168,
+          "nominal_cor": 0.44,
+          "predicted_apex_y": 0.6351000517923859,
+          "downward_speed": 5.655963550328044,
+          "horizontal_speed": 2.5753169024340976,
+          "predicted_first_impact_seconds": 0.20772999110416426,
+          "predicted_apex_seconds": 0.5528135482648527,
+          "horizontal_retention_prior": 0.75
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0256739801382022,
+          "mass_scale": 1.050844164286673,
+          "friction_scale": 1.1122068592837577,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9598917682468895
+        }
+      }
+    },
+    {
+      "slot": 2,
+      "episode": 3,
+      "success": true,
+      "reason": "track_touch",
+      "steps": 16,
+      "reward": 17.556304718252942,
+      "legacy_success": true,
+      "physics": {
+        "version": "bounce_v1",
+        "object": "softball",
+        "shape": "sphere",
+        "mass_kg": 0.19475733267469703,
+        "dimensions_m": [
+          0.09680785350650925,
+          0.09680785350650925,
+          0.09680785350650925
+        ],
+        "inertia": [
+          0.0001825219077550817,
+          0.0001825219077550817,
+          0.0001825219077550817
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "sphere",
+          "inertia_factor": 0.4,
+          "sliding_friction": 0.32570139304756474,
+          "torsional_length_m": 0.0001,
+          "time_constant": 0.004,
+          "damping_ratio": 0.3055791474545525,
+          "normal_cor_target": 0.44,
+          "cor_basis": "Literature/standard-test informed prior; not a measured YCB softball/floor pair",
+          "launch_height_m": [
+            1.2,
+            1.5
+          ],
+          "rebound_apex_m": [
+            0.5,
+            0.65
+          ],
+          "horizontal_retention_prior": 0.75,
+          "numerical_validation": {
+            "passed": true,
+            "peak_refinement_error_m": 0.0030220591917469175,
+            "calibration": "simulation-only fit to nominal COR; not real measurements"
+          }
+        },
+        "launch": {
+          "requested_apex_clearance_m": 0.619504588834788,
+          "nominal_cor": 0.44,
+          "predicted_apex_y": 0.5518909325652609,
+          "downward_speed": 6.044264171426468,
+          "horizontal_speed": 2.605735417678079,
+          "predicted_first_impact_seconds": 0.19156705434236587,
+          "predicted_apex_seconds": 0.5469550531997598,
+          "horizontal_retention_prior": 0.75
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0169572918099654,
+          "mass_scale": 1.0196718988204032,
+          "friction_scale": 0.9305754087073278,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9838260852585877
+        }
+      }
+    },
+    {
+      "slot": 3,
+      "episode": 4,
+      "success": true,
+      "reason": "track_touch",
+      "steps": 17,
+      "reward": 17.95183518586767,
+      "legacy_success": true,
+      "physics": {
+        "version": "bounce_v1",
+        "object": "softball",
+        "shape": "sphere",
+        "mass_kg": 0.18545541324492928,
+        "dimensions_m": [
+          0.09265577268958722,
+          0.09265577268958722,
+          0.09265577268958722
+        ],
+        "inertia": [
+          0.00015921518240529295,
+          0.00015921518240529295,
+          0.00015921518240529295
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "sphere",
+          "inertia_factor": 0.4,
+          "sliding_friction": 0.30743013262023683,
+          "torsional_length_m": 0.0001,
+          "time_constant": 0.004,
+          "damping_ratio": 0.3265283522644514,
+          "normal_cor_target": 0.44,
+          "cor_basis": "Literature/standard-test informed prior; not a measured YCB softball/floor pair",
+          "launch_height_m": [
+            1.2,
+            1.5
+          ],
+          "rebound_apex_m": [
+            0.5,
+            0.65
+          ],
+          "horizontal_retention_prior": 0.75,
+          "numerical_validation": {
+            "passed": true,
+            "peak_refinement_error_m": 0.0030220591917469175,
+            "calibration": "simulation-only fit to nominal COR; not real measurements"
+          }
+        },
+        "launch": {
+          "requested_apex_clearance_m": 0.6404673178815243,
+          "nominal_cor": 0.44,
+          "predicted_apex_y": 0.6207669951915074,
+          "downward_speed": 6.293579473936381,
+          "horizontal_speed": 2.1165986328230004,
+          "predicted_first_impact_seconds": 0.17970439595256055,
+          "predicted_apex_seconds": 0.5410551628456941,
+          "horizontal_retention_prior": 0.75
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 0.9733400778132805,
+          "mass_scale": 0.9709707499734517,
+          "friction_scale": 0.878371807486391,
+          "rolling_scale": 1.0,
+          "damping_scale": 1.051273011297507
+        }
+      }
+    },
+    {
+      "slot": 0,
+      "episode": 4,
+      "success": true,
+      "reason": "track_touch",
+      "steps": 18,
+      "reward": 18.615875116318264,
+      "legacy_success": true,
+      "physics": {
+        "version": "bounce_v1",
+        "object": "softball",
+        "shape": "sphere",
+        "mass_kg": 0.1953903138361108,
+        "dimensions_m": [
+          0.09774307579027215,
+          0.09774307579027215,
+          0.09774307579027215
+        ],
+        "inertia": [
+          0.0001866702173420025,
+          0.0001866702173420025,
+          0.0001866702173420025
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "sphere",
+          "inertia_factor": 0.4,
+          "sliding_friction": 0.3086304653600051,
+          "torsional_length_m": 0.0001,
+          "time_constant": 0.004,
+          "damping_ratio": 0.287393556981089,
+          "normal_cor_target": 0.44,
+          "cor_basis": "Literature/standard-test informed prior; not a measured YCB softball/floor pair",
+          "launch_height_m": [
+            1.2,
+            1.5
+          ],
+          "rebound_apex_m": [
+            0.5,
+            0.65
+          ],
+          "horizontal_retention_prior": 0.75,
+          "numerical_validation": {
+            "passed": true,
+            "peak_refinement_error_m": 0.0030220591917469175,
+            "calibration": "simulation-only fit to nominal COR; not real measurements"
+          }
+        },
+        "launch": {
+          "requested_apex_clearance_m": 0.5863862160242457,
+          "nominal_cor": 0.44,
+          "predicted_apex_y": 0.569993913226532,
+          "downward_speed": 5.715688668777069,
+          "horizontal_speed": 2.2868221282089753,
+          "predicted_first_impact_seconds": 0.20317486934151605,
+          "predicted_apex_seconds": 0.5489329753851073,
+          "horizontal_retention_prior": 0.75
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.026781712933732,
+          "mass_scale": 1.0229859363147162,
+          "friction_scale": 0.8818013296000147,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9252767423709667
+        }
+      }
+    },
+    {
+      "slot": 1,
+      "episode": 4,
+      "success": true,
+      "reason": "track_touch",
+      "steps": 16,
+      "reward": 17.985321914497185,
+      "legacy_success": true,
+      "physics": {
+        "version": "bounce_v1",
+        "object": "softball",
+        "shape": "sphere",
+        "mass_kg": 0.20071123537875454,
+        "dimensions_m": [
+          0.09763762668728854,
+          0.09763762668728854,
+          0.09763762668728854
+        ],
+        "inertia": [
+          0.00019134015113851004,
+          0.00019134015113851004,
+          0.00019134015113851004
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "sphere",
+          "inertia_factor": 0.4,
+          "sliding_friction": 0.3892724007493152,
+          "torsional_length_m": 0.0001,
+          "time_constant": 0.004,
+          "damping_ratio": 0.2981450813152924,
+          "normal_cor_target": 0.44,
+          "cor_basis": "Literature/standard-test informed prior; not a measured YCB softball/floor pair",
+          "launch_height_m": [
+            1.2,
+            1.5
+          ],
+          "rebound_apex_m": [
+            0.5,
+            0.65
+          ],
+          "horizontal_retention_prior": 0.75,
+          "numerical_validation": {
+            "passed": true,
+            "peak_refinement_error_m": 0.0030220591917469175,
+            "calibration": "simulation-only fit to nominal COR; not real measurements"
+          }
+        },
+        "launch": {
+          "requested_apex_clearance_m": 0.5494985019830512,
+          "nominal_cor": 0.44,
+          "predicted_apex_y": 0.6058483724742643,
+          "downward_speed": 5.5169876774155595,
+          "horizontal_speed": 2.30045469739131,
+          "predicted_first_impact_seconds": 0.19831183250091017,
+          "predicted_apex_seconds": 0.5330180273907954,
+          "horizontal_retention_prior": 0.75
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0256739801382022,
+          "mass_scale": 1.050844164286673,
+          "friction_scale": 1.1122068592837577,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9598917682468895
+        }
+      }
+    },
+    {
+      "slot": 2,
+      "episode": 4,
+      "success": true,
+      "reason": "track_touch",
+      "steps": 17,
+      "reward": 18.379833113219348,
+      "legacy_success": true,
+      "physics": {
+        "version": "bounce_v1",
+        "object": "softball",
+        "shape": "sphere",
+        "mass_kg": 0.19475733267469703,
+        "dimensions_m": [
+          0.09680785350650925,
+          0.09680785350650925,
+          0.09680785350650925
+        ],
+        "inertia": [
+          0.0001825219077550817,
+          0.0001825219077550817,
+          0.0001825219077550817
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "sphere",
+          "inertia_factor": 0.4,
+          "sliding_friction": 0.32570139304756474,
+          "torsional_length_m": 0.0001,
+          "time_constant": 0.004,
+          "damping_ratio": 0.3055791474545525,
+          "normal_cor_target": 0.44,
+          "cor_basis": "Literature/standard-test informed prior; not a measured YCB softball/floor pair",
+          "launch_height_m": [
+            1.2,
+            1.5
+          ],
+          "rebound_apex_m": [
+            0.5,
+            0.65
+          ],
+          "horizontal_retention_prior": 0.75,
+          "numerical_validation": {
+            "passed": true,
+            "peak_refinement_error_m": 0.0030220591917469175,
+            "calibration": "simulation-only fit to nominal COR; not real measurements"
+          }
+        },
+        "launch": {
+          "requested_apex_clearance_m": 0.5140501602567221,
+          "nominal_cor": 0.44,
+          "predicted_apex_y": 0.706752871613257,
+          "downward_speed": 5.109404853638269,
+          "horizontal_speed": 2.039702299216454,
+          "predicted_first_impact_seconds": 0.21491412549178435,
+          "predicted_apex_seconds": 0.5386443463759409,
+          "horizontal_retention_prior": 0.75
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0169572918099654,
+          "mass_scale": 1.0196718988204032,
+          "friction_scale": 0.9305754087073278,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9838260852585877
+        }
+      }
+    }
+  ],
+  "checkpoint": "/home/isee/Catch/11-6/bounce_track_best_reward_19.43.pth"
+}

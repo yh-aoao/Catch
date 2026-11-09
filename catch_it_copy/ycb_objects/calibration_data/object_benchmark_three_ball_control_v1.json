@@ -1,0 +1,35 @@
+{
+  "schema": "object_motion_benchmark_v1",
+  "surface_id": "generic_dry_rigid_surface_prior_v1",
+  "status": "simulation_priors_not_specimen_measurements",
+  "sources": {
+    "geometry_mass": "https://github.com/elpis-lab/YCB_Dataset",
+    "ycb": "https://www.ri.cmu.edu/pub_files/2015/7/ICAR-FINAL.pdf",
+    "racquetball_rebound": "https://coloradoracquetball.org/equipment-specifications/",
+    "softball_cor": "https://ssl.wsu.edu/glossary/cor/",
+    "golf_material": "https://www.usga.org/content/dam/usga/pdf/Equipment/Equipment%20Rules%20Final.pdf"
+  },
+  "roll": {
+    "original": {
+      "route": "three_ball_baseline"
+    },
+    "tennis_ball": {
+      "route": "three_ball_baseline"
+    },
+    "baseball": {
+      "route": "three_ball_baseline"
+    }
+  },
+  "bounce": {
+    "original": {
+      "route": "three_ball_baseline"
+    },
+    "tennis_ball": {
+      "route": "three_ball_baseline"
+    },
+    "baseball": {
+      "route": "three_ball_baseline"
+    }
+  },
+  "basis": "Three-ball controlled comparison: identical baseline routes; opt-in physical_dr_v1 changes only per-environment physical parameters."
+}

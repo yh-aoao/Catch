@@ -1,0 +1,1488 @@
+{
+  "motion": "bounce",
+  "object": "golf_ball",
+  "seed": 41000,
+  "episodes": 20,
+  "successes": 20,
+  "instances": [
+    {
+      "version": "physical_dr_v1",
+      "sampling": "environment_creation",
+      "size_scale": 1.026781712933732,
+      "mass_scale": 1.0229859363147162,
+      "friction_scale": 0.8818013296000147,
+      "rolling_scale": 1.0,
+      "damping_scale": 0.9252767423709667
+    },
+    {
+      "version": "physical_dr_v1",
+      "sampling": "environment_creation",
+      "size_scale": 1.0256739801382022,
+      "mass_scale": 1.050844164286673,
+      "friction_scale": 1.1122068592837577,
+      "rolling_scale": 1.0,
+      "damping_scale": 0.9598917682468895
+    },
+    {
+      "version": "physical_dr_v1",
+      "sampling": "environment_creation",
+      "size_scale": 1.0169572918099654,
+      "mass_scale": 1.0196718988204032,
+      "friction_scale": 0.9305754087073278,
+      "rolling_scale": 1.0,
+      "damping_scale": 0.9838260852585877
+    },
+    {
+      "version": "physical_dr_v1",
+      "sampling": "environment_creation",
+      "size_scale": 0.9733400778132805,
+      "mass_scale": 0.9709707499734517,
+      "friction_scale": 0.878371807486391,
+      "rolling_scale": 1.0,
+      "damping_scale": 1.051273011297507
+    }
+  ],
+  "records": [
+    {
+      "slot": 3,
+      "episode": 0,
+      "success": true,
+      "reason": "track_touch",
+      "steps": 20,
+      "reward": 20.0268692696275,
+      "legacy_success": true,
+      "physics": {
+        "version": "bounce_v1",
+        "object": "golf_ball",
+        "shape": "sphere",
+        "mass_kg": 0.04466465449877877,
+        "dimensions_m": [
+          0.04139521987528064,
+          0.04139521987528064,
+          0.04139521987528064
+        ],
+        "inertia": [
+          7.653575422843857e-06,
+          7.653575422843857e-06,
+          7.653575422843857e-06
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "sphere",
+          "inertia_factor": 0.4,
+          "sliding_friction": 0.21959295187159775,
+          "torsional_length_m": 0.0001,
+          "time_constant": 0.008,
+          "damping_ratio": 0.07778027078787683,
+          "normal_cor_target": 0.8,
+          "cor_basis": "Engineering prior for a resilient golf ball on a rigid floor; not a USGA specified ground COR",
+          "launch_height_m": [
+            0.9,
+            1.2
+          ],
+          "rebound_apex_m": [
+            0.65,
+            0.85
+          ],
+          "horizontal_retention_prior": 0.75,
+          "numerical_validation": {
+            "passed": true,
+            "peak_refinement_error_m": 0.00632180006612082,
+            "calibration": "simulation-only fit to nominal COR; not real measurements"
+          }
+        },
+        "launch": {
+          "requested_apex_clearance_m": 0.6787191965159639,
+          "nominal_cor": 0.8,
+          "predicted_apex_y": 0.594686874896128,
+          "downward_speed": 1.148430168407062,
+          "horizontal_speed": 2.065779561348259,
+          "predicted_first_impact_seconds": 0.3479140967738773,
+          "predicted_apex_seconds": 0.7198992105564501,
+          "horizontal_retention_prior": 0.75
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 0.9733400778132805,
+          "mass_scale": 0.9709707499734517,
+          "friction_scale": 0.878371807486391,
+          "rolling_scale": 1.0,
+          "damping_scale": 1.051273011297507
+        }
+      }
+    },
+    {
+      "slot": 0,
+      "episode": 0,
+      "success": true,
+      "reason": "track_touch",
+      "steps": 21,
+      "reward": 20.523749440678287,
+      "legacy_success": true,
+      "physics": {
+        "version": "bounce_v1",
+        "object": "golf_ball",
+        "shape": "sphere",
+        "mass_kg": 0.04705735307047695,
+        "dimensions_m": [
+          0.04366804135539028,
+          0.04366804135539028,
+          0.04366804135539028
+        ],
+        "inertia": [
+          8.973356472932546e-06,
+          8.973356472932546e-06,
+          8.973356472932546e-06
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "sphere",
+          "inertia_factor": 0.4,
+          "sliding_friction": 0.22045033240000367,
+          "torsional_length_m": 0.0001,
+          "time_constant": 0.008,
+          "damping_ratio": 0.06845821665916575,
+          "normal_cor_target": 0.8,
+          "cor_basis": "Engineering prior for a resilient golf ball on a rigid floor; not a USGA specified ground COR",
+          "launch_height_m": [
+            0.9,
+            1.2
+          ],
+          "rebound_apex_m": [
+            0.65,
+            0.85
+          ],
+          "horizontal_retention_prior": 0.75,
+          "numerical_validation": {
+            "passed": true,
+            "peak_refinement_error_m": 0.00632180006612082,
+            "calibration": "simulation-only fit to nominal COR; not real measurements"
+          }
+        },
+        "launch": {
+          "requested_apex_clearance_m": 0.7500048510114236,
+          "nominal_cor": 0.8,
+          "predicted_apex_y": 0.5896240079298722,
+          "downward_speed": 1.472980020086216,
+          "horizontal_speed": 1.9092193153880188,
+          "predicted_first_impact_seconds": 0.33863939161204726,
+          "predicted_apex_seconds": 0.7296715997099392,
+          "horizontal_retention_prior": 0.75
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.026781712933732,
+          "mass_scale": 1.0229859363147162,
+          "friction_scale": 0.8818013296000147,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9252767423709667
+        }
+      }
+    },
+    {
+      "slot": 1,
+      "episode": 0,
+      "success": true,
+      "reason": "track_touch",
+      "steps": 21,
+      "reward": 20.028940069938642,
+      "legacy_success": true,
+      "physics": {
+        "version": "bounce_v1",
+        "object": "golf_ball",
+        "shape": "sphere",
+        "mass_kg": 0.04833883155718696,
+        "dimensions_m": [
+          0.04362093054214088,
+          0.04362093054214088,
+          0.04362093054214088
+        ],
+        "inertia": [
+          9.197843170691528e-06,
+          9.197843170691528e-06,
+          9.197843170691528e-06
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "sphere",
+          "inertia_factor": 0.4,
+          "sliding_friction": 0.27805171482093943,
+          "torsional_length_m": 0.0001,
+          "time_constant": 0.008,
+          "damping_ratio": 0.0710192698366231,
+          "normal_cor_target": 0.8,
+          "cor_basis": "Engineering prior for a resilient golf ball on a rigid floor; not a USGA specified ground COR",
+          "launch_height_m": [
+            0.9,
+            1.2
+          ],
+          "rebound_apex_m": [
+            0.65,
+            0.85
+          ],
+          "horizontal_retention_prior": 0.75,
+          "numerical_validation": {
+            "passed": true,
+            "peak_refinement_error_m": 0.00632180006612082,
+            "calibration": "simulation-only fit to nominal COR; not real measurements"
+          }
+        },
+        "launch": {
+          "requested_apex_clearance_m": 0.6632689999005469,
+          "nominal_cor": 0.8,
+          "predicted_apex_y": 0.6222043738851675,
+          "downward_speed": 1.0349299543334411,
+          "horizontal_speed": 1.8370785568036694,
+          "predicted_first_impact_seconds": 0.3541611180997439,
+          "predicted_apex_seconds": 0.7218879701194731,
+          "horizontal_retention_prior": 0.75
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0256739801382022,
+          "mass_scale": 1.050844164286673,
+          "friction_scale": 1.1122068592837577,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9598917682468895
+        }
+      }
+    },
+    {
+      "slot": 2,
+      "episode": 0,
+      "success": true,
+      "reason": "track_touch",
+      "steps": 24,
+      "reward": 21.715052035693713,
+      "legacy_success": true,
+      "physics": {
+        "version": "bounce_v1",
+        "object": "golf_ball",
+        "shape": "sphere",
+        "mass_kg": 0.046904907345738545,
+        "dimensions_m": [
+          0.04325021814864497,
+          0.04325021814864497,
+          0.04325021814864497
+        ],
+        "inertia": [
+          8.77394458380765e-06,
+          8.77394458380765e-06,
+          8.77394458380765e-06
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "sphere",
+          "inertia_factor": 0.4,
+          "sliding_friction": 0.23264385217683195,
+          "torsional_length_m": 0.0001,
+          "time_constant": 0.008,
+          "damping_ratio": 0.07279009210475601,
+          "normal_cor_target": 0.8,
+          "cor_basis": "Engineering prior for a resilient golf ball on a rigid floor; not a USGA specified ground COR",
+          "launch_height_m": [
+            0.9,
+            1.2
+          ],
+          "rebound_apex_m": [
+            0.65,
+            0.85
+          ],
+          "horizontal_retention_prior": 0.75,
+          "numerical_validation": {
+            "passed": true,
+            "peak_refinement_error_m": 0.00632180006612082,
+            "calibration": "simulation-only fit to nominal COR; not real measurements"
+          }
+        },
+        "launch": {
+          "requested_apex_clearance_m": 0.7369226332485427,
+          "nominal_cor": 0.8,
+          "predicted_apex_y": 0.7977637005440875,
+          "downward_speed": 0.9904544411531511,
+          "horizontal_speed": 1.4134387637955805,
+          "predicted_first_impact_seconds": 0.3835448050845723,
+          "predicted_apex_seconds": 0.7711516535276146,
+          "horizontal_retention_prior": 0.75
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0169572918099654,
+          "mass_scale": 1.0196718988204032,
+          "friction_scale": 0.9305754087073278,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9838260852585877
+        }
+      }
+    },
+    {
+      "slot": 3,
+      "episode": 1,
+      "success": true,
+      "reason": "track_touch",
+      "steps": 20,
+      "reward": 19.121076238862827,
+      "legacy_success": true,
+      "physics": {
+        "version": "bounce_v1",
+        "object": "golf_ball",
+        "shape": "sphere",
+        "mass_kg": 0.04466465449877877,
+        "dimensions_m": [
+          0.04139521987528064,
+          0.04139521987528064,
+          0.04139521987528064
+        ],
+        "inertia": [
+          7.653575422843857e-06,
+          7.653575422843857e-06,
+          7.653575422843857e-06
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "sphere",
+          "inertia_factor": 0.4,
+          "sliding_friction": 0.21959295187159775,
+          "torsional_length_m": 0.0001,
+          "time_constant": 0.008,
+          "damping_ratio": 0.07778027078787683,
+          "normal_cor_target": 0.8,
+          "cor_basis": "Engineering prior for a resilient golf ball on a rigid floor; not a USGA specified ground COR",
+          "launch_height_m": [
+            0.9,
+            1.2
+          ],
+          "rebound_apex_m": [
+            0.65,
+            0.85
+          ],
+          "horizontal_retention_prior": 0.75,
+          "numerical_validation": {
+            "passed": true,
+            "peak_refinement_error_m": 0.00632180006612082,
+            "calibration": "simulation-only fit to nominal COR; not real measurements"
+          }
+        },
+        "launch": {
+          "requested_apex_clearance_m": 0.8365290949063279,
+          "nominal_cor": 0.8,
+          "predicted_apex_y": 0.6155528715794265,
+          "downward_speed": 2.586306363844529,
+          "horizontal_speed": 2.1888894763160187,
+          "predicted_first_impact_seconds": 0.2525756978084669,
+          "predicted_apex_seconds": 0.6655480900079034,
+          "horizontal_retention_prior": 0.75
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 0.9733400778132805,
+          "mass_scale": 0.9709707499734517,
+          "friction_scale": 0.878371807486391,
+          "rolling_scale": 1.0,
+          "damping_scale": 1.051273011297507
+        }
+      }
+    },
+    {
+      "slot": 0,
+      "episode": 1,
+      "success": true,
+      "reason": "track_touch",
+      "steps": 23,
+      "reward": 21.34376861428843,
+      "legacy_success": true,
+      "physics": {
+        "version": "bounce_v1",
+        "object": "golf_ball",
+        "shape": "sphere",
+        "mass_kg": 0.04705735307047695,
+        "dimensions_m": [
+          0.04366804135539028,
+          0.04366804135539028,
+          0.04366804135539028
+        ],
+        "inertia": [
+          8.973356472932546e-06,
+          8.973356472932546e-06,
+          8.973356472932546e-06
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "sphere",
+          "inertia_factor": 0.4,
+          "sliding_friction": 0.22045033240000367,
+          "torsional_length_m": 0.0001,
+          "time_constant": 0.008,
+          "damping_ratio": 0.06845821665916575,
+          "normal_cor_target": 0.8,
+          "cor_basis": "Engineering prior for a resilient golf ball on a rigid floor; not a USGA specified ground COR",
+          "launch_height_m": [
+            0.9,
+            1.2
+          ],
+          "rebound_apex_m": [
+            0.65,
+            0.85
+          ],
+          "horizontal_retention_prior": 0.75,
+          "numerical_validation": {
+            "passed": true,
+            "peak_refinement_error_m": 0.00632180006612082,
+            "calibration": "simulation-only fit to nominal COR; not real measurements"
+          }
+        },
+        "launch": {
+          "requested_apex_clearance_m": 0.7006280036182673,
+          "nominal_cor": 0.8,
+          "predicted_apex_y": 0.6465897056478493,
+          "downward_speed": 0.9904544411531511,
+          "horizontal_speed": 1.6428877192092137,
+          "predicted_first_impact_seconds": 0.3714627471077457,
+          "predicted_apex_seconds": 0.7494039491693266,
+          "horizontal_retention_prior": 0.75
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.026781712933732,
+          "mass_scale": 1.0229859363147162,
+          "friction_scale": 0.8818013296000147,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9252767423709667
+        }
+      }
+    },
+    {
+      "slot": 2,
+      "episode": 1,
+      "success": true,
+      "reason": "track_touch",
+      "steps": 22,
+      "reward": 21.35694934570673,
+      "legacy_success": true,
+      "physics": {
+        "version": "bounce_v1",
+        "object": "golf_ball",
+        "shape": "sphere",
+        "mass_kg": 0.046904907345738545,
+        "dimensions_m": [
+          0.04325021814864497,
+          0.04325021814864497,
+          0.04325021814864497
+        ],
+        "inertia": [
+          8.77394458380765e-06,
+          8.77394458380765e-06,
+          8.77394458380765e-06
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "sphere",
+          "inertia_factor": 0.4,
+          "sliding_friction": 0.23264385217683195,
+          "torsional_length_m": 0.0001,
+          "time_constant": 0.008,
+          "damping_ratio": 0.07279009210475601,
+          "normal_cor_target": 0.8,
+          "cor_basis": "Engineering prior for a resilient golf ball on a rigid floor; not a USGA specified ground COR",
+          "launch_height_m": [
+            0.9,
+            1.2
+          ],
+          "rebound_apex_m": [
+            0.65,
+            0.85
+          ],
+          "horizontal_retention_prior": 0.75,
+          "numerical_validation": {
+            "passed": true,
+            "peak_refinement_error_m": 0.00632180006612082,
+            "calibration": "simulation-only fit to nominal COR; not real measurements"
+          }
+        },
+        "launch": {
+          "requested_apex_clearance_m": 0.7009613789964463,
+          "nominal_cor": 0.8,
+          "predicted_apex_y": 0.5694970589285653,
+          "downward_speed": 1.1116000728611422,
+          "horizontal_speed": 1.6157999285892697,
+          "predicted_first_impact_seconds": 0.3592259316621008,
+          "predicted_apex_seconds": 0.7372570397123639,
+          "horizontal_retention_prior": 0.75
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0169572918099654,
+          "mass_scale": 1.0196718988204032,
+          "friction_scale": 0.9305754087073278,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9838260852585877
+        }
+      }
+    },
+    {
+      "slot": 1,
+      "episode": 1,
+      "success": true,
+      "reason": "track_touch",
+      "steps": 26,
+      "reward": 22.766175768553445,
+      "legacy_success": true,
+      "physics": {
+        "version": "bounce_v1",
+        "object": "golf_ball",
+        "shape": "sphere",
+        "mass_kg": 0.04833883155718696,
+        "dimensions_m": [
+          0.04362093054214088,
+          0.04362093054214088,
+          0.04362093054214088
+        ],
+        "inertia": [
+          9.197843170691528e-06,
+          9.197843170691528e-06,
+          9.197843170691528e-06
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "sphere",
+          "inertia_factor": 0.4,
+          "sliding_friction": 0.27805171482093943,
+          "torsional_length_m": 0.0001,
+          "time_constant": 0.008,
+          "damping_ratio": 0.0710192698366231,
+          "normal_cor_target": 0.8,
+          "cor_basis": "Engineering prior for a resilient golf ball on a rigid floor; not a USGA specified ground COR",
+          "launch_height_m": [
+            0.9,
+            1.2
+          ],
+          "rebound_apex_m": [
+            0.65,
+            0.85
+          ],
+          "horizontal_retention_prior": 0.75,
+          "numerical_validation": {
+            "passed": true,
+            "peak_refinement_error_m": 0.00632180006612082,
+            "calibration": "simulation-only fit to nominal COR; not real measurements"
+          }
+        },
+        "launch": {
+          "requested_apex_clearance_m": 0.7235893745463248,
+          "nominal_cor": 0.8,
+          "predicted_apex_y": 0.7831427309626785,
+          "downward_speed": 1.2266346691645358,
+          "horizontal_speed": 1.268565836672056,
+          "predicted_first_impact_seconds": 0.35506619564037195,
+          "predicted_apex_seconds": 0.7391505217073717,
+          "horizontal_retention_prior": 0.75
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0256739801382022,
+          "mass_scale": 1.050844164286673,
+          "friction_scale": 1.1122068592837577,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9598917682468895
+        }
+      }
+    },
+    {
+      "slot": 3,
+      "episode": 2,
+      "success": true,
+      "reason": "track_touch",
+      "steps": 23,
+      "reward": 21.263808116933614,
+      "legacy_success": true,
+      "physics": {
+        "version": "bounce_v1",
+        "object": "golf_ball",
+        "shape": "sphere",
+        "mass_kg": 0.04466465449877877,
+        "dimensions_m": [
+          0.04139521987528064,
+          0.04139521987528064,
+          0.04139521987528064
+        ],
+        "inertia": [
+          7.653575422843857e-06,
+          7.653575422843857e-06,
+          7.653575422843857e-06
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "sphere",
+          "inertia_factor": 0.4,
+          "sliding_friction": 0.21959295187159775,
+          "torsional_length_m": 0.0001,
+          "time_constant": 0.008,
+          "damping_ratio": 0.07778027078787683,
+          "normal_cor_target": 0.8,
+          "cor_basis": "Engineering prior for a resilient golf ball on a rigid floor; not a USGA specified ground COR",
+          "launch_height_m": [
+            0.9,
+            1.2
+          ],
+          "rebound_apex_m": [
+            0.65,
+            0.85
+          ],
+          "horizontal_retention_prior": 0.75,
+          "numerical_validation": {
+            "passed": true,
+            "peak_refinement_error_m": 0.00632180006612082,
+            "calibration": "simulation-only fit to nominal COR; not real measurements"
+          }
+        },
+        "launch": {
+          "requested_apex_clearance_m": 0.8243553057566914,
+          "nominal_cor": 0.8,
+          "predicted_apex_y": 0.6483790153994315,
+          "downward_speed": 1.8830061833850469,
+          "horizontal_speed": 1.6975584467298486,
+          "predicted_first_impact_seconds": 0.32049792654931347,
+          "predicted_apex_seconds": 0.7304543663318874,
+          "horizontal_retention_prior": 0.75
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 0.9733400778132805,
+          "mass_scale": 0.9709707499734517,
+          "friction_scale": 0.878371807486391,
+          "rolling_scale": 1.0,
+          "damping_scale": 1.051273011297507
+        }
+      }
+    },
+    {
+      "slot": 0,
+      "episode": 2,
+      "success": true,
+      "reason": "track_touch",
+      "steps": 24,
+      "reward": 21.760152368918572,
+      "legacy_success": true,
+      "physics": {
+        "version": "bounce_v1",
+        "object": "golf_ball",
+        "shape": "sphere",
+        "mass_kg": 0.04705735307047695,
+        "dimensions_m": [
+          0.04366804135539028,
+          0.04366804135539028,
+          0.04366804135539028
+        ],
+        "inertia": [
+          8.973356472932546e-06,
+          8.973356472932546e-06,
+          8.973356472932546e-06
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "sphere",
+          "inertia_factor": 0.4,
+          "sliding_friction": 0.22045033240000367,
+          "torsional_length_m": 0.0001,
+          "time_constant": 0.008,
+          "damping_ratio": 0.06845821665916575,
+          "normal_cor_target": 0.8,
+          "cor_basis": "Engineering prior for a resilient golf ball on a rigid floor; not a USGA specified ground COR",
+          "launch_height_m": [
+            0.9,
+            1.2
+          ],
+          "rebound_apex_m": [
+            0.65,
+            0.85
+          ],
+          "horizontal_retention_prior": 0.75,
+          "numerical_validation": {
+            "passed": true,
+            "peak_refinement_error_m": 0.00632180006612082,
+            "calibration": "simulation-only fit to nominal COR; not real measurements"
+          }
+        },
+        "launch": {
+          "requested_apex_clearance_m": 0.6517234313647243,
+          "nominal_cor": 0.8,
+          "predicted_apex_y": 0.7665357218257944,
+          "downward_speed": 0.9904544411531511,
+          "horizontal_speed": 1.2780716840001085,
+          "predicted_first_impact_seconds": 0.35467659251253714,
+          "predicted_apex_seconds": 0.7191888708979512,
+          "horizontal_retention_prior": 0.75
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.026781712933732,
+          "mass_scale": 1.0229859363147162,
+          "friction_scale": 0.8818013296000147,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9252767423709667
+        }
+      }
+    },
+    {
+      "slot": 2,
+      "episode": 2,
+      "success": true,
+      "reason": "track_touch",
+      "steps": 23,
+      "reward": 21.336022675026683,
+      "legacy_success": true,
+      "physics": {
+        "version": "bounce_v1",
+        "object": "golf_ball",
+        "shape": "sphere",
+        "mass_kg": 0.046904907345738545,
+        "dimensions_m": [
+          0.04325021814864497,
+          0.04325021814864497,
+          0.04325021814864497
+        ],
+        "inertia": [
+          8.77394458380765e-06,
+          8.77394458380765e-06,
+          8.77394458380765e-06
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "sphere",
+          "inertia_factor": 0.4,
+          "sliding_friction": 0.23264385217683195,
+          "torsional_length_m": 0.0001,
+          "time_constant": 0.008,
+          "damping_ratio": 0.07279009210475601,
+          "normal_cor_target": 0.8,
+          "cor_basis": "Engineering prior for a resilient golf ball on a rigid floor; not a USGA specified ground COR",
+          "launch_height_m": [
+            0.9,
+            1.2
+          ],
+          "rebound_apex_m": [
+            0.65,
+            0.85
+          ],
+          "horizontal_retention_prior": 0.75,
+          "numerical_validation": {
+            "passed": true,
+            "peak_refinement_error_m": 0.00632180006612082,
+            "calibration": "simulation-only fit to nominal COR; not real measurements"
+          }
+        },
+        "launch": {
+          "requested_apex_clearance_m": 0.693399558530394,
+          "nominal_cor": 0.8,
+          "predicted_apex_y": 0.749013976472971,
+          "downward_speed": 0.9904544411531511,
+          "horizontal_speed": 1.570546776536932,
+          "predicted_first_impact_seconds": 0.3690193943368876,
+          "predicted_apex_seconds": 0.7450059141817821,
+          "horizontal_retention_prior": 0.75
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0169572918099654,
+          "mass_scale": 1.0196718988204032,
+          "friction_scale": 0.9305754087073278,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9838260852585877
+        }
+      }
+    },
+    {
+      "slot": 1,
+      "episode": 2,
+      "success": true,
+      "reason": "track_touch",
+      "steps": 26,
+      "reward": 21.855580585296444,
+      "legacy_success": true,
+      "physics": {
+        "version": "bounce_v1",
+        "object": "golf_ball",
+        "shape": "sphere",
+        "mass_kg": 0.04833883155718696,
+        "dimensions_m": [
+          0.04362093054214088,
+          0.04362093054214088,
+          0.04362093054214088
+        ],
+        "inertia": [
+          9.197843170691528e-06,
+          9.197843170691528e-06,
+          9.197843170691528e-06
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "sphere",
+          "inertia_factor": 0.4,
+          "sliding_friction": 0.27805171482093943,
+          "torsional_length_m": 0.0001,
+          "time_constant": 0.008,
+          "damping_ratio": 0.0710192698366231,
+          "normal_cor_target": 0.8,
+          "cor_basis": "Engineering prior for a resilient golf ball on a rigid floor; not a USGA specified ground COR",
+          "launch_height_m": [
+            0.9,
+            1.2
+          ],
+          "rebound_apex_m": [
+            0.65,
+            0.85
+          ],
+          "horizontal_retention_prior": 0.75,
+          "numerical_validation": {
+            "passed": true,
+            "peak_refinement_error_m": 0.00632180006612082,
+            "calibration": "simulation-only fit to nominal COR; not real measurements"
+          }
+        },
+        "launch": {
+          "requested_apex_clearance_m": 0.8331881892876005,
+          "nominal_cor": 0.8,
+          "predicted_apex_y": 0.8034102837410538,
+          "downward_speed": 1.7334943838256671,
+          "horizontal_speed": 1.2646380268804251,
+          "predicted_first_impact_seconds": 0.33847676685862693,
+          "predicted_apex_seconds": 0.7506236754587328,
+          "horizontal_retention_prior": 0.75
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0256739801382022,
+          "mass_scale": 1.050844164286673,
+          "friction_scale": 1.1122068592837577,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9598917682468895
+        }
+      }
+    },
+    {
+      "slot": 3,
+      "episode": 3,
+      "success": true,
+      "reason": "track_touch",
+      "steps": 20,
+      "reward": 19.79226366770424,
+      "legacy_success": true,
+      "physics": {
+        "version": "bounce_v1",
+        "object": "golf_ball",
+        "shape": "sphere",
+        "mass_kg": 0.04466465449877877,
+        "dimensions_m": [
+          0.04139521987528064,
+          0.04139521987528064,
+          0.04139521987528064
+        ],
+        "inertia": [
+          7.653575422843857e-06,
+          7.653575422843857e-06,
+          7.653575422843857e-06
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "sphere",
+          "inertia_factor": 0.4,
+          "sliding_friction": 0.21959295187159775,
+          "torsional_length_m": 0.0001,
+          "time_constant": 0.008,
+          "damping_ratio": 0.07778027078787683,
+          "normal_cor_target": 0.8,
+          "cor_basis": "Engineering prior for a resilient golf ball on a rigid floor; not a USGA specified ground COR",
+          "launch_height_m": [
+            0.9,
+            1.2
+          ],
+          "rebound_apex_m": [
+            0.65,
+            0.85
+          ],
+          "horizontal_retention_prior": 0.75,
+          "numerical_validation": {
+            "passed": true,
+            "peak_refinement_error_m": 0.00632180006612082,
+            "calibration": "simulation-only fit to nominal COR; not real measurements"
+          }
+        },
+        "launch": {
+          "requested_apex_clearance_m": 0.7703550283370036,
+          "nominal_cor": 0.8,
+          "predicted_apex_y": 0.6030800871702108,
+          "downward_speed": 2.2216127439596933,
+          "horizontal_speed": 2.2863357181234063,
+          "predicted_first_impact_seconds": 0.2689130552885425,
+          "predicted_apex_seconds": 0.6652147732367827,
+          "horizontal_retention_prior": 0.75
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 0.9733400778132805,
+          "mass_scale": 0.9709707499734517,
+          "friction_scale": 0.878371807486391,
+          "rolling_scale": 1.0,
+          "damping_scale": 1.051273011297507
+        }
+      }
+    },
+    {
+      "slot": 2,
+      "episode": 3,
+      "success": true,
+      "reason": "track_touch",
+      "steps": 19,
+      "reward": 19.11736198042105,
+      "legacy_success": true,
+      "physics": {
+        "version": "bounce_v1",
+        "object": "golf_ball",
+        "shape": "sphere",
+        "mass_kg": 0.046904907345738545,
+        "dimensions_m": [
+          0.04325021814864497,
+          0.04325021814864497,
+          0.04325021814864497
+        ],
+        "inertia": [
+          8.77394458380765e-06,
+          8.77394458380765e-06,
+          8.77394458380765e-06
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "sphere",
+          "inertia_factor": 0.4,
+          "sliding_friction": 0.23264385217683195,
+          "torsional_length_m": 0.0001,
+          "time_constant": 0.008,
+          "damping_ratio": 0.07279009210475601,
+          "normal_cor_target": 0.8,
+          "cor_basis": "Engineering prior for a resilient golf ball on a rigid floor; not a USGA specified ground COR",
+          "launch_height_m": [
+            0.9,
+            1.2
+          ],
+          "rebound_apex_m": [
+            0.65,
+            0.85
+          ],
+          "horizontal_retention_prior": 0.75,
+          "numerical_validation": {
+            "passed": true,
+            "peak_refinement_error_m": 0.00632180006612082,
+            "calibration": "simulation-only fit to nominal COR; not real measurements"
+          }
+        },
+        "launch": {
+          "requested_apex_clearance_m": 0.699082257567465,
+          "nominal_cor": 0.8,
+          "predicted_apex_y": 0.5718527181648172,
+          "downward_speed": 1.571369114004816,
+          "horizontal_speed": 1.7177076521566896,
+          "predicted_first_impact_seconds": 0.31172473639843584,
+          "predicted_apex_seconds": 0.6892487957724194,
+          "horizontal_retention_prior": 0.75
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0169572918099654,
+          "mass_scale": 1.0196718988204032,
+          "friction_scale": 0.9305754087073278,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9838260852585877
+        }
+      }
+    },
+    {
+      "slot": 0,
+      "episode": 3,
+      "success": true,
+      "reason": "track_touch",
+      "steps": 25,
+      "reward": 22.19006869925949,
+      "legacy_success": true,
+      "physics": {
+        "version": "bounce_v1",
+        "object": "golf_ball",
+        "shape": "sphere",
+        "mass_kg": 0.04705735307047695,
+        "dimensions_m": [
+          0.04366804135539028,
+          0.04366804135539028,
+          0.04366804135539028
+        ],
+        "inertia": [
+          8.973356472932546e-06,
+          8.973356472932546e-06,
+          8.973356472932546e-06
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "sphere",
+          "inertia_factor": 0.4,
+          "sliding_friction": 0.22045033240000367,
+          "torsional_length_m": 0.0001,
+          "time_constant": 0.008,
+          "damping_ratio": 0.06845821665916575,
+          "normal_cor_target": 0.8,
+          "cor_basis": "Engineering prior for a resilient golf ball on a rigid floor; not a USGA specified ground COR",
+          "launch_height_m": [
+            0.9,
+            1.2
+          ],
+          "rebound_apex_m": [
+            0.65,
+            0.85
+          ],
+          "horizontal_retention_prior": 0.75,
+          "numerical_validation": {
+            "passed": true,
+            "peak_refinement_error_m": 0.00632180006612082,
+            "calibration": "simulation-only fit to nominal COR; not real measurements"
+          }
+        },
+        "launch": {
+          "requested_apex_clearance_m": 0.716881457101421,
+          "nominal_cor": 0.8,
+          "predicted_apex_y": 0.7810597759926691,
+          "downward_speed": 0.9904544411531511,
+          "horizontal_speed": 1.401339765077965,
+          "predicted_first_impact_seconds": 0.3769111010951062,
+          "predicted_apex_seconds": 0.7592109863465756,
+          "horizontal_retention_prior": 0.75
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.026781712933732,
+          "mass_scale": 1.0229859363147162,
+          "friction_scale": 0.8818013296000147,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9252767423709667
+        }
+      }
+    },
+    {
+      "slot": 1,
+      "episode": 3,
+      "success": true,
+      "reason": "track_touch",
+      "steps": 24,
+      "reward": 20.807845646048122,
+      "legacy_success": true,
+      "physics": {
+        "version": "bounce_v1",
+        "object": "golf_ball",
+        "shape": "sphere",
+        "mass_kg": 0.04833883155718696,
+        "dimensions_m": [
+          0.04362093054214088,
+          0.04362093054214088,
+          0.04362093054214088
+        ],
+        "inertia": [
+          9.197843170691528e-06,
+          9.197843170691528e-06,
+          9.197843170691528e-06
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "sphere",
+          "inertia_factor": 0.4,
+          "sliding_friction": 0.27805171482093943,
+          "torsional_length_m": 0.0001,
+          "time_constant": 0.008,
+          "damping_ratio": 0.0710192698366231,
+          "normal_cor_target": 0.8,
+          "cor_basis": "Engineering prior for a resilient golf ball on a rigid floor; not a USGA specified ground COR",
+          "launch_height_m": [
+            0.9,
+            1.2
+          ],
+          "rebound_apex_m": [
+            0.65,
+            0.85
+          ],
+          "horizontal_retention_prior": 0.75,
+          "numerical_validation": {
+            "passed": true,
+            "peak_refinement_error_m": 0.00632180006612082,
+            "calibration": "simulation-only fit to nominal COR; not real measurements"
+          }
+        },
+        "launch": {
+          "requested_apex_clearance_m": 0.8063673856677767,
+          "nominal_cor": 0.8,
+          "predicted_apex_y": 0.8192101518886716,
+          "downward_speed": 1.9837089817128917,
+          "horizontal_speed": 1.673329662237819,
+          "predicted_first_impact_seconds": 0.30461083647711207,
+          "predicted_apex_seconds": 0.7100698609462954,
+          "horizontal_retention_prior": 0.75
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0256739801382022,
+          "mass_scale": 1.050844164286673,
+          "friction_scale": 1.1122068592837577,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9598917682468895
+        }
+      }
+    },
+    {
+      "slot": 3,
+      "episode": 4,
+      "success": true,
+      "reason": "track_touch",
+      "steps": 23,
+      "reward": 20.39355169069174,
+      "legacy_success": true,
+      "physics": {
+        "version": "bounce_v1",
+        "object": "golf_ball",
+        "shape": "sphere",
+        "mass_kg": 0.04466465449877877,
+        "dimensions_m": [
+          0.04139521987528064,
+          0.04139521987528064,
+          0.04139521987528064
+        ],
+        "inertia": [
+          7.653575422843857e-06,
+          7.653575422843857e-06,
+          7.653575422843857e-06
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "sphere",
+          "inertia_factor": 0.4,
+          "sliding_friction": 0.21959295187159775,
+          "torsional_length_m": 0.0001,
+          "time_constant": 0.008,
+          "damping_ratio": 0.07778027078787683,
+          "normal_cor_target": 0.8,
+          "cor_basis": "Engineering prior for a resilient golf ball on a rigid floor; not a USGA specified ground COR",
+          "launch_height_m": [
+            0.9,
+            1.2
+          ],
+          "rebound_apex_m": [
+            0.65,
+            0.85
+          ],
+          "horizontal_retention_prior": 0.75,
+          "numerical_validation": {
+            "passed": true,
+            "peak_refinement_error_m": 0.00632180006612082,
+            "calibration": "simulation-only fit to nominal COR; not real measurements"
+          }
+        },
+        "launch": {
+          "requested_apex_clearance_m": 0.7869315810480457,
+          "nominal_cor": 0.8,
+          "predicted_apex_y": 0.8317522071370709,
+          "downward_speed": 2.2433947725716643,
+          "horizontal_speed": 1.2028092859412118,
+          "predicted_first_impact_seconds": 0.2719940775994636,
+          "predicted_apex_seconds": 0.6725369256176004,
+          "horizontal_retention_prior": 0.75
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 0.9733400778132805,
+          "mass_scale": 0.9709707499734517,
+          "friction_scale": 0.878371807486391,
+          "rolling_scale": 1.0,
+          "damping_scale": 1.051273011297507
+        }
+      }
+    },
+    {
+      "slot": 2,
+      "episode": 4,
+      "success": true,
+      "reason": "track_touch",
+      "steps": 24,
+      "reward": 23.06739279871523,
+      "legacy_success": true,
+      "physics": {
+        "version": "bounce_v1",
+        "object": "golf_ball",
+        "shape": "sphere",
+        "mass_kg": 0.046904907345738545,
+        "dimensions_m": [
+          0.04325021814864497,
+          0.04325021814864497,
+          0.04325021814864497
+        ],
+        "inertia": [
+          8.77394458380765e-06,
+          8.77394458380765e-06,
+          8.77394458380765e-06
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "sphere",
+          "inertia_factor": 0.4,
+          "sliding_friction": 0.23264385217683195,
+          "torsional_length_m": 0.0001,
+          "time_constant": 0.008,
+          "damping_ratio": 0.07279009210475601,
+          "normal_cor_target": 0.8,
+          "cor_basis": "Engineering prior for a resilient golf ball on a rigid floor; not a USGA specified ground COR",
+          "launch_height_m": [
+            0.9,
+            1.2
+          ],
+          "rebound_apex_m": [
+            0.65,
+            0.85
+          ],
+          "horizontal_retention_prior": 0.75,
+          "numerical_validation": {
+            "passed": true,
+            "peak_refinement_error_m": 0.00632180006612082,
+            "calibration": "simulation-only fit to nominal COR; not real measurements"
+          }
+        },
+        "launch": {
+          "requested_apex_clearance_m": 0.7725409080049175,
+          "nominal_cor": 0.8,
+          "predicted_apex_y": 0.5633413842747175,
+          "downward_speed": 1.142314679669326,
+          "horizontal_speed": 1.4357683682897884,
+          "predicted_first_impact_seconds": 0.37963556292709366,
+          "predicted_apex_seconds": 0.7764991349543405,
+          "horizontal_retention_prior": 0.75
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0169572918099654,
+          "mass_scale": 1.0196718988204032,
+          "friction_scale": 0.9305754087073278,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9838260852585877
+        }
+      }
+    },
+    {
+      "slot": 0,
+      "episode": 4,
+      "success": true,
+      "reason": "track_touch",
+      "steps": 24,
+      "reward": 20.83445652342432,
+      "legacy_success": true,
+      "physics": {
+        "version": "bounce_v1",
+        "object": "golf_ball",
+        "shape": "sphere",
+        "mass_kg": 0.04705735307047695,
+        "dimensions_m": [
+          0.04366804135539028,
+          0.04366804135539028,
+          0.04366804135539028
+        ],
+        "inertia": [
+          8.973356472932546e-06,
+          8.973356472932546e-06,
+          8.973356472932546e-06
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "sphere",
+          "inertia_factor": 0.4,
+          "sliding_friction": 0.22045033240000367,
+          "torsional_length_m": 0.0001,
+          "time_constant": 0.008,
+          "damping_ratio": 0.06845821665916575,
+          "normal_cor_target": 0.8,
+          "cor_basis": "Engineering prior for a resilient golf ball on a rigid floor; not a USGA specified ground COR",
+          "launch_height_m": [
+            0.9,
+            1.2
+          ],
+          "rebound_apex_m": [
+            0.65,
+            0.85
+          ],
+          "horizontal_retention_prior": 0.75,
+          "numerical_validation": {
+            "passed": true,
+            "peak_refinement_error_m": 0.00632180006612082,
+            "calibration": "simulation-only fit to nominal COR; not real measurements"
+          }
+        },
+        "launch": {
+          "requested_apex_clearance_m": 0.8012160192561093,
+          "nominal_cor": 0.8,
+          "predicted_apex_y": 0.8303780346762923,
+          "downward_speed": 2.5873252912008295,
+          "horizontal_speed": 1.230611313536373,
+          "predicted_first_impact_seconds": 0.24145864137275372,
+          "predicted_apex_seconds": 0.6456204813782619,
+          "horizontal_retention_prior": 0.75
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.026781712933732,
+          "mass_scale": 1.0229859363147162,
+          "friction_scale": 0.8818013296000147,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9252767423709667
+        }
+      }
+    },
+    {
+      "slot": 1,
+      "episode": 4,
+      "success": true,
+      "reason": "track_touch",
+      "steps": 24,
+      "reward": 21.29852286961576,
+      "legacy_success": true,
+      "physics": {
+        "version": "bounce_v1",
+        "object": "golf_ball",
+        "shape": "sphere",
+        "mass_kg": 0.04833883155718696,
+        "dimensions_m": [
+          0.04362093054214088,
+          0.04362093054214088,
+          0.04362093054214088
+        ],
+        "inertia": [
+          9.197843170691528e-06,
+          9.197843170691528e-06,
+          9.197843170691528e-06
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "sphere",
+          "inertia_factor": 0.4,
+          "sliding_friction": 0.27805171482093943,
+          "torsional_length_m": 0.0001,
+          "time_constant": 0.008,
+          "damping_ratio": 0.0710192698366231,
+          "normal_cor_target": 0.8,
+          "cor_basis": "Engineering prior for a resilient golf ball on a rigid floor; not a USGA specified ground COR",
+          "launch_height_m": [
+            0.9,
+            1.2
+          ],
+          "rebound_apex_m": [
+            0.65,
+            0.85
+          ],
+          "horizontal_retention_prior": 0.75,
+          "numerical_validation": {
+            "passed": true,
+            "peak_refinement_error_m": 0.00632180006612082,
+            "calibration": "simulation-only fit to nominal COR; not real measurements"
+          }
+        },
+        "launch": {
+          "requested_apex_clearance_m": 0.6834163425926124,
+          "nominal_cor": 0.8,
+          "predicted_apex_y": 0.7662449056118917,
+          "downward_speed": 0.9904544411531511,
+          "horizontal_speed": 1.3320322311630073,
+          "predicted_first_impact_seconds": 0.36562383837794976,
+          "predicted_apex_seconds": 0.738893913455694,
+          "horizontal_retention_prior": 0.75
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0256739801382022,
+          "mass_scale": 1.050844164286673,
+          "friction_scale": 1.1122068592837577,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9598917682468895
+        }
+      }
+    }
+  ],
+  "checkpoint": "/home/isee/Catch/11-6/bounce_track_best_reward_19.43.pth"
+}

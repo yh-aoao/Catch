@@ -1,0 +1,5008 @@
+{
+  "motion": "bounce",
+  "object": "golf_ball",
+  "seed": 41000,
+  "episodes": 20,
+  "successes": 9,
+  "instances": [
+    {
+      "version": "physical_dr_v1",
+      "sampling": "environment_creation",
+      "size_scale": 1.026781712933732,
+      "mass_scale": 1.0229859363147162,
+      "friction_scale": 0.8818013296000147,
+      "rolling_scale": 1.0,
+      "damping_scale": 0.9252767423709667
+    },
+    {
+      "version": "physical_dr_v1",
+      "sampling": "environment_creation",
+      "size_scale": 1.0256739801382022,
+      "mass_scale": 1.050844164286673,
+      "friction_scale": 1.1122068592837577,
+      "rolling_scale": 1.0,
+      "damping_scale": 0.9598917682468895
+    },
+    {
+      "version": "physical_dr_v1",
+      "sampling": "environment_creation",
+      "size_scale": 1.0169572918099654,
+      "mass_scale": 1.0196718988204032,
+      "friction_scale": 0.9305754087073278,
+      "rolling_scale": 1.0,
+      "damping_scale": 0.9838260852585877
+    },
+    {
+      "version": "physical_dr_v1",
+      "sampling": "environment_creation",
+      "size_scale": 0.9733400778132805,
+      "mass_scale": 0.9709707499734517,
+      "friction_scale": 0.878371807486391,
+      "rolling_scale": 1.0,
+      "damping_scale": 1.051273011297507
+    }
+  ],
+  "records": [
+    {
+      "slot": 2,
+      "episode": 0,
+      "success": true,
+      "reason": "controlled_hold",
+      "steps": 33,
+      "reward": 14.647308011834815,
+      "legacy_success": true,
+      "physics": {
+        "version": "bounce_v1",
+        "object": "golf_ball",
+        "shape": "sphere",
+        "mass_kg": 0.046904907345738545,
+        "dimensions_m": [
+          0.04325021814864497,
+          0.04325021814864497,
+          0.04325021814864497
+        ],
+        "inertia": [
+          8.77394458380765e-06,
+          8.77394458380765e-06,
+          8.77394458380765e-06
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "sphere",
+          "inertia_factor": 0.4,
+          "sliding_friction": 0.23264385217683195,
+          "torsional_length_m": 0.0001,
+          "time_constant": 0.008,
+          "damping_ratio": 0.07279009210475601,
+          "normal_cor_target": 0.8,
+          "cor_basis": "Engineering prior for a resilient golf ball on a rigid floor; not a USGA specified ground COR",
+          "launch_height_m": [
+            0.9,
+            1.2
+          ],
+          "rebound_apex_m": [
+            0.65,
+            0.85
+          ],
+          "horizontal_retention_prior": 0.75,
+          "numerical_validation": {
+            "passed": true,
+            "peak_refinement_error_m": 0.00632180006612082,
+            "calibration": "simulation-only fit to nominal COR; not real measurements"
+          }
+        },
+        "launch": {
+          "requested_apex_clearance_m": 0.7369226332485427,
+          "nominal_cor": 0.8,
+          "predicted_apex_y": 0.7977637005440875,
+          "downward_speed": 0.9904544411531511,
+          "horizontal_speed": 1.4134387637955805,
+          "predicted_first_impact_seconds": 0.3835448050845723,
+          "predicted_apex_seconds": 0.7711516535276146,
+          "horizontal_retention_prior": 0.75
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0169572918099654,
+          "mass_scale": 1.0196718988204032,
+          "friction_scale": 0.9305754087073278,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9838260852585877
+        }
+      },
+      "stable_hold": false,
+      "success_version": "bounce_controlled_hold_v1",
+      "diagnostics": {
+        "bounce_grasp_terminal": true,
+        "bounce_grasp_version": "controlled_hold_v1",
+        "bounce_grasp_reward_profile": "finger_coordination_v2",
+        "bounce_grasp_hold_seconds": 0.3299999999998259,
+        "bounce_grasp_max_hold_seconds": 0.3299999999998259,
+        "bounce_grasp_hold_reached": true,
+        "bounce_grasp_contact_fraction": 1.0,
+        "bounce_grasp_had_contact": true,
+        "bounce_grasp_hand_target_clipped": 0.8333333333333334,
+        "bounce_grasp_state": {
+          "hand_contact": true,
+          "floor_contact": false,
+          "external_support": false,
+          "off_ground": true,
+          "capture": true,
+          "contact_groups": 3,
+          "contact_span": 0.9085473790487528,
+          "relative_speed": 0.030077424100807108,
+          "palm_dot": 0.7864055322824863,
+          "distance": 0.02316618004480215,
+          "local_ball": [
+            0.013452120511386664,
+            0.016174290846385747,
+            0.06448273151902766
+          ],
+          "joint_violation": 0.0006680967555967587,
+          "target_violation": 0.0,
+          "valid_hold": true,
+          "collision": false,
+          "finger_contact_groups": 2,
+          "thumb_contact": false,
+          "finger_tip_heights": [
+            0.03599426640082348,
+            0.07107190180022653,
+            0.025328227070407938
+          ]
+        },
+        "bounce_grasp_joint_violation": 0.0006732125511131892,
+        "bounce_grasp_target_violation": 0.0,
+        "bounce_grasp_finger_posture": {
+          "backfold": 0.0,
+          "prepare_sync": 0.27340174960065067,
+          "near": 0.9835724804127461,
+          "contact_fraction": 1.0
+        },
+        "bounce_grasp_reward_terms": {
+          "shaping": -20.30963344299566,
+          "step_cost": -0.01,
+          "hand_action": -0.019999999105930335,
+          "hand_smooth": -0.0,
+          "joint_limit": -0.00014162973093010263,
+          "robot_control": -0.0770634937286377,
+          "arm_limit": -0.3,
+          "collision": 0.0,
+          "success": 25.0,
+          "failure": 0.0,
+          "finger_backfold": -0.0,
+          "finger_prepare_sync": -0.0
+        },
+        "bounce_grasp_potential_terms": {
+          "position": 1.991276228630214,
+          "precision": 3.934823785532147,
+          "palm": 0.7847051226322936,
+          "velocity": 0.9811070362636359,
+          "ready": 0.0,
+          "contact": 2.0,
+          "wrap": 1.8968427467394793,
+          "hold": 8.0,
+          "finger_coverage": 1.0,
+          "thumb_opposition": 0.0
+        },
+        "bounce_grasp_potential_previous": 20.30963344299566,
+        "bounce_grasp_potential": 0.0,
+        "bounce_grasp_episode": {
+          "version": "controlled_hold_v1",
+          "reward_profile": "finger_coordination_v2",
+          "episode": 1,
+          "success": true,
+          "reason": "controlled_hold",
+          "physics": {
+            "version": "bounce_v1",
+            "object": "golf_ball",
+            "shape": "sphere",
+            "mass_kg": 0.046904907345738545,
+            "dimensions_m": [
+              0.04325021814864497,
+              0.04325021814864497,
+              0.04325021814864497
+            ],
+            "inertia": [
+              8.77394458380765e-06,
+              8.77394458380765e-06,
+              8.77394458380765e-06
+            ],
+            "inertia_basis": "structural analytical approximation",
+            "surface_id": "generic_dry_rigid_surface_prior_v1",
+            "material": {
+              "kind": "sphere",
+              "inertia_factor": 0.4,
+              "sliding_friction": 0.23264385217683195,
+              "torsional_length_m": 0.0001,
+              "time_constant": 0.008,
+              "damping_ratio": 0.07279009210475601,
+              "normal_cor_target": 0.8,
+              "cor_basis": "Engineering prior for a resilient golf ball on a rigid floor; not a USGA specified ground COR",
+              "launch_height_m": [
+                0.9,
+                1.2
+              ],
+              "rebound_apex_m": [
+                0.65,
+                0.85
+              ],
+              "horizontal_retention_prior": 0.75,
+              "numerical_validation": {
+                "passed": true,
+                "peak_refinement_error_m": 0.00632180006612082,
+                "calibration": "simulation-only fit to nominal COR; not real measurements"
+              }
+            },
+            "launch": {
+              "requested_apex_clearance_m": 0.7369226332485427,
+              "nominal_cor": 0.8,
+              "predicted_apex_y": 0.7977637005440875,
+              "downward_speed": 0.9904544411531511,
+              "horizontal_speed": 1.4134387637955805,
+              "predicted_first_impact_seconds": 0.3835448050845723,
+              "predicted_apex_seconds": 0.7711516535276146,
+              "horizontal_retention_prior": 0.75
+            },
+            "sampling": "fixed_object_per_environment",
+            "status": "simulation_priors_not_specimen_measurements",
+            "randomization": {
+              "version": "physical_dr_v1",
+              "sampling": "environment_creation",
+              "size_scale": 1.0169572918099654,
+              "mass_scale": 1.0196718988204032,
+              "friction_scale": 0.9305754087073278,
+              "rolling_scale": 1.0,
+              "damping_scale": 0.9838260852585877
+            }
+          },
+          "policy_steps": 33,
+          "control_ticks": 660,
+          "max_hold_seconds": 0.3299999999998259,
+          "sums": {
+            "shaping": -1.9713536751152532,
+            "step_cost": -0.3300000000000001,
+            "hand_action": -0.6580571134450846,
+            "hand_smooth": -0.14417684203598283,
+            "joint_limit": -0.6356153332842043,
+            "robot_control": -2.6651057267189033,
+            "arm_limit": -3.899999999999999,
+            "collision": 0.0,
+            "success": 25.0,
+            "failure": 0.0,
+            "finger_backfold": -5.256659234955554e-21,
+            "finger_prepare_sync": -0.04838329756575627
+          },
+          "potential_score_sums": {
+            "position": 38.57481408992767,
+            "precision": 59.019671563421454,
+            "palm": 10.879719436258934,
+            "velocity": 9.443141925947101,
+            "ready": 0.024519553080332303,
+            "contact": 18.9,
+            "wrap": 14.539078858366484,
+            "hold": 39.99999999998414,
+            "finger_coverage": 8.05,
+            "thumb_opposition": 0.0
+          }
+        }
+      }
+    },
+    {
+      "slot": 1,
+      "episode": 0,
+      "success": true,
+      "reason": "controlled_hold",
+      "steps": 38,
+      "reward": 11.993495488937652,
+      "legacy_success": true,
+      "physics": {
+        "version": "bounce_v1",
+        "object": "golf_ball",
+        "shape": "sphere",
+        "mass_kg": 0.04833883155718696,
+        "dimensions_m": [
+          0.04362093054214088,
+          0.04362093054214088,
+          0.04362093054214088
+        ],
+        "inertia": [
+          9.197843170691528e-06,
+          9.197843170691528e-06,
+          9.197843170691528e-06
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "sphere",
+          "inertia_factor": 0.4,
+          "sliding_friction": 0.27805171482093943,
+          "torsional_length_m": 0.0001,
+          "time_constant": 0.008,
+          "damping_ratio": 0.0710192698366231,
+          "normal_cor_target": 0.8,
+          "cor_basis": "Engineering prior for a resilient golf ball on a rigid floor; not a USGA specified ground COR",
+          "launch_height_m": [
+            0.9,
+            1.2
+          ],
+          "rebound_apex_m": [
+            0.65,
+            0.85
+          ],
+          "horizontal_retention_prior": 0.75,
+          "numerical_validation": {
+            "passed": true,
+            "peak_refinement_error_m": 0.00632180006612082,
+            "calibration": "simulation-only fit to nominal COR; not real measurements"
+          }
+        },
+        "launch": {
+          "requested_apex_clearance_m": 0.6632689999005469,
+          "nominal_cor": 0.8,
+          "predicted_apex_y": 0.6222043738851675,
+          "downward_speed": 1.0349299543334411,
+          "horizontal_speed": 1.8370785568036694,
+          "predicted_first_impact_seconds": 0.3541611180997439,
+          "predicted_apex_seconds": 0.7218879701194731,
+          "horizontal_retention_prior": 0.75
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0256739801382022,
+          "mass_scale": 1.050844164286673,
+          "friction_scale": 1.1122068592837577,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9598917682468895
+        }
+      },
+      "stable_hold": false,
+      "success_version": "bounce_controlled_hold_v1",
+      "diagnostics": {
+        "bounce_grasp_terminal": true,
+        "bounce_grasp_version": "controlled_hold_v1",
+        "bounce_grasp_reward_profile": "finger_coordination_v2",
+        "bounce_grasp_hold_seconds": 0.3059999999998304,
+        "bounce_grasp_max_hold_seconds": 0.3059999999998304,
+        "bounce_grasp_hold_reached": true,
+        "bounce_grasp_contact_fraction": 1.0,
+        "bounce_grasp_had_contact": true,
+        "bounce_grasp_hand_target_clipped": 0.5833333333333334,
+        "bounce_grasp_state": {
+          "hand_contact": true,
+          "floor_contact": false,
+          "external_support": false,
+          "off_ground": true,
+          "capture": true,
+          "contact_groups": 3,
+          "contact_span": 0.936022946307938,
+          "relative_speed": 0.024649549486329095,
+          "palm_dot": 0.554615697376426,
+          "distance": 0.04005351549228468,
+          "local_ball": [
+            0.013133402125501695,
+            -0.002816505176382971,
+            0.06450287659524188
+          ],
+          "joint_violation": 0.0007764729164594364,
+          "target_violation": 0.0,
+          "valid_hold": true,
+          "collision": false,
+          "finger_contact_groups": 2,
+          "thumb_contact": false,
+          "finger_tip_heights": [
+            0.026705184278152473,
+            0.04758077023401244,
+            0.025149998151692415
+          ]
+        },
+        "bounce_grasp_joint_violation": 0.0008574826301228633,
+        "bounce_grasp_target_violation": 0.0,
+        "bounce_grasp_finger_posture": {
+          "backfold": 0.0,
+          "prepare_sync": 0.19848133433580223,
+          "near": 0.9516909383785334,
+          "contact_fraction": 1.0
+        },
+        "bounce_grasp_reward_terms": {
+          "shaping": -19.313257183728737,
+          "step_cost": -0.01,
+          "hand_action": -0.0199999987954895,
+          "hand_smooth": -2.168404344971009e-17,
+          "joint_limit": -0.00022977389405075724,
+          "robot_control": -0.08623542308807373,
+          "arm_limit": -0.3,
+          "collision": 0.0,
+          "success": 25.0,
+          "failure": 0.0,
+          "finger_backfold": -0.0,
+          "finger_prepare_sync": -0.0
+        },
+        "bounce_grasp_potential_terms": {
+          "position": 1.9741461930201305,
+          "precision": 3.8112844724602875,
+          "palm": 0.5750187946868813,
+          "velocity": 0.9500874012107944,
+          "ready": 0.0,
+          "contact": 2.0,
+          "wrap": 1.9360472802886324,
+          "hold": 8.0,
+          "finger_coverage": 1.0,
+          "thumb_opposition": 0.0
+        },
+        "bounce_grasp_potential_previous": 19.313257183728737,
+        "bounce_grasp_potential": 0.0,
+        "bounce_grasp_episode": {
+          "version": "controlled_hold_v1",
+          "reward_profile": "finger_coordination_v2",
+          "episode": 1,
+          "success": true,
+          "reason": "controlled_hold",
+          "physics": {
+            "version": "bounce_v1",
+            "object": "golf_ball",
+            "shape": "sphere",
+            "mass_kg": 0.04833883155718696,
+            "dimensions_m": [
+              0.04362093054214088,
+              0.04362093054214088,
+              0.04362093054214088
+            ],
+            "inertia": [
+              9.197843170691528e-06,
+              9.197843170691528e-06,
+              9.197843170691528e-06
+            ],
+            "inertia_basis": "structural analytical approximation",
+            "surface_id": "generic_dry_rigid_surface_prior_v1",
+            "material": {
+              "kind": "sphere",
+              "inertia_factor": 0.4,
+              "sliding_friction": 0.27805171482093943,
+              "torsional_length_m": 0.0001,
+              "time_constant": 0.008,
+              "damping_ratio": 0.0710192698366231,
+              "normal_cor_target": 0.8,
+              "cor_basis": "Engineering prior for a resilient golf ball on a rigid floor; not a USGA specified ground COR",
+              "launch_height_m": [
+                0.9,
+                1.2
+              ],
+              "rebound_apex_m": [
+                0.65,
+                0.85
+              ],
+              "horizontal_retention_prior": 0.75,
+              "numerical_validation": {
+                "passed": true,
+                "peak_refinement_error_m": 0.00632180006612082,
+                "calibration": "simulation-only fit to nominal COR; not real measurements"
+              }
+            },
+            "launch": {
+              "requested_apex_clearance_m": 0.6632689999005469,
+              "nominal_cor": 0.8,
+              "predicted_apex_y": 0.6222043738851675,
+              "downward_speed": 1.0349299543334411,
+              "horizontal_speed": 1.8370785568036694,
+              "predicted_first_impact_seconds": 0.3541611180997439,
+              "predicted_apex_seconds": 0.7218879701194731,
+              "horizontal_retention_prior": 0.75
+            },
+            "sampling": "fixed_object_per_environment",
+            "status": "simulation_priors_not_specimen_measurements",
+            "randomization": {
+              "version": "physical_dr_v1",
+              "sampling": "environment_creation",
+              "size_scale": 1.0256739801382022,
+              "mass_scale": 1.050844164286673,
+              "friction_scale": 1.1122068592837577,
+              "rolling_scale": 1.0,
+              "damping_scale": 0.9598917682468895
+            }
+          },
+          "policy_steps": 38,
+          "control_ticks": 760,
+          "max_hold_seconds": 0.3059999999998304,
+          "sums": {
+            "shaping": -2.733593210450916,
+            "step_cost": -0.38000000000000017,
+            "hand_action": -0.7538241404886326,
+            "hand_smooth": -0.1833047709362846,
+            "joint_limit": -1.006422211744028,
+            "robot_control": -3.073620667457581,
+            "arm_limit": -4.799999999999999,
+            "collision": 0.0,
+            "success": 25.0,
+            "failure": 0.0,
+            "finger_backfold": -7.022628666435628e-23,
+            "finger_prepare_sync": -0.0757395099849021
+          },
+          "potential_score_sums": {
+            "position": 52.97857299405311,
+            "precision": 87.02127028354622,
+            "palm": 13.8230393696713,
+            "velocity": 14.036254686513995,
+            "ready": 0.05888628737427813,
+            "contact": 31.6,
+            "wrap": 22.952044033468713,
+            "hold": 38.879999999982886,
+            "finger_coverage": 13.925,
+            "thumb_opposition": 0.0
+          }
+        }
+      }
+    },
+    {
+      "slot": 0,
+      "episode": 0,
+      "success": false,
+      "reason": "out_of_bounds",
+      "steps": 55,
+      "reward": -39.942239151626424,
+      "legacy_success": false,
+      "physics": {
+        "version": "bounce_v1",
+        "object": "golf_ball",
+        "shape": "sphere",
+        "mass_kg": 0.04705735307047695,
+        "dimensions_m": [
+          0.04366804135539028,
+          0.04366804135539028,
+          0.04366804135539028
+        ],
+        "inertia": [
+          8.973356472932546e-06,
+          8.973356472932546e-06,
+          8.973356472932546e-06
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "sphere",
+          "inertia_factor": 0.4,
+          "sliding_friction": 0.22045033240000367,
+          "torsional_length_m": 0.0001,
+          "time_constant": 0.008,
+          "damping_ratio": 0.06845821665916575,
+          "normal_cor_target": 0.8,
+          "cor_basis": "Engineering prior for a resilient golf ball on a rigid floor; not a USGA specified ground COR",
+          "launch_height_m": [
+            0.9,
+            1.2
+          ],
+          "rebound_apex_m": [
+            0.65,
+            0.85
+          ],
+          "horizontal_retention_prior": 0.75,
+          "numerical_validation": {
+            "passed": true,
+            "peak_refinement_error_m": 0.00632180006612082,
+            "calibration": "simulation-only fit to nominal COR; not real measurements"
+          }
+        },
+        "launch": {
+          "requested_apex_clearance_m": 0.7500048510114236,
+          "nominal_cor": 0.8,
+          "predicted_apex_y": 0.5896240079298722,
+          "downward_speed": 1.472980020086216,
+          "horizontal_speed": 1.9092193153880188,
+          "predicted_first_impact_seconds": 0.33863939161204726,
+          "predicted_apex_seconds": 0.7296715997099392,
+          "horizontal_retention_prior": 0.75
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.026781712933732,
+          "mass_scale": 1.0229859363147162,
+          "friction_scale": 0.8818013296000147,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9252767423709667
+        }
+      },
+      "stable_hold": false,
+      "success_version": "bounce_controlled_hold_v1",
+      "diagnostics": {
+        "bounce_grasp_terminal": true,
+        "bounce_grasp_version": "controlled_hold_v1",
+        "bounce_grasp_reward_profile": "finger_coordination_v2",
+        "bounce_grasp_hold_seconds": 0.0,
+        "bounce_grasp_max_hold_seconds": 0.0,
+        "bounce_grasp_hold_reached": false,
+        "bounce_grasp_contact_fraction": 0.0,
+        "bounce_grasp_had_contact": true,
+        "bounce_grasp_hand_target_clipped": 0.4166666666666667,
+        "bounce_grasp_state": {
+          "hand_contact": false,
+          "floor_contact": false,
+          "external_support": false,
+          "off_ground": true,
+          "capture": false,
+          "contact_groups": 0,
+          "contact_span": 0.0,
+          "relative_speed": 0.6390455180245329,
+          "palm_dot": -0.5888777709949994,
+          "distance": 0.32744159223975716,
+          "local_ball": [
+            0.21276264557108493,
+            -0.10713956619291183,
+            -0.13848532911715694
+          ],
+          "joint_violation": 2.1108411271078542e-05,
+          "target_violation": 0.0,
+          "valid_hold": false,
+          "collision": false,
+          "finger_contact_groups": 0,
+          "thumb_contact": false,
+          "finger_tip_heights": [
+            0.04011227849084441,
+            0.1008581394592012,
+            0.02888084567421996
+          ]
+        },
+        "bounce_grasp_joint_violation": 3.5359161101073885e-05,
+        "bounce_grasp_target_violation": 0.0,
+        "bounce_grasp_finger_posture": {
+          "backfold": 0.0,
+          "prepare_sync": 0.3333333333333333,
+          "near": 0.036545492757948585,
+          "contact_fraction": 0.0
+        },
+        "bounce_grasp_reward_terms": {
+          "shaping": -2.0091597504338505,
+          "step_cost": -0.01,
+          "hand_action": -0.019999507394941166,
+          "hand_smooth": -1.8900636264418402e-11,
+          "joint_limit": -3.907094605536552e-07,
+          "robot_control": -0.0897550916671753,
+          "arm_limit": -0.3,
+          "collision": 0.0,
+          "success": 0.0,
+          "failure": -25.0,
+          "finger_backfold": -0.0,
+          "finger_prepare_sync": -0.0006090915459658098
+        },
+        "bounce_grasp_potential_terms": {
+          "position": 1.066525060795144,
+          "precision": 0.9282470985693274,
+          "palm": 0.001544243383937237,
+          "velocity": 0.017122246198496314,
+          "ready": 2.5702161282192515e-05,
+          "contact": 0.0,
+          "wrap": 0.0,
+          "hold": 0.0,
+          "finger_coverage": 0.0,
+          "thumb_opposition": 0.0
+        },
+        "bounce_grasp_potential_previous": 2.0091597504338505,
+        "bounce_grasp_potential": 0.0,
+        "bounce_grasp_episode": {
+          "version": "controlled_hold_v1",
+          "reward_profile": "finger_coordination_v2",
+          "episode": 1,
+          "success": false,
+          "reason": "out_of_bounds",
+          "physics": {
+            "version": "bounce_v1",
+            "object": "golf_ball",
+            "shape": "sphere",
+            "mass_kg": 0.04705735307047695,
+            "dimensions_m": [
+              0.04366804135539028,
+              0.04366804135539028,
+              0.04366804135539028
+            ],
+            "inertia": [
+              8.973356472932546e-06,
+              8.973356472932546e-06,
+              8.973356472932546e-06
+            ],
+            "inertia_basis": "structural analytical approximation",
+            "surface_id": "generic_dry_rigid_surface_prior_v1",
+            "material": {
+              "kind": "sphere",
+              "inertia_factor": 0.4,
+              "sliding_friction": 0.22045033240000367,
+              "torsional_length_m": 0.0001,
+              "time_constant": 0.008,
+              "damping_ratio": 0.06845821665916575,
+              "normal_cor_target": 0.8,
+              "cor_basis": "Engineering prior for a resilient golf ball on a rigid floor; not a USGA specified ground COR",
+              "launch_height_m": [
+                0.9,
+                1.2
+              ],
+              "rebound_apex_m": [
+                0.65,
+                0.85
+              ],
+              "horizontal_retention_prior": 0.75,
+              "numerical_validation": {
+                "passed": true,
+                "peak_refinement_error_m": 0.00632180006612082,
+                "calibration": "simulation-only fit to nominal COR; not real measurements"
+              }
+            },
+            "launch": {
+              "requested_apex_clearance_m": 0.7500048510114236,
+              "nominal_cor": 0.8,
+              "predicted_apex_y": 0.5896240079298722,
+              "downward_speed": 1.472980020086216,
+              "horizontal_speed": 1.9092193153880188,
+              "predicted_first_impact_seconds": 0.33863939161204726,
+              "predicted_apex_seconds": 0.7296715997099392,
+              "horizontal_retention_prior": 0.75
+            },
+            "sampling": "fixed_object_per_environment",
+            "status": "simulation_priors_not_specimen_measurements",
+            "randomization": {
+              "version": "physical_dr_v1",
+              "sampling": "environment_creation",
+              "size_scale": 1.026781712933732,
+              "mass_scale": 1.0229859363147162,
+              "friction_scale": 0.8818013296000147,
+              "rolling_scale": 1.0,
+              "damping_scale": 0.9252767423709667
+            }
+          },
+          "policy_steps": 55,
+          "control_ticks": 1085,
+          "max_hold_seconds": 0.0,
+          "sums": {
+            "shaping": -1.5530342619281625,
+            "step_cost": -0.5500000000000003,
+            "hand_action": -1.0954869890887327,
+            "hand_smooth": -0.2831182845249984,
+            "joint_limit": -3.0726971752474292,
+            "robot_control": -4.612056304812433,
+            "arm_limit": -3.599999999999999,
+            "collision": 0.0,
+            "success": 0.0,
+            "failure": -25.0,
+            "finger_backfold": -3.8604813976909844e-21,
+            "finger_prepare_sync": -0.17584613602467256
+          },
+          "potential_score_sums": {
+            "position": 62.80208394722544,
+            "precision": 70.34367634933973,
+            "palm": 2.832481099278569,
+            "velocity": 2.6061938447021205,
+            "ready": 0.05472433302121015,
+            "contact": 1.2000000000000002,
+            "wrap": 0.0,
+            "hold": 0.0,
+            "finger_coverage": 0.0,
+            "thumb_opposition": 0.0
+          }
+        }
+      }
+    },
+    {
+      "slot": 1,
+      "episode": 1,
+      "success": false,
+      "reason": "out_of_bounds",
+      "steps": 25,
+      "reward": -30.02803484510759,
+      "legacy_success": false,
+      "physics": {
+        "version": "bounce_v1",
+        "object": "golf_ball",
+        "shape": "sphere",
+        "mass_kg": 0.04833883155718696,
+        "dimensions_m": [
+          0.04362093054214088,
+          0.04362093054214088,
+          0.04362093054214088
+        ],
+        "inertia": [
+          9.197843170691528e-06,
+          9.197843170691528e-06,
+          9.197843170691528e-06
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "sphere",
+          "inertia_factor": 0.4,
+          "sliding_friction": 0.27805171482093943,
+          "torsional_length_m": 0.0001,
+          "time_constant": 0.008,
+          "damping_ratio": 0.0710192698366231,
+          "normal_cor_target": 0.8,
+          "cor_basis": "Engineering prior for a resilient golf ball on a rigid floor; not a USGA specified ground COR",
+          "launch_height_m": [
+            0.9,
+            1.2
+          ],
+          "rebound_apex_m": [
+            0.65,
+            0.85
+          ],
+          "horizontal_retention_prior": 0.75,
+          "numerical_validation": {
+            "passed": true,
+            "peak_refinement_error_m": 0.00632180006612082,
+            "calibration": "simulation-only fit to nominal COR; not real measurements"
+          }
+        },
+        "launch": {
+          "requested_apex_clearance_m": 0.7754200046332076,
+          "nominal_cor": 0.8,
+          "predicted_apex_y": 0.6797886200733962,
+          "downward_speed": 2.4391987030844784,
+          "horizontal_speed": 1.985427687817696,
+          "predicted_first_impact_seconds": 0.2483588886555507,
+          "predicted_apex_seconds": 0.6459612862739345,
+          "horizontal_retention_prior": 0.75
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0256739801382022,
+          "mass_scale": 1.050844164286673,
+          "friction_scale": 1.1122068592837577,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9598917682468895
+        }
+      },
+      "stable_hold": false,
+      "success_version": "bounce_controlled_hold_v1",
+      "diagnostics": {
+        "bounce_grasp_terminal": true,
+        "bounce_grasp_version": "controlled_hold_v1",
+        "bounce_grasp_reward_profile": "finger_coordination_v2",
+        "bounce_grasp_hold_seconds": 0.0,
+        "bounce_grasp_max_hold_seconds": 0.0,
+        "bounce_grasp_hold_reached": false,
+        "bounce_grasp_contact_fraction": 0.0,
+        "bounce_grasp_had_contact": true,
+        "bounce_grasp_hand_target_clipped": 0.4166666666666667,
+        "bounce_grasp_state": {
+          "hand_contact": false,
+          "floor_contact": false,
+          "external_support": false,
+          "off_ground": true,
+          "capture": false,
+          "contact_groups": 0,
+          "contact_span": 0.0,
+          "relative_speed": 2.3772078504982153,
+          "palm_dot": -0.7182450039350403,
+          "distance": 0.3035034044802741,
+          "local_ball": [
+            0.10378499128685911,
+            -0.14131533835803312,
+            -0.1583677976680372
+          ],
+          "joint_violation": 0.0019264961619249732,
+          "target_violation": 0.0,
+          "valid_hold": false,
+          "collision": false,
+          "finger_contact_groups": 0,
+          "thumb_contact": false,
+          "finger_tip_heights": [
+            0.04605875385707719,
+            0.11018532947748311,
+            0.043001787117890156
+          ]
+        },
+        "bounce_grasp_joint_violation": 0.0031518332896791623,
+        "bounce_grasp_target_violation": 0.0,
+        "bounce_grasp_finger_posture": {
+          "backfold": 0.0,
+          "prepare_sync": 0.29256230516366866,
+          "near": 0.05824864428776599,
+          "contact_fraction": 0.0
+        },
+        "bounce_grasp_reward_terms": {
+          "shaping": -2.28032528547355,
+          "step_cost": -0.01,
+          "hand_action": -0.01988048915769587,
+          "hand_smooth": -0.02980716200166676,
+          "joint_limit": -0.003104391589353053,
+          "robot_control": -0.07996323347091674,
+          "arm_limit": 0.0,
+          "collision": 0.0,
+          "success": 0.0,
+          "failure": -25.0,
+          "finger_backfold": -0.0,
+          "finger_prepare_sync": -0.000852067882274369
+        },
+        "bounce_grasp_potential_terms": {
+          "position": 1.141582742288665,
+          "precision": 1.040844166442597,
+          "palm": 0.001156029939471234,
+          "velocity": 0.0034884550358690986,
+          "ready": 6.205800895555229e-05,
+          "contact": 0.0,
+          "wrap": 0.0,
+          "hold": 0.0,
+          "finger_coverage": 0.0,
+          "thumb_opposition": 0.0
+        },
+        "bounce_grasp_potential_previous": 2.28032528547355,
+        "bounce_grasp_potential": 0.0,
+        "bounce_grasp_episode": {
+          "version": "controlled_hold_v1",
+          "reward_profile": "finger_coordination_v2",
+          "episode": 2,
+          "success": false,
+          "reason": "out_of_bounds",
+          "physics": {
+            "version": "bounce_v1",
+            "object": "golf_ball",
+            "shape": "sphere",
+            "mass_kg": 0.04833883155718696,
+            "dimensions_m": [
+              0.04362093054214088,
+              0.04362093054214088,
+              0.04362093054214088
+            ],
+            "inertia": [
+              9.197843170691528e-06,
+              9.197843170691528e-06,
+              9.197843170691528e-06
+            ],
+            "inertia_basis": "structural analytical approximation",
+            "surface_id": "generic_dry_rigid_surface_prior_v1",
+            "material": {
+              "kind": "sphere",
+              "inertia_factor": 0.4,
+              "sliding_friction": 0.27805171482093943,
+              "torsional_length_m": 0.0001,
+              "time_constant": 0.008,
+              "damping_ratio": 0.0710192698366231,
+              "normal_cor_target": 0.8,
+              "cor_basis": "Engineering prior for a resilient golf ball on a rigid floor; not a USGA specified ground COR",
+              "launch_height_m": [
+                0.9,
+                1.2
+              ],
+              "rebound_apex_m": [
+                0.65,
+                0.85
+              ],
+              "horizontal_retention_prior": 0.75,
+              "numerical_validation": {
+                "passed": true,
+                "peak_refinement_error_m": 0.00632180006612082,
+                "calibration": "simulation-only fit to nominal COR; not real measurements"
+              }
+            },
+            "launch": {
+              "requested_apex_clearance_m": 0.7754200046332076,
+              "nominal_cor": 0.8,
+              "predicted_apex_y": 0.6797886200733962,
+              "downward_speed": 2.4391987030844784,
+              "horizontal_speed": 1.985427687817696,
+              "predicted_first_impact_seconds": 0.2483588886555507,
+              "predicted_apex_seconds": 0.6459612862739345,
+              "horizontal_retention_prior": 0.75
+            },
+            "sampling": "fixed_object_per_environment",
+            "status": "simulation_priors_not_specimen_measurements",
+            "randomization": {
+              "version": "physical_dr_v1",
+              "sampling": "environment_creation",
+              "size_scale": 1.0256739801382022,
+              "mass_scale": 1.050844164286673,
+              "friction_scale": 1.1122068592837577,
+              "rolling_scale": 1.0,
+              "damping_scale": 0.9598917682468895
+            }
+          },
+          "policy_steps": 25,
+          "control_ticks": 483,
+          "max_hold_seconds": 0.0,
+          "sums": {
+            "shaping": -0.7351853727832713,
+            "step_cost": -0.25000000000000006,
+            "hand_action": -0.4984352192322444,
+            "hand_smooth": -0.14000949746654492,
+            "joint_limit": -0.9405461079197835,
+            "robot_control": -2.1043714725971223,
+            "arm_limit": -0.3,
+            "collision": 0.0,
+            "success": 0.0,
+            "failure": -25.0,
+            "finger_backfold": 0.0,
+            "finger_prepare_sync": -0.05948717510862481
+          },
+          "potential_score_sums": {
+            "position": 25.03907702614067,
+            "precision": 28.057086331400168,
+            "palm": 2.0508010872781965,
+            "velocity": 0.6947239944625798,
+            "ready": 0.07035560734851878,
+            "contact": 0.6,
+            "wrap": 0.0,
+            "hold": 0.0,
+            "finger_coverage": 0.0,
+            "thumb_opposition": 0.0
+          }
+        }
+      }
+    },
+    {
+      "slot": 3,
+      "episode": 0,
+      "success": false,
+      "reason": "timeout",
+      "steps": 63,
+      "reward": -43.31382502845101,
+      "legacy_success": false,
+      "physics": {
+        "version": "bounce_v1",
+        "object": "golf_ball",
+        "shape": "sphere",
+        "mass_kg": 0.04466465449877877,
+        "dimensions_m": [
+          0.04139521987528064,
+          0.04139521987528064,
+          0.04139521987528064
+        ],
+        "inertia": [
+          7.653575422843857e-06,
+          7.653575422843857e-06,
+          7.653575422843857e-06
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "sphere",
+          "inertia_factor": 0.4,
+          "sliding_friction": 0.21959295187159775,
+          "torsional_length_m": 0.0001,
+          "time_constant": 0.008,
+          "damping_ratio": 0.07778027078787683,
+          "normal_cor_target": 0.8,
+          "cor_basis": "Engineering prior for a resilient golf ball on a rigid floor; not a USGA specified ground COR",
+          "launch_height_m": [
+            0.9,
+            1.2
+          ],
+          "rebound_apex_m": [
+            0.65,
+            0.85
+          ],
+          "horizontal_retention_prior": 0.75,
+          "numerical_validation": {
+            "passed": true,
+            "peak_refinement_error_m": 0.00632180006612082,
+            "calibration": "simulation-only fit to nominal COR; not real measurements"
+          }
+        },
+        "launch": {
+          "requested_apex_clearance_m": 0.6787191965159639,
+          "nominal_cor": 0.8,
+          "predicted_apex_y": 0.594686874896128,
+          "downward_speed": 1.148430168407062,
+          "horizontal_speed": 2.065779561348259,
+          "predicted_first_impact_seconds": 0.3479140967738773,
+          "predicted_apex_seconds": 0.7198992105564501,
+          "horizontal_retention_prior": 0.75
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 0.9733400778132805,
+          "mass_scale": 0.9709707499734517,
+          "friction_scale": 0.878371807486391,
+          "rolling_scale": 1.0,
+          "damping_scale": 1.051273011297507
+        }
+      },
+      "stable_hold": false,
+      "success_version": "bounce_controlled_hold_v1",
+      "diagnostics": {
+        "bounce_grasp_terminal": true,
+        "bounce_grasp_version": "controlled_hold_v1",
+        "bounce_grasp_reward_profile": "finger_coordination_v2",
+        "bounce_grasp_hold_seconds": 0.0,
+        "bounce_grasp_max_hold_seconds": 0.0,
+        "bounce_grasp_hold_reached": false,
+        "bounce_grasp_contact_fraction": 0.0,
+        "bounce_grasp_had_contact": true,
+        "bounce_grasp_hand_target_clipped": 0.6666666666666666,
+        "bounce_grasp_state": {
+          "hand_contact": false,
+          "floor_contact": false,
+          "external_support": false,
+          "off_ground": false,
+          "capture": false,
+          "contact_groups": 0,
+          "contact_span": 0.0,
+          "relative_speed": 2.323338179369038,
+          "palm_dot": 0.10508275875147359,
+          "distance": 1.4796447975163218,
+          "local_ball": [
+            -1.3086621999360775,
+            0.7120493782714368,
+            0.20018234213224972
+          ],
+          "joint_violation": 0.0007993843081179897,
+          "target_violation": 0.0,
+          "valid_hold": false,
+          "collision": false,
+          "finger_contact_groups": 0,
+          "thumb_contact": false,
+          "finger_tip_heights": [
+            0.03706761694675571,
+            0.019558268539587774,
+            0.06284987350536178
+          ]
+        },
+        "bounce_grasp_joint_violation": 0.0008184315375028284,
+        "bounce_grasp_target_violation": 0.0,
+        "bounce_grasp_finger_posture": {
+          "backfold": 0.0,
+          "prepare_sync": 0.2222222222222222,
+          "near": 4.5044293892838326e-30,
+          "contact_fraction": 0.0
+        },
+        "bounce_grasp_reward_terms": {
+          "shaping": -0.18615732194500673,
+          "step_cost": -0.01,
+          "hand_action": -0.019999999105930335,
+          "hand_smooth": -0.0,
+          "joint_limit": -0.0002093219317435136,
+          "robot_control": -0.09141620159149169,
+          "arm_limit": -0.3,
+          "collision": 0.0,
+          "success": 0.0,
+          "failure": -25.0,
+          "finger_backfold": -0.0,
+          "finger_prepare_sync": -5.004921543648703e-32
+        },
+        "bounce_grasp_potential_terms": {
+          "position": 0.10597579208277545,
+          "precision": 0.0583324290617082,
+          "palm": 1.3752111929514722e-30,
+          "velocity": 2.816294997934038e-31,
+          "ready": 7.03118241795549e-34,
+          "contact": 0.0,
+          "wrap": 0.0,
+          "hold": 0.0,
+          "finger_coverage": 0.0,
+          "thumb_opposition": 0.0
+        },
+        "bounce_grasp_potential_previous": 0.18615732194500673,
+        "bounce_grasp_potential": 0.0,
+        "bounce_grasp_episode": {
+          "version": "controlled_hold_v1",
+          "reward_profile": "finger_coordination_v2",
+          "episode": 1,
+          "success": false,
+          "reason": "timeout",
+          "physics": {
+            "version": "bounce_v1",
+            "object": "golf_ball",
+            "shape": "sphere",
+            "mass_kg": 0.04466465449877877,
+            "dimensions_m": [
+              0.04139521987528064,
+              0.04139521987528064,
+              0.04139521987528064
+            ],
+            "inertia": [
+              7.653575422843857e-06,
+              7.653575422843857e-06,
+              7.653575422843857e-06
+            ],
+            "inertia_basis": "structural analytical approximation",
+            "surface_id": "generic_dry_rigid_surface_prior_v1",
+            "material": {
+              "kind": "sphere",
+              "inertia_factor": 0.4,
+              "sliding_friction": 0.21959295187159775,
+              "torsional_length_m": 0.0001,
+              "time_constant": 0.008,
+              "damping_ratio": 0.07778027078787683,
+              "normal_cor_target": 0.8,
+              "cor_basis": "Engineering prior for a resilient golf ball on a rigid floor; not a USGA specified ground COR",
+              "launch_height_m": [
+                0.9,
+                1.2
+              ],
+              "rebound_apex_m": [
+                0.65,
+                0.85
+              ],
+              "horizontal_retention_prior": 0.75,
+              "numerical_validation": {
+                "passed": true,
+                "peak_refinement_error_m": 0.00632180006612082,
+                "calibration": "simulation-only fit to nominal COR; not real measurements"
+              }
+            },
+            "launch": {
+              "requested_apex_clearance_m": 0.6787191965159639,
+              "nominal_cor": 0.8,
+              "predicted_apex_y": 0.594686874896128,
+              "downward_speed": 1.148430168407062,
+              "horizontal_speed": 2.065779561348259,
+              "predicted_first_impact_seconds": 0.3479140967738773,
+              "predicted_apex_seconds": 0.7198992105564501,
+              "horizontal_retention_prior": 0.75
+            },
+            "sampling": "fixed_object_per_environment",
+            "status": "simulation_priors_not_specimen_measurements",
+            "randomization": {
+              "version": "physical_dr_v1",
+              "sampling": "environment_creation",
+              "size_scale": 0.9733400778132805,
+              "mass_scale": 0.9709707499734517,
+              "friction_scale": 0.878371807486391,
+              "rolling_scale": 1.0,
+              "damping_scale": 1.051273011297507
+            }
+          },
+          "policy_steps": 63,
+          "control_ticks": 1260,
+          "max_hold_seconds": 0.0,
+          "sums": {
+            "shaping": -1.3040835490008886,
+            "step_cost": -0.6300000000000003,
+            "hand_action": -1.2529765533119113,
+            "hand_smooth": -0.13812353073488337,
+            "joint_limit": -1.8157678878729169,
+            "robot_control": -5.537908046245576,
+            "arm_limit": -7.499999999999997,
+            "collision": 0.0,
+            "success": 0.0,
+            "failure": -25.0,
+            "finger_backfold": -1.1512470873503397e-22,
+            "finger_prepare_sync": -0.13496546128482897
+          },
+          "potential_score_sums": {
+            "position": 52.481711458912805,
+            "precision": 56.61068124437178,
+            "palm": 3.035356178777822,
+            "velocity": 1.9261846960546982,
+            "ready": 0.06712622764796924,
+            "contact": 0.5,
+            "wrap": 0.0,
+            "hold": 0.0,
+            "finger_coverage": 0.0,
+            "thumb_opposition": 0.0
+          }
+        }
+      }
+    },
+    {
+      "slot": 2,
+      "episode": 1,
+      "success": false,
+      "reason": "base_collision",
+      "steps": 32,
+      "reward": -44.1218753805344,
+      "legacy_success": false,
+      "physics": {
+        "version": "bounce_v1",
+        "object": "golf_ball",
+        "shape": "sphere",
+        "mass_kg": 0.046904907345738545,
+        "dimensions_m": [
+          0.04325021814864497,
+          0.04325021814864497,
+          0.04325021814864497
+        ],
+        "inertia": [
+          8.77394458380765e-06,
+          8.77394458380765e-06,
+          8.77394458380765e-06
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "sphere",
+          "inertia_factor": 0.4,
+          "sliding_friction": 0.23264385217683195,
+          "torsional_length_m": 0.0001,
+          "time_constant": 0.008,
+          "damping_ratio": 0.07279009210475601,
+          "normal_cor_target": 0.8,
+          "cor_basis": "Engineering prior for a resilient golf ball on a rigid floor; not a USGA specified ground COR",
+          "launch_height_m": [
+            0.9,
+            1.2
+          ],
+          "rebound_apex_m": [
+            0.65,
+            0.85
+          ],
+          "horizontal_retention_prior": 0.75,
+          "numerical_validation": {
+            "passed": true,
+            "peak_refinement_error_m": 0.00632180006612082,
+            "calibration": "simulation-only fit to nominal COR; not real measurements"
+          }
+        },
+        "launch": {
+          "requested_apex_clearance_m": 0.8205075858769705,
+          "nominal_cor": 0.8,
+          "predicted_apex_y": 0.8039541607801428,
+          "downward_speed": 2.0080982341702853,
+          "horizontal_speed": 1.1954713075695398,
+          "predicted_first_impact_seconds": 0.3065491118060033,
+          "predicted_apex_seconds": 0.7155476864023074,
+          "horizontal_retention_prior": 0.75
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0169572918099654,
+          "mass_scale": 1.0196718988204032,
+          "friction_scale": 0.9305754087073278,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9838260852585877
+        }
+      },
+      "stable_hold": false,
+      "success_version": "bounce_controlled_hold_v1",
+      "diagnostics": {
+        "bounce_grasp_terminal": true,
+        "bounce_grasp_version": "controlled_hold_v1",
+        "bounce_grasp_reward_profile": "finger_coordination_v2",
+        "bounce_grasp_hold_seconds": 0.0,
+        "bounce_grasp_max_hold_seconds": 0.0,
+        "bounce_grasp_hold_reached": false,
+        "bounce_grasp_contact_fraction": 0.0,
+        "bounce_grasp_had_contact": true,
+        "bounce_grasp_hand_target_clipped": 0.3333333333333333,
+        "bounce_grasp_state": {
+          "hand_contact": false,
+          "floor_contact": false,
+          "external_support": true,
+          "off_ground": false,
+          "capture": false,
+          "contact_groups": 0,
+          "contact_span": 0.0,
+          "relative_speed": 1.1466473529695673,
+          "palm_dot": -0.8374433808474749,
+          "distance": 0.3766274207412117,
+          "local_ball": [
+            0.17934253289822122,
+            -0.05069445025014897,
+            -0.2542825825246029
+          ],
+          "joint_violation": 3.914111514934614e-05,
+          "target_violation": 0.0,
+          "valid_hold": false,
+          "collision": true,
+          "finger_contact_groups": 0,
+          "thumb_contact": false,
+          "finger_tip_heights": [
+            0.040576825010088,
+            0.03976428941322496,
+            0.024930788023561544
+          ]
+        },
+        "bounce_grasp_joint_violation": 6.348605563219999e-05,
+        "bounce_grasp_target_violation": 0.0,
+        "bounce_grasp_finger_posture": {
+          "backfold": 0.0,
+          "prepare_sync": 0.17104531137691426,
+          "near": 0.012550041608789482,
+          "contact_fraction": 0.0
+        },
+        "bounce_grasp_reward_terms": {
+          "shaping": -1.9908762759743464,
+          "step_cost": -0.01,
+          "hand_action": -0.01999999600152301,
+          "hand_smooth": -1.7564075194265172e-15,
+          "joint_limit": -1.2595247686671223e-06,
+          "robot_control": -0.08581089258193969,
+          "arm_limit": -0.3,
+          "collision": -10.0,
+          "success": 0.0,
+          "failure": -25.0,
+          "finger_backfold": -0.0,
+          "finger_prepare_sync": -0.00010733128873843135
+        },
+        "bounce_grasp_potential_terms": {
+          "position": 0.9268078503068218,
+          "precision": 0.7437665901109577,
+          "palm": 8.290762814953419e-05,
+          "velocity": 0.0026976442374777566,
+          "ready": 2.240147719054004e-06,
+          "contact": 0.0,
+          "wrap": 0.0,
+          "hold": 0.0,
+          "finger_coverage": 0.0,
+          "thumb_opposition": 0.0
+        },
+        "bounce_grasp_potential_previous": 1.9908762759743464,
+        "bounce_grasp_potential": 0.0,
+        "bounce_grasp_episode": {
+          "version": "controlled_hold_v1",
+          "reward_profile": "finger_coordination_v2",
+          "episode": 2,
+          "success": false,
+          "reason": "base_collision",
+          "physics": {
+            "version": "bounce_v1",
+            "object": "golf_ball",
+            "shape": "sphere",
+            "mass_kg": 0.046904907345738545,
+            "dimensions_m": [
+              0.04325021814864497,
+              0.04325021814864497,
+              0.04325021814864497
+            ],
+            "inertia": [
+              8.77394458380765e-06,
+              8.77394458380765e-06,
+              8.77394458380765e-06
+            ],
+            "inertia_basis": "structural analytical approximation",
+            "surface_id": "generic_dry_rigid_surface_prior_v1",
+            "material": {
+              "kind": "sphere",
+              "inertia_factor": 0.4,
+              "sliding_friction": 0.23264385217683195,
+              "torsional_length_m": 0.0001,
+              "time_constant": 0.008,
+              "damping_ratio": 0.07279009210475601,
+              "normal_cor_target": 0.8,
+              "cor_basis": "Engineering prior for a resilient golf ball on a rigid floor; not a USGA specified ground COR",
+              "launch_height_m": [
+                0.9,
+                1.2
+              ],
+              "rebound_apex_m": [
+                0.65,
+                0.85
+              ],
+              "horizontal_retention_prior": 0.75,
+              "numerical_validation": {
+                "passed": true,
+                "peak_refinement_error_m": 0.00632180006612082,
+                "calibration": "simulation-only fit to nominal COR; not real measurements"
+              }
+            },
+            "launch": {
+              "requested_apex_clearance_m": 0.8205075858769705,
+              "nominal_cor": 0.8,
+              "predicted_apex_y": 0.8039541607801428,
+              "downward_speed": 2.0080982341702853,
+              "horizontal_speed": 1.1954713075695398,
+              "predicted_first_impact_seconds": 0.3065491118060033,
+              "predicted_apex_seconds": 0.7155476864023074,
+              "horizontal_retention_prior": 0.75
+            },
+            "sampling": "fixed_object_per_environment",
+            "status": "simulation_priors_not_specimen_measurements",
+            "randomization": {
+              "version": "physical_dr_v1",
+              "sampling": "environment_creation",
+              "size_scale": 1.0169572918099654,
+              "mass_scale": 1.0196718988204032,
+              "friction_scale": 0.9305754087073278,
+              "rolling_scale": 1.0,
+              "damping_scale": 0.9838260852585877
+            }
+          },
+          "policy_steps": 32,
+          "control_ticks": 633,
+          "max_hold_seconds": 0.0,
+          "sums": {
+            "shaping": -1.0237399725509801,
+            "step_cost": -0.3200000000000001,
+            "hand_action": -0.6315605716349094,
+            "hand_smooth": -0.21484179396118422,
+            "joint_limit": -0.7414709836500363,
+            "robot_control": -2.5265855842828753,
+            "arm_limit": -3.599999999999999,
+            "collision": -10.0,
+            "success": 0.0,
+            "failure": -25.0,
+            "finger_backfold": -2.152822485467189e-18,
+            "finger_prepare_sync": -0.06367647445441207
+          },
+          "potential_score_sums": {
+            "position": 32.71208528640773,
+            "precision": 37.284729195268554,
+            "palm": 3.4892105731860017,
+            "velocity": 1.3384077542341775,
+            "ready": 0.018331153606157276,
+            "contact": 3.1,
+            "wrap": 0.5732844333763518,
+            "hold": 0.0,
+            "finger_coverage": 0.775,
+            "thumb_opposition": 0.0
+          }
+        }
+      }
+    },
+    {
+      "slot": 0,
+      "episode": 1,
+      "success": true,
+      "reason": "controlled_hold",
+      "steps": 34,
+      "reward": 14.137872037145003,
+      "legacy_success": true,
+      "physics": {
+        "version": "bounce_v1",
+        "object": "golf_ball",
+        "shape": "sphere",
+        "mass_kg": 0.04705735307047695,
+        "dimensions_m": [
+          0.04366804135539028,
+          0.04366804135539028,
+          0.04366804135539028
+        ],
+        "inertia": [
+          8.973356472932546e-06,
+          8.973356472932546e-06,
+          8.973356472932546e-06
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "sphere",
+          "inertia_factor": 0.4,
+          "sliding_friction": 0.22045033240000367,
+          "torsional_length_m": 0.0001,
+          "time_constant": 0.008,
+          "damping_ratio": 0.06845821665916575,
+          "normal_cor_target": 0.8,
+          "cor_basis": "Engineering prior for a resilient golf ball on a rigid floor; not a USGA specified ground COR",
+          "launch_height_m": [
+            0.9,
+            1.2
+          ],
+          "rebound_apex_m": [
+            0.65,
+            0.85
+          ],
+          "horizontal_retention_prior": 0.75,
+          "numerical_validation": {
+            "passed": true,
+            "peak_refinement_error_m": 0.00632180006612082,
+            "calibration": "simulation-only fit to nominal COR; not real measurements"
+          }
+        },
+        "launch": {
+          "requested_apex_clearance_m": 0.8335780746949925,
+          "nominal_cor": 0.8,
+          "predicted_apex_y": 0.7199423108796695,
+          "downward_speed": 2.6389197937101145,
+          "horizontal_speed": 1.6746331676283193,
+          "predicted_first_impact_seconds": 0.24630112312022975,
+          "predicted_apex_seconds": 0.6585444512767695,
+          "horizontal_retention_prior": 0.75
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.026781712933732,
+          "mass_scale": 1.0229859363147162,
+          "friction_scale": 0.8818013296000147,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9252767423709667
+        }
+      },
+      "stable_hold": false,
+      "success_version": "bounce_controlled_hold_v1",
+      "diagnostics": {
+        "bounce_grasp_terminal": true,
+        "bounce_grasp_version": "controlled_hold_v1",
+        "bounce_grasp_reward_profile": "finger_coordination_v2",
+        "bounce_grasp_hold_seconds": 0.3339999999998149,
+        "bounce_grasp_max_hold_seconds": 0.3339999999998149,
+        "bounce_grasp_hold_reached": true,
+        "bounce_grasp_contact_fraction": 1.0,
+        "bounce_grasp_had_contact": true,
+        "bounce_grasp_hand_target_clipped": 0.25,
+        "bounce_grasp_state": {
+          "hand_contact": true,
+          "floor_contact": false,
+          "external_support": false,
+          "off_ground": true,
+          "capture": true,
+          "contact_groups": 2,
+          "contact_span": 0.8501167519222331,
+          "relative_speed": 0.034726262570748144,
+          "palm_dot": 0.42583093253095167,
+          "distance": 0.05049659135417858,
+          "local_ball": [
+            -0.03715370497572832,
+            0.0008156937070723132,
+            0.06486389272801564
+          ],
+          "joint_violation": 6.146975487132493e-05,
+          "target_violation": 0.0,
+          "valid_hold": true,
+          "collision": false,
+          "finger_contact_groups": 1,
+          "thumb_contact": false,
+          "finger_tip_heights": [
+            0.042712334841088294,
+            0.05060662711354914,
+            0.0864309884847123
+          ]
+        },
+        "bounce_grasp_joint_violation": 0.00022841083515325739,
+        "bounce_grasp_target_violation": 0.0,
+        "bounce_grasp_finger_posture": {
+          "backfold": 0.0,
+          "prepare_sync": 0.13698268494937058,
+          "near": 0.9243164437359249,
+          "contact_fraction": 1.0
+        },
+        "bounce_grasp_reward_terms": {
+          "shaping": -18.94402418079844,
+          "step_cost": -0.01,
+          "hand_action": -0.019999999105930335,
+          "hand_smooth": -0.0,
+          "joint_limit": -1.6303596754815162e-05,
+          "robot_control": -0.07794013977050782,
+          "arm_limit": -0.3,
+          "collision": 0.0,
+          "success": 25.0,
+          "failure": 0.0,
+          "finger_backfold": -0.0,
+          "finger_prepare_sync": -0.0
+        },
+        "bounce_grasp_potential_terms": {
+          "position": 1.9592177903160455,
+          "precision": 3.7081645075122536,
+          "palm": 0.46978241096754747,
+          "velocity": 0.9212305432480197,
+          "ready": 0.0,
+          "contact": 2.0,
+          "wrap": 1.5169527286920892,
+          "hold": 8.0,
+          "finger_coverage": 0.5,
+          "thumb_opposition": 0.0
+        },
+        "bounce_grasp_potential_previous": 18.94402418079844,
+        "bounce_grasp_potential": 0.0,
+        "bounce_grasp_episode": {
+          "version": "controlled_hold_v1",
+          "reward_profile": "finger_coordination_v2",
+          "episode": 2,
+          "success": true,
+          "reason": "controlled_hold",
+          "physics": {
+            "version": "bounce_v1",
+            "object": "golf_ball",
+            "shape": "sphere",
+            "mass_kg": 0.04705735307047695,
+            "dimensions_m": [
+              0.04366804135539028,
+              0.04366804135539028,
+              0.04366804135539028
+            ],
+            "inertia": [
+              8.973356472932546e-06,
+              8.973356472932546e-06,
+              8.973356472932546e-06
+            ],
+            "inertia_basis": "structural analytical approximation",
+            "surface_id": "generic_dry_rigid_surface_prior_v1",
+            "material": {
+              "kind": "sphere",
+              "inertia_factor": 0.4,
+              "sliding_friction": 0.22045033240000367,
+              "torsional_length_m": 0.0001,
+              "time_constant": 0.008,
+              "damping_ratio": 0.06845821665916575,
+              "normal_cor_target": 0.8,
+              "cor_basis": "Engineering prior for a resilient golf ball on a rigid floor; not a USGA specified ground COR",
+              "launch_height_m": [
+                0.9,
+                1.2
+              ],
+              "rebound_apex_m": [
+                0.65,
+                0.85
+              ],
+              "horizontal_retention_prior": 0.75,
+              "numerical_validation": {
+                "passed": true,
+                "peak_refinement_error_m": 0.00632180006612082,
+                "calibration": "simulation-only fit to nominal COR; not real measurements"
+              }
+            },
+            "launch": {
+              "requested_apex_clearance_m": 0.8335780746949925,
+              "nominal_cor": 0.8,
+              "predicted_apex_y": 0.7199423108796695,
+              "downward_speed": 2.6389197937101145,
+              "horizontal_speed": 1.6746331676283193,
+              "predicted_first_impact_seconds": 0.24630112312022975,
+              "predicted_apex_seconds": 0.6585444512767695,
+              "horizontal_retention_prior": 0.75
+            },
+            "sampling": "fixed_object_per_environment",
+            "status": "simulation_priors_not_specimen_measurements",
+            "randomization": {
+              "version": "physical_dr_v1",
+              "sampling": "environment_creation",
+              "size_scale": 1.026781712933732,
+              "mass_scale": 1.0229859363147162,
+              "friction_scale": 0.8818013296000147,
+              "rolling_scale": 1.0,
+              "damping_scale": 0.9252767423709667
+            }
+          },
+          "policy_steps": 34,
+          "control_ticks": 680,
+          "max_hold_seconds": 0.3339999999998149,
+          "sums": {
+            "shaping": -2.267465060497379,
+            "step_cost": -0.34000000000000014,
+            "hand_action": -0.6712570398822956,
+            "hand_smooth": -0.26595995416209683,
+            "joint_limit": -0.8609204010643663,
+            "robot_control": -2.8383630776405333,
+            "arm_limit": -3.599999999999999,
+            "collision": 0.0,
+            "success": 25.0,
+            "failure": 0.0,
+            "finger_backfold": 0.0,
+            "finger_prepare_sync": -0.018162429608321012
+          },
+          "potential_score_sums": {
+            "position": 44.2534152559013,
+            "precision": 68.48965649442675,
+            "palm": 8.881774057178625,
+            "velocity": 11.520616681485112,
+            "ready": 0.06683469006913248,
+            "contact": 25.8,
+            "wrap": 17.132108773659574,
+            "hold": 41.81333333331544,
+            "finger_coverage": 5.575,
+            "thumb_opposition": 0.0
+          }
+        }
+      }
+    },
+    {
+      "slot": 3,
+      "episode": 1,
+      "success": true,
+      "reason": "controlled_hold",
+      "steps": 37,
+      "reward": 13.638454993042568,
+      "legacy_success": true,
+      "physics": {
+        "version": "bounce_v1",
+        "object": "golf_ball",
+        "shape": "sphere",
+        "mass_kg": 0.04466465449877877,
+        "dimensions_m": [
+          0.04139521987528064,
+          0.04139521987528064,
+          0.04139521987528064
+        ],
+        "inertia": [
+          7.653575422843857e-06,
+          7.653575422843857e-06,
+          7.653575422843857e-06
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "sphere",
+          "inertia_factor": 0.4,
+          "sliding_friction": 0.21959295187159775,
+          "torsional_length_m": 0.0001,
+          "time_constant": 0.008,
+          "damping_ratio": 0.07778027078787683,
+          "normal_cor_target": 0.8,
+          "cor_basis": "Engineering prior for a resilient golf ball on a rigid floor; not a USGA specified ground COR",
+          "launch_height_m": [
+            0.9,
+            1.2
+          ],
+          "rebound_apex_m": [
+            0.65,
+            0.85
+          ],
+          "horizontal_retention_prior": 0.75,
+          "numerical_validation": {
+            "passed": true,
+            "peak_refinement_error_m": 0.00632180006612082,
+            "calibration": "simulation-only fit to nominal COR; not real measurements"
+          }
+        },
+        "launch": {
+          "requested_apex_clearance_m": 0.7039686960190215,
+          "nominal_cor": 0.8,
+          "predicted_apex_y": 0.5524958614431412,
+          "downward_speed": 0.9904544411531511,
+          "horizontal_speed": 1.4647688546366788,
+          "predicted_first_impact_seconds": 0.372587705561766,
+          "predicted_apex_seconds": 0.7514288743865633,
+          "horizontal_retention_prior": 0.75
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 0.9733400778132805,
+          "mass_scale": 0.9709707499734517,
+          "friction_scale": 0.878371807486391,
+          "rolling_scale": 1.0,
+          "damping_scale": 1.051273011297507
+        }
+      },
+      "stable_hold": false,
+      "success_version": "bounce_controlled_hold_v1",
+      "diagnostics": {
+        "bounce_grasp_terminal": true,
+        "bounce_grasp_version": "controlled_hold_v1",
+        "bounce_grasp_reward_profile": "finger_coordination_v2",
+        "bounce_grasp_hold_seconds": 0.3299999999998171,
+        "bounce_grasp_max_hold_seconds": 0.3299999999998171,
+        "bounce_grasp_hold_reached": true,
+        "bounce_grasp_contact_fraction": 1.0,
+        "bounce_grasp_had_contact": true,
+        "bounce_grasp_hand_target_clipped": 0.4166666666666667,
+        "bounce_grasp_state": {
+          "hand_contact": true,
+          "floor_contact": false,
+          "external_support": false,
+          "off_ground": true,
+          "capture": true,
+          "contact_groups": 3,
+          "contact_span": 0.8996027370149738,
+          "relative_speed": 0.030871581531966504,
+          "palm_dot": 0.9325788508186079,
+          "distance": 0.012432286347918124,
+          "local_ball": [
+            -0.007546755716143836,
+            0.025192696779870516,
+            0.06350386559904904
+          ],
+          "joint_violation": 4.709656914411199e-05,
+          "target_violation": 0.0,
+          "valid_hold": true,
+          "collision": false,
+          "finger_contact_groups": 2,
+          "thumb_contact": false,
+          "finger_tip_heights": [
+            0.04333321247813692,
+            0.06363359936316461,
+            0.06287785193279366
+          ]
+        },
+        "bounce_grasp_joint_violation": 5.6521304759216476e-05,
+        "bounce_grasp_target_violation": 0.0,
+        "bounce_grasp_finger_posture": {
+          "backfold": 0.0,
+          "prepare_sync": 0.36745955944730435,
+          "near": 0.9952409362091755,
+          "contact_fraction": 1.0
+        },
+        "bounce_grasp_reward_terms": {
+          "shaping": -20.506795909660656,
+          "step_cost": -0.01,
+          "hand_action": -0.019999999105930335,
+          "hand_smooth": -0.0,
+          "joint_limit": -9.983305911513209e-07,
+          "robot_control": -0.07959510564804077,
+          "arm_limit": -0.3,
+          "collision": 0.0,
+          "success": 25.0,
+          "failure": 0.0,
+          "finger_backfold": -0.0,
+          "finger_prepare_sync": -0.0
+        },
+        "bounce_grasp_potential_terms": {
+          "position": 1.9974797228633137,
+          "precision": 3.9810088988384686,
+          "palm": 0.9292716432032193,
+          "velocity": 0.9926131183061099,
+          "ready": 0.0,
+          "contact": 2.0,
+          "wrap": 1.8918626142428523,
+          "hold": 8.0,
+          "finger_coverage": 1.0,
+          "thumb_opposition": 0.0
+        },
+        "bounce_grasp_potential_previous": 20.506795909660656,
+        "bounce_grasp_potential": 0.0,
+        "bounce_grasp_episode": {
+          "version": "controlled_hold_v1",
+          "reward_profile": "finger_coordination_v2",
+          "episode": 2,
+          "success": true,
+          "reason": "controlled_hold",
+          "physics": {
+            "version": "bounce_v1",
+            "object": "golf_ball",
+            "shape": "sphere",
+            "mass_kg": 0.04466465449877877,
+            "dimensions_m": [
+              0.04139521987528064,
+              0.04139521987528064,
+              0.04139521987528064
+            ],
+            "inertia": [
+              7.653575422843857e-06,
+              7.653575422843857e-06,
+              7.653575422843857e-06
+            ],
+            "inertia_basis": "structural analytical approximation",
+            "surface_id": "generic_dry_rigid_surface_prior_v1",
+            "material": {
+              "kind": "sphere",
+              "inertia_factor": 0.4,
+              "sliding_friction": 0.21959295187159775,
+              "torsional_length_m": 0.0001,
+              "time_constant": 0.008,
+              "damping_ratio": 0.07778027078787683,
+              "normal_cor_target": 0.8,
+              "cor_basis": "Engineering prior for a resilient golf ball on a rigid floor; not a USGA specified ground COR",
+              "launch_height_m": [
+                0.9,
+                1.2
+              ],
+              "rebound_apex_m": [
+                0.65,
+                0.85
+              ],
+              "horizontal_retention_prior": 0.75,
+              "numerical_validation": {
+                "passed": true,
+                "peak_refinement_error_m": 0.00632180006612082,
+                "calibration": "simulation-only fit to nominal COR; not real measurements"
+              }
+            },
+            "launch": {
+              "requested_apex_clearance_m": 0.7039686960190215,
+              "nominal_cor": 0.8,
+              "predicted_apex_y": 0.5524958614431412,
+              "downward_speed": 0.9904544411531511,
+              "horizontal_speed": 1.4647688546366788,
+              "predicted_first_impact_seconds": 0.372587705561766,
+              "predicted_apex_seconds": 0.7514288743865633,
+              "horizontal_retention_prior": 0.75
+            },
+            "sampling": "fixed_object_per_environment",
+            "status": "simulation_priors_not_specimen_measurements",
+            "randomization": {
+              "version": "physical_dr_v1",
+              "sampling": "environment_creation",
+              "size_scale": 0.9733400778132805,
+              "mass_scale": 0.9709707499734517,
+              "friction_scale": 0.878371807486391,
+              "rolling_scale": 1.0,
+              "damping_scale": 1.051273011297507
+            }
+          },
+          "policy_steps": 37,
+          "control_ticks": 740,
+          "max_hold_seconds": 0.3299999999998171,
+          "sums": {
+            "shaping": -2.7102320444161236,
+            "step_cost": -0.37000000000000016,
+            "hand_action": -0.7329269065447352,
+            "hand_smooth": -0.3526400692325206,
+            "joint_limit": -1.2462781678175279,
+            "robot_control": -3.1431323534250257,
+            "arm_limit": -2.6999999999999997,
+            "collision": 0.0,
+            "success": 25.0,
+            "failure": 0.0,
+            "finger_backfold": -2.219481369356911e-18,
+            "finger_prepare_sync": -0.10633546552149846
+          },
+          "potential_score_sums": {
+            "position": 53.10927127944228,
+            "precision": 88.78839936677673,
+            "palm": 17.153923530551467,
+            "velocity": 15.384622134640285,
+            "ready": 0.19207482358207856,
+            "contact": 25.3,
+            "wrap": 16.71283528060208,
+            "hold": 40.15999999998232,
+            "finger_coverage": 8.975,
+            "thumb_opposition": 0.0
+          }
+        }
+      }
+    },
+    {
+      "slot": 2,
+      "episode": 2,
+      "success": true,
+      "reason": "controlled_hold",
+      "steps": 37,
+      "reward": 12.047052735248002,
+      "legacy_success": true,
+      "physics": {
+        "version": "bounce_v1",
+        "object": "golf_ball",
+        "shape": "sphere",
+        "mass_kg": 0.046904907345738545,
+        "dimensions_m": [
+          0.04325021814864497,
+          0.04325021814864497,
+          0.04325021814864497
+        ],
+        "inertia": [
+          8.77394458380765e-06,
+          8.77394458380765e-06,
+          8.77394458380765e-06
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "sphere",
+          "inertia_factor": 0.4,
+          "sliding_friction": 0.23264385217683195,
+          "torsional_length_m": 0.0001,
+          "time_constant": 0.008,
+          "damping_ratio": 0.07279009210475601,
+          "normal_cor_target": 0.8,
+          "cor_basis": "Engineering prior for a resilient golf ball on a rigid floor; not a USGA specified ground COR",
+          "launch_height_m": [
+            0.9,
+            1.2
+          ],
+          "rebound_apex_m": [
+            0.65,
+            0.85
+          ],
+          "horizontal_retention_prior": 0.75,
+          "numerical_validation": {
+            "passed": true,
+            "peak_refinement_error_m": 0.00632180006612082,
+            "calibration": "simulation-only fit to nominal COR; not real measurements"
+          }
+        },
+        "launch": {
+          "requested_apex_clearance_m": 0.7337098850587582,
+          "nominal_cor": 0.8,
+          "predicted_apex_y": 0.8016752414947987,
+          "downward_speed": 1.5106360308207254,
+          "horizontal_speed": 1.3763952025649757,
+          "predicted_first_impact_seconds": 0.32946185362592545,
+          "predicted_apex_seconds": 0.7162228578983865,
+          "horizontal_retention_prior": 0.75
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0169572918099654,
+          "mass_scale": 1.0196718988204032,
+          "friction_scale": 0.9305754087073278,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9838260852585877
+        }
+      },
+      "stable_hold": false,
+      "success_version": "bounce_controlled_hold_v1",
+      "diagnostics": {
+        "bounce_grasp_terminal": true,
+        "bounce_grasp_version": "controlled_hold_v1",
+        "bounce_grasp_reward_profile": "finger_coordination_v2",
+        "bounce_grasp_hold_seconds": 0.31799999999982376,
+        "bounce_grasp_max_hold_seconds": 0.31799999999982376,
+        "bounce_grasp_hold_reached": true,
+        "bounce_grasp_contact_fraction": 1.0,
+        "bounce_grasp_had_contact": true,
+        "bounce_grasp_hand_target_clipped": 0.9166666666666666,
+        "bounce_grasp_state": {
+          "hand_contact": true,
+          "floor_contact": false,
+          "external_support": false,
+          "off_ground": true,
+          "capture": true,
+          "contact_groups": 3,
+          "contact_span": 0.9018496045953256,
+          "relative_speed": 0.005230553148231572,
+          "palm_dot": 0.6958078660192084,
+          "distance": 0.029262591601707726,
+          "local_ball": [
+            0.013379770042267302,
+            0.00901469461303904,
+            0.0641951003992587
+          ],
+          "joint_violation": 0.0007141796598385541,
+          "target_violation": 0.0,
+          "valid_hold": true,
+          "collision": false,
+          "finger_contact_groups": 2,
+          "thumb_contact": false,
+          "finger_tip_heights": [
+            0.0377287568181883,
+            0.051876646085376676,
+            0.024381454597517123
+          ]
+        },
+        "bounce_grasp_joint_violation": 0.0007196202212557123,
+        "bounce_grasp_target_violation": 0.0,
+        "bounce_grasp_finger_posture": {
+          "backfold": 0.0,
+          "prepare_sync": 0.173751223188105,
+          "near": 0.9739171995035292,
+          "contact_fraction": 1.0
+        },
+        "bounce_grasp_reward_terms": {
+          "shaping": -19.869761461916198,
+          "step_cost": -0.01,
+          "hand_action": -0.01999978428778373,
+          "hand_smooth": -1.038370778250197e-11,
+          "joint_limit": -0.00016182914463753762,
+          "robot_control": -0.08047600746154786,
+          "arm_limit": -0.3,
+          "collision": 0.0,
+          "success": 25.0,
+          "failure": 0.0,
+          "finger_backfold": -0.0,
+          "finger_prepare_sync": -0.0
+        },
+        "bounce_grasp_potential_terms": {
+          "position": 1.986116651158719,
+          "precision": 3.8970060666862425,
+          "palm": 0.700189082864888,
+          "velocity": 0.973843190974903,
+          "ready": 0.0,
+          "contact": 2.0,
+          "wrap": 1.9041678504640818,
+          "hold": 8.0,
+          "finger_coverage": 1.0,
+          "thumb_opposition": 0.0
+        },
+        "bounce_grasp_potential_previous": 19.869761461916198,
+        "bounce_grasp_potential": 0.0,
+        "bounce_grasp_episode": {
+          "version": "controlled_hold_v1",
+          "reward_profile": "finger_coordination_v2",
+          "episode": 3,
+          "success": true,
+          "reason": "controlled_hold",
+          "physics": {
+            "version": "bounce_v1",
+            "object": "golf_ball",
+            "shape": "sphere",
+            "mass_kg": 0.046904907345738545,
+            "dimensions_m": [
+              0.04325021814864497,
+              0.04325021814864497,
+              0.04325021814864497
+            ],
+            "inertia": [
+              8.77394458380765e-06,
+              8.77394458380765e-06,
+              8.77394458380765e-06
+            ],
+            "inertia_basis": "structural analytical approximation",
+            "surface_id": "generic_dry_rigid_surface_prior_v1",
+            "material": {
+              "kind": "sphere",
+              "inertia_factor": 0.4,
+              "sliding_friction": 0.23264385217683195,
+              "torsional_length_m": 0.0001,
+              "time_constant": 0.008,
+              "damping_ratio": 0.07279009210475601,
+              "normal_cor_target": 0.8,
+              "cor_basis": "Engineering prior for a resilient golf ball on a rigid floor; not a USGA specified ground COR",
+              "launch_height_m": [
+                0.9,
+                1.2
+              ],
+              "rebound_apex_m": [
+                0.65,
+                0.85
+              ],
+              "horizontal_retention_prior": 0.75,
+              "numerical_validation": {
+                "passed": true,
+                "peak_refinement_error_m": 0.00632180006612082,
+                "calibration": "simulation-only fit to nominal COR; not real measurements"
+              }
+            },
+            "launch": {
+              "requested_apex_clearance_m": 0.7337098850587582,
+              "nominal_cor": 0.8,
+              "predicted_apex_y": 0.8016752414947987,
+              "downward_speed": 1.5106360308207254,
+              "horizontal_speed": 1.3763952025649757,
+              "predicted_first_impact_seconds": 0.32946185362592545,
+              "predicted_apex_seconds": 0.7162228578983865,
+              "horizontal_retention_prior": 0.75
+            },
+            "sampling": "fixed_object_per_environment",
+            "status": "simulation_priors_not_specimen_measurements",
+            "randomization": {
+              "version": "physical_dr_v1",
+              "sampling": "environment_creation",
+              "size_scale": 1.0169572918099654,
+              "mass_scale": 1.0196718988204032,
+              "friction_scale": 0.9305754087073278,
+              "rolling_scale": 1.0,
+              "damping_scale": 0.9838260852585877
+            }
+          },
+          "policy_steps": 37,
+          "control_ticks": 740,
+          "max_hold_seconds": 0.31799999999982376,
+          "sums": {
+            "shaping": -2.5830020863541456,
+            "step_cost": -0.37000000000000016,
+            "hand_action": -0.7342923102151613,
+            "hand_smooth": -0.17669421035806746,
+            "joint_limit": -0.6165838914975007,
+            "robot_control": -3.020443673729896,
+            "arm_limit": -5.399999999999999,
+            "collision": 0.0,
+            "success": 25.0,
+            "failure": 0.0,
+            "finger_backfold": -3.3706753970437943e-18,
+            "finger_prepare_sync": -0.051931092597220514
+          },
+          "potential_score_sums": {
+            "position": 48.85646815710325,
+            "precision": 80.16698378829885,
+            "palm": 15.051309078361115,
+            "velocity": 13.825336521558395,
+            "ready": 0.036828128466927866,
+            "contact": 30.4,
+            "wrap": 19.31179079405043,
+            "hold": 37.70666666665039,
+            "finger_coverage": 11.95,
+            "thumb_opposition": 0.0
+          }
+        }
+      }
+    },
+    {
+      "slot": 1,
+      "episode": 2,
+      "success": false,
+      "reason": "timeout",
+      "steps": 63,
+      "reward": -43.40707080099109,
+      "legacy_success": false,
+      "physics": {
+        "version": "bounce_v1",
+        "object": "golf_ball",
+        "shape": "sphere",
+        "mass_kg": 0.04833883155718696,
+        "dimensions_m": [
+          0.04362093054214088,
+          0.04362093054214088,
+          0.04362093054214088
+        ],
+        "inertia": [
+          9.197843170691528e-06,
+          9.197843170691528e-06,
+          9.197843170691528e-06
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "sphere",
+          "inertia_factor": 0.4,
+          "sliding_friction": 0.27805171482093943,
+          "torsional_length_m": 0.0001,
+          "time_constant": 0.008,
+          "damping_ratio": 0.0710192698366231,
+          "normal_cor_target": 0.8,
+          "cor_basis": "Engineering prior for a resilient golf ball on a rigid floor; not a USGA specified ground COR",
+          "launch_height_m": [
+            0.9,
+            1.2
+          ],
+          "rebound_apex_m": [
+            0.65,
+            0.85
+          ],
+          "horizontal_retention_prior": 0.75,
+          "numerical_validation": {
+            "passed": true,
+            "peak_refinement_error_m": 0.00632180006612082,
+            "calibration": "simulation-only fit to nominal COR; not real measurements"
+          }
+        },
+        "launch": {
+          "requested_apex_clearance_m": 0.7474303810805277,
+          "nominal_cor": 0.8,
+          "predicted_apex_y": 0.7110804053622571,
+          "downward_speed": 1.8834856825421193,
+          "horizontal_speed": 1.856857904553438,
+          "predicted_first_impact_seconds": 0.2959541253908216,
+          "predicted_apex_seconds": 0.6863146271340288,
+          "horizontal_retention_prior": 0.75
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0256739801382022,
+          "mass_scale": 1.050844164286673,
+          "friction_scale": 1.1122068592837577,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9598917682468895
+        }
+      },
+      "stable_hold": false,
+      "success_version": "bounce_controlled_hold_v1",
+      "diagnostics": {
+        "bounce_grasp_terminal": true,
+        "bounce_grasp_version": "controlled_hold_v1",
+        "bounce_grasp_reward_profile": "finger_coordination_v2",
+        "bounce_grasp_hold_seconds": 0.0,
+        "bounce_grasp_max_hold_seconds": 0.0,
+        "bounce_grasp_hold_reached": false,
+        "bounce_grasp_contact_fraction": 0.0,
+        "bounce_grasp_had_contact": true,
+        "bounce_grasp_hand_target_clipped": 0.9166666666666666,
+        "bounce_grasp_state": {
+          "hand_contact": false,
+          "floor_contact": false,
+          "external_support": false,
+          "off_ground": true,
+          "capture": false,
+          "contact_groups": 0,
+          "contact_span": 0.0,
+          "relative_speed": 0.13052304215273206,
+          "palm_dot": -0.1921232834005043,
+          "distance": 0.3994349300222604,
+          "local_ball": [
+            0.10413489481326749,
+            0.4075817435123369,
+            -0.03362308744341974
+          ],
+          "joint_violation": 0.0011155230010536175,
+          "target_violation": 0.0,
+          "valid_hold": false,
+          "collision": false,
+          "finger_contact_groups": 0,
+          "thumb_contact": false,
+          "finger_tip_heights": [
+            0.016901451165266985,
+            0.04251711558190285,
+            0.06026982334090777
+          ]
+        },
+        "bounce_grasp_joint_violation": 0.024419178341751557,
+        "bounce_grasp_target_violation": 0.0,
+        "bounce_grasp_finger_posture": {
+          "backfold": 0.0,
+          "prepare_sync": 0.32830740885404053,
+          "near": 0.007267600369651225,
+          "contact_fraction": 0.0
+        },
+        "bounce_grasp_reward_terms": {
+          "shaping": -1.4903734054252569,
+          "step_cost": -0.01,
+          "hand_action": -0.019999999105930335,
+          "hand_smooth": -0.0,
+          "joint_limit": -0.18634258465195885,
+          "robot_control": -0.08445728302001954,
+          "arm_limit": 0.0,
+          "collision": 0.0,
+          "success": 0.0,
+          "failure": -25.0,
+          "finger_backfold": -0.0,
+          "finger_prepare_sync": -0.00011930035229734306
+        },
+        "bounce_grasp_potential_terms": {
+          "position": 0.8686456605492137,
+          "precision": 0.675181935783743,
+          "palm": 0.0011858267158549106,
+          "velocity": 0.006939216142289167,
+          "ready": 6.037224723121408e-07,
+          "contact": 0.0,
+          "wrap": 0.0,
+          "hold": 0.0,
+          "finger_coverage": 0.0,
+          "thumb_opposition": 0.0
+        },
+        "bounce_grasp_potential_previous": 1.4903734054252569,
+        "bounce_grasp_potential": 0.0,
+        "bounce_grasp_episode": {
+          "version": "controlled_hold_v1",
+          "reward_profile": "finger_coordination_v2",
+          "episode": 3,
+          "success": false,
+          "reason": "timeout",
+          "physics": {
+            "version": "bounce_v1",
+            "object": "golf_ball",
+            "shape": "sphere",
+            "mass_kg": 0.04833883155718696,
+            "dimensions_m": [
+              0.04362093054214088,
+              0.04362093054214088,
+              0.04362093054214088
+            ],
+            "inertia": [
+              9.197843170691528e-06,
+              9.197843170691528e-06,
+              9.197843170691528e-06
+            ],
+            "inertia_basis": "structural analytical approximation",
+            "surface_id": "generic_dry_rigid_surface_prior_v1",
+            "material": {
+              "kind": "sphere",
+              "inertia_factor": 0.4,
+              "sliding_friction": 0.27805171482093943,
+              "torsional_length_m": 0.0001,
+              "time_constant": 0.008,
+              "damping_ratio": 0.0710192698366231,
+              "normal_cor_target": 0.8,
+              "cor_basis": "Engineering prior for a resilient golf ball on a rigid floor; not a USGA specified ground COR",
+              "launch_height_m": [
+                0.9,
+                1.2
+              ],
+              "rebound_apex_m": [
+                0.65,
+                0.85
+              ],
+              "horizontal_retention_prior": 0.75,
+              "numerical_validation": {
+                "passed": true,
+                "peak_refinement_error_m": 0.00632180006612082,
+                "calibration": "simulation-only fit to nominal COR; not real measurements"
+              }
+            },
+            "launch": {
+              "requested_apex_clearance_m": 0.7474303810805277,
+              "nominal_cor": 0.8,
+              "predicted_apex_y": 0.7110804053622571,
+              "downward_speed": 1.8834856825421193,
+              "horizontal_speed": 1.856857904553438,
+              "predicted_first_impact_seconds": 0.2959541253908216,
+              "predicted_apex_seconds": 0.6863146271340288,
+              "horizontal_retention_prior": 0.75
+            },
+            "sampling": "fixed_object_per_environment",
+            "status": "simulation_priors_not_specimen_measurements",
+            "randomization": {
+              "version": "physical_dr_v1",
+              "sampling": "environment_creation",
+              "size_scale": 1.0256739801382022,
+              "mass_scale": 1.050844164286673,
+              "friction_scale": 1.1122068592837577,
+              "rolling_scale": 1.0,
+              "damping_scale": 0.9598917682468895
+            }
+          },
+          "policy_steps": 63,
+          "control_ticks": 1260,
+          "max_hold_seconds": 0.0,
+          "sums": {
+            "shaping": -2.044597510909125,
+            "step_cost": -0.6300000000000003,
+            "hand_action": -1.2431406703029186,
+            "hand_smooth": -0.3862677706755415,
+            "joint_limit": -2.0697192824680464,
+            "robot_control": -5.32529242515564,
+            "arm_limit": -6.599999999999998,
+            "collision": 0.0,
+            "success": 0.0,
+            "failure": -25.0,
+            "finger_backfold": 0.0,
+            "finger_prepare_sync": -0.10805314147982323
+          },
+          "potential_score_sums": {
+            "position": 71.61172871700137,
+            "precision": 87.49959595666164,
+            "palm": 8.742115135491847,
+            "velocity": 5.706395382158632,
+            "ready": 0.14429523809388603,
+            "contact": 10.3,
+            "wrap": 2.059677488393741,
+            "hold": 0.0,
+            "finger_coverage": 2.0999999999999996,
+            "thumb_opposition": 0.0
+          }
+        }
+      }
+    },
+    {
+      "slot": 3,
+      "episode": 2,
+      "success": false,
+      "reason": "base_collision",
+      "steps": 27,
+      "reward": -40.35259140939195,
+      "legacy_success": false,
+      "physics": {
+        "version": "bounce_v1",
+        "object": "golf_ball",
+        "shape": "sphere",
+        "mass_kg": 0.04466465449877877,
+        "dimensions_m": [
+          0.04139521987528064,
+          0.04139521987528064,
+          0.04139521987528064
+        ],
+        "inertia": [
+          7.653575422843857e-06,
+          7.653575422843857e-06,
+          7.653575422843857e-06
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "sphere",
+          "inertia_factor": 0.4,
+          "sliding_friction": 0.21959295187159775,
+          "torsional_length_m": 0.0001,
+          "time_constant": 0.008,
+          "damping_ratio": 0.07778027078787683,
+          "normal_cor_target": 0.8,
+          "cor_basis": "Engineering prior for a resilient golf ball on a rigid floor; not a USGA specified ground COR",
+          "launch_height_m": [
+            0.9,
+            1.2
+          ],
+          "rebound_apex_m": [
+            0.65,
+            0.85
+          ],
+          "horizontal_retention_prior": 0.75,
+          "numerical_validation": {
+            "passed": true,
+            "peak_refinement_error_m": 0.00632180006612082,
+            "calibration": "simulation-only fit to nominal COR; not real measurements"
+          }
+        },
+        "launch": {
+          "requested_apex_clearance_m": 0.6619705659729366,
+          "nominal_cor": 0.8,
+          "predicted_apex_y": 0.636333316431524,
+          "downward_speed": 0.9904544411531511,
+          "horizontal_speed": 1.4746137139671904,
+          "predicted_first_impact_seconds": 0.35824466892008183,
+          "predicted_apex_seconds": 0.7256114084315317,
+          "horizontal_retention_prior": 0.75
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 0.9733400778132805,
+          "mass_scale": 0.9709707499734517,
+          "friction_scale": 0.878371807486391,
+          "rolling_scale": 1.0,
+          "damping_scale": 1.051273011297507
+        }
+      },
+      "stable_hold": false,
+      "success_version": "bounce_controlled_hold_v1",
+      "diagnostics": {
+        "bounce_grasp_terminal": true,
+        "bounce_grasp_version": "controlled_hold_v1",
+        "bounce_grasp_reward_profile": "finger_coordination_v2",
+        "bounce_grasp_hold_seconds": 0.0,
+        "bounce_grasp_max_hold_seconds": 0.0,
+        "bounce_grasp_hold_reached": false,
+        "bounce_grasp_contact_fraction": 0.0,
+        "bounce_grasp_had_contact": true,
+        "bounce_grasp_hand_target_clipped": 0.5,
+        "bounce_grasp_state": {
+          "hand_contact": false,
+          "floor_contact": false,
+          "external_support": true,
+          "off_ground": false,
+          "capture": false,
+          "contact_groups": 0,
+          "contact_span": 0.0,
+          "relative_speed": 1.8671504644734238,
+          "palm_dot": -0.8870571012404285,
+          "distance": 0.33100097546327784,
+          "local_ball": [
+            0.10251810659750021,
+            0.1284424088489734,
+            -0.23583558258159912
+          ],
+          "joint_violation": 0.0005634513480412273,
+          "target_violation": 0.0,
+          "valid_hold": false,
+          "collision": true,
+          "finger_contact_groups": 0,
+          "thumb_contact": false,
+          "finger_tip_heights": [
+            0.057946425261344414,
+            0.06272291335718712,
+            0.07512878043319632
+          ]
+        },
+        "bounce_grasp_joint_violation": 0.013249293869592603,
+        "bounce_grasp_target_violation": 0.0,
+        "bounce_grasp_finger_posture": {
+          "backfold": 0.0,
+          "prepare_sync": 0.23102724182578857,
+          "near": 0.03399532456994389,
+          "contact_fraction": 0.0
+        },
+        "bounce_grasp_reward_terms": {
+          "shaping": -2.372031214897867,
+          "step_cost": -0.01,
+          "hand_action": -0.019999999105930335,
+          "hand_smooth": -0.0,
+          "joint_limit": -0.054857433763382535,
+          "robot_control": -0.07709118127822877,
+          "arm_limit": 0.0,
+          "collision": -10.0,
+          "success": 0.0,
+          "failure": -25.0,
+          "finger_backfold": -0.0,
+          "finger_prepare_sync": -0.00039269230351833
+        },
+        "bounce_grasp_potential_terms": {
+          "position": 1.055753953653638,
+          "precision": 0.9129226370146101,
+          "palm": 0.00010841192617038461,
+          "velocity": 0.003181882123720477,
+          "ready": 3.9810933250284154e-05,
+          "contact": 0.0,
+          "wrap": 0.0,
+          "hold": 0.0,
+          "finger_coverage": 0.0,
+          "thumb_opposition": 0.0
+        },
+        "bounce_grasp_potential_previous": 2.372031214897867,
+        "bounce_grasp_potential": 0.0,
+        "bounce_grasp_episode": {
+          "version": "controlled_hold_v1",
+          "reward_profile": "finger_coordination_v2",
+          "episode": 3,
+          "success": false,
+          "reason": "base_collision",
+          "physics": {
+            "version": "bounce_v1",
+            "object": "golf_ball",
+            "shape": "sphere",
+            "mass_kg": 0.04466465449877877,
+            "dimensions_m": [
+              0.04139521987528064,
+              0.04139521987528064,
+              0.04139521987528064
+            ],
+            "inertia": [
+              7.653575422843857e-06,
+              7.653575422843857e-06,
+              7.653575422843857e-06
+            ],
+            "inertia_basis": "structural analytical approximation",
+            "surface_id": "generic_dry_rigid_surface_prior_v1",
+            "material": {
+              "kind": "sphere",
+              "inertia_factor": 0.4,
+              "sliding_friction": 0.21959295187159775,
+              "torsional_length_m": 0.0001,
+              "time_constant": 0.008,
+              "damping_ratio": 0.07778027078787683,
+              "normal_cor_target": 0.8,
+              "cor_basis": "Engineering prior for a resilient golf ball on a rigid floor; not a USGA specified ground COR",
+              "launch_height_m": [
+                0.9,
+                1.2
+              ],
+              "rebound_apex_m": [
+                0.65,
+                0.85
+              ],
+              "horizontal_retention_prior": 0.75,
+              "numerical_validation": {
+                "passed": true,
+                "peak_refinement_error_m": 0.00632180006612082,
+                "calibration": "simulation-only fit to nominal COR; not real measurements"
+              }
+            },
+            "launch": {
+              "requested_apex_clearance_m": 0.6619705659729366,
+              "nominal_cor": 0.8,
+              "predicted_apex_y": 0.636333316431524,
+              "downward_speed": 0.9904544411531511,
+              "horizontal_speed": 1.4746137139671904,
+              "predicted_first_impact_seconds": 0.35824466892008183,
+              "predicted_apex_seconds": 0.7256114084315317,
+              "horizontal_retention_prior": 0.75
+            },
+            "sampling": "fixed_object_per_environment",
+            "status": "simulation_priors_not_specimen_measurements",
+            "randomization": {
+              "version": "physical_dr_v1",
+              "sampling": "environment_creation",
+              "size_scale": 0.9733400778132805,
+              "mass_scale": 0.9709707499734517,
+              "friction_scale": 0.878371807486391,
+              "rolling_scale": 1.0,
+              "damping_scale": 1.051273011297507
+            }
+          },
+          "policy_steps": 27,
+          "control_ticks": 531,
+          "max_hold_seconds": 0.0,
+          "sums": {
+            "shaping": -1.003158090876699,
+            "step_cost": -0.2700000000000001,
+            "hand_action": -0.527365631548609,
+            "hand_smooth": -0.24087653427189729,
+            "joint_limit": -1.036651278086668,
+            "robot_control": -2.2352919065952297,
+            "arm_limit": 0.0,
+            "collision": -10.0,
+            "success": 0.0,
+            "failure": -25.0,
+            "finger_backfold": 0.0,
+            "finger_prepare_sync": -0.03924796801284584
+          },
+          "potential_score_sums": {
+            "position": 29.95752405448891,
+            "precision": 37.87334987765307,
+            "palm": 4.114303482241104,
+            "velocity": 1.8088734252927643,
+            "ready": 0.16322966405504055,
+            "contact": 2.8000000000000003,
+            "wrap": 0.3499999999999999,
+            "hold": 0.0,
+            "finger_coverage": 0.525,
+            "thumb_opposition": 0.0
+          }
+        }
+      }
+    },
+    {
+      "slot": 0,
+      "episode": 2,
+      "success": false,
+      "reason": "timeout",
+      "steps": 63,
+      "reward": -44.52301864195431,
+      "legacy_success": false,
+      "physics": {
+        "version": "bounce_v1",
+        "object": "golf_ball",
+        "shape": "sphere",
+        "mass_kg": 0.04705735307047695,
+        "dimensions_m": [
+          0.04366804135539028,
+          0.04366804135539028,
+          0.04366804135539028
+        ],
+        "inertia": [
+          8.973356472932546e-06,
+          8.973356472932546e-06,
+          8.973356472932546e-06
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "sphere",
+          "inertia_factor": 0.4,
+          "sliding_friction": 0.22045033240000367,
+          "torsional_length_m": 0.0001,
+          "time_constant": 0.008,
+          "damping_ratio": 0.06845821665916575,
+          "normal_cor_target": 0.8,
+          "cor_basis": "Engineering prior for a resilient golf ball on a rigid floor; not a USGA specified ground COR",
+          "launch_height_m": [
+            0.9,
+            1.2
+          ],
+          "rebound_apex_m": [
+            0.65,
+            0.85
+          ],
+          "horizontal_retention_prior": 0.75,
+          "numerical_validation": {
+            "passed": true,
+            "peak_refinement_error_m": 0.00632180006612082,
+            "calibration": "simulation-only fit to nominal COR; not real measurements"
+          }
+        },
+        "launch": {
+          "requested_apex_clearance_m": 0.7650014186806722,
+          "nominal_cor": 0.8,
+          "predicted_apex_y": 0.7705716490707032,
+          "downward_speed": 2.0266123234496747,
+          "horizontal_speed": 1.7441147870113831,
+          "predicted_first_impact_seconds": 0.2870664524147704,
+          "predicted_apex_seconds": 0.6819887130988538,
+          "horizontal_retention_prior": 0.75
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.026781712933732,
+          "mass_scale": 1.0229859363147162,
+          "friction_scale": 0.8818013296000147,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9252767423709667
+        }
+      },
+      "stable_hold": false,
+      "success_version": "bounce_controlled_hold_v1",
+      "diagnostics": {
+        "bounce_grasp_terminal": true,
+        "bounce_grasp_version": "controlled_hold_v1",
+        "bounce_grasp_reward_profile": "finger_coordination_v2",
+        "bounce_grasp_hold_seconds": 0.0,
+        "bounce_grasp_max_hold_seconds": 0.0,
+        "bounce_grasp_hold_reached": false,
+        "bounce_grasp_contact_fraction": 0.0,
+        "bounce_grasp_had_contact": true,
+        "bounce_grasp_hand_target_clipped": 0.75,
+        "bounce_grasp_state": {
+          "hand_contact": false,
+          "floor_contact": false,
+          "external_support": false,
+          "off_ground": true,
+          "capture": false,
+          "contact_groups": 0,
+          "contact_span": 0.0,
+          "relative_speed": 1.4656908224070895,
+          "palm_dot": -0.014888297140319959,
+          "distance": 1.05961635721234,
+          "local_ball": [
+            -1.0054623549265223,
+            0.36728726529180733,
+            0.028184975238907145
+          ],
+          "joint_violation": 0.0007486594854517747,
+          "target_violation": 0.0,
+          "valid_hold": false,
+          "collision": false,
+          "finger_contact_groups": 0,
+          "thumb_contact": false,
+          "finger_tip_heights": [
+            0.02665267880945423,
+            0.02854582555528422,
+            0.06122442645539333
+          ]
+        },
+        "bounce_grasp_joint_violation": 0.011090261145031902,
+        "bounce_grasp_target_violation": 0.0,
+        "bounce_grasp_finger_posture": {
+          "backfold": 0.0,
+          "prepare_sync": 0.2222222222222222,
+          "near": 8.912431967674114e-16,
+          "contact_fraction": 0.0
+        },
+        "bounce_grasp_reward_terms": {
+          "shaping": -0.33904021194923395,
+          "step_cost": -0.01,
+          "hand_action": -0.019999999105930335,
+          "hand_smooth": -0.0,
+          "joint_limit": -0.038435591332813844,
+          "robot_control": -0.08797293663024902,
+          "arm_limit": 0.0,
+          "collision": 0.0,
+          "success": 0.0,
+          "failure": -25.0,
+          "finger_backfold": -0.0,
+          "finger_prepare_sync": -9.90270218630457e-18
+        },
+        "bounce_grasp_potential_terms": {
+          "position": 0.1967418229963925,
+          "precision": 0.11218964521971742,
+          "palm": 2.1622564097481515e-16,
+          "velocity": 1.2791691565044696e-16,
+          "ready": 1.1206503411085818e-19,
+          "contact": 0.0,
+          "wrap": 0.0,
+          "hold": 0.0,
+          "finger_coverage": 0.0,
+          "thumb_opposition": 0.0
+        },
+        "bounce_grasp_potential_previous": 0.33904021194923395,
+        "bounce_grasp_potential": 0.0,
+        "bounce_grasp_episode": {
+          "version": "controlled_hold_v1",
+          "reward_profile": "finger_coordination_v2",
+          "episode": 3,
+          "success": false,
+          "reason": "timeout",
+          "physics": {
+            "version": "bounce_v1",
+            "object": "golf_ball",
+            "shape": "sphere",
+            "mass_kg": 0.04705735307047695,
+            "dimensions_m": [
+              0.04366804135539028,
+              0.04366804135539028,
+              0.04366804135539028
+            ],
+            "inertia": [
+              8.973356472932546e-06,
+              8.973356472932546e-06,
+              8.973356472932546e-06
+            ],
+            "inertia_basis": "structural analytical approximation",
+            "surface_id": "generic_dry_rigid_surface_prior_v1",
+            "material": {
+              "kind": "sphere",
+              "inertia_factor": 0.4,
+              "sliding_friction": 0.22045033240000367,
+              "torsional_length_m": 0.0001,
+              "time_constant": 0.008,
+              "damping_ratio": 0.06845821665916575,
+              "normal_cor_target": 0.8,
+              "cor_basis": "Engineering prior for a resilient golf ball on a rigid floor; not a USGA specified ground COR",
+              "launch_height_m": [
+                0.9,
+                1.2
+              ],
+              "rebound_apex_m": [
+                0.65,
+                0.85
+              ],
+              "horizontal_retention_prior": 0.75,
+              "numerical_validation": {
+                "passed": true,
+                "peak_refinement_error_m": 0.00632180006612082,
+                "calibration": "simulation-only fit to nominal COR; not real measurements"
+              }
+            },
+            "launch": {
+              "requested_apex_clearance_m": 0.7650014186806722,
+              "nominal_cor": 0.8,
+              "predicted_apex_y": 0.7705716490707032,
+              "downward_speed": 2.0266123234496747,
+              "horizontal_speed": 1.7441147870113831,
+              "predicted_first_impact_seconds": 0.2870664524147704,
+              "predicted_apex_seconds": 0.6819887130988538,
+              "horizontal_retention_prior": 0.75
+            },
+            "sampling": "fixed_object_per_environment",
+            "status": "simulation_priors_not_specimen_measurements",
+            "randomization": {
+              "version": "physical_dr_v1",
+              "sampling": "environment_creation",
+              "size_scale": 1.026781712933732,
+              "mass_scale": 1.0229859363147162,
+              "friction_scale": 0.8818013296000147,
+              "rolling_scale": 1.0,
+              "damping_scale": 0.9252767423709667
+            }
+          },
+          "policy_steps": 63,
+          "control_ticks": 1260,
+          "max_hold_seconds": 0.0,
+          "sums": {
+            "shaping": -1.2649959153146042,
+            "step_cost": -0.6300000000000003,
+            "hand_action": -1.2575838950000475,
+            "hand_smooth": -0.26242900587436496,
+            "joint_limit": -2.4148162817251526,
+            "robot_control": -5.513852829933165,
+            "arm_limit": -8.099999999999998,
+            "collision": 0.0,
+            "success": 0.0,
+            "failure": -25.0,
+            "finger_backfold": -3.077699610224424e-20,
+            "finger_prepare_sync": -0.07934071410697578
+          },
+          "potential_score_sums": {
+            "position": 52.19400052070555,
+            "precision": 51.54179867277308,
+            "palm": 1.8456897599536788,
+            "velocity": 1.5277978678269304,
+            "ready": 0.016009503875556184,
+            "contact": 1.1,
+            "wrap": 0.18333333333333332,
+            "hold": 0.0,
+            "finger_coverage": 0.275,
+            "thumb_opposition": 0.0
+          }
+        }
+      }
+    },
+    {
+      "slot": 3,
+      "episode": 3,
+      "success": true,
+      "reason": "controlled_hold",
+      "steps": 31,
+      "reward": 15.547538768984195,
+      "legacy_success": true,
+      "physics": {
+        "version": "bounce_v1",
+        "object": "golf_ball",
+        "shape": "sphere",
+        "mass_kg": 0.04466465449877877,
+        "dimensions_m": [
+          0.04139521987528064,
+          0.04139521987528064,
+          0.04139521987528064
+        ],
+        "inertia": [
+          7.653575422843857e-06,
+          7.653575422843857e-06,
+          7.653575422843857e-06
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "sphere",
+          "inertia_factor": 0.4,
+          "sliding_friction": 0.21959295187159775,
+          "torsional_length_m": 0.0001,
+          "time_constant": 0.008,
+          "damping_ratio": 0.07778027078787683,
+          "normal_cor_target": 0.8,
+          "cor_basis": "Engineering prior for a resilient golf ball on a rigid floor; not a USGA specified ground COR",
+          "launch_height_m": [
+            0.9,
+            1.2
+          ],
+          "rebound_apex_m": [
+            0.65,
+            0.85
+          ],
+          "horizontal_retention_prior": 0.75,
+          "numerical_validation": {
+            "passed": true,
+            "peak_refinement_error_m": 0.00632180006612082,
+            "calibration": "simulation-only fit to nominal COR; not real measurements"
+          }
+        },
+        "launch": {
+          "requested_apex_clearance_m": 0.8019076841131424,
+          "nominal_cor": 0.8,
+          "predicted_apex_y": 0.6624360972420819,
+          "downward_speed": 2.133308717962281,
+          "horizontal_speed": 2.045255205366523,
+          "predicted_first_impact_seconds": 0.28795765329633094,
+          "predicted_apex_seconds": 0.6922939058385766,
+          "horizontal_retention_prior": 0.75
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 0.9733400778132805,
+          "mass_scale": 0.9709707499734517,
+          "friction_scale": 0.878371807486391,
+          "rolling_scale": 1.0,
+          "damping_scale": 1.051273011297507
+        }
+      },
+      "stable_hold": false,
+      "success_version": "bounce_controlled_hold_v1",
+      "diagnostics": {
+        "bounce_grasp_terminal": true,
+        "bounce_grasp_version": "controlled_hold_v1",
+        "bounce_grasp_reward_profile": "finger_coordination_v2",
+        "bounce_grasp_hold_seconds": 0.3379999999998996,
+        "bounce_grasp_max_hold_seconds": 0.3379999999998996,
+        "bounce_grasp_hold_reached": true,
+        "bounce_grasp_contact_fraction": 1.0,
+        "bounce_grasp_had_contact": true,
+        "bounce_grasp_hand_target_clipped": 0.75,
+        "bounce_grasp_state": {
+          "hand_contact": true,
+          "floor_contact": false,
+          "external_support": false,
+          "off_ground": true,
+          "capture": true,
+          "contact_groups": 3,
+          "contact_span": 0.9298581855084188,
+          "relative_speed": 0.045831792658189485,
+          "palm_dot": 0.8585366603525684,
+          "distance": 0.020034660587187135,
+          "local_ball": [
+            -0.008296219346271764,
+            0.01680119536223376,
+            0.06352975756736846
+          ],
+          "joint_violation": 0.0006313939795008494,
+          "target_violation": 0.0,
+          "valid_hold": true,
+          "collision": false,
+          "finger_contact_groups": 2,
+          "thumb_contact": false,
+          "finger_tip_heights": [
+            0.033527791445139656,
+            0.06693385657807017,
+            0.02629959576344836
+          ]
+        },
+        "bounce_grasp_joint_violation": 0.0010161126489458931,
+        "bounce_grasp_target_violation": 0.0,
+        "bounce_grasp_finger_posture": {
+          "backfold": 0.0,
+          "prepare_sync": 0.2600635802570392,
+          "near": 0.9876879147035897,
+          "contact_fraction": 1.0
+        },
+        "bounce_grasp_reward_terms": {
+          "shaping": -20.63902194532076,
+          "step_cost": -0.01,
+          "hand_action": -0.019896872753338582,
+          "hand_smooth": -1.216660585950588e-06,
+          "joint_limit": -0.00032265153604619997,
+          "robot_control": -0.07922466039657593,
+          "arm_limit": -0.3,
+          "collision": 0.0,
+          "success": 25.0,
+          "failure": 0.0,
+          "finger_backfold": -0.0,
+          "finger_prepare_sync": -0.0
+        },
+        "bounce_grasp_potential_terms": {
+          "position": 1.9934681351838108,
+          "precision": 3.951052360414194,
+          "palm": 0.8529076558937714,
+          "velocity": 0.9819583155371951,
+          "ready": 0.0,
+          "contact": 2.0,
+          "wrap": 1.9191307841473475,
+          "hold": 8.0,
+          "finger_coverage": 1.0,
+          "thumb_opposition": 0.0
+        },
+        "bounce_grasp_potential_previous": 20.63902194532076,
+        "bounce_grasp_potential": 0.0,
+        "bounce_grasp_episode": {
+          "version": "controlled_hold_v1",
+          "reward_profile": "finger_coordination_v2",
+          "episode": 4,
+          "success": true,
+          "reason": "controlled_hold",
+          "physics": {
+            "version": "bounce_v1",
+            "object": "golf_ball",
+            "shape": "sphere",
+            "mass_kg": 0.04466465449877877,
+            "dimensions_m": [
+              0.04139521987528064,
+              0.04139521987528064,
+              0.04139521987528064
+            ],
+            "inertia": [
+              7.653575422843857e-06,
+              7.653575422843857e-06,
+              7.653575422843857e-06
+            ],
+            "inertia_basis": "structural analytical approximation",
+            "surface_id": "generic_dry_rigid_surface_prior_v1",
+            "material": {
+              "kind": "sphere",
+              "inertia_factor": 0.4,
+              "sliding_friction": 0.21959295187159775,
+              "torsional_length_m": 0.0001,
+              "time_constant": 0.008,
+              "damping_ratio": 0.07778027078787683,
+              "normal_cor_target": 0.8,
+              "cor_basis": "Engineering prior for a resilient golf ball on a rigid floor; not a USGA specified ground COR",
+              "launch_height_m": [
+                0.9,
+                1.2
+              ],
+              "rebound_apex_m": [
+                0.65,
+                0.85
+              ],
+              "horizontal_retention_prior": 0.75,
+              "numerical_validation": {
+                "passed": true,
+                "peak_refinement_error_m": 0.00632180006612082,
+                "calibration": "simulation-only fit to nominal COR; not real measurements"
+              }
+            },
+            "launch": {
+              "requested_apex_clearance_m": 0.8019076841131424,
+              "nominal_cor": 0.8,
+              "predicted_apex_y": 0.6624360972420819,
+              "downward_speed": 2.133308717962281,
+              "horizontal_speed": 2.045255205366523,
+              "predicted_first_impact_seconds": 0.28795765329633094,
+              "predicted_apex_seconds": 0.6922939058385766,
+              "horizontal_retention_prior": 0.75
+            },
+            "sampling": "fixed_object_per_environment",
+            "status": "simulation_priors_not_specimen_measurements",
+            "randomization": {
+              "version": "physical_dr_v1",
+              "sampling": "environment_creation",
+              "size_scale": 0.9733400778132805,
+              "mass_scale": 0.9709707499734517,
+              "friction_scale": 0.878371807486391,
+              "rolling_scale": 1.0,
+              "damping_scale": 1.051273011297507
+            }
+          },
+          "policy_steps": 31,
+          "control_ticks": 620,
+          "max_hold_seconds": 0.3379999999998996,
+          "sums": {
+            "shaping": -1.98202554868746,
+            "step_cost": -0.3100000000000001,
+            "hand_action": -0.6187778621856913,
+            "hand_smooth": -0.15655355465231002,
+            "joint_limit": -0.9819880367429548,
+            "robot_control": -2.6591679954528806,
+            "arm_limit": -2.6999999999999997,
+            "collision": 0.0,
+            "success": 25.0,
+            "failure": 0.0,
+            "finger_backfold": -1.6568346990923163e-21,
+            "finger_prepare_sync": -0.0439482332945113
+          },
+          "potential_score_sums": {
+            "position": 37.46593933879207,
+            "precision": 59.06159727141453,
+            "palm": 10.543539145562061,
+            "velocity": 9.713469033527277,
+            "ready": 0.03568257350327,
+            "contact": 19.8,
+            "wrap": 16.04852351185985,
+            "hold": 41.7066666666637,
+            "finger_coverage": 8.425,
+            "thumb_opposition": 0.0
+          }
+        }
+      }
+    },
+    {
+      "slot": 2,
+      "episode": 3,
+      "success": false,
+      "reason": "timeout",
+      "steps": 63,
+      "reward": -38.55264411239506,
+      "legacy_success": false,
+      "physics": {
+        "version": "bounce_v1",
+        "object": "golf_ball",
+        "shape": "sphere",
+        "mass_kg": 0.046904907345738545,
+        "dimensions_m": [
+          0.04325021814864497,
+          0.04325021814864497,
+          0.04325021814864497
+        ],
+        "inertia": [
+          8.77394458380765e-06,
+          8.77394458380765e-06,
+          8.77394458380765e-06
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "sphere",
+          "inertia_factor": 0.4,
+          "sliding_friction": 0.23264385217683195,
+          "torsional_length_m": 0.0001,
+          "time_constant": 0.008,
+          "damping_ratio": 0.07279009210475601,
+          "normal_cor_target": 0.8,
+          "cor_basis": "Engineering prior for a resilient golf ball on a rigid floor; not a USGA specified ground COR",
+          "launch_height_m": [
+            0.9,
+            1.2
+          ],
+          "rebound_apex_m": [
+            0.65,
+            0.85
+          ],
+          "horizontal_retention_prior": 0.75,
+          "numerical_validation": {
+            "passed": true,
+            "peak_refinement_error_m": 0.00632180006612082,
+            "calibration": "simulation-only fit to nominal COR; not real measurements"
+          }
+        },
+        "launch": {
+          "requested_apex_clearance_m": 0.7335052931524326,
+          "nominal_cor": 0.8,
+          "predicted_apex_y": 0.8230977754185153,
+          "downward_speed": 0.9904544411531511,
+          "horizontal_speed": 1.0101069791379975,
+          "predicted_first_impact_seconds": 0.38242009100028146,
+          "predicted_apex_seconds": 0.7691271681758911,
+          "horizontal_retention_prior": 0.75
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0169572918099654,
+          "mass_scale": 1.0196718988204032,
+          "friction_scale": 0.9305754087073278,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9838260852585877
+        }
+      },
+      "stable_hold": false,
+      "success_version": "bounce_controlled_hold_v1",
+      "diagnostics": {
+        "bounce_grasp_terminal": true,
+        "bounce_grasp_version": "controlled_hold_v1",
+        "bounce_grasp_reward_profile": "finger_coordination_v2",
+        "bounce_grasp_hold_seconds": 0.0,
+        "bounce_grasp_max_hold_seconds": 0.0,
+        "bounce_grasp_hold_reached": false,
+        "bounce_grasp_contact_fraction": 0.0,
+        "bounce_grasp_had_contact": true,
+        "bounce_grasp_hand_target_clipped": 0.9166666666666666,
+        "bounce_grasp_state": {
+          "hand_contact": false,
+          "floor_contact": false,
+          "external_support": false,
+          "off_ground": true,
+          "capture": false,
+          "contact_groups": 0,
+          "contact_span": 0.0,
+          "relative_speed": 1.6889944558932004,
+          "palm_dot": -0.0898897192684335,
+          "distance": 0.3313380276373024,
+          "local_ball": [
+            -0.042178390243649694,
+            0.3594938493792941,
+            0.01357115946393872
+          ],
+          "joint_violation": 7.383463437817851e-05,
+          "target_violation": 0.0,
+          "valid_hold": false,
+          "collision": false,
+          "finger_contact_groups": 0,
+          "thumb_contact": false,
+          "finger_tip_heights": [
+            0.01567911302960476,
+            0.04998778347475632,
+            0.06077499190337755
+          ]
+        },
+        "bounce_grasp_joint_violation": 0.01465271836979651,
+        "bounce_grasp_target_violation": 0.0,
+        "bounce_grasp_finger_posture": {
+          "backfold": 0.0,
+          "prepare_sync": 0.2232128720410484,
+          "near": 0.03376189476154819,
+          "contact_fraction": 0.0
+        },
+        "bounce_grasp_reward_terms": {
+          "shaping": -2.3375215425309013,
+          "step_cost": -0.01,
+          "hand_action": -0.019999999105930335,
+          "hand_smooth": -0.0,
+          "joint_limit": -0.06709442363267877,
+          "robot_control": -0.07456466674804688,
+          "arm_limit": 0.0,
+          "collision": 0.0,
+          "success": 0.0,
+          "failure": -25.0,
+          "finger_backfold": -0.0,
+          "finger_prepare_sync": -0.00037680447476364
+        },
+        "bounce_grasp_potential_terms": {
+          "position": 1.0547392967330964,
+          "precision": 0.9114892680497969,
+          "palm": 0.006991250460997489,
+          "velocity": 0.0037831959157694738,
+          "ready": 2.3626284916158037e-06,
+          "contact": 0.0,
+          "wrap": 0.0,
+          "hold": 0.0,
+          "finger_coverage": 0.0,
+          "thumb_opposition": 0.0
+        },
+        "bounce_grasp_potential_previous": 2.3375215425309013,
+        "bounce_grasp_potential": 0.0,
+        "bounce_grasp_episode": {
+          "version": "controlled_hold_v1",
+          "reward_profile": "finger_coordination_v2",
+          "episode": 4,
+          "success": false,
+          "reason": "timeout",
+          "physics": {
+            "version": "bounce_v1",
+            "object": "golf_ball",
+            "shape": "sphere",
+            "mass_kg": 0.046904907345738545,
+            "dimensions_m": [
+              0.04325021814864497,
+              0.04325021814864497,
+              0.04325021814864497
+            ],
+            "inertia": [
+              8.77394458380765e-06,
+              8.77394458380765e-06,
+              8.77394458380765e-06
+            ],
+            "inertia_basis": "structural analytical approximation",
+            "surface_id": "generic_dry_rigid_surface_prior_v1",
+            "material": {
+              "kind": "sphere",
+              "inertia_factor": 0.4,
+              "sliding_friction": 0.23264385217683195,
+              "torsional_length_m": 0.0001,
+              "time_constant": 0.008,
+              "damping_ratio": 0.07279009210475601,
+              "normal_cor_target": 0.8,
+              "cor_basis": "Engineering prior for a resilient golf ball on a rigid floor; not a USGA specified ground COR",
+              "launch_height_m": [
+                0.9,
+                1.2
+              ],
+              "rebound_apex_m": [
+                0.65,
+                0.85
+              ],
+              "horizontal_retention_prior": 0.75,
+              "numerical_validation": {
+                "passed": true,
+                "peak_refinement_error_m": 0.00632180006612082,
+                "calibration": "simulation-only fit to nominal COR; not real measurements"
+              }
+            },
+            "launch": {
+              "requested_apex_clearance_m": 0.7335052931524326,
+              "nominal_cor": 0.8,
+              "predicted_apex_y": 0.8230977754185153,
+              "downward_speed": 0.9904544411531511,
+              "horizontal_speed": 1.0101069791379975,
+              "predicted_first_impact_seconds": 0.38242009100028146,
+              "predicted_apex_seconds": 0.7691271681758911,
+              "horizontal_retention_prior": 0.75
+            },
+            "sampling": "fixed_object_per_environment",
+            "status": "simulation_priors_not_specimen_measurements",
+            "randomization": {
+              "version": "physical_dr_v1",
+              "sampling": "environment_creation",
+              "size_scale": 1.0169572918099654,
+              "mass_scale": 1.0196718988204032,
+              "friction_scale": 0.9305754087073278,
+              "rolling_scale": 1.0,
+              "damping_scale": 0.9838260852585877
+            }
+          },
+          "policy_steps": 63,
+          "control_ticks": 1260,
+          "max_hold_seconds": 0.0,
+          "sums": {
+            "shaping": -1.8093103500674894,
+            "step_cost": -0.6300000000000003,
+            "hand_action": -1.2469325108924714,
+            "hand_smooth": -0.3434250548714893,
+            "joint_limit": -4.473666090523074,
+            "robot_control": -4.9450934213399895,
+            "arm_limit": 0.0,
+            "collision": 0.0,
+            "success": 0.0,
+            "failure": -25.0,
+            "finger_backfold": 0.0,
+            "finger_prepare_sync": -0.1042166847005428
+          },
+          "potential_score_sums": {
+            "position": 71.41862120973278,
+            "precision": 77.19775629107123,
+            "palm": 3.281223863600401,
+            "velocity": 3.2770098288295477,
+            "ready": 0.023309820561398183,
+            "contact": 1.6,
+            "wrap": 0.16666666666666669,
+            "hold": 0.0,
+            "finger_coverage": 0.25,
+            "thumb_opposition": 0.0
+          }
+        }
+      }
+    },
+    {
+      "slot": 1,
+      "episode": 3,
+      "success": false,
+      "reason": "timeout",
+      "steps": 63,
+      "reward": -46.60019911587463,
+      "legacy_success": false,
+      "physics": {
+        "version": "bounce_v1",
+        "object": "golf_ball",
+        "shape": "sphere",
+        "mass_kg": 0.04833883155718696,
+        "dimensions_m": [
+          0.04362093054214088,
+          0.04362093054214088,
+          0.04362093054214088
+        ],
+        "inertia": [
+          9.197843170691528e-06,
+          9.197843170691528e-06,
+          9.197843170691528e-06
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "sphere",
+          "inertia_factor": 0.4,
+          "sliding_friction": 0.27805171482093943,
+          "torsional_length_m": 0.0001,
+          "time_constant": 0.008,
+          "damping_ratio": 0.0710192698366231,
+          "normal_cor_target": 0.8,
+          "cor_basis": "Engineering prior for a resilient golf ball on a rigid floor; not a USGA specified ground COR",
+          "launch_height_m": [
+            0.9,
+            1.2
+          ],
+          "rebound_apex_m": [
+            0.65,
+            0.85
+          ],
+          "horizontal_retention_prior": 0.75,
+          "numerical_validation": {
+            "passed": true,
+            "peak_refinement_error_m": 0.00632180006612082,
+            "calibration": "simulation-only fit to nominal COR; not real measurements"
+          }
+        },
+        "launch": {
+          "requested_apex_clearance_m": 0.813160540655111,
+          "nominal_cor": 0.8,
+          "predicted_apex_y": 0.5715250953397943,
+          "downward_speed": 2.2428353640731498,
+          "horizontal_speed": 2.0360185526631422,
+          "predicted_first_impact_seconds": 0.2803266862422243,
+          "predicted_apex_seconds": 0.6874900017251495,
+          "horizontal_retention_prior": 0.75
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0256739801382022,
+          "mass_scale": 1.050844164286673,
+          "friction_scale": 1.1122068592837577,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9598917682468895
+        }
+      },
+      "stable_hold": false,
+      "success_version": "bounce_controlled_hold_v1",
+      "diagnostics": {
+        "bounce_grasp_terminal": true,
+        "bounce_grasp_version": "controlled_hold_v1",
+        "bounce_grasp_reward_profile": "finger_coordination_v2",
+        "bounce_grasp_hold_seconds": 0.0,
+        "bounce_grasp_max_hold_seconds": 0.0,
+        "bounce_grasp_hold_reached": false,
+        "bounce_grasp_contact_fraction": 0.0,
+        "bounce_grasp_had_contact": true,
+        "bounce_grasp_hand_target_clipped": 1.0,
+        "bounce_grasp_state": {
+          "hand_contact": false,
+          "floor_contact": false,
+          "external_support": false,
+          "off_ground": true,
+          "capture": false,
+          "contact_groups": 0,
+          "contact_span": 0.0,
+          "relative_speed": 2.0524050178137685,
+          "palm_dot": 0.14008776702416603,
+          "distance": 1.3968355199305182,
+          "local_ball": [
+            -1.3603137913354182,
+            0.30000966074583213,
+            0.24035483943878488
+          ],
+          "joint_violation": 0.0008124518872749675,
+          "target_violation": 0.0,
+          "valid_hold": false,
+          "collision": false,
+          "finger_contact_groups": 0,
+          "thumb_contact": false,
+          "finger_tip_heights": [
+            0.016550968622792085,
+            0.01781530231335066,
+            0.057601916324650906
+          ]
+        },
+        "bounce_grasp_joint_violation": 0.024524020361751525,
+        "bounce_grasp_target_violation": 0.0,
+        "bounce_grasp_finger_posture": {
+          "backfold": 0.0,
+          "prepare_sync": 0.2222222222222222,
+          "near": 7.022609443426938e-27,
+          "contact_fraction": 0.0
+        },
+        "bounce_grasp_reward_terms": {
+          "shaping": -0.20105434523989094,
+          "step_cost": -0.01,
+          "hand_action": -0.019999999105930335,
+          "hand_smooth": -0.0,
+          "joint_limit": -0.18794611709487605,
+          "robot_control": -0.08786775112152101,
+          "arm_limit": 0.0,
+          "collision": 0.0,
+          "success": 0.0,
+          "failure": -25.0,
+          "finger_backfold": -0.0,
+          "finger_prepare_sync": -7.802899381585487e-29
+        },
+        "bounce_grasp_potential_terms": {
+          "position": 0.1181491874954018,
+          "precision": 0.06533741758254025,
+          "palm": 2.281997143206947e-27,
+          "velocity": 5.5291706791646835e-28,
+          "ready": 2.84580272711394e-31,
+          "contact": 0.0,
+          "wrap": 0.0,
+          "hold": 0.0,
+          "finger_coverage": 0.0,
+          "thumb_opposition": 0.0
+        },
+        "bounce_grasp_potential_previous": 0.20105434523989094,
+        "bounce_grasp_potential": 0.0,
+        "bounce_grasp_episode": {
+          "version": "controlled_hold_v1",
+          "reward_profile": "finger_coordination_v2",
+          "episode": 4,
+          "success": false,
+          "reason": "timeout",
+          "physics": {
+            "version": "bounce_v1",
+            "object": "golf_ball",
+            "shape": "sphere",
+            "mass_kg": 0.04833883155718696,
+            "dimensions_m": [
+              0.04362093054214088,
+              0.04362093054214088,
+              0.04362093054214088
+            ],
+            "inertia": [
+              9.197843170691528e-06,
+              9.197843170691528e-06,
+              9.197843170691528e-06
+            ],
+            "inertia_basis": "structural analytical approximation",
+            "surface_id": "generic_dry_rigid_surface_prior_v1",
+            "material": {
+              "kind": "sphere",
+              "inertia_factor": 0.4,
+              "sliding_friction": 0.27805171482093943,
+              "torsional_length_m": 0.0001,
+              "time_constant": 0.008,
+              "damping_ratio": 0.0710192698366231,
+              "normal_cor_target": 0.8,
+              "cor_basis": "Engineering prior for a resilient golf ball on a rigid floor; not a USGA specified ground COR",
+              "launch_height_m": [
+                0.9,
+                1.2
+              ],
+              "rebound_apex_m": [
+                0.65,
+                0.85
+              ],
+              "horizontal_retention_prior": 0.75,
+              "numerical_validation": {
+                "passed": true,
+                "peak_refinement_error_m": 0.00632180006612082,
+                "calibration": "simulation-only fit to nominal COR; not real measurements"
+              }
+            },
+            "launch": {
+              "requested_apex_clearance_m": 0.813160540655111,
+              "nominal_cor": 0.8,
+              "predicted_apex_y": 0.5715250953397943,
+              "downward_speed": 2.2428353640731498,
+              "horizontal_speed": 2.0360185526631422,
+              "predicted_first_impact_seconds": 0.2803266862422243,
+              "predicted_apex_seconds": 0.6874900017251495,
+              "horizontal_retention_prior": 0.75
+            },
+            "sampling": "fixed_object_per_environment",
+            "status": "simulation_priors_not_specimen_measurements",
+            "randomization": {
+              "version": "physical_dr_v1",
+              "sampling": "environment_creation",
+              "size_scale": 1.0256739801382022,
+              "mass_scale": 1.050844164286673,
+              "friction_scale": 1.1122068592837577,
+              "rolling_scale": 1.0,
+              "damping_scale": 0.9598917682468895
+            }
+          },
+          "policy_steps": 63,
+          "control_ticks": 1260,
+          "max_hold_seconds": 0.0,
+          "sums": {
+            "shaping": -1.4294994357835984,
+            "step_cost": -0.6300000000000003,
+            "hand_action": -1.2519388759905323,
+            "hand_smooth": -0.3041775240976647,
+            "joint_limit": -1.563248188562972,
+            "robot_control": -5.536716337203981,
+            "arm_limit": -10.800000000000004,
+            "collision": 0.0,
+            "success": 0.0,
+            "failure": -25.0,
+            "finger_backfold": 0.0,
+            "finger_prepare_sync": -0.0846187542358899
+          },
+          "potential_score_sums": {
+            "position": 53.679763690339946,
+            "precision": 59.497239545210185,
+            "palm": 2.976428733463197,
+            "velocity": 4.453250492760804,
+            "ready": 0.08486452902450066,
+            "contact": 3.8000000000000003,
+            "wrap": 0.0,
+            "hold": 0.0,
+            "finger_coverage": 0.0,
+            "thumb_opposition": 0.0
+          }
+        }
+      }
+    },
+    {
+      "slot": 3,
+      "episode": 4,
+      "success": true,
+      "reason": "controlled_hold",
+      "steps": 36,
+      "reward": 13.914170444113143,
+      "legacy_success": true,
+      "physics": {
+        "version": "bounce_v1",
+        "object": "golf_ball",
+        "shape": "sphere",
+        "mass_kg": 0.04466465449877877,
+        "dimensions_m": [
+          0.04139521987528064,
+          0.04139521987528064,
+          0.04139521987528064
+        ],
+        "inertia": [
+          7.653575422843857e-06,
+          7.653575422843857e-06,
+          7.653575422843857e-06
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "sphere",
+          "inertia_factor": 0.4,
+          "sliding_friction": 0.21959295187159775,
+          "torsional_length_m": 0.0001,
+          "time_constant": 0.008,
+          "damping_ratio": 0.07778027078787683,
+          "normal_cor_target": 0.8,
+          "cor_basis": "Engineering prior for a resilient golf ball on a rigid floor; not a USGA specified ground COR",
+          "launch_height_m": [
+            0.9,
+            1.2
+          ],
+          "rebound_apex_m": [
+            0.65,
+            0.85
+          ],
+          "horizontal_retention_prior": 0.75,
+          "numerical_validation": {
+            "passed": true,
+            "peak_refinement_error_m": 0.00632180006612082,
+            "calibration": "simulation-only fit to nominal COR; not real measurements"
+          }
+        },
+        "launch": {
+          "requested_apex_clearance_m": 0.7725207609965327,
+          "nominal_cor": 0.8,
+          "predicted_apex_y": 0.8001599988887897,
+          "downward_speed": 1.523295244148698,
+          "horizontal_speed": 1.7106105761187835,
+          "predicted_first_impact_seconds": 0.34079315498979956,
+          "predicted_apex_seconds": 0.7376515521028378,
+          "horizontal_retention_prior": 0.75
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 0.9733400778132805,
+          "mass_scale": 0.9709707499734517,
+          "friction_scale": 0.878371807486391,
+          "rolling_scale": 1.0,
+          "damping_scale": 1.051273011297507
+        }
+      },
+      "stable_hold": false,
+      "success_version": "bounce_controlled_hold_v1",
+      "diagnostics": {
+        "bounce_grasp_terminal": true,
+        "bounce_grasp_version": "controlled_hold_v1",
+        "bounce_grasp_reward_profile": "finger_coordination_v2",
+        "bounce_grasp_hold_seconds": 0.3299999999998171,
+        "bounce_grasp_max_hold_seconds": 0.3299999999998171,
+        "bounce_grasp_hold_reached": true,
+        "bounce_grasp_contact_fraction": 1.0,
+        "bounce_grasp_had_contact": true,
+        "bounce_grasp_hand_target_clipped": 0.8333333333333334,
+        "bounce_grasp_state": {
+          "hand_contact": true,
+          "floor_contact": false,
+          "external_support": false,
+          "off_ground": true,
+          "capture": true,
+          "contact_groups": 2,
+          "contact_span": 0.7798085854091684,
+          "relative_speed": 0.0181837933566096,
+          "palm_dot": 0.6435689990908795,
+          "distance": 0.03363810369719474,
+          "local_ball": [
+            0.001131541442880241,
+            0.0013910194655797833,
+            0.06387416489197495
+          ],
+          "joint_violation": 0.0006943193988243057,
+          "target_violation": 0.0,
+          "valid_hold": true,
+          "collision": false,
+          "finger_contact_groups": 1,
+          "thumb_contact": false,
+          "finger_tip_heights": [
+            0.03789490719047527,
+            0.06932411384066588,
+            0.024581515927648255
+          ]
+        },
+        "bounce_grasp_joint_violation": 0.0007062683960148974,
+        "bounce_grasp_target_violation": 0.0,
+        "bounce_grasp_finger_posture": {
+          "backfold": 0.0,
+          "prepare_sync": 0.2928980774419089,
+          "near": 0.9656792694081866,
+          "contact_fraction": 1.0
+        },
+        "bounce_grasp_reward_terms": {
+          "shaping": -19.12117592216268,
+          "step_cost": -0.01,
+          "hand_action": -0.019999719100043976,
+          "hand_smooth": -1.7642224486857927e-11,
+          "joint_limit": -0.000155879702252955,
+          "robot_control": -0.08882463455200196,
+          "arm_limit": -0.3,
+          "collision": 0.0,
+          "success": 25.0,
+          "failure": 0.0,
+          "finger_backfold": -0.0,
+          "finger_prepare_sync": -0.0
+        },
+        "bounce_grasp_potential_terms": {
+          "position": 1.981695250501615,
+          "precision": 3.8650199034023274,
+          "palm": 0.6521519528128034,
+          "velocity": 0.9647931328020835,
+          "ready": 0.0,
+          "contact": 2.0,
+          "wrap": 1.4370522699767585,
+          "hold": 8.0,
+          "finger_coverage": 0.5,
+          "thumb_opposition": 0.0
+        },
+        "bounce_grasp_potential_previous": 19.12117592216268,
+        "bounce_grasp_potential": 0.0,
+        "bounce_grasp_episode": {
+          "version": "controlled_hold_v1",
+          "reward_profile": "finger_coordination_v2",
+          "episode": 5,
+          "success": true,
+          "reason": "controlled_hold",
+          "physics": {
+            "version": "bounce_v1",
+            "object": "golf_ball",
+            "shape": "sphere",
+            "mass_kg": 0.04466465449877877,
+            "dimensions_m": [
+              0.04139521987528064,
+              0.04139521987528064,
+              0.04139521987528064
+            ],
+            "inertia": [
+              7.653575422843857e-06,
+              7.653575422843857e-06,
+              7.653575422843857e-06
+            ],
+            "inertia_basis": "structural analytical approximation",
+            "surface_id": "generic_dry_rigid_surface_prior_v1",
+            "material": {
+              "kind": "sphere",
+              "inertia_factor": 0.4,
+              "sliding_friction": 0.21959295187159775,
+              "torsional_length_m": 0.0001,
+              "time_constant": 0.008,
+              "damping_ratio": 0.07778027078787683,
+              "normal_cor_target": 0.8,
+              "cor_basis": "Engineering prior for a resilient golf ball on a rigid floor; not a USGA specified ground COR",
+              "launch_height_m": [
+                0.9,
+                1.2
+              ],
+              "rebound_apex_m": [
+                0.65,
+                0.85
+              ],
+              "horizontal_retention_prior": 0.75,
+              "numerical_validation": {
+                "passed": true,
+                "peak_refinement_error_m": 0.00632180006612082,
+                "calibration": "simulation-only fit to nominal COR; not real measurements"
+              }
+            },
+            "launch": {
+              "requested_apex_clearance_m": 0.7725207609965327,
+              "nominal_cor": 0.8,
+              "predicted_apex_y": 0.8001599988887897,
+              "downward_speed": 1.523295244148698,
+              "horizontal_speed": 1.7106105761187835,
+              "predicted_first_impact_seconds": 0.34079315498979956,
+              "predicted_apex_seconds": 0.7376515521028378,
+              "horizontal_retention_prior": 0.75
+            },
+            "sampling": "fixed_object_per_environment",
+            "status": "simulation_priors_not_specimen_measurements",
+            "randomization": {
+              "version": "physical_dr_v1",
+              "sampling": "environment_creation",
+              "size_scale": 0.9733400778132805,
+              "mass_scale": 0.9709707499734517,
+              "friction_scale": 0.878371807486391,
+              "rolling_scale": 1.0,
+              "damping_scale": 1.051273011297507
+            }
+          },
+          "policy_steps": 36,
+          "control_ticks": 720,
+          "max_hold_seconds": 0.3299999999998171,
+          "sums": {
+            "shaping": -2.2495426557631895,
+            "step_cost": -0.36000000000000015,
+            "hand_action": -0.7143835421383631,
+            "hand_smooth": -0.19785133959939818,
+            "joint_limit": -0.9687606202286112,
+            "robot_control": -2.9437655663490294,
+            "arm_limit": -3.599999999999999,
+            "collision": 0.0,
+            "success": 25.0,
+            "failure": 0.0,
+            "finger_backfold": -8.3764883278721e-30,
+            "finger_prepare_sync": -0.051525831808265074
+          },
+          "potential_score_sums": {
+            "position": 45.35385179773023,
+            "precision": 72.1135441278789,
+            "palm": 11.906754808257661,
+            "velocity": 11.714190845033455,
+            "ready": 0.034638795643368955,
+            "contact": 25.7,
+            "wrap": 14.624970247644,
+            "hold": 40.31999999998237,
+            "finger_coverage": 7.199999999999999,
+            "thumb_opposition": 0.0
+          }
+        }
+      }
+    },
+    {
+      "slot": 2,
+      "episode": 4,
+      "success": true,
+      "reason": "controlled_hold",
+      "steps": 34,
+      "reward": 13.897896559323334,
+      "legacy_success": true,
+      "physics": {
+        "version": "bounce_v1",
+        "object": "golf_ball",
+        "shape": "sphere",
+        "mass_kg": 0.046904907345738545,
+        "dimensions_m": [
+          0.04325021814864497,
+          0.04325021814864497,
+          0.04325021814864497
+        ],
+        "inertia": [
+          8.77394458380765e-06,
+          8.77394458380765e-06,
+          8.77394458380765e-06
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "sphere",
+          "inertia_factor": 0.4,
+          "sliding_friction": 0.23264385217683195,
+          "torsional_length_m": 0.0001,
+          "time_constant": 0.008,
+          "damping_ratio": 0.07279009210475601,
+          "normal_cor_target": 0.8,
+          "cor_basis": "Engineering prior for a resilient golf ball on a rigid floor; not a USGA specified ground COR",
+          "launch_height_m": [
+            0.9,
+            1.2
+          ],
+          "rebound_apex_m": [
+            0.65,
+            0.85
+          ],
+          "horizontal_retention_prior": 0.75,
+          "numerical_validation": {
+            "passed": true,
+            "peak_refinement_error_m": 0.00632180006612082,
+            "calibration": "simulation-only fit to nominal COR; not real measurements"
+          }
+        },
+        "launch": {
+          "requested_apex_clearance_m": 0.8404018456673481,
+          "nominal_cor": 0.8,
+          "predicted_apex_y": 0.819693055430418,
+          "downward_speed": 2.845239281708419,
+          "horizontal_speed": 1.520167129057095,
+          "predicted_first_impact_seconds": 0.22737444710006652,
+          "predicted_apex_seconds": 0.6413016730132223,
+          "horizontal_retention_prior": 0.75
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0169572918099654,
+          "mass_scale": 1.0196718988204032,
+          "friction_scale": 0.9305754087073278,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9838260852585877
+        }
+      },
+      "stable_hold": false,
+      "success_version": "bounce_controlled_hold_v1",
+      "diagnostics": {
+        "bounce_grasp_terminal": true,
+        "bounce_grasp_version": "controlled_hold_v1",
+        "bounce_grasp_reward_profile": "finger_coordination_v2",
+        "bounce_grasp_hold_seconds": 0.3119999999998271,
+        "bounce_grasp_max_hold_seconds": 0.3119999999998271,
+        "bounce_grasp_hold_reached": true,
+        "bounce_grasp_contact_fraction": 1.0,
+        "bounce_grasp_had_contact": true,
+        "bounce_grasp_hand_target_clipped": 0.75,
+        "bounce_grasp_state": {
+          "hand_contact": true,
+          "floor_contact": false,
+          "external_support": false,
+          "off_ground": true,
+          "capture": true,
+          "contact_groups": 3,
+          "contact_span": 0.9234493482575559,
+          "relative_speed": 0.026635523336979907,
+          "palm_dot": 0.7568657058862378,
+          "distance": 0.025600104657132184,
+          "local_ball": [
+            0.012382278794976652,
+            0.012634989601534363,
+            0.06426465320362512
+          ],
+          "joint_violation": 0.000717087755303436,
+          "target_violation": 0.0,
+          "valid_hold": true,
+          "collision": false,
+          "finger_contact_groups": 2,
+          "thumb_contact": false,
+          "finger_tip_heights": [
+            0.03183313605688263,
+            0.05485182876391831,
+            0.024543604929493625
+          ]
+        },
+        "bounce_grasp_joint_violation": 0.000717087755303436,
+        "bounce_grasp_target_violation": 0.0,
+        "bounce_grasp_finger_posture": {
+          "backfold": 0.0,
+          "prepare_sync": 0.1517327811468741,
+          "near": 0.9799758741074328,
+          "contact_fraction": 1.0
+        },
+        "bounce_grasp_reward_terms": {
+          "shaping": -19.836511530792464,
+          "step_cost": -0.01,
+          "hand_action": -0.019999833644795392,
+          "hand_smooth": -2.3892584807318207e-08,
+          "joint_limit": -0.0001606921402519127,
+          "robot_control": -0.08517802238464356,
+          "arm_limit": -0.3,
+          "collision": 0.0,
+          "success": 25.0,
+          "failure": 0.0,
+          "finger_backfold": -0.0,
+          "finger_prepare_sync": -0.0
+        },
+        "bounce_grasp_potential_terms": {
+          "position": 1.9893570961111016,
+          "precision": 3.920694828043888,
+          "palm": 0.7561927749802613,
+          "velocity": 0.9780484364894326,
+          "ready": 0.0,
+          "contact": 2.0,
+          "wrap": 1.9224578523165305,
+          "hold": 8.0,
+          "finger_coverage": 1.0,
+          "thumb_opposition": 0.0
+        },
+        "bounce_grasp_potential_previous": 19.836511530792464,
+        "bounce_grasp_potential": 0.0,
+        "bounce_grasp_episode": {
+          "version": "controlled_hold_v1",
+          "reward_profile": "finger_coordination_v2",
+          "episode": 5,
+          "success": true,
+          "reason": "controlled_hold",
+          "physics": {
+            "version": "bounce_v1",
+            "object": "golf_ball",
+            "shape": "sphere",
+            "mass_kg": 0.046904907345738545,
+            "dimensions_m": [
+              0.04325021814864497,
+              0.04325021814864497,
+              0.04325021814864497
+            ],
+            "inertia": [
+              8.77394458380765e-06,
+              8.77394458380765e-06,
+              8.77394458380765e-06
+            ],
+            "inertia_basis": "structural analytical approximation",
+            "surface_id": "generic_dry_rigid_surface_prior_v1",
+            "material": {
+              "kind": "sphere",
+              "inertia_factor": 0.4,
+              "sliding_friction": 0.23264385217683195,
+              "torsional_length_m": 0.0001,
+              "time_constant": 0.008,
+              "damping_ratio": 0.07279009210475601,
+              "normal_cor_target": 0.8,
+              "cor_basis": "Engineering prior for a resilient golf ball on a rigid floor; not a USGA specified ground COR",
+              "launch_height_m": [
+                0.9,
+                1.2
+              ],
+              "rebound_apex_m": [
+                0.65,
+                0.85
+              ],
+              "horizontal_retention_prior": 0.75,
+              "numerical_validation": {
+                "passed": true,
+                "peak_refinement_error_m": 0.00632180006612082,
+                "calibration": "simulation-only fit to nominal COR; not real measurements"
+              }
+            },
+            "launch": {
+              "requested_apex_clearance_m": 0.8404018456673481,
+              "nominal_cor": 0.8,
+              "predicted_apex_y": 0.819693055430418,
+              "downward_speed": 2.845239281708419,
+              "horizontal_speed": 1.520167129057095,
+              "predicted_first_impact_seconds": 0.22737444710006652,
+              "predicted_apex_seconds": 0.6413016730132223,
+              "horizontal_retention_prior": 0.75
+            },
+            "sampling": "fixed_object_per_environment",
+            "status": "simulation_priors_not_specimen_measurements",
+            "randomization": {
+              "version": "physical_dr_v1",
+              "sampling": "environment_creation",
+              "size_scale": 1.0169572918099654,
+              "mass_scale": 1.0196718988204032,
+              "friction_scale": 0.9305754087073278,
+              "rolling_scale": 1.0,
+              "damping_scale": 0.9838260852585877
+            }
+          },
+          "policy_steps": 34,
+          "control_ticks": 680,
+          "max_hold_seconds": 0.3119999999998271,
+          "sums": {
+            "shaping": -2.3300277492270745,
+            "step_cost": -0.34000000000000014,
+            "hand_action": -0.6739828262764953,
+            "hand_smooth": -0.1936563891429427,
+            "joint_limit": -0.7666944001916396,
+            "robot_control": -2.8343821954727177,
+            "arm_limit": -3.899999999999999,
+            "collision": 0.0,
+            "success": 25.0,
+            "failure": 0.0,
+            "finger_backfold": 0.0,
+            "finger_prepare_sync": -0.0633598803657935
+          },
+          "potential_score_sums": {
+            "position": 44.587285743112496,
+            "precision": 71.02033679155788,
+            "palm": 13.556841622253401,
+            "velocity": 11.814222970723273,
+            "ready": 0.03431551487598576,
+            "contact": 24.8,
+            "wrap": 17.025947071304316,
+            "hold": 36.47999999998431,
+            "finger_coverage": 11.05,
+            "thumb_opposition": 0.0
+          }
+        }
+      }
+    },
+    {
+      "slot": 0,
+      "episode": 3,
+      "success": false,
+      "reason": "out_of_bounds",
+      "steps": 58,
+      "reward": -41.88174678696265,
+      "legacy_success": false,
+      "physics": {
+        "version": "bounce_v1",
+        "object": "golf_ball",
+        "shape": "sphere",
+        "mass_kg": 0.04705735307047695,
+        "dimensions_m": [
+          0.04366804135539028,
+          0.04366804135539028,
+          0.04366804135539028
+        ],
+        "inertia": [
+          8.973356472932546e-06,
+          8.973356472932546e-06,
+          8.973356472932546e-06
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "sphere",
+          "inertia_factor": 0.4,
+          "sliding_friction": 0.22045033240000367,
+          "torsional_length_m": 0.0001,
+          "time_constant": 0.008,
+          "damping_ratio": 0.06845821665916575,
+          "normal_cor_target": 0.8,
+          "cor_basis": "Engineering prior for a resilient golf ball on a rigid floor; not a USGA specified ground COR",
+          "launch_height_m": [
+            0.9,
+            1.2
+          ],
+          "rebound_apex_m": [
+            0.65,
+            0.85
+          ],
+          "horizontal_retention_prior": 0.75,
+          "numerical_validation": {
+            "passed": true,
+            "peak_refinement_error_m": 0.00632180006612082,
+            "calibration": "simulation-only fit to nominal COR; not real measurements"
+          }
+        },
+        "launch": {
+          "requested_apex_clearance_m": 0.8343418006596104,
+          "nominal_cor": 0.8,
+          "predicted_apex_y": 0.608018506889047,
+          "downward_speed": 2.594704869470705,
+          "horizontal_speed": 1.9310214022197905,
+          "predicted_first_impact_seconds": 0.2510442582994686,
+          "predicted_apex_seconds": 0.6634763923168787,
+          "horizontal_retention_prior": 0.75
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.026781712933732,
+          "mass_scale": 1.0229859363147162,
+          "friction_scale": 0.8818013296000147,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9252767423709667
+        }
+      },
+      "stable_hold": false,
+      "success_version": "bounce_controlled_hold_v1",
+      "diagnostics": {
+        "bounce_grasp_terminal": true,
+        "bounce_grasp_version": "controlled_hold_v1",
+        "bounce_grasp_reward_profile": "finger_coordination_v2",
+        "bounce_grasp_hold_seconds": 0.0,
+        "bounce_grasp_max_hold_seconds": 0.0,
+        "bounce_grasp_hold_reached": false,
+        "bounce_grasp_contact_fraction": 0.0,
+        "bounce_grasp_had_contact": false,
+        "bounce_grasp_hand_target_clipped": 0.75,
+        "bounce_grasp_state": {
+          "hand_contact": false,
+          "floor_contact": true,
+          "external_support": true,
+          "off_ground": false,
+          "capture": false,
+          "contact_groups": 0,
+          "contact_span": 0.0,
+          "relative_speed": 2.7665900926925393,
+          "palm_dot": 0.5598043348513391,
+          "distance": 1.6918246266164714,
+          "local_ball": [
+            -1.1864591834200173,
+            0.7973280783885874,
+            1.0004147150024985
+          ],
+          "joint_violation": 0.0008499798307455286,
+          "target_violation": 0.0,
+          "valid_hold": false,
+          "collision": false,
+          "finger_contact_groups": 0,
+          "thumb_contact": false,
+          "finger_tip_heights": [
+            0.03401348906603815,
+            0.0171792689531838,
+            0.06218039504137875
+          ]
+        },
+        "bounce_grasp_joint_violation": 0.0008499798307455286,
+        "bounce_grasp_target_violation": 0.0,
+        "bounce_grasp_finger_posture": {
+          "backfold": 0.0,
+          "prepare_sync": 0.2222222222222222,
+          "near": 4.3022341310254994e-39,
+          "contact_fraction": 0.0
+        },
+        "bounce_grasp_reward_terms": {
+          "shaping": -0.13873411272636121,
+          "step_cost": -0.01,
+          "hand_action": -0.019999999105930335,
+          "hand_smooth": -0.0,
+          "joint_limit": -0.00022577053521068673,
+          "robot_control": -0.09141442775726319,
+          "arm_limit": -0.3,
+          "collision": 0.0,
+          "success": 0.0,
+          "failure": -25.0,
+          "finger_backfold": -0.0,
+          "finger_prepare_sync": -4.780260145583888e-41
+        },
+        "bounce_grasp_potential_terms": {
+          "position": 0.08208336100945349,
+          "precision": 0.044771934142474455,
+          "palm": 2.6168226846144707e-39,
+          "velocity": 1.9326182664445045e-40,
+          "ready": 3.2598428508973344e-43,
+          "contact": 0.0,
+          "wrap": 0.0,
+          "hold": 0.0,
+          "finger_coverage": 0.0,
+          "thumb_opposition": 0.0
+        },
+        "bounce_grasp_potential_previous": 0.13873411272636121,
+        "bounce_grasp_potential": 0.0,
+        "bounce_grasp_episode": {
+          "version": "controlled_hold_v1",
+          "reward_profile": "finger_coordination_v2",
+          "episode": 4,
+          "success": false,
+          "reason": "out_of_bounds",
+          "physics": {
+            "version": "bounce_v1",
+            "object": "golf_ball",
+            "shape": "sphere",
+            "mass_kg": 0.04705735307047695,
+            "dimensions_m": [
+              0.04366804135539028,
+              0.04366804135539028,
+              0.04366804135539028
+            ],
+            "inertia": [
+              8.973356472932546e-06,
+              8.973356472932546e-06,
+              8.973356472932546e-06
+            ],
+            "inertia_basis": "structural analytical approximation",
+            "surface_id": "generic_dry_rigid_surface_prior_v1",
+            "material": {
+              "kind": "sphere",
+              "inertia_factor": 0.4,
+              "sliding_friction": 0.22045033240000367,
+              "torsional_length_m": 0.0001,
+              "time_constant": 0.008,
+              "damping_ratio": 0.06845821665916575,
+              "normal_cor_target": 0.8,
+              "cor_basis": "Engineering prior for a resilient golf ball on a rigid floor; not a USGA specified ground COR",
+              "launch_height_m": [
+                0.9,
+                1.2
+              ],
+              "rebound_apex_m": [
+                0.65,
+                0.85
+              ],
+              "horizontal_retention_prior": 0.75,
+              "numerical_validation": {
+                "passed": true,
+                "peak_refinement_error_m": 0.00632180006612082,
+                "calibration": "simulation-only fit to nominal COR; not real measurements"
+              }
+            },
+            "launch": {
+              "requested_apex_clearance_m": 0.8343418006596104,
+              "nominal_cor": 0.8,
+              "predicted_apex_y": 0.608018506889047,
+              "downward_speed": 2.594704869470705,
+              "horizontal_speed": 1.9310214022197905,
+              "predicted_first_impact_seconds": 0.2510442582994686,
+              "predicted_apex_seconds": 0.6634763923168787,
+              "horizontal_retention_prior": 0.75
+            },
+            "sampling": "fixed_object_per_environment",
+            "status": "simulation_priors_not_specimen_measurements",
+            "randomization": {
+              "version": "physical_dr_v1",
+              "sampling": "environment_creation",
+              "size_scale": 1.026781712933732,
+              "mass_scale": 1.0229859363147162,
+              "friction_scale": 0.8818013296000147,
+              "rolling_scale": 1.0,
+              "damping_scale": 0.9252767423709667
+            }
+          },
+          "policy_steps": 58,
+          "control_ticks": 1155,
+          "max_hold_seconds": 0.0,
+          "sums": {
+            "shaping": -1.1161014440873374,
+            "step_cost": -0.5800000000000003,
+            "hand_action": -1.1554351689239606,
+            "hand_smooth": -0.21660052583284456,
+            "joint_limit": -2.7238832021110264,
+            "robot_control": -5.00992559671402,
+            "arm_limit": -5.999999999999998,
+            "collision": 0.0,
+            "success": 0.0,
+            "failure": -25.0,
+            "finger_backfold": -2.8418651294350398e-21,
+            "finger_prepare_sync": -0.07980084929345935
+          },
+          "potential_score_sums": {
+            "position": 44.95493229840069,
+            "precision": 43.70590169122986,
+            "palm": 1.1610955460852574,
+            "velocity": 0.7044191468377757,
+            "ready": 0.07081050020843316,
+            "contact": 0.0,
+            "wrap": 0.0,
+            "hold": 0.0,
+            "finger_coverage": 0.0,
+            "thumb_opposition": 0.0
+          }
+        }
+      }
+    },
+    {
+      "slot": 1,
+      "episode": 4,
+      "success": true,
+      "reason": "controlled_hold",
+      "steps": 38,
+      "reward": 12.536110031641268,
+      "legacy_success": true,
+      "physics": {
+        "version": "bounce_v1",
+        "object": "golf_ball",
+        "shape": "sphere",
+        "mass_kg": 0.04833883155718696,
+        "dimensions_m": [
+          0.04362093054214088,
+          0.04362093054214088,
+          0.04362093054214088
+        ],
+        "inertia": [
+          9.197843170691528e-06,
+          9.197843170691528e-06,
+          9.197843170691528e-06
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "sphere",
+          "inertia_factor": 0.4,
+          "sliding_friction": 0.27805171482093943,
+          "torsional_length_m": 0.0001,
+          "time_constant": 0.008,
+          "damping_ratio": 0.0710192698366231,
+          "normal_cor_target": 0.8,
+          "cor_basis": "Engineering prior for a resilient golf ball on a rigid floor; not a USGA specified ground COR",
+          "launch_height_m": [
+            0.9,
+            1.2
+          ],
+          "rebound_apex_m": [
+            0.65,
+            0.85
+          ],
+          "horizontal_retention_prior": 0.75,
+          "numerical_validation": {
+            "passed": true,
+            "peak_refinement_error_m": 0.00632180006612082,
+            "calibration": "simulation-only fit to nominal COR; not real measurements"
+          }
+        },
+        "launch": {
+          "requested_apex_clearance_m": 0.7086461249728118,
+          "nominal_cor": 0.8,
+          "predicted_apex_y": 0.6749359327560258,
+          "downward_speed": 1.5712309695420303,
+          "horizontal_speed": 1.4708925840705243,
+          "predicted_first_impact_seconds": 0.31495582630682245,
+          "predicted_apex_seconds": 0.6950534920040261,
+          "horizontal_retention_prior": 0.75
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0256739801382022,
+          "mass_scale": 1.050844164286673,
+          "friction_scale": 1.1122068592837577,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9598917682468895
+        }
+      },
+      "stable_hold": false,
+      "success_version": "bounce_controlled_hold_v1",
+      "diagnostics": {
+        "bounce_grasp_terminal": true,
+        "bounce_grasp_version": "controlled_hold_v1",
+        "bounce_grasp_reward_profile": "finger_coordination_v2",
+        "bounce_grasp_hold_seconds": 0.3099999999998282,
+        "bounce_grasp_max_hold_seconds": 0.3099999999998282,
+        "bounce_grasp_hold_reached": true,
+        "bounce_grasp_contact_fraction": 1.0,
+        "bounce_grasp_had_contact": true,
+        "bounce_grasp_hand_target_clipped": 0.3333333333333333,
+        "bounce_grasp_state": {
+          "hand_contact": true,
+          "floor_contact": false,
+          "external_support": false,
+          "off_ground": true,
+          "capture": true,
+          "contact_groups": 2,
+          "contact_span": 0.8901735792233426,
+          "relative_speed": 0.011409486037651342,
+          "palm_dot": 0.9398033981100888,
+          "distance": 0.016105213879849648,
+          "local_ball": [
+            0.005577411035109307,
+            0.019930094638896948,
+            0.06472956163589255
+          ],
+          "joint_violation": 0.0004453183614279762,
+          "target_violation": 0.0,
+          "valid_hold": true,
+          "collision": false,
+          "finger_contact_groups": 1,
+          "thumb_contact": false,
+          "finger_tip_heights": [
+            0.03868194970718227,
+            0.06213067042854468,
+            0.031204261648112994
+          ]
+        },
+        "bounce_grasp_joint_violation": 0.0011566185115163882,
+        "bounce_grasp_target_violation": 0.0,
+        "bounce_grasp_finger_posture": {
+          "backfold": 0.0,
+          "prepare_sync": 0.1401508338693165,
+          "near": 0.9920264674297677,
+          "contact_fraction": 1.0
+        },
+        "bounce_grasp_reward_terms": {
+          "shaping": -19.11617460416477,
+          "step_cost": -0.01,
+          "hand_action": -0.019999999105930335,
+          "hand_smooth": -0.0,
+          "joint_limit": -0.00041805199411949534,
+          "robot_control": -0.08049405097961426,
+          "arm_limit": -0.3,
+          "collision": 0.0,
+          "success": 25.0,
+          "failure": 0.0,
+          "finger_backfold": -0.0,
+          "finger_prepare_sync": -0.0
+        },
+        "bounce_grasp_potential_terms": {
+          "position": 1.9957742061173174,
+          "precision": 3.9682323509286936,
+          "palm": 0.933208529540707,
+          "velocity": 0.9916678793008715,
+          "ready": 0.0,
+          "contact": 2.0,
+          "wrap": 1.5364164474370863,
+          "hold": 8.0,
+          "finger_coverage": 0.5,
+          "thumb_opposition": 0.0
+        },
+        "bounce_grasp_potential_previous": 19.11617460416477,
+        "bounce_grasp_potential": 0.0,
+        "bounce_grasp_episode": {
+          "version": "controlled_hold_v1",
+          "reward_profile": "finger_coordination_v2",
+          "episode": 5,
+          "success": true,
+          "reason": "controlled_hold",
+          "physics": {
+            "version": "bounce_v1",
+            "object": "golf_ball",
+            "shape": "sphere",
+            "mass_kg": 0.04833883155718696,
+            "dimensions_m": [
+              0.04362093054214088,
+              0.04362093054214088,
+              0.04362093054214088
+            ],
+            "inertia": [
+              9.197843170691528e-06,
+              9.197843170691528e-06,
+              9.197843170691528e-06
+            ],
+            "inertia_basis": "structural analytical approximation",
+            "surface_id": "generic_dry_rigid_surface_prior_v1",
+            "material": {
+              "kind": "sphere",
+              "inertia_factor": 0.4,
+              "sliding_friction": 0.27805171482093943,
+              "torsional_length_m": 0.0001,
+              "time_constant": 0.008,
+              "damping_ratio": 0.0710192698366231,
+              "normal_cor_target": 0.8,
+              "cor_basis": "Engineering prior for a resilient golf ball on a rigid floor; not a USGA specified ground COR",
+              "launch_height_m": [
+                0.9,
+                1.2
+              ],
+              "rebound_apex_m": [
+                0.65,
+                0.85
+              ],
+              "horizontal_retention_prior": 0.75,
+              "numerical_validation": {
+                "passed": true,
+                "peak_refinement_error_m": 0.00632180006612082,
+                "calibration": "simulation-only fit to nominal COR; not real measurements"
+              }
+            },
+            "launch": {
+              "requested_apex_clearance_m": 0.7086461249728118,
+              "nominal_cor": 0.8,
+              "predicted_apex_y": 0.6749359327560258,
+              "downward_speed": 1.5712309695420303,
+              "horizontal_speed": 1.4708925840705243,
+              "predicted_first_impact_seconds": 0.31495582630682245,
+              "predicted_apex_seconds": 0.6950534920040261,
+              "horizontal_retention_prior": 0.75
+            },
+            "sampling": "fixed_object_per_environment",
+            "status": "simulation_priors_not_specimen_measurements",
+            "randomization": {
+              "version": "physical_dr_v1",
+              "sampling": "environment_creation",
+              "size_scale": 1.0256739801382022,
+              "mass_scale": 1.050844164286673,
+              "friction_scale": 1.1122068592837577,
+              "rolling_scale": 1.0,
+              "damping_scale": 0.9598917682468895
+            }
+          },
+          "policy_steps": 38,
+          "control_ticks": 760,
+          "max_hold_seconds": 0.3099999999998282,
+          "sums": {
+            "shaping": -3.022142737565858,
+            "step_cost": -0.38000000000000017,
+            "hand_action": -0.756063357133172,
+            "hand_smooth": -0.25820220954762796,
+            "joint_limit": -0.6359105090230229,
+            "robot_control": -3.1507609868049626,
+            "arm_limit": -4.199999999999999,
+            "collision": 0.0,
+            "success": 25.0,
+            "failure": 0.0,
+            "finger_backfold": -6.541409937039326e-18,
+            "finger_prepare_sync": -0.060810168284089826
+          },
+          "potential_score_sums": {
+            "position": 55.424673150907374,
+            "precision": 94.37697871203441,
+            "palm": 19.241024083438358,
+            "velocity": 17.235634804649795,
+            "ready": 0.1782706801056791,
+            "contact": 34.9,
+            "wrap": 21.15573546591417,
+            "hold": 45.493333333316336,
+            "finger_coverage": 8.775,
+            "thumb_opposition": 0.0
+          }
+        }
+      }
+    },
+    {
+      "slot": 0,
+      "episode": 4,
+      "success": false,
+      "reason": "out_of_bounds",
+      "steps": 51,
+      "reward": -38.54948523832397,
+      "legacy_success": false,
+      "physics": {
+        "version": "bounce_v1",
+        "object": "golf_ball",
+        "shape": "sphere",
+        "mass_kg": 0.04705735307047695,
+        "dimensions_m": [
+          0.04366804135539028,
+          0.04366804135539028,
+          0.04366804135539028
+        ],
+        "inertia": [
+          8.973356472932546e-06,
+          8.973356472932546e-06,
+          8.973356472932546e-06
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "sphere",
+          "inertia_factor": 0.4,
+          "sliding_friction": 0.22045033240000367,
+          "torsional_length_m": 0.0001,
+          "time_constant": 0.008,
+          "damping_ratio": 0.06845821665916575,
+          "normal_cor_target": 0.8,
+          "cor_basis": "Engineering prior for a resilient golf ball on a rigid floor; not a USGA specified ground COR",
+          "launch_height_m": [
+            0.9,
+            1.2
+          ],
+          "rebound_apex_m": [
+            0.65,
+            0.85
+          ],
+          "horizontal_retention_prior": 0.75,
+          "numerical_validation": {
+            "passed": true,
+            "peak_refinement_error_m": 0.00632180006612082,
+            "calibration": "simulation-only fit to nominal COR; not real measurements"
+          }
+        },
+        "launch": {
+          "requested_apex_clearance_m": 0.782493018827886,
+          "nominal_cor": 0.8,
+          "predicted_apex_y": 0.572747081000415,
+          "downward_speed": 1.7363202904697943,
+          "horizontal_speed": 1.8063999404143753,
+          "predicted_first_impact_seconds": 0.32226963175110324,
+          "predicted_apex_seconds": 0.7216812833676673,
+          "horizontal_retention_prior": 0.75
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.026781712933732,
+          "mass_scale": 1.0229859363147162,
+          "friction_scale": 0.8818013296000147,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9252767423709667
+        }
+      },
+      "stable_hold": false,
+      "success_version": "bounce_controlled_hold_v1",
+      "diagnostics": {
+        "bounce_grasp_terminal": true,
+        "bounce_grasp_version": "controlled_hold_v1",
+        "bounce_grasp_reward_profile": "finger_coordination_v2",
+        "bounce_grasp_hold_seconds": 0.0,
+        "bounce_grasp_max_hold_seconds": 0.0,
+        "bounce_grasp_hold_reached": false,
+        "bounce_grasp_contact_fraction": 0.0,
+        "bounce_grasp_had_contact": false,
+        "bounce_grasp_hand_target_clipped": 0.6666666666666666,
+        "bounce_grasp_state": {
+          "hand_contact": false,
+          "floor_contact": false,
+          "external_support": false,
+          "off_ground": true,
+          "capture": false,
+          "contact_groups": 0,
+          "contact_span": 0.0,
+          "relative_speed": 0.9021881157445775,
+          "palm_dot": 0.39574865043355817,
+          "distance": 0.8534966877013396,
+          "local_ball": [
+            -0.7732640506708988,
+            0.20256986352398673,
+            0.38589595952038797
+          ],
+          "joint_violation": 0.0004871495434857209,
+          "target_violation": 0.0,
+          "valid_hold": false,
+          "collision": false,
+          "finger_contact_groups": 0,
+          "thumb_contact": false,
+          "finger_tip_heights": [
+            0.03746625774024054,
+            0.028039479816247343,
+            0.05889667718394555
+          ]
+        },
+        "bounce_grasp_joint_violation": 0.00048805843219401623,
+        "bounce_grasp_target_violation": 0.0,
+        "bounce_grasp_finger_posture": {
+          "backfold": 0.0,
+          "prepare_sync": 0.2346705989830289,
+          "near": 1.720513273084108e-10,
+          "contact_fraction": 0.0
+        },
+        "bounce_grasp_reward_terms": {
+          "shaping": -0.47487881977663454,
+          "step_cost": -0.01,
+          "hand_action": -0.019999999105930335,
+          "hand_smooth": -0.0,
+          "joint_limit": -7.443782288615035e-05,
+          "robot_control": -0.09140572547912598,
+          "arm_limit": -0.3,
+          "collision": 0.0,
+          "success": 0.0,
+          "failure": -25.0,
+          "finger_backfold": -0.0,
+          "finger_prepare_sync": -2.0187694017644957e-12
+        },
+        "bounce_grasp_potential_terms": {
+          "position": 0.2879112767625238,
+          "precision": 0.17033433198246314,
+          "palm": 8.379391255885739e-11,
+          "velocity": 5.276104285096524e-11,
+          "ready": 3.2262946127611724e-14,
+          "contact": 0.0,
+          "wrap": 0.0,
+          "hold": 0.0,
+          "finger_coverage": 0.0,
+          "thumb_opposition": 0.0
+        },
+        "bounce_grasp_potential_previous": 0.47487881977663454,
+        "bounce_grasp_potential": 0.0,
+        "bounce_grasp_episode": {
+          "version": "controlled_hold_v1",
+          "reward_profile": "finger_coordination_v2",
+          "episode": 5,
+          "success": false,
+          "reason": "out_of_bounds",
+          "physics": {
+            "version": "bounce_v1",
+            "object": "golf_ball",
+            "shape": "sphere",
+            "mass_kg": 0.04705735307047695,
+            "dimensions_m": [
+              0.04366804135539028,
+              0.04366804135539028,
+              0.04366804135539028
+            ],
+            "inertia": [
+              8.973356472932546e-06,
+              8.973356472932546e-06,
+              8.973356472932546e-06
+            ],
+            "inertia_basis": "structural analytical approximation",
+            "surface_id": "generic_dry_rigid_surface_prior_v1",
+            "material": {
+              "kind": "sphere",
+              "inertia_factor": 0.4,
+              "sliding_friction": 0.22045033240000367,
+              "torsional_length_m": 0.0001,
+              "time_constant": 0.008,
+              "damping_ratio": 0.06845821665916575,
+              "normal_cor_target": 0.8,
+              "cor_basis": "Engineering prior for a resilient golf ball on a rigid floor; not a USGA specified ground COR",
+              "launch_height_m": [
+                0.9,
+                1.2
+              ],
+              "rebound_apex_m": [
+                0.65,
+                0.85
+              ],
+              "horizontal_retention_prior": 0.75,
+              "numerical_validation": {
+                "passed": true,
+                "peak_refinement_error_m": 0.00632180006612082,
+                "calibration": "simulation-only fit to nominal COR; not real measurements"
+              }
+            },
+            "launch": {
+              "requested_apex_clearance_m": 0.782493018827886,
+              "nominal_cor": 0.8,
+              "predicted_apex_y": 0.572747081000415,
+              "downward_speed": 1.7363202904697943,
+              "horizontal_speed": 1.8063999404143753,
+              "predicted_first_impact_seconds": 0.32226963175110324,
+              "predicted_apex_seconds": 0.7216812833676673,
+              "horizontal_retention_prior": 0.75
+            },
+            "sampling": "fixed_object_per_environment",
+            "status": "simulation_priors_not_specimen_measurements",
+            "randomization": {
+              "version": "physical_dr_v1",
+              "sampling": "environment_creation",
+              "size_scale": 1.026781712933732,
+              "mass_scale": 1.0229859363147162,
+              "friction_scale": 0.8818013296000147,
+              "rolling_scale": 1.0,
+              "damping_scale": 0.9252767423709667
+            }
+          },
+          "policy_steps": 51,
+          "control_ticks": 1012,
+          "max_hold_seconds": 0.0,
+          "sums": {
+            "shaping": -1.1011815359842945,
+            "step_cost": -0.5100000000000002,
+            "hand_action": -1.0107826124132469,
+            "hand_smooth": -0.19654313831443315,
+            "joint_limit": -2.1422946294530547,
+            "robot_control": -4.300307413339614,
+            "arm_limit": -4.199999999999999,
+            "collision": 0.0,
+            "success": 0.0,
+            "failure": -25.0,
+            "finger_backfold": -1.569589785928509e-14,
+            "finger_prepare_sync": -0.0883759088193116
+          },
+          "potential_score_sums": {
+            "position": 44.02467965509017,
+            "precision": 43.80773868143603,
+            "palm": 1.9970933959876032,
+            "velocity": 0.6744540984425714,
+            "ready": 0.09416888675872219,
+            "contact": 0.0,
+            "wrap": 0.0,
+            "hold": 0.0,
+            "finger_coverage": 0.0,
+            "thumb_opposition": 0.0
+          }
+        }
+      }
+    }
+  ],
+  "checkpoint": "/home/isee/Catch/11-9/bounce_catch_best_reward_-14.97.pth"
+}

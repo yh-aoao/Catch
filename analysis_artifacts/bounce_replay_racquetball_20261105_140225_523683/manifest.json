@@ -1,0 +1,621 @@
+{
+  "version": "exact_bounce_replay_v1",
+  "mode": "recorded_state_playback_not_live_policy",
+  "object": "racquetball",
+  "checkpoint": "/home/isee/Catch/11-5/bounce_catch_best_reward_-18.27.pth",
+  "checkpoint_sha256": "de61bbca9cb50562a33f8d694a2a500dcecd08b4ede2b1b3f1d68fa0c3e26e01",
+  "config": "/home/isee/Catch/catch_it_copy/configs/all_targets_bounce_viewer_v1.yaml",
+  "config_sha256": "63ba01e0656cc7dfc7db86f87c1389c4330d8bc33979fa639cdbc147f0db5b0e",
+  "material": "/home/isee/Catch/catch_it_copy/ycb_objects/calibration_data/object_benchmark_all_targets_v1.json",
+  "material_sha256": "31151a8303e5cd01701f96d896f5f1528f75fc70b537869b704a3e0101adbacc",
+  "grasp_version": "controlled_hold_v1",
+  "physics_dt_seconds": 0.000125,
+  "controller_interval_seconds": 0.002,
+  "physics_substeps": 16,
+  "policy_interval_seconds": 0.04,
+  "state_spec": 16383,
+  "model": "scene.mjb",
+  "model_sha256": "802ada45052afbb1fdfe6b24731b7044664ce4cbc868690afbbad2de94a406a6",
+  "model_signature": "bd0e45b3036a069628dec001b1b5f0e6038425b5e4f9ae776b252712fcc81532",
+  "episodes": [
+    {
+      "index": 0,
+      "seed": 6631,
+      "trace": "episode_000.npz",
+      "trace_sha256": "9134ca3adaa9bfc7c2595fd8663e6564299572d99c1f4f4881887d251acaf787",
+      "frames": 649,
+      "simulation_seconds": 1.2959999999999616,
+      "success": false,
+      "success_version": "bounce_controlled_hold_v1",
+      "reason": "out_of_bounds",
+      "policy_steps": 33,
+      "reward": -32.200339940177635,
+      "terminal_state_exact": true,
+      "model_signature": "bd0e45b3036a069628dec001b1b5f0e6038425b5e4f9ae776b252712fcc81532",
+      "physics": {
+        "mass": 0.041,
+        "radius": 0.02784284803428688,
+        "inertia": [
+          2.1189461102050734e-05,
+          2.1189461102050734e-05,
+          2.1189461102050734e-05
+        ],
+        "com": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "inertia_quat": [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "armature": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "damping": [
+          0.00015,
+          0.00015,
+          0.00015,
+          0.00015,
+          0.00015,
+          0.00015
+        ],
+        "collision_geoms": [
+          {
+            "name": "benchmark_collision",
+            "type": 2,
+            "solref": [
+              0.02,
+              1.0
+            ],
+            "friction": [
+              0.55,
+              0.0001,
+              0.0
+            ],
+            "condim": 3
+          }
+        ]
+      }
+    },
+    {
+      "index": 1,
+      "seed": 6632,
+      "trace": "episode_001.npz",
+      "trace_sha256": "5661e30ea322e5193318b47d61b651b89031a148e1df72b6ec6c6496d4ab3a72",
+      "frames": 581,
+      "simulation_seconds": 1.160000000000037,
+      "success": true,
+      "success_version": "bounce_controlled_hold_v1",
+      "reason": "controlled_hold",
+      "policy_steps": 29,
+      "reward": 16.666216262454267,
+      "terminal_state_exact": true,
+      "model_signature": "bd0e45b3036a069628dec001b1b5f0e6038425b5e4f9ae776b252712fcc81532",
+      "physics": {
+        "mass": 0.041,
+        "radius": 0.02784284803428688,
+        "inertia": [
+          2.1189461102050734e-05,
+          2.1189461102050734e-05,
+          2.1189461102050734e-05
+        ],
+        "com": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "inertia_quat": [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "armature": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "damping": [
+          0.00015,
+          0.00015,
+          0.00015,
+          0.00015,
+          0.00015,
+          0.00015
+        ],
+        "collision_geoms": [
+          {
+            "name": "benchmark_collision",
+            "type": 2,
+            "solref": [
+              0.02,
+              1.0
+            ],
+            "friction": [
+              0.55,
+              0.0001,
+              0.0
+            ],
+            "condim": 3
+          }
+        ]
+      }
+    },
+    {
+      "index": 2,
+      "seed": 6633,
+      "trace": "episode_002.npz",
+      "trace_sha256": "66dea0f4b8cbeb9ef9b6c293143659a847af6e1a0fc10871366a16a83166adfb",
+      "frames": 1261,
+      "simulation_seconds": 2.520000000000207,
+      "success": false,
+      "success_version": "bounce_controlled_hold_v1",
+      "reason": "timeout",
+      "policy_steps": 63,
+      "reward": -45.11721007695819,
+      "terminal_state_exact": true,
+      "model_signature": "bd0e45b3036a069628dec001b1b5f0e6038425b5e4f9ae776b252712fcc81532",
+      "physics": {
+        "mass": 0.041,
+        "radius": 0.02784284803428688,
+        "inertia": [
+          2.1189461102050734e-05,
+          2.1189461102050734e-05,
+          2.1189461102050734e-05
+        ],
+        "com": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "inertia_quat": [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "armature": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "damping": [
+          0.00015,
+          0.00015,
+          0.00015,
+          0.00015,
+          0.00015,
+          0.00015
+        ],
+        "collision_geoms": [
+          {
+            "name": "benchmark_collision",
+            "type": 2,
+            "solref": [
+              0.02,
+              1.0
+            ],
+            "friction": [
+              0.55,
+              0.0001,
+              0.0
+            ],
+            "condim": 3
+          }
+        ]
+      }
+    },
+    {
+      "index": 3,
+      "seed": 6634,
+      "trace": "episode_003.npz",
+      "trace_sha256": "9e61156e0cd5cc8837e2727af216246b8553d4ba9f04567e8d515afca71c878c",
+      "frames": 852,
+      "simulation_seconds": 1.7019999999997366,
+      "success": false,
+      "success_version": "bounce_controlled_hold_v1",
+      "reason": "base_collision",
+      "policy_steps": 43,
+      "reward": -47.99693778351748,
+      "terminal_state_exact": true,
+      "model_signature": "bd0e45b3036a069628dec001b1b5f0e6038425b5e4f9ae776b252712fcc81532",
+      "physics": {
+        "mass": 0.041,
+        "radius": 0.02784284803428688,
+        "inertia": [
+          2.1189461102050734e-05,
+          2.1189461102050734e-05,
+          2.1189461102050734e-05
+        ],
+        "com": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "inertia_quat": [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "armature": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "damping": [
+          0.00015,
+          0.00015,
+          0.00015,
+          0.00015,
+          0.00015,
+          0.00015
+        ],
+        "collision_geoms": [
+          {
+            "name": "benchmark_collision",
+            "type": 2,
+            "solref": [
+              0.02,
+              1.0
+            ],
+            "friction": [
+              0.55,
+              0.0001,
+              0.0
+            ],
+            "condim": 3
+          }
+        ]
+      }
+    },
+    {
+      "index": 4,
+      "seed": 6635,
+      "trace": "episode_004.npz",
+      "trace_sha256": "ad25001261743b4ad91afcaaad5f88463bd14b4ad8b6c71804eeb06f07144374",
+      "frames": 578,
+      "simulation_seconds": 1.1540000000000403,
+      "success": false,
+      "success_version": "bounce_controlled_hold_v1",
+      "reason": "base_collision",
+      "policy_steps": 29,
+      "reward": -43.04465291901898,
+      "terminal_state_exact": true,
+      "model_signature": "bd0e45b3036a069628dec001b1b5f0e6038425b5e4f9ae776b252712fcc81532",
+      "physics": {
+        "mass": 0.041,
+        "radius": 0.02784284803428688,
+        "inertia": [
+          2.1189461102050734e-05,
+          2.1189461102050734e-05,
+          2.1189461102050734e-05
+        ],
+        "com": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "inertia_quat": [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "armature": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "damping": [
+          0.00015,
+          0.00015,
+          0.00015,
+          0.00015,
+          0.00015,
+          0.00015
+        ],
+        "collision_geoms": [
+          {
+            "name": "benchmark_collision",
+            "type": 2,
+            "solref": [
+              0.02,
+              1.0
+            ],
+            "friction": [
+              0.55,
+              0.0001,
+              0.0
+            ],
+            "condim": 3
+          }
+        ]
+      }
+    }
+  ],
+  "precompute_wall_seconds": 18.151749163000204,
+  "mujoco_version": "3.6.0",
+  "torch_version": "2.11.0+cu128",
+  "effective_policy_config": {
+    "train": {
+      "seed": 123,
+      "algo": "PPO",
+      "network": {
+        "mlp": {
+          "units": [
+            256,
+            128
+          ]
+        },
+        "separate_value_mlp": true
+      },
+      "ppo": {
+        "name": "Dcmm",
+        "normalize_input": true,
+        "normalize_value": true,
+        "value_bootstrap": true,
+        "num_actors": 1,
+        "reward_scale_value": 0.1,
+        "clip_value_loss": false,
+        "normalize_advantage": true,
+        "gamma": 0.99,
+        "tau": 0.95,
+        "learning_rate": 0.0005,
+        "lr_schedule": "kl",
+        "kl_threshold": 0.016,
+        "save_best_after": 500,
+        "save_frequency": 2000,
+        "grad_norm": 1.0,
+        "entropy_coef": 0.0,
+        "freeze_base": false,
+        "freeze_arm": false,
+        "truncate_grads": true,
+        "e_clip": 0.2,
+        "action_track_denorm": [
+          1.5,
+          0.025,
+          0.01
+        ],
+        "action_catch_denorm": [
+          1.5,
+          0.025,
+          0.08
+        ],
+        "horizon_length": 64,
+        "minibatch_size": 512,
+        "mini_epochs": 6,
+        "critic_coef": 4,
+        "clip_value": true,
+        "bounds_loss_coef": 0.0001,
+        "max_agent_steps": 25000000,
+        "test_num_episodes": 100,
+        "max_test_steps": 10000,
+        "img_dim": [
+          112,
+          112
+        ],
+        "num_frames": 2
+      }
+    },
+    "experiment": "",
+    "seed": 123,
+    "torch_deterministic": true,
+    "rl_device": "cpu",
+    "device_id": -1,
+    "viewer": false,
+    "imshow_cam": false,
+    "test": true,
+    "task": "Catching_TwoStage",
+    "num_envs": 1,
+    "object_eval": false,
+    "checkpoint_tracking": "",
+    "checkpoint_catching": "",
+    "output_name": "bounce_new_objects_viewer_v1",
+    "wandb_mode": "disabled",
+    "wandb_entity": "Your_username",
+    "wandb_project": "RL_Dcmm_Catch_Random",
+    "object_motion": "bounce",
+    "bounce_physics": "physical_v2",
+    "bounce_launch": "baseball_intercept_v1",
+    "bounce_grasp_version": "controlled_hold_v1",
+    "bounce_grasp": {
+      "finger_backfold_weight": 0.15,
+      "finger_prepare_sync_weight": 0.05,
+      "finger_contact_weight": 1.0,
+      "thumb_opposition_weight": 0.5
+    },
+    "bounce_grasp_training": {
+      "track_lr_scale": 1.0,
+      "freeze_track_steps": 0,
+      "freeze_track_normalization": false
+    },
+    "bounce_ball_mode": "fixed",
+    "bounce_ball_weights": null,
+    "bounce_material_file": null,
+    "bounce_v2": {
+      "height": [
+        0.9,
+        1.1
+      ],
+      "distance": [
+        1.6,
+        2.0
+      ],
+      "speed": [
+        1.3,
+        1.7
+      ],
+      "vertical_speed": [
+        -0.2,
+        -0.2
+      ],
+      "heading_degrees": [
+        -15.0,
+        15.0
+      ],
+      "spin_factor": [
+        0.5,
+        1.5
+      ],
+      "damping_ratio": [
+        0.11,
+        0.11
+      ],
+      "ground_friction": 0.3,
+      "time_constant": 0.008,
+      "mass_jitter": 0.1,
+      "radius_jitter": 0.05
+    },
+    "bounce_log": false,
+    "basket_log": false,
+    "basket_freeze_tracking": true,
+    "roll_log": false,
+    "roll_physics": "legacy",
+    "roll_material_file": null,
+    "roll_ball_mode": "fixed",
+    "roll_ball_weights": null,
+    "roll_reward_version": "legacy",
+    "roll_adaptive_wait": {
+      "min_height": 0.38,
+      "max_height": 0.62,
+      "height_band": 0.06,
+      "stand_off": 0.1,
+      "speed_lookahead": 0.08,
+      "hand_margin": 0.03,
+      "xy_weight": 1.0,
+      "xy_scale": 0.3,
+      "progress_weight": 5.0,
+      "height_weight": 1.5,
+      "hand_weight": 4.0,
+      "ready_weight": 0.5,
+      "settle_speed": 0.15,
+      "early_contact_weight": 2.0
+    },
+    "catch_tracking": "",
+    "catch_catching": "",
+    "basket_tracking": "",
+    "basket_fixed_base_training": false,
+    "basket_control_probe": "off",
+    "basket_arm_control": "cartesian",
+    "slide_config": null,
+    "slide_log": false,
+    "basket_reward_version": "legacy",
+    "basket_curriculum_stage": 3,
+    "basket_warm_start": "",
+    "basket_training_stage": "joint",
+    "basket_parking_checkpoint": "",
+    "basket_throw_lr_scale": 0.1,
+    "basket_throw_checkpoint": "",
+    "basket_mask_navigation_updates": false,
+    "basket_pose_eval_override": false,
+    "basket_mobile": {
+      "target_x_range": [
+        -0.4,
+        0.4
+      ],
+      "target_y_range": [
+        1.35,
+        1.85
+      ],
+      "max_time": 8.0,
+      "max_speed": 0.5,
+      "max_acceleration": 0.8,
+      "position_tolerance": 0.1,
+      "speed_tolerance": 0.1,
+      "settle_seconds": 0.2,
+      "carry_settle_seconds": 0.3,
+      "brake_after_unlock": false,
+      "approach_braking": false,
+      "preserve_fixed_throw": false,
+      "parking_only": false,
+      "hold_position": false,
+      "settle_contact_grace": 0.0,
+      "release_speed_tolerance": 0.0,
+      "release_position_tolerance": 0.0,
+      "post_ready_seconds": 0.0,
+      "fixed_throw_probability": 0.0,
+      "hold_only": false,
+      "hold_time_range": [
+        0.0,
+        0.0
+      ],
+      "collision_free_spawn": false,
+      "hold_aim_bonus": 0.0,
+      "arm_drive_bonus": 0.0,
+      "hold_ball_speed_tolerance": 0.15,
+      "hold_arm_offset_deg": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "hold_hand_flex": [
+        0.6,
+        0.5,
+        0.5
+      ],
+      "hold_thumb_flex": [
+        0.4,
+        0.4,
+        0.4
+      ],
+      "hold_ball_local": [
+        0.0,
+        0.03,
+        0.07
+      ]
+    },
+    "test_object": "default",
+    "roll_speed": null,
+    "roll_wait_guard": false,
+    "ycb_collision": "auto",
+    "ycb_joint_damping": null,
+    "test_env_time": null,
+    "basket_viewer_speed": 1.0,
+    "basket_self_collision_debug": false,
+    "vector_mode": "auto",
+    "basket_eval_hand_flex": null,
+    "basket_fixed_hand_flex": null,
+    "basket_fixed_arm_drive_bonus": 0.0,
+    "basket_freeze_input_normalization": false,
+    "basket_fixed_physical": false,
+    "basket_carry_reward": false,
+    "basket_carry_options": {},
+    "basket_finger_reward": false,
+    "basket_finger_options": {},
+    "object_benchmark": "bounce_v1",
+    "benchmark_catalog": "/home/isee/Catch/catch_it_copy/ycb_objects/calibration_data/object_benchmark_all_targets_v1.json",
+    "benchmark_options": {}
+  },
+  "source_sha256": {
+    "ycb_objects/bounce_viewer_replay.py": "0e036730bb8761246dd5108b3859d3a6865abc95c31c62496c33b111117c2fc4",
+    "gym_dcmm/envs/bounce_physical_v2.py": "1cb1e455f45fb123e94c41aa58ce7ad43f298025e3bd538944a1aa002a2cc43f",
+    "gym_dcmm/envs/DcmmVecEnv.py": "f9efd9d0e1ada8a6f3c0a9aeefaff1d85b56cb75169090cbc74ab1e7aa26a48c",
+    "gym_dcmm/agents/MujocoDcmm_bounce_5fe75d5f.py": "27926a1fab5ffa55f3721d82154ddf1aa9305506606cf25247f8b61bcc0037fc",
+    "gym_dcmm/envs/object_benchmark.py": "7165ffecaa9bbdd8fdb9434562de6345a09188fa8bab5049569bba96fe4a2db9",
+    "ycb_objects/benchmark_geometry.py": "be7b50d388fc8b2213d24dfbdf1ec8615a12b939521a6b0ddecf857493726dd3"
+  }
+}

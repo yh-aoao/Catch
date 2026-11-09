@@ -1,0 +1,3007 @@
+[
+  {
+    "motion": "roll",
+    "object": "original",
+    "episodes": 20,
+    "successes": 20,
+    "success_rate": 1.0,
+    "slots": [
+      {
+        "slot": 0,
+        "successes": 5,
+        "episodes": 5,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.026781712933732,
+          "mass_scale": 1.0229859363147162,
+          "friction_scale": 0.8818013296000147,
+          "rolling_scale": 0.8505534847419334,
+          "damping_scale": 1.0
+        },
+        "physics": {
+          "profile": "original",
+          "version": "physical_v1",
+          "mass_kg": 0.051149296815735816,
+          "radius_m": 0.04107126851734928,
+          "inertia_factor": 0.4,
+          "sliding_friction": 0.3527205318400059,
+          "rolling_length_m": 0.00012758302271129,
+          "torsional_length_m": 0.0001,
+          "status": "simulation_priors_not_measured"
+        }
+      },
+      {
+        "slot": 1,
+        "successes": 5,
+        "episodes": 5,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0256739801382022,
+          "mass_scale": 1.050844164286673,
+          "friction_scale": 1.1122068592837577,
+          "rolling_scale": 0.9197835364937789,
+          "damping_scale": 1.0
+        },
+        "physics": {
+          "profile": "original",
+          "version": "physical_v1",
+          "mass_kg": 0.052542208214333655,
+          "radius_m": 0.04102695920552809,
+          "inertia_factor": 0.4,
+          "sliding_friction": 0.4448827437135031,
+          "rolling_length_m": 0.00013796753047406682,
+          "torsional_length_m": 0.0001,
+          "status": "simulation_priors_not_measured"
+        }
+      },
+      {
+        "slot": 2,
+        "successes": 5,
+        "episodes": 5,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0169572918099654,
+          "mass_scale": 1.0196718988204032,
+          "friction_scale": 0.9305754087073278,
+          "rolling_scale": 0.9676521705171753,
+          "damping_scale": 1.0
+        },
+        "physics": {
+          "profile": "original",
+          "version": "physical_v1",
+          "mass_kg": 0.050983594941020165,
+          "radius_m": 0.040678291672398614,
+          "inertia_factor": 0.4,
+          "sliding_friction": 0.37223016348293114,
+          "rolling_length_m": 0.00014514782557757628,
+          "torsional_length_m": 0.0001,
+          "status": "simulation_priors_not_measured"
+        }
+      },
+      {
+        "slot": 3,
+        "successes": 5,
+        "episodes": 5,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 0.9733400778132805,
+          "mass_scale": 0.9709707499734517,
+          "friction_scale": 0.878371807486391,
+          "rolling_scale": 1.102546022595014,
+          "damping_scale": 1.0
+        },
+        "physics": {
+          "profile": "original",
+          "version": "physical_v1",
+          "mass_kg": 0.048548537498672585,
+          "radius_m": 0.03893360311253122,
+          "inertia_factor": 0.4,
+          "sliding_friction": 0.35134872299455644,
+          "rolling_length_m": 0.0001653819033892521,
+          "torsional_length_m": 0.0001,
+          "status": "simulation_priors_not_measured"
+        }
+      }
+    ],
+    "reasons": {
+      "track_touch": 8,
+      "collision_or_failure": 12
+    },
+    "checkpoint": "/home/isee/Catch/11-6/roll_track_best_reward_25.16.pth",
+    "checkpoint_sha256": "8cdf224b05d97ef091d66aa64f0721f4762ad0d04826d2e96396ae1c0fc00205"
+  },
+  {
+    "motion": "roll",
+    "object": "tennis_ball",
+    "episodes": 20,
+    "successes": 20,
+    "success_rate": 1.0,
+    "slots": [
+      {
+        "slot": 0,
+        "successes": 5,
+        "episodes": 5,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.026781712933732,
+          "mass_scale": 1.0229859363147162,
+          "friction_scale": 0.8818013296000147,
+          "rolling_scale": 0.8505534847419334,
+          "damping_scale": 1.0
+        },
+        "physics": {
+          "profile": "tennis_ball",
+          "version": "physical_v1",
+          "mass_kg": 0.05933318430625355,
+          "radius_m": 0.034166967863775155,
+          "inertia_factor": 0.55,
+          "sliding_friction": 0.44090066480000734,
+          "rolling_length_m": 0.00025516604542258,
+          "torsional_length_m": 0.0001,
+          "status": "simulation_priors_not_measured"
+        }
+      },
+      {
+        "slot": 1,
+        "successes": 5,
+        "episodes": 5,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0256739801382022,
+          "mass_scale": 1.050844164286673,
+          "friction_scale": 1.1122068592837577,
+          "rolling_scale": 0.9197835364937789,
+          "damping_scale": 1.0
+        },
+        "physics": {
+          "profile": "tennis_ball",
+          "version": "physical_v1",
+          "mass_kg": 0.06094896152862704,
+          "radius_m": 0.034130107185064415,
+          "inertia_factor": 0.55,
+          "sliding_friction": 0.5561034296418789,
+          "rolling_length_m": 0.00027593506094813363,
+          "torsional_length_m": 0.0001,
+          "status": "simulation_priors_not_measured"
+        }
+      },
+      {
+        "slot": 2,
+        "successes": 5,
+        "episodes": 5,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0169572918099654,
+          "mass_scale": 1.0196718988204032,
+          "friction_scale": 0.9305754087073278,
+          "rolling_scale": 0.9676521705171753,
+          "damping_scale": 1.0
+        },
+        "physics": {
+          "profile": "tennis_ball",
+          "version": "physical_v1",
+          "mass_kg": 0.05914097013158339,
+          "radius_m": 0.033840052535436434,
+          "inertia_factor": 0.55,
+          "sliding_friction": 0.4652877043536639,
+          "rolling_length_m": 0.00029029565115515257,
+          "torsional_length_m": 0.0001,
+          "status": "simulation_priors_not_measured"
+        }
+      },
+      {
+        "slot": 3,
+        "successes": 5,
+        "episodes": 5,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 0.9733400778132805,
+          "mass_scale": 0.9709707499734517,
+          "friction_scale": 0.878371807486391,
+          "rolling_scale": 1.102546022595014,
+          "damping_scale": 1.0
+        },
+        "physics": {
+          "profile": "tennis_ball",
+          "version": "physical_v1",
+          "mass_kg": 0.0563163034984602,
+          "radius_m": 0.032388655485644686,
+          "inertia_factor": 0.55,
+          "sliding_friction": 0.4391859037431955,
+          "rolling_length_m": 0.0003307638067785042,
+          "torsional_length_m": 0.0001,
+          "status": "simulation_priors_not_measured"
+        }
+      }
+    ],
+    "reasons": {
+      "track_touch": 8,
+      "collision_or_failure": 11,
+      "timeout": 1
+    },
+    "checkpoint": "/home/isee/Catch/11-6/roll_track_best_reward_25.16.pth",
+    "checkpoint_sha256": "8cdf224b05d97ef091d66aa64f0721f4762ad0d04826d2e96396ae1c0fc00205"
+  },
+  {
+    "motion": "roll",
+    "object": "baseball",
+    "episodes": 20,
+    "successes": 20,
+    "success_rate": 1.0,
+    "slots": [
+      {
+        "slot": 0,
+        "successes": 5,
+        "episodes": 5,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.026781712933732,
+          "mass_scale": 1.0229859363147162,
+          "friction_scale": 0.8818013296000147,
+          "rolling_scale": 0.8505534847419334,
+          "damping_scale": 1.0
+        },
+        "physics": {
+          "profile": "baseball",
+          "version": "physical_v1",
+          "mass_kg": 0.14117205921143086,
+          "radius_m": 0.03714509534288123,
+          "inertia_factor": 0.4,
+          "sliding_friction": 0.2645403988800044,
+          "rolling_length_m": 0.000102066418169032,
+          "torsional_length_m": 0.0001,
+          "status": "simulation_priors_not_measured"
+        }
+      },
+      {
+        "slot": 1,
+        "successes": 5,
+        "episodes": 5,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0256739801382022,
+          "mass_scale": 1.050844164286673,
+          "friction_scale": 1.1122068592837577,
+          "rolling_scale": 0.9197835364937789,
+          "damping_scale": 1.0
+        },
+        "physics": {
+          "profile": "baseball",
+          "version": "physical_v1",
+          "mass_kg": 0.14501649467156089,
+          "radius_m": 0.037105021742245295,
+          "inertia_factor": 0.4,
+          "sliding_friction": 0.3336620577851273,
+          "rolling_length_m": 0.00011037402437925347,
+          "torsional_length_m": 0.0001,
+          "status": "simulation_priors_not_measured"
+        }
+      },
+      {
+        "slot": 2,
+        "successes": 5,
+        "episodes": 5,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0169572918099654,
+          "mass_scale": 1.0196718988204032,
+          "friction_scale": 0.9305754087073278,
+          "rolling_scale": 0.9676521705171753,
+          "damping_scale": 1.0
+        },
+        "physics": {
+          "profile": "baseball",
+          "version": "physical_v1",
+          "mass_kg": 0.14071472203721566,
+          "radius_m": 0.036789684787030714,
+          "inertia_factor": 0.4,
+          "sliding_friction": 0.27917262261219833,
+          "rolling_length_m": 0.00011611826046206105,
+          "torsional_length_m": 0.0001,
+          "status": "simulation_priors_not_measured"
+        }
+      },
+      {
+        "slot": 3,
+        "successes": 5,
+        "episodes": 5,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 0.9733400778132805,
+          "mass_scale": 0.9709707499734517,
+          "friction_scale": 0.878371807486391,
+          "rolling_scale": 1.102546022595014,
+          "damping_scale": 1.0
+        },
+        "physics": {
+          "profile": "baseball",
+          "version": "physical_v1",
+          "mass_kg": 0.13399396349633635,
+          "radius_m": 0.0352117782543281,
+          "inertia_factor": 0.4,
+          "sliding_friction": 0.2635115422459173,
+          "rolling_length_m": 0.00013230552271140168,
+          "torsional_length_m": 0.0001,
+          "status": "simulation_priors_not_measured"
+        }
+      }
+    ],
+    "reasons": {
+      "track_touch": 9,
+      "collision_or_failure": 11
+    },
+    "checkpoint": "/home/isee/Catch/11-6/roll_track_best_reward_25.16.pth",
+    "checkpoint_sha256": "8cdf224b05d97ef091d66aa64f0721f4762ad0d04826d2e96396ae1c0fc00205"
+  },
+  {
+    "motion": "roll",
+    "object": "orange",
+    "episodes": 20,
+    "successes": 18,
+    "success_rate": 0.9,
+    "slots": [
+      {
+        "slot": 0,
+        "successes": 5,
+        "episodes": 5,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.026781712933732,
+          "mass_scale": 1.0229859363147162,
+          "friction_scale": 0.8818013296000147,
+          "rolling_scale": 0.8505534847419334,
+          "damping_scale": 1.0
+        },
+        "physics": {
+          "version": "roll_v1",
+          "object": "orange",
+          "shape": "convex",
+          "mass_kg": 0.048080339006791664,
+          "dimensions_m": [
+            0.07363775976664254,
+            0.07429071683987361,
+            0.07327538625659409
+          ],
+          "inertia": [
+            2.7424841580182597e-05,
+            2.685227932830747e-05,
+            2.6648750144805603e-05
+          ],
+          "inertia_basis": "homogeneous visual convex hull",
+          "surface_id": "generic_dry_rigid_surface_prior_v1",
+          "material": {
+            "kind": "convex",
+            "sliding_friction": 0.3527205318400059,
+            "torsional_length_m": 0.0001,
+            "rolling_length_m": 1.701106969483867e-05,
+            "time_constant": 0.008,
+            "distance_m": [
+              2.0,
+              2.2
+            ],
+            "speed_mps": [
+              1.1,
+              1.4
+            ]
+          },
+          "launch": {
+            "no_slip_error": 2.220446049250313e-16,
+            "support_point": [
+              -0.0011339045212094738,
+              -0.00265916132136954,
+              -0.0346465363807763
+            ],
+            "axis_world": [
+              0.0,
+              0.0,
+              1.0
+            ],
+            "initial_support_clearance": 0.0003,
+            "configured_speed_mps": [
+              1.1,
+              1.4
+            ],
+            "configured_distance_m": [
+              2.0,
+              2.2
+            ]
+          },
+          "sampling": "fixed_object_per_environment",
+          "status": "simulation_priors_not_specimen_measurements",
+          "randomization": {
+            "version": "physical_dr_v1",
+            "sampling": "environment_creation",
+            "size_scale": 1.026781712933732,
+            "mass_scale": 1.0229859363147162,
+            "friction_scale": 0.8818013296000147,
+            "rolling_scale": 0.8505534847419334,
+            "damping_scale": 1.0
+          }
+        }
+      },
+      {
+        "slot": 1,
+        "successes": 3,
+        "episodes": 5,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0256739801382022,
+          "mass_scale": 1.050844164286673,
+          "friction_scale": 1.1122068592837577,
+          "rolling_scale": 0.9197835364937789,
+          "damping_scale": 1.0
+        },
+        "physics": {
+          "version": "roll_v1",
+          "object": "orange",
+          "shape": "convex",
+          "mass_kg": 0.04938967572147363,
+          "dimensions_m": [
+            0.07355831643369713,
+            0.07421056907096583,
+            0.07319633386654946
+          ],
+          "inertia": [
+            2.811092957205822e-05,
+            2.752404351508601e-05,
+            2.731542263658242e-05
+          ],
+          "inertia_basis": "homogeneous visual convex hull",
+          "surface_id": "generic_dry_rigid_surface_prior_v1",
+          "material": {
+            "kind": "convex",
+            "sliding_friction": 0.4448827437135031,
+            "torsional_length_m": 0.0001,
+            "rolling_length_m": 1.839567072987558e-05,
+            "time_constant": 0.008,
+            "distance_m": [
+              2.0,
+              2.2
+            ],
+            "speed_mps": [
+              1.1,
+              1.4
+            ]
+          },
+          "launch": {
+            "no_slip_error": 2.7755575615628914e-17,
+            "support_point": [
+              0.0024291772911644973,
+              -0.0015613950005806433,
+              -0.03460915832454772
+            ],
+            "axis_world": [
+              0.0,
+              -0.0,
+              1.0
+            ],
+            "initial_support_clearance": 0.0003,
+            "configured_speed_mps": [
+              1.1,
+              1.4
+            ],
+            "configured_distance_m": [
+              2.0,
+              2.2
+            ]
+          },
+          "sampling": "fixed_object_per_environment",
+          "status": "simulation_priors_not_specimen_measurements",
+          "randomization": {
+            "version": "physical_dr_v1",
+            "sampling": "environment_creation",
+            "size_scale": 1.0256739801382022,
+            "mass_scale": 1.050844164286673,
+            "friction_scale": 1.1122068592837577,
+            "rolling_scale": 0.9197835364937789,
+            "damping_scale": 1.0
+          }
+        }
+      },
+      {
+        "slot": 2,
+        "successes": 5,
+        "episodes": 5,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0169572918099654,
+          "mass_scale": 1.0196718988204032,
+          "friction_scale": 0.9305754087073278,
+          "rolling_scale": 0.9676521705171753,
+          "damping_scale": 1.0
+        },
+        "physics": {
+          "version": "roll_v1",
+          "object": "orange",
+          "shape": "convex",
+          "mass_kg": 0.04792457924455895,
+          "dimensions_m": [
+            0.0729331812243434,
+            0.07357989069384104,
+            0.07257427496533964
+          ],
+          "inertia": [
+            2.6815388530484688e-05,
+            2.6255550137361012e-05,
+            2.6056543914592574e-05
+          ],
+          "inertia_basis": "homogeneous visual convex hull",
+          "surface_id": "generic_dry_rigid_surface_prior_v1",
+          "material": {
+            "kind": "convex",
+            "sliding_friction": 0.37223016348293114,
+            "torsional_length_m": 0.0001,
+            "rolling_length_m": 1.935304341034351e-05,
+            "time_constant": 0.008,
+            "distance_m": [
+              2.0,
+              2.2
+            ],
+            "speed_mps": [
+              1.1,
+              1.4
+            ]
+          },
+          "launch": {
+            "no_slip_error": 3.469446951953614e-18,
+            "support_point": [
+              0.0027141134852257313,
+              0.000911762800460636,
+              -0.034315032459741206
+            ],
+            "axis_world": [
+              0.0,
+              -0.0,
+              1.0
+            ],
+            "initial_support_clearance": 0.0003,
+            "configured_speed_mps": [
+              1.1,
+              1.4
+            ],
+            "configured_distance_m": [
+              2.0,
+              2.2
+            ]
+          },
+          "sampling": "fixed_object_per_environment",
+          "status": "simulation_priors_not_specimen_measurements",
+          "randomization": {
+            "version": "physical_dr_v1",
+            "sampling": "environment_creation",
+            "size_scale": 1.0169572918099654,
+            "mass_scale": 1.0196718988204032,
+            "friction_scale": 0.9305754087073278,
+            "rolling_scale": 0.9676521705171753,
+            "damping_scale": 1.0
+          }
+        }
+      },
+      {
+        "slot": 3,
+        "successes": 5,
+        "episodes": 5,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 0.9733400778132805,
+          "mass_scale": 0.9709707499734517,
+          "friction_scale": 0.878371807486391,
+          "rolling_scale": 1.102546022595014,
+          "damping_scale": 1.0
+        },
+        "physics": {
+          "version": "roll_v1",
+          "object": "orange",
+          "shape": "convex",
+          "mass_kg": 0.045635625248752226,
+          "dimensions_m": [
+            0.0698050831237246,
+            0.07042405527765162,
+            0.06946157032443619
+          ],
+          "inertia": [
+            2.3391257677839237e-05,
+            2.2902906591797126e-05,
+            2.2729312021985915e-05
+          ],
+          "inertia_basis": "homogeneous visual convex hull",
+          "surface_id": "generic_dry_rigid_surface_prior_v1",
+          "material": {
+            "kind": "convex",
+            "sliding_friction": 0.35134872299455644,
+            "torsional_length_m": 0.0001,
+            "rolling_length_m": 2.2050920451900284e-05,
+            "time_constant": 0.008,
+            "distance_m": [
+              2.0,
+              2.2
+            ],
+            "speed_mps": [
+              1.1,
+              1.4
+            ]
+          },
+          "launch": {
+            "no_slip_error": 0.0,
+            "support_point": [
+              0.002694602754883588,
+              0.0011287497013057854,
+              -0.03283927586401306
+            ],
+            "axis_world": [
+              0.0,
+              -0.0,
+              1.0
+            ],
+            "initial_support_clearance": 0.0003,
+            "configured_speed_mps": [
+              1.1,
+              1.4
+            ],
+            "configured_distance_m": [
+              2.0,
+              2.2
+            ]
+          },
+          "sampling": "fixed_object_per_environment",
+          "status": "simulation_priors_not_specimen_measurements",
+          "randomization": {
+            "version": "physical_dr_v1",
+            "sampling": "environment_creation",
+            "size_scale": 0.9733400778132805,
+            "mass_scale": 0.9709707499734517,
+            "friction_scale": 0.878371807486391,
+            "rolling_scale": 1.102546022595014,
+            "damping_scale": 1.0
+          }
+        }
+      }
+    ],
+    "reasons": {
+      "collision_or_failure": 16,
+      "track_touch": 4
+    },
+    "checkpoint": "/home/isee/Catch/11-6/roll_track_best_reward_25.16.pth",
+    "checkpoint_sha256": "8cdf224b05d97ef091d66aa64f0721f4762ad0d04826d2e96396ae1c0fc00205"
+  },
+  {
+    "motion": "roll",
+    "object": "apple",
+    "episodes": 20,
+    "successes": 17,
+    "success_rate": 0.85,
+    "slots": [
+      {
+        "slot": 0,
+        "successes": 3,
+        "episodes": 5,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.026781712933732,
+          "mass_scale": 1.0229859363147162,
+          "friction_scale": 0.8818013296000147,
+          "rolling_scale": 0.8505534847419334,
+          "damping_scale": 1.0
+        },
+        "physics": {
+          "version": "roll_v1",
+          "object": "apple",
+          "shape": "convex",
+          "mass_kg": 0.0695630436694007,
+          "dimensions_m": [
+            0.07665483451920425,
+            0.07673345972120442,
+            0.07315537101212034
+          ],
+          "inertia": [
+            4.564177711403379e-05,
+            4.5316506228798746e-05,
+            4.478425863896724e-05
+          ],
+          "inertia_basis": "homogeneous visual convex hull",
+          "surface_id": "generic_dry_rigid_surface_prior_v1",
+          "material": {
+            "kind": "convex",
+            "sliding_friction": 0.3527205318400059,
+            "torsional_length_m": 0.0001,
+            "rolling_length_m": 1.701106969483867e-05,
+            "time_constant": 0.008,
+            "distance_m": [
+              2.0,
+              2.2
+            ],
+            "speed_mps": [
+              1.6,
+              1.9
+            ]
+          },
+          "launch": {
+            "no_slip_error": 7.850462293418876e-17,
+            "support_point": [
+              -0.006653488914648846,
+              0.01106077360694733,
+              -0.038207404709360626
+            ],
+            "axis_world": [
+              0.0,
+              0.0,
+              1.0
+            ],
+            "initial_support_clearance": 0.0003,
+            "configured_speed_mps": [
+              1.6,
+              1.9
+            ],
+            "configured_distance_m": [
+              2.0,
+              2.2
+            ]
+          },
+          "sampling": "fixed_object_per_environment",
+          "status": "simulation_priors_not_specimen_measurements",
+          "randomization": {
+            "version": "physical_dr_v1",
+            "sampling": "environment_creation",
+            "size_scale": 1.026781712933732,
+            "mass_scale": 1.0229859363147162,
+            "friction_scale": 0.8818013296000147,
+            "rolling_scale": 0.8505534847419334,
+            "damping_scale": 1.0
+          }
+        }
+      },
+      {
+        "slot": 1,
+        "successes": 5,
+        "episodes": 5,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0256739801382022,
+          "mass_scale": 1.050844164286673,
+          "friction_scale": 1.1122068592837577,
+          "rolling_scale": 0.9197835364937789,
+          "damping_scale": 1.0
+        },
+        "physics": {
+          "version": "roll_v1",
+          "object": "apple",
+          "shape": "convex",
+          "mass_kg": 0.07145740317149377,
+          "dimensions_m": [
+            0.07657213624647187,
+            0.07665067662448878,
+            0.07307644809927674
+          ],
+          "inertia": [
+            4.678359866710449e-05,
+            4.6450190471474636e-05,
+            4.59046276295196e-05
+          ],
+          "inertia_basis": "homogeneous visual convex hull",
+          "surface_id": "generic_dry_rigid_surface_prior_v1",
+          "material": {
+            "kind": "convex",
+            "sliding_friction": 0.4448827437135031,
+            "torsional_length_m": 0.0001,
+            "rolling_length_m": 1.839567072987558e-05,
+            "time_constant": 0.008,
+            "distance_m": [
+              2.0,
+              2.2
+            ],
+            "speed_mps": [
+              1.6,
+              1.9
+            ]
+          },
+          "launch": {
+            "no_slip_error": 2.5438405243138006e-16,
+            "support_point": [
+              -0.012005588791299425,
+              -0.004702783120293497,
+              -0.038166185047288824
+            ],
+            "axis_world": [
+              0.0,
+              -0.0,
+              1.0
+            ],
+            "initial_support_clearance": 0.0003,
+            "configured_speed_mps": [
+              1.6,
+              1.9
+            ],
+            "configured_distance_m": [
+              2.0,
+              2.2
+            ]
+          },
+          "sampling": "fixed_object_per_environment",
+          "status": "simulation_priors_not_specimen_measurements",
+          "randomization": {
+            "version": "physical_dr_v1",
+            "sampling": "environment_creation",
+            "size_scale": 1.0256739801382022,
+            "mass_scale": 1.050844164286673,
+            "friction_scale": 1.1122068592837577,
+            "rolling_scale": 0.9197835364937789,
+            "damping_scale": 1.0
+          }
+        }
+      },
+      {
+        "slot": 2,
+        "successes": 5,
+        "episodes": 5,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0169572918099654,
+          "mass_scale": 1.0196718988204032,
+          "friction_scale": 0.9305754087073278,
+          "rolling_scale": 0.9676521705171753,
+          "damping_scale": 1.0
+        },
+        "physics": {
+          "version": "roll_v1",
+          "object": "apple",
+          "shape": "convex",
+          "mass_kg": 0.06933768911978742,
+          "dimensions_m": [
+            0.07592138809529243,
+            0.0759992609980593,
+            0.07245540804702726
+          ],
+          "inertia": [
+            4.462749522020945e-05,
+            4.430945272068467e-05,
+            4.378903309040103e-05
+          ],
+          "inertia_basis": "homogeneous visual convex hull",
+          "surface_id": "generic_dry_rigid_surface_prior_v1",
+          "material": {
+            "kind": "convex",
+            "sliding_friction": 0.37223016348293114,
+            "torsional_length_m": 0.0001,
+            "rolling_length_m": 1.935304341034351e-05,
+            "time_constant": 0.008,
+            "distance_m": [
+              2.0,
+              2.2
+            ],
+            "speed_mps": [
+              1.6,
+              1.9
+            ]
+          },
+          "launch": {
+            "no_slip_error": 2.220446049250313e-16,
+            "support_point": [
+              -0.003803498821912145,
+              -0.01220532585065022,
+              -0.037841829797787205
+            ],
+            "axis_world": [
+              0.0,
+              -0.0,
+              1.0
+            ],
+            "initial_support_clearance": 0.0003,
+            "configured_speed_mps": [
+              1.6,
+              1.9
+            ],
+            "configured_distance_m": [
+              2.0,
+              2.2
+            ]
+          },
+          "sampling": "fixed_object_per_environment",
+          "status": "simulation_priors_not_specimen_measurements",
+          "randomization": {
+            "version": "physical_dr_v1",
+            "sampling": "environment_creation",
+            "size_scale": 1.0169572918099654,
+            "mass_scale": 1.0196718988204032,
+            "friction_scale": 0.9305754087073278,
+            "rolling_scale": 0.9676521705171753,
+            "damping_scale": 1.0
+          }
+        }
+      },
+      {
+        "slot": 3,
+        "successes": 4,
+        "episodes": 5,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 0.9733400778132805,
+          "mass_scale": 0.9709707499734517,
+          "friction_scale": 0.878371807486391,
+          "rolling_scale": 1.102546022595014,
+          "damping_scale": 1.0
+        },
+        "physics": {
+          "version": "roll_v1",
+          "object": "apple",
+          "shape": "convex",
+          "mass_kg": 0.06602601099819472,
+          "dimensions_m": [
+            0.07266512604953433,
+            0.07273965898995285,
+            0.0693478015984028
+          ],
+          "inertia": [
+            3.892888738217323e-05,
+            3.86514566057953e-05,
+            3.819749079214575e-05
+          ],
+          "inertia_basis": "homogeneous visual convex hull",
+          "surface_id": "generic_dry_rigid_surface_prior_v1",
+          "material": {
+            "kind": "convex",
+            "sliding_friction": 0.35134872299455644,
+            "torsional_length_m": 0.0001,
+            "rolling_length_m": 2.2050920451900284e-05,
+            "time_constant": 0.008,
+            "distance_m": [
+              2.0,
+              2.2
+            ],
+            "speed_mps": [
+              1.6,
+              1.9
+            ]
+          },
+          "launch": {
+            "no_slip_error": 4.585973723508303e-16,
+            "support_point": [
+              -0.0028283776172790373,
+              -0.011820770923859109,
+              -0.03619426050784248
+            ],
+            "axis_world": [
+              0.0,
+              -0.0,
+              1.0
+            ],
+            "initial_support_clearance": 0.0003,
+            "configured_speed_mps": [
+              1.6,
+              1.9
+            ],
+            "configured_distance_m": [
+              2.0,
+              2.2
+            ]
+          },
+          "sampling": "fixed_object_per_environment",
+          "status": "simulation_priors_not_specimen_measurements",
+          "randomization": {
+            "version": "physical_dr_v1",
+            "sampling": "environment_creation",
+            "size_scale": 0.9733400778132805,
+            "mass_scale": 0.9709707499734517,
+            "friction_scale": 0.878371807486391,
+            "rolling_scale": 1.102546022595014,
+            "damping_scale": 1.0
+          }
+        }
+      }
+    ],
+    "reasons": {
+      "collision_or_failure": 20
+    },
+    "checkpoint": "/home/isee/Catch/11-6/roll_track_best_reward_25.16.pth",
+    "checkpoint_sha256": "8cdf224b05d97ef091d66aa64f0721f4762ad0d04826d2e96396ae1c0fc00205"
+  },
+  {
+    "motion": "roll",
+    "object": "lemon",
+    "episodes": 20,
+    "successes": 17,
+    "success_rate": 0.85,
+    "slots": [
+      {
+        "slot": 0,
+        "successes": 4,
+        "episodes": 5,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.026781712933732,
+          "mass_scale": 1.0229859363147162,
+          "friction_scale": 0.8818013296000147,
+          "rolling_scale": 0.8505534847419334,
+          "damping_scale": 1.0
+        },
+        "physics": {
+          "version": "roll_v1",
+          "object": "lemon",
+          "shape": "convex",
+          "mass_kg": 0.029666592153126774,
+          "dimensions_m": [
+            0.05435796249931473,
+            0.061371276275812216,
+            0.06010216127093406
+          ],
+          "inertia": [
+            1.1016847841884506e-05,
+            1.0961487086356328e-05,
+            8.997868985478697e-06
+          ],
+          "inertia_basis": "homogeneous visual convex hull",
+          "surface_id": "generic_dry_rigid_surface_prior_v1",
+          "material": {
+            "kind": "convex",
+            "sliding_friction": 0.3968105983200066,
+            "torsional_length_m": 0.0001,
+            "rolling_length_m": 1.701106969483867e-05,
+            "time_constant": 0.008,
+            "distance_m": [
+              2.0,
+              2.2
+            ],
+            "speed_mps": [
+              1.4,
+              1.7
+            ]
+          },
+          "launch": {
+            "no_slip_error": 0.0,
+            "support_point": [
+              -0.003440008481301348,
+              -0.004582409675973295,
+              -0.030165737082197143
+            ],
+            "axis_world": [
+              0.0,
+              0.0,
+              1.0
+            ],
+            "initial_support_clearance": 0.0003,
+            "configured_speed_mps": [
+              1.4,
+              1.7
+            ],
+            "configured_distance_m": [
+              2.0,
+              2.2
+            ]
+          },
+          "sampling": "fixed_object_per_environment",
+          "status": "simulation_priors_not_specimen_measurements",
+          "randomization": {
+            "version": "physical_dr_v1",
+            "sampling": "environment_creation",
+            "size_scale": 1.026781712933732,
+            "mass_scale": 1.0229859363147162,
+            "friction_scale": 0.8818013296000147,
+            "rolling_scale": 0.8505534847419334,
+            "damping_scale": 1.0
+          }
+        }
+      },
+      {
+        "slot": 1,
+        "successes": 4,
+        "episodes": 5,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0256739801382022,
+          "mass_scale": 1.050844164286673,
+          "friction_scale": 1.1122068592837577,
+          "rolling_scale": 0.9197835364937789,
+          "damping_scale": 1.0
+        },
+        "physics": {
+          "version": "roll_v1",
+          "object": "lemon",
+          "shape": "convex",
+          "mass_kg": 0.03047448076431352,
+          "dimensions_m": [
+            0.0542993189755743,
+            0.06130506651128496,
+            0.06003732067795953
+          ],
+          "inertia": [
+            1.129245661761941e-05,
+            1.123571090059645e-05,
+            9.222968913416582e-06
+          ],
+          "inertia_basis": "homogeneous visual convex hull",
+          "surface_id": "generic_dry_rigid_surface_prior_v1",
+          "material": {
+            "kind": "convex",
+            "sliding_friction": 0.500493086677691,
+            "torsional_length_m": 0.0001,
+            "rolling_length_m": 1.839567072987558e-05,
+            "time_constant": 0.008,
+            "distance_m": [
+              2.0,
+              2.2
+            ],
+            "speed_mps": [
+              1.4,
+              1.7
+            ]
+          },
+          "launch": {
+            "no_slip_error": 2.237726045655905e-16,
+            "support_point": [
+              0.003937580008702253,
+              -0.004154130168637829,
+              -0.030133193089792187
+            ],
+            "axis_world": [
+              0.0,
+              -0.0,
+              1.0
+            ],
+            "initial_support_clearance": 0.0003,
+            "configured_speed_mps": [
+              1.4,
+              1.7
+            ],
+            "configured_distance_m": [
+              2.0,
+              2.2
+            ]
+          },
+          "sampling": "fixed_object_per_environment",
+          "status": "simulation_priors_not_specimen_measurements",
+          "randomization": {
+            "version": "physical_dr_v1",
+            "sampling": "environment_creation",
+            "size_scale": 1.0256739801382022,
+            "mass_scale": 1.050844164286673,
+            "friction_scale": 1.1122068592837577,
+            "rolling_scale": 0.9197835364937789,
+            "damping_scale": 1.0
+          }
+        }
+      },
+      {
+        "slot": 2,
+        "successes": 4,
+        "episodes": 5,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0169572918099654,
+          "mass_scale": 1.0196718988204032,
+          "friction_scale": 0.9305754087073278,
+          "rolling_scale": 0.9676521705171753,
+          "damping_scale": 1.0
+        },
+        "physics": {
+          "version": "roll_v1",
+          "object": "lemon",
+          "shape": "convex",
+          "mass_kg": 0.029570485065791696,
+          "dimensions_m": [
+            0.053837856318715425,
+            0.060784065522599746,
+            0.059527093624776733
+          ],
+          "inertia": [
+            1.077202412993475e-05,
+            1.0717893637895663e-05,
+            8.797912363014745e-06
+          ],
+          "inertia_basis": "homogeneous visual convex hull",
+          "surface_id": "generic_dry_rigid_surface_prior_v1",
+          "material": {
+            "kind": "convex",
+            "sliding_friction": 0.4187589339182975,
+            "torsional_length_m": 0.0001,
+            "rolling_length_m": 1.935304341034351e-05,
+            "time_constant": 0.008,
+            "distance_m": [
+              2.0,
+              2.2
+            ],
+            "speed_mps": [
+              1.4,
+              1.7
+            ]
+          },
+          "launch": {
+            "no_slip_error": 2.221800888627857e-16,
+            "support_point": [
+              0.005727587514322999,
+              0.0005412069127338514,
+              -0.029873877411527857
+            ],
+            "axis_world": [
+              0.0,
+              -0.0,
+              1.0
+            ],
+            "initial_support_clearance": 0.0003,
+            "configured_speed_mps": [
+              1.4,
+              1.7
+            ],
+            "configured_distance_m": [
+              2.0,
+              2.2
+            ]
+          },
+          "sampling": "fixed_object_per_environment",
+          "status": "simulation_priors_not_specimen_measurements",
+          "randomization": {
+            "version": "physical_dr_v1",
+            "sampling": "environment_creation",
+            "size_scale": 1.0169572918099654,
+            "mass_scale": 1.0196718988204032,
+            "friction_scale": 0.9305754087073278,
+            "rolling_scale": 0.9676521705171753,
+            "damping_scale": 1.0
+          }
+        }
+      },
+      {
+        "slot": 3,
+        "successes": 5,
+        "episodes": 5,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 0.9733400778132805,
+          "mass_scale": 0.9709707499734517,
+          "friction_scale": 0.878371807486391,
+          "rolling_scale": 1.102546022595014,
+          "damping_scale": 1.0
+        },
+        "physics": {
+          "version": "roll_v1",
+          "object": "lemon",
+          "shape": "convex",
+          "mass_kg": 0.0281581517492301,
+          "dimensions_m": [
+            0.05152875512136151,
+            0.05817704198794459,
+            0.05697398151068633
+          ],
+          "inertia": [
+            9.396514685914616e-06,
+            9.349296265563367e-06,
+            7.674482690279546e-06
+          ],
+          "inertia_basis": "homogeneous visual convex hull",
+          "surface_id": "generic_dry_rigid_surface_prior_v1",
+          "material": {
+            "kind": "convex",
+            "sliding_friction": 0.39526731336887594,
+            "torsional_length_m": 0.0001,
+            "rolling_length_m": 2.2050920451900284e-05,
+            "time_constant": 0.008,
+            "distance_m": [
+              2.0,
+              2.2
+            ],
+            "speed_mps": [
+              1.4,
+              1.7
+            ]
+          },
+          "launch": {
+            "no_slip_error": 2.240145354958912e-16,
+            "support_point": [
+              0.005283963205761983,
+              0.0010956695160232498,
+              -0.028583662757000815
+            ],
+            "axis_world": [
+              0.0,
+              -0.0,
+              1.0
+            ],
+            "initial_support_clearance": 0.0003,
+            "configured_speed_mps": [
+              1.4,
+              1.7
+            ],
+            "configured_distance_m": [
+              2.0,
+              2.2
+            ]
+          },
+          "sampling": "fixed_object_per_environment",
+          "status": "simulation_priors_not_specimen_measurements",
+          "randomization": {
+            "version": "physical_dr_v1",
+            "sampling": "environment_creation",
+            "size_scale": 0.9733400778132805,
+            "mass_scale": 0.9709707499734517,
+            "friction_scale": 0.878371807486391,
+            "rolling_scale": 1.102546022595014,
+            "damping_scale": 1.0
+          }
+        }
+      }
+    ],
+    "reasons": {
+      "collision_or_failure": 19,
+      "timeout": 1
+    },
+    "checkpoint": "/home/isee/Catch/11-6/roll_track_best_reward_25.16.pth",
+    "checkpoint_sha256": "8cdf224b05d97ef091d66aa64f0721f4762ad0d04826d2e96396ae1c0fc00205"
+  },
+  {
+    "motion": "roll",
+    "object": "tomato_soup_can",
+    "episodes": 20,
+    "successes": 20,
+    "success_rate": 1.0,
+    "slots": [
+      {
+        "slot": 0,
+        "successes": 5,
+        "episodes": 5,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.026781712933732,
+          "mass_scale": 1.0229859363147162,
+          "friction_scale": 0.8818013296000147,
+          "rolling_scale": 0.8505534847419334,
+          "damping_scale": 1.0
+        },
+        "physics": {
+          "version": "roll_v1",
+          "object": "tomato_soup_can",
+          "shape": "cylinder",
+          "mass_kg": 0.3570220917738359,
+          "dimensions_m": [
+            0.07105558993036852,
+            0.07105558993036852,
+            0.10548098028003049
+          ],
+          "inertia": [
+            0.0004436865223074587,
+            0.0004436865223074587,
+            0.0002253209647791837
+          ],
+          "inertia_basis": "structural analytical approximation",
+          "surface_id": "generic_dry_rigid_surface_prior_v1",
+          "material": {
+            "kind": "cylinder",
+            "sliding_friction": 0.2645403988800044,
+            "torsional_length_m": 0.0001,
+            "rolling_length_m": 1.701106969483867e-05,
+            "time_constant": 0.008,
+            "distance_m": [
+              2.0,
+              2.2
+            ]
+          },
+          "launch": {
+            "no_slip_error": 0.0,
+            "support_point": [
+              0.0,
+              0.0,
+              -0.03552779496518426
+            ],
+            "axis_world": [
+              0.9924744279167514,
+              -0.12245207197641442,
+              0.0
+            ],
+            "initial_support_clearance": 0.0003,
+            "configured_speed_mps": [
+              0.8,
+              1.3
+            ],
+            "configured_distance_m": [
+              2.0,
+              2.2
+            ]
+          },
+          "sampling": "fixed_object_per_environment",
+          "status": "simulation_priors_not_specimen_measurements",
+          "randomization": {
+            "version": "physical_dr_v1",
+            "sampling": "environment_creation",
+            "size_scale": 1.026781712933732,
+            "mass_scale": 1.0229859363147162,
+            "friction_scale": 0.8818013296000147,
+            "rolling_scale": 0.8505534847419334,
+            "damping_scale": 1.0
+          }
+        }
+      },
+      {
+        "slot": 1,
+        "successes": 5,
+        "episodes": 5,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0256739801382022,
+          "mass_scale": 1.050844164286673,
+          "friction_scale": 1.1122068592837577,
+          "rolling_scale": 0.9197835364937789,
+          "damping_scale": 1.0
+        },
+        "physics": {
+          "version": "roll_v1",
+          "object": "tomato_soup_can",
+          "shape": "cylinder",
+          "mass_kg": 0.36674461333604885,
+          "dimensions_m": [
+            0.0709789323445544,
+            0.0709789323445544,
+            0.10536718321908851
+          ],
+          "inertia": [
+            0.00045478623984720085,
+            0.00045478623984720085,
+            0.0002309578253532311
+          ],
+          "inertia_basis": "structural analytical approximation",
+          "surface_id": "generic_dry_rigid_surface_prior_v1",
+          "material": {
+            "kind": "cylinder",
+            "sliding_friction": 0.3336620577851273,
+            "torsional_length_m": 0.0001,
+            "rolling_length_m": 1.839567072987558e-05,
+            "time_constant": 0.008,
+            "distance_m": [
+              2.0,
+              2.2
+            ]
+          },
+          "launch": {
+            "no_slip_error": 0.0,
+            "support_point": [
+              0.0,
+              0.0,
+              -0.0354894661722772
+            ],
+            "axis_world": [
+              0.9880077542517235,
+              -0.15440426658116002,
+              0.0
+            ],
+            "initial_support_clearance": 0.0003,
+            "configured_speed_mps": [
+              0.8,
+              1.3
+            ],
+            "configured_distance_m": [
+              2.0,
+              2.2
+            ]
+          },
+          "sampling": "fixed_object_per_environment",
+          "status": "simulation_priors_not_specimen_measurements",
+          "randomization": {
+            "version": "physical_dr_v1",
+            "sampling": "environment_creation",
+            "size_scale": 1.0256739801382022,
+            "mass_scale": 1.050844164286673,
+            "friction_scale": 1.1122068592837577,
+            "rolling_scale": 0.9197835364937789,
+            "damping_scale": 1.0
+          }
+        }
+      },
+      {
+        "slot": 2,
+        "successes": 5,
+        "episodes": 5,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0169572918099654,
+          "mass_scale": 1.0196718988204032,
+          "friction_scale": 0.9305754087073278,
+          "rolling_scale": 0.9676521705171753,
+          "damping_scale": 1.0
+        },
+        "physics": {
+          "version": "roll_v1",
+          "object": "tomato_soup_can",
+          "shape": "cylinder",
+          "mass_kg": 0.3558654926883207,
+          "dimensions_m": [
+            0.07037571802587282,
+            0.07037571802587282,
+            0.10447172041713534
+          ],
+          "inertia": [
+            0.0004338266256389748,
+            0.0004338266256389748,
+            0.00022031373260451257
+          ],
+          "inertia_basis": "structural analytical approximation",
+          "surface_id": "generic_dry_rigid_surface_prior_v1",
+          "material": {
+            "kind": "cylinder",
+            "sliding_friction": 0.27917262261219833,
+            "torsional_length_m": 0.0001,
+            "rolling_length_m": 1.935304341034351e-05,
+            "time_constant": 0.008,
+            "distance_m": [
+              2.0,
+              2.2
+            ]
+          },
+          "launch": {
+            "no_slip_error": 0.0,
+            "support_point": [
+              0.0,
+              0.0,
+              -0.035187859012936425
+            ],
+            "axis_world": [
+              0.9990658505935618,
+              0.04321372672847223,
+              -2.220446049250313e-16
+            ],
+            "initial_support_clearance": 0.0003,
+            "configured_speed_mps": [
+              0.8,
+              1.3
+            ],
+            "configured_distance_m": [
+              2.0,
+              2.2
+            ]
+          },
+          "sampling": "fixed_object_per_environment",
+          "status": "simulation_priors_not_specimen_measurements",
+          "randomization": {
+            "version": "physical_dr_v1",
+            "sampling": "environment_creation",
+            "size_scale": 1.0169572918099654,
+            "mass_scale": 1.0196718988204032,
+            "friction_scale": 0.9305754087073278,
+            "rolling_scale": 0.9676521705171753,
+            "damping_scale": 1.0
+          }
+        }
+      },
+      {
+        "slot": 3,
+        "successes": 5,
+        "episodes": 5,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 0.9733400778132805,
+          "mass_scale": 0.9709707499734517,
+          "friction_scale": 0.878371807486391,
+          "rolling_scale": 1.102546022595014,
+          "damping_scale": 1.0
+        },
+        "physics": {
+          "version": "roll_v1",
+          "object": "tomato_soup_can",
+          "shape": "cylinder",
+          "mass_kg": 0.3388687917407346,
+          "dimensions_m": [
+            0.06735730930996535,
+            0.06735730930996535,
+            0.09999093698332372
+          ],
+          "inertia": [
+            0.0003784301083794641,
+            0.0003784301083794641,
+            0.000192181265002375
+          ],
+          "inertia_basis": "structural analytical approximation",
+          "surface_id": "generic_dry_rigid_surface_prior_v1",
+          "material": {
+            "kind": "cylinder",
+            "sliding_friction": 0.2635115422459173,
+            "torsional_length_m": 0.0001,
+            "rolling_length_m": 2.2050920451900284e-05,
+            "time_constant": 0.008,
+            "distance_m": [
+              2.0,
+              2.2
+            ]
+          },
+          "launch": {
+            "no_slip_error": 0.0,
+            "support_point": [
+              0.0,
+              0.0,
+              -0.033678654654982675
+            ],
+            "axis_world": [
+              0.9897715924695811,
+              0.14266111852999572,
+              0.0
+            ],
+            "initial_support_clearance": 0.0003,
+            "configured_speed_mps": [
+              0.8,
+              1.3
+            ],
+            "configured_distance_m": [
+              2.0,
+              2.2
+            ]
+          },
+          "sampling": "fixed_object_per_environment",
+          "status": "simulation_priors_not_specimen_measurements",
+          "randomization": {
+            "version": "physical_dr_v1",
+            "sampling": "environment_creation",
+            "size_scale": 0.9733400778132805,
+            "mass_scale": 0.9709707499734517,
+            "friction_scale": 0.878371807486391,
+            "rolling_scale": 1.102546022595014,
+            "damping_scale": 1.0
+          }
+        }
+      }
+    ],
+    "reasons": {
+      "collision_or_failure": 19,
+      "track_touch": 1
+    },
+    "checkpoint": "/home/isee/Catch/11-6/roll_track_best_reward_25.16.pth",
+    "checkpoint_sha256": "8cdf224b05d97ef091d66aa64f0721f4762ad0d04826d2e96396ae1c0fc00205"
+  },
+  {
+    "motion": "bounce",
+    "object": "original",
+    "episodes": 20,
+    "successes": 18,
+    "success_rate": 0.9,
+    "slots": [
+      {
+        "slot": 0,
+        "successes": 4,
+        "episodes": 5,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.026781712933732,
+          "mass_scale": 1.0229859363147162,
+          "friction_scale": 0.8818013296000147,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9252767423709667
+        },
+        "physics": {
+          "profile": "original",
+          "mass": 0.051149296815735816,
+          "radius": 0.04107126851734928,
+          "launch_profile": "physical_v2_default",
+          "inertia_factor": 0.4,
+          "damping_ratio": 0.10178044166080634,
+          "time_constant": 0.008,
+          "sliding_friction": 0.2645403988800044,
+          "torsional_friction": 0.005,
+          "material_status": "simulation_prior/simulation_prior",
+          "surface_id": "generic_dry_rigid_floor_literature_approx_v1"
+        }
+      },
+      {
+        "slot": 1,
+        "successes": 4,
+        "episodes": 5,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0256739801382022,
+          "mass_scale": 1.050844164286673,
+          "friction_scale": 1.1122068592837577,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9598917682468895
+        },
+        "physics": {
+          "profile": "original",
+          "mass": 0.052542208214333655,
+          "radius": 0.04102695920552809,
+          "launch_profile": "physical_v2_default",
+          "inertia_factor": 0.4,
+          "damping_ratio": 0.10558809450715785,
+          "time_constant": 0.008,
+          "sliding_friction": 0.3336620577851273,
+          "torsional_friction": 0.005,
+          "material_status": "simulation_prior/simulation_prior",
+          "surface_id": "generic_dry_rigid_floor_literature_approx_v1"
+        }
+      },
+      {
+        "slot": 2,
+        "successes": 5,
+        "episodes": 5,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0169572918099654,
+          "mass_scale": 1.0196718988204032,
+          "friction_scale": 0.9305754087073278,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9838260852585877
+        },
+        "physics": {
+          "profile": "original",
+          "mass": 0.050983594941020165,
+          "radius": 0.040678291672398614,
+          "launch_profile": "physical_v2_default",
+          "inertia_factor": 0.4,
+          "damping_ratio": 0.10822086937844465,
+          "time_constant": 0.008,
+          "sliding_friction": 0.27917262261219833,
+          "torsional_friction": 0.005,
+          "material_status": "simulation_prior/simulation_prior",
+          "surface_id": "generic_dry_rigid_floor_literature_approx_v1"
+        }
+      },
+      {
+        "slot": 3,
+        "successes": 5,
+        "episodes": 5,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 0.9733400778132805,
+          "mass_scale": 0.9709707499734517,
+          "friction_scale": 0.878371807486391,
+          "rolling_scale": 1.0,
+          "damping_scale": 1.051273011297507
+        },
+        "physics": {
+          "profile": "original",
+          "mass": 0.048548537498672585,
+          "radius": 0.03893360311253122,
+          "launch_profile": "physical_v2_default",
+          "inertia_factor": 0.4,
+          "damping_ratio": 0.11564003124272577,
+          "time_constant": 0.008,
+          "sliding_friction": 0.2635115422459173,
+          "torsional_friction": 0.005,
+          "material_status": "simulation_prior/simulation_prior",
+          "surface_id": "generic_dry_rigid_floor_literature_approx_v1"
+        }
+      }
+    ],
+    "reasons": {
+      "track_touch": 18,
+      "early_contact": 2
+    },
+    "checkpoint": "/home/isee/Catch/11-6/bounce_track_best_reward_19.43.pth",
+    "checkpoint_sha256": "451008e15986f5b217cd1398c9adcd46f29de26d18758452c4b86e7bc93be103"
+  },
+  {
+    "motion": "bounce",
+    "object": "tennis_ball",
+    "episodes": 20,
+    "successes": 16,
+    "success_rate": 0.8,
+    "slots": [
+      {
+        "slot": 0,
+        "successes": 4,
+        "episodes": 5,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.026781712933732,
+          "mass_scale": 1.0229859363147162,
+          "friction_scale": 0.8818013296000147,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9252767423709667
+        },
+        "physics": {
+          "profile": "tennis_ball",
+          "mass": 0.05933318430625355,
+          "radius": 0.034166967863775155,
+          "launch_profile": "physical_v2_default",
+          "inertia_factor": 0.55,
+          "damping_ratio": 0.09045455001699744,
+          "time_constant": 0.008,
+          "sliding_friction": 0.44090066480000734,
+          "torsional_friction": 0.005,
+          "material_status": "simulation_prior/simulation_prior",
+          "surface_id": "generic_dry_rigid_floor_literature_approx_v1"
+        }
+      },
+      {
+        "slot": 1,
+        "successes": 3,
+        "episodes": 5,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0256739801382022,
+          "mass_scale": 1.050844164286673,
+          "friction_scale": 1.1122068592837577,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9598917682468895
+        },
+        "physics": {
+          "profile": "tennis_ball",
+          "mass": 0.06094896152862704,
+          "radius": 0.034130107185064415,
+          "launch_profile": "physical_v2_default",
+          "inertia_factor": 0.55,
+          "damping_ratio": 0.09383849607989111,
+          "time_constant": 0.008,
+          "sliding_friction": 0.5561034296418789,
+          "torsional_friction": 0.005,
+          "material_status": "simulation_prior/simulation_prior",
+          "surface_id": "generic_dry_rigid_floor_literature_approx_v1"
+        }
+      },
+      {
+        "slot": 2,
+        "successes": 4,
+        "episodes": 5,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0169572918099654,
+          "mass_scale": 1.0196718988204032,
+          "friction_scale": 0.9305754087073278,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9838260852585877
+        },
+        "physics": {
+          "profile": "tennis_ball",
+          "mass": 0.05914097013158339,
+          "radius": 0.033840052535436434,
+          "launch_profile": "physical_v2_default",
+          "inertia_factor": 0.55,
+          "damping_ratio": 0.096178301865682,
+          "time_constant": 0.008,
+          "sliding_friction": 0.4652877043536639,
+          "torsional_friction": 0.005,
+          "material_status": "simulation_prior/simulation_prior",
+          "surface_id": "generic_dry_rigid_floor_literature_approx_v1"
+        }
+      },
+      {
+        "slot": 3,
+        "successes": 5,
+        "episodes": 5,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 0.9733400778132805,
+          "mass_scale": 0.9709707499734517,
+          "friction_scale": 0.878371807486391,
+          "rolling_scale": 1.0,
+          "damping_scale": 1.051273011297507
+        },
+        "physics": {
+          "profile": "tennis_ball",
+          "mass": 0.0563163034984602,
+          "radius": 0.032388655485644686,
+          "launch_profile": "physical_v2_default",
+          "inertia_factor": 0.55,
+          "damping_ratio": 0.10277187659365691,
+          "time_constant": 0.008,
+          "sliding_friction": 0.4391859037431955,
+          "torsional_friction": 0.005,
+          "material_status": "simulation_prior/simulation_prior",
+          "surface_id": "generic_dry_rigid_floor_literature_approx_v1"
+        }
+      }
+    ],
+    "reasons": {
+      "track_touch": 16,
+      "early_contact": 4
+    },
+    "checkpoint": "/home/isee/Catch/11-6/bounce_track_best_reward_19.43.pth",
+    "checkpoint_sha256": "451008e15986f5b217cd1398c9adcd46f29de26d18758452c4b86e7bc93be103"
+  },
+  {
+    "motion": "bounce",
+    "object": "baseball",
+    "episodes": 20,
+    "successes": 14,
+    "success_rate": 0.7,
+    "slots": [
+      {
+        "slot": 0,
+        "successes": 3,
+        "episodes": 5,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.026781712933732,
+          "mass_scale": 1.0229859363147162,
+          "friction_scale": 0.8818013296000147,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9252767423709667
+        },
+        "physics": {
+          "profile": "baseball",
+          "mass": 0.14117205921143086,
+          "radius": 0.03714509534288123,
+          "launch_profile": "baseball_intercept_v1",
+          "inertia_factor": 0.4,
+          "damping_ratio": 0.23568364330356611,
+          "time_constant": 0.008,
+          "sliding_friction": 0.2645403988800044,
+          "torsional_friction": 0.005,
+          "material_status": "simulation_prior/simulation_prior",
+          "surface_id": "generic_dry_rigid_floor_literature_approx_v1"
+        }
+      },
+      {
+        "slot": 1,
+        "successes": 5,
+        "episodes": 5,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0256739801382022,
+          "mass_scale": 1.050844164286673,
+          "friction_scale": 1.1122068592837577,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9598917682468895
+        },
+        "physics": {
+          "profile": "baseball",
+          "mass": 0.14501649467156089,
+          "radius": 0.037105021742245295,
+          "launch_profile": "baseball_intercept_v1",
+          "inertia_factor": 0.4,
+          "damping_ratio": 0.24450067613050155,
+          "time_constant": 0.008,
+          "sliding_friction": 0.3336620577851273,
+          "torsional_friction": 0.005,
+          "material_status": "simulation_prior/simulation_prior",
+          "surface_id": "generic_dry_rigid_floor_literature_approx_v1"
+        }
+      },
+      {
+        "slot": 2,
+        "successes": 2,
+        "episodes": 5,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0169572918099654,
+          "mass_scale": 1.0196718988204032,
+          "friction_scale": 0.9305754087073278,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9838260852585877
+        },
+        "physics": {
+          "profile": "baseball",
+          "mass": 0.14071472203721566,
+          "radius": 0.036789684787030714,
+          "launch_profile": "baseball_intercept_v1",
+          "inertia_factor": 0.4,
+          "damping_ratio": 0.2505971516766663,
+          "time_constant": 0.008,
+          "sliding_friction": 0.27917262261219833,
+          "torsional_friction": 0.005,
+          "material_status": "simulation_prior/simulation_prior",
+          "surface_id": "generic_dry_rigid_floor_literature_approx_v1"
+        }
+      },
+      {
+        "slot": 3,
+        "successes": 4,
+        "episodes": 5,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 0.9733400778132805,
+          "mass_scale": 0.9709707499734517,
+          "friction_scale": 0.878371807486391,
+          "rolling_scale": 1.0,
+          "damping_scale": 1.051273011297507
+        },
+        "physics": {
+          "profile": "baseball",
+          "mass": 0.13399396349633635,
+          "radius": 0.0352117782543281,
+          "launch_profile": "baseball_intercept_v1",
+          "inertia_factor": 0.4,
+          "damping_ratio": 0.26777702503838696,
+          "time_constant": 0.008,
+          "sliding_friction": 0.2635115422459173,
+          "torsional_friction": 0.005,
+          "material_status": "simulation_prior/simulation_prior",
+          "surface_id": "generic_dry_rigid_floor_literature_approx_v1"
+        }
+      }
+    ],
+    "reasons": {
+      "track_touch": 14,
+      "early_contact": 3,
+      "out_of_bounds": 3
+    },
+    "checkpoint": "/home/isee/Catch/11-6/bounce_track_best_reward_19.43.pth",
+    "checkpoint_sha256": "451008e15986f5b217cd1398c9adcd46f29de26d18758452c4b86e7bc93be103"
+  },
+  {
+    "motion": "bounce",
+    "object": "racquetball",
+    "episodes": 20,
+    "successes": 20,
+    "success_rate": 1.0,
+    "slots": [
+      {
+        "slot": 0,
+        "successes": 5,
+        "episodes": 5,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.026781712933732,
+          "mass_scale": 1.0229859363147162,
+          "friction_scale": 0.8818013296000147,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9252767423709667
+        },
+        "physics": {
+          "version": "bounce_v1",
+          "object": "racquetball",
+          "shape": "sphere",
+          "mass_kg": 0.04194242338890337,
+          "dimensions_m": [
+            0.057177054395197345,
+            0.057177054395197345,
+            0.057177054395197345
+          ],
+          "inertia": [
+            2.2853137119800536e-05,
+            2.2853137119800536e-05,
+            2.2853137119800536e-05
+          ],
+          "inertia_basis": "structural analytical approximation",
+          "surface_id": "generic_dry_rigid_surface_prior_v1",
+          "material": {
+            "kind": "sphere",
+            "inertia_factor": 0.6666666666666666,
+            "sliding_friction": 0.48499073128000814,
+            "torsional_length_m": 0.0001,
+            "time_constant": 0.008,
+            "damping_ratio": 0.052854944794305386,
+            "normal_cor_target": 0.84,
+            "cor_basis": "Approximation from specified rebound-height ratio 0.68-0.72; generic floor transfer unmeasured",
+            "launch_height_m": [
+              0.9,
+              1.2
+            ],
+            "rebound_apex_m": [
+              0.65,
+              0.85
+            ],
+            "horizontal_retention_prior": 0.65,
+            "numerical_validation": {
+              "passed": true,
+              "peak_refinement_error_m": 0.006634457365296775,
+              "calibration": "simulation-only fit to nominal COR; not real measurements"
+            }
+          },
+          "launch": {
+            "requested_apex_clearance_m": 0.7500048510114236,
+            "nominal_cor": 0.84,
+            "predicted_apex_y": 0.5896240079298722,
+            "downward_speed": 0.9904544411531511,
+            "horizontal_speed": 1.9499259926896253,
+            "predicted_first_impact_seconds": 0.3645507779806409,
+            "predicted_apex_seconds": 0.7555829860785328,
+            "horizontal_retention_prior": 0.65
+          },
+          "sampling": "fixed_object_per_environment",
+          "status": "simulation_priors_not_specimen_measurements",
+          "randomization": {
+            "version": "physical_dr_v1",
+            "sampling": "environment_creation",
+            "size_scale": 1.026781712933732,
+            "mass_scale": 1.0229859363147162,
+            "friction_scale": 0.8818013296000147,
+            "rolling_scale": 1.0,
+            "damping_scale": 0.9252767423709667
+          }
+        }
+      },
+      {
+        "slot": 1,
+        "successes": 5,
+        "episodes": 5,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0256739801382022,
+          "mass_scale": 1.050844164286673,
+          "friction_scale": 1.1122068592837577,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9598917682468895
+        },
+        "physics": {
+          "version": "bounce_v1",
+          "object": "racquetball",
+          "shape": "sphere",
+          "mass_kg": 0.0430846107357536,
+          "dimensions_m": [
+            0.057115369523420285,
+            0.057115369523420285,
+            0.057115369523420285
+          ],
+          "inertia": [
+            2.342485465948952e-05,
+            2.342485465948952e-05,
+            2.342485465948952e-05
+          ],
+          "inertia_basis": "structural analytical approximation",
+          "surface_id": "generic_dry_rigid_surface_prior_v1",
+          "material": {
+            "kind": "sphere",
+            "inertia_factor": 0.6666666666666666,
+            "sliding_friction": 0.6117137726060669,
+            "torsional_length_m": 0.0001,
+            "time_constant": 0.008,
+            "damping_ratio": 0.054832272439045676,
+            "normal_cor_target": 0.84,
+            "cor_basis": "Approximation from specified rebound-height ratio 0.68-0.72; generic floor transfer unmeasured",
+            "launch_height_m": [
+              0.9,
+              1.2
+            ],
+            "rebound_apex_m": [
+              0.65,
+              0.85
+            ],
+            "horizontal_retention_prior": 0.65,
+            "numerical_validation": {
+              "passed": true,
+              "peak_refinement_error_m": 0.006634457365296775,
+              "calibration": "simulation-only fit to nominal COR; not real measurements"
+            }
+          },
+          "launch": {
+            "requested_apex_clearance_m": 0.6632689999005469,
+            "nominal_cor": 0.84,
+            "predicted_apex_y": 0.6222043738851675,
+            "downward_speed": 0.9904544411531511,
+            "horizontal_speed": 2.0097626438858014,
+            "predicted_first_impact_seconds": 0.3368063064590186,
+            "predicted_apex_seconds": 0.7045331584787478,
+            "horizontal_retention_prior": 0.65
+          },
+          "sampling": "fixed_object_per_environment",
+          "status": "simulation_priors_not_specimen_measurements",
+          "randomization": {
+            "version": "physical_dr_v1",
+            "sampling": "environment_creation",
+            "size_scale": 1.0256739801382022,
+            "mass_scale": 1.050844164286673,
+            "friction_scale": 1.1122068592837577,
+            "rolling_scale": 1.0,
+            "damping_scale": 0.9598917682468895
+          }
+        }
+      },
+      {
+        "slot": 2,
+        "successes": 5,
+        "episodes": 5,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0169572918099654,
+          "mass_scale": 1.0196718988204032,
+          "friction_scale": 0.9305754087073278,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9838260852585877
+        },
+        "physics": {
+          "version": "bounce_v1",
+          "object": "racquetball",
+          "shape": "sphere",
+          "mass_kg": 0.04180654785163653,
+          "dimensions_m": [
+            0.0566299746664496,
+            0.0566299746664496,
+            0.0566299746664496
+          ],
+          "inertia": [
+            2.234527952390137e-05,
+            2.234527952390137e-05,
+            2.234527952390137e-05
+          ],
+          "inertia_basis": "structural analytical approximation",
+          "surface_id": "generic_dry_rigid_surface_prior_v1",
+          "material": {
+            "kind": "sphere",
+            "inertia_factor": 0.6666666666666666,
+            "sliding_friction": 0.5118164747890304,
+            "torsional_length_m": 0.0001,
+            "time_constant": 0.008,
+            "damping_ratio": 0.056199481779141164,
+            "normal_cor_target": 0.84,
+            "cor_basis": "Approximation from specified rebound-height ratio 0.68-0.72; generic floor transfer unmeasured",
+            "launch_height_m": [
+              0.9,
+              1.2
+            ],
+            "rebound_apex_m": [
+              0.65,
+              0.85
+            ],
+            "horizontal_retention_prior": 0.65,
+            "numerical_validation": {
+              "passed": true,
+              "peak_refinement_error_m": 0.006634457365296775,
+              "calibration": "simulation-only fit to nominal COR; not real measurements"
+            }
+          },
+          "launch": {
+            "requested_apex_clearance_m": 0.7369226332485427,
+            "nominal_cor": 0.84,
+            "predicted_apex_y": 0.7977637005440875,
+            "downward_speed": 0.9904544411531511,
+            "horizontal_speed": 1.5561461382531476,
+            "predicted_first_impact_seconds": 0.3604729688677246,
+            "predicted_apex_seconds": 0.7480798173107669,
+            "horizontal_retention_prior": 0.65
+          },
+          "sampling": "fixed_object_per_environment",
+          "status": "simulation_priors_not_specimen_measurements",
+          "randomization": {
+            "version": "physical_dr_v1",
+            "sampling": "environment_creation",
+            "size_scale": 1.0169572918099654,
+            "mass_scale": 1.0196718988204032,
+            "friction_scale": 0.9305754087073278,
+            "rolling_scale": 1.0,
+            "damping_scale": 0.9838260852585877
+          }
+        }
+      },
+      {
+        "slot": 3,
+        "successes": 5,
+        "episodes": 5,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 0.9733400778132805,
+          "mass_scale": 0.9709707499734517,
+          "friction_scale": 0.878371807486391,
+          "rolling_scale": 1.0,
+          "damping_scale": 1.051273011297507
+        },
+        "physics": {
+          "version": "bounce_v1",
+          "object": "racquetball",
+          "shape": "sphere",
+          "mass_kg": 0.03980980074891152,
+          "dimensions_m": [
+            0.05420111974447227,
+            0.05420111974447227,
+            0.05420111974447227
+          ],
+          "inertia": [
+            1.9491949207922753e-05,
+            1.9491949207922753e-05,
+            1.9491949207922753e-05
+          ],
+          "inertia_basis": "structural analytical approximation",
+          "surface_id": "generic_dry_rigid_surface_prior_v1",
+          "material": {
+            "kind": "sphere",
+            "inertia_factor": 0.6666666666666666,
+            "sliding_friction": 0.4831044941175151,
+            "torsional_length_m": 0.0001,
+            "time_constant": 0.008,
+            "damping_ratio": 0.0600522788819818,
+            "normal_cor_target": 0.84,
+            "cor_basis": "Approximation from specified rebound-height ratio 0.68-0.72; generic floor transfer unmeasured",
+            "launch_height_m": [
+              0.9,
+              1.2
+            ],
+            "rebound_apex_m": [
+              0.65,
+              0.85
+            ],
+            "horizontal_retention_prior": 0.65,
+            "numerical_validation": {
+              "passed": true,
+              "peak_refinement_error_m": 0.006634457365296775,
+              "calibration": "simulation-only fit to nominal COR; not real measurements"
+            }
+          },
+          "launch": {
+            "requested_apex_clearance_m": 0.6787191965159639,
+            "nominal_cor": 0.84,
+            "predicted_apex_y": 0.594686874896128,
+            "downward_speed": 0.9904544411531511,
+            "horizontal_speed": 2.218808851377538,
+            "predicted_first_impact_seconds": 0.34187566570049904,
+            "predicted_apex_seconds": 0.7138607794830718,
+            "horizontal_retention_prior": 0.65
+          },
+          "sampling": "fixed_object_per_environment",
+          "status": "simulation_priors_not_specimen_measurements",
+          "randomization": {
+            "version": "physical_dr_v1",
+            "sampling": "environment_creation",
+            "size_scale": 0.9733400778132805,
+            "mass_scale": 0.9709707499734517,
+            "friction_scale": 0.878371807486391,
+            "rolling_scale": 1.0,
+            "damping_scale": 1.051273011297507
+          }
+        }
+      }
+    ],
+    "reasons": {
+      "track_touch": 20
+    },
+    "checkpoint": "/home/isee/Catch/11-6/bounce_track_best_reward_19.43.pth",
+    "checkpoint_sha256": "451008e15986f5b217cd1398c9adcd46f29de26d18758452c4b86e7bc93be103"
+  },
+  {
+    "motion": "bounce",
+    "object": "golf_ball",
+    "episodes": 20,
+    "successes": 20,
+    "success_rate": 1.0,
+    "slots": [
+      {
+        "slot": 0,
+        "successes": 5,
+        "episodes": 5,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.026781712933732,
+          "mass_scale": 1.0229859363147162,
+          "friction_scale": 0.8818013296000147,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9252767423709667
+        },
+        "physics": {
+          "version": "bounce_v1",
+          "object": "golf_ball",
+          "shape": "sphere",
+          "mass_kg": 0.04705735307047695,
+          "dimensions_m": [
+            0.04366804135539028,
+            0.04366804135539028,
+            0.04366804135539028
+          ],
+          "inertia": [
+            8.973356472932546e-06,
+            8.973356472932546e-06,
+            8.973356472932546e-06
+          ],
+          "inertia_basis": "structural analytical approximation",
+          "surface_id": "generic_dry_rigid_surface_prior_v1",
+          "material": {
+            "kind": "sphere",
+            "inertia_factor": 0.4,
+            "sliding_friction": 0.22045033240000367,
+            "torsional_length_m": 0.0001,
+            "time_constant": 0.008,
+            "damping_ratio": 0.06845821665916575,
+            "normal_cor_target": 0.8,
+            "cor_basis": "Engineering prior for a resilient golf ball on a rigid floor; not a USGA specified ground COR",
+            "launch_height_m": [
+              0.9,
+              1.2
+            ],
+            "rebound_apex_m": [
+              0.65,
+              0.85
+            ],
+            "horizontal_retention_prior": 0.75,
+            "numerical_validation": {
+              "passed": true,
+              "peak_refinement_error_m": 0.00632180006612082,
+              "calibration": "simulation-only fit to nominal COR; not real measurements"
+            }
+          },
+          "launch": {
+            "requested_apex_clearance_m": 0.7500048510114236,
+            "nominal_cor": 0.8,
+            "predicted_apex_y": 0.5896240079298722,
+            "downward_speed": 1.472980020086216,
+            "horizontal_speed": 1.9092193153880188,
+            "predicted_first_impact_seconds": 0.33863939161204726,
+            "predicted_apex_seconds": 0.7296715997099392,
+            "horizontal_retention_prior": 0.75
+          },
+          "sampling": "fixed_object_per_environment",
+          "status": "simulation_priors_not_specimen_measurements",
+          "randomization": {
+            "version": "physical_dr_v1",
+            "sampling": "environment_creation",
+            "size_scale": 1.026781712933732,
+            "mass_scale": 1.0229859363147162,
+            "friction_scale": 0.8818013296000147,
+            "rolling_scale": 1.0,
+            "damping_scale": 0.9252767423709667
+          }
+        }
+      },
+      {
+        "slot": 1,
+        "successes": 5,
+        "episodes": 5,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0256739801382022,
+          "mass_scale": 1.050844164286673,
+          "friction_scale": 1.1122068592837577,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9598917682468895
+        },
+        "physics": {
+          "version": "bounce_v1",
+          "object": "golf_ball",
+          "shape": "sphere",
+          "mass_kg": 0.04833883155718696,
+          "dimensions_m": [
+            0.04362093054214088,
+            0.04362093054214088,
+            0.04362093054214088
+          ],
+          "inertia": [
+            9.197843170691528e-06,
+            9.197843170691528e-06,
+            9.197843170691528e-06
+          ],
+          "inertia_basis": "structural analytical approximation",
+          "surface_id": "generic_dry_rigid_surface_prior_v1",
+          "material": {
+            "kind": "sphere",
+            "inertia_factor": 0.4,
+            "sliding_friction": 0.27805171482093943,
+            "torsional_length_m": 0.0001,
+            "time_constant": 0.008,
+            "damping_ratio": 0.0710192698366231,
+            "normal_cor_target": 0.8,
+            "cor_basis": "Engineering prior for a resilient golf ball on a rigid floor; not a USGA specified ground COR",
+            "launch_height_m": [
+              0.9,
+              1.2
+            ],
+            "rebound_apex_m": [
+              0.65,
+              0.85
+            ],
+            "horizontal_retention_prior": 0.75,
+            "numerical_validation": {
+              "passed": true,
+              "peak_refinement_error_m": 0.00632180006612082,
+              "calibration": "simulation-only fit to nominal COR; not real measurements"
+            }
+          },
+          "launch": {
+            "requested_apex_clearance_m": 0.6632689999005469,
+            "nominal_cor": 0.8,
+            "predicted_apex_y": 0.6222043738851675,
+            "downward_speed": 1.0349299543334411,
+            "horizontal_speed": 1.8370785568036694,
+            "predicted_first_impact_seconds": 0.3541611180997439,
+            "predicted_apex_seconds": 0.7218879701194731,
+            "horizontal_retention_prior": 0.75
+          },
+          "sampling": "fixed_object_per_environment",
+          "status": "simulation_priors_not_specimen_measurements",
+          "randomization": {
+            "version": "physical_dr_v1",
+            "sampling": "environment_creation",
+            "size_scale": 1.0256739801382022,
+            "mass_scale": 1.050844164286673,
+            "friction_scale": 1.1122068592837577,
+            "rolling_scale": 1.0,
+            "damping_scale": 0.9598917682468895
+          }
+        }
+      },
+      {
+        "slot": 2,
+        "successes": 5,
+        "episodes": 5,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0169572918099654,
+          "mass_scale": 1.0196718988204032,
+          "friction_scale": 0.9305754087073278,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9838260852585877
+        },
+        "physics": {
+          "version": "bounce_v1",
+          "object": "golf_ball",
+          "shape": "sphere",
+          "mass_kg": 0.046904907345738545,
+          "dimensions_m": [
+            0.04325021814864497,
+            0.04325021814864497,
+            0.04325021814864497
+          ],
+          "inertia": [
+            8.77394458380765e-06,
+            8.77394458380765e-06,
+            8.77394458380765e-06
+          ],
+          "inertia_basis": "structural analytical approximation",
+          "surface_id": "generic_dry_rigid_surface_prior_v1",
+          "material": {
+            "kind": "sphere",
+            "inertia_factor": 0.4,
+            "sliding_friction": 0.23264385217683195,
+            "torsional_length_m": 0.0001,
+            "time_constant": 0.008,
+            "damping_ratio": 0.07279009210475601,
+            "normal_cor_target": 0.8,
+            "cor_basis": "Engineering prior for a resilient golf ball on a rigid floor; not a USGA specified ground COR",
+            "launch_height_m": [
+              0.9,
+              1.2
+            ],
+            "rebound_apex_m": [
+              0.65,
+              0.85
+            ],
+            "horizontal_retention_prior": 0.75,
+            "numerical_validation": {
+              "passed": true,
+              "peak_refinement_error_m": 0.00632180006612082,
+              "calibration": "simulation-only fit to nominal COR; not real measurements"
+            }
+          },
+          "launch": {
+            "requested_apex_clearance_m": 0.7369226332485427,
+            "nominal_cor": 0.8,
+            "predicted_apex_y": 0.7977637005440875,
+            "downward_speed": 0.9904544411531511,
+            "horizontal_speed": 1.4134387637955805,
+            "predicted_first_impact_seconds": 0.3835448050845723,
+            "predicted_apex_seconds": 0.7711516535276146,
+            "horizontal_retention_prior": 0.75
+          },
+          "sampling": "fixed_object_per_environment",
+          "status": "simulation_priors_not_specimen_measurements",
+          "randomization": {
+            "version": "physical_dr_v1",
+            "sampling": "environment_creation",
+            "size_scale": 1.0169572918099654,
+            "mass_scale": 1.0196718988204032,
+            "friction_scale": 0.9305754087073278,
+            "rolling_scale": 1.0,
+            "damping_scale": 0.9838260852585877
+          }
+        }
+      },
+      {
+        "slot": 3,
+        "successes": 5,
+        "episodes": 5,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 0.9733400778132805,
+          "mass_scale": 0.9709707499734517,
+          "friction_scale": 0.878371807486391,
+          "rolling_scale": 1.0,
+          "damping_scale": 1.051273011297507
+        },
+        "physics": {
+          "version": "bounce_v1",
+          "object": "golf_ball",
+          "shape": "sphere",
+          "mass_kg": 0.04466465449877877,
+          "dimensions_m": [
+            0.04139521987528064,
+            0.04139521987528064,
+            0.04139521987528064
+          ],
+          "inertia": [
+            7.653575422843857e-06,
+            7.653575422843857e-06,
+            7.653575422843857e-06
+          ],
+          "inertia_basis": "structural analytical approximation",
+          "surface_id": "generic_dry_rigid_surface_prior_v1",
+          "material": {
+            "kind": "sphere",
+            "inertia_factor": 0.4,
+            "sliding_friction": 0.21959295187159775,
+            "torsional_length_m": 0.0001,
+            "time_constant": 0.008,
+            "damping_ratio": 0.07778027078787683,
+            "normal_cor_target": 0.8,
+            "cor_basis": "Engineering prior for a resilient golf ball on a rigid floor; not a USGA specified ground COR",
+            "launch_height_m": [
+              0.9,
+              1.2
+            ],
+            "rebound_apex_m": [
+              0.65,
+              0.85
+            ],
+            "horizontal_retention_prior": 0.75,
+            "numerical_validation": {
+              "passed": true,
+              "peak_refinement_error_m": 0.00632180006612082,
+              "calibration": "simulation-only fit to nominal COR; not real measurements"
+            }
+          },
+          "launch": {
+            "requested_apex_clearance_m": 0.6787191965159639,
+            "nominal_cor": 0.8,
+            "predicted_apex_y": 0.594686874896128,
+            "downward_speed": 1.148430168407062,
+            "horizontal_speed": 2.065779561348259,
+            "predicted_first_impact_seconds": 0.3479140967738773,
+            "predicted_apex_seconds": 0.7198992105564501,
+            "horizontal_retention_prior": 0.75
+          },
+          "sampling": "fixed_object_per_environment",
+          "status": "simulation_priors_not_specimen_measurements",
+          "randomization": {
+            "version": "physical_dr_v1",
+            "sampling": "environment_creation",
+            "size_scale": 0.9733400778132805,
+            "mass_scale": 0.9709707499734517,
+            "friction_scale": 0.878371807486391,
+            "rolling_scale": 1.0,
+            "damping_scale": 1.051273011297507
+          }
+        }
+      }
+    ],
+    "reasons": {
+      "track_touch": 20
+    },
+    "checkpoint": "/home/isee/Catch/11-6/bounce_track_best_reward_19.43.pth",
+    "checkpoint_sha256": "451008e15986f5b217cd1398c9adcd46f29de26d18758452c4b86e7bc93be103"
+  },
+  {
+    "motion": "bounce",
+    "object": "softball",
+    "episodes": 20,
+    "successes": 20,
+    "success_rate": 1.0,
+    "slots": [
+      {
+        "slot": 0,
+        "successes": 5,
+        "episodes": 5,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.026781712933732,
+          "mass_scale": 1.0229859363147162,
+          "friction_scale": 0.8818013296000147,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9252767423709667
+        },
+        "physics": {
+          "version": "bounce_v1",
+          "object": "softball",
+          "shape": "sphere",
+          "mass_kg": 0.1953903138361108,
+          "dimensions_m": [
+            0.09774307579027215,
+            0.09774307579027215,
+            0.09774307579027215
+          ],
+          "inertia": [
+            0.0001866702173420025,
+            0.0001866702173420025,
+            0.0001866702173420025
+          ],
+          "inertia_basis": "structural analytical approximation",
+          "surface_id": "generic_dry_rigid_surface_prior_v1",
+          "material": {
+            "kind": "sphere",
+            "inertia_factor": 0.4,
+            "sliding_friction": 0.3086304653600051,
+            "torsional_length_m": 0.0001,
+            "time_constant": 0.004,
+            "damping_ratio": 0.287393556981089,
+            "normal_cor_target": 0.44,
+            "cor_basis": "Literature/standard-test informed prior; not a measured YCB softball/floor pair",
+            "launch_height_m": [
+              1.2,
+              1.5
+            ],
+            "rebound_apex_m": [
+              0.5,
+              0.65
+            ],
+            "horizontal_retention_prior": 0.75,
+            "numerical_validation": {
+              "passed": true,
+              "peak_refinement_error_m": 0.0030220591917469175,
+              "calibration": "simulation-only fit to nominal COR; not real measurements"
+            }
+          },
+          "launch": {
+            "requested_apex_clearance_m": 0.5750036382585677,
+            "nominal_cor": 0.44,
+            "predicted_apex_y": 0.5896240079298722,
+            "downward_speed": 5.6181770514557225,
+            "horizontal_speed": 2.6100326704190366,
+            "predicted_first_impact_seconds": 0.20545064177261563,
+            "predicted_apex_seconds": 0.5478364779385521,
+            "horizontal_retention_prior": 0.75
+          },
+          "sampling": "fixed_object_per_environment",
+          "status": "simulation_priors_not_specimen_measurements",
+          "randomization": {
+            "version": "physical_dr_v1",
+            "sampling": "environment_creation",
+            "size_scale": 1.026781712933732,
+            "mass_scale": 1.0229859363147162,
+            "friction_scale": 0.8818013296000147,
+            "rolling_scale": 1.0,
+            "damping_scale": 0.9252767423709667
+          }
+        }
+      },
+      {
+        "slot": 1,
+        "successes": 5,
+        "episodes": 5,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0256739801382022,
+          "mass_scale": 1.050844164286673,
+          "friction_scale": 1.1122068592837577,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9598917682468895
+        },
+        "physics": {
+          "version": "bounce_v1",
+          "object": "softball",
+          "shape": "sphere",
+          "mass_kg": 0.20071123537875454,
+          "dimensions_m": [
+            0.09763762668728854,
+            0.09763762668728854,
+            0.09763762668728854
+          ],
+          "inertia": [
+            0.00019134015113851004,
+            0.00019134015113851004,
+            0.00019134015113851004
+          ],
+          "inertia_basis": "structural analytical approximation",
+          "surface_id": "generic_dry_rigid_surface_prior_v1",
+          "material": {
+            "kind": "sphere",
+            "inertia_factor": 0.4,
+            "sliding_friction": 0.3892724007493152,
+            "torsional_length_m": 0.0001,
+            "time_constant": 0.004,
+            "damping_ratio": 0.2981450813152924,
+            "normal_cor_target": 0.44,
+            "cor_basis": "Literature/standard-test informed prior; not a measured YCB softball/floor pair",
+            "launch_height_m": [
+              1.2,
+              1.5
+            ],
+            "rebound_apex_m": [
+              0.5,
+              0.65
+            ],
+            "horizontal_retention_prior": 0.75,
+            "numerical_validation": {
+              "passed": true,
+              "peak_refinement_error_m": 0.0030220591917469175,
+              "calibration": "simulation-only fit to nominal COR; not real measurements"
+            }
+          },
+          "launch": {
+            "requested_apex_clearance_m": 0.5099517499254101,
+            "nominal_cor": 0.44,
+            "predicted_apex_y": 0.6222043738851675,
+            "downward_speed": 5.1508996574806725,
+            "horizontal_speed": 2.574172512921609,
+            "predicted_first_impact_seconds": 0.20774541904850807,
+            "predicted_apex_seconds": 0.5301825419916759,
+            "horizontal_retention_prior": 0.75
+          },
+          "sampling": "fixed_object_per_environment",
+          "status": "simulation_priors_not_specimen_measurements",
+          "randomization": {
+            "version": "physical_dr_v1",
+            "sampling": "environment_creation",
+            "size_scale": 1.0256739801382022,
+            "mass_scale": 1.050844164286673,
+            "friction_scale": 1.1122068592837577,
+            "rolling_scale": 1.0,
+            "damping_scale": 0.9598917682468895
+          }
+        }
+      },
+      {
+        "slot": 2,
+        "successes": 5,
+        "episodes": 5,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0169572918099654,
+          "mass_scale": 1.0196718988204032,
+          "friction_scale": 0.9305754087073278,
+          "rolling_scale": 1.0,
+          "damping_scale": 0.9838260852585877
+        },
+        "physics": {
+          "version": "bounce_v1",
+          "object": "softball",
+          "shape": "sphere",
+          "mass_kg": 0.19475733267469703,
+          "dimensions_m": [
+            0.09680785350650925,
+            0.09680785350650925,
+            0.09680785350650925
+          ],
+          "inertia": [
+            0.0001825219077550817,
+            0.0001825219077550817,
+            0.0001825219077550817
+          ],
+          "inertia_basis": "structural analytical approximation",
+          "surface_id": "generic_dry_rigid_surface_prior_v1",
+          "material": {
+            "kind": "sphere",
+            "inertia_factor": 0.4,
+            "sliding_friction": 0.32570139304756474,
+            "torsional_length_m": 0.0001,
+            "time_constant": 0.004,
+            "damping_ratio": 0.3055791474545525,
+            "normal_cor_target": 0.44,
+            "cor_basis": "Literature/standard-test informed prior; not a measured YCB softball/floor pair",
+            "launch_height_m": [
+              1.2,
+              1.5
+            ],
+            "rebound_apex_m": [
+              0.5,
+              0.65
+            ],
+            "horizontal_retention_prior": 0.75,
+            "numerical_validation": {
+              "passed": true,
+              "peak_refinement_error_m": 0.0030220591917469175,
+              "calibration": "simulation-only fit to nominal COR; not real measurements"
+            }
+          },
+          "launch": {
+            "requested_apex_clearance_m": 0.565191974936407,
+            "nominal_cor": 0.44,
+            "predicted_apex_y": 0.7977637005440875,
+            "downward_speed": 5.279989562092803,
+            "horizontal_speed": 1.9535084540695928,
+            "predicted_first_impact_seconds": 0.23325678802482633,
+            "predicted_apex_seconds": 0.5727088784581794,
+            "horizontal_retention_prior": 0.75
+          },
+          "sampling": "fixed_object_per_environment",
+          "status": "simulation_priors_not_specimen_measurements",
+          "randomization": {
+            "version": "physical_dr_v1",
+            "sampling": "environment_creation",
+            "size_scale": 1.0169572918099654,
+            "mass_scale": 1.0196718988204032,
+            "friction_scale": 0.9305754087073278,
+            "rolling_scale": 1.0,
+            "damping_scale": 0.9838260852585877
+          }
+        }
+      },
+      {
+        "slot": 3,
+        "successes": 5,
+        "episodes": 5,
+        "draw": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 0.9733400778132805,
+          "mass_scale": 0.9709707499734517,
+          "friction_scale": 0.878371807486391,
+          "rolling_scale": 1.0,
+          "damping_scale": 1.051273011297507
+        },
+        "physics": {
+          "version": "bounce_v1",
+          "object": "softball",
+          "shape": "sphere",
+          "mass_kg": 0.18545541324492928,
+          "dimensions_m": [
+            0.09265577268958722,
+            0.09265577268958722,
+            0.09265577268958722
+          ],
+          "inertia": [
+            0.00015921518240529295,
+            0.00015921518240529295,
+            0.00015921518240529295
+          ],
+          "inertia_basis": "structural analytical approximation",
+          "surface_id": "generic_dry_rigid_surface_prior_v1",
+          "material": {
+            "kind": "sphere",
+            "inertia_factor": 0.4,
+            "sliding_friction": 0.30743013262023683,
+            "torsional_length_m": 0.0001,
+            "time_constant": 0.004,
+            "damping_ratio": 0.3265283522644514,
+            "normal_cor_target": 0.44,
+            "cor_basis": "Literature/standard-test informed prior; not a measured YCB softball/floor pair",
+            "launch_height_m": [
+              1.2,
+              1.5
+            ],
+            "rebound_apex_m": [
+              0.5,
+              0.65
+            ],
+            "horizontal_retention_prior": 0.75,
+            "numerical_validation": {
+              "passed": true,
+              "peak_refinement_error_m": 0.0030220591917469175,
+              "calibration": "simulation-only fit to nominal COR; not real measurements"
+            }
+          },
+          "launch": {
+            "requested_apex_clearance_m": 0.521539397386973,
+            "nominal_cor": 0.44,
+            "predicted_apex_y": 0.594686874896128,
+            "downward_speed": 5.242161834794316,
+            "horizontal_speed": 2.869701862020196,
+            "predicted_first_impact_seconds": 0.2067215269680107,
+            "predicted_apex_seconds": 0.5328014460622227,
+            "horizontal_retention_prior": 0.75
+          },
+          "sampling": "fixed_object_per_environment",
+          "status": "simulation_priors_not_specimen_measurements",
+          "randomization": {
+            "version": "physical_dr_v1",
+            "sampling": "environment_creation",
+            "size_scale": 0.9733400778132805,
+            "mass_scale": 0.9709707499734517,
+            "friction_scale": 0.878371807486391,
+            "rolling_scale": 1.0,
+            "damping_scale": 1.051273011297507
+          }
+        }
+      }
+    ],
+    "reasons": {
+      "track_touch": 20
+    },
+    "checkpoint": "/home/isee/Catch/11-6/bounce_track_best_reward_19.43.pth",
+    "checkpoint_sha256": "451008e15986f5b217cd1398c9adcd46f29de26d18758452c4b86e7bc93be103"
+  }
+]

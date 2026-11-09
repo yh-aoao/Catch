@@ -22,6 +22,18 @@ class BallisticConfigTests(unittest.TestCase):
             self.assertEqual(config.basket_carry_options,mixed.basket_carry_options)
         self.assertEqual([c.basket_mixed_ball for c in singles],['original','tennis_ball','baseball'])
 
+    def test_range_training_defaults_to_scratch(self):
+        root=Path(__file__).resolve().parents[1]/'configs'
+        with initialize_config_dir(config_dir=str(root),version_base='1.1'):
+            config=compose(config_name='basket_three_ball_range')
+        self.assertFalse(any([config.basket_mixed_source,config.checkpoint_catching,
+            config.checkpoint_tracking,config.basket_warm_start]))
+        self.assertFalse(config.basket_freeze_input_normalization)
+        self.assertEqual(config.train.ppo.learning_rate,.0003)
+        self.assertEqual(config.output_name,'BasketThreeBallRangeScratch')
+        self.assertEqual(list(config.basket_mixed_options.weights),[1.,1.,1.])
+        self.assertEqual(list(config.basket_range.y_offset_range),[-.1,.1])
+
     def test_physical_parameters_reach_actor_without_ball_id_or_image(self):
         import torch
         from gym_dcmm.algs.ppo_dcmm.models_track import ActorCritic

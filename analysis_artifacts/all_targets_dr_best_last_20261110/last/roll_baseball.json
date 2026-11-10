@@ -1,0 +1,788 @@
+{
+  "motion": "roll",
+  "object": "baseball",
+  "seed": 41000,
+  "episodes": 20,
+  "successes": 13,
+  "instances": [
+    {
+      "version": "physical_dr_v1",
+      "sampling": "environment_creation",
+      "size_scale": 1.026781712933732,
+      "mass_scale": 1.0229859363147162,
+      "friction_scale": 0.8818013296000147,
+      "rolling_scale": 0.8505534847419334,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_v1",
+      "sampling": "environment_creation",
+      "size_scale": 1.0256739801382022,
+      "mass_scale": 1.050844164286673,
+      "friction_scale": 1.1122068592837577,
+      "rolling_scale": 0.9197835364937789,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_v1",
+      "sampling": "environment_creation",
+      "size_scale": 1.0169572918099654,
+      "mass_scale": 1.0196718988204032,
+      "friction_scale": 0.9305754087073278,
+      "rolling_scale": 0.9676521705171753,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_v1",
+      "sampling": "environment_creation",
+      "size_scale": 0.9733400778132805,
+      "mass_scale": 0.9709707499734517,
+      "friction_scale": 0.878371807486391,
+      "rolling_scale": 1.102546022595014,
+      "damping_scale": 1.0
+    }
+  ],
+  "records": [
+    {
+      "slot": 2,
+      "episode": 0,
+      "success": false,
+      "reason": "ball_on_floor",
+      "steps": 62,
+      "reward": 143.56198718949136,
+      "legacy_success": false,
+      "physics": {
+        "object": "baseball",
+        "route": "three_ball_baseline",
+        "sampling": "fixed_object_per_environment",
+        "physics": {
+          "profile": "baseball",
+          "version": "physical_v1",
+          "mass_kg": 0.14071472203721566,
+          "radius_m": 0.036789684787030714,
+          "inertia_factor": 0.4,
+          "sliding_friction": 0.27917262261219833,
+          "rolling_length_m": 0.00011611826046206105,
+          "torsional_length_m": 0.0001,
+          "status": "simulation_priors_not_measured"
+        },
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0169572918099654,
+          "mass_scale": 1.0196718988204032,
+          "friction_scale": 0.9305754087073278,
+          "rolling_scale": 0.9676521705171753,
+          "damping_scale": 1.0
+        }
+      },
+      "stable_hold": false,
+      "success_version": null,
+      "diagnostics": {}
+    },
+    {
+      "slot": 0,
+      "episode": 0,
+      "success": true,
+      "reason": "timeout",
+      "steps": 63,
+      "reward": 302.8467569514369,
+      "legacy_success": false,
+      "physics": {
+        "object": "baseball",
+        "route": "three_ball_baseline",
+        "sampling": "fixed_object_per_environment",
+        "physics": {
+          "profile": "baseball",
+          "version": "physical_v1",
+          "mass_kg": 0.14117205921143086,
+          "radius_m": 0.03714509534288123,
+          "inertia_factor": 0.4,
+          "sliding_friction": 0.2645403988800044,
+          "rolling_length_m": 0.000102066418169032,
+          "torsional_length_m": 0.0001,
+          "status": "simulation_priors_not_measured"
+        },
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.026781712933732,
+          "mass_scale": 1.0229859363147162,
+          "friction_scale": 0.8818013296000147,
+          "rolling_scale": 0.8505534847419334,
+          "damping_scale": 1.0
+        }
+      },
+      "stable_hold": true,
+      "success_version": null,
+      "diagnostics": {}
+    },
+    {
+      "slot": 1,
+      "episode": 0,
+      "success": true,
+      "reason": "timeout",
+      "steps": 63,
+      "reward": 339.1525768231387,
+      "legacy_success": false,
+      "physics": {
+        "object": "baseball",
+        "route": "three_ball_baseline",
+        "sampling": "fixed_object_per_environment",
+        "physics": {
+          "profile": "baseball",
+          "version": "physical_v1",
+          "mass_kg": 0.14501649467156089,
+          "radius_m": 0.037105021742245295,
+          "inertia_factor": 0.4,
+          "sliding_friction": 0.3336620577851273,
+          "rolling_length_m": 0.00011037402437925347,
+          "torsional_length_m": 0.0001,
+          "status": "simulation_priors_not_measured"
+        },
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0256739801382022,
+          "mass_scale": 1.050844164286673,
+          "friction_scale": 1.1122068592837577,
+          "rolling_scale": 0.9197835364937789,
+          "damping_scale": 1.0
+        }
+      },
+      "stable_hold": true,
+      "success_version": null,
+      "diagnostics": {}
+    },
+    {
+      "slot": 3,
+      "episode": 0,
+      "success": true,
+      "reason": "timeout",
+      "steps": 63,
+      "reward": 218.16242867283273,
+      "legacy_success": false,
+      "physics": {
+        "object": "baseball",
+        "route": "three_ball_baseline",
+        "sampling": "fixed_object_per_environment",
+        "physics": {
+          "profile": "baseball",
+          "version": "physical_v1",
+          "mass_kg": 0.13399396349633635,
+          "radius_m": 0.0352117782543281,
+          "inertia_factor": 0.4,
+          "sliding_friction": 0.2635115422459173,
+          "rolling_length_m": 0.00013230552271140168,
+          "torsional_length_m": 0.0001,
+          "status": "simulation_priors_not_measured"
+        },
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 0.9733400778132805,
+          "mass_scale": 0.9709707499734517,
+          "friction_scale": 0.878371807486391,
+          "rolling_scale": 1.102546022595014,
+          "damping_scale": 1.0
+        }
+      },
+      "stable_hold": false,
+      "success_version": null,
+      "diagnostics": {}
+    },
+    {
+      "slot": 3,
+      "episode": 1,
+      "success": false,
+      "reason": "ball_on_floor",
+      "steps": 55,
+      "reward": 138.7759496342278,
+      "legacy_success": false,
+      "physics": {
+        "object": "baseball",
+        "route": "three_ball_baseline",
+        "sampling": "fixed_object_per_environment",
+        "physics": {
+          "profile": "baseball",
+          "version": "physical_v1",
+          "mass_kg": 0.13399396349633635,
+          "radius_m": 0.0352117782543281,
+          "inertia_factor": 0.4,
+          "sliding_friction": 0.2635115422459173,
+          "rolling_length_m": 0.00013230552271140168,
+          "torsional_length_m": 0.0001,
+          "status": "simulation_priors_not_measured"
+        },
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 0.9733400778132805,
+          "mass_scale": 0.9709707499734517,
+          "friction_scale": 0.878371807486391,
+          "rolling_scale": 1.102546022595014,
+          "damping_scale": 1.0
+        }
+      },
+      "stable_hold": false,
+      "success_version": null,
+      "diagnostics": {}
+    },
+    {
+      "slot": 2,
+      "episode": 1,
+      "success": true,
+      "reason": "timeout",
+      "steps": 63,
+      "reward": 343.57180543286194,
+      "legacy_success": false,
+      "physics": {
+        "object": "baseball",
+        "route": "three_ball_baseline",
+        "sampling": "fixed_object_per_environment",
+        "physics": {
+          "profile": "baseball",
+          "version": "physical_v1",
+          "mass_kg": 0.14071472203721566,
+          "radius_m": 0.036789684787030714,
+          "inertia_factor": 0.4,
+          "sliding_friction": 0.27917262261219833,
+          "rolling_length_m": 0.00011611826046206105,
+          "torsional_length_m": 0.0001,
+          "status": "simulation_priors_not_measured"
+        },
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0169572918099654,
+          "mass_scale": 1.0196718988204032,
+          "friction_scale": 0.9305754087073278,
+          "rolling_scale": 0.9676521705171753,
+          "damping_scale": 1.0
+        }
+      },
+      "stable_hold": true,
+      "success_version": null,
+      "diagnostics": {}
+    },
+    {
+      "slot": 0,
+      "episode": 1,
+      "success": true,
+      "reason": "timeout",
+      "steps": 63,
+      "reward": 271.1984635862809,
+      "legacy_success": false,
+      "physics": {
+        "object": "baseball",
+        "route": "three_ball_baseline",
+        "sampling": "fixed_object_per_environment",
+        "physics": {
+          "profile": "baseball",
+          "version": "physical_v1",
+          "mass_kg": 0.14117205921143086,
+          "radius_m": 0.03714509534288123,
+          "inertia_factor": 0.4,
+          "sliding_friction": 0.2645403988800044,
+          "rolling_length_m": 0.000102066418169032,
+          "torsional_length_m": 0.0001,
+          "status": "simulation_priors_not_measured"
+        },
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.026781712933732,
+          "mass_scale": 1.0229859363147162,
+          "friction_scale": 0.8818013296000147,
+          "rolling_scale": 0.8505534847419334,
+          "damping_scale": 1.0
+        }
+      },
+      "stable_hold": true,
+      "success_version": null,
+      "diagnostics": {}
+    },
+    {
+      "slot": 1,
+      "episode": 1,
+      "success": true,
+      "reason": "timeout",
+      "steps": 63,
+      "reward": 333.11969689657593,
+      "legacy_success": false,
+      "physics": {
+        "object": "baseball",
+        "route": "three_ball_baseline",
+        "sampling": "fixed_object_per_environment",
+        "physics": {
+          "profile": "baseball",
+          "version": "physical_v1",
+          "mass_kg": 0.14501649467156089,
+          "radius_m": 0.037105021742245295,
+          "inertia_factor": 0.4,
+          "sliding_friction": 0.3336620577851273,
+          "rolling_length_m": 0.00011037402437925347,
+          "torsional_length_m": 0.0001,
+          "status": "simulation_priors_not_measured"
+        },
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0256739801382022,
+          "mass_scale": 1.050844164286673,
+          "friction_scale": 1.1122068592837577,
+          "rolling_scale": 0.9197835364937789,
+          "damping_scale": 1.0
+        }
+      },
+      "stable_hold": false,
+      "success_version": null,
+      "diagnostics": {}
+    },
+    {
+      "slot": 3,
+      "episode": 2,
+      "success": false,
+      "reason": "ball_on_floor",
+      "steps": 58,
+      "reward": 165.26801611479564,
+      "legacy_success": false,
+      "physics": {
+        "object": "baseball",
+        "route": "three_ball_baseline",
+        "sampling": "fixed_object_per_environment",
+        "physics": {
+          "profile": "baseball",
+          "version": "physical_v1",
+          "mass_kg": 0.13399396349633635,
+          "radius_m": 0.0352117782543281,
+          "inertia_factor": 0.4,
+          "sliding_friction": 0.2635115422459173,
+          "rolling_length_m": 0.00013230552271140168,
+          "torsional_length_m": 0.0001,
+          "status": "simulation_priors_not_measured"
+        },
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 0.9733400778132805,
+          "mass_scale": 0.9709707499734517,
+          "friction_scale": 0.878371807486391,
+          "rolling_scale": 1.102546022595014,
+          "damping_scale": 1.0
+        }
+      },
+      "stable_hold": false,
+      "success_version": null,
+      "diagnostics": {}
+    },
+    {
+      "slot": 2,
+      "episode": 2,
+      "success": true,
+      "reason": "timeout",
+      "steps": 63,
+      "reward": 268.3589927238743,
+      "legacy_success": false,
+      "physics": {
+        "object": "baseball",
+        "route": "three_ball_baseline",
+        "sampling": "fixed_object_per_environment",
+        "physics": {
+          "profile": "baseball",
+          "version": "physical_v1",
+          "mass_kg": 0.14071472203721566,
+          "radius_m": 0.036789684787030714,
+          "inertia_factor": 0.4,
+          "sliding_friction": 0.27917262261219833,
+          "rolling_length_m": 0.00011611826046206105,
+          "torsional_length_m": 0.0001,
+          "status": "simulation_priors_not_measured"
+        },
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0169572918099654,
+          "mass_scale": 1.0196718988204032,
+          "friction_scale": 0.9305754087073278,
+          "rolling_scale": 0.9676521705171753,
+          "damping_scale": 1.0
+        }
+      },
+      "stable_hold": true,
+      "success_version": null,
+      "diagnostics": {}
+    },
+    {
+      "slot": 0,
+      "episode": 2,
+      "success": true,
+      "reason": "timeout",
+      "steps": 63,
+      "reward": 372.36933653605075,
+      "legacy_success": false,
+      "physics": {
+        "object": "baseball",
+        "route": "three_ball_baseline",
+        "sampling": "fixed_object_per_environment",
+        "physics": {
+          "profile": "baseball",
+          "version": "physical_v1",
+          "mass_kg": 0.14117205921143086,
+          "radius_m": 0.03714509534288123,
+          "inertia_factor": 0.4,
+          "sliding_friction": 0.2645403988800044,
+          "rolling_length_m": 0.000102066418169032,
+          "torsional_length_m": 0.0001,
+          "status": "simulation_priors_not_measured"
+        },
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.026781712933732,
+          "mass_scale": 1.0229859363147162,
+          "friction_scale": 0.8818013296000147,
+          "rolling_scale": 0.8505534847419334,
+          "damping_scale": 1.0
+        }
+      },
+      "stable_hold": true,
+      "success_version": null,
+      "diagnostics": {}
+    },
+    {
+      "slot": 1,
+      "episode": 2,
+      "success": true,
+      "reason": "timeout",
+      "steps": 63,
+      "reward": 323.6808979122198,
+      "legacy_success": false,
+      "physics": {
+        "object": "baseball",
+        "route": "three_ball_baseline",
+        "sampling": "fixed_object_per_environment",
+        "physics": {
+          "profile": "baseball",
+          "version": "physical_v1",
+          "mass_kg": 0.14501649467156089,
+          "radius_m": 0.037105021742245295,
+          "inertia_factor": 0.4,
+          "sliding_friction": 0.3336620577851273,
+          "rolling_length_m": 0.00011037402437925347,
+          "torsional_length_m": 0.0001,
+          "status": "simulation_priors_not_measured"
+        },
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0256739801382022,
+          "mass_scale": 1.050844164286673,
+          "friction_scale": 1.1122068592837577,
+          "rolling_scale": 0.9197835364937789,
+          "damping_scale": 1.0
+        }
+      },
+      "stable_hold": true,
+      "success_version": null,
+      "diagnostics": {}
+    },
+    {
+      "slot": 3,
+      "episode": 3,
+      "success": false,
+      "reason": "timeout",
+      "steps": 63,
+      "reward": 167.53474135299265,
+      "legacy_success": false,
+      "physics": {
+        "object": "baseball",
+        "route": "three_ball_baseline",
+        "sampling": "fixed_object_per_environment",
+        "physics": {
+          "profile": "baseball",
+          "version": "physical_v1",
+          "mass_kg": 0.13399396349633635,
+          "radius_m": 0.0352117782543281,
+          "inertia_factor": 0.4,
+          "sliding_friction": 0.2635115422459173,
+          "rolling_length_m": 0.00013230552271140168,
+          "torsional_length_m": 0.0001,
+          "status": "simulation_priors_not_measured"
+        },
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 0.9733400778132805,
+          "mass_scale": 0.9709707499734517,
+          "friction_scale": 0.878371807486391,
+          "rolling_scale": 1.102546022595014,
+          "damping_scale": 1.0
+        }
+      },
+      "stable_hold": false,
+      "success_version": null,
+      "diagnostics": {}
+    },
+    {
+      "slot": 1,
+      "episode": 3,
+      "success": false,
+      "reason": "ball_on_floor",
+      "steps": 51,
+      "reward": 149.0975294865348,
+      "legacy_success": false,
+      "physics": {
+        "object": "baseball",
+        "route": "three_ball_baseline",
+        "sampling": "fixed_object_per_environment",
+        "physics": {
+          "profile": "baseball",
+          "version": "physical_v1",
+          "mass_kg": 0.14501649467156089,
+          "radius_m": 0.037105021742245295,
+          "inertia_factor": 0.4,
+          "sliding_friction": 0.3336620577851273,
+          "rolling_length_m": 0.00011037402437925347,
+          "torsional_length_m": 0.0001,
+          "status": "simulation_priors_not_measured"
+        },
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0256739801382022,
+          "mass_scale": 1.050844164286673,
+          "friction_scale": 1.1122068592837577,
+          "rolling_scale": 0.9197835364937789,
+          "damping_scale": 1.0
+        }
+      },
+      "stable_hold": false,
+      "success_version": null,
+      "diagnostics": {}
+    },
+    {
+      "slot": 0,
+      "episode": 3,
+      "success": true,
+      "reason": "catch_success",
+      "steps": 60,
+      "reward": 288.10056802681765,
+      "legacy_success": true,
+      "physics": {
+        "object": "baseball",
+        "route": "three_ball_baseline",
+        "sampling": "fixed_object_per_environment",
+        "physics": {
+          "profile": "baseball",
+          "version": "physical_v1",
+          "mass_kg": 0.14117205921143086,
+          "radius_m": 0.03714509534288123,
+          "inertia_factor": 0.4,
+          "sliding_friction": 0.2645403988800044,
+          "rolling_length_m": 0.000102066418169032,
+          "torsional_length_m": 0.0001,
+          "status": "simulation_priors_not_measured"
+        },
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.026781712933732,
+          "mass_scale": 1.0229859363147162,
+          "friction_scale": 0.8818013296000147,
+          "rolling_scale": 0.8505534847419334,
+          "damping_scale": 1.0
+        }
+      },
+      "stable_hold": true,
+      "success_version": null,
+      "diagnostics": {}
+    },
+    {
+      "slot": 2,
+      "episode": 3,
+      "success": false,
+      "reason": "timeout",
+      "steps": 63,
+      "reward": 174.22575307598814,
+      "legacy_success": false,
+      "physics": {
+        "object": "baseball",
+        "route": "three_ball_baseline",
+        "sampling": "fixed_object_per_environment",
+        "physics": {
+          "profile": "baseball",
+          "version": "physical_v1",
+          "mass_kg": 0.14071472203721566,
+          "radius_m": 0.036789684787030714,
+          "inertia_factor": 0.4,
+          "sliding_friction": 0.27917262261219833,
+          "rolling_length_m": 0.00011611826046206105,
+          "torsional_length_m": 0.0001,
+          "status": "simulation_priors_not_measured"
+        },
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0169572918099654,
+          "mass_scale": 1.0196718988204032,
+          "friction_scale": 0.9305754087073278,
+          "rolling_scale": 0.9676521705171753,
+          "damping_scale": 1.0
+        }
+      },
+      "stable_hold": false,
+      "success_version": null,
+      "diagnostics": {}
+    },
+    {
+      "slot": 2,
+      "episode": 4,
+      "success": false,
+      "reason": "out_of_bounds",
+      "steps": 50,
+      "reward": 105.54255749308999,
+      "legacy_success": false,
+      "physics": {
+        "object": "baseball",
+        "route": "three_ball_baseline",
+        "sampling": "fixed_object_per_environment",
+        "physics": {
+          "profile": "baseball",
+          "version": "physical_v1",
+          "mass_kg": 0.14071472203721566,
+          "radius_m": 0.036789684787030714,
+          "inertia_factor": 0.4,
+          "sliding_friction": 0.27917262261219833,
+          "rolling_length_m": 0.00011611826046206105,
+          "torsional_length_m": 0.0001,
+          "status": "simulation_priors_not_measured"
+        },
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0169572918099654,
+          "mass_scale": 1.0196718988204032,
+          "friction_scale": 0.9305754087073278,
+          "rolling_scale": 0.9676521705171753,
+          "damping_scale": 1.0
+        }
+      },
+      "stable_hold": false,
+      "success_version": null,
+      "diagnostics": {}
+    },
+    {
+      "slot": 3,
+      "episode": 4,
+      "success": true,
+      "reason": "timeout",
+      "steps": 63,
+      "reward": 324.37326178749504,
+      "legacy_success": false,
+      "physics": {
+        "object": "baseball",
+        "route": "three_ball_baseline",
+        "sampling": "fixed_object_per_environment",
+        "physics": {
+          "profile": "baseball",
+          "version": "physical_v1",
+          "mass_kg": 0.13399396349633635,
+          "radius_m": 0.0352117782543281,
+          "inertia_factor": 0.4,
+          "sliding_friction": 0.2635115422459173,
+          "rolling_length_m": 0.00013230552271140168,
+          "torsional_length_m": 0.0001,
+          "status": "simulation_priors_not_measured"
+        },
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 0.9733400778132805,
+          "mass_scale": 0.9709707499734517,
+          "friction_scale": 0.878371807486391,
+          "rolling_scale": 1.102546022595014,
+          "damping_scale": 1.0
+        }
+      },
+      "stable_hold": true,
+      "success_version": null,
+      "diagnostics": {}
+    },
+    {
+      "slot": 1,
+      "episode": 4,
+      "success": true,
+      "reason": "timeout",
+      "steps": 63,
+      "reward": 355.0092072908172,
+      "legacy_success": false,
+      "physics": {
+        "object": "baseball",
+        "route": "three_ball_baseline",
+        "sampling": "fixed_object_per_environment",
+        "physics": {
+          "profile": "baseball",
+          "version": "physical_v1",
+          "mass_kg": 0.14501649467156089,
+          "radius_m": 0.037105021742245295,
+          "inertia_factor": 0.4,
+          "sliding_friction": 0.3336620577851273,
+          "rolling_length_m": 0.00011037402437925347,
+          "torsional_length_m": 0.0001,
+          "status": "simulation_priors_not_measured"
+        },
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0256739801382022,
+          "mass_scale": 1.050844164286673,
+          "friction_scale": 1.1122068592837577,
+          "rolling_scale": 0.9197835364937789,
+          "damping_scale": 1.0
+        }
+      },
+      "stable_hold": true,
+      "success_version": null,
+      "diagnostics": {}
+    },
+    {
+      "slot": 0,
+      "episode": 4,
+      "success": true,
+      "reason": "timeout",
+      "steps": 63,
+      "reward": 251.23571669384046,
+      "legacy_success": false,
+      "physics": {
+        "object": "baseball",
+        "route": "three_ball_baseline",
+        "sampling": "fixed_object_per_environment",
+        "physics": {
+          "profile": "baseball",
+          "version": "physical_v1",
+          "mass_kg": 0.14117205921143086,
+          "radius_m": 0.03714509534288123,
+          "inertia_factor": 0.4,
+          "sliding_friction": 0.2645403988800044,
+          "rolling_length_m": 0.000102066418169032,
+          "torsional_length_m": 0.0001,
+          "status": "simulation_priors_not_measured"
+        },
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.026781712933732,
+          "mass_scale": 1.0229859363147162,
+          "friction_scale": 0.8818013296000147,
+          "rolling_scale": 0.8505534847419334,
+          "damping_scale": 1.0
+        }
+      },
+      "stable_hold": false,
+      "success_version": null,
+      "diagnostics": {}
+    }
+  ],
+  "checkpoint": "/home/isee/Catch/11-10/roll_catch_last.pth"
+}

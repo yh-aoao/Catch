@@ -1,0 +1,103 @@
+{
+  "scan_candidates": 30,
+  "scan_trials": 600,
+  "holdout_trials": 400,
+  "policy_trials": 160,
+  "candidate_catalog": "/home/isee/Catch/catch_it_copy/ycb_objects/calibration_data/object_benchmark_fruit_launch_candidate_v2.json",
+  "candidate_sha256": "509aa2278a0d6dc39dfa0eb58d38a6de904932db737b9636958f3c2d47b11ae7",
+  "default_distance_changed": false,
+  "apple_speed": [
+    1.5,
+    1.7
+  ],
+  "policy_results": [
+    {
+      "stage": "policy",
+      "object": "apple",
+      "case": "current",
+      "successes": 16,
+      "episodes": 20,
+      "stable_hold": 0,
+      "departure_time_min": 0.92,
+      "departure_time_max": 1.76,
+      "hand_contact_on_table": 0
+    },
+    {
+      "stage": "policy",
+      "object": "apple",
+      "case": "candidate",
+      "successes": 19,
+      "episodes": 20,
+      "stable_hold": 0,
+      "departure_time_min": 0.92,
+      "departure_time_max": 2.16,
+      "hand_contact_on_table": 0
+    },
+    {
+      "stage": "policy",
+      "object": "lemon",
+      "case": "current",
+      "successes": 17,
+      "episodes": 20,
+      "stable_hold": 0,
+      "departure_time_min": 1.0,
+      "departure_time_max": 1.72,
+      "hand_contact_on_table": 0
+    },
+    {
+      "stage": "policy",
+      "object": "lemon",
+      "case": "candidate",
+      "successes": 17,
+      "episodes": 20,
+      "stable_hold": 0,
+      "departure_time_min": 0.8,
+      "departure_time_max": 1.56,
+      "hand_contact_on_table": 0
+    },
+    {
+      "stage": "catch",
+      "object": "apple",
+      "case": "current",
+      "successes": 6,
+      "episodes": 20,
+      "stable_hold": 3,
+      "departure_time_min": 1.0,
+      "departure_time_max": 1.8,
+      "hand_contact_on_table": 0
+    },
+    {
+      "stage": "catch",
+      "object": "apple",
+      "case": "candidate",
+      "successes": 4,
+      "episodes": 20,
+      "stable_hold": 3,
+      "departure_time_min": 0.76,
+      "departure_time_max": 2.16,
+      "hand_contact_on_table": 1
+    },
+    {
+      "stage": "catch",
+      "object": "lemon",
+      "case": "current",
+      "successes": 2,
+      "episodes": 20,
+      "stable_hold": 1,
+      "departure_time_min": 0.96,
+      "departure_time_max": 2.12,
+      "hand_contact_on_table": 0
+    },
+    {
+      "stage": "catch",
+      "object": "lemon",
+      "case": "candidate",
+      "successes": 3,
+      "episodes": 20,
+      "stable_hold": 3,
+      "departure_time_min": 0.84,
+      "departure_time_max": 1.48,
+      "hand_contact_on_table": 1
+    }
+  ]
+}

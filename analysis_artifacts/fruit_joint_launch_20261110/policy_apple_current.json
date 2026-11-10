@@ -1,0 +1,1588 @@
+{
+  "motion": "roll",
+  "object": "apple",
+  "seed": 41000,
+  "episodes": 20,
+  "successes": 16,
+  "instances": [
+    {
+      "version": "physical_dr_v1",
+      "sampling": "environment_creation",
+      "size_scale": 1.026781712933732,
+      "mass_scale": 1.0229859363147162,
+      "friction_scale": 0.8818013296000147,
+      "rolling_scale": 0.8505534847419334,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_v1",
+      "sampling": "environment_creation",
+      "size_scale": 1.0256739801382022,
+      "mass_scale": 1.050844164286673,
+      "friction_scale": 1.1122068592837577,
+      "rolling_scale": 0.9197835364937789,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_v1",
+      "sampling": "environment_creation",
+      "size_scale": 1.0169572918099654,
+      "mass_scale": 1.0196718988204032,
+      "friction_scale": 0.9305754087073278,
+      "rolling_scale": 0.9676521705171753,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_v1",
+      "sampling": "environment_creation",
+      "size_scale": 0.9733400778132805,
+      "mass_scale": 0.9709707499734517,
+      "friction_scale": 0.878371807486391,
+      "rolling_scale": 1.102546022595014,
+      "damping_scale": 1.0
+    }
+  ],
+  "records": [
+    {
+      "slot": 1,
+      "episode": 0,
+      "success": true,
+      "reason": "collision_or_failure",
+      "steps": 36,
+      "reward": 17.738040879008274,
+      "legacy_success": false,
+      "physics": {
+        "version": "roll_v1",
+        "object": "apple",
+        "shape": "convex",
+        "mass_kg": 0.07145740317149377,
+        "dimensions_m": [
+          0.07657213624647187,
+          0.07665067662448878,
+          0.07307644809927674
+        ],
+        "inertia": [
+          4.678359866710449e-05,
+          4.6450190471474636e-05,
+          4.59046276295196e-05
+        ],
+        "inertia_basis": "homogeneous visual convex hull",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "convex",
+          "sliding_friction": 0.4448827437135031,
+          "torsional_length_m": 0.0001,
+          "rolling_length_m": 1.839567072987558e-05,
+          "time_constant": 0.008,
+          "distance_m": [
+            2.0,
+            2.2
+          ],
+          "speed_mps": [
+            1.5,
+            1.7
+          ]
+        },
+        "launch": {
+          "no_slip_error": 2.3551386880256624e-16,
+          "support_point": [
+            -0.012005588791299425,
+            -0.004702783120293497,
+            -0.038166185047288824
+          ],
+          "axis_world": [
+            0.0,
+            -0.0,
+            1.0
+          ],
+          "initial_support_clearance": 0.0003,
+          "configured_speed_mps": [
+            1.5,
+            1.7
+          ],
+          "configured_distance_m": [
+            2.0,
+            2.2
+          ]
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0256739801382022,
+          "mass_scale": 1.050844164286673,
+          "friction_scale": 1.1122068592837577,
+          "rolling_scale": 0.9197835364937789,
+          "damping_scale": 1.0
+        }
+      },
+      "departure_time": 1.04,
+      "hand_contact_on_table": false
+    },
+    {
+      "slot": 0,
+      "episode": 0,
+      "success": true,
+      "reason": "collision_or_failure",
+      "steps": 39,
+      "reward": 21.229740842080332,
+      "legacy_success": false,
+      "physics": {
+        "version": "roll_v1",
+        "object": "apple",
+        "shape": "convex",
+        "mass_kg": 0.0695630436694007,
+        "dimensions_m": [
+          0.07665483451920425,
+          0.07673345972120442,
+          0.07315537101212034
+        ],
+        "inertia": [
+          4.564177711403379e-05,
+          4.5316506228798746e-05,
+          4.478425863896724e-05
+        ],
+        "inertia_basis": "homogeneous visual convex hull",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "convex",
+          "sliding_friction": 0.3527205318400059,
+          "torsional_length_m": 0.0001,
+          "rolling_length_m": 1.701106969483867e-05,
+          "time_constant": 0.008,
+          "distance_m": [
+            2.0,
+            2.2
+          ],
+          "speed_mps": [
+            1.5,
+            1.7
+          ]
+        },
+        "launch": {
+          "no_slip_error": 2.3055512673781017e-16,
+          "support_point": [
+            -0.006653488914648846,
+            0.01106077360694733,
+            -0.038207404709360626
+          ],
+          "axis_world": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "initial_support_clearance": 0.0003,
+          "configured_speed_mps": [
+            1.5,
+            1.7
+          ],
+          "configured_distance_m": [
+            2.0,
+            2.2
+          ]
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.026781712933732,
+          "mass_scale": 1.0229859363147162,
+          "friction_scale": 0.8818013296000147,
+          "rolling_scale": 0.8505534847419334,
+          "damping_scale": 1.0
+        }
+      },
+      "departure_time": 1.04,
+      "hand_contact_on_table": false
+    },
+    {
+      "slot": 2,
+      "episode": 0,
+      "success": false,
+      "reason": "collision_or_failure",
+      "steps": 48,
+      "reward": 27.241561431010105,
+      "legacy_success": false,
+      "physics": {
+        "version": "roll_v1",
+        "object": "apple",
+        "shape": "convex",
+        "mass_kg": 0.06933768911978742,
+        "dimensions_m": [
+          0.07592138809529243,
+          0.0759992609980593,
+          0.07245540804702726
+        ],
+        "inertia": [
+          4.462749522020945e-05,
+          4.430945272068467e-05,
+          4.378903309040103e-05
+        ],
+        "inertia_basis": "homogeneous visual convex hull",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "convex",
+          "sliding_friction": 0.37223016348293114,
+          "torsional_length_m": 0.0001,
+          "rolling_length_m": 1.935304341034351e-05,
+          "time_constant": 0.008,
+          "distance_m": [
+            2.0,
+            2.2
+          ],
+          "speed_mps": [
+            1.5,
+            1.7
+          ]
+        },
+        "launch": {
+          "no_slip_error": 2.2247786310271853e-16,
+          "support_point": [
+            -0.003803498821912145,
+            -0.01220532585065022,
+            -0.037841829797787205
+          ],
+          "axis_world": [
+            0.0,
+            -0.0,
+            1.0
+          ],
+          "initial_support_clearance": 0.0003,
+          "configured_speed_mps": [
+            1.5,
+            1.7
+          ],
+          "configured_distance_m": [
+            2.0,
+            2.2
+          ]
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0169572918099654,
+          "mass_scale": 1.0196718988204032,
+          "friction_scale": 0.9305754087073278,
+          "rolling_scale": 0.9676521705171753,
+          "damping_scale": 1.0
+        }
+      },
+      "departure_time": 1.6,
+      "hand_contact_on_table": false
+    },
+    {
+      "slot": 3,
+      "episode": 0,
+      "success": true,
+      "reason": "collision_or_failure",
+      "steps": 52,
+      "reward": 32.75916633666468,
+      "legacy_success": false,
+      "physics": {
+        "version": "roll_v1",
+        "object": "apple",
+        "shape": "convex",
+        "mass_kg": 0.06602601099819472,
+        "dimensions_m": [
+          0.07266512604953433,
+          0.07273965898995285,
+          0.0693478015984028
+        ],
+        "inertia": [
+          3.892888738217323e-05,
+          3.86514566057953e-05,
+          3.819749079214575e-05
+        ],
+        "inertia_basis": "homogeneous visual convex hull",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "convex",
+          "sliding_friction": 0.35134872299455644,
+          "torsional_length_m": 0.0001,
+          "rolling_length_m": 2.2050920451900284e-05,
+          "time_constant": 0.008,
+          "distance_m": [
+            2.0,
+            2.2
+          ],
+          "speed_mps": [
+            1.5,
+            1.7
+          ]
+        },
+        "launch": {
+          "no_slip_error": 2.3551386880256624e-16,
+          "support_point": [
+            -0.0028283776172790373,
+            -0.011820770923859109,
+            -0.03619426050784248
+          ],
+          "axis_world": [
+            0.0,
+            -0.0,
+            1.0
+          ],
+          "initial_support_clearance": 0.0003,
+          "configured_speed_mps": [
+            1.5,
+            1.7
+          ],
+          "configured_distance_m": [
+            2.0,
+            2.2
+          ]
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 0.9733400778132805,
+          "mass_scale": 0.9709707499734517,
+          "friction_scale": 0.878371807486391,
+          "rolling_scale": 1.102546022595014,
+          "damping_scale": 1.0
+        }
+      },
+      "departure_time": 1.72,
+      "hand_contact_on_table": false
+    },
+    {
+      "slot": 0,
+      "episode": 1,
+      "success": true,
+      "reason": "collision_or_failure",
+      "steps": 33,
+      "reward": 15.845651631570489,
+      "legacy_success": false,
+      "physics": {
+        "version": "roll_v1",
+        "object": "apple",
+        "shape": "convex",
+        "mass_kg": 0.0695630436694007,
+        "dimensions_m": [
+          0.07665483451920425,
+          0.07673345972120442,
+          0.07315537101212034
+        ],
+        "inertia": [
+          4.564177711403379e-05,
+          4.5316506228798746e-05,
+          4.478425863896724e-05
+        ],
+        "inertia_basis": "homogeneous visual convex hull",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "convex",
+          "sliding_friction": 0.3527205318400059,
+          "torsional_length_m": 0.0001,
+          "rolling_length_m": 1.701106969483867e-05,
+          "time_constant": 0.008,
+          "distance_m": [
+            2.0,
+            2.2
+          ],
+          "speed_mps": [
+            1.5,
+            1.7
+          ]
+        },
+        "launch": {
+          "no_slip_error": 2.5438405243138006e-16,
+          "support_point": [
+            0.012287910667165981,
+            -0.003951819702016565,
+            -0.03820740470936063
+          ],
+          "axis_world": [
+            0.0,
+            0.0,
+            1.0000000000000002
+          ],
+          "initial_support_clearance": 0.0003,
+          "configured_speed_mps": [
+            1.5,
+            1.7
+          ],
+          "configured_distance_m": [
+            2.0,
+            2.2
+          ]
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.026781712933732,
+          "mass_scale": 1.0229859363147162,
+          "friction_scale": 0.8818013296000147,
+          "rolling_scale": 0.8505534847419334,
+          "damping_scale": 1.0
+        }
+      },
+      "departure_time": 0.92,
+      "hand_contact_on_table": false
+    },
+    {
+      "slot": 1,
+      "episode": 1,
+      "success": true,
+      "reason": "collision_or_failure",
+      "steps": 40,
+      "reward": 21.595787987241724,
+      "legacy_success": false,
+      "physics": {
+        "version": "roll_v1",
+        "object": "apple",
+        "shape": "convex",
+        "mass_kg": 0.07145740317149377,
+        "dimensions_m": [
+          0.07657213624647187,
+          0.07665067662448878,
+          0.07307644809927674
+        ],
+        "inertia": [
+          4.678359866710449e-05,
+          4.6450190471474636e-05,
+          4.59046276295196e-05
+        ],
+        "inertia_basis": "homogeneous visual convex hull",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "convex",
+          "sliding_friction": 0.4448827437135031,
+          "torsional_length_m": 0.0001,
+          "rolling_length_m": 1.839567072987558e-05,
+          "time_constant": 0.008,
+          "distance_m": [
+            2.0,
+            2.2
+          ],
+          "speed_mps": [
+            1.5,
+            1.7
+          ]
+        },
+        "launch": {
+          "no_slip_error": 2.3055512673781017e-16,
+          "support_point": [
+            -0.011042147620668658,
+            0.0066574249695849665,
+            -0.03816618504728881
+          ],
+          "axis_world": [
+            0.0,
+            0.0,
+            0.9999999999999999
+          ],
+          "initial_support_clearance": 0.0003,
+          "configured_speed_mps": [
+            1.5,
+            1.7
+          ],
+          "configured_distance_m": [
+            2.0,
+            2.2
+          ]
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0256739801382022,
+          "mass_scale": 1.050844164286673,
+          "friction_scale": 1.1122068592837577,
+          "rolling_scale": 0.9197835364937789,
+          "damping_scale": 1.0
+        }
+      },
+      "departure_time": 1.08,
+      "hand_contact_on_table": false
+    },
+    {
+      "slot": 3,
+      "episode": 1,
+      "success": true,
+      "reason": "collision_or_failure",
+      "steps": 42,
+      "reward": 23.392549053184563,
+      "legacy_success": false,
+      "physics": {
+        "version": "roll_v1",
+        "object": "apple",
+        "shape": "convex",
+        "mass_kg": 0.06602601099819472,
+        "dimensions_m": [
+          0.07266512604953433,
+          0.07273965898995285,
+          0.0693478015984028
+        ],
+        "inertia": [
+          3.892888738217323e-05,
+          3.86514566057953e-05,
+          3.819749079214575e-05
+        ],
+        "inertia_basis": "homogeneous visual convex hull",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "convex",
+          "sliding_friction": 0.35134872299455644,
+          "torsional_length_m": 0.0001,
+          "rolling_length_m": 2.2050920451900284e-05,
+          "time_constant": 0.008,
+          "distance_m": [
+            2.0,
+            2.2
+          ],
+          "speed_mps": [
+            1.5,
+            1.7
+          ]
+        },
+        "launch": {
+          "no_slip_error": 2.2887833992611187e-16,
+          "support_point": [
+            -0.0073180996224306485,
+            0.009704419771241264,
+            -0.036194260507842475
+          ],
+          "axis_world": [
+            0.0,
+            0.0,
+            0.9999999999999999
+          ],
+          "initial_support_clearance": 0.0003,
+          "configured_speed_mps": [
+            1.5,
+            1.7
+          ],
+          "configured_distance_m": [
+            2.0,
+            2.2
+          ]
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 0.9733400778132805,
+          "mass_scale": 0.9709707499734517,
+          "friction_scale": 0.878371807486391,
+          "rolling_scale": 1.102546022595014,
+          "damping_scale": 1.0
+        }
+      },
+      "departure_time": 1.24,
+      "hand_contact_on_table": false
+    },
+    {
+      "slot": 2,
+      "episode": 1,
+      "success": false,
+      "reason": "collision_or_failure",
+      "steps": 52,
+      "reward": 27.27751356539275,
+      "legacy_success": false,
+      "physics": {
+        "version": "roll_v1",
+        "object": "apple",
+        "shape": "convex",
+        "mass_kg": 0.06933768911978742,
+        "dimensions_m": [
+          0.07592138809529243,
+          0.0759992609980593,
+          0.07245540804702726
+        ],
+        "inertia": [
+          4.462749522020945e-05,
+          4.430945272068467e-05,
+          4.378903309040103e-05
+        ],
+        "inertia_basis": "homogeneous visual convex hull",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "convex",
+          "sliding_friction": 0.37223016348293114,
+          "torsional_length_m": 0.0001,
+          "rolling_length_m": 1.935304341034351e-05,
+          "time_constant": 0.008,
+          "distance_m": [
+            2.0,
+            2.2
+          ],
+          "speed_mps": [
+            1.5,
+            1.7
+          ]
+        },
+        "launch": {
+          "no_slip_error": 2.482534153247273e-16,
+          "support_point": [
+            -0.004366441323706687,
+            0.012015438925626658,
+            -0.037841829797787205
+          ],
+          "axis_world": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "initial_support_clearance": 0.0003,
+          "configured_speed_mps": [
+            1.5,
+            1.7
+          ],
+          "configured_distance_m": [
+            2.0,
+            2.2
+          ]
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0169572918099654,
+          "mass_scale": 1.0196718988204032,
+          "friction_scale": 0.9305754087073278,
+          "rolling_scale": 0.9676521705171753,
+          "damping_scale": 1.0
+        }
+      },
+      "departure_time": 1.76,
+      "hand_contact_on_table": false
+    },
+    {
+      "slot": 0,
+      "episode": 2,
+      "success": true,
+      "reason": "collision_or_failure",
+      "steps": 41,
+      "reward": 23.472373641283642,
+      "legacy_success": false,
+      "physics": {
+        "version": "roll_v1",
+        "object": "apple",
+        "shape": "convex",
+        "mass_kg": 0.0695630436694007,
+        "dimensions_m": [
+          0.07665483451920425,
+          0.07673345972120442,
+          0.07315537101212034
+        ],
+        "inertia": [
+          4.564177711403379e-05,
+          4.5316506228798746e-05,
+          4.478425863896724e-05
+        ],
+        "inertia_basis": "homogeneous visual convex hull",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "convex",
+          "sliding_friction": 0.3527205318400059,
+          "torsional_length_m": 0.0001,
+          "rolling_length_m": 1.701106969483867e-05,
+          "time_constant": 0.008,
+          "distance_m": [
+            2.0,
+            2.2
+          ],
+          "speed_mps": [
+            1.5,
+            1.7
+          ]
+        },
+        "launch": {
+          "no_slip_error": 2.237726045655905e-16,
+          "support_point": [
+            -0.011749458989597351,
+            -0.00534414080776955,
+            -0.038207404709360626
+          ],
+          "axis_world": [
+            0.0,
+            -0.0,
+            1.0
+          ],
+          "initial_support_clearance": 0.0003,
+          "configured_speed_mps": [
+            1.5,
+            1.7
+          ],
+          "configured_distance_m": [
+            2.0,
+            2.2
+          ]
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.026781712933732,
+          "mass_scale": 1.0229859363147162,
+          "friction_scale": 0.8818013296000147,
+          "rolling_scale": 0.8505534847419334,
+          "damping_scale": 1.0
+        }
+      },
+      "departure_time": 1.08,
+      "hand_contact_on_table": false
+    },
+    {
+      "slot": 1,
+      "episode": 2,
+      "success": true,
+      "reason": "collision_or_failure",
+      "steps": 43,
+      "reward": 23.750567301879165,
+      "legacy_success": false,
+      "physics": {
+        "version": "roll_v1",
+        "object": "apple",
+        "shape": "convex",
+        "mass_kg": 0.07145740317149377,
+        "dimensions_m": [
+          0.07657213624647187,
+          0.07665067662448878,
+          0.07307644809927674
+        ],
+        "inertia": [
+          4.678359866710449e-05,
+          4.6450190471474636e-05,
+          4.59046276295196e-05
+        ],
+        "inertia_basis": "homogeneous visual convex hull",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "convex",
+          "sliding_friction": 0.4448827437135031,
+          "torsional_length_m": 0.0001,
+          "rolling_length_m": 1.839567072987558e-05,
+          "time_constant": 0.008,
+          "distance_m": [
+            2.0,
+            2.2
+          ],
+          "speed_mps": [
+            1.5,
+            1.7
+          ]
+        },
+        "launch": {
+          "no_slip_error": 4.449557262054371e-16,
+          "support_point": [
+            -0.00854944338266146,
+            0.009651805486485834,
+            -0.03816618504728883
+          ],
+          "axis_world": [
+            0.0,
+            0.0,
+            1.0000000000000002
+          ],
+          "initial_support_clearance": 0.0003,
+          "configured_speed_mps": [
+            1.5,
+            1.7
+          ],
+          "configured_distance_m": [
+            2.0,
+            2.2
+          ]
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0256739801382022,
+          "mass_scale": 1.050844164286673,
+          "friction_scale": 1.1122068592837577,
+          "rolling_scale": 0.9197835364937789,
+          "damping_scale": 1.0
+        }
+      },
+      "departure_time": 1.24,
+      "hand_contact_on_table": false
+    },
+    {
+      "slot": 3,
+      "episode": 2,
+      "success": true,
+      "reason": "collision_or_failure",
+      "steps": 37,
+      "reward": 18.094551431285982,
+      "legacy_success": false,
+      "physics": {
+        "version": "roll_v1",
+        "object": "apple",
+        "shape": "convex",
+        "mass_kg": 0.06602601099819472,
+        "dimensions_m": [
+          0.07266512604953433,
+          0.07273965898995285,
+          0.0693478015984028
+        ],
+        "inertia": [
+          3.892888738217323e-05,
+          3.86514566057953e-05,
+          3.819749079214575e-05
+        ],
+        "inertia_basis": "homogeneous visual convex hull",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "convex",
+          "sliding_friction": 0.35134872299455644,
+          "torsional_length_m": 0.0001,
+          "rolling_length_m": 2.2050920451900284e-05,
+          "time_constant": 0.008,
+          "distance_m": [
+            2.0,
+            2.2
+          ],
+          "speed_mps": [
+            1.5,
+            1.7
+          ]
+        },
+        "launch": {
+          "no_slip_error": 2.482534153247273e-16,
+          "support_point": [
+            0.0007670689817993587,
+            -0.0121302081745302,
+            -0.03619426050784248
+          ],
+          "axis_world": [
+            0.0,
+            -0.0,
+            1.0
+          ],
+          "initial_support_clearance": 0.0003,
+          "configured_speed_mps": [
+            1.5,
+            1.7
+          ],
+          "configured_distance_m": [
+            2.0,
+            2.2
+          ]
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 0.9733400778132805,
+          "mass_scale": 0.9709707499734517,
+          "friction_scale": 0.878371807486391,
+          "rolling_scale": 1.102546022595014,
+          "damping_scale": 1.0
+        }
+      },
+      "departure_time": 0.96,
+      "hand_contact_on_table": false
+    },
+    {
+      "slot": 2,
+      "episode": 2,
+      "success": true,
+      "reason": "collision_or_failure",
+      "steps": 43,
+      "reward": 26.61007819427031,
+      "legacy_success": false,
+      "physics": {
+        "version": "roll_v1",
+        "object": "apple",
+        "shape": "convex",
+        "mass_kg": 0.06933768911978742,
+        "dimensions_m": [
+          0.07592138809529243,
+          0.0759992609980593,
+          0.07245540804702726
+        ],
+        "inertia": [
+          4.462749522020945e-05,
+          4.430945272068467e-05,
+          4.378903309040103e-05
+        ],
+        "inertia_basis": "homogeneous visual convex hull",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "convex",
+          "sliding_friction": 0.37223016348293114,
+          "torsional_length_m": 0.0001,
+          "rolling_length_m": 1.935304341034351e-05,
+          "time_constant": 0.008,
+          "distance_m": [
+            2.0,
+            2.2
+          ],
+          "speed_mps": [
+            1.5,
+            1.7
+          ]
+        },
+        "launch": {
+          "no_slip_error": 2.7755575615628914e-17,
+          "support_point": [
+            -0.01170660048491363,
+            0.0051373229892092195,
+            -0.037841829797787205
+          ],
+          "axis_world": [
+            0.0,
+            0.0,
+            0.9999999999999999
+          ],
+          "initial_support_clearance": 0.0003,
+          "configured_speed_mps": [
+            1.5,
+            1.7
+          ],
+          "configured_distance_m": [
+            2.0,
+            2.2
+          ]
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0169572918099654,
+          "mass_scale": 1.0196718988204032,
+          "friction_scale": 0.9305754087073278,
+          "rolling_scale": 0.9676521705171753,
+          "damping_scale": 1.0
+        }
+      },
+      "departure_time": 1.2,
+      "hand_contact_on_table": false
+    },
+    {
+      "slot": 0,
+      "episode": 3,
+      "success": true,
+      "reason": "collision_or_failure",
+      "steps": 39,
+      "reward": 19.676455213854265,
+      "legacy_success": false,
+      "physics": {
+        "version": "roll_v1",
+        "object": "apple",
+        "shape": "convex",
+        "mass_kg": 0.0695630436694007,
+        "dimensions_m": [
+          0.07665483451920425,
+          0.07673345972120442,
+          0.07315537101212034
+        ],
+        "inertia": [
+          4.564177711403379e-05,
+          4.5316506228798746e-05,
+          4.478425863896724e-05
+        ],
+        "inertia_basis": "homogeneous visual convex hull",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "convex",
+          "sliding_friction": 0.3527205318400059,
+          "torsional_length_m": 0.0001,
+          "rolling_length_m": 1.701106969483867e-05,
+          "time_constant": 0.008,
+          "distance_m": [
+            2.0,
+            2.2
+          ],
+          "speed_mps": [
+            1.5,
+            1.7
+          ]
+        },
+        "launch": {
+          "no_slip_error": 2.482534153247273e-16,
+          "support_point": [
+            -0.009968901986278181,
+            0.008199428072096048,
+            -0.03820740470936063
+          ],
+          "axis_world": [
+            0.0,
+            0.0,
+            1.0000000000000002
+          ],
+          "initial_support_clearance": 0.0003,
+          "configured_speed_mps": [
+            1.5,
+            1.7
+          ],
+          "configured_distance_m": [
+            2.0,
+            2.2
+          ]
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.026781712933732,
+          "mass_scale": 1.0229859363147162,
+          "friction_scale": 0.8818013296000147,
+          "rolling_scale": 0.8505534847419334,
+          "damping_scale": 1.0
+        }
+      },
+      "departure_time": 1.04,
+      "hand_contact_on_table": false
+    },
+    {
+      "slot": 1,
+      "episode": 3,
+      "success": true,
+      "reason": "collision_or_failure",
+      "steps": 43,
+      "reward": 24.51166298275404,
+      "legacy_success": false,
+      "physics": {
+        "version": "roll_v1",
+        "object": "apple",
+        "shape": "convex",
+        "mass_kg": 0.07145740317149377,
+        "dimensions_m": [
+          0.07657213624647187,
+          0.07665067662448878,
+          0.07307644809927674
+        ],
+        "inertia": [
+          4.678359866710449e-05,
+          4.6450190471474636e-05,
+          4.59046276295196e-05
+        ],
+        "inertia_basis": "homogeneous visual convex hull",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "convex",
+          "sliding_friction": 0.4448827437135031,
+          "torsional_length_m": 0.0001,
+          "rolling_length_m": 1.839567072987558e-05,
+          "time_constant": 0.008,
+          "distance_m": [
+            2.0,
+            2.2
+          ],
+          "speed_mps": [
+            1.5,
+            1.7
+          ]
+        },
+        "launch": {
+          "no_slip_error": 2.237726045655905e-16,
+          "support_point": [
+            -0.01163528413726119,
+            -0.00555612224015005,
+            -0.038166185047288824
+          ],
+          "axis_world": [
+            0.0,
+            -0.0,
+            1.0
+          ],
+          "initial_support_clearance": 0.0003,
+          "configured_speed_mps": [
+            1.5,
+            1.7
+          ],
+          "configured_distance_m": [
+            2.0,
+            2.2
+          ]
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0256739801382022,
+          "mass_scale": 1.050844164286673,
+          "friction_scale": 1.1122068592837577,
+          "rolling_scale": 0.9197835364937789,
+          "damping_scale": 1.0
+        }
+      },
+      "departure_time": 1.24,
+      "hand_contact_on_table": false
+    },
+    {
+      "slot": 3,
+      "episode": 3,
+      "success": true,
+      "reason": "collision_or_failure",
+      "steps": 40,
+      "reward": 22.121739305837174,
+      "legacy_success": false,
+      "physics": {
+        "version": "roll_v1",
+        "object": "apple",
+        "shape": "convex",
+        "mass_kg": 0.06602601099819472,
+        "dimensions_m": [
+          0.07266512604953433,
+          0.07273965898995285,
+          0.0693478015984028
+        ],
+        "inertia": [
+          3.892888738217323e-05,
+          3.86514566057953e-05,
+          3.819749079214575e-05
+        ],
+        "inertia_basis": "homogeneous visual convex hull",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "convex",
+          "sliding_friction": 0.35134872299455644,
+          "torsional_length_m": 0.0001,
+          "rolling_length_m": 2.2050920451900284e-05,
+          "time_constant": 0.008,
+          "distance_m": [
+            2.0,
+            2.2
+          ],
+          "speed_mps": [
+            1.5,
+            1.7
+          ]
+        },
+        "launch": {
+          "no_slip_error": 2.220446049250313e-16,
+          "support_point": [
+            -0.005285505099505002,
+            0.01094503453733174,
+            -0.036194260507842475
+          ],
+          "axis_world": [
+            0.0,
+            0.0,
+            0.9999999999999999
+          ],
+          "initial_support_clearance": 0.0003,
+          "configured_speed_mps": [
+            1.5,
+            1.7
+          ],
+          "configured_distance_m": [
+            2.0,
+            2.2
+          ]
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 0.9733400778132805,
+          "mass_scale": 0.9709707499734517,
+          "friction_scale": 0.878371807486391,
+          "rolling_scale": 1.102546022595014,
+          "damping_scale": 1.0
+        }
+      },
+      "departure_time": 1.12,
+      "hand_contact_on_table": false
+    },
+    {
+      "slot": 2,
+      "episode": 3,
+      "success": false,
+      "reason": "collision_or_failure",
+      "steps": 50,
+      "reward": 24.67605168224385,
+      "legacy_success": false,
+      "physics": {
+        "version": "roll_v1",
+        "object": "apple",
+        "shape": "convex",
+        "mass_kg": 0.06933768911978742,
+        "dimensions_m": [
+          0.07592138809529243,
+          0.0759992609980593,
+          0.07245540804702726
+        ],
+        "inertia": [
+          4.462749522020945e-05,
+          4.430945272068467e-05,
+          4.378903309040103e-05
+        ],
+        "inertia_basis": "homogeneous visual convex hull",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "convex",
+          "sliding_friction": 0.37223016348293114,
+          "torsional_length_m": 0.0001,
+          "rolling_length_m": 1.935304341034351e-05,
+          "time_constant": 0.008,
+          "distance_m": [
+            2.0,
+            2.2
+          ],
+          "speed_mps": [
+            1.5,
+            1.7
+          ]
+        },
+        "launch": {
+          "no_slip_error": 0.0,
+          "support_point": [
+            -0.005267283674289021,
+            -0.011648704009605791,
+            -0.037841829797787205
+          ],
+          "axis_world": [
+            0.0,
+            -0.0,
+            1.0
+          ],
+          "initial_support_clearance": 0.0003,
+          "configured_speed_mps": [
+            1.5,
+            1.7
+          ],
+          "configured_distance_m": [
+            2.0,
+            2.2
+          ]
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0169572918099654,
+          "mass_scale": 1.0196718988204032,
+          "friction_scale": 0.9305754087073278,
+          "rolling_scale": 0.9676521705171753,
+          "damping_scale": 1.0
+        }
+      },
+      "departure_time": 1.72,
+      "hand_contact_on_table": false
+    },
+    {
+      "slot": 0,
+      "episode": 4,
+      "success": true,
+      "reason": "collision_or_failure",
+      "steps": 45,
+      "reward": 25.42309520137328,
+      "legacy_success": false,
+      "physics": {
+        "version": "roll_v1",
+        "object": "apple",
+        "shape": "convex",
+        "mass_kg": 0.0695630436694007,
+        "dimensions_m": [
+          0.07665483451920425,
+          0.07673345972120442,
+          0.07315537101212034
+        ],
+        "inertia": [
+          4.564177711403379e-05,
+          4.5316506228798746e-05,
+          4.478425863896724e-05
+        ],
+        "inertia_basis": "homogeneous visual convex hull",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "convex",
+          "sliding_friction": 0.3527205318400059,
+          "torsional_length_m": 0.0001,
+          "rolling_length_m": 1.701106969483867e-05,
+          "time_constant": 0.008,
+          "distance_m": [
+            2.0,
+            2.2
+          ],
+          "speed_mps": [
+            1.5,
+            1.7
+          ]
+        },
+        "launch": {
+          "no_slip_error": 2.2887833992611187e-16,
+          "support_point": [
+            -0.0062959459897128705,
+            -0.011268127245293079,
+            -0.038207404709360626
+          ],
+          "axis_world": [
+            0.0,
+            -0.0,
+            1.0
+          ],
+          "initial_support_clearance": 0.0003,
+          "configured_speed_mps": [
+            1.5,
+            1.7
+          ],
+          "configured_distance_m": [
+            2.0,
+            2.2
+          ]
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.026781712933732,
+          "mass_scale": 1.0229859363147162,
+          "friction_scale": 0.8818013296000147,
+          "rolling_scale": 0.8505534847419334,
+          "damping_scale": 1.0
+        }
+      },
+      "departure_time": 1.24,
+      "hand_contact_on_table": false
+    },
+    {
+      "slot": 1,
+      "episode": 4,
+      "success": true,
+      "reason": "collision_or_failure",
+      "steps": 40,
+      "reward": 22.84030845154536,
+      "legacy_success": false,
+      "physics": {
+        "version": "roll_v1",
+        "object": "apple",
+        "shape": "convex",
+        "mass_kg": 0.07145740317149377,
+        "dimensions_m": [
+          0.07657213624647187,
+          0.07665067662448878,
+          0.07307644809927674
+        ],
+        "inertia": [
+          4.678359866710449e-05,
+          4.6450190471474636e-05,
+          4.59046276295196e-05
+        ],
+        "inertia_basis": "homogeneous visual convex hull",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "convex",
+          "sliding_friction": 0.4448827437135031,
+          "torsional_length_m": 0.0001,
+          "rolling_length_m": 1.839567072987558e-05,
+          "time_constant": 0.008,
+          "distance_m": [
+            2.0,
+            2.2
+          ],
+          "speed_mps": [
+            1.5,
+            1.7
+          ]
+        },
+        "launch": {
+          "no_slip_error": 2.482534153247273e-16,
+          "support_point": [
+            -0.0008774988941225328,
+            -0.012863915694418462,
+            -0.03816618504728883
+          ],
+          "axis_world": [
+            0.0,
+            -0.0,
+            1.0000000000000002
+          ],
+          "initial_support_clearance": 0.0003,
+          "configured_speed_mps": [
+            1.5,
+            1.7
+          ],
+          "configured_distance_m": [
+            2.0,
+            2.2
+          ]
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0256739801382022,
+          "mass_scale": 1.050844164286673,
+          "friction_scale": 1.1122068592837577,
+          "rolling_scale": 0.9197835364937789,
+          "damping_scale": 1.0
+        }
+      },
+      "departure_time": 1.28,
+      "hand_contact_on_table": false
+    },
+    {
+      "slot": 3,
+      "episode": 4,
+      "success": true,
+      "reason": "collision_or_failure",
+      "steps": 39,
+      "reward": 21.0555659627288,
+      "legacy_success": false,
+      "physics": {
+        "version": "roll_v1",
+        "object": "apple",
+        "shape": "convex",
+        "mass_kg": 0.06602601099819472,
+        "dimensions_m": [
+          0.07266512604953433,
+          0.07273965898995285,
+          0.0693478015984028
+        ],
+        "inertia": [
+          3.892888738217323e-05,
+          3.86514566057953e-05,
+          3.819749079214575e-05
+        ],
+        "inertia_basis": "homogeneous visual convex hull",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "convex",
+          "sliding_friction": 0.35134872299455644,
+          "torsional_length_m": 0.0001,
+          "rolling_length_m": 2.2050920451900284e-05,
+          "time_constant": 0.008,
+          "distance_m": [
+            2.0,
+            2.2
+          ],
+          "speed_mps": [
+            1.5,
+            1.7
+          ]
+        },
+        "launch": {
+          "no_slip_error": 2.238801616996866e-16,
+          "support_point": [
+            -0.011288001057139032,
+            -0.004506814541813995,
+            -0.03619426050784248
+          ],
+          "axis_world": [
+            0.0,
+            -0.0,
+            1.0
+          ],
+          "initial_support_clearance": 0.0003,
+          "configured_speed_mps": [
+            1.5,
+            1.7
+          ],
+          "configured_distance_m": [
+            2.0,
+            2.2
+          ]
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 0.9733400778132805,
+          "mass_scale": 0.9709707499734517,
+          "friction_scale": 0.878371807486391,
+          "rolling_scale": 1.102546022595014,
+          "damping_scale": 1.0
+        }
+      },
+      "departure_time": 0.96,
+      "hand_contact_on_table": false
+    },
+    {
+      "slot": 2,
+      "episode": 4,
+      "success": false,
+      "reason": "timeout",
+      "steps": 63,
+      "reward": 35.651598743690876,
+      "legacy_success": false,
+      "physics": {
+        "version": "roll_v1",
+        "object": "apple",
+        "shape": "convex",
+        "mass_kg": 0.06933768911978742,
+        "dimensions_m": [
+          0.07592138809529243,
+          0.0759992609980593,
+          0.07245540804702726
+        ],
+        "inertia": [
+          4.462749522020945e-05,
+          4.430945272068467e-05,
+          4.378903309040103e-05
+        ],
+        "inertia_basis": "homogeneous visual convex hull",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "convex",
+          "sliding_friction": 0.37223016348293114,
+          "torsional_length_m": 0.0001,
+          "rolling_length_m": 1.935304341034351e-05,
+          "time_constant": 0.008,
+          "distance_m": [
+            2.0,
+            2.2
+          ],
+          "speed_mps": [
+            1.5,
+            1.7
+          ]
+        },
+        "launch": {
+          "no_slip_error": 2.237726045655905e-16,
+          "support_point": [
+            -0.00446803560499952,
+            -0.011978031567886863,
+            -0.037841829797787205
+          ],
+          "axis_world": [
+            0.0,
+            -0.0,
+            0.9999999999999999
+          ],
+          "initial_support_clearance": 0.0003,
+          "configured_speed_mps": [
+            1.5,
+            1.7
+          ],
+          "configured_distance_m": [
+            2.0,
+            2.2
+          ]
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0169572918099654,
+          "mass_scale": 1.0196718988204032,
+          "friction_scale": 0.9305754087073278,
+          "rolling_scale": 0.9676521705171753,
+          "damping_scale": 1.0
+        }
+      },
+      "departure_time": null,
+      "hand_contact_on_table": false
+    }
+  ],
+  "checkpoint": "/home/isee/Catch/11-6/roll_track_best_reward_25.16.pth"
+}

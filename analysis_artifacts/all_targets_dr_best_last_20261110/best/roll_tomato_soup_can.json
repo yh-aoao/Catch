@@ -1,0 +1,1528 @@
+{
+  "motion": "roll",
+  "object": "tomato_soup_can",
+  "seed": 41000,
+  "episodes": 20,
+  "successes": 8,
+  "instances": [
+    {
+      "version": "physical_dr_v1",
+      "sampling": "environment_creation",
+      "size_scale": 1.026781712933732,
+      "mass_scale": 1.0229859363147162,
+      "friction_scale": 0.8818013296000147,
+      "rolling_scale": 0.8505534847419334,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_v1",
+      "sampling": "environment_creation",
+      "size_scale": 1.0256739801382022,
+      "mass_scale": 1.050844164286673,
+      "friction_scale": 1.1122068592837577,
+      "rolling_scale": 0.9197835364937789,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_v1",
+      "sampling": "environment_creation",
+      "size_scale": 1.0169572918099654,
+      "mass_scale": 1.0196718988204032,
+      "friction_scale": 0.9305754087073278,
+      "rolling_scale": 0.9676521705171753,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_v1",
+      "sampling": "environment_creation",
+      "size_scale": 0.9733400778132805,
+      "mass_scale": 0.9709707499734517,
+      "friction_scale": 0.878371807486391,
+      "rolling_scale": 1.102546022595014,
+      "damping_scale": 1.0
+    }
+  ],
+  "records": [
+    {
+      "slot": 1,
+      "episode": 0,
+      "success": false,
+      "reason": "ball_on_floor",
+      "steps": 38,
+      "reward": 75.72594251486372,
+      "legacy_success": false,
+      "physics": {
+        "version": "roll_v1",
+        "object": "tomato_soup_can",
+        "shape": "cylinder",
+        "mass_kg": 0.36674461333604885,
+        "dimensions_m": [
+          0.0709789323445544,
+          0.0709789323445544,
+          0.10536718321908851
+        ],
+        "inertia": [
+          0.00045478623984720085,
+          0.00045478623984720085,
+          0.0002309578253532311
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "cylinder",
+          "sliding_friction": 0.3336620577851273,
+          "torsional_length_m": 0.0001,
+          "rolling_length_m": 1.839567072987558e-05,
+          "time_constant": 0.008,
+          "distance_m": [
+            2.0,
+            2.2
+          ]
+        },
+        "launch": {
+          "no_slip_error": 0.0,
+          "support_point": [
+            0.0,
+            0.0,
+            -0.0354894661722772
+          ],
+          "axis_world": [
+            0.9880077542517235,
+            -0.15440426658116002,
+            0.0
+          ],
+          "initial_support_clearance": 0.0003,
+          "configured_speed_mps": [
+            0.8,
+            1.3
+          ],
+          "configured_distance_m": [
+            2.0,
+            2.2
+          ]
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0256739801382022,
+          "mass_scale": 1.050844164286673,
+          "friction_scale": 1.1122068592837577,
+          "rolling_scale": 0.9197835364937789,
+          "damping_scale": 1.0
+        }
+      },
+      "stable_hold": false,
+      "success_version": null,
+      "diagnostics": {}
+    },
+    {
+      "slot": 3,
+      "episode": 0,
+      "success": false,
+      "reason": "ball_left",
+      "steps": 55,
+      "reward": 93.9544686873991,
+      "legacy_success": false,
+      "physics": {
+        "version": "roll_v1",
+        "object": "tomato_soup_can",
+        "shape": "cylinder",
+        "mass_kg": 0.3388687917407346,
+        "dimensions_m": [
+          0.06735730930996535,
+          0.06735730930996535,
+          0.09999093698332372
+        ],
+        "inertia": [
+          0.0003784301083794641,
+          0.0003784301083794641,
+          0.000192181265002375
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "cylinder",
+          "sliding_friction": 0.2635115422459173,
+          "torsional_length_m": 0.0001,
+          "rolling_length_m": 2.2050920451900284e-05,
+          "time_constant": 0.008,
+          "distance_m": [
+            2.0,
+            2.2
+          ]
+        },
+        "launch": {
+          "no_slip_error": 0.0,
+          "support_point": [
+            0.0,
+            0.0,
+            -0.033678654654982675
+          ],
+          "axis_world": [
+            0.9897715924695811,
+            0.14266111852999572,
+            0.0
+          ],
+          "initial_support_clearance": 0.0003,
+          "configured_speed_mps": [
+            0.8,
+            1.3
+          ],
+          "configured_distance_m": [
+            2.0,
+            2.2
+          ]
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 0.9733400778132805,
+          "mass_scale": 0.9709707499734517,
+          "friction_scale": 0.878371807486391,
+          "rolling_scale": 1.102546022595014,
+          "damping_scale": 1.0
+        }
+      },
+      "stable_hold": false,
+      "success_version": null,
+      "diagnostics": {}
+    },
+    {
+      "slot": 0,
+      "episode": 0,
+      "success": false,
+      "reason": "out_of_bounds",
+      "steps": 62,
+      "reward": 350.20796155717363,
+      "legacy_success": false,
+      "physics": {
+        "version": "roll_v1",
+        "object": "tomato_soup_can",
+        "shape": "cylinder",
+        "mass_kg": 0.3570220917738359,
+        "dimensions_m": [
+          0.07105558993036852,
+          0.07105558993036852,
+          0.10548098028003049
+        ],
+        "inertia": [
+          0.0004436865223074587,
+          0.0004436865223074587,
+          0.0002253209647791837
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "cylinder",
+          "sliding_friction": 0.2645403988800044,
+          "torsional_length_m": 0.0001,
+          "rolling_length_m": 1.701106969483867e-05,
+          "time_constant": 0.008,
+          "distance_m": [
+            2.0,
+            2.2
+          ]
+        },
+        "launch": {
+          "no_slip_error": 0.0,
+          "support_point": [
+            0.0,
+            0.0,
+            -0.03552779496518426
+          ],
+          "axis_world": [
+            0.9924744279167514,
+            -0.12245207197641442,
+            0.0
+          ],
+          "initial_support_clearance": 0.0003,
+          "configured_speed_mps": [
+            0.8,
+            1.3
+          ],
+          "configured_distance_m": [
+            2.0,
+            2.2
+          ]
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.026781712933732,
+          "mass_scale": 1.0229859363147162,
+          "friction_scale": 0.8818013296000147,
+          "rolling_scale": 0.8505534847419334,
+          "damping_scale": 1.0
+        }
+      },
+      "stable_hold": true,
+      "success_version": null,
+      "diagnostics": {}
+    },
+    {
+      "slot": 2,
+      "episode": 0,
+      "success": true,
+      "reason": "catch_success",
+      "steps": 62,
+      "reward": 342.9899952288082,
+      "legacy_success": true,
+      "physics": {
+        "version": "roll_v1",
+        "object": "tomato_soup_can",
+        "shape": "cylinder",
+        "mass_kg": 0.3558654926883207,
+        "dimensions_m": [
+          0.07037571802587282,
+          0.07037571802587282,
+          0.10447172041713534
+        ],
+        "inertia": [
+          0.0004338266256389748,
+          0.0004338266256389748,
+          0.00022031373260451257
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "cylinder",
+          "sliding_friction": 0.27917262261219833,
+          "torsional_length_m": 0.0001,
+          "rolling_length_m": 1.935304341034351e-05,
+          "time_constant": 0.008,
+          "distance_m": [
+            2.0,
+            2.2
+          ]
+        },
+        "launch": {
+          "no_slip_error": 0.0,
+          "support_point": [
+            0.0,
+            0.0,
+            -0.035187859012936425
+          ],
+          "axis_world": [
+            0.9990658505935618,
+            0.04321372672847223,
+            -2.220446049250313e-16
+          ],
+          "initial_support_clearance": 0.0003,
+          "configured_speed_mps": [
+            0.8,
+            1.3
+          ],
+          "configured_distance_m": [
+            2.0,
+            2.2
+          ]
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0169572918099654,
+          "mass_scale": 1.0196718988204032,
+          "friction_scale": 0.9305754087073278,
+          "rolling_scale": 0.9676521705171753,
+          "damping_scale": 1.0
+        }
+      },
+      "stable_hold": true,
+      "success_version": null,
+      "diagnostics": {}
+    },
+    {
+      "slot": 1,
+      "episode": 1,
+      "success": true,
+      "reason": "timeout",
+      "steps": 63,
+      "reward": 362.4127040848417,
+      "legacy_success": false,
+      "physics": {
+        "version": "roll_v1",
+        "object": "tomato_soup_can",
+        "shape": "cylinder",
+        "mass_kg": 0.36674461333604885,
+        "dimensions_m": [
+          0.0709789323445544,
+          0.0709789323445544,
+          0.10536718321908851
+        ],
+        "inertia": [
+          0.00045478623984720085,
+          0.00045478623984720085,
+          0.0002309578253532311
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "cylinder",
+          "sliding_friction": 0.3336620577851273,
+          "torsional_length_m": 0.0001,
+          "rolling_length_m": 1.839567072987558e-05,
+          "time_constant": 0.008,
+          "distance_m": [
+            2.0,
+            2.2
+          ]
+        },
+        "launch": {
+          "no_slip_error": 1.3877787807814457e-17,
+          "support_point": [
+            0.0,
+            0.0,
+            -0.0354894661722772
+          ],
+          "axis_world": [
+            0.9943812255410036,
+            -0.10585829344728623,
+            0.0
+          ],
+          "initial_support_clearance": 0.0003,
+          "configured_speed_mps": [
+            0.8,
+            1.3
+          ],
+          "configured_distance_m": [
+            2.0,
+            2.2
+          ]
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0256739801382022,
+          "mass_scale": 1.050844164286673,
+          "friction_scale": 1.1122068592837577,
+          "rolling_scale": 0.9197835364937789,
+          "damping_scale": 1.0
+        }
+      },
+      "stable_hold": true,
+      "success_version": null,
+      "diagnostics": {}
+    },
+    {
+      "slot": 2,
+      "episode": 1,
+      "success": false,
+      "reason": "ball_on_floor",
+      "steps": 47,
+      "reward": 144.64884796289522,
+      "legacy_success": false,
+      "physics": {
+        "version": "roll_v1",
+        "object": "tomato_soup_can",
+        "shape": "cylinder",
+        "mass_kg": 0.3558654926883207,
+        "dimensions_m": [
+          0.07037571802587282,
+          0.07037571802587282,
+          0.10447172041713534
+        ],
+        "inertia": [
+          0.0004338266256389748,
+          0.0004338266256389748,
+          0.00022031373260451257
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "cylinder",
+          "sliding_friction": 0.27917262261219833,
+          "torsional_length_m": 0.0001,
+          "rolling_length_m": 1.935304341034351e-05,
+          "time_constant": 0.008,
+          "distance_m": [
+            2.0,
+            2.2
+          ]
+        },
+        "launch": {
+          "no_slip_error": 2.220717083251841e-16,
+          "support_point": [
+            0.0,
+            0.0,
+            -0.03518785901293641
+          ],
+          "axis_world": [
+            0.9998314065786387,
+            -0.01836187405961172,
+            0.0
+          ],
+          "initial_support_clearance": 0.0003,
+          "configured_speed_mps": [
+            0.8,
+            1.3
+          ],
+          "configured_distance_m": [
+            2.0,
+            2.2
+          ]
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0169572918099654,
+          "mass_scale": 1.0196718988204032,
+          "friction_scale": 0.9305754087073278,
+          "rolling_scale": 0.9676521705171753,
+          "damping_scale": 1.0
+        }
+      },
+      "stable_hold": false,
+      "success_version": null,
+      "diagnostics": {}
+    },
+    {
+      "slot": 3,
+      "episode": 1,
+      "success": true,
+      "reason": "timeout",
+      "steps": 63,
+      "reward": 417.8541426537927,
+      "legacy_success": false,
+      "physics": {
+        "version": "roll_v1",
+        "object": "tomato_soup_can",
+        "shape": "cylinder",
+        "mass_kg": 0.3388687917407346,
+        "dimensions_m": [
+          0.06735730930996535,
+          0.06735730930996535,
+          0.09999093698332372
+        ],
+        "inertia": [
+          0.0003784301083794641,
+          0.0003784301083794641,
+          0.000192181265002375
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "cylinder",
+          "sliding_friction": 0.2635115422459173,
+          "torsional_length_m": 0.0001,
+          "rolling_length_m": 2.2050920451900284e-05,
+          "time_constant": 0.008,
+          "distance_m": [
+            2.0,
+            2.2
+          ]
+        },
+        "launch": {
+          "no_slip_error": 0.0,
+          "support_point": [
+            0.0,
+            0.0,
+            -0.033678654654982675
+          ],
+          "axis_world": [
+            0.9997808762086782,
+            -0.02093321684328145,
+            0.0
+          ],
+          "initial_support_clearance": 0.0003,
+          "configured_speed_mps": [
+            0.8,
+            1.3
+          ],
+          "configured_distance_m": [
+            2.0,
+            2.2
+          ]
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 0.9733400778132805,
+          "mass_scale": 0.9709707499734517,
+          "friction_scale": 0.878371807486391,
+          "rolling_scale": 1.102546022595014,
+          "damping_scale": 1.0
+        }
+      },
+      "stable_hold": true,
+      "success_version": null,
+      "diagnostics": {}
+    },
+    {
+      "slot": 0,
+      "episode": 1,
+      "success": false,
+      "reason": "timeout",
+      "steps": 63,
+      "reward": 158.73851859578372,
+      "legacy_success": false,
+      "physics": {
+        "version": "roll_v1",
+        "object": "tomato_soup_can",
+        "shape": "cylinder",
+        "mass_kg": 0.3570220917738359,
+        "dimensions_m": [
+          0.07105558993036852,
+          0.07105558993036852,
+          0.10548098028003049
+        ],
+        "inertia": [
+          0.0004436865223074587,
+          0.0004436865223074587,
+          0.0002253209647791837
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "cylinder",
+          "sliding_friction": 0.2645403988800044,
+          "torsional_length_m": 0.0001,
+          "rolling_length_m": 1.701106969483867e-05,
+          "time_constant": 0.008,
+          "distance_m": [
+            2.0,
+            2.2
+          ]
+        },
+        "launch": {
+          "no_slip_error": 6.938893903907228e-18,
+          "support_point": [
+            0.0,
+            0.0,
+            -0.03552779496518426
+          ],
+          "axis_world": [
+            0.9975003307143956,
+            -0.07066180173666237,
+            0.0
+          ],
+          "initial_support_clearance": 0.0003,
+          "configured_speed_mps": [
+            0.8,
+            1.3
+          ],
+          "configured_distance_m": [
+            2.0,
+            2.2
+          ]
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.026781712933732,
+          "mass_scale": 1.0229859363147162,
+          "friction_scale": 0.8818013296000147,
+          "rolling_scale": 0.8505534847419334,
+          "damping_scale": 1.0
+        }
+      },
+      "stable_hold": false,
+      "success_version": null,
+      "diagnostics": {}
+    },
+    {
+      "slot": 1,
+      "episode": 2,
+      "success": true,
+      "reason": "timeout",
+      "steps": 63,
+      "reward": 345.009179771018,
+      "legacy_success": false,
+      "physics": {
+        "version": "roll_v1",
+        "object": "tomato_soup_can",
+        "shape": "cylinder",
+        "mass_kg": 0.36674461333604885,
+        "dimensions_m": [
+          0.0709789323445544,
+          0.0709789323445544,
+          0.10536718321908851
+        ],
+        "inertia": [
+          0.00045478623984720085,
+          0.00045478623984720085,
+          0.0002309578253532311
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "cylinder",
+          "sliding_friction": 0.3336620577851273,
+          "torsional_length_m": 0.0001,
+          "rolling_length_m": 1.839567072987558e-05,
+          "time_constant": 0.008,
+          "distance_m": [
+            2.0,
+            2.2
+          ]
+        },
+        "launch": {
+          "no_slip_error": 1.3877787807814457e-17,
+          "support_point": [
+            0.0,
+            0.0,
+            -0.0354894661722772
+          ],
+          "axis_world": [
+            0.9937288888055799,
+            0.11181634743286886,
+            0.0
+          ],
+          "initial_support_clearance": 0.0003,
+          "configured_speed_mps": [
+            0.8,
+            1.3
+          ],
+          "configured_distance_m": [
+            2.0,
+            2.2
+          ]
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0256739801382022,
+          "mass_scale": 1.050844164286673,
+          "friction_scale": 1.1122068592837577,
+          "rolling_scale": 0.9197835364937789,
+          "damping_scale": 1.0
+        }
+      },
+      "stable_hold": true,
+      "success_version": null,
+      "diagnostics": {}
+    },
+    {
+      "slot": 3,
+      "episode": 2,
+      "success": false,
+      "reason": "ball_on_floor",
+      "steps": 52,
+      "reward": 163.64406228652237,
+      "legacy_success": false,
+      "physics": {
+        "version": "roll_v1",
+        "object": "tomato_soup_can",
+        "shape": "cylinder",
+        "mass_kg": 0.3388687917407346,
+        "dimensions_m": [
+          0.06735730930996535,
+          0.06735730930996535,
+          0.09999093698332372
+        ],
+        "inertia": [
+          0.0003784301083794641,
+          0.0003784301083794641,
+          0.000192181265002375
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "cylinder",
+          "sliding_friction": 0.2635115422459173,
+          "torsional_length_m": 0.0001,
+          "rolling_length_m": 2.2050920451900284e-05,
+          "time_constant": 0.008,
+          "distance_m": [
+            2.0,
+            2.2
+          ]
+        },
+        "launch": {
+          "no_slip_error": 0.0,
+          "support_point": [
+            0.0,
+            0.0,
+            -0.03367865465498269
+          ],
+          "axis_world": [
+            0.999913412728946,
+            0.013159294994521651,
+            -2.220446049250313e-16
+          ],
+          "initial_support_clearance": 0.0003,
+          "configured_speed_mps": [
+            0.8,
+            1.3
+          ],
+          "configured_distance_m": [
+            2.0,
+            2.2
+          ]
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 0.9733400778132805,
+          "mass_scale": 0.9709707499734517,
+          "friction_scale": 0.878371807486391,
+          "rolling_scale": 1.102546022595014,
+          "damping_scale": 1.0
+        }
+      },
+      "stable_hold": false,
+      "success_version": null,
+      "diagnostics": {}
+    },
+    {
+      "slot": 0,
+      "episode": 2,
+      "success": false,
+      "reason": "ball_on_floor",
+      "steps": 46,
+      "reward": 85.56186164030905,
+      "legacy_success": false,
+      "physics": {
+        "version": "roll_v1",
+        "object": "tomato_soup_can",
+        "shape": "cylinder",
+        "mass_kg": 0.3570220917738359,
+        "dimensions_m": [
+          0.07105558993036852,
+          0.07105558993036852,
+          0.10548098028003049
+        ],
+        "inertia": [
+          0.0004436865223074587,
+          0.0004436865223074587,
+          0.0002253209647791837
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "cylinder",
+          "sliding_friction": 0.2645403988800044,
+          "torsional_length_m": 0.0001,
+          "rolling_length_m": 1.701106969483867e-05,
+          "time_constant": 0.008,
+          "distance_m": [
+            2.0,
+            2.2
+          ]
+        },
+        "launch": {
+          "no_slip_error": 1.1102230246251565e-16,
+          "support_point": [
+            0.0,
+            0.0,
+            -0.03552779496518426
+          ],
+          "axis_world": [
+            0.9999508166572,
+            0.009917876113306886,
+            0.0
+          ],
+          "initial_support_clearance": 0.0003,
+          "configured_speed_mps": [
+            0.8,
+            1.3
+          ],
+          "configured_distance_m": [
+            2.0,
+            2.2
+          ]
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.026781712933732,
+          "mass_scale": 1.0229859363147162,
+          "friction_scale": 0.8818013296000147,
+          "rolling_scale": 0.8505534847419334,
+          "damping_scale": 1.0
+        }
+      },
+      "stable_hold": false,
+      "success_version": null,
+      "diagnostics": {}
+    },
+    {
+      "slot": 2,
+      "episode": 2,
+      "success": true,
+      "reason": "timeout",
+      "steps": 63,
+      "reward": 296.2482085982789,
+      "legacy_success": false,
+      "physics": {
+        "version": "roll_v1",
+        "object": "tomato_soup_can",
+        "shape": "cylinder",
+        "mass_kg": 0.3558654926883207,
+        "dimensions_m": [
+          0.07037571802587282,
+          0.07037571802587282,
+          0.10447172041713534
+        ],
+        "inertia": [
+          0.0004338266256389748,
+          0.0004338266256389748,
+          0.00022031373260451257
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "cylinder",
+          "sliding_friction": 0.27917262261219833,
+          "torsional_length_m": 0.0001,
+          "rolling_length_m": 1.935304341034351e-05,
+          "time_constant": 0.008,
+          "distance_m": [
+            2.0,
+            2.2
+          ]
+        },
+        "launch": {
+          "no_slip_error": 1.1102230246251565e-16,
+          "support_point": [
+            0.0,
+            0.0,
+            -0.035187859012936425
+          ],
+          "axis_world": [
+            0.9999948104469643,
+            -0.0032216578248151274,
+            -2.220446049250313e-16
+          ],
+          "initial_support_clearance": 0.0003,
+          "configured_speed_mps": [
+            0.8,
+            1.3
+          ],
+          "configured_distance_m": [
+            2.0,
+            2.2
+          ]
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0169572918099654,
+          "mass_scale": 1.0196718988204032,
+          "friction_scale": 0.9305754087073278,
+          "rolling_scale": 0.9676521705171753,
+          "damping_scale": 1.0
+        }
+      },
+      "stable_hold": false,
+      "success_version": null,
+      "diagnostics": {}
+    },
+    {
+      "slot": 1,
+      "episode": 3,
+      "success": true,
+      "reason": "catch_success",
+      "steps": 53,
+      "reward": 306.58266073131716,
+      "legacy_success": true,
+      "physics": {
+        "version": "roll_v1",
+        "object": "tomato_soup_can",
+        "shape": "cylinder",
+        "mass_kg": 0.36674461333604885,
+        "dimensions_m": [
+          0.0709789323445544,
+          0.0709789323445544,
+          0.10536718321908851
+        ],
+        "inertia": [
+          0.00045478623984720085,
+          0.00045478623984720085,
+          0.0002309578253532311
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "cylinder",
+          "sliding_friction": 0.3336620577851273,
+          "torsional_length_m": 0.0001,
+          "rolling_length_m": 1.839567072987558e-05,
+          "time_constant": 0.008,
+          "distance_m": [
+            2.0,
+            2.2
+          ]
+        },
+        "launch": {
+          "no_slip_error": 2.2215299868541707e-16,
+          "support_point": [
+            0.0,
+            0.0,
+            -0.0354894661722772
+          ],
+          "axis_world": [
+            0.9992732029519534,
+            0.03811910101437269,
+            0.0
+          ],
+          "initial_support_clearance": 0.0003,
+          "configured_speed_mps": [
+            0.8,
+            1.3
+          ],
+          "configured_distance_m": [
+            2.0,
+            2.2
+          ]
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0256739801382022,
+          "mass_scale": 1.050844164286673,
+          "friction_scale": 1.1122068592837577,
+          "rolling_scale": 0.9197835364937789,
+          "damping_scale": 1.0
+        }
+      },
+      "stable_hold": true,
+      "success_version": null,
+      "diagnostics": {}
+    },
+    {
+      "slot": 0,
+      "episode": 3,
+      "success": false,
+      "reason": "ball_on_floor",
+      "steps": 48,
+      "reward": 140.9362465104893,
+      "legacy_success": false,
+      "physics": {
+        "version": "roll_v1",
+        "object": "tomato_soup_can",
+        "shape": "cylinder",
+        "mass_kg": 0.3570220917738359,
+        "dimensions_m": [
+          0.07105558993036852,
+          0.07105558993036852,
+          0.10548098028003049
+        ],
+        "inertia": [
+          0.0004436865223074587,
+          0.0004436865223074587,
+          0.0002253209647791837
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "cylinder",
+          "sliding_friction": 0.2645403988800044,
+          "torsional_length_m": 0.0001,
+          "rolling_length_m": 1.701106969483867e-05,
+          "time_constant": 0.008,
+          "distance_m": [
+            2.0,
+            2.2
+          ]
+        },
+        "launch": {
+          "no_slip_error": 2.7755575615628914e-17,
+          "support_point": [
+            0.0,
+            0.0,
+            -0.03552779496518426
+          ],
+          "axis_world": [
+            0.9888750587489716,
+            0.1487485064940754,
+            0.0
+          ],
+          "initial_support_clearance": 0.0003,
+          "configured_speed_mps": [
+            0.8,
+            1.3
+          ],
+          "configured_distance_m": [
+            2.0,
+            2.2
+          ]
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.026781712933732,
+          "mass_scale": 1.0229859363147162,
+          "friction_scale": 0.8818013296000147,
+          "rolling_scale": 0.8505534847419334,
+          "damping_scale": 1.0
+        }
+      },
+      "stable_hold": false,
+      "success_version": null,
+      "diagnostics": {}
+    },
+    {
+      "slot": 2,
+      "episode": 3,
+      "success": false,
+      "reason": "ball_on_floor",
+      "steps": 47,
+      "reward": 141.4231712260041,
+      "legacy_success": false,
+      "physics": {
+        "version": "roll_v1",
+        "object": "tomato_soup_can",
+        "shape": "cylinder",
+        "mass_kg": 0.3558654926883207,
+        "dimensions_m": [
+          0.07037571802587282,
+          0.07037571802587282,
+          0.10447172041713534
+        ],
+        "inertia": [
+          0.0004338266256389748,
+          0.0004338266256389748,
+          0.00022031373260451257
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "cylinder",
+          "sliding_friction": 0.27917262261219833,
+          "torsional_length_m": 0.0001,
+          "rolling_length_m": 1.935304341034351e-05,
+          "time_constant": 0.008,
+          "distance_m": [
+            2.0,
+            2.2
+          ]
+        },
+        "launch": {
+          "no_slip_error": 2.7755575615628914e-17,
+          "support_point": [
+            0.0,
+            0.0,
+            -0.03518785901293641
+          ],
+          "axis_world": [
+            0.987374234048477,
+            0.15840493028054226,
+            0.0
+          ],
+          "initial_support_clearance": 0.0003,
+          "configured_speed_mps": [
+            0.8,
+            1.3
+          ],
+          "configured_distance_m": [
+            2.0,
+            2.2
+          ]
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0169572918099654,
+          "mass_scale": 1.0196718988204032,
+          "friction_scale": 0.9305754087073278,
+          "rolling_scale": 0.9676521705171753,
+          "damping_scale": 1.0
+        }
+      },
+      "stable_hold": false,
+      "success_version": null,
+      "diagnostics": {}
+    },
+    {
+      "slot": 3,
+      "episode": 3,
+      "success": true,
+      "reason": "timeout",
+      "steps": 63,
+      "reward": 279.2747180116794,
+      "legacy_success": false,
+      "physics": {
+        "version": "roll_v1",
+        "object": "tomato_soup_can",
+        "shape": "cylinder",
+        "mass_kg": 0.3388687917407346,
+        "dimensions_m": [
+          0.06735730930996535,
+          0.06735730930996535,
+          0.09999093698332372
+        ],
+        "inertia": [
+          0.0003784301083794641,
+          0.0003784301083794641,
+          0.000192181265002375
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "cylinder",
+          "sliding_friction": 0.2635115422459173,
+          "torsional_length_m": 0.0001,
+          "rolling_length_m": 2.2050920451900284e-05,
+          "time_constant": 0.008,
+          "distance_m": [
+            2.0,
+            2.2
+          ]
+        },
+        "launch": {
+          "no_slip_error": 8.673617379884035e-19,
+          "support_point": [
+            0.0,
+            0.0,
+            -0.03367865465498269
+          ],
+          "axis_world": [
+            0.99999159966735,
+            -0.004098852855944384,
+            -2.220446049250313e-16
+          ],
+          "initial_support_clearance": 0.0003,
+          "configured_speed_mps": [
+            0.8,
+            1.3
+          ],
+          "configured_distance_m": [
+            2.0,
+            2.2
+          ]
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 0.9733400778132805,
+          "mass_scale": 0.9709707499734517,
+          "friction_scale": 0.878371807486391,
+          "rolling_scale": 1.102546022595014,
+          "damping_scale": 1.0
+        }
+      },
+      "stable_hold": false,
+      "success_version": null,
+      "diagnostics": {}
+    },
+    {
+      "slot": 1,
+      "episode": 4,
+      "success": false,
+      "reason": "ball_on_floor",
+      "steps": 56,
+      "reward": 181.70010401158203,
+      "legacy_success": false,
+      "physics": {
+        "version": "roll_v1",
+        "object": "tomato_soup_can",
+        "shape": "cylinder",
+        "mass_kg": 0.36674461333604885,
+        "dimensions_m": [
+          0.0709789323445544,
+          0.0709789323445544,
+          0.10536718321908851
+        ],
+        "inertia": [
+          0.00045478623984720085,
+          0.00045478623984720085,
+          0.0002309578253532311
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "cylinder",
+          "sliding_friction": 0.3336620577851273,
+          "torsional_length_m": 0.0001,
+          "rolling_length_m": 1.839567072987558e-05,
+          "time_constant": 0.008,
+          "distance_m": [
+            2.0,
+            2.2
+          ]
+        },
+        "launch": {
+          "no_slip_error": 2.237726045655905e-16,
+          "support_point": [
+            0.0,
+            0.0,
+            -0.0354894661722772
+          ],
+          "axis_world": [
+            0.9866548417667957,
+            0.16282574494882268,
+            0.0
+          ],
+          "initial_support_clearance": 0.0003,
+          "configured_speed_mps": [
+            0.8,
+            1.3
+          ],
+          "configured_distance_m": [
+            2.0,
+            2.2
+          ]
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0256739801382022,
+          "mass_scale": 1.050844164286673,
+          "friction_scale": 1.1122068592837577,
+          "rolling_scale": 0.9197835364937789,
+          "damping_scale": 1.0
+        }
+      },
+      "stable_hold": false,
+      "success_version": null,
+      "diagnostics": {}
+    },
+    {
+      "slot": 2,
+      "episode": 4,
+      "success": false,
+      "reason": "ball_on_floor",
+      "steps": 58,
+      "reward": 156.92639058914855,
+      "legacy_success": false,
+      "physics": {
+        "version": "roll_v1",
+        "object": "tomato_soup_can",
+        "shape": "cylinder",
+        "mass_kg": 0.3558654926883207,
+        "dimensions_m": [
+          0.07037571802587282,
+          0.07037571802587282,
+          0.10447172041713534
+        ],
+        "inertia": [
+          0.0004338266256389748,
+          0.0004338266256389748,
+          0.00022031373260451257
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "cylinder",
+          "sliding_friction": 0.27917262261219833,
+          "torsional_length_m": 0.0001,
+          "rolling_length_m": 1.935304341034351e-05,
+          "time_constant": 0.008,
+          "distance_m": [
+            2.0,
+            2.2
+          ]
+        },
+        "launch": {
+          "no_slip_error": 1.1102230246251565e-16,
+          "support_point": [
+            0.0,
+            0.0,
+            -0.035187859012936425
+          ],
+          "axis_world": [
+            0.9991210925484358,
+            -0.04191708988968336,
+            -2.2204460492503128e-16
+          ],
+          "initial_support_clearance": 0.0003,
+          "configured_speed_mps": [
+            0.8,
+            1.3
+          ],
+          "configured_distance_m": [
+            2.0,
+            2.2
+          ]
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.0169572918099654,
+          "mass_scale": 1.0196718988204032,
+          "friction_scale": 0.9305754087073278,
+          "rolling_scale": 0.9676521705171753,
+          "damping_scale": 1.0
+        }
+      },
+      "stable_hold": false,
+      "success_version": null,
+      "diagnostics": {}
+    },
+    {
+      "slot": 3,
+      "episode": 4,
+      "success": false,
+      "reason": "out_of_bounds",
+      "steps": 44,
+      "reward": 131.1770895118428,
+      "legacy_success": false,
+      "physics": {
+        "version": "roll_v1",
+        "object": "tomato_soup_can",
+        "shape": "cylinder",
+        "mass_kg": 0.3388687917407346,
+        "dimensions_m": [
+          0.06735730930996535,
+          0.06735730930996535,
+          0.09999093698332372
+        ],
+        "inertia": [
+          0.0003784301083794641,
+          0.0003784301083794641,
+          0.000192181265002375
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "cylinder",
+          "sliding_friction": 0.2635115422459173,
+          "torsional_length_m": 0.0001,
+          "rolling_length_m": 2.2050920451900284e-05,
+          "time_constant": 0.008,
+          "distance_m": [
+            2.0,
+            2.2
+          ]
+        },
+        "launch": {
+          "no_slip_error": 0.0,
+          "support_point": [
+            0.0,
+            0.0,
+            -0.033678654654982675
+          ],
+          "axis_world": [
+            0.9874681515261324,
+            -0.15781840742309888,
+            0.0
+          ],
+          "initial_support_clearance": 0.0003,
+          "configured_speed_mps": [
+            0.8,
+            1.3
+          ],
+          "configured_distance_m": [
+            2.0,
+            2.2
+          ]
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 0.9733400778132805,
+          "mass_scale": 0.9709707499734517,
+          "friction_scale": 0.878371807486391,
+          "rolling_scale": 1.102546022595014,
+          "damping_scale": 1.0
+        }
+      },
+      "stable_hold": false,
+      "success_version": null,
+      "diagnostics": {}
+    },
+    {
+      "slot": 0,
+      "episode": 4,
+      "success": true,
+      "reason": "timeout",
+      "steps": 63,
+      "reward": 379.99664469248825,
+      "legacy_success": false,
+      "physics": {
+        "version": "roll_v1",
+        "object": "tomato_soup_can",
+        "shape": "cylinder",
+        "mass_kg": 0.3570220917738359,
+        "dimensions_m": [
+          0.07105558993036852,
+          0.07105558993036852,
+          0.10548098028003049
+        ],
+        "inertia": [
+          0.0004436865223074587,
+          0.0004436865223074587,
+          0.0002253209647791837
+        ],
+        "inertia_basis": "structural analytical approximation",
+        "surface_id": "generic_dry_rigid_surface_prior_v1",
+        "material": {
+          "kind": "cylinder",
+          "sliding_friction": 0.2645403988800044,
+          "torsional_length_m": 0.0001,
+          "rolling_length_m": 1.701106969483867e-05,
+          "time_constant": 0.008,
+          "distance_m": [
+            2.0,
+            2.2
+          ]
+        },
+        "launch": {
+          "no_slip_error": 2.7755575615628914e-17,
+          "support_point": [
+            0.0,
+            0.0,
+            -0.035527794965184274
+          ],
+          "axis_world": [
+            0.9906029494764742,
+            0.13676913573065339,
+            -2.2204460492503128e-16
+          ],
+          "initial_support_clearance": 0.0003,
+          "configured_speed_mps": [
+            0.8,
+            1.3
+          ],
+          "configured_distance_m": [
+            2.0,
+            2.2
+          ]
+        },
+        "sampling": "fixed_object_per_environment",
+        "status": "simulation_priors_not_specimen_measurements",
+        "randomization": {
+          "version": "physical_dr_v1",
+          "sampling": "environment_creation",
+          "size_scale": 1.026781712933732,
+          "mass_scale": 1.0229859363147162,
+          "friction_scale": 0.8818013296000147,
+          "rolling_scale": 0.8505534847419334,
+          "damping_scale": 1.0
+        }
+      },
+      "stable_hold": true,
+      "success_version": null,
+      "diagnostics": {}
+    }
+  ],
+  "checkpoint": "/home/isee/Catch/11-10/roll_catch_best_reward_237.70.pth"
+}

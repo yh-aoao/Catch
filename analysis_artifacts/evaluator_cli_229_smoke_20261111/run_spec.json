@@ -1,0 +1,37 @@
+{
+  "episodes": 4,
+  "instances": 2,
+  "seed": 41000,
+  "models": [
+    {
+      "name": "roll_dr_229_39",
+      "motion": "roll",
+      "physics": "dr",
+      "checkpoint": "/home/isee/Catch/11-11/roll_catch_best_reward_229.39.pth",
+      "checkpoint_sha256": "f64048326240a454aaa3d74e1eed4971ae9cbf89bd711822fd7c2ba410ad714f"
+    }
+  ],
+  "objects": [
+    "original"
+  ],
+  "catalog_sha256": "67e2de3d33d57ee3ea7c0661230ba45ead68c1fe5e3f141b9e0d0c3cb30e6d90",
+  "source_sha256": {
+    "scripts/evaluate_multitarget_catch.py": "7f5be11dc1000517b375546a0588fcf56fb674aa797c3f38c6ca1cacaef88018",
+    "scripts/_eval_multitarget_worker.py": "3369a3c0422ea4e3a4140b203b7b86b05b06c40c4dcfb2c6b19fe74796246095",
+    "train_DCMM.py": "792cccc14864cea7f1990cc2dd4bca32b730f533366503615806eb00077289ef",
+    "configs/config.yaml": "648e3700689a520868854f6ed6b33d0905b4df14b75a1acf8645d3b9ff4f5589",
+    "configs/train/DcmmPPO.yaml": "24b38442bdddc431f3a6ab9e6b52d9f30c0a49933eebeeb5e8ea13494ac736ee",
+    "gym_dcmm/envs/object_benchmark.py": "6a649d497d09631d347c866de57c252c395796c9893a3f1dcb9c00b3b8cc55d5",
+    "gym_dcmm/envs/roll_physical.py": "3546941dd3b2f09c8e7396da6b14b75cb7a47892f8417066fb64f638dc13d774",
+    "gym_dcmm/envs/bounce_physical_v2.py": "1cb1e455f45fb123e94c41aa58ce7ad43f298025e3bd538944a1aa002a2cc43f",
+    "ycb_objects/benchmark_geometry.py": "be7b50d388fc8b2213d24dfbdf1ec8615a12b939521a6b0ddecf857493726dd3",
+    "ycb_objects/benchmark_randomization.py": "1358a6d670ed566ad673a8c26d8100437744dc453e81d5a3d100b493769a049b",
+    "ycb_objects/calibration_data/balls.roll_table_priors_v1.json": "d6c3da0c92a73ade608f0509e44ab92ab14eafadb40a100a173e4ec899806a14",
+    "ycb_objects/calibration_data/balls.three_ball_training_v1.json": "4f8b6b5397ae56eae3c46af8a2e96d348e8477511cb56a1960d575f60083488e",
+    "gym_dcmm/envs/DcmmVecEnv_roll_645edc4.py": "fac469c8c8ff75ad3e3ef23a0b9e1840e115aba796ccc6b2403ba4ae109fe53f",
+    "gym_dcmm/envs/bounce_grasp.py": "f130370f930c412d7fbf9793e12ed12cae91c34551a6d317e03164b58a482582",
+    "gym_dcmm/utils/roll_evaluation.py": "9b952076a427417ba7307c4439bb4ecd143ec42005456c57425eb113edde83b8",
+    "gym_dcmm/algs/ppo_dcmm_645edc4/ppo_dcmm_catch_two_stage.py": "30b4e176023be0866d9d055a8b6344cc803f7acbbea12cf644bdc3df60fb703f",
+    "gym_dcmm/algs/ppo_dcmm_5fe75d5f/ppo_dcmm_catch_hold.py": "4c4c30efa972b0ffb1939cf6a06255ec70323e04e236250bb0e19e800ae2db87"
+  }
+}

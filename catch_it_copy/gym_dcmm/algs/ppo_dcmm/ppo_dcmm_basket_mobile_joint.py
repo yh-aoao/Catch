@@ -24,6 +24,10 @@ class PPO_Basket_MobileJoint(PPO_Catch_OneStage):
         self.model = JointActorCritic(list(self.network_config.mlp.units),self.conditioned).to(self.device)
         self.running_mean_std = JointNormalizer(self.conditioned).to(self.device)
         self.input_normalization_frozen = False
+        from gym_dcmm.envs.basket_free_stop import options as free_options
+        self.free_stop_options=free_options(full_config.basket_free_stop) if full_config.get('basket_free_stop') else {}
+        if self.free_stop_options and any(v!=self.free_stop_options for v in self.env.call('free_stop_options')):
+            raise ValueError('Workers disagree on free stopping region')
         self.single_ball=str(full_config.get('basket_mixed_ball','off'))
         self.single_ball_protocol=None
         if self.single_ball!='off':
@@ -40,6 +44,11 @@ class PPO_Basket_MobileJoint(PPO_Catch_OneStage):
         if not full_config.test:
             source_path=full_config.basket_throw_checkpoint
             checkpoint=torch.load(source_path,map_location=self.device,weights_only=False)
+            if self.free_stop_options:
+                bounds=checkpoint.get('basket_range',{}).get('y_offset_range')
+                selected=self.free_stop_options['y_offset_range']
+                if bounds is None or selected[0]<bounds[0] or selected[1]>bounds[1]:
+                    raise ValueError('Stopping region must stay within the source trained distance range')
             if self.single_ball!='off':
                 from .basket_mixed_policy import single_ball_fixed35
                 if checkpoint.get('basket_mixed_options')!=dict(full_config.basket_mixed_options):
@@ -260,6 +269,7 @@ class PPO_Basket_MobileJoint(PPO_Catch_OneStage):
             weights.update(basket_trained_ball=self.single_ball,basket_ball_protocol=self.single_ball_protocol,
                 basket_delivery_version=self.delivery_version,basket_delivery_options=self.delivery_options,
                 basket_conditioned_mobile=self.conditioned)
+        weights['basket_free_stop']=self.free_stop_options
         torch.save(weights,f'{name}.pth')
 
     def restore_test(self,fn):
@@ -274,6 +284,8 @@ class PPO_Basket_MobileJoint(PPO_Catch_OneStage):
                 raise ValueError('Use matching single-ball mobile checkpoint and reward preset')
         elif checkpoint.get('basket_trained_ball') in ('tennis_ball','baseball'):
             raise ValueError('Single-ball mobile checkpoint requires its matching ball preset')
+        if checkpoint.get('basket_free_stop',{})!=self.free_stop_options:
+            raise ValueError('Checkpoint stopping geometry differs; use its matching configuration')
         self._validate_mobile_checkpoint(checkpoint)
         if checkpoint.get('joint_actor_version') != 'phase_conditioned_base2_arm18_v1':
             raise ValueError('Use the new jointly trained BasketMobile41 checkpoint, not the frozen version')

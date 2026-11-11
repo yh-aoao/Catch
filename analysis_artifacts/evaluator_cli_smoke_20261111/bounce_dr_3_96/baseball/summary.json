@@ -1,0 +1,46 @@
+{
+  "name": "bounce_dr_3_96",
+  "motion": "bounce",
+  "physics": "dr",
+  "checkpoint": "/home/isee/Catch/11-11/bounce_catch_best_reward_3.96.pth",
+  "checkpoint_sha256": "bb44d0495ecd27aae1ed5922969185a02e05e6493fbc632fd98fccd569219413",
+  "object": "baseball",
+  "seed": 41000,
+  "episodes": 4,
+  "instances": 2,
+  "case_dir": "/home/isee/Catch/analysis_artifacts/evaluator_cli_smoke_20261111/bounce_dr_3_96/baseball",
+  "completed": true,
+  "successes": 3,
+  "success_rate": 0.75,
+  "wilson_95_interval": [
+    0.30064184258240184,
+    0.9544127391902995
+  ],
+  "stable_hold_episodes": null,
+  "stable_hold_rate": null,
+  "reasons": {
+    "controlled_hold": 3,
+    "timeout": 1
+  },
+  "parameter_samples": [
+    {
+      "version": "physical_dr_v1",
+      "sampling": "environment_creation",
+      "size_scale": 1.026781712933732,
+      "mass_scale": 1.0229859363147162,
+      "friction_scale": 0.8818013296000147,
+      "rolling_scale": 1.0,
+      "damping_scale": 0.9252767423709667
+    },
+    {
+      "version": "physical_dr_v1",
+      "sampling": "environment_creation",
+      "size_scale": 1.0256739801382022,
+      "mass_scale": 1.050844164286673,
+      "friction_scale": 1.1122068592837577,
+      "rolling_scale": 1.0,
+      "damping_scale": 0.9598917682468895
+    }
+  ],
+  "wall_seconds": 17.666326315999868
+}

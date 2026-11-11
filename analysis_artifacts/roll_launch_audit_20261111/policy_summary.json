@@ -1,0 +1,65 @@
+[
+  {
+    "object": "apple",
+    "stage": "track",
+    "episodes": 20,
+    "passive_valid": 18,
+    "successes": 18,
+    "hand_contact": 18,
+    "hand_on_table": 0,
+    "successes_given_passive_valid": 18,
+    "valid_denominator": 18,
+    "reasons": {
+      "collision_or_failure": 18,
+      "timeout": 2
+    }
+  },
+  {
+    "object": "apple",
+    "stage": "catch",
+    "episodes": 20,
+    "passive_valid": 18,
+    "successes": 4,
+    "hand_contact": 18,
+    "hand_on_table": 0,
+    "successes_given_passive_valid": 4,
+    "valid_denominator": 18,
+    "reasons": {
+      "ball_on_floor": 12,
+      "timeout": 6,
+      "base_collision": 1,
+      "ball_left": 1
+    }
+  },
+  {
+    "object": "lemon",
+    "stage": "track",
+    "episodes": 20,
+    "passive_valid": 20,
+    "successes": 16,
+    "hand_contact": 16,
+    "hand_on_table": 0,
+    "successes_given_passive_valid": 16,
+    "valid_denominator": 20,
+    "reasons": {
+      "collision_or_failure": 20
+    }
+  },
+  {
+    "object": "lemon",
+    "stage": "catch",
+    "episodes": 20,
+    "passive_valid": 20,
+    "successes": 9,
+    "hand_contact": 19,
+    "hand_on_table": 0,
+    "successes_given_passive_valid": 9,
+    "valid_denominator": 20,
+    "reasons": {
+      "timeout": 8,
+      "ball_on_floor": 9,
+      "catch_success": 1,
+      "base_collision": 2
+    }
+  }
+]

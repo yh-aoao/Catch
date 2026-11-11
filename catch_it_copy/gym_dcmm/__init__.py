@@ -21,3 +21,5 @@ register(id="gym_dcmm/ObjectBenchmark-v1", entry_point="gym_dcmm.envs.object_ben
          vector_entry_point="gym_dcmm.envs.object_benchmark:make_benchmark_vector")
 
 register(id="gym_dcmm/BasketMixed-v0", entry_point="gym_dcmm.envs.basket_mixed:BasketMixedEnv")
+
+register(id='gym_dcmm/BasketFreeStop-v0', entry_point='gym_dcmm.envs.basket_free_stop:BasketFreeStopEnv')

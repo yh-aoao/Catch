@@ -1,0 +1,46 @@
+{
+  "name": "roll_dr_relaunch_222_64",
+  "motion": "roll",
+  "physics": "dr",
+  "checkpoint": "/home/isee/Catch/11-11/roll_catch_best_reward_222.64.pth",
+  "checkpoint_sha256": "1321d96c3d04556223028b6438adea750fed327fb0645b7bc2f1f0fa53f24030",
+  "object": "baseball",
+  "seed": 41000,
+  "episodes": 4,
+  "instances": 2,
+  "case_dir": "/home/isee/Catch/analysis_artifacts/evaluator_cli_smoke_20261111/roll_dr_relaunch_222_64/baseball",
+  "completed": true,
+  "successes": 3,
+  "success_rate": 0.75,
+  "wilson_95_interval": [
+    0.30064184258240184,
+    0.9544127391902995
+  ],
+  "stable_hold_episodes": 2,
+  "stable_hold_rate": 0.5,
+  "reasons": {
+    "timeout": 3,
+    "ball_on_floor": 1
+  },
+  "parameter_samples": [
+    {
+      "version": "physical_dr_v1",
+      "sampling": "environment_creation",
+      "size_scale": 1.026781712933732,
+      "mass_scale": 1.0229859363147162,
+      "friction_scale": 0.8818013296000147,
+      "rolling_scale": 0.8505534847419334,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_v1",
+      "sampling": "environment_creation",
+      "size_scale": 1.0256739801382022,
+      "mass_scale": 1.050844164286673,
+      "friction_scale": 1.1122068592837577,
+      "rolling_scale": 0.9197835364937789,
+      "damping_scale": 1.0
+    }
+  ],
+  "wall_seconds": 5.23176784899988
+}

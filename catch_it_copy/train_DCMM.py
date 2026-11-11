@@ -118,6 +118,8 @@ def main(config: DictConfig):
     single_mobile=(mixed_basket and config.basket_reward_version=='basket_mobile_v1'
                    and config.basket_training_stage=='mobile_joint'
                    and mixed_ball in ('mixed','tennis_ball','baseball'))
+    if config.get('basket_free_stop') and not (single_mobile and mixed_ball=='mixed'):
+        raise ValueError('basket_free_stop requires three-ball mobile_joint')
     if single_mobile and (config.test_object!='default' or config.object_eval or config.basket_mixed_source):
         raise ValueError('Single mobile uses basket_throw_checkpoint and its native ball physics')
     if mixed_basket:
@@ -298,7 +300,7 @@ def main(config: DictConfig):
                   'catch=' + bounce_grasp_version, flush=True)
             print('[bounce-launch] mode=' + str(config.bounce_launch) + '; baseball_intercept_v1 applies only when the sampled ball is baseball', flush=True)
     if mixed_basket:
-        env_name='gym_dcmm/BasketMixed-v0'
+        env_name='gym_dcmm/BasketFreeStop-v0' if config.get('basket_free_stop') else 'gym_dcmm/BasketMixed-v0'
     if benchmark != 'off':
         env_name='gym_dcmm/ObjectBenchmark-v1'
         print('[object-benchmark] '+benchmark+'; real collision shapes; per-environment object; existing task rewards',flush=True)
@@ -357,7 +359,9 @@ def main(config: DictConfig):
                         'basket_mixed_options': OmegaConf.to_container(config.basket_mixed_options,resolve=True),
                         'basket_delivery_version':delivery_version,
                         'basket_delivery_options':delivery_options,
-                        'basket_range':OmegaConf.to_container(config.basket_range,resolve=True) if config.get('basket_range') else {}}
+                        'basket_range':OmegaConf.to_container(config.basket_range,resolve=True) if config.get('basket_range') else {},
+                        **({'basket_free_stop':OmegaConf.to_container(config.basket_free_stop,resolve=True)}
+                           if config.get('basket_free_stop') else {})}
                        if mixed_basket else {}),
                     **({'test_object': str(config.test_object), 'ycb_joint_damping': ycb_joint_damping,
                         'ycb_collision': ycb_collision, 'roll_speed': roll_speed,

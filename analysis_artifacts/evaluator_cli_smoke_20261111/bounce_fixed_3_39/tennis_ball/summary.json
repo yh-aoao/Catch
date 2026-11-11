@@ -1,0 +1,31 @@
+{
+  "name": "bounce_fixed_3_39",
+  "motion": "bounce",
+  "physics": "fixed",
+  "checkpoint": "/home/isee/Catch/11-11/bounce_catch_best_reward_3.39.pth",
+  "checkpoint_sha256": "0d81ddd306a513492764ed23a5ecba29e4d47697d43bdeb4f3a485fe6e5d5898",
+  "object": "tennis_ball",
+  "seed": 41000,
+  "episodes": 4,
+  "instances": 2,
+  "case_dir": "/home/isee/Catch/analysis_artifacts/evaluator_cli_smoke_20261111/bounce_fixed_3_39/tennis_ball",
+  "completed": true,
+  "successes": 2,
+  "success_rate": 0.5,
+  "wilson_95_interval": [
+    0.15003898915214947,
+    0.8499610108478506
+  ],
+  "stable_hold_episodes": null,
+  "stable_hold_rate": null,
+  "reasons": {
+    "controlled_hold": 2,
+    "base_collision": 1,
+    "timeout": 1
+  },
+  "parameter_samples": [
+    null,
+    null
+  ],
+  "wall_seconds": 16.29518364500018
+}

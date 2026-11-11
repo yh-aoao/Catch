@@ -1599,4 +1599,23 @@ roll：三类（球类、水果类、圆柱体）
 
 basket的问题：最好还是设计成多球类？根据视觉来估计半径，质量根据灵巧手的传感器来获取？
 
-210:future模型
+210:future模型，重新训练的
+
+后续要做的：
+1.basket增加移动
+2.模型继续训练
+3.roll和bounce想想怎么提升
+
+orange、apple、lemon、tomato_soup_can
+original、tennis_ball、baseball、racquetball、golf_ball、softball
+
+————————————————————11-11开会进度——————————————————————
+1.模型目前先用future
+2.泛化的benchmark目前也先这样
+3.抛的话两版都先留着，因为效果还可以
+4.真机
+
+后续任务：
+1.让roll跟bounce的泛化数据更好看
+2.throw也需要做数据集跟泛化（可以下周开会问问老师怎么搞）
+3.抛的话进行下一步的移动

@@ -1,0 +1,12 @@
+# Continue the range-trained fixed37 skill; learn where to stop within its range.
+defaults:
+  - basket_mobile_three_ball
+  - _self_
+basket_throw_checkpoint: /home/isee/Catch/11-11/throw_basket_catch_best_reward_37.86.pth
+basket_range: {}
+basket_free_stop:
+  y_offset_range: [-0.08, 0.08]
+basket_mobile:
+  hold_position: false
+  approach_braking: false
+output_name: BasketThreeBallFreeStop

@@ -124,6 +124,9 @@ def update_physics(state, launch, parking, position, velocity, center,
                 cfg.mobile_release_position_tolerance or cfg.basket_track_position_tolerance)))
             eligible = position_ok and parking['speed'] < (
                 cfg.mobile_release_speed_tolerance or cfg.basket_track_speed_tolerance)
+        if parking.get('free_stop'):
+            eligible=bool(parking['in_position'] and parking['speed']<(
+                cfg.mobile_release_speed_tolerance or cfg.basket_track_speed_tolerance))
         state['last_contact_qualified'] = bool(state['unlocked'] and eligible)
         state['release_parking_distance'] = parking['distance']
         state['release_base_speed'] = parking['speed']

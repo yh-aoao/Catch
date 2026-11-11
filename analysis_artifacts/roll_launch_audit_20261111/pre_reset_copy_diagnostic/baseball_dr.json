@@ -1,0 +1,5398 @@
+{
+  "object": "baseball",
+  "mode": "dr",
+  "episodes": 80,
+  "valid": 80,
+  "stopped": 0,
+  "late": 0,
+  "not_departed": 0,
+  "early": 0,
+  "arrival_window": 76,
+  "time_quantiles": [
+    1.0100000000000007,
+    1.1756000000000009,
+    1.5160000000000011,
+    1.8322000000000014,
+    2.255999999999973
+  ],
+  "instances": [
+    {
+      "slot": 0,
+      "draw": {
+        "version": "physical_dr_v1",
+        "sampling": "environment_creation",
+        "size_scale": 1.0412207061191439,
+        "mass_scale": 1.035081587270373,
+        "friction_scale": 0.9201365671826482,
+        "rolling_scale": 1.1646284457878582,
+        "damping_scale": 1.0
+      }
+    },
+    {
+      "slot": 1,
+      "draw": {
+        "version": "physical_dr_v1",
+        "sampling": "environment_creation",
+        "size_scale": 0.9546231640709276,
+        "mass_scale": 0.9671852586699169,
+        "friction_scale": 0.9661918837044671,
+        "rolling_scale": 1.1222932191901358,
+        "damping_scale": 1.0
+      }
+    },
+    {
+      "slot": 2,
+      "draw": {
+        "version": "physical_dr_v1",
+        "sampling": "environment_creation",
+        "size_scale": 1.0269769925392676,
+        "mass_scale": 1.043737819260048,
+        "friction_scale": 1.081783441206793,
+        "rolling_scale": 0.8927253069920417,
+        "damping_scale": 1.0
+      }
+    },
+    {
+      "slot": 3,
+      "draw": {
+        "version": "physical_dr_v1",
+        "sampling": "environment_creation",
+        "size_scale": 1.0215988175525106,
+        "mass_scale": 0.9719400444319723,
+        "friction_scale": 1.1270586233848827,
+        "rolling_scale": 0.866569388313789,
+        "damping_scale": 1.0
+      }
+    },
+    {
+      "slot": 4,
+      "draw": {
+        "version": "physical_dr_v1",
+        "sampling": "environment_creation",
+        "size_scale": 0.9879689136103641,
+        "mass_scale": 0.9058509241714409,
+        "friction_scale": 0.9079810810465848,
+        "rolling_scale": 0.8446167147298554,
+        "damping_scale": 1.0
+      }
+    },
+    {
+      "slot": 5,
+      "draw": {
+        "version": "physical_dr_v1",
+        "sampling": "environment_creation",
+        "size_scale": 1.0056199995646662,
+        "mass_scale": 1.0487043184037352,
+        "friction_scale": 1.0603892358385025,
+        "rolling_scale": 0.8195002131148292,
+        "damping_scale": 1.0
+      }
+    },
+    {
+      "slot": 6,
+      "draw": {
+        "version": "physical_dr_v1",
+        "sampling": "environment_creation",
+        "size_scale": 1.028227272608265,
+        "mass_scale": 0.9736446359587616,
+        "friction_scale": 0.9888115604353462,
+        "rolling_scale": 1.1171866283838954,
+        "damping_scale": 1.0
+      }
+    },
+    {
+      "slot": 7,
+      "draw": {
+        "version": "physical_dr_v1",
+        "sampling": "environment_creation",
+        "size_scale": 1.0023354834245137,
+        "mass_scale": 1.0566091427606479,
+        "friction_scale": 0.8738338299507391,
+        "rolling_scale": 0.8842523344053634,
+        "damping_scale": 1.0
+      }
+    }
+  ],
+  "rows": [
+    {
+      "seed": 70000,
+      "initial": {
+        "position": [
+          0.16005369663154861,
+          2.1489141592862055,
+          0.7378674437366746
+        ],
+        "quaternion": [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "velocity": [
+          -0.05913223802155818,
+          -0.8430417820701731,
+          0.0,
+          22.38117850427297,
+          -1.5698500390666161,
+          0.0
+        ],
+        "mass": 0.14284125904331146,
+        "inertia": [
+          8.106734639611762e-05,
+          8.106734639611762e-05,
+          8.106734639611762e-05
+        ]
+      },
+      "departure": 1.5700000000000012,
+      "launch_valid": true,
+      "arrival_window": true,
+      "early": false,
+      "stopped": false,
+      "stopped_at_2p5": null,
+      "final_speed": 0.925985769764112,
+      "final_position": [
+        0.07027732207150537,
+        0.8609680696398014,
+        0.4169963259868944
+      ],
+      "table": {
+        "center": [
+          0.0,
+          2.5,
+          0.37
+        ],
+        "half_size": [
+          1.2,
+          1.6,
+          0.02
+        ],
+        "edge_y": 0.8999999999999999,
+        "top_z": 0.39
+      },
+      "slot": 0,
+      "draw": {
+        "version": "physical_dr_v1",
+        "sampling": "environment_creation",
+        "size_scale": 1.0412207061191439,
+        "mass_scale": 1.035081587270373,
+        "friction_scale": 0.9201365671826482,
+        "rolling_scale": 1.1646284457878582,
+        "damping_scale": 1.0
+      }
+    },
+    {
+      "seed": 70001,
+      "initial": {
+        "position": [
+          0.2384130451357479,
+          2.230609915427421,
+          0.7378674437366746
+        ],
+        "quaternion": [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "velocity": [
+          0.1555900983659715,
+          -0.952143361227336,
+          0.0,
+          25.27762085167169,
+          4.130625360554597,
+          0.0
+        ],
+        "mass": 0.14284125904331146,
+        "inertia": [
+          8.106734639611762e-05,
+          8.106734639611762e-05,
+          8.106734639611762e-05
+        ]
+      },
+      "departure": 1.472000000000001,
+      "launch_valid": true,
+      "arrival_window": true,
+      "early": false,
+      "stopped": false,
+      "stopped_at_2p5": null,
+      "final_speed": 1.0075633374206072,
+      "final_position": [
+        0.46221124973604605,
+        0.8621233671136559,
+        0.4197214202788544
+      ],
+      "table": {
+        "center": [
+          0.0,
+          2.5,
+          0.37
+        ],
+        "half_size": [
+          1.2,
+          1.6,
+          0.02
+        ],
+        "edge_y": 0.8999999999999999,
+        "top_z": 0.39
+      },
+      "slot": 0,
+      "draw": {
+        "version": "physical_dr_v1",
+        "sampling": "environment_creation",
+        "size_scale": 1.0412207061191439,
+        "mass_scale": 1.035081587270373,
+        "friction_scale": 0.9201365671826482,
+        "rolling_scale": 1.1646284457878582,
+        "damping_scale": 1.0
+      }
+    },
+    {
+      "seed": 70002,
+      "initial": {
+        "position": [
+          -0.1042938818555833,
+          2.365219612284017,
+          0.7378674437366746
+        ],
+        "quaternion": [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "velocity": [
+          0.09186009498168242,
+          -1.2564048566287997,
+          0.0,
+          33.35519302589444,
+          2.4387132724975333,
+          0.0
+        ],
+        "mass": 0.14284125904331146,
+        "inertia": [
+          8.106734639611762e-05,
+          8.106734639611762e-05,
+          8.106734639611762e-05
+        ]
+      },
+      "departure": 1.2200000000000009,
+      "launch_valid": true,
+      "arrival_window": true,
+      "early": false,
+      "stopped": false,
+      "stopped_at_2p5": null,
+      "final_speed": 1.2637439562611175,
+      "final_position": [
+        0.0038363329660433152,
+        0.860356950101443,
+        0.4228850068433963
+      ],
+      "table": {
+        "center": [
+          0.0,
+          2.5,
+          0.37
+        ],
+        "half_size": [
+          1.2,
+          1.6,
+          0.02
+        ],
+        "edge_y": 0.8999999999999999,
+        "top_z": 0.39
+      },
+      "slot": 0,
+      "draw": {
+        "version": "physical_dr_v1",
+        "sampling": "environment_creation",
+        "size_scale": 1.0412207061191439,
+        "mass_scale": 1.035081587270373,
+        "friction_scale": 0.9201365671826482,
+        "rolling_scale": 1.1646284457878582,
+        "damping_scale": 1.0
+      }
+    },
+    {
+      "seed": 70003,
+      "initial": {
+        "position": [
+          0.1682924648559419,
+          2.487334861900687,
+          0.7378674437366746
+        ],
+        "quaternion": [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "velocity": [
+          0.12363859945922223,
+          -1.2042896337303433,
+          0.0,
+          31.97163158055763,
+          3.2823729776714985,
+          0.0
+        ],
+        "mass": 0.14284125904331146,
+        "inertia": [
+          8.106734639611762e-05,
+          8.106734639611762e-05,
+          8.106734639611762e-05
+        ]
+      },
+      "departure": 1.378000000000001,
+      "launch_valid": true,
+      "arrival_window": true,
+      "early": false,
+      "stopped": false,
+      "stopped_at_2p5": null,
+      "final_speed": 1.2156432786523577,
+      "final_position": [
+        0.33366815303235636,
+        0.8607488255214135,
+        0.42249910991050904
+      ],
+      "table": {
+        "center": [
+          0.0,
+          2.5,
+          0.37
+        ],
+        "half_size": [
+          1.2,
+          1.6,
+          0.02
+        ],
+        "edge_y": 0.8999999999999999,
+        "top_z": 0.39
+      },
+      "slot": 0,
+      "draw": {
+        "version": "physical_dr_v1",
+        "sampling": "environment_creation",
+        "size_scale": 1.0412207061191439,
+        "mass_scale": 1.035081587270373,
+        "friction_scale": 0.9201365671826482,
+        "rolling_scale": 1.1646284457878582,
+        "damping_scale": 1.0
+      }
+    },
+    {
+      "seed": 70004,
+      "initial": {
+        "position": [
+          -0.007898464192518273,
+          2.4624980412595203,
+          0.7378674437366746
+        ],
+        "quaternion": [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "velocity": [
+          0.1606039927719528,
+          -1.0219562302920429,
+          0.0,
+          27.13102161740335,
+          4.2637348553488925,
+          0.0
+        ],
+        "mass": 0.14284125904331146,
+        "inertia": [
+          8.106734639611762e-05,
+          8.106734639611762e-05,
+          8.106734639611762e-05
+        ]
+      },
+      "departure": 1.6060000000000012,
+      "launch_valid": true,
+      "arrival_window": true,
+      "early": false,
+      "stopped": false,
+      "stopped_at_2p5": null,
+      "final_speed": 1.0621346921497126,
+      "final_position": [
+        0.2439510074020481,
+        0.8607296429010352,
+        0.4203948474700366
+      ],
+      "table": {
+        "center": [
+          0.0,
+          2.5,
+          0.37
+        ],
+        "half_size": [
+          1.2,
+          1.6,
+          0.02
+        ],
+        "edge_y": 0.8999999999999999,
+        "top_z": 0.39
+      },
+      "slot": 0,
+      "draw": {
+        "version": "physical_dr_v1",
+        "sampling": "environment_creation",
+        "size_scale": 1.0412207061191439,
+        "mass_scale": 1.035081587270373,
+        "friction_scale": 0.9201365671826482,
+        "rolling_scale": 1.1646284457878582,
+        "damping_scale": 1.0
+      }
+    },
+    {
+      "seed": 70005,
+      "initial": {
+        "position": [
+          0.24637313241024994,
+          2.561179947956294,
+          0.7378674437366746
+        ],
+        "quaternion": [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "velocity": [
+          0.42302571315923865,
+          -0.9945101509993544,
+          0.0,
+          26.402379677043434,
+          11.23053945780141,
+          0.0
+        ],
+        "mass": 0.14284125904331146,
+        "inertia": [
+          8.106734639611762e-05,
+          8.106734639611762e-05,
+          8.106734639611762e-05
+        ]
+      },
+      "departure": 1.7540000000000013,
+      "launch_valid": true,
+      "arrival_window": true,
+      "early": false,
+      "stopped": false,
+      "stopped_at_2p5": null,
+      "final_speed": 1.1020296958569624,
+      "final_position": [
+        0.976198902148778,
+        0.862202258405107,
+        0.4205042765557589
+      ],
+      "table": {
+        "center": [
+          0.0,
+          2.5,
+          0.37
+        ],
+        "half_size": [
+          1.2,
+          1.6,
+          0.02
+        ],
+        "edge_y": 0.8999999999999999,
+        "top_z": 0.39
+      },
+      "slot": 0,
+      "draw": {
+        "version": "physical_dr_v1",
+        "sampling": "environment_creation",
+        "size_scale": 1.0412207061191439,
+        "mass_scale": 1.035081587270373,
+        "friction_scale": 0.9201365671826482,
+        "rolling_scale": 1.1646284457878582,
+        "damping_scale": 1.0
+      }
+    },
+    {
+      "seed": 70006,
+      "initial": {
+        "position": [
+          0.20659529470592725,
+          2.2570249581804096,
+          0.7378674437366746
+        ],
+        "quaternion": [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "velocity": [
+          -0.033591174098171105,
+          -1.2136328170723614,
+          0.0,
+          32.21967557864081,
+          -0.8917826846175211,
+          0.0
+        ],
+        "mass": 0.14284125904331146,
+        "inertia": [
+          8.106734639611762e-05,
+          8.106734639611762e-05,
+          8.106734639611762e-05
+        ]
+      },
+      "departure": 1.1720000000000008,
+      "launch_valid": true,
+      "arrival_window": true,
+      "early": false,
+      "stopped": false,
+      "stopped_at_2p5": null,
+      "final_speed": 1.223611166225046,
+      "final_position": [
+        0.16905284640225796,
+        0.8604806223914967,
+        0.42256681992186484
+      ],
+      "table": {
+        "center": [
+          0.0,
+          2.5,
+          0.37
+        ],
+        "half_size": [
+          1.2,
+          1.6,
+          0.02
+        ],
+        "edge_y": 0.8999999999999999,
+        "top_z": 0.39
+      },
+      "slot": 0,
+      "draw": {
+        "version": "physical_dr_v1",
+        "sampling": "environment_creation",
+        "size_scale": 1.0412207061191439,
+        "mass_scale": 1.035081587270373,
+        "friction_scale": 0.9201365671826482,
+        "rolling_scale": 1.1646284457878582,
+        "damping_scale": 1.0
+      }
+    },
+    {
+      "seed": 70007,
+      "initial": {
+        "position": [
+          -0.11230503681317738,
+          2.349766463227035,
+          0.7378674437366746
+        ],
+        "quaternion": [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "velocity": [
+          0.2868691801146091,
+          -1.067869198794585,
+          0.0,
+          28.34992483853803,
+          7.615838816141943,
+          0.0
+        ],
+        "mass": 0.14284125904331146,
+        "inertia": [
+          8.106734639611762e-05,
+          8.106734639611762e-05,
+          8.106734639611762e-05
+        ]
+      },
+      "departure": 1.424000000000001,
+      "launch_valid": true,
+      "arrival_window": true,
+      "early": false,
+      "stopped": false,
+      "stopped_at_2p5": null,
+      "final_speed": 1.1242618010707353,
+      "final_position": [
+        0.2882871030267901,
+        0.8617629662970118,
+        0.4214093211609116
+      ],
+      "table": {
+        "center": [
+          0.0,
+          2.5,
+          0.37
+        ],
+        "half_size": [
+          1.2,
+          1.6,
+          0.02
+        ],
+        "edge_y": 0.8999999999999999,
+        "top_z": 0.39
+      },
+      "slot": 0,
+      "draw": {
+        "version": "physical_dr_v1",
+        "sampling": "environment_creation",
+        "size_scale": 1.0412207061191439,
+        "mass_scale": 1.035081587270373,
+        "friction_scale": 0.9201365671826482,
+        "rolling_scale": 1.1646284457878582,
+        "damping_scale": 1.0
+      }
+    },
+    {
+      "seed": 70008,
+      "initial": {
+        "position": [
+          -0.23660166967794133,
+          2.4603510119960936,
+          0.7378674437366746
+        ],
+        "quaternion": [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "velocity": [
+          0.22053780801469045,
+          -1.1923891465596919,
+          0.0,
+          31.655695961091514,
+          5.854865266579416,
+          0.0
+        ],
+        "mass": 0.14284125904331146,
+        "inertia": [
+          8.106734639611762e-05,
+          8.106734639611762e-05,
+          8.106734639611762e-05
+        ]
+      },
+      "departure": 1.368000000000001,
+      "launch_valid": true,
+      "arrival_window": true,
+      "early": false,
+      "stopped": false,
+      "stopped_at_2p5": null,
+      "final_speed": 1.2175064101771436,
+      "final_position": [
+        0.05833805933311788,
+        0.8614258790576514,
+        0.42256137607723887
+      ],
+      "table": {
+        "center": [
+          0.0,
+          2.5,
+          0.37
+        ],
+        "half_size": [
+          1.2,
+          1.6,
+          0.02
+        ],
+        "edge_y": 0.8999999999999999,
+        "top_z": 0.39
+      },
+      "slot": 0,
+      "draw": {
+        "version": "physical_dr_v1",
+        "sampling": "environment_creation",
+        "size_scale": 1.0412207061191439,
+        "mass_scale": 1.035081587270373,
+        "friction_scale": 0.9201365671826482,
+        "rolling_scale": 1.1646284457878582,
+        "damping_scale": 1.0
+      }
+    },
+    {
+      "seed": 70009,
+      "initial": {
+        "position": [
+          -0.22889979411116373,
+          2.2450804587498085,
+          0.7378674437366746
+        ],
+        "quaternion": [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "velocity": [
+          -0.0680182838286331,
+          -1.2073401456725816,
+          0.0,
+          32.05261695252935,
+          -1.8057578927876028,
+          0.0
+        ],
+        "mass": 0.14284125904331146,
+        "inertia": [
+          8.106734639611762e-05,
+          8.106734639611762e-05,
+          8.106734639611762e-05
+        ]
+      },
+      "departure": 1.1680000000000008,
+      "launch_valid": true,
+      "arrival_window": true,
+      "early": false,
+      "stopped": false,
+      "stopped_at_2p5": null,
+      "final_speed": 1.219620009799458,
+      "final_position": [
+        -0.305131110181575,
+        0.8605182348834443,
+        0.42248221046898093
+      ],
+      "table": {
+        "center": [
+          0.0,
+          2.5,
+          0.37
+        ],
+        "half_size": [
+          1.2,
+          1.6,
+          0.02
+        ],
+        "edge_y": 0.8999999999999999,
+        "top_z": 0.39
+      },
+      "slot": 0,
+      "draw": {
+        "version": "physical_dr_v1",
+        "sampling": "environment_creation",
+        "size_scale": 1.0412207061191439,
+        "mass_scale": 1.035081587270373,
+        "friction_scale": 0.9201365671826482,
+        "rolling_scale": 1.1646284457878582,
+        "damping_scale": 1.0
+      }
+    },
+    {
+      "seed": 70010,
+      "initial": {
+        "position": [
+          -0.16930296792350913,
+          2.248005683887513,
+          0.7347346708061463
+        ],
+        "quaternion": [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "velocity": [
+          -0.04297900316727835,
+          -0.9353249930205654,
+          0.0,
+          27.083651622765668,
+          -1.2445175287331547,
+          0.0
+        ],
+        "mass": 0.13347156569644855,
+        "inertia": [
+          6.367359744780428e-05,
+          6.367359744780428e-05,
+          6.367359744780428e-05
+        ]
+      },
+      "departure": 1.5200000000000011,
+      "launch_valid": true,
+      "arrival_window": true,
+      "early": false,
+      "stopped": false,
+      "stopped_at_2p5": null,
+      "final_speed": 0.9703777073771503,
+      "final_position": [
+        -0.2317172493426927,
+        0.864718369659696,
+        0.4172658803898473
+      ],
+      "table": {
+        "center": [
+          0.0,
+          2.5,
+          0.37
+        ],
+        "half_size": [
+          1.2,
+          1.6,
+          0.02
+        ],
+        "edge_y": 0.8999999999999999,
+        "top_z": 0.39
+      },
+      "slot": 1,
+      "draw": {
+        "version": "physical_dr_v1",
+        "sampling": "environment_creation",
+        "size_scale": 0.9546231640709276,
+        "mass_scale": 0.9671852586699169,
+        "friction_scale": 0.9661918837044671,
+        "rolling_scale": 1.1222932191901358,
+        "damping_scale": 1.0
+      }
+    },
+    {
+      "seed": 70011,
+      "initial": {
+        "position": [
+          0.0753589732778806,
+          2.3681994690809685,
+          0.7347346708061463
+        ],
+        "quaternion": [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "velocity": [
+          -0.03256320307135605,
+          -1.158004272420141,
+          0.0,
+          33.53164357408734,
+          -0.942913376940617,
+          0.0
+        ],
+        "mass": 0.13347156569644855,
+        "inertia": [
+          6.367359744780428e-05,
+          6.367359744780428e-05,
+          6.367359744780428e-05
+        ]
+      },
+      "departure": 1.328000000000001,
+      "launch_valid": true,
+      "arrival_window": true,
+      "early": false,
+      "stopped": false,
+      "stopped_at_2p5": null,
+      "final_speed": 1.1609566624399459,
+      "final_position": [
+        0.03455533522260565,
+        0.8643724923826606,
+        0.41969088595577053
+      ],
+      "table": {
+        "center": [
+          0.0,
+          2.5,
+          0.37
+        ],
+        "half_size": [
+          1.2,
+          1.6,
+          0.02
+        ],
+        "edge_y": 0.8999999999999999,
+        "top_z": 0.39
+      },
+      "slot": 1,
+      "draw": {
+        "version": "physical_dr_v1",
+        "sampling": "environment_creation",
+        "size_scale": 0.9546231640709276,
+        "mass_scale": 0.9671852586699169,
+        "friction_scale": 0.9661918837044671,
+        "rolling_scale": 1.1222932191901358,
+        "damping_scale": 1.0
+      }
+    },
+    {
+      "seed": 70012,
+      "initial": {
+        "position": [
+          0.046474444412551164,
+          2.496733761874422,
+          0.7347346708061463
+        ],
+        "quaternion": [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "velocity": [
+          0.5552037001948369,
+          -1.0641691075196706,
+          0.0,
+          30.814514303413368,
+          16.076704576434615,
+          0.0
+        ],
+        "mass": 0.13347156569644855,
+        "inertia": [
+          6.367359744780428e-05,
+          6.367359744780428e-05,
+          6.367359744780428e-05
+        ]
+      },
+      "departure": 1.5740000000000012,
+      "launch_valid": true,
+      "arrival_window": true,
+      "early": false,
+      "stopped": false,
+      "stopped_at_2p5": null,
+      "final_speed": 1.2045902496527119,
+      "final_position": [
+        0.9046902781093941,
+        0.8640519062226578,
+        0.4187997839489933
+      ],
+      "table": {
+        "center": [
+          0.0,
+          2.5,
+          0.37
+        ],
+        "half_size": [
+          1.2,
+          1.6,
+          0.02
+        ],
+        "edge_y": 0.8999999999999999,
+        "top_z": 0.39
+      },
+      "slot": 1,
+      "draw": {
+        "version": "physical_dr_v1",
+        "sampling": "environment_creation",
+        "size_scale": 0.9546231640709276,
+        "mass_scale": 0.9671852586699169,
+        "friction_scale": 0.9661918837044671,
+        "rolling_scale": 1.1222932191901358,
+        "damping_scale": 1.0
+      }
+    },
+    {
+      "seed": 70013,
+      "initial": {
+        "position": [
+          -0.24439408008923336,
+          2.5146558373439607,
+          0.7347346708061463
+        ],
+        "quaternion": [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "velocity": [
+          0.11787451946191163,
+          -0.9902844457957151,
+          0.0,
+          28.675079932120454,
+          3.4132226168761557,
+          0.0
+        ],
+        "mass": 0.13347156569644855,
+        "inertia": [
+          6.367359744780428e-05,
+          6.367359744780428e-05,
+          6.367359744780428e-05
+        ]
+      },
+      "departure": 1.7160000000000013,
+      "launch_valid": true,
+      "arrival_window": true,
+      "early": false,
+      "stopped": false,
+      "stopped_at_2p5": null,
+      "final_speed": 1.0180855445720345,
+      "final_position": [
+        -0.04780999187571312,
+        0.8636621062227129,
+        0.4176144494944807
+      ],
+      "table": {
+        "center": [
+          0.0,
+          2.5,
+          0.37
+        ],
+        "half_size": [
+          1.2,
+          1.6,
+          0.02
+        ],
+        "edge_y": 0.8999999999999999,
+        "top_z": 0.39
+      },
+      "slot": 1,
+      "draw": {
+        "version": "physical_dr_v1",
+        "sampling": "environment_creation",
+        "size_scale": 0.9546231640709276,
+        "mass_scale": 0.9671852586699169,
+        "friction_scale": 0.9661918837044671,
+        "rolling_scale": 1.1222932191901358,
+        "damping_scale": 1.0
+      }
+    },
+    {
+      "seed": 70014,
+      "initial": {
+        "position": [
+          -0.036907026114156805,
+          2.4699659981361415,
+          0.7347346708061463
+        ],
+        "quaternion": [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "velocity": [
+          -0.4050745409039671,
+          -0.9904346560772842,
+          0.0,
+          28.679429482241037,
+          -11.729503465597615,
+          0.0
+        ],
+        "mass": 0.13347156569644855,
+        "inertia": [
+          6.367359744780428e-05,
+          6.367359744780428e-05,
+          6.367359744780428e-05
+        ]
+      },
+      "departure": 1.6680000000000013,
+      "launch_valid": true,
+      "arrival_window": true,
+      "early": false,
+      "stopped": false,
+      "stopped_at_2p5": null,
+      "final_speed": 1.0885338573616525,
+      "final_position": [
+        -0.7000133292477697,
+        0.8636771804523298,
+        0.4176247908541671
+      ],
+      "table": {
+        "center": [
+          0.0,
+          2.5,
+          0.37
+        ],
+        "half_size": [
+          1.2,
+          1.6,
+          0.02
+        ],
+        "edge_y": 0.8999999999999999,
+        "top_z": 0.39
+      },
+      "slot": 1,
+      "draw": {
+        "version": "physical_dr_v1",
+        "sampling": "environment_creation",
+        "size_scale": 0.9546231640709276,
+        "mass_scale": 0.9671852586699169,
+        "friction_scale": 0.9661918837044671,
+        "rolling_scale": 1.1222932191901358,
+        "damping_scale": 1.0
+      }
+    },
+    {
+      "seed": 70015,
+      "initial": {
+        "position": [
+          0.15369896729400268,
+          2.196791132565167,
+          0.7347346708061463
+        ],
+        "quaternion": [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "velocity": [
+          -0.15650299040046997,
+          -0.8778088711857532,
+          0.0,
+          25.41819136233152,
+          -4.531764361645975,
+          0.0
+        ],
+        "mass": 0.13347156569644855,
+        "inertia": [
+          6.367359744780428e-05,
+          6.367359744780428e-05,
+          6.367359744780428e-05
+        ]
+      },
+      "departure": 1.5620000000000012,
+      "launch_valid": true,
+      "arrival_window": true,
+      "early": false,
+      "stopped": false,
+      "stopped_at_2p5": null,
+      "final_speed": 0.9374386146539482,
+      "final_position": [
+        -0.08503361979696268,
+        0.864786691089939,
+        0.4164264665295082
+      ],
+      "table": {
+        "center": [
+          0.0,
+          2.5,
+          0.37
+        ],
+        "half_size": [
+          1.2,
+          1.6,
+          0.02
+        ],
+        "edge_y": 0.8999999999999999,
+        "top_z": 0.39
+      },
+      "slot": 1,
+      "draw": {
+        "version": "physical_dr_v1",
+        "sampling": "environment_creation",
+        "size_scale": 0.9546231640709276,
+        "mass_scale": 0.9671852586699169,
+        "friction_scale": 0.9661918837044671,
+        "rolling_scale": 1.1222932191901358,
+        "damping_scale": 1.0
+      }
+    },
+    {
+      "seed": 70016,
+      "initial": {
+        "position": [
+          0.05973716296451598,
+          2.2268611099409426,
+          0.7347346708061463
+        ],
+        "quaternion": [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "velocity": [
+          0.46307870483959634,
+          -0.8668932560965992,
+          0.0,
+          25.102114363931083,
+          13.409095671969705,
+          0.0
+        ],
+        "mass": 0.13347156569644855,
+        "inertia": [
+          6.367359744780428e-05,
+          6.367359744780428e-05,
+          6.367359744780428e-05
+        ]
+      },
+      "departure": 1.6160000000000012,
+      "launch_valid": true,
+      "arrival_window": true,
+      "early": false,
+      "stopped": false,
+      "stopped_at_2p5": null,
+      "final_speed": 1.0278496769479997,
+      "final_position": [
+        0.7946108847949733,
+        0.8646410799380475,
+        0.4160551734308208
+      ],
+      "table": {
+        "center": [
+          0.0,
+          2.5,
+          0.37
+        ],
+        "half_size": [
+          1.2,
+          1.6,
+          0.02
+        ],
+        "edge_y": 0.8999999999999999,
+        "top_z": 0.39
+      },
+      "slot": 1,
+      "draw": {
+        "version": "physical_dr_v1",
+        "sampling": "environment_creation",
+        "size_scale": 0.9546231640709276,
+        "mass_scale": 0.9671852586699169,
+        "friction_scale": 0.9661918837044671,
+        "rolling_scale": 1.1222932191901358,
+        "damping_scale": 1.0
+      }
+    },
+    {
+      "seed": 70017,
+      "initial": {
+        "position": [
+          -0.18705115866820843,
+          2.266390897539242,
+          0.7347346708061463
+        ],
+        "quaternion": [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "velocity": [
+          0.49053468387234955,
+          -0.9390565815192917,
+          0.0,
+          27.19170501987702,
+          14.204122188564346,
+          0.0
+        ],
+        "mass": 0.13347156569644855,
+        "inertia": [
+          6.367359744780428e-05,
+          6.367359744780428e-05,
+          6.367359744780428e-05
+        ]
+      },
+      "departure": 1.5320000000000011,
+      "launch_valid": true,
+      "arrival_window": true,
+      "early": false,
+      "stopped": false,
+      "stopped_at_2p5": null,
+      "final_speed": 1.0844947559367233,
+      "final_position": [
+        0.5509341636496073,
+        0.8650852914477024,
+        0.41758379012396446
+      ],
+      "table": {
+        "center": [
+          0.0,
+          2.5,
+          0.37
+        ],
+        "half_size": [
+          1.2,
+          1.6,
+          0.02
+        ],
+        "edge_y": 0.8999999999999999,
+        "top_z": 0.39
+      },
+      "slot": 1,
+      "draw": {
+        "version": "physical_dr_v1",
+        "sampling": "environment_creation",
+        "size_scale": 0.9546231640709276,
+        "mass_scale": 0.9671852586699169,
+        "friction_scale": 0.9661918837044671,
+        "rolling_scale": 1.1222932191901358,
+        "damping_scale": 1.0
+      }
+    },
+    {
+      "seed": 70018,
+      "initial": {
+        "position": [
+          -0.029971019264762977,
+          2.5793837767979553,
+          0.7347346708061463
+        ],
+        "quaternion": [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "velocity": [
+          -0.019878031456864412,
+          -1.1014633760614996,
+          0.0,
+          31.894422339924645,
+          -0.5755963787361934,
+          0.0
+        ],
+        "mass": 0.13347156569644855,
+        "inertia": [
+          6.367359744780428e-05,
+          6.367359744780428e-05,
+          6.367359744780428e-05
+        ]
+      },
+      "departure": 1.5980000000000012,
+      "launch_valid": true,
+      "arrival_window": true,
+      "early": false,
+      "stopped": false,
+      "stopped_at_2p5": null,
+      "final_speed": 1.103279136744047,
+      "final_position": [
+        -0.05983410926275079,
+        0.864039509123941,
+        0.41925742868649185
+      ],
+      "table": {
+        "center": [
+          0.0,
+          2.5,
+          0.37
+        ],
+        "half_size": [
+          1.2,
+          1.6,
+          0.02
+        ],
+        "edge_y": 0.8999999999999999,
+        "top_z": 0.39
+      },
+      "slot": 1,
+      "draw": {
+        "version": "physical_dr_v1",
+        "sampling": "environment_creation",
+        "size_scale": 0.9546231640709276,
+        "mass_scale": 0.9671852586699169,
+        "friction_scale": 0.9661918837044671,
+        "rolling_scale": 1.1222932191901358,
+        "damping_scale": 1.0
+      }
+    },
+    {
+      "seed": 70019,
+      "initial": {
+        "position": [
+          -0.16267497975639045,
+          2.1916751559143655,
+          0.7347346708061463
+        ],
+        "quaternion": [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "velocity": [
+          -0.01189760985850145,
+          -1.2541849944315544,
+          0.0,
+          36.31669175222997,
+          -0.3445120390834575,
+          0.0
+        ],
+        "mass": 0.13347156569644855,
+        "inertia": [
+          6.367359744780428e-05,
+          6.367359744780428e-05,
+          6.367359744780428e-05
+        ]
+      },
+      "departure": 1.0800000000000007,
+      "launch_valid": true,
+      "arrival_window": true,
+      "early": false,
+      "stopped": false,
+      "stopped_at_2p5": null,
+      "final_speed": 1.2545509699530946,
+      "final_position": [
+        -0.1749173816815354,
+        0.863447126827534,
+        0.4202962553988556
+      ],
+      "table": {
+        "center": [
+          0.0,
+          2.5,
+          0.37
+        ],
+        "half_size": [
+          1.2,
+          1.6,
+          0.02
+        ],
+        "edge_y": 0.8999999999999999,
+        "top_z": 0.39
+      },
+      "slot": 1,
+      "draw": {
+        "version": "physical_dr_v1",
+        "sampling": "environment_creation",
+        "size_scale": 0.9546231640709276,
+        "mass_scale": 0.9671852586699169,
+        "friction_scale": 0.9661918837044671,
+        "rolling_scale": 1.1222932191901358,
+        "damping_scale": 1.0
+      }
+    },
+    {
+      "seed": 70020,
+      "initial": {
+        "position": [
+          -0.036120674995649193,
+          2.574552024589272,
+          0.737352159823554
+        ],
+        "quaternion": [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "velocity": [
+          -0.1274850721123022,
+          -1.1542361877286462,
+          0.0,
+          31.067808526084026,
+          -3.4314309778425964,
+          0.0
+        ],
+        "mass": 0.14403581905788662,
+        "inertia": [
+          7.952407579673993e-05,
+          7.952407579673993e-05,
+          7.952407579673993e-05
+        ]
+      },
+      "departure": 1.5120000000000011,
+      "launch_valid": true,
+      "arrival_window": true,
+      "early": false,
+      "stopped": false,
+      "stopped_at_2p5": null,
+      "final_speed": 1.174022996203865,
+      "final_position": [
+        -0.2254008767291116,
+        0.8617641138804824,
+        0.4216964168335211
+      ],
+      "table": {
+        "center": [
+          0.0,
+          2.5,
+          0.37
+        ],
+        "half_size": [
+          1.2,
+          1.6,
+          0.02
+        ],
+        "edge_y": 0.8999999999999999,
+        "top_z": 0.39
+      },
+      "slot": 2,
+      "draw": {
+        "version": "physical_dr_v1",
+        "sampling": "environment_creation",
+        "size_scale": 1.0269769925392676,
+        "mass_scale": 1.043737819260048,
+        "friction_scale": 1.081783441206793,
+        "rolling_scale": 0.8927253069920417,
+        "damping_scale": 1.0
+      }
+    },
+    {
+      "seed": 70021,
+      "initial": {
+        "position": [
+          -0.22197048338430536,
+          2.4542103403185505,
+          0.737352159823554
+        ],
+        "quaternion": [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "velocity": [
+          0.1442510151442405,
+          -1.2789179863433033,
+          0.0,
+          34.42378565384203,
+          3.88270872620405,
+          0.0
+        ],
+        "mass": 0.14403581905788662,
+        "inertia": [
+          7.952407579673993e-05,
+          7.952407579673993e-05,
+          7.952407579673993e-05
+        ]
+      },
+      "departure": 1.266000000000001,
+      "launch_valid": true,
+      "arrival_window": true,
+      "early": false,
+      "stopped": false,
+      "stopped_at_2p5": null,
+      "final_speed": 1.2908513275054145,
+      "final_position": [
+        -0.042857871467996383,
+        0.8612914081125927,
+        0.4227654694323417
+      ],
+      "table": {
+        "center": [
+          0.0,
+          2.5,
+          0.37
+        ],
+        "half_size": [
+          1.2,
+          1.6,
+          0.02
+        ],
+        "edge_y": 0.8999999999999999,
+        "top_z": 0.39
+      },
+      "slot": 2,
+      "draw": {
+        "version": "physical_dr_v1",
+        "sampling": "environment_creation",
+        "size_scale": 1.0269769925392676,
+        "mass_scale": 1.043737819260048,
+        "friction_scale": 1.081783441206793,
+        "rolling_scale": 0.8927253069920417,
+        "damping_scale": 1.0
+      }
+    },
+    {
+      "seed": 70022,
+      "initial": {
+        "position": [
+          0.06332360005260118,
+          2.404870335575934,
+          0.737352159823554
+        ],
+        "quaternion": [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "velocity": [
+          -0.15760266080370056,
+          -0.9462064120722954,
+          0.0,
+          25.468409281347174,
+          -4.242086100840431,
+          0.0
+        ],
+        "mass": 0.14403581905788662,
+        "inertia": [
+          7.952407579673993e-05,
+          7.952407579673993e-05,
+          7.952407579673993e-05
+        ]
+      },
+      "departure": 1.6660000000000013,
+      "launch_valid": true,
+      "arrival_window": true,
+      "early": false,
+      "stopped": false,
+      "stopped_at_2p5": null,
+      "final_speed": 1.0040728990983132,
+      "final_position": [
+        -0.19517264185444846,
+        0.862664386235403,
+        0.4194017740505253
+      ],
+      "table": {
+        "center": [
+          0.0,
+          2.5,
+          0.37
+        ],
+        "half_size": [
+          1.2,
+          1.6,
+          0.02
+        ],
+        "edge_y": 0.8999999999999999,
+        "top_z": 0.39
+      },
+      "slot": 2,
+      "draw": {
+        "version": "physical_dr_v1",
+        "sampling": "environment_creation",
+        "size_scale": 1.0269769925392676,
+        "mass_scale": 1.043737819260048,
+        "friction_scale": 1.081783441206793,
+        "rolling_scale": 0.8927253069920417,
+        "damping_scale": 1.0
+      }
+    },
+    {
+      "seed": 70023,
+      "initial": {
+        "position": [
+          0.06390926330569685,
+          2.3586458209923276,
+          0.737352159823554
+        ],
+        "quaternion": [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "velocity": [
+          0.11064935298025663,
+          -1.0893500593692875,
+          0.0,
+          29.321311723003905,
+          2.9782751125576943,
+          0.0
+        ],
+        "mass": 0.14403581905788662,
+        "inertia": [
+          7.952407579673993e-05,
+          7.952407579673993e-05,
+          7.952407579673993e-05
+        ]
+      },
+      "departure": 1.400000000000001,
+      "launch_valid": true,
+      "arrival_window": true,
+      "early": false,
+      "stopped": false,
+      "stopped_at_2p5": null,
+      "final_speed": 1.120233337841448,
+      "final_position": [
+        0.21607824512733434,
+        0.8614598991930876,
+        0.4208969246242978
+      ],
+      "table": {
+        "center": [
+          0.0,
+          2.5,
+          0.37
+        ],
+        "half_size": [
+          1.2,
+          1.6,
+          0.02
+        ],
+        "edge_y": 0.8999999999999999,
+        "top_z": 0.39
+      },
+      "slot": 2,
+      "draw": {
+        "version": "physical_dr_v1",
+        "sampling": "environment_creation",
+        "size_scale": 1.0269769925392676,
+        "mass_scale": 1.043737819260048,
+        "friction_scale": 1.081783441206793,
+        "rolling_scale": 0.8927253069920417,
+        "damping_scale": 1.0
+      }
+    },
+    {
+      "seed": 70024,
+      "initial": {
+        "position": [
+          0.10872156478955086,
+          2.554155644425107,
+          0.737352159823554
+        ],
+        "quaternion": [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "velocity": [
+          0.016726774482239543,
+          -0.9363477348482874,
+          0.0,
+          25.20304981716448,
+          0.45022347453498507,
+          0.0
+        ],
+        "mass": 0.14403581905788662,
+        "inertia": [
+          7.952407579673993e-05,
+          7.952407579673993e-05,
+          7.952407579673993e-05
+        ]
+      },
+      "departure": 1.8520000000000014,
+      "launch_valid": true,
+      "arrival_window": true,
+      "early": false,
+      "stopped": false,
+      "stopped_at_2p5": null,
+      "final_speed": 0.98638263680148,
+      "final_position": [
+        0.13904360946268302,
+        0.8618884890775401,
+        0.41862722200929986
+      ],
+      "table": {
+        "center": [
+          0.0,
+          2.5,
+          0.37
+        ],
+        "half_size": [
+          1.2,
+          1.6,
+          0.02
+        ],
+        "edge_y": 0.8999999999999999,
+        "top_z": 0.39
+      },
+      "slot": 2,
+      "draw": {
+        "version": "physical_dr_v1",
+        "sampling": "environment_creation",
+        "size_scale": 1.0269769925392676,
+        "mass_scale": 1.043737819260048,
+        "friction_scale": 1.081783441206793,
+        "rolling_scale": 0.8927253069920417,
+        "damping_scale": 1.0
+      }
+    },
+    {
+      "seed": 70025,
+      "initial": {
+        "position": [
+          -0.04042997506380158,
+          2.101243887375885,
+          0.737352159823554
+        ],
+        "quaternion": [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "velocity": [
+          0.059989630263926,
+          -1.2463209152169106,
+          0.0,
+          33.546391949648104,
+          1.6147010173522507,
+          0.0
+        ],
+        "mass": 0.14403581905788662,
+        "inertia": [
+          7.952407579673993e-05,
+          7.952407579673993e-05,
+          7.952407579673993e-05
+        ]
+      },
+      "departure": 1.0100000000000007,
+      "launch_valid": true,
+      "arrival_window": true,
+      "early": false,
+      "stopped": false,
+      "stopped_at_2p5": null,
+      "final_speed": 1.2611537985491992,
+      "final_position": [
+        0.018587685991408198,
+        0.8612684229064907,
+        0.42239217798082823
+      ],
+      "table": {
+        "center": [
+          0.0,
+          2.5,
+          0.37
+        ],
+        "half_size": [
+          1.2,
+          1.6,
+          0.02
+        ],
+        "edge_y": 0.8999999999999999,
+        "top_z": 0.39
+      },
+      "slot": 2,
+      "draw": {
+        "version": "physical_dr_v1",
+        "sampling": "environment_creation",
+        "size_scale": 1.0269769925392676,
+        "mass_scale": 1.043737819260048,
+        "friction_scale": 1.081783441206793,
+        "rolling_scale": 0.8927253069920417,
+        "damping_scale": 1.0
+      }
+    },
+    {
+      "seed": 70026,
+      "initial": {
+        "position": [
+          -0.19609497311725638,
+          2.253336163926928,
+          0.737352159823554
+        ],
+        "quaternion": [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "velocity": [
+          -0.3310880896254543,
+          -0.8108424416074642,
+          0.0,
+          21.8249072317298,
+          -8.91167811502439,
+          0.0
+        ],
+        "mass": 0.14403581905788662,
+        "inertia": [
+          7.952407579673993e-05,
+          7.952407579673993e-05,
+          7.952407579673993e-05
+        ]
+      },
+      "departure": 1.7540000000000013,
+      "launch_valid": true,
+      "arrival_window": true,
+      "early": false,
+      "stopped": false,
+      "stopped_at_2p5": null,
+      "final_speed": 0.9602072850466313,
+      "final_position": [
+        -0.7661082470440929,
+        0.8624828039083537,
+        0.41655477392428647
+      ],
+      "table": {
+        "center": [
+          0.0,
+          2.5,
+          0.37
+        ],
+        "half_size": [
+          1.2,
+          1.6,
+          0.02
+        ],
+        "edge_y": 0.8999999999999999,
+        "top_z": 0.39
+      },
+      "slot": 2,
+      "draw": {
+        "version": "physical_dr_v1",
+        "sampling": "environment_creation",
+        "size_scale": 1.0269769925392676,
+        "mass_scale": 1.043737819260048,
+        "friction_scale": 1.081783441206793,
+        "rolling_scale": 0.8927253069920417,
+        "damping_scale": 1.0
+      }
+    },
+    {
+      "seed": 70027,
+      "initial": {
+        "position": [
+          0.12862813403419504,
+          2.120109586754395,
+          0.737352159823554
+        ],
+        "quaternion": [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "velocity": [
+          0.5265478541493263,
+          -1.0764666254931472,
+          0.0,
+          28.974536893833072,
+          14.172738722325965,
+          0.0
+        ],
+        "mass": 0.14403581905788662,
+        "inertia": [
+          7.952407579673993e-05,
+          7.952407579673993e-05,
+          7.952407579673993e-05
+        ]
+      },
+      "departure": 1.1880000000000008,
+      "launch_valid": true,
+      "arrival_window": true,
+      "early": false,
+      "stopped": false,
+      "stopped_at_2p5": null,
+      "final_speed": 1.2249783199030586,
+      "final_position": [
+        0.745328380795271,
+        0.8615372661307,
+        0.4209165175664868
+      ],
+      "table": {
+        "center": [
+          0.0,
+          2.5,
+          0.37
+        ],
+        "half_size": [
+          1.2,
+          1.6,
+          0.02
+        ],
+        "edge_y": 0.8999999999999999,
+        "top_z": 0.39
+      },
+      "slot": 2,
+      "draw": {
+        "version": "physical_dr_v1",
+        "sampling": "environment_creation",
+        "size_scale": 1.0269769925392676,
+        "mass_scale": 1.043737819260048,
+        "friction_scale": 1.081783441206793,
+        "rolling_scale": 0.8927253069920417,
+        "damping_scale": 1.0
+      }
+    },
+    {
+      "seed": 70028,
+      "initial": {
+        "position": [
+          0.1861444485979178,
+          2.3635866639428613,
+          0.737352159823554
+        ],
+        "quaternion": [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "velocity": [
+          -0.3299681870023202,
+          -0.8463903874800037,
+          0.0,
+          22.781727670739716,
+          -8.88153444024336,
+          0.0
+        ],
+        "mass": 0.14403581905788662,
+        "inertia": [
+          7.952407579673993e-05,
+          7.952407579673993e-05,
+          7.952407579673993e-05
+        ]
+      },
+      "departure": 1.8140000000000014,
+      "launch_valid": true,
+      "arrival_window": true,
+      "early": false,
+      "stopped": false,
+      "stopped_at_2p5": null,
+      "final_speed": 0.9787982483289002,
+      "final_position": [
+        -0.40160156554542714,
+        0.8624890262277329,
+        0.4174384200518902
+      ],
+      "table": {
+        "center": [
+          0.0,
+          2.5,
+          0.37
+        ],
+        "half_size": [
+          1.2,
+          1.6,
+          0.02
+        ],
+        "edge_y": 0.8999999999999999,
+        "top_z": 0.39
+      },
+      "slot": 2,
+      "draw": {
+        "version": "physical_dr_v1",
+        "sampling": "environment_creation",
+        "size_scale": 1.0269769925392676,
+        "mass_scale": 1.043737819260048,
+        "friction_scale": 1.081783441206793,
+        "rolling_scale": 0.8927253069920417,
+        "damping_scale": 1.0
+      }
+    },
+    {
+      "seed": 70029,
+      "initial": {
+        "position": [
+          -0.04216568677910304,
+          2.370702263887652,
+          0.737352159823554
+        ],
+        "quaternion": [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "velocity": [
+          -0.3957624854187956,
+          -0.9673651183517483,
+          0.0,
+          26.037924119244664,
+          -10.652475853311968,
+          0.0
+        ],
+        "mass": 0.14403581905788662,
+        "inertia": [
+          7.952407579673993e-05,
+          7.952407579673993e-05,
+          7.952407579673993e-05
+        ]
+      },
+      "departure": 1.5900000000000012,
+      "launch_valid": true,
+      "arrival_window": true,
+      "early": false,
+      "stopped": false,
+      "stopped_at_2p5": null,
+      "final_speed": 1.0843998841121687,
+      "final_position": [
+        -0.6618010653219313,
+        0.8623214531885233,
+        0.4197088087197359
+      ],
+      "table": {
+        "center": [
+          0.0,
+          2.5,
+          0.37
+        ],
+        "half_size": [
+          1.2,
+          1.6,
+          0.02
+        ],
+        "edge_y": 0.8999999999999999,
+        "top_z": 0.39
+      },
+      "slot": 2,
+      "draw": {
+        "version": "physical_dr_v1",
+        "sampling": "environment_creation",
+        "size_scale": 1.0269769925392676,
+        "mass_scale": 1.043737819260048,
+        "friction_scale": 1.081783441206793,
+        "rolling_scale": 0.8927253069920417,
+        "damping_scale": 1.0
+      }
+    },
+    {
+      "seed": 70030,
+      "initial": {
+        "position": [
+          -0.09490499390802004,
+          2.3955850777598036,
+          0.7371575977076364
+        ],
+        "quaternion": [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "velocity": [
+          0.11089153271525881,
+          -1.0630346106166264,
+          0.0,
+          28.763628497340722,
+          3.0005070565597274,
+          0.0
+        ],
+        "mass": 0.1341277261316122,
+        "inertia": [
+          7.328009452938318e-05,
+          7.328009452938318e-05,
+          7.328009452938318e-05
+        ]
+      },
+      "departure": 1.470000000000001,
+      "launch_valid": true,
+      "arrival_window": true,
+      "early": false,
+      "stopped": false,
+      "stopped_at_2p5": null,
+      "final_speed": 1.0922572416824663,
+      "final_position": [
+        0.06549271067735625,
+        0.8623952844956779,
+        0.4209401782529769
+      ],
+      "table": {
+        "center": [
+          0.0,
+          2.5,
+          0.37
+        ],
+        "half_size": [
+          1.2,
+          1.6,
+          0.02
+        ],
+        "edge_y": 0.8999999999999999,
+        "top_z": 0.39
+      },
+      "slot": 3,
+      "draw": {
+        "version": "physical_dr_v1",
+        "sampling": "environment_creation",
+        "size_scale": 1.0215988175525106,
+        "mass_scale": 0.9719400444319723,
+        "friction_scale": 1.1270586233848827,
+        "rolling_scale": 0.866569388313789,
+        "damping_scale": 1.0
+      }
+    },
+    {
+      "seed": 70031,
+      "initial": {
+        "position": [
+          -0.23891642509662425,
+          2.492692239902696,
+          0.7371575977076364
+        ],
+        "quaternion": [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "velocity": [
+          -0.36969546758253874,
+          -0.9170298171562842,
+          0.0,
+          24.813025576248435,
+          -10.00323317838782,
+          0.0
+        ],
+        "mass": 0.1341277261316122,
+        "inertia": [
+          7.328009452938318e-05,
+          7.328009452938318e-05,
+          7.328009452938318e-05
+        ]
+      },
+      "departure": 1.8160000000000014,
+      "launch_valid": true,
+      "arrival_window": true,
+      "early": false,
+      "stopped": false,
+      "stopped_at_2p5": null,
+      "final_speed": 1.041948276229023,
+      "final_position": [
+        -0.8984645793232336,
+        0.8620603165404513,
+        0.4182534900028945
+      ],
+      "table": {
+        "center": [
+          0.0,
+          2.5,
+          0.37
+        ],
+        "half_size": [
+          1.2,
+          1.6,
+          0.02
+        ],
+        "edge_y": 0.8999999999999999,
+        "top_z": 0.39
+      },
+      "slot": 3,
+      "draw": {
+        "version": "physical_dr_v1",
+        "sampling": "environment_creation",
+        "size_scale": 1.0215988175525106,
+        "mass_scale": 0.9719400444319723,
+        "friction_scale": 1.1270586233848827,
+        "rolling_scale": 0.866569388313789,
+        "damping_scale": 1.0
+      }
+    },
+    {
+      "seed": 70032,
+      "initial": {
+        "position": [
+          0.1453453315855439,
+          2.563307189820094,
+          0.7371575977076364
+        ],
+        "quaternion": [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "velocity": [
+          0.20137511243467954,
+          -1.261303509803246,
+          0.0,
+          34.12839545960601,
+          5.448814991377804,
+          0.0
+        ],
+        "mass": 0.1341277261316122,
+        "inertia": [
+          7.328009452938318e-05,
+          7.328009452938318e-05,
+          7.328009452938318e-05
+        ]
+      },
+      "departure": 1.372000000000001,
+      "launch_valid": true,
+      "arrival_window": true,
+      "early": false,
+      "stopped": false,
+      "stopped_at_2p5": null,
+      "final_speed": 1.2810419466924177,
+      "final_position": [
+        0.4171787831532637,
+        0.8618459168634333,
+        0.4224780812776849
+      ],
+      "table": {
+        "center": [
+          0.0,
+          2.5,
+          0.37
+        ],
+        "half_size": [
+          1.2,
+          1.6,
+          0.02
+        ],
+        "edge_y": 0.8999999999999999,
+        "top_z": 0.39
+      },
+      "slot": 3,
+      "draw": {
+        "version": "physical_dr_v1",
+        "sampling": "environment_creation",
+        "size_scale": 1.0215988175525106,
+        "mass_scale": 0.9719400444319723,
+        "friction_scale": 1.1270586233848827,
+        "rolling_scale": 0.866569388313789,
+        "damping_scale": 1.0
+      }
+    },
+    {
+      "seed": 70033,
+      "initial": {
+        "position": [
+          0.02912762168947136,
+          2.4522936303976834,
+          0.7371575977076364
+        ],
+        "quaternion": [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "velocity": [
+          -0.36325641797688357,
+          -0.9688478019080062,
+          0.0,
+          26.215118460143188,
+          -9.82900514396326,
+          0.0
+        ],
+        "mass": 0.1341277261316122,
+        "inertia": [
+          7.328009452938318e-05,
+          7.328009452938318e-05,
+          7.328009452938318e-05
+        ]
+      },
+      "departure": 1.6740000000000013,
+      "launch_valid": true,
+      "arrival_window": true,
+      "early": false,
+      "stopped": false,
+      "stopped_at_2p5": null,
+      "final_speed": 1.0740895633262961,
+      "final_position": [
+        -0.5690531848853407,
+        0.8621614951406473,
+        0.4195177901964228
+      ],
+      "table": {
+        "center": [
+          0.0,
+          2.5,
+          0.37
+        ],
+        "half_size": [
+          1.2,
+          1.6,
+          0.02
+        ],
+        "edge_y": 0.8999999999999999,
+        "top_z": 0.39
+      },
+      "slot": 3,
+      "draw": {
+        "version": "physical_dr_v1",
+        "sampling": "environment_creation",
+        "size_scale": 1.0215988175525106,
+        "mass_scale": 0.9719400444319723,
+        "friction_scale": 1.1270586233848827,
+        "rolling_scale": 0.866569388313789,
+        "damping_scale": 1.0
+      }
+    },
+    {
+      "seed": 70034,
+      "initial": {
+        "position": [
+          0.09145093136602245,
+          2.1741633077366864,
+          0.7371575977076364
+        ],
+        "quaternion": [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "velocity": [
+          -0.02041590682615722,
+          -1.203680104564519,
+          0.0,
+          32.569219300631254,
+          -0.5524143367667733,
+          0.0
+        ],
+        "mass": 0.1341277261316122,
+        "inertia": [
+          7.328009452938318e-05,
+          7.328009452938318e-05,
+          7.328009452938318e-05
+        ]
+      },
+      "departure": 1.1080000000000008,
+      "launch_valid": true,
+      "arrival_window": true,
+      "early": false,
+      "stopped": false,
+      "stopped_at_2p5": null,
+      "final_speed": 1.21997637829316,
+      "final_position": [
+        0.0695630700211195,
+        0.8612451775355913,
+        0.421860328682019
+      ],
+      "table": {
+        "center": [
+          0.0,
+          2.5,
+          0.37
+        ],
+        "half_size": [
+          1.2,
+          1.6,
+          0.02
+        ],
+        "edge_y": 0.8999999999999999,
+        "top_z": 0.39
+      },
+      "slot": 3,
+      "draw": {
+        "version": "physical_dr_v1",
+        "sampling": "environment_creation",
+        "size_scale": 1.0215988175525106,
+        "mass_scale": 0.9719400444319723,
+        "friction_scale": 1.1270586233848827,
+        "rolling_scale": 0.866569388313789,
+        "damping_scale": 1.0
+      }
+    },
+    {
+      "seed": 70035,
+      "initial": {
+        "position": [
+          0.09919357559104852,
+          2.5726575809985173,
+          0.7371575977076364
+        ],
+        "quaternion": [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "velocity": [
+          0.4408962926768778,
+          -1.0262811299010117,
+          0.0,
+          27.76915150220799,
+          11.929787649205792,
+          0.0
+        ],
+        "mass": 0.1341277261316122,
+        "inertia": [
+          7.328009452938318e-05,
+          7.328009452938318e-05,
+          7.328009452938318e-05
+        ]
+      },
+      "departure": 1.7000000000000013,
+      "launch_valid": true,
+      "arrival_window": true,
+      "early": false,
+      "stopped": false,
+      "stopped_at_2p5": null,
+      "final_speed": 1.145589791950344,
+      "final_position": [
+        0.8369814122156998,
+        0.8611729149953831,
+        0.42006472302027115
+      ],
+      "table": {
+        "center": [
+          0.0,
+          2.5,
+          0.37
+        ],
+        "half_size": [
+          1.2,
+          1.6,
+          0.02
+        ],
+        "edge_y": 0.8999999999999999,
+        "top_z": 0.39
+      },
+      "slot": 3,
+      "draw": {
+        "version": "physical_dr_v1",
+        "sampling": "environment_creation",
+        "size_scale": 1.0215988175525106,
+        "mass_scale": 0.9719400444319723,
+        "friction_scale": 1.1270586233848827,
+        "rolling_scale": 0.866569388313789,
+        "damping_scale": 1.0
+      }
+    },
+    {
+      "seed": 70036,
+      "initial": {
+        "position": [
+          0.016366105506497475,
+          2.3389512585738075,
+          0.7371575977076364
+        ],
+        "quaternion": [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "velocity": [
+          -0.10048931702367488,
+          -0.8250553507175049,
+          0.0,
+          22.32437717527905,
+          -2.7190435324997058,
+          0.0
+        ],
+        "mass": 0.1341277261316122,
+        "inertia": [
+          7.328009452938318e-05,
+          7.328009452938318e-05,
+          7.328009452938318e-05
+        ]
+      },
+      "departure": 1.8340000000000014,
+      "launch_valid": true,
+      "arrival_window": true,
+      "early": false,
+      "stopped": false,
+      "stopped_at_2p5": null,
+      "final_speed": 0.9282186090063466,
+      "final_position": [
+        -0.1631954340532154,
+        0.8615978967603974,
+        0.41549878187866196
+      ],
+      "table": {
+        "center": [
+          0.0,
+          2.5,
+          0.37
+        ],
+        "half_size": [
+          1.2,
+          1.6,
+          0.02
+        ],
+        "edge_y": 0.8999999999999999,
+        "top_z": 0.39
+      },
+      "slot": 3,
+      "draw": {
+        "version": "physical_dr_v1",
+        "sampling": "environment_creation",
+        "size_scale": 1.0215988175525106,
+        "mass_scale": 0.9719400444319723,
+        "friction_scale": 1.1270586233848827,
+        "rolling_scale": 0.866569388313789,
+        "damping_scale": 1.0
+      }
+    },
+    {
+      "seed": 70037,
+      "initial": {
+        "position": [
+          -0.14021753626358702,
+          2.476912500116665,
+          0.7371575977076364
+        ],
+        "quaternion": [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "velocity": [
+          -0.47006891539159507,
+          -0.9732362975651753,
+          0.0,
+          26.333862532522716,
+          -12.719141517536077,
+          0.0
+        ],
+        "mass": 0.1341277261316122,
+        "inertia": [
+          7.328009452938318e-05,
+          7.328009452938318e-05,
+          7.328009452938318e-05
+        ]
+      },
+      "departure": 1.6920000000000013,
+      "launch_valid": true,
+      "arrival_window": true,
+      "early": false,
+      "stopped": false,
+      "stopped_at_2p5": null,
+      "final_speed": 1.117746868504008,
+      "final_position": [
+        -0.9227346137253579,
+        0.8614905320835787,
+        0.4194556005955628
+      ],
+      "table": {
+        "center": [
+          0.0,
+          2.5,
+          0.37
+        ],
+        "half_size": [
+          1.2,
+          1.6,
+          0.02
+        ],
+        "edge_y": 0.8999999999999999,
+        "top_z": 0.39
+      },
+      "slot": 3,
+      "draw": {
+        "version": "physical_dr_v1",
+        "sampling": "environment_creation",
+        "size_scale": 1.0215988175525106,
+        "mass_scale": 0.9719400444319723,
+        "friction_scale": 1.1270586233848827,
+        "rolling_scale": 0.866569388313789,
+        "damping_scale": 1.0
+      }
+    },
+    {
+      "seed": 70038,
+      "initial": {
+        "position": [
+          0.16494090808690437,
+          2.185337308888317,
+          0.7371575977076364
+        ],
+        "quaternion": [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "velocity": [
+          -0.32247769230443113,
+          -0.8402127982144945,
+          0.0,
+          22.73450793152833,
+          -8.725612926886702,
+          0.0
+        ],
+        "mass": 0.1341277261316122,
+        "inertia": [
+          7.328009452938318e-05,
+          7.328009452938318e-05,
+          7.328009452938318e-05
+        ]
+      },
+      "departure": 1.6060000000000012,
+      "launch_valid": true,
+      "arrival_window": true,
+      "early": false,
+      "stopped": false,
+      "stopped_at_2p5": null,
+      "final_speed": 0.9748363388215497,
+      "final_position": [
+        -0.3436542217474418,
+        0.8629907077918603,
+        0.4172864203519905
+      ],
+      "table": {
+        "center": [
+          0.0,
+          2.5,
+          0.37
+        ],
+        "half_size": [
+          1.2,
+          1.6,
+          0.02
+        ],
+        "edge_y": 0.8999999999999999,
+        "top_z": 0.39
+      },
+      "slot": 3,
+      "draw": {
+        "version": "physical_dr_v1",
+        "sampling": "environment_creation",
+        "size_scale": 1.0215988175525106,
+        "mass_scale": 0.9719400444319723,
+        "friction_scale": 1.1270586233848827,
+        "rolling_scale": 0.866569388313789,
+        "damping_scale": 1.0
+      }
+    },
+    {
+      "seed": 70039,
+      "initial": {
+        "position": [
+          -0.24917257536182258,
+          2.536659586131738,
+          0.7371575977076364
+        ],
+        "quaternion": [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "velocity": [
+          -0.31798194992369977,
+          -1.0347466346279792,
+          0.0,
+          27.998211431750388,
+          -8.603966968826978,
+          0.0
+        ],
+        "mass": 0.1341277261316122,
+        "inertia": [
+          7.328009452938318e-05,
+          7.328009452938318e-05,
+          7.328009452938318e-05
+        ]
+      },
+      "departure": 1.6500000000000012,
+      "launch_valid": true,
+      "arrival_window": true,
+      "early": false,
+      "stopped": false,
+      "stopped_at_2p5": null,
+      "final_speed": 1.1096222921444734,
+      "final_position": [
+        -0.7657488529851662,
+        0.862353481422585,
+        0.4204413860971513
+      ],
+      "table": {
+        "center": [
+          0.0,
+          2.5,
+          0.37
+        ],
+        "half_size": [
+          1.2,
+          1.6,
+          0.02
+        ],
+        "edge_y": 0.8999999999999999,
+        "top_z": 0.39
+      },
+      "slot": 3,
+      "draw": {
+        "version": "physical_dr_v1",
+        "sampling": "environment_creation",
+        "size_scale": 1.0215988175525106,
+        "mass_scale": 0.9719400444319723,
+        "friction_scale": 1.1270586233848827,
+        "rolling_scale": 0.866569388313789,
+        "damping_scale": 1.0
+      }
+    },
+    {
+      "seed": 70040,
+      "initial": {
+        "position": [
+          0.01039213495824215,
+          2.2255827285414873,
+          0.7359409944388328
+        ],
+        "quaternion": [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "velocity": [
+          0.30629678249543757,
+          -1.0730935358878393,
+          0.0,
+          30.024165604130925,
+          8.569900958397623,
+          0.0
+        ],
+        "mass": 0.12500742753565885,
+        "inertia": [
+          6.38747294029631e-05,
+          6.38747294029631e-05,
+          6.38747294029631e-05
+        ]
+      },
+      "departure": 1.294000000000001,
+      "launch_valid": true,
+      "arrival_window": true,
+      "early": false,
+      "stopped": false,
+      "stopped_at_2p5": null,
+      "final_speed": 1.1392143563916213,
+      "final_position": [
+        0.3997177581915316,
+        0.8625942658427046,
+        0.41981247750119743
+      ],
+      "table": {
+        "center": [
+          0.0,
+          2.5,
+          0.37
+        ],
+        "half_size": [
+          1.2,
+          1.6,
+          0.02
+        ],
+        "edge_y": 0.8999999999999999,
+        "top_z": 0.39
+      },
+      "slot": 4,
+      "draw": {
+        "version": "physical_dr_v1",
+        "sampling": "environment_creation",
+        "size_scale": 0.9879689136103641,
+        "mass_scale": 0.9058509241714409,
+        "friction_scale": 0.9079810810465848,
+        "rolling_scale": 0.8446167147298554,
+        "damping_scale": 1.0
+      }
+    },
+    {
+      "seed": 70041,
+      "initial": {
+        "position": [
+          0.0897214095022954,
+          2.247611296108957,
+          0.7359409944388328
+        ],
+        "quaternion": [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "velocity": [
+          0.238633428078147,
+          -1.0961848491611579,
+          0.0,
+          30.67023921332602,
+          6.676742822210626,
+          0.0
+        ],
+        "mass": 0.12500742753565885,
+        "inertia": [
+          6.38747294029631e-05,
+          6.38747294029631e-05,
+          6.38747294029631e-05
+        ]
+      },
+      "departure": 1.286000000000001,
+      "launch_valid": true,
+      "arrival_window": true,
+      "early": false,
+      "stopped": false,
+      "stopped_at_2p5": null,
+      "final_speed": 1.1411105559976913,
+      "final_position": [
+        0.3907122187906689,
+        0.8635843479541544,
+        0.42022678924786283
+      ],
+      "table": {
+        "center": [
+          0.0,
+          2.5,
+          0.37
+        ],
+        "half_size": [
+          1.2,
+          1.6,
+          0.02
+        ],
+        "edge_y": 0.8999999999999999,
+        "top_z": 0.39
+      },
+      "slot": 4,
+      "draw": {
+        "version": "physical_dr_v1",
+        "sampling": "environment_creation",
+        "size_scale": 0.9879689136103641,
+        "mass_scale": 0.9058509241714409,
+        "friction_scale": 0.9079810810465848,
+        "rolling_scale": 0.8446167147298554,
+        "damping_scale": 1.0
+      }
+    },
+    {
+      "seed": 70042,
+      "initial": {
+        "position": [
+          0.1988319618440808,
+          2.1313054129505518,
+          0.7359409944388328
+        ],
+        "quaternion": [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "velocity": [
+          -0.11651632280550185,
+          -1.120277182971651,
+          0.0,
+          31.34432045221613,
+          -3.2600190519295147,
+          0.0
+        ],
+        "mass": 0.12500742753565885,
+        "inertia": [
+          6.38747294029631e-05,
+          6.38747294029631e-05,
+          6.38747294029631e-05
+        ]
+      },
+      "departure": 1.1520000000000008,
+      "launch_valid": true,
+      "arrival_window": true,
+      "early": false,
+      "stopped": false,
+      "stopped_at_2p5": null,
+      "final_speed": 1.1450741876633443,
+      "final_position": [
+        0.06783982002181636,
+        0.8630122665363618,
+        0.42053081324270547
+      ],
+      "table": {
+        "center": [
+          0.0,
+          2.5,
+          0.37
+        ],
+        "half_size": [
+          1.2,
+          1.6,
+          0.02
+        ],
+        "edge_y": 0.8999999999999999,
+        "top_z": 0.39
+      },
+      "slot": 4,
+      "draw": {
+        "version": "physical_dr_v1",
+        "sampling": "environment_creation",
+        "size_scale": 0.9879689136103641,
+        "mass_scale": 0.9058509241714409,
+        "friction_scale": 0.9079810810465848,
+        "rolling_scale": 0.8446167147298554,
+        "damping_scale": 1.0
+      }
+    },
+    {
+      "seed": 70043,
+      "initial": {
+        "position": [
+          0.15003480177780065,
+          2.5994674118275167,
+          0.7359409944388328
+        ],
+        "quaternion": [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "velocity": [
+          0.23172022165943407,
+          -0.7943028202044015,
+          0.0,
+          22.223858979743053,
+          6.483317694363548,
+          0.0
+        ],
+        "mass": 0.12500742753565885,
+        "inertia": [
+          6.38747294029631e-05,
+          6.38747294029631e-05,
+          6.38747294029631e-05
+        ]
+      },
+      "departure": 2.255999999999973,
+      "launch_valid": true,
+      "arrival_window": false,
+      "early": false,
+      "stopped": false,
+      "stopped_at_2p5": null,
+      "final_speed": 0.9129308590597709,
+      "final_position": [
+        0.6643553051181378,
+        0.8634925766633271,
+        0.4146042233217693
+      ],
+      "table": {
+        "center": [
+          0.0,
+          2.5,
+          0.37
+        ],
+        "half_size": [
+          1.2,
+          1.6,
+          0.02
+        ],
+        "edge_y": 0.8999999999999999,
+        "top_z": 0.39
+      },
+      "slot": 4,
+      "draw": {
+        "version": "physical_dr_v1",
+        "sampling": "environment_creation",
+        "size_scale": 0.9879689136103641,
+        "mass_scale": 0.9058509241714409,
+        "friction_scale": 0.9079810810465848,
+        "rolling_scale": 0.8446167147298554,
+        "damping_scale": 1.0
+      }
+    },
+    {
+      "seed": 70044,
+      "initial": {
+        "position": [
+          0.06059163009569224,
+          2.1830344962643906,
+          0.7359409944388328
+        ],
+        "quaternion": [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "velocity": [
+          -0.08121112519039561,
+          -1.0111021840368841,
+          0.0,
+          28.289704858864106,
+          -2.272212244384537,
+          0.0
+        ],
+        "mass": 0.12500742753565885,
+        "inertia": [
+          6.38747294029631e-05,
+          6.38747294029631e-05,
+          6.38747294029631e-05
+        ]
+      },
+      "departure": 1.330000000000001,
+      "launch_valid": true,
+      "arrival_window": true,
+      "early": false,
+      "stopped": false,
+      "stopped_at_2p5": null,
+      "final_speed": 1.043068286900102,
+      "final_position": [
+        -0.04463089890681884,
+        0.8641005970688287,
+        0.4197079284104031
+      ],
+      "table": {
+        "center": [
+          0.0,
+          2.5,
+          0.37
+        ],
+        "half_size": [
+          1.2,
+          1.6,
+          0.02
+        ],
+        "edge_y": 0.8999999999999999,
+        "top_z": 0.39
+      },
+      "slot": 4,
+      "draw": {
+        "version": "physical_dr_v1",
+        "sampling": "environment_creation",
+        "size_scale": 0.9879689136103641,
+        "mass_scale": 0.9058509241714409,
+        "friction_scale": 0.9079810810465848,
+        "rolling_scale": 0.8446167147298554,
+        "damping_scale": 1.0
+      }
+    },
+    {
+      "seed": 70045,
+      "initial": {
+        "position": [
+          -0.07926710995124076,
+          2.379155512981354,
+          0.7359409944388328
+        ],
+        "quaternion": [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "velocity": [
+          -0.39603520271661835,
+          -1.212073424944779,
+          0.0,
+          33.91269448361664,
+          -11.0806990385898,
+          0.0
+        ],
+        "mass": 0.12500742753565885,
+        "inertia": [
+          6.38747294029631e-05,
+          6.38747294029631e-05,
+          6.38747294029631e-05
+        ]
+      },
+      "departure": 1.274000000000001,
+      "launch_valid": true,
+      "arrival_window": true,
+      "early": false,
+      "stopped": false,
+      "stopped_at_2p5": null,
+      "final_speed": 1.2812921809421247,
+      "final_position": [
+        -0.5748587378002218,
+        0.861989052030875,
+        0.4210717046193032
+      ],
+      "table": {
+        "center": [
+          0.0,
+          2.5,
+          0.37
+        ],
+        "half_size": [
+          1.2,
+          1.6,
+          0.02
+        ],
+        "edge_y": 0.8999999999999999,
+        "top_z": 0.39
+      },
+      "slot": 4,
+      "draw": {
+        "version": "physical_dr_v1",
+        "sampling": "environment_creation",
+        "size_scale": 0.9879689136103641,
+        "mass_scale": 0.9058509241714409,
+        "friction_scale": 0.9079810810465848,
+        "rolling_scale": 0.8446167147298554,
+        "damping_scale": 1.0
+      }
+    },
+    {
+      "seed": 70046,
+      "initial": {
+        "position": [
+          0.2462781346698173,
+          2.3079254977184145,
+          0.7359409944388328
+        ],
+        "quaternion": [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "velocity": [
+          -0.34010008912074374,
+          -0.764109289160223,
+          0.0,
+          21.379071879712814,
+          -9.51568624378349,
+          0.0
+        ],
+        "mass": 0.12500742753565885,
+        "inertia": [
+          6.38747294029631e-05,
+          6.38747294029631e-05,
+          6.38747294029631e-05
+        ]
+      },
+      "departure": 1.9420000000000015,
+      "launch_valid": true,
+      "arrival_window": true,
+      "early": false,
+      "stopped": false,
+      "stopped_at_2p5": null,
+      "final_speed": 0.9274049301685536,
+      "final_position": [
+        -0.4024903884872393,
+        0.863211127254693,
+        0.41463655409837047
+      ],
+      "table": {
+        "center": [
+          0.0,
+          2.5,
+          0.37
+        ],
+        "half_size": [
+          1.2,
+          1.6,
+          0.02
+        ],
+        "edge_y": 0.8999999999999999,
+        "top_z": 0.39
+      },
+      "slot": 4,
+      "draw": {
+        "version": "physical_dr_v1",
+        "sampling": "environment_creation",
+        "size_scale": 0.9879689136103641,
+        "mass_scale": 0.9058509241714409,
+        "friction_scale": 0.9079810810465848,
+        "rolling_scale": 0.8446167147298554,
+        "damping_scale": 1.0
+      }
+    },
+    {
+      "seed": 70047,
+      "initial": {
+        "position": [
+          0.059752781793983245,
+          2.524520120936519,
+          0.7359409944388328
+        ],
+        "quaternion": [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "velocity": [
+          -0.09287381485861612,
+          -0.8159483488976232,
+          0.0,
+          22.82948087228065,
+          -2.598523525067565,
+          0.0
+        ],
+        "mass": 0.12500742753565885,
+        "inertia": [
+          6.38747294029631e-05,
+          6.38747294029631e-05,
+          6.38747294029631e-05
+        ]
+      },
+      "departure": 2.0979999999999905,
+      "launch_valid": true,
+      "arrival_window": false,
+      "early": false,
+      "stopped": false,
+      "stopped_at_2p5": null,
+      "final_speed": 0.8942701210117698,
+      "final_position": [
+        -0.13120915742178704,
+        0.8633638048566796,
+        0.415837984084228
+      ],
+      "table": {
+        "center": [
+          0.0,
+          2.5,
+          0.37
+        ],
+        "half_size": [
+          1.2,
+          1.6,
+          0.02
+        ],
+        "edge_y": 0.8999999999999999,
+        "top_z": 0.39
+      },
+      "slot": 4,
+      "draw": {
+        "version": "physical_dr_v1",
+        "sampling": "environment_creation",
+        "size_scale": 0.9879689136103641,
+        "mass_scale": 0.9058509241714409,
+        "friction_scale": 0.9079810810465848,
+        "rolling_scale": 0.8446167147298554,
+        "damping_scale": 1.0
+      }
+    },
+    {
+      "seed": 70048,
+      "initial": {
+        "position": [
+          0.07433288297837598,
+          2.242966000315897,
+          0.7359409944388328
+        ],
+        "quaternion": [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "velocity": [
+          -0.1712608000013055,
+          -0.8534184079836639,
+          0.0,
+          23.877858503467355,
+          -4.7917189404005365,
+          0.0
+        ],
+        "mass": 0.12500742753565885,
+        "inertia": [
+          6.38747294029631e-05,
+          6.38747294029631e-05,
+          6.38747294029631e-05
+        ]
+      },
+      "departure": 1.6560000000000012,
+      "launch_valid": true,
+      "arrival_window": true,
+      "early": false,
+      "stopped": false,
+      "stopped_at_2p5": null,
+      "final_speed": 0.9395575665434704,
+      "final_position": [
+        -0.20428140293949265,
+        0.8636726796840589,
+        0.41641173480625326
+      ],
+      "table": {
+        "center": [
+          0.0,
+          2.5,
+          0.37
+        ],
+        "half_size": [
+          1.2,
+          1.6,
+          0.02
+        ],
+        "edge_y": 0.8999999999999999,
+        "top_z": 0.39
+      },
+      "slot": 4,
+      "draw": {
+        "version": "physical_dr_v1",
+        "sampling": "environment_creation",
+        "size_scale": 0.9879689136103641,
+        "mass_scale": 0.9058509241714409,
+        "friction_scale": 0.9079810810465848,
+        "rolling_scale": 0.8446167147298554,
+        "damping_scale": 1.0
+      }
+    },
+    {
+      "seed": 70049,
+      "initial": {
+        "position": [
+          0.08442550579247388,
+          2.5237070607502674,
+          0.7359409944388328
+        ],
+        "quaternion": [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "velocity": [
+          -0.6160798105388433,
+          -1.134545338660994,
+          0.0,
+          31.743530264740002,
+          -17.237343845963853,
+          0.0
+        ],
+        "mass": 0.12500742753565885,
+        "inertia": [
+          6.38747294029631e-05,
+          6.38747294029631e-05,
+          6.38747294029631e-05
+        ]
+      },
+      "departure": 1.492000000000001,
+      "launch_valid": true,
+      "arrival_window": true,
+      "early": false,
+      "stopped": false,
+      "stopped_at_2p5": null,
+      "final_speed": 1.2988287535501992,
+      "final_position": [
+        -0.8202530697472386,
+        0.8629642831084388,
+        0.4205798286619041
+      ],
+      "table": {
+        "center": [
+          0.0,
+          2.5,
+          0.37
+        ],
+        "half_size": [
+          1.2,
+          1.6,
+          0.02
+        ],
+        "edge_y": 0.8999999999999999,
+        "top_z": 0.39
+      },
+      "slot": 4,
+      "draw": {
+        "version": "physical_dr_v1",
+        "sampling": "environment_creation",
+        "size_scale": 0.9879689136103641,
+        "mass_scale": 0.9058509241714409,
+        "friction_scale": 0.9079810810465848,
+        "rolling_scale": 0.8446167147298554,
+        "damping_scale": 1.0
+      }
+    },
+    {
+      "seed": 70050,
+      "initial": {
+        "position": [
+          0.06401804269862155,
+          2.244176002990658,
+          0.7365795442517279
+        ],
+        "quaternion": [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "velocity": [
+          -0.2679994036715395,
+          -1.0697866538735599,
+          0.0,
+          29.406268711646874,
+          -7.3667608867532826,
+          0.0
+        ],
+        "mass": 0.14472119593971547,
+        "inertia": [
+          7.661373625573034e-05,
+          7.661373625573034e-05,
+          7.661373625573034e-05
+        ]
+      },
+      "departure": 1.314000000000001,
+      "launch_valid": true,
+      "arrival_window": true,
+      "early": false,
+      "stopped": false,
+      "stopped_at_2p5": null,
+      "final_speed": 1.127177066838809,
+      "final_position": [
+        -0.2828097014768489,
+        0.8629017654960563,
+        0.42052294503342125
+      ],
+      "table": {
+        "center": [
+          0.0,
+          2.5,
+          0.37
+        ],
+        "half_size": [
+          1.2,
+          1.6,
+          0.02
+        ],
+        "edge_y": 0.8999999999999999,
+        "top_z": 0.39
+      },
+      "slot": 5,
+      "draw": {
+        "version": "physical_dr_v1",
+        "sampling": "environment_creation",
+        "size_scale": 1.0056199995646662,
+        "mass_scale": 1.0487043184037352,
+        "friction_scale": 1.0603892358385025,
+        "rolling_scale": 0.8195002131148292,
+        "damping_scale": 1.0
+      }
+    },
+    {
+      "seed": 70051,
+      "initial": {
+        "position": [
+          0.1413899414628978,
+          2.477908884595079,
+          0.7365795442517279
+        ],
+        "quaternion": [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "velocity": [
+          0.02823091063618585,
+          -1.2776198758479431,
+          0.0,
+          35.1191831048642,
+          0.7760105635420366,
+          0.0
+        ],
+        "mass": 0.14472119593971547,
+        "inertia": [
+          7.661373625573034e-05,
+          7.661373625573034e-05,
+          7.661373625573034e-05
+        ]
+      },
+      "departure": 1.286000000000001,
+      "launch_valid": true,
+      "arrival_window": true,
+      "early": false,
+      "stopped": false,
+      "stopped_at_2p5": null,
+      "final_speed": 1.281744705760614,
+      "final_position": [
+        0.17630950761830863,
+        0.8616742443384049,
+        0.4220742100464448
+      ],
+      "table": {
+        "center": [
+          0.0,
+          2.5,
+          0.37
+        ],
+        "half_size": [
+          1.2,
+          1.6,
+          0.02
+        ],
+        "edge_y": 0.8999999999999999,
+        "top_z": 0.39
+      },
+      "slot": 5,
+      "draw": {
+        "version": "physical_dr_v1",
+        "sampling": "environment_creation",
+        "size_scale": 1.0056199995646662,
+        "mass_scale": 1.0487043184037352,
+        "friction_scale": 1.0603892358385025,
+        "rolling_scale": 0.8195002131148292,
+        "damping_scale": 1.0
+      }
+    },
+    {
+      "seed": 70052,
+      "initial": {
+        "position": [
+          -0.13413133192363086,
+          2.1599025028785324,
+          0.7365795442517279
+        ],
+        "quaternion": [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "velocity": [
+          -0.28113529352306593,
+          -1.0685543633815462,
+          0.0,
+          29.372395541507995,
+          -7.727839897546621,
+          0.0
+        ],
+        "mass": 0.14472119593971547,
+        "inertia": [
+          7.661373625573034e-05,
+          7.661373625573034e-05,
+          7.661373625573034e-05
+        ]
+      },
+      "departure": 1.2340000000000009,
+      "launch_valid": true,
+      "arrival_window": true,
+      "early": false,
+      "stopped": false,
+      "stopped_at_2p5": null,
+      "final_speed": 1.1281893919156514,
+      "final_position": [
+        -0.47581841950628156,
+        0.863527253498453,
+        0.4208180209020951
+      ],
+      "table": {
+        "center": [
+          0.0,
+          2.5,
+          0.37
+        ],
+        "half_size": [
+          1.2,
+          1.6,
+          0.02
+        ],
+        "edge_y": 0.8999999999999999,
+        "top_z": 0.39
+      },
+      "slot": 5,
+      "draw": {
+        "version": "physical_dr_v1",
+        "sampling": "environment_creation",
+        "size_scale": 1.0056199995646662,
+        "mass_scale": 1.0487043184037352,
+        "friction_scale": 1.0603892358385025,
+        "rolling_scale": 0.8195002131148292,
+        "damping_scale": 1.0
+      }
+    },
+    {
+      "seed": 70053,
+      "initial": {
+        "position": [
+          -0.10404434844638633,
+          2.3985725780520437,
+          0.7365795442517279
+        ],
+        "quaternion": [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "velocity": [
+          -0.3937424038365376,
+          -0.9393040560672407,
+          0.0,
+          25.81956633562352,
+          -10.823181321680133,
+          0.0
+        ],
+        "mass": 0.14472119593971547,
+        "inertia": [
+          7.661373625573034e-05,
+          7.661373625573034e-05,
+          7.661373625573034e-05
+        ]
+      },
+      "departure": 1.6680000000000013,
+      "launch_valid": true,
+      "arrival_window": true,
+      "early": false,
+      "stopped": false,
+      "stopped_at_2p5": null,
+      "final_speed": 1.0600826950408777,
+      "final_position": [
+        -0.7502198014154576,
+        0.8626517966432401,
+        0.41890371133042825
+      ],
+      "table": {
+        "center": [
+          0.0,
+          2.5,
+          0.37
+        ],
+        "half_size": [
+          1.2,
+          1.6,
+          0.02
+        ],
+        "edge_y": 0.8999999999999999,
+        "top_z": 0.39
+      },
+      "slot": 5,
+      "draw": {
+        "version": "physical_dr_v1",
+        "sampling": "environment_creation",
+        "size_scale": 1.0056199995646662,
+        "mass_scale": 1.0487043184037352,
+        "friction_scale": 1.0603892358385025,
+        "rolling_scale": 0.8195002131148292,
+        "damping_scale": 1.0
+      }
+    },
+    {
+      "seed": 70054,
+      "initial": {
+        "position": [
+          0.19317404598476112,
+          2.53453637188114,
+          0.7365795442517279
+        ],
+        "quaternion": [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "velocity": [
+          -0.47600204586497497,
+          -1.1124889234444566,
+          0.0,
+          30.580067626647534,
+          -13.084332298702893,
+          0.0
+        ],
+        "mass": 0.14472119593971547,
+        "inertia": [
+          7.661373625573034e-05,
+          7.661373625573034e-05,
+          7.661373625573034e-05
+        ]
+      },
+      "departure": 1.5300000000000011,
+      "launch_valid": true,
+      "arrival_window": true,
+      "early": false,
+      "stopped": false,
+      "stopped_at_2p5": null,
+      "final_speed": 1.225449262828943,
+      "final_position": [
+        -0.5244870916517171,
+        0.8626965055326955,
+        0.4208270431984479
+      ],
+      "table": {
+        "center": [
+          0.0,
+          2.5,
+          0.37
+        ],
+        "half_size": [
+          1.2,
+          1.6,
+          0.02
+        ],
+        "edge_y": 0.8999999999999999,
+        "top_z": 0.39
+      },
+      "slot": 5,
+      "draw": {
+        "version": "physical_dr_v1",
+        "sampling": "environment_creation",
+        "size_scale": 1.0056199995646662,
+        "mass_scale": 1.0487043184037352,
+        "friction_scale": 1.0603892358385025,
+        "rolling_scale": 0.8195002131148292,
+        "damping_scale": 1.0
+      }
+    },
+    {
+      "seed": 70055,
+      "initial": {
+        "position": [
+          0.034822334244236475,
+          2.2049770075343753,
+          0.7365795442517279
+        ],
+        "quaternion": [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "velocity": [
+          0.020943365504470263,
+          -1.2033261583539816,
+          0.0,
+          33.07699926166136,
+          0.5756907057315735,
+          0.0
+        ],
+        "mass": 0.14472119593971547,
+        "inertia": [
+          7.661373625573034e-05,
+          7.661373625573034e-05,
+          7.661373625573034e-05
+        ]
+      },
+      "departure": 1.1340000000000008,
+      "launch_valid": true,
+      "arrival_window": true,
+      "early": false,
+      "stopped": false,
+      "stopped_at_2p5": null,
+      "final_speed": 1.2162223768256213,
+      "final_position": [
+        0.057641766386481774,
+        0.8619896085791818,
+        0.4216600982831259
+      ],
+      "table": {
+        "center": [
+          0.0,
+          2.5,
+          0.37
+        ],
+        "half_size": [
+          1.2,
+          1.6,
+          0.02
+        ],
+        "edge_y": 0.8999999999999999,
+        "top_z": 0.39
+      },
+      "slot": 5,
+      "draw": {
+        "version": "physical_dr_v1",
+        "sampling": "environment_creation",
+        "size_scale": 1.0056199995646662,
+        "mass_scale": 1.0487043184037352,
+        "friction_scale": 1.0603892358385025,
+        "rolling_scale": 0.8195002131148292,
+        "damping_scale": 1.0
+      }
+    },
+    {
+      "seed": 70056,
+      "initial": {
+        "position": [
+          0.10509459115788106,
+          2.3720054603787504,
+          0.7365795442517279
+        ],
+        "quaternion": [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "velocity": [
+          0.17600501336897767,
+          -0.843568716558678,
+          0.0,
+          23.187995724234803,
+          4.838021393316875,
+          0.0
+        ],
+        "mass": 0.14472119593971547,
+        "inertia": [
+          7.661373625573034e-05,
+          7.661373625573034e-05,
+          7.661373625573034e-05
+        ]
+      },
+      "departure": 1.8320000000000014,
+      "launch_valid": true,
+      "arrival_window": true,
+      "early": false,
+      "stopped": false,
+      "stopped_at_2p5": null,
+      "final_speed": 0.9351466254145492,
+      "final_position": [
+        0.42121698790671436,
+        0.8624622179866158,
+        0.4167502144767418
+      ],
+      "table": {
+        "center": [
+          0.0,
+          2.5,
+          0.37
+        ],
+        "half_size": [
+          1.2,
+          1.6,
+          0.02
+        ],
+        "edge_y": 0.8999999999999999,
+        "top_z": 0.39
+      },
+      "slot": 5,
+      "draw": {
+        "version": "physical_dr_v1",
+        "sampling": "environment_creation",
+        "size_scale": 1.0056199995646662,
+        "mass_scale": 1.0487043184037352,
+        "friction_scale": 1.0603892358385025,
+        "rolling_scale": 0.8195002131148292,
+        "damping_scale": 1.0
+      }
+    },
+    {
+      "seed": 70057,
+      "initial": {
+        "position": [
+          -0.13580920446132727,
+          2.2796163540096206,
+          0.7365795442517279
+        ],
+        "quaternion": [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "velocity": [
+          -0.37502737937636543,
+          -0.8642584550747533,
+          0.0,
+          23.756714737670286,
+          -10.30874319868789,
+          0.0
+        ],
+        "mass": 0.14472119593971547,
+        "inertia": [
+          7.661373625573034e-05,
+          7.661373625573034e-05,
+          7.661373625573034e-05
+        ]
+      },
+      "departure": 1.6740000000000013,
+      "launch_valid": true,
+      "arrival_window": true,
+      "early": false,
+      "stopped": false,
+      "stopped_at_2p5": null,
+      "final_speed": 1.0117667187965969,
+      "final_position": [
+        -0.752866640111114,
+        0.8621092358214695,
+        0.41673898821882793
+      ],
+      "table": {
+        "center": [
+          0.0,
+          2.5,
+          0.37
+        ],
+        "half_size": [
+          1.2,
+          1.6,
+          0.02
+        ],
+        "edge_y": 0.8999999999999999,
+        "top_z": 0.39
+      },
+      "slot": 5,
+      "draw": {
+        "version": "physical_dr_v1",
+        "sampling": "environment_creation",
+        "size_scale": 1.0056199995646662,
+        "mass_scale": 1.0487043184037352,
+        "friction_scale": 1.0603892358385025,
+        "rolling_scale": 0.8195002131148292,
+        "damping_scale": 1.0
+      }
+    },
+    {
+      "seed": 70058,
+      "initial": {
+        "position": [
+          -0.10242023395341082,
+          2.3350581738759657,
+          0.7365795442517279
+        ],
+        "quaternion": [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "velocity": [
+          0.2689692455720036,
+          -1.1365560595786106,
+          0.0,
+          31.241624461104326,
+          7.393419876589803,
+          0.0
+        ],
+        "mass": 0.14472119593971547,
+        "inertia": [
+          7.661373625573034e-05,
+          7.661373625573034e-05,
+          7.661373625573034e-05
+        ]
+      },
+      "departure": 1.318000000000001,
+      "launch_valid": true,
+      "arrival_window": true,
+      "early": false,
+      "stopped": false,
+      "stopped_at_2p5": null,
+      "final_speed": 1.1832995667002135,
+      "final_position": [
+        0.24661032332920482,
+        0.8628282443214096,
+        0.4211946880155453
+      ],
+      "table": {
+        "center": [
+          0.0,
+          2.5,
+          0.37
+        ],
+        "half_size": [
+          1.2,
+          1.6,
+          0.02
+        ],
+        "edge_y": 0.8999999999999999,
+        "top_z": 0.39
+      },
+      "slot": 5,
+      "draw": {
+        "version": "physical_dr_v1",
+        "sampling": "environment_creation",
+        "size_scale": 1.0056199995646662,
+        "mass_scale": 1.0487043184037352,
+        "friction_scale": 1.0603892358385025,
+        "rolling_scale": 0.8195002131148292,
+        "damping_scale": 1.0
+      }
+    },
+    {
+      "seed": 70059,
+      "initial": {
+        "position": [
+          -0.19972544988020735,
+          2.1789575313958145,
+          0.7365795442517279
+        ],
+        "quaternion": [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "velocity": [
+          0.33742674677784623,
+          -0.9003148888143706,
+          0.0,
+          24.747833084016936,
+          9.275177952835937,
+          0.0
+        ],
+        "mass": 0.14472119593971547,
+        "inertia": [
+          7.661373625573034e-05,
+          7.661373625573034e-05,
+          7.661373625573034e-05
+        ]
+      },
+      "departure": 1.490000000000001,
+      "launch_valid": true,
+      "arrival_window": true,
+      "early": false,
+      "stopped": false,
+      "stopped_at_2p5": null,
+      "final_speed": 1.0200399423172901,
+      "final_position": [
+        0.2949775573952098,
+        0.8629097178422058,
+        0.4178709675606928
+      ],
+      "table": {
+        "center": [
+          0.0,
+          2.5,
+          0.37
+        ],
+        "half_size": [
+          1.2,
+          1.6,
+          0.02
+        ],
+        "edge_y": 0.8999999999999999,
+        "top_z": 0.39
+      },
+      "slot": 5,
+      "draw": {
+        "version": "physical_dr_v1",
+        "sampling": "environment_creation",
+        "size_scale": 1.0056199995646662,
+        "mass_scale": 1.0487043184037352,
+        "friction_scale": 1.0603892358385025,
+        "rolling_scale": 0.8195002131148292,
+        "damping_scale": 1.0
+      }
+    },
+    {
+      "seed": 70060,
+      "initial": {
+        "position": [
+          0.2299561747713076,
+          2.573437070907632,
+          0.7373973902476871
+        ],
+        "quaternion": [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "velocity": [
+          0.19453303284442616,
+          -1.1438416938835239,
+          0.0,
+          30.750589927599677,
+          5.229749494496368,
+          0.0
+        ],
+        "mass": 0.1343629597623091,
+        "inertia": [
+          7.436430019665851e-05,
+          7.436430019665851e-05,
+          7.436430019665851e-05
+        ]
+      },
+      "departure": 1.5300000000000011,
+      "launch_valid": true,
+      "arrival_window": true,
+      "early": false,
+      "stopped": false,
+      "stopped_at_2p5": null,
+      "final_speed": 1.169912901804774,
+      "final_position": [
+        0.5212162786209648,
+        0.8608826841020564,
+        0.42136068232766377
+      ],
+      "table": {
+        "center": [
+          0.0,
+          2.5,
+          0.37
+        ],
+        "half_size": [
+          1.2,
+          1.6,
+          0.02
+        ],
+        "edge_y": 0.8999999999999999,
+        "top_z": 0.39
+      },
+      "slot": 6,
+      "draw": {
+        "version": "physical_dr_v1",
+        "sampling": "environment_creation",
+        "size_scale": 1.028227272608265,
+        "mass_scale": 0.9736446359587616,
+        "friction_scale": 0.9888115604353462,
+        "rolling_scale": 1.1171866283838954,
+        "damping_scale": 1.0
+      }
+    },
+    {
+      "seed": 70061,
+      "initial": {
+        "position": [
+          -0.0864036648121983,
+          2.1005825680338175,
+          0.7373973902476871
+        ],
+        "quaternion": [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "velocity": [
+          -0.46958390589222315,
+          -1.0475729081488503,
+          0.0,
+          28.162537779488044,
+          -12.624108916388844,
+          0.0
+        ],
+        "mass": 0.1343629597623091,
+        "inertia": [
+          7.436430019665851e-05,
+          7.436430019665851e-05,
+          7.436430019665851e-05
+        ]
+      },
+      "departure": 1.2060000000000008,
+      "launch_valid": true,
+      "arrival_window": true,
+      "early": false,
+      "stopped": false,
+      "stopped_at_2p5": null,
+      "final_speed": 1.1760164860643427,
+      "final_position": [
+        -0.6437302723477618,
+        0.8615272915147753,
+        0.4203172068883093
+      ],
+      "table": {
+        "center": [
+          0.0,
+          2.5,
+          0.37
+        ],
+        "half_size": [
+          1.2,
+          1.6,
+          0.02
+        ],
+        "edge_y": 0.8999999999999999,
+        "top_z": 0.39
+      },
+      "slot": 6,
+      "draw": {
+        "version": "physical_dr_v1",
+        "sampling": "environment_creation",
+        "size_scale": 1.028227272608265,
+        "mass_scale": 0.9736446359587616,
+        "friction_scale": 0.9888115604353462,
+        "rolling_scale": 1.1171866283838954,
+        "damping_scale": 1.0
+      }
+    },
+    {
+      "seed": 70062,
+      "initial": {
+        "position": [
+          -0.23555301040166843,
+          2.458758729241475,
+          0.7373973902476871
+        ],
+        "quaternion": [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "velocity": [
+          -0.060327080069847064,
+          -0.9186042523503163,
+          0.0,
+          24.69539519395268,
+          -1.6218094782495667,
+          0.0
+        ],
+        "mass": 0.1343629597623091,
+        "inertia": [
+          7.436430019665851e-05,
+          7.436430019665851e-05,
+          7.436430019665851e-05
+        ]
+      },
+      "departure": 1.7880000000000014,
+      "launch_valid": true,
+      "arrival_window": true,
+      "early": false,
+      "stopped": false,
+      "stopped_at_2p5": null,
+      "final_speed": 0.9695743491688977,
+      "final_position": [
+        -0.3401734892094343,
+        0.8618164685586909,
+        0.41835998292170506
+      ],
+      "table": {
+        "center": [
+          0.0,
+          2.5,
+          0.37
+        ],
+        "half_size": [
+          1.2,
+          1.6,
+          0.02
+        ],
+        "edge_y": 0.8999999999999999,
+        "top_z": 0.39
+      },
+      "slot": 6,
+      "draw": {
+        "version": "physical_dr_v1",
+        "sampling": "environment_creation",
+        "size_scale": 1.028227272608265,
+        "mass_scale": 0.9736446359587616,
+        "friction_scale": 0.9888115604353462,
+        "rolling_scale": 1.1171866283838954,
+        "damping_scale": 1.0
+      }
+    },
+    {
+      "seed": 70063,
+      "initial": {
+        "position": [
+          0.11070865183043316,
+          2.439186879033604,
+          0.7373973902476871
+        ],
+        "quaternion": [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "velocity": [
+          0.5036670485963196,
+          -0.886132402469711,
+          0.0,
+          23.822434761395876,
+          13.54038671107138,
+          0.0
+        ],
+        "mass": 0.1343629597623091,
+        "inertia": [
+          7.436430019665851e-05,
+          7.436430019665851e-05,
+          7.436430019665851e-05
+        ]
+      },
+      "departure": 1.8260000000000014,
+      "launch_valid": true,
+      "arrival_window": true,
+      "early": false,
+      "stopped": false,
+      "stopped_at_2p5": null,
+      "final_speed": 1.0658281402105763,
+      "final_position": [
+        1.0151034200881046,
+        0.8625651603041196,
+        0.41824582329771637
+      ],
+      "table": {
+        "center": [
+          0.0,
+          2.5,
+          0.37
+        ],
+        "half_size": [
+          1.2,
+          1.6,
+          0.02
+        ],
+        "edge_y": 0.8999999999999999,
+        "top_z": 0.39
+      },
+      "slot": 6,
+      "draw": {
+        "version": "physical_dr_v1",
+        "sampling": "environment_creation",
+        "size_scale": 1.028227272608265,
+        "mass_scale": 0.9736446359587616,
+        "friction_scale": 0.9888115604353462,
+        "rolling_scale": 1.1171866283838954,
+        "damping_scale": 1.0
+      }
+    },
+    {
+      "seed": 70064,
+      "initial": {
+        "position": [
+          -0.2486912526663222,
+          2.3323303401133004,
+          0.7373973902476871
+        ],
+        "quaternion": [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "velocity": [
+          -0.28139851214829054,
+          -0.7656019335513162,
+          0.0,
+          20.58214107101019,
+          -7.565006853290925,
+          0.0
+        ],
+        "mass": 0.1343629597623091,
+        "inertia": [
+          7.436430019665851e-05,
+          7.436430019665851e-05,
+          7.436430019665851e-05
+        ]
+      },
+      "departure": 1.9840000000000015,
+      "launch_valid": true,
+      "arrival_window": true,
+      "early": false,
+      "stopped": false,
+      "stopped_at_2p5": null,
+      "final_speed": 0.9118750004830936,
+      "final_position": [
+        -0.7973596849615273,
+        0.8627615807771737,
+        0.41511743756079433
+      ],
+      "table": {
+        "center": [
+          0.0,
+          2.5,
+          0.37
+        ],
+        "half_size": [
+          1.2,
+          1.6,
+          0.02
+        ],
+        "edge_y": 0.8999999999999999,
+        "top_z": 0.39
+      },
+      "slot": 6,
+      "draw": {
+        "version": "physical_dr_v1",
+        "sampling": "environment_creation",
+        "size_scale": 1.028227272608265,
+        "mass_scale": 0.9736446359587616,
+        "friction_scale": 0.9888115604353462,
+        "rolling_scale": 1.1171866283838954,
+        "damping_scale": 1.0
+      }
+    },
+    {
+      "seed": 70065,
+      "initial": {
+        "position": [
+          0.16573127593539272,
+          2.5256106495700292,
+          0.7373973902476871
+        ],
+        "quaternion": [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "velocity": [
+          -0.539383964808837,
+          -1.0930357959530117,
+          0.0,
+          29.384744162823985,
+          -14.500586229765789,
+          0.0
+        ],
+        "mass": 0.1343629597623091,
+        "inertia": [
+          7.436430019665851e-05,
+          7.436430019665851e-05,
+          7.436430019665851e-05
+        ]
+      },
+      "departure": 1.5560000000000012,
+      "launch_valid": true,
+      "arrival_window": true,
+      "early": false,
+      "stopped": false,
+      "stopped_at_2p5": null,
+      "final_speed": 1.228063313963355,
+      "final_position": [
+        -0.6604972148423125,
+        0.8620566594179119,
+        0.4212989314457014
+      ],
+      "table": {
+        "center": [
+          0.0,
+          2.5,
+          0.37
+        ],
+        "half_size": [
+          1.2,
+          1.6,
+          0.02
+        ],
+        "edge_y": 0.8999999999999999,
+        "top_z": 0.39
+      },
+      "slot": 6,
+      "draw": {
+        "version": "physical_dr_v1",
+        "sampling": "environment_creation",
+        "size_scale": 1.028227272608265,
+        "mass_scale": 0.9736446359587616,
+        "friction_scale": 0.9888115604353462,
+        "rolling_scale": 1.1171866283838954,
+        "damping_scale": 1.0
+      }
+    },
+    {
+      "seed": 70066,
+      "initial": {
+        "position": [
+          -0.1767666283912825,
+          2.336912497966022,
+          0.7373973902476871
+        ],
+        "quaternion": [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "velocity": [
+          -0.391995330525514,
+          -1.2394300160623402,
+          0.0,
+          33.320348761279135,
+          -10.538248192018983,
+          0.0
+        ],
+        "mass": 0.1343629597623091,
+        "inertia": [
+          7.436430019665851e-05,
+          7.436430019665851e-05,
+          7.436430019665851e-05
+        ]
+      },
+      "departure": 1.2120000000000009,
+      "launch_valid": true,
+      "arrival_window": true,
+      "early": false,
+      "stopped": false,
+      "stopped_at_2p5": null,
+      "final_speed": 1.3019066291234815,
+      "final_position": [
+        -0.6433834325134344,
+        0.8616906930349026,
+        0.42258612363204867
+      ],
+      "table": {
+        "center": [
+          0.0,
+          2.5,
+          0.37
+        ],
+        "half_size": [
+          1.2,
+          1.6,
+          0.02
+        ],
+        "edge_y": 0.8999999999999999,
+        "top_z": 0.39
+      },
+      "slot": 6,
+      "draw": {
+        "version": "physical_dr_v1",
+        "sampling": "environment_creation",
+        "size_scale": 1.028227272608265,
+        "mass_scale": 0.9736446359587616,
+        "friction_scale": 0.9888115604353462,
+        "rolling_scale": 1.1171866283838954,
+        "damping_scale": 1.0
+      }
+    },
+    {
+      "seed": 70067,
+      "initial": {
+        "position": [
+          0.019553635555976945,
+          2.2905403229812893,
+          0.7373973902476871
+        ],
+        "quaternion": [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "velocity": [
+          0.18872717505888656,
+          -1.0498081831690638,
+          0.0,
+          28.22263003341579,
+          5.073667098745483,
+          0.0
+        ],
+        "mass": 0.1343629597623091,
+        "inertia": [
+          7.436430019665851e-05,
+          7.436430019665851e-05,
+          7.436430019665851e-05
+        ]
+      },
+      "departure": 1.390000000000001,
+      "launch_valid": true,
+      "arrival_window": true,
+      "early": false,
+      "stopped": false,
+      "stopped_at_2p5": null,
+      "final_speed": 1.089364133619493,
+      "final_position": [
+        0.27648475727635224,
+        0.8621203575405255,
+        0.42081252068214375
+      ],
+      "table": {
+        "center": [
+          0.0,
+          2.5,
+          0.37
+        ],
+        "half_size": [
+          1.2,
+          1.6,
+          0.02
+        ],
+        "edge_y": 0.8999999999999999,
+        "top_z": 0.39
+      },
+      "slot": 6,
+      "draw": {
+        "version": "physical_dr_v1",
+        "sampling": "environment_creation",
+        "size_scale": 1.028227272608265,
+        "mass_scale": 0.9736446359587616,
+        "friction_scale": 0.9888115604353462,
+        "rolling_scale": 1.1171866283838954,
+        "damping_scale": 1.0
+      }
+    },
+    {
+      "seed": 70068,
+      "initial": {
+        "position": [
+          -0.17745074311560716,
+          2.4198094040088387,
+          0.7373973902476871
+        ],
+        "quaternion": [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "velocity": [
+          0.48346575018628385,
+          -0.8838790601680535,
+          0.0,
+          23.761856793784354,
+          12.997302955046537,
+          0.0
+        ],
+        "mass": 0.1343629597623091,
+        "inertia": [
+          7.436430019665851e-05,
+          7.436430019665851e-05,
+          7.436430019665851e-05
+        ]
+      },
+      "departure": 1.8100000000000014,
+      "launch_valid": true,
+      "arrival_window": true,
+      "early": false,
+      "stopped": false,
+      "stopped_at_2p5": null,
+      "final_speed": 1.0614981531076455,
+      "final_position": [
+        0.6832397687218409,
+        0.861244521103712,
+        0.41755935415772566
+      ],
+      "table": {
+        "center": [
+          0.0,
+          2.5,
+          0.37
+        ],
+        "half_size": [
+          1.2,
+          1.6,
+          0.02
+        ],
+        "edge_y": 0.8999999999999999,
+        "top_z": 0.39
+      },
+      "slot": 6,
+      "draw": {
+        "version": "physical_dr_v1",
+        "sampling": "environment_creation",
+        "size_scale": 1.028227272608265,
+        "mass_scale": 0.9736446359587616,
+        "friction_scale": 0.9888115604353462,
+        "rolling_scale": 1.1171866283838954,
+        "damping_scale": 1.0
+      }
+    },
+    {
+      "seed": 70069,
+      "initial": {
+        "position": [
+          0.16622711238105486,
+          2.1074929522798107,
+          0.7373973902476871
+        ],
+        "quaternion": [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "velocity": [
+          -0.13651961079170918,
+          -1.024924522396599,
+          0.0,
+          27.55366749043169,
+          -3.670139487815212,
+          0.0
+        ],
+        "mass": 0.1343629597623091,
+        "inertia": [
+          7.436430019665851e-05,
+          7.436430019665851e-05,
+          7.436430019665851e-05
+        ]
+      },
+      "departure": 1.2400000000000009,
+      "launch_valid": true,
+      "arrival_window": true,
+      "early": false,
+      "stopped": false,
+      "stopped_at_2p5": null,
+      "final_speed": 1.0718648887724171,
+      "final_position": [
+        0.0007944102818845529,
+        0.8619003447853942,
+        0.41981865184392336
+      ],
+      "table": {
+        "center": [
+          0.0,
+          2.5,
+          0.37
+        ],
+        "half_size": [
+          1.2,
+          1.6,
+          0.02
+        ],
+        "edge_y": 0.8999999999999999,
+        "top_z": 0.39
+      },
+      "slot": 6,
+      "draw": {
+        "version": "physical_dr_v1",
+        "sampling": "environment_creation",
+        "size_scale": 1.028227272608265,
+        "mass_scale": 0.9736446359587616,
+        "friction_scale": 0.9888115604353462,
+        "rolling_scale": 1.1171866283838954,
+        "damping_scale": 1.0
+      }
+    },
+    {
+      "seed": 70070,
+      "initial": {
+        "position": [
+          -0.13145358989363293,
+          2.583678938593491,
+          0.7364607228278124
+        ],
+        "quaternion": [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "velocity": [
+          -0.28513288994485514,
+          -0.8845769992349765,
+          0.0,
+          24.394908050660675,
+          -7.863408881804053,
+          0.0
+        ],
+        "mass": 0.14581206170096941,
+        "inertia": [
+          7.66878136489914e-05,
+          7.66878136489914e-05,
+          7.66878136489914e-05
+        ]
+      },
+      "departure": 2.0000000000000013,
+      "launch_valid": true,
+      "arrival_window": false,
+      "early": false,
+      "stopped": false,
+      "stopped_at_2p5": null,
+      "final_speed": 0.9810324484774465,
+      "final_position": [
+        -0.6923976437075723,
+        0.8627848406519631,
+        0.4173604760305948
+      ],
+      "table": {
+        "center": [
+          0.0,
+          2.5,
+          0.37
+        ],
+        "half_size": [
+          1.2,
+          1.6,
+          0.02
+        ],
+        "edge_y": 0.8999999999999999,
+        "top_z": 0.39
+      },
+      "slot": 7,
+      "draw": {
+        "version": "physical_dr_v1",
+        "sampling": "environment_creation",
+        "size_scale": 1.0023354834245137,
+        "mass_scale": 1.0566091427606479,
+        "friction_scale": 0.8738338299507391,
+        "rolling_scale": 0.8842523344053634,
+        "damping_scale": 1.0
+      }
+    },
+    {
+      "seed": 70071,
+      "initial": {
+        "position": [
+          0.057079540545057705,
+          2.4329039895927806,
+          0.7364607228278124
+        ],
+        "quaternion": [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "velocity": [
+          -0.39942736953657504,
+          -1.0021135321237955,
+          0.0,
+          27.63633634338812,
+          -11.01542766903172,
+          0.0
+        ],
+        "mass": 0.14581206170096941,
+        "inertia": [
+          7.66878136489914e-05,
+          7.66878136489914e-05,
+          7.66878136489914e-05
+        ]
+      },
+      "departure": 1.6020000000000012,
+      "launch_valid": true,
+      "arrival_window": true,
+      "early": false,
+      "stopped": false,
+      "stopped_at_2p5": null,
+      "final_speed": 1.1079613542700628,
+      "final_position": [
+        -0.5724489096492031,
+        0.8621517535574125,
+        0.41927126481676946
+      ],
+      "table": {
+        "center": [
+          0.0,
+          2.5,
+          0.37
+        ],
+        "half_size": [
+          1.2,
+          1.6,
+          0.02
+        ],
+        "edge_y": 0.8999999999999999,
+        "top_z": 0.39
+      },
+      "slot": 7,
+      "draw": {
+        "version": "physical_dr_v1",
+        "sampling": "environment_creation",
+        "size_scale": 1.0023354834245137,
+        "mass_scale": 1.0566091427606479,
+        "friction_scale": 0.8738338299507391,
+        "rolling_scale": 0.8842523344053634,
+        "damping_scale": 1.0
+      }
+    },
+    {
+      "seed": 70072,
+      "initial": {
+        "position": [
+          0.17977693265863204,
+          2.1212635540086495,
+          0.7364607228278124
+        ],
+        "quaternion": [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "velocity": [
+          -0.5301607907206612,
+          -0.9448713514785326,
+          0.0,
+          26.057708666353577,
+          -14.620800397117883,
+          0.0
+        ],
+        "mass": 0.14581206170096941,
+        "inertia": [
+          7.66878136489914e-05,
+          7.66878136489914e-05,
+          7.66878136489914e-05
+        ]
+      },
+      "departure": 1.358000000000001,
+      "launch_valid": true,
+      "arrival_window": true,
+      "early": false,
+      "stopped": false,
+      "stopped_at_2p5": null,
+      "final_speed": 1.125518845547009,
+      "final_position": [
+        -0.5289568019243786,
+        0.8626861488872757,
+        0.41855626858193323
+      ],
+      "table": {
+        "center": [
+          0.0,
+          2.5,
+          0.37
+        ],
+        "half_size": [
+          1.2,
+          1.6,
+          0.02
+        ],
+        "edge_y": 0.8999999999999999,
+        "top_z": 0.39
+      },
+      "slot": 7,
+      "draw": {
+        "version": "physical_dr_v1",
+        "sampling": "environment_creation",
+        "size_scale": 1.0023354834245137,
+        "mass_scale": 1.0566091427606479,
+        "friction_scale": 0.8738338299507391,
+        "rolling_scale": 0.8842523344053634,
+        "damping_scale": 1.0
+      }
+    },
+    {
+      "seed": 70073,
+      "initial": {
+        "position": [
+          -0.23393082125175252,
+          2.5440545845795004,
+          0.7364607228278124
+        ],
+        "quaternion": [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "velocity": [
+          -0.4220858643584954,
+          -0.7859252218418036,
+          0.0,
+          21.674284475073655,
+          -11.640304755170252,
+          0.0
+        ],
+        "mass": 0.14581206170096941,
+        "inertia": [
+          7.66878136489914e-05,
+          7.66878136489914e-05,
+          7.66878136489914e-05
+        ]
+      },
+      "departure": 2.201999999999979,
+      "launch_valid": true,
+      "arrival_window": false,
+      "early": false,
+      "stopped": false,
+      "stopped_at_2p5": null,
+      "final_speed": 0.972003813259139,
+      "final_position": [
+        -1.1468668478739188,
+        0.8626940616804335,
+        0.41516701262013567
+      ],
+      "table": {
+        "center": [
+          0.0,
+          2.5,
+          0.37
+        ],
+        "half_size": [
+          1.2,
+          1.6,
+          0.02
+        ],
+        "edge_y": 0.8999999999999999,
+        "top_z": 0.39
+      },
+      "slot": 7,
+      "draw": {
+        "version": "physical_dr_v1",
+        "sampling": "environment_creation",
+        "size_scale": 1.0023354834245137,
+        "mass_scale": 1.0566091427606479,
+        "friction_scale": 0.8738338299507391,
+        "rolling_scale": 0.8842523344053634,
+        "damping_scale": 1.0
+      }
+    },
+    {
+      "seed": 70074,
+      "initial": {
+        "position": [
+          -0.1061143809608685,
+          2.4444767173236963,
+          0.7364607228278124
+        ],
+        "quaternion": [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "velocity": [
+          0.08248759195986605,
+          -1.210346486402037,
+          0.0,
+          33.3789950120268,
+          2.2748468736149148,
+          0.0
+        ],
+        "mass": 0.14581206170096941,
+        "inertia": [
+          7.66878136489914e-05,
+          7.66878136489914e-05,
+          7.66878136489914e-05
+        ]
+      },
+      "departure": 1.330000000000001,
+      "launch_valid": true,
+      "arrival_window": true,
+      "early": false,
+      "stopped": false,
+      "stopped_at_2p5": null,
+      "final_speed": 1.2176080781337262,
+      "final_position": [
+        9.176058521664847e-05,
+        0.8635741597432914,
+        0.4218515560502166
+      ],
+      "table": {
+        "center": [
+          0.0,
+          2.5,
+          0.37
+        ],
+        "half_size": [
+          1.2,
+          1.6,
+          0.02
+        ],
+        "edge_y": 0.8999999999999999,
+        "top_z": 0.39
+      },
+      "slot": 7,
+      "draw": {
+        "version": "physical_dr_v1",
+        "sampling": "environment_creation",
+        "size_scale": 1.0023354834245137,
+        "mass_scale": 1.0566091427606479,
+        "friction_scale": 0.8738338299507391,
+        "rolling_scale": 0.8842523344053634,
+        "damping_scale": 1.0
+      }
+    },
+    {
+      "seed": 70075,
+      "initial": {
+        "position": [
+          0.14378985620543333,
+          2.1820185171184954,
+          0.7364607228278124
+        ],
+        "quaternion": [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "velocity": [
+          0.21883636601699236,
+          -1.1890387273528165,
+          0.0,
+          32.79136858355204,
+          6.035080079792071,
+          0.0
+        ],
+        "mass": 0.14581206170096941,
+        "inertia": [
+          7.66878136489914e-05,
+          7.66878136489914e-05,
+          7.66878136489914e-05
+        ]
+      },
+      "departure": 1.1280000000000008,
+      "launch_valid": true,
+      "arrival_window": true,
+      "early": false,
+      "stopped": false,
+      "stopped_at_2p5": null,
+      "final_speed": 1.219317419962512,
+      "final_position": [
+        0.38543816841478334,
+        0.8632898184805083,
+        0.42166163838187143
+      ],
+      "table": {
+        "center": [
+          0.0,
+          2.5,
+          0.37
+        ],
+        "half_size": [
+          1.2,
+          1.6,
+          0.02
+        ],
+        "edge_y": 0.8999999999999999,
+        "top_z": 0.39
+      },
+      "slot": 7,
+      "draw": {
+        "version": "physical_dr_v1",
+        "sampling": "environment_creation",
+        "size_scale": 1.0023354834245137,
+        "mass_scale": 1.0566091427606479,
+        "friction_scale": 0.8738338299507391,
+        "rolling_scale": 0.8842523344053634,
+        "damping_scale": 1.0
+      }
+    },
+    {
+      "seed": 70076,
+      "initial": {
+        "position": [
+          -0.2334841351778787,
+          2.3030480030214755,
+          0.7364607228278124
+        ],
+        "quaternion": [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "velocity": [
+          -0.180911770756827,
+          -1.2460541487281462,
+          0.0,
+          34.36374268227239,
+          -4.989193723906283,
+          0.0
+        ],
+        "mass": 0.14581206170096941,
+        "inertia": [
+          7.66878136489914e-05,
+          7.66878136489914e-05,
+          7.66878136489914e-05
+        ]
+      },
+      "departure": 1.1760000000000008,
+      "launch_valid": true,
+      "arrival_window": true,
+      "early": false,
+      "stopped": false,
+      "stopped_at_2p5": null,
+      "final_speed": 1.2663029204069156,
+      "final_position": [
+        -0.44138093777715237,
+        0.8623435715632055,
+        0.42170617715981534
+      ],
+      "table": {
+        "center": [
+          0.0,
+          2.5,
+          0.37
+        ],
+        "half_size": [
+          1.2,
+          1.6,
+          0.02
+        ],
+        "edge_y": 0.8999999999999999,
+        "top_z": 0.39
+      },
+      "slot": 7,
+      "draw": {
+        "version": "physical_dr_v1",
+        "sampling": "environment_creation",
+        "size_scale": 1.0023354834245137,
+        "mass_scale": 1.0566091427606479,
+        "friction_scale": 0.8738338299507391,
+        "rolling_scale": 0.8842523344053634,
+        "damping_scale": 1.0
+      }
+    },
+    {
+      "seed": 70077,
+      "initial": {
+        "position": [
+          0.0956355508664985,
+          2.221214470728798,
+          0.7364607228278124
+        ],
+        "quaternion": [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "velocity": [
+          0.002477918571952834,
+          -1.0060893736902736,
+          0.0,
+          27.745982297920182,
+          0.06833616041576093,
+          0.0
+        ],
+        "mass": 0.14581206170096941,
+        "inertia": [
+          7.66878136489914e-05,
+          7.66878136489914e-05,
+          7.66878136489914e-05
+        ]
+      },
+      "departure": 1.378000000000001,
+      "launch_valid": true,
+      "arrival_window": true,
+      "early": false,
+      "stopped": false,
+      "stopped_at_2p5": null,
+      "final_speed": 1.043142492847679,
+      "final_position": [
+        0.09885004308766873,
+        0.8622091307906241,
+        0.41931224173943465
+      ],
+      "table": {
+        "center": [
+          0.0,
+          2.5,
+          0.37
+        ],
+        "half_size": [
+          1.2,
+          1.6,
+          0.02
+        ],
+        "edge_y": 0.8999999999999999,
+        "top_z": 0.39
+      },
+      "slot": 7,
+      "draw": {
+        "version": "physical_dr_v1",
+        "sampling": "environment_creation",
+        "size_scale": 1.0023354834245137,
+        "mass_scale": 1.0566091427606479,
+        "friction_scale": 0.8738338299507391,
+        "rolling_scale": 0.8842523344053634,
+        "damping_scale": 1.0
+      }
+    },
+    {
+      "seed": 70078,
+      "initial": {
+        "position": [
+          0.1525784278277315,
+          2.5523965764133907,
+          0.7364607228278124
+        ],
+        "quaternion": [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "velocity": [
+          -0.2900982415200401,
+          -1.233129866036825,
+          0.0,
+          34.00731617768522,
+          -8.000343592089985,
+          0.0
+        ],
+        "mass": 0.14581206170096941,
+        "inertia": [
+          7.66878136489914e-05,
+          7.66878136489914e-05,
+          7.66878136489914e-05
+        ]
+      },
+      "departure": 1.396000000000001,
+      "launch_valid": true,
+      "arrival_window": true,
+      "early": false,
+      "stopped": false,
+      "stopped_at_2p5": null,
+      "final_speed": 1.2699863641139015,
+      "final_position": [
+        -0.2443958913923495,
+        0.862111722510631,
+        0.42166538162918205
+      ],
+      "table": {
+        "center": [
+          0.0,
+          2.5,
+          0.37
+        ],
+        "half_size": [
+          1.2,
+          1.6,
+          0.02
+        ],
+        "edge_y": 0.8999999999999999,
+        "top_z": 0.39
+      },
+      "slot": 7,
+      "draw": {
+        "version": "physical_dr_v1",
+        "sampling": "environment_creation",
+        "size_scale": 1.0023354834245137,
+        "mass_scale": 1.0566091427606479,
+        "friction_scale": 0.8738338299507391,
+        "rolling_scale": 0.8842523344053634,
+        "damping_scale": 1.0
+      }
+    },
+    {
+      "seed": 70079,
+      "initial": {
+        "position": [
+          0.0721727793661811,
+          2.5223115397395226,
+          0.7364607228278124
+        ],
+        "quaternion": [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "velocity": [
+          -0.2204354306245019,
+          -1.1903653328223744,
+          0.0,
+          32.827953774527344,
+          -6.079179162292519,
+          0.0
+        ],
+        "mass": 0.14581206170096941,
+        "inertia": [
+          7.66878136489914e-05,
+          7.66878136489914e-05,
+          7.66878136489914e-05
+        ]
+      },
+      "departure": 1.420000000000001,
+      "launch_valid": true,
+      "arrival_window": true,
+      "early": false,
+      "stopped": false,
+      "stopped_at_2p5": null,
+      "final_speed": 1.215089772594205,
+      "final_position": [
+        -0.23426479357430358,
+        0.8633386353721122,
+        0.42167738872315746
+      ],
+      "table": {
+        "center": [
+          0.0,
+          2.5,
+          0.37
+        ],
+        "half_size": [
+          1.2,
+          1.6,
+          0.02
+        ],
+        "edge_y": 0.8999999999999999,
+        "top_z": 0.39
+      },
+      "slot": 7,
+      "draw": {
+        "version": "physical_dr_v1",
+        "sampling": "environment_creation",
+        "size_scale": 1.0023354834245137,
+        "mass_scale": 1.0566091427606479,
+        "friction_scale": 0.8738338299507391,
+        "rolling_scale": 0.8842523344053634,
+        "damping_scale": 1.0
+      }
+    }
+  ]
+}

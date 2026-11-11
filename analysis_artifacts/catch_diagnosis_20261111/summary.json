@@ -1,0 +1,430 @@
+[
+  {
+    "name": "bounce_original_range1.0",
+    "motion": "bounce",
+    "object": "original",
+    "episodes": 60,
+    "successes": 38,
+    "success_rate": 0.6333333333333333,
+    "wilson_95_interval": [
+      0.5068300063010303,
+      0.7437908331277456
+    ],
+    "reasons": {
+      "out_of_bounds": 12,
+      "controlled_hold": 38,
+      "timeout": 8,
+      "base_collision": 2
+    },
+    "checkpoint_sha256": "fc26281f0639cf569aa4e2b4b5b3d2aa71f9ee4163d929538375bc18a594f374",
+    "failure_diagnostics": {
+      "failures": 22,
+      "had_contact": 21,
+      "never_two_contact_groups": 4,
+      "never_low_speed_contact": 7,
+      "never_valid_hold": 9,
+      "contact_tick_gate_fractions": {
+        "capture": 0.5830155097889652,
+        "groups": 0.6163234172387491,
+        "span": 0.590134757182812,
+        "speed": 0.6137808288838037,
+        "off_ground": 0.9992372234935164,
+        "joint": 1.0,
+        "valid": 0.17315026697177727
+      }
+    }
+  },
+  {
+    "name": "bounce_original_range0.5",
+    "motion": "bounce",
+    "object": "original",
+    "episodes": 60,
+    "successes": 37,
+    "success_rate": 0.6166666666666667,
+    "wilson_95_interval": [
+      0.49017595824099924,
+      0.7291172762591798
+    ],
+    "reasons": {
+      "out_of_bounds": 11,
+      "controlled_hold": 37,
+      "timeout": 11,
+      "base_collision": 1
+    },
+    "checkpoint_sha256": "fc26281f0639cf569aa4e2b4b5b3d2aa71f9ee4163d929538375bc18a594f374",
+    "failure_diagnostics": {
+      "failures": 23,
+      "had_contact": 22,
+      "never_two_contact_groups": 5,
+      "never_low_speed_contact": 6,
+      "never_valid_hold": 13,
+      "contact_tick_gate_fractions": {
+        "capture": 0.398691552818934,
+        "groups": 0.6188185491629786,
+        "span": 0.607850683086396,
+        "speed": 0.6975177987300366,
+        "off_ground": 0.9857610159707524,
+        "joint": 1.0,
+        "valid": 0.08370213584760439
+      }
+    }
+  },
+  {
+    "name": "bounce_original_range0.0",
+    "motion": "bounce",
+    "object": "original",
+    "episodes": 60,
+    "successes": 35,
+    "success_rate": 0.5833333333333334,
+    "wilson_95_interval": [
+      0.45728081022640116,
+      0.6993572144165838
+    ],
+    "reasons": {
+      "out_of_bounds": 14,
+      "controlled_hold": 35,
+      "timeout": 8,
+      "base_collision": 3
+    },
+    "checkpoint_sha256": "fc26281f0639cf569aa4e2b4b5b3d2aa71f9ee4163d929538375bc18a594f374",
+    "failure_diagnostics": {
+      "failures": 25,
+      "had_contact": 24,
+      "never_two_contact_groups": 5,
+      "never_low_speed_contact": 8,
+      "never_valid_hold": 9,
+      "contact_tick_gate_fractions": {
+        "capture": 0.761315715490582,
+        "groups": 0.3736294630306438,
+        "span": 0.33117795895417484,
+        "speed": 0.42282822603317405,
+        "off_ground": 0.9448973854371662,
+        "joint": 1.0,
+        "valid": 0.1577171773966826
+      }
+    }
+  },
+  {
+    "name": "bounce_tennis_ball_range1.0",
+    "motion": "bounce",
+    "object": "tennis_ball",
+    "episodes": 60,
+    "successes": 43,
+    "success_rate": 0.7166666666666667,
+    "wilson_95_interval": [
+      0.5923271483560882,
+      0.8149317157156729
+    ],
+    "reasons": {
+      "out_of_bounds": 6,
+      "controlled_hold": 43,
+      "timeout": 8,
+      "base_collision": 3
+    },
+    "checkpoint_sha256": "fc26281f0639cf569aa4e2b4b5b3d2aa71f9ee4163d929538375bc18a594f374",
+    "failure_diagnostics": {
+      "failures": 17,
+      "had_contact": 16,
+      "never_two_contact_groups": 6,
+      "never_low_speed_contact": 8,
+      "never_valid_hold": 8,
+      "contact_tick_gate_fractions": {
+        "capture": 0.3774380600948867,
+        "groups": 0.6797575118608329,
+        "span": 0.6689509752240379,
+        "speed": 0.7237743806009489,
+        "off_ground": 0.9973642593568793,
+        "joint": 1.0,
+        "valid": 0.08513442277279916
+      }
+    }
+  },
+  {
+    "name": "bounce_tennis_ball_range0.5",
+    "motion": "bounce",
+    "object": "tennis_ball",
+    "episodes": 60,
+    "successes": 43,
+    "success_rate": 0.7166666666666667,
+    "wilson_95_interval": [
+      0.5923271483560882,
+      0.8149317157156729
+    ],
+    "reasons": {
+      "base_collision": 4,
+      "out_of_bounds": 9,
+      "controlled_hold": 43,
+      "timeout": 4
+    },
+    "checkpoint_sha256": "fc26281f0639cf569aa4e2b4b5b3d2aa71f9ee4163d929538375bc18a594f374",
+    "failure_diagnostics": {
+      "failures": 17,
+      "had_contact": 14,
+      "never_two_contact_groups": 8,
+      "never_low_speed_contact": 10,
+      "never_valid_hold": 11,
+      "contact_tick_gate_fractions": {
+        "capture": 0.5081487672377768,
+        "groups": 0.6581696615127455,
+        "span": 0.661930631007104,
+        "speed": 0.730045967404931,
+        "off_ground": 0.9803593815294609,
+        "joint": 1.0,
+        "valid": 0.22106142916840785
+      }
+    }
+  },
+  {
+    "name": "bounce_tennis_ball_range0.0",
+    "motion": "bounce",
+    "object": "tennis_ball",
+    "episodes": 60,
+    "successes": 46,
+    "success_rate": 0.7666666666666667,
+    "wilson_95_interval": [
+      0.6456372962239805,
+      0.8556043826335717
+    ],
+    "reasons": {
+      "out_of_bounds": 8,
+      "controlled_hold": 46,
+      "timeout": 4,
+      "base_collision": 2
+    },
+    "checkpoint_sha256": "fc26281f0639cf569aa4e2b4b5b3d2aa71f9ee4163d929538375bc18a594f374",
+    "failure_diagnostics": {
+      "failures": 14,
+      "had_contact": 12,
+      "never_two_contact_groups": 4,
+      "never_low_speed_contact": 5,
+      "never_valid_hold": 7,
+      "contact_tick_gate_fractions": {
+        "capture": 0.9929742388758782,
+        "groups": 0.5275175644028103,
+        "span": 0.5163934426229508,
+        "speed": 0.42330210772833726,
+        "off_ground": 0.9994145199063232,
+        "joint": 1.0,
+        "valid": 0.2605386416861827
+      }
+    }
+  },
+  {
+    "name": "roll_apple_range1.0",
+    "motion": "roll",
+    "object": "apple",
+    "episodes": 40,
+    "successes": 12,
+    "success_rate": 0.3,
+    "wilson_95_interval": [
+      0.18074845229746528,
+      0.45430018818144935
+    ],
+    "reasons": {
+      "ball_on_floor": 19,
+      "ball_left": 4,
+      "base_collision": 1,
+      "catch_success": 3,
+      "timeout": 13
+    },
+    "checkpoint_sha256": "0d3cfe87a58b326a89bb075ac677aeaf79daa09288c534d114e58abab18f19c9"
+  },
+  {
+    "name": "roll_apple_range0.5",
+    "motion": "roll",
+    "object": "apple",
+    "episodes": 40,
+    "successes": 14,
+    "success_rate": 0.35,
+    "wilson_95_interval": [
+      0.2213452887317629,
+      0.5049411916274231
+    ],
+    "reasons": {
+      "ball_left": 1,
+      "ball_on_floor": 19,
+      "catch_success": 5,
+      "timeout": 15
+    },
+    "checkpoint_sha256": "0d3cfe87a58b326a89bb075ac677aeaf79daa09288c534d114e58abab18f19c9"
+  },
+  {
+    "name": "roll_apple_range0.0",
+    "motion": "roll",
+    "object": "apple",
+    "episodes": 40,
+    "successes": 14,
+    "success_rate": 0.35,
+    "wilson_95_interval": [
+      0.2213452887317629,
+      0.5049411916274231
+    ],
+    "reasons": {
+      "ball_on_floor": 17,
+      "ball_left": 5,
+      "catch_success": 2,
+      "timeout": 16
+    },
+    "checkpoint_sha256": "0d3cfe87a58b326a89bb075ac677aeaf79daa09288c534d114e58abab18f19c9"
+  },
+  {
+    "name": "roll_lemon_range1.0",
+    "motion": "roll",
+    "object": "lemon",
+    "episodes": 40,
+    "successes": 11,
+    "success_rate": 0.275,
+    "wilson_95_interval": [
+      0.16108016247667337,
+      0.42834955806210573
+    ],
+    "reasons": {
+      "ball_left": 4,
+      "ball_on_floor": 24,
+      "catch_success": 2,
+      "timeout": 10
+    },
+    "checkpoint_sha256": "0d3cfe87a58b326a89bb075ac677aeaf79daa09288c534d114e58abab18f19c9"
+  },
+  {
+    "name": "roll_lemon_range0.5",
+    "motion": "roll",
+    "object": "lemon",
+    "episodes": 40,
+    "successes": 15,
+    "success_rate": 0.375,
+    "wilson_95_interval": [
+      0.24222979167233266,
+      0.5296756086269889
+    ],
+    "reasons": {
+      "ball_left": 4,
+      "ball_on_floor": 18,
+      "catch_success": 3,
+      "timeout": 15
+    },
+    "checkpoint_sha256": "0d3cfe87a58b326a89bb075ac677aeaf79daa09288c534d114e58abab18f19c9"
+  },
+  {
+    "name": "roll_lemon_range0.0",
+    "motion": "roll",
+    "object": "lemon",
+    "episodes": 40,
+    "successes": 16,
+    "success_rate": 0.4,
+    "wilson_95_interval": [
+      0.2634832568429192,
+      0.5540410633965381
+    ],
+    "reasons": {
+      "ball_on_floor": 17,
+      "ball_left": 5,
+      "catch_success": 4,
+      "timeout": 14
+    },
+    "checkpoint_sha256": "0d3cfe87a58b326a89bb075ac677aeaf79daa09288c534d114e58abab18f19c9"
+  },
+  {
+    "name": "bounce_original_spin0",
+    "motion": "bounce",
+    "object": "original",
+    "episodes": 60,
+    "successes": 33,
+    "success_rate": 0.55,
+    "wilson_95_interval": [
+      0.4249193588533434,
+      0.6690634559324476
+    ],
+    "reasons": {
+      "base_collision": 4,
+      "out_of_bounds": 13,
+      "controlled_hold": 33,
+      "timeout": 10
+    },
+    "checkpoint_sha256": "fc26281f0639cf569aa4e2b4b5b3d2aa71f9ee4163d929538375bc18a594f374",
+    "failure_diagnostics": {
+      "failures": 27,
+      "had_contact": 22,
+      "never_two_contact_groups": 8,
+      "never_low_speed_contact": 8,
+      "never_valid_hold": 12,
+      "contact_tick_gate_fractions": {
+        "capture": 0.6907183725365543,
+        "groups": 0.5499046408137317,
+        "span": 0.5295613477431659,
+        "speed": 0.4831532104259377,
+        "off_ground": 0.9895104895104895,
+        "joint": 1.0,
+        "valid": 0.12205975842339478
+      }
+    }
+  },
+  {
+    "name": "bounce_original_nearer",
+    "motion": "bounce",
+    "object": "original",
+    "episodes": 60,
+    "successes": 42,
+    "success_rate": 0.7,
+    "wilson_95_interval": [
+      0.5749129205308552,
+      0.8010183386123089
+    ],
+    "reasons": {
+      "out_of_bounds": 14,
+      "controlled_hold": 42,
+      "timeout": 3,
+      "base_collision": 1
+    },
+    "checkpoint_sha256": "fc26281f0639cf569aa4e2b4b5b3d2aa71f9ee4163d929538375bc18a594f374",
+    "failure_diagnostics": {
+      "failures": 18,
+      "had_contact": 18,
+      "never_two_contact_groups": 7,
+      "never_low_speed_contact": 5,
+      "never_valid_hold": 9,
+      "contact_tick_gate_fractions": {
+        "capture": 0.5884735202492212,
+        "groups": 0.40218068535825546,
+        "span": 0.38847352024922116,
+        "speed": 0.532398753894081,
+        "off_ground": 0.9130841121495327,
+        "joint": 1.0,
+        "valid": 0.10809968847352025
+      }
+    }
+  },
+  {
+    "name": "bounce_original_threeball",
+    "motion": "bounce",
+    "object": "original",
+    "episodes": 60,
+    "successes": 55,
+    "success_rate": 0.9166666666666666,
+    "wilson_95_interval": [
+      0.8193105798166558,
+      0.9638795433982692
+    ],
+    "reasons": {
+      "controlled_hold": 55,
+      "timeout": 5
+    },
+    "checkpoint_sha256": "7d7ca9b8459dcb9ab6a545ce257b6659c908a45eaae9948c5429a2d292adf748",
+    "failure_diagnostics": {
+      "failures": 5,
+      "had_contact": 5,
+      "never_two_contact_groups": 3,
+      "never_low_speed_contact": 1,
+      "never_valid_hold": 4,
+      "contact_tick_gate_fractions": {
+        "capture": 0.8177496038034865,
+        "groups": 0.07290015847860538,
+        "span": 0.07448494453248812,
+        "speed": 0.2884310618066561,
+        "off_ground": 1.0,
+        "joint": 1.0,
+        "valid": 0.03169572107765452
+      }
+    }
+  }
+]

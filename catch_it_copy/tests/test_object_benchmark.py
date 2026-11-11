@@ -74,9 +74,10 @@ class ObjectBenchmarkTests(unittest.TestCase):
             try:
                 env.reset(seed=0)
                 launch=env.benchmark_episode['launch']
-                self.assertEqual(launch['configured_distance_m'],[2.,2.2])
+                distance=[2.,2.2] if name=='orange' else [1.9,2.1]
+                self.assertEqual(launch['configured_distance_m'],distance)
                 self.assertEqual(launch['configured_speed_mps'],catalog()['roll'][name]['speed_mps'])
-                self.assertTrue(2.<=env.object_pos3d[1]<=2.2)
+                self.assertTrue(distance[0]<=env.object_pos3d[1]<=distance[1])
                 speed=np.linalg.norm(env.object_vel6d[:2])
                 self.assertTrue(launch['configured_speed_mps'][0]<=speed<=launch['configured_speed_mps'][1])
             finally:env.close()

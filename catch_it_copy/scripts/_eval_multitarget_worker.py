@@ -54,7 +54,7 @@ def evaluate(self):
     obs,_=self.env.reset(seed=seeds)
     initial=[initial_state(self.env,i) for i in range(n)]
     count=np.zeros(n,dtype=int);length=np.zeros(n,dtype=int);returns=np.zeros(n)
-    successes=stable=0;reasons={};started=time.monotonic()
+    successes=stable=0;reasons={};episode_draws=[];started=time.monotonic()
     metrics=roll.terminal_metrics if request['motion']=='roll' else bounce_metrics
     with (folder/'episodes.jsonl').open('w') as stream:
         for _ in range(quota*500):
@@ -67,6 +67,12 @@ def evaluate(self):
                 if count[i]<quota:
                     final=infos['final_info'][i];physics=plain(final['object_benchmark'])
                     if request['physics']=='dr':assert physics['randomization']==draws[i]
+                    elif request['physics']=='dr_episode':
+                        draw=physics['randomization']
+                        assert draw['version']=='physical_dr_episode_v1' and draw['sampling']=='episode_reset'
+                        for k,lo,hi in [('size_scale',.95,1.05),('mass_scale',.9,1.1),('friction_scale',.85,1.15),('rolling_scale',.8,1.2),('damping_scale',.9,1.1)]:
+                            assert lo<=draw[k]<=hi,(k,draw)
+                        episode_draws.append(draw)
                     else:assert 'randomization' not in physics
                     held=bool(final.get('roll_stable_hold',False));successes+=int(ok[i]);stable+=int(held)
                     reason=str(why[i]);reasons[reason]=reasons.get(reason,0)+1
@@ -93,7 +99,7 @@ def evaluate(self):
         success_rate=successes/request['episodes'],wilson_95_interval=wilson(successes,request['episodes']),
         stable_hold_episodes=stable if request['motion']=='roll' else None,
         stable_hold_rate=stable/request['episodes'] if request['motion']=='roll' else None,
-        reasons=reasons,parameter_samples=draws,wall_seconds=time.monotonic()-started)
+        reasons=reasons,parameter_samples=episode_draws if request['physics']=='dr_episode' else draws,wall_seconds=time.monotonic()-started)
     temporary=folder/'summary.json.tmp';temporary.write_text(json.dumps(result,indent=2));os.replace(temporary,folder/'summary.json')
     print('[evaluation complete]',successes,'/',request['episodes'],flush=True)
 

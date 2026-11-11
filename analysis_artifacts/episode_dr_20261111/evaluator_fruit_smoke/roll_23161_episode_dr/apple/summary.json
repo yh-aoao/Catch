@@ -1,0 +1,65 @@
+{
+  "name": "roll_23161_episode_dr",
+  "motion": "roll",
+  "physics": "dr_episode",
+  "checkpoint": "/home/isee/Catch/11-11/roll_catch_best_reward_231.61.pth",
+  "checkpoint_sha256": "0d3cfe87a58b326a89bb075ac677aeaf79daa09288c534d114e58abab18f19c9",
+  "object": "apple",
+  "seed": 41000,
+  "episodes": 4,
+  "instances": 2,
+  "case_dir": "/home/isee/Catch/analysis_artifacts/episode_dr_20261111/evaluator_fruit_smoke/roll_23161_episode_dr/apple",
+  "completed": true,
+  "successes": 1,
+  "success_rate": 0.25,
+  "wilson_95_interval": [
+    0.04558726080970055,
+    0.6993581574175981
+  ],
+  "stable_hold_episodes": 1,
+  "stable_hold_rate": 0.25,
+  "reasons": {
+    "ball_left": 1,
+    "ball_on_floor": 2,
+    "timeout": 1
+  },
+  "parameter_samples": [
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 0.9662140033962517,
+      "mass_scale": 1.0259260227670044,
+      "friction_scale": 0.8617830601725602,
+      "rolling_scale": 0.8076168339485623,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 1.0213529830696733,
+      "mass_scale": 1.0846078974834175,
+      "friction_scale": 0.8819061841220909,
+      "rolling_scale": 0.8123186685401917,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 0.9953492172462666,
+      "mass_scale": 0.9509408679424654,
+      "friction_scale": 0.8986236578364862,
+      "rolling_scale": 1.073594041335717,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 1.0414426321916568,
+      "mass_scale": 1.074019866468581,
+      "friction_scale": 0.8968383118499802,
+      "rolling_scale": 1.05050541735585,
+      "damping_scale": 1.0
+    }
+  ],
+  "wall_seconds": 5.459875886000191
+}

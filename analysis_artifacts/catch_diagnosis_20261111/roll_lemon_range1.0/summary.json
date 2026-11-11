@@ -1,0 +1,120 @@
+{
+  "name": "roll_lemon_range1.0",
+  "motion": "roll",
+  "object": "lemon",
+  "physics": "dr",
+  "checkpoint": "/home/isee/Catch/11-11/roll_catch_best_reward_231.61.pth",
+  "checkpoint_sha256": "0d3cfe87a58b326a89bb075ac677aeaf79daa09288c534d114e58abab18f19c9",
+  "instances": 10,
+  "episodes": 40,
+  "seed": 41000,
+  "case_dir": "/home/isee/Catch/analysis_artifacts/catch_diagnosis_20261111/roll_lemon_range1.0",
+  "completed": true,
+  "successes": 11,
+  "success_rate": 0.275,
+  "wilson_95_interval": [
+    0.16108016247667337,
+    0.42834955806210573
+  ],
+  "stable_hold_episodes": 7,
+  "stable_hold_rate": 0.175,
+  "reasons": {
+    "ball_left": 4,
+    "ball_on_floor": 24,
+    "catch_success": 2,
+    "timeout": 10
+  },
+  "parameter_samples": [
+    {
+      "version": "physical_dr_v1",
+      "sampling": "environment_creation",
+      "size_scale": 1.026781712933732,
+      "mass_scale": 1.0229859363147162,
+      "friction_scale": 0.8818013296000147,
+      "rolling_scale": 0.8505534847419334,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_v1",
+      "sampling": "environment_creation",
+      "size_scale": 1.0256739801382022,
+      "mass_scale": 1.050844164286673,
+      "friction_scale": 1.1122068592837577,
+      "rolling_scale": 0.9197835364937789,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_v1",
+      "sampling": "environment_creation",
+      "size_scale": 1.0169572918099654,
+      "mass_scale": 1.0196718988204032,
+      "friction_scale": 0.9305754087073278,
+      "rolling_scale": 0.9676521705171753,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_v1",
+      "sampling": "environment_creation",
+      "size_scale": 0.9733400778132805,
+      "mass_scale": 0.9709707499734517,
+      "friction_scale": 0.878371807486391,
+      "rolling_scale": 1.102546022595014,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_v1",
+      "sampling": "environment_creation",
+      "size_scale": 0.9543201919065959,
+      "mass_scale": 1.0762706147984091,
+      "friction_scale": 1.0095853236338745,
+      "rolling_scale": 1.0823247960748204,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_v1",
+      "sampling": "environment_creation",
+      "size_scale": 1.0254998648800537,
+      "mass_scale": 1.0676384201306153,
+      "friction_scale": 0.9460349505729778,
+      "rolling_scale": 0.8992709511381055,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_v1",
+      "sampling": "environment_creation",
+      "size_scale": 1.033539807065733,
+      "mass_scale": 1.044169370734746,
+      "friction_scale": 0.8671266123922644,
+      "rolling_scale": 0.9706192422741289,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_v1",
+      "sampling": "environment_creation",
+      "size_scale": 1.038872073133353,
+      "mass_scale": 0.9953894971221272,
+      "friction_scale": 0.8844516095685537,
+      "rolling_scale": 0.9724947988758612,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_v1",
+      "sampling": "environment_creation",
+      "size_scale": 1.0409140920500533,
+      "mass_scale": 1.030841920735624,
+      "friction_scale": 1.1309797259779173,
+      "rolling_scale": 0.9066649110893897,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_v1",
+      "sampling": "environment_creation",
+      "size_scale": 1.0187374718143687,
+      "mass_scale": 0.9362035499418115,
+      "friction_scale": 1.1121656202285028,
+      "rolling_scale": 0.8951931302213113,
+      "damping_scale": 1.0
+    }
+  ],
+  "wall_seconds": 63.70327963700015
+}

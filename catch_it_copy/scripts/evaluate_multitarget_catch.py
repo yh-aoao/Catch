@@ -32,7 +32,7 @@ def write_reports(output,results):
     lines=['# Multi-target Catch evaluation','',
         'Roll: end-of-episode region retention; stable_hold is ever stable during the episode, not necessarily at the end.',
         'Bounce: controlled_hold_v1 continuous hold. Fixed and DR columns have different test distributions.',
-        'Deterministic policy; explicit per-episode launch seeds; DR parameters fixed per environment instance.',
+        'Deterministic policy; explicit per-episode launch seeds; DR v1 parameters fixed per instance; dr_episode parameters resampled each episode.',
         'Per-object Wilson intervals and full physics samples are in the JSON results. No failed episodes are filtered.',
         '', '|Model|Mode|Target|Success|Rate|Roll ever stable|','|---|---|---|---:|---:|---:|']
     for r in rows:
@@ -66,7 +66,7 @@ def main():
     if a.only and set(a.only)-set(names):p.error('Unknown model name in --only')
     models=[m.copy() for m in models if not a.only or m['name'] in a.only]
     for m in models:
-        if not re.fullmatch(r'[A-Za-z0-9_-]+',m['name']) or m['motion'] not in ('roll','bounce') or m['physics'] not in ('fixed','dr'):
+        if not re.fullmatch(r'[A-Za-z0-9_-]+',m['name']) or m['motion'] not in ('roll','bounce') or m['physics'] not in ('fixed','dr','dr_episode'):
             p.error('Invalid manifest name/motion/physics')
         checkpoint=Path(m['checkpoint']);checkpoint=checkpoint if checkpoint.is_absolute() else model_dir/checkpoint
         if not checkpoint.is_file():p.error('Missing checkpoint: '+str(checkpoint))
@@ -79,7 +79,7 @@ def main():
     source_names=['scripts/evaluate_multitarget_catch.py','scripts/_eval_multitarget_worker.py','train_DCMM.py',
         'configs/config.yaml','configs/train/DcmmPPO.yaml','gym_dcmm/envs/object_benchmark.py',
         'gym_dcmm/envs/roll_physical.py','gym_dcmm/envs/bounce_physical_v2.py',
-        'ycb_objects/benchmark_geometry.py','ycb_objects/benchmark_randomization.py',
+        'ycb_objects/benchmark_geometry.py','ycb_objects/benchmark_randomization.py','ycb_objects/episode_randomization.py',
         'ycb_objects/calibration_data/balls.roll_table_priors_v1.json','ycb_objects/calibration_data/balls.three_ball_training_v1.json',
         'gym_dcmm/envs/DcmmVecEnv_roll_645edc4.py','gym_dcmm/envs/bounce_grasp.py',
         'gym_dcmm/utils/roll_evaluation.py','gym_dcmm/algs/ppo_dcmm_645edc4/ppo_dcmm_catch_two_stage.py',
@@ -104,7 +104,7 @@ def main():
             'task=Catching_TwoStage','test=True','viewer=false','imshow_cam=false','device_id=-1',
             'hydra.job.chdir=false','vector_mode=sync',f'num_envs={a.instances}',f'train.ppo.num_actors={a.instances}',
             'checkpoint_tracking=','checkpoint_catching='+m['checkpoint'],'benchmark_catalog='+str(output/'catalog_used.json'),
-            '+benchmark_options.domain_randomization='+('physical_dr_v1' if m['physics']=='dr' else 'off'),
+            '+benchmark_options.domain_randomization='+({'dr':'physical_dr_v1','dr_episode':'physical_dr_episode_v1'}.get(m['physics'],'off')),
             m['motion']+'_ball_mode=fixed','seed='+str(a.seed)]
         config_dir=output/'configs';config_dir.mkdir(exist_ok=True)
         config=config_dir/(m['name']+'.yaml')

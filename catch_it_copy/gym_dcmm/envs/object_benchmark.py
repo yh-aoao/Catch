@@ -157,7 +157,13 @@ def make_object_benchmark(object_benchmark='off',benchmark_catalog=None,benchmar
     opts=dict(benchmark_options or {})
     if set(opts)-{'heading_degrees','distance_m','domain_randomization'}:raise ValueError('Unknown benchmark options')
     dr=opts.get('domain_randomization','off')
-    if dr not in ('off','physical_dr_v1'):raise ValueError('Unknown benchmark domain_randomization')
+    if dr not in ('off','physical_dr_v1','physical_dr_episode_v1'):raise ValueError('Unknown benchmark domain_randomization')
+    if dr=='physical_dr_episode_v1':
+        from ycb_objects.episode_randomization import EpisodeRandomization
+        base=make_object_benchmark(object_benchmark=object_benchmark,benchmark_catalog=benchmark_catalog,
+            benchmark_options=dict(opts,domain_randomization='off'),test_object=test_object,
+            benchmark_slot=benchmark_slot,benchmark_num_envs=benchmark_num_envs,benchmark_seed=benchmark_seed,**kwargs)
+        return EpisodeRandomization(base)
     for key,default,low,high in [('heading_degrees',[-10,10],-30,30),('distance_m',[2.,2.2],1.1,3.5)]:
         value=np.asarray(opts.get(key,default),dtype=float)
         if value.shape!=(2,) or not np.isfinite(value).all() or not low<=value[0]<=value[1]<=high:raise ValueError('Invalid benchmark '+key)
@@ -277,13 +283,16 @@ def make_benchmark_vector(num_envs,benchmark_backend='async',**kwargs):
 
 def write_provenance(output,config,env=None):
     data=catalog(config.get('benchmark_catalog'))
-    names=['train_DCMM.py','configs/config.yaml','gym_dcmm/envs/object_benchmark.py','ycb_objects/benchmark_geometry.py','ycb_objects/benchmark_randomization.py','gym_dcmm/utils/roll_evaluation.py',
+    names=['train_DCMM.py','configs/config.yaml','gym_dcmm/envs/object_benchmark.py','ycb_objects/benchmark_geometry.py','ycb_objects/benchmark_randomization.py','ycb_objects/episode_randomization.py','gym_dcmm/utils/roll_evaluation.py',
            'gym_dcmm/envs/roll_physical.py','gym_dcmm/envs/bounce_physical_v2.py',
            'ycb_objects/calibration_data/balls.roll_table_priors_v1.json','ycb_objects/calibration_data/balls.three_ball_training_v1.json']
     result=dict(version=config['object_benchmark'],catalog=data,options=config.get('benchmark_options'),
                 sampling='one_object_sampled_at_environment_creation_no_mesh_recompile_on_reset',
                 reward='existing task reward; shape-aware departure for non-spheres',
                 sources={n:hashlib.sha256((ROOT/n).read_bytes()).hexdigest() for n in names})
+    if config.get('benchmark_options',{}).get('domain_randomization')=='physical_dr_episode_v1':
+        result['physics_sampling']='every_episode_reset; object identity fixed per environment; ranges unchanged from physical_dr_v1'
+        result['environment_samples_note']='initial snapshots only; subsequent reset samples are in episode object_benchmark metadata'
     if env is not None and config.get('benchmark_options',{}).get('domain_randomization','off')!='off':
         result['environment_samples']=[dict(slot=i,object=name,randomization=draw)
             for i,(name,draw) in enumerate(zip(env.call('benchmark_object'),env.call('benchmark_randomization')))]

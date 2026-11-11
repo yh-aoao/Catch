@@ -1,0 +1,11 @@
+{
+  "cases": 15,
+  "episodes": 780,
+  "exact_quotas": true,
+  "unique_episode_ids": true,
+  "same_launch_seeds": true,
+  "interventions_verified": true,
+  "checkpoint_hashes_verified": true,
+  "production_source_hashes_unchanged": true,
+  "notes": "Same launch seeds/states do not guarantee identical subsequent observation/control noise: synchronous environments share the historical global NumPy RNG. Physical draws are clustered by ten environment instances; these are diagnostic samples, not definitive significance tests."
+}

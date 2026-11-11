@@ -1,0 +1,28 @@
+{
+  "objects_reset_checked": 13,
+  "reset_same_seed_reproduces": true,
+  "nominal_inertia_and_clearance_checked": true,
+  "reference_geometry_objects": 13,
+  "max_short_horizon_passive_position_error_m": 1.0905705100634051e-08,
+  "ppo_smokes": [
+    "roll_track",
+    "roll_catch",
+    "bounce_track",
+    "bounce_catch"
+  ],
+  "evaluator_episodes": 16,
+  "source_sha256": {
+    "catch_it_copy/ycb_objects/episode_randomization.py": "f3ea2cb0fee3838c36bdd18f3a9d8ea2adff858a6b2534290f6347f7a8bffa50",
+    "catch_it_copy/gym_dcmm/envs/object_benchmark.py": "fb5165d5f773288828ca143bd101cf985d86b524955beda096373559a98e9b78",
+    "catch_it_copy/scripts/train_all_targets_episode_dr_v1.sh": "9cb0ef74564cd6ea3027f47ee5fc2c3adb809a71fd8b32428ebb9499a3edb8d3",
+    "catch_it_copy/scripts/evaluate_multitarget_catch.py": "30900421c7999ceb838ad6f8351d36ac7b37e18dfd22ee98276efa6286366d4f",
+    "catch_it_copy/scripts/_eval_multitarget_worker.py": "ce6f18d08e7f16a63eca1e6deb9e64adebbf01c6619330a76fc5b4ffcecd95be"
+  },
+  "notes": [
+    "Long fruit contact trajectories can diverge from tiny compiled-mesh rounding; short-horizon comparisons are not claims of exact long-horizon trajectory identity.",
+    "Reference legacy sphere AABB corrected from a freshly compiled primitive because its old runtime radius setter leaves that cache nominal.",
+    "No formal training or 200-episode benchmark was launched."
+  ],
+  "regression_tests_passed": 16,
+  "stale_test_update": "fruit launch test now expects previously approved apple/lemon [1.9,2.1], orange [2.0,2.2]; production launch catalog unchanged"
+}

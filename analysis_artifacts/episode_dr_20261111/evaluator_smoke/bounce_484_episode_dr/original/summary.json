@@ -1,0 +1,64 @@
+{
+  "name": "bounce_484_episode_dr",
+  "motion": "bounce",
+  "physics": "dr_episode",
+  "checkpoint": "/home/isee/Catch/11-11/bounce_catch_best_reward_4.84.pth",
+  "checkpoint_sha256": "fc26281f0639cf569aa4e2b4b5b3d2aa71f9ee4163d929538375bc18a594f374",
+  "object": "original",
+  "seed": 41000,
+  "episodes": 4,
+  "instances": 2,
+  "case_dir": "/home/isee/Catch/analysis_artifacts/episode_dr_20261111/evaluator_smoke/bounce_484_episode_dr/original",
+  "completed": true,
+  "successes": 3,
+  "success_rate": 0.75,
+  "wilson_95_interval": [
+    0.30064184258240184,
+    0.9544127391902995
+  ],
+  "stable_hold_episodes": null,
+  "stable_hold_rate": null,
+  "reasons": {
+    "controlled_hold": 3,
+    "timeout": 1
+  },
+  "parameter_samples": [
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 1.02311044895857,
+      "mass_scale": 0.9672584273276676,
+      "friction_scale": 1.0125101354582198,
+      "rolling_scale": 1.0,
+      "damping_scale": 1.088981435963307
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 0.9519262179168874,
+      "mass_scale": 0.9315666993439428,
+      "friction_scale": 1.0006614669709697,
+      "rolling_scale": 1.0,
+      "damping_scale": 1.034344567187277
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 1.0182092896663468,
+      "mass_scale": 0.9374706803016853,
+      "friction_scale": 1.065401685840991,
+      "rolling_scale": 1.0,
+      "damping_scale": 1.0687791079919693
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 1.0091262184315242,
+      "mass_scale": 1.0888929637466827,
+      "friction_scale": 1.0913215231746427,
+      "rolling_scale": 1.0,
+      "damping_scale": 0.9732833799520245
+    }
+  ],
+  "wall_seconds": 17.348250317000293
+}

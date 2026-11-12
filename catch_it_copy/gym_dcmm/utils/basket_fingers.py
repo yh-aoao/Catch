@@ -6,6 +6,22 @@ except action smoothness, which uses the policy's normalized hand commands.
 import numpy as np
 
 
+# Reward-only revision. Keep DEFAULTS/checkpoint contracts and all control paths intact.
+POST_RELEASE_REWARD_VERSION = 'post_release_v2'
+POST_RELEASE = dict(ramp=.08, posture_weight=6., action_weight=2.,
+                    velocity_weight=1., velocity_free=3., velocity_scale=5.,
+                    sync_weight=4., coupling_weight=2., extension_weight=4.)
+
+
+def post_release_exposure(elapsed,dt,release_time):
+    if release_time is None:return 0.
+    ramp=POST_RELEASE['ramp']
+    def primitive(t):
+        t=max(0.,t)
+        return t*t/(2.*ramp) if t<ramp else t-ramp/2.
+    return max(0.,primitive(elapsed-release_time)-primitive(elapsed-dt-release_time))
+
+
 HAND_INDICES = np.array([0, 2, 3, 4, 6, 7, 8, 10, 11, 13, 14, 15])
 DEFAULTS = dict(sync_weight=2., coupling_weight=1., extension_weight=2.,
                 post_release_weight=1., smooth_weight=.01,
@@ -48,7 +64,8 @@ def new_state(ready_joints, limits, options):
     return dict(ready=ready.copy(), opened=opened, limits=limits.copy(),
                 scale=np.maximum(np.abs(ready-opened), .10),
                 pending=dict(finger_sync=0., finger_coupling=0., finger_extension=0., finger_posture=0.),
-                release_time=None, previous_action=np.zeros(12), metrics={})
+                release_time=None, previous_action=np.zeros(12), metrics={},
+                previous_measured=ready.copy(),post_release_exposure=0.)
 
 
 def update(state, measured_joints, elapsed, dt, confirmed_release, options):
@@ -87,9 +104,27 @@ def update(state, measured_joints, elapsed, dt, confirmed_release, options):
             ('finger_extension', extension, 'extension_weight'),
             ('finger_posture', posture, 'post_release_weight')):
         state['pending'][key] -= options[weight]*loss*dt
+    # These extra penalties activate ONLY after the existing confirmed-release flag.
+    exposure=post_release_exposure(elapsed,dt,state['release_time'])
+    previous=state.get('previous_measured',q)
+    velocity=(q-previous)/dt if dt>0 else np.zeros(12)
+    excess=np.maximum(np.abs(velocity)-POST_RELEASE['velocity_free'],0.)/POST_RELEASE['velocity_scale']
+    recovery=.75*bounded_square(error[:9])+.25*bounded_square(error[9:])
+    for key,loss,weight in (
+            ('finger_post_recovery',recovery,'posture_weight'),
+            ('finger_post_velocity',bounded_square(excess),'velocity_weight'),
+            ('finger_post_sync',sync,'sync_weight'),
+            ('finger_post_coupling',coupling,'coupling_weight'),
+            ('finger_post_extension',extension,'extension_weight')):
+        state['pending'][key]=state['pending'].get(key,0.)-POST_RELEASE[weight]*loss*exposure
+    state['post_release_exposure']=state.get('post_release_exposure',0.)+exposure
+    state['previous_measured']=q.copy()
     state['metrics'] = dict(phase=phase.tolist(), sync_loss=sync, coupling_loss=coupling,
                             extension_loss=extension, post_release_ramp=ramp,
-                            min_long_angle=float(np.min(q[:9])), thumb_angles=q[9:].tolist())
+                            min_long_angle=float(np.min(q[:9])), thumb_angles=q[9:].tolist(),
+                            post_reward_version=POST_RELEASE_REWARD_VERSION,
+                            post_joint_speed=float(np.max(np.abs(velocity))),
+                            post_reward_exposure=exposure)
 
 
 def reward(state, normalized_action, options):
@@ -103,5 +138,8 @@ def reward(state, normalized_action, options):
     previous = state.get('previous_action')
     terms['finger_smoothness'] = (0. if previous is None else
         -options['smooth_weight']*float(np.mean((action-previous)**2)))
+    exposure=state.get('post_release_exposure',0.)
+    terms['finger_post_action']=-POST_RELEASE['action_weight']*float(np.mean(action**2))*exposure
+    state['post_release_exposure']=0.
     state['previous_action'] = action.copy()
     return terms

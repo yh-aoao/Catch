@@ -1,0 +1,39 @@
+{
+  "total": {
+    "episodes": 50,
+    "successes": 44,
+    "failures": {
+      "ball_on_floor": 4,
+      "premature_release": 1,
+      "arm_self_collision": 1
+    }
+  },
+  "balls": {
+    "original": {
+      "episodes": 24,
+      "successes": 21,
+      "failures": {
+        "ball_on_floor": 2,
+        "arm_self_collision": 1
+      }
+    },
+    "tennis_ball": {
+      "episodes": 12,
+      "successes": 10,
+      "failures": {
+        "ball_on_floor": 2
+      }
+    },
+    "baseball": {
+      "episodes": 14,
+      "successes": 13,
+      "failures": {
+        "premature_release": 1
+      }
+    }
+  },
+  "successful_terminal_offset_min_max": [
+    -0.035681189793574375,
+    0.07928186919293695
+  ]
+}

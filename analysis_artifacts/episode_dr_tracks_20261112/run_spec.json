@@ -1,0 +1,27 @@
+{
+  "episodes": 20,
+  "instances": 4,
+  "seed": 41000,
+  "physics": "physical_dr_episode_v1",
+  "sources": {
+    "train_DCMM.py": "1d18d3cf8d0f40d59004600351285939d6feec290d7db986bcb6190b7185ca43",
+    "gym_dcmm/envs/object_benchmark.py": "fb5165d5f773288828ca143bd101cf985d86b524955beda096373559a98e9b78",
+    "ycb_objects/episode_randomization.py": "f3ea2cb0fee3838c36bdd18f3a9d8ea2adff858a6b2534290f6347f7a8bffa50",
+    "ycb_objects/benchmark_randomization.py": "1358a6d670ed566ad673a8c26d8100437744dc453e81d5a3d100b493769a049b",
+    "scripts/_eval_multitarget_worker.py": "ce6f18d08e7f16a63eca1e6deb9e64adebbf01c6619330a76fc5b4ffcecd95be",
+    "gym_dcmm/algs/ppo_dcmm_645edc4/ppo_dcmm_track.py": "59976be0ca118c46f783fc5780a60c55a51b8e716721ca59145c20fd2d35afac",
+    "gym_dcmm/algs/ppo_dcmm_july22/ppo_dcmm_track.py": "2e37514d41dcd4ebc54d389397c347284ffca6d918a63f71c4b4083550911f92",
+    "gym_dcmm/utils/roll_evaluation.py": "9b952076a427417ba7307c4439bb4ecd143ec42005456c57425eb113edde83b8"
+  },
+  "catalog_sha256": "67e2de3d33d57ee3ea7c0661230ba45ead68c1fe5e3f141b9e0d0c3cb30e6d90",
+  "models": {
+    "roll": {
+      "checkpoint": "/home/isee/Catch/11-12/roll_track_best_reward_24.52.pth",
+      "sha256": "bd23ca5a4844d8d7ff43c37d010e64bc90903eda7a3d764cef2ef40387ca9ff5"
+    },
+    "bounce": {
+      "checkpoint": "/home/isee/Catch/11-12/bounce_track_best_reward_19.56.pth",
+      "sha256": "6c6ebd2b9a7f8ee2cadb6fec87df8809fe6bc567c8aea87150837bd9fe879ea7"
+    }
+  }
+}

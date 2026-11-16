@@ -31,6 +31,20 @@ def mesh_points(model,data,geom):
 
 @lru_cache(maxsize=16)
 def geometry(name,kind,factor=.4):
+    if name=='small_cylinder':
+        if kind!='cylinder':raise ValueError('small_cylinder requires cylinder kind')
+        radius=.028;half_length=.045;mass=.065
+        diagonal=np.array([mass*(3*radius**2+4*half_length**2)/12]*2+[.5*mass*radius**2])
+        angles=np.linspace(0,2*np.pi,128,endpoint=False)
+        support=np.array([[radius*np.cos(a),radius*np.sin(a),z] for z in (-half_length,half_length) for a in angles])
+        root=ET.Element('mujoco');body=ET.SubElement(ET.SubElement(root,'worldbody'),'body',name='object')
+        ET.SubElement(body,'inertial',mass=str(mass),pos='0 0 0',diaginertia=' '.join(map(str,diagonal)))
+        ET.SubElement(body,'geom',name='benchmark_collision',type='cylinder',size=f'{radius} {half_length}',mass='0',rgba='.65 .42 .18 1',contype='1',conaffinity='1')
+        marker=float(np.sqrt(radius**2+half_length**2))
+        ET.SubElement(body,'geom',name='object',type='sphere',size=str(marker),mass='0',contype='0',conaffinity='0',rgba='0 0 0 0',group='5')
+        return dict(xml=ET.tostring(root,encoding='unicode'),kind=kind,mass=mass,radius=radius,marker_radius=marker,
+                    points=support,long_axis=np.array([0.,0.,1.]),inertia=diagonal,extents=[2*radius,2*radius,2*half_length],
+                    com_source=[0.,0.,0.],inertia_basis='homogeneous analytical solid cylinder; synthetic benchmark target')
     resource=load(name)
     root=ET.fromstring(compose('<mujoco><worldbody><body name="object"><freejoint/><geom name="object" type="sphere" size=".04"/></body></worldbody></mujoco>',resource,collision='mesh'))
     body=root.find('.//body[@name="object"]')
@@ -58,6 +72,10 @@ def geometry(name,kind,factor=.4):
         physical.attrib.clear();physical.attrib.update(name='benchmark_collision',type='sphere',size=str(radius),mass='0',contype='1',conaffinity='1',group='3',rgba='0 0 0 0')
         extents=[radius*2]*3
     elif kind=='cylinder':
+        # Tuna can is a short disk: its cylinder axis is the shortest PCA axis,
+        # unlike the taller soup can. The longest axis would turn a diameter
+        # into the cylinder height.
+        if name=='tuna_fish_can':long_axis=vectors[:,0]
         transform=align(long_axis,[0,0,1]);canonical=centered@transform.T
         # Fit cylinder to the source can's principal axis and radial extent.
         radius=float(np.percentile(np.linalg.norm(canonical[:,:2],axis=1),99.5))

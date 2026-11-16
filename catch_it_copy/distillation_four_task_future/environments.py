@@ -16,7 +16,17 @@ import numpy as np
 from distillation.teachers import ROOT
 from distillation.environments import Pool as BasePool, stack_tree, terminal_success
 from .core import encode_depth, camera_specs, robot_input, command_context
-from visual_module_experiments.labels import labels, hand_contact
+from visual_module_experiments.labels import labels
+
+
+def hand_contact(env):
+    """Include analytical YCB collision spheres, not only their visual 'object' geom."""
+    from gym_dcmm.utils.roll_rewards import hand_collision_ids
+    model,data=env.Dcmm.model,env.Dcmm.data
+    objects=set(np.flatnonzero(model.geom_bodyid==model.body('object').id).tolist())
+    hand=set(hand_collision_ids(model,env.hand_start_id).tolist())
+    return any((int(c.geom1) in objects and int(c.geom2) in hand) or
+               (int(c.geom2) in objects and int(c.geom1) in hand) for c in data.contact)
 
 
 class DepthCamera:
@@ -197,7 +207,8 @@ class Pool(BasePool):
             context=mp.get_context('spawn');observations=[]
             for i in range(count):
                 cfg=copy.deepcopy(config);obj=names[i%len(names)];cfg['selected_object']=obj
-                cfg['env_kwargs']['test_object']='default' if obj=='original' else 'ycb:'+obj
+                if task in ('roll','bounce'):
+                    cfg['env_kwargs']['test_object']='default' if obj=='original' else 'ycb:'+obj
                 parent,child=context.Pipe()
                 process=context.Process(target=_worker,args=(child,task,cfg,seed+i*1009,viewer),daemon=True)
                 process.start();child.close();self.pipes.append(parent);self.processes.append(process)

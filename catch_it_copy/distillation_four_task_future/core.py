@@ -175,4 +175,8 @@ def losses(student,batch,begin,end,logits,prediction,config,lengths):
     for index,(task,obj) in enumerate([(t,o) for t in TASKS for o in config['tasks'][t]['objects']]):
         select=batch['group_id']==index
         result['imitation/'+task+'/'+obj]=per_episode[select].mean()
+    basket=(context[...,0]>.5).to(valid.dtype)*valid
+    throwing=(context[...,6]>.5).to(valid.dtype)
+    result['basket/navigation_frames']=(basket*(1-throwing)).sum()
+    result['basket/throwing_frames']=(basket*throwing).sum()
     return result

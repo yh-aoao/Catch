@@ -53,6 +53,7 @@ def validate(config):
               'eval_episodes','save_every','batch_episodes_per_object','capacity_frames_per_task','max_episode_steps','bptt_steps'):
         if type(config[k]) is not int or config[k]<1:raise ValueError('Invalid '+k)
     if config['eval_episodes']%3:raise ValueError('Evaluation total per task must divide equally over 3 balls')
+    if type(config['evaluation_seed']) is not int or config['evaluation_seed']<0:raise ValueError('Invalid evaluation seed')
     if config['auxiliary']['velocity_weight']!=0:raise ValueError('This version uses position/Future supervision only')
     if not config['skip_teacher_baseline']:raise ValueError('Teacher closed-loop baseline is disabled in this experiment')
     if config['vision']['gl_backend'] not in ('egl','auto','glfw','osmesa'):raise ValueError('Invalid renderer')
@@ -153,6 +154,7 @@ def evaluate(config,adapters,student,output):
             try:
                 pool=Pool(task,env_config(config,task),1,config['evaluation_seed']+1000000+ti*10000+oi*1009,objects=[obj])
                 previous=np.zeros((1,20),np.float32);hidden=None
+                rehearsal=bool(np.asarray(pool.obs['teacher_obs'].get('basket_rehearsal',[False])).reshape(-1)[0])
                 for _ in range(count*config['max_episode_steps']+1):
                     command,hidden=student_step(student,pool.obs,previous,hidden)
                     command=adapters[task].executable(command)*action_mask(pool.obs['context'])
@@ -162,8 +164,9 @@ def evaluate(config,adapters,student,output):
                     if done[0]:
                         info=infos[0];rows.append(dict(episode=len(rows),success=terminal_success(info,cfg['success_metric']),reward=reward_sum,
                                                      length=length,reason=str(info.get('terminated_reason','unspecified')),
-                                                     stable_hold=bool(info.get('roll_stable_hold',False))))
+                                                     stable_hold=bool(info.get('roll_stable_hold',False)),basket_rehearsal=rehearsal))
                         previous.fill(0);hidden=None;reward_sum=0.;length=0
+                        rehearsal=bool(np.asarray(pool.obs['teacher_obs'].get('basket_rehearsal',[False])).reshape(-1)[0])
                         if len(rows)%25==0:print('[eval] {} / {} {}/{}'.format(task,obj,len(rows),count),flush=True)
                         if len(rows)==count:break
                 if len(rows)!=count:raise RuntimeError('Incomplete evaluation')
@@ -175,6 +178,13 @@ def evaluate(config,adapters,student,output):
         results[task]=dict(successes=successes,episodes=episodes,success_rate=successes/episodes,
                            object_macro_success_rate=sum(v['success_rate'] for v in objects.values())/len(objects),
                            success_metric=cfg['success_metric'],objects=objects,seed=config['evaluation_seed'])
+        if task=='basket':
+            groups={}
+            for value,name in ((False,'mobile'),(True,'rehearsal')):
+                records=[r for v in objects.values() for r in v['records'] if r['basket_rehearsal']==value]
+                groups[name]=dict(episodes=len(records),successes=sum(r['success'] for r in records),
+                                  success_rate=sum(r['success'] for r in records)/len(records) if records else None)
+            results[task]['phase_groups']=groups
         save_json(output,results)
         print('[eval] {} {:.2%}'.format(task,results[task]['success_rate']),flush=True)
     return results
@@ -240,16 +250,21 @@ def env_check(config,teachers,adapters,output,steps):
             try:
                 pool=Pool(task,env_config(config,task),1,config['seed']+ti*10000+oi*1009,objects=[obj])
                 previous=np.zeros((1,20),np.float32);hidden=None
+                phases=set();terminals=0
                 for _ in range(steps):
+                    phases.add(int(pool.obs['context'][0,6]>.5))
                     command,hidden=student_step(student,pool.obs,previous,hidden)
                     target=teachers[task].predict(pool.obs['teacher_obs'])
                     if target.shape!=(1,20) or not np.isfinite(target).all():raise ValueError('Teacher environment inference failed')
                     # Step the teacher for interface smoke only; this is not a success-rate test.
                     command=adapters[task].canonical(target)*action_mask(pool.obs['context'])
-                    _,_,done,_=pool.step(adapters[task].action_dict(command));previous=command
-                    if done[0]:previous.fill(0);hidden=None
+                    _,_,done,infos=pool.step(adapters[task].action_dict(command));previous=command
+                    if done[0]:
+                        terminal_success(infos[0],config['tasks'][task]['success_metric'])
+                        terminals+=1;previous.fill(0);hidden=None
                 report[task+'/'+obj]=dict(depth_shape=list(pool.obs['depth'].shape),proprio_shape=list(pool.obs['proprio'].shape),
-                                         context=pool.obs['context'][0].tolist(),teacher_inference_finite=True)
+                                         context=pool.obs['context'][0].tolist(),teacher_inference_finite=True,
+                                         steps=steps,observed_phases=sorted(phases),terminal_metric_checks=terminals)
                 print('[env-check] '+task+'/'+obj,flush=True)
             finally:
                 if pool is not None:pool.close()
@@ -262,7 +277,7 @@ def main():
     p.add_argument('--config',type=Path,default=Path(__file__).with_name('configs')/'catch.json')
     p.add_argument('--output',type=Path,required=True);p.add_argument('--checkpoint',type=Path);p.add_argument('--resume',type=Path)
     p.add_argument('--device');p.add_argument('--gl-backend',choices=['egl','glfw','osmesa','auto']);p.add_argument('--egl-device-id',type=int)
-    for flag in ('iterations','num-envs','episodes','eval-start','eval-every','seed'):p.add_argument('--'+flag,type=int)
+    for flag in ('iterations','num-envs','episodes','eval-start','eval-every','seed','eval-seed'):p.add_argument('--'+flag,type=int)
     p.add_argument('--skip-teacher-baseline',action='store_true');p.add_argument('--allow-source-changes',action='store_true')
     p.add_argument('--check-steps',type=int,default=2)
     args=p.parse_args()
@@ -280,7 +295,7 @@ def main():
     else:config=json.loads(args.config.read_text())
     if args.resume and args.command!='train':p.error('resume is train only')
     if args.check_steps<1:p.error('check-steps must be positive')
-    for flag,key in [('iterations','iterations'),('num_envs','num_envs_per_task'),('episodes','eval_episodes'),('eval_start','eval_start'),('eval_every','eval_every'),('seed','seed')]:
+    for flag,key in [('iterations','iterations'),('num_envs','num_envs_per_task'),('episodes','eval_episodes'),('eval_start','eval_start'),('eval_every','eval_every'),('seed','seed'),('eval_seed','evaluation_seed')]:
         if getattr(args,flag) is not None:config[key]=getattr(args,flag)
     if args.gl_backend:config['vision']['gl_backend']=args.gl_backend
     config['device']=args.device or ('cpu' if args.command=='check' else config['device'])

@@ -644,6 +644,9 @@ class DcmmVecEnv(gym.Env):
                              self.Dcmm.data.qvel[:2], yaw, self.basket_center, DcmmCfg)
 
     def _roll_capture_point(self):
+        from gym_dcmm.utils import roll_palm
+        if roll_palm.enabled(self):
+            return roll_palm.capture_point(self)
         # Physical palm mesh center, offset outward by the ball radius.
         normal = self.Dcmm.data.body('link6').xmat.reshape(3, 3)[:, 1]
         return (self.Dcmm.data.geom_xpos[self.hand_start_id].copy()
@@ -2089,7 +2092,8 @@ class DcmmVecEnv(gym.Env):
         if self.object_motion == "roll":
             try:
                 _xmat = self.Dcmm.data.body('link6').xmat.reshape(3, 3)
-                _palm_up = float(_xmat[2, 1])  # link6 Y 轴朝上分量：1=掌心完全朝上（舀水）
+                from gym_dcmm.utils import roll_palm
+                _palm_up = float(_xmat[2, 2 if roll_palm.enabled(self) else 1])  # Legacy uses Y; palm_z_v1 uses calibrated grasp-side +Z.
                 # 掌心朝上：用平方非线性 + 改善增量。
                 # 默认姿态下 _palm_up 为负，max(0,·) 会梯度为零、模型学不动（项目历史教训）
                 _palm_align = 0.25 * (_palm_up + 1.0) ** 2
@@ -2101,6 +2105,8 @@ class DcmmVecEnv(gym.Env):
                 reward_roll_scoop = DcmmCfg.roll_w_scoop_palm * _palm_align
                 if _delta_up > 0:
                     reward_roll_scoop += DcmmCfg.roll_w_scoop_palm * 2.0 * _delta_up
+                if roll_palm.enabled(self):
+                    reward_roll_scoop *= roll_palm.scoop_weight(self)
                 if self.stage == "tracking" and self.task != "Catching":
                     # 跟踪阶段：手指轻弯（过度弯曲会挡球）+ 不乱动
                     # 抓取阶段不加这两项，否则会与快速闭合的需求打架
@@ -2123,7 +2129,8 @@ class DcmmVecEnv(gym.Env):
             # Contact bypasses the unverified palm-normal gate only for Catch shaping.
             # There is no prescribed closed-angle target after contact.
             ready, finger_terms = grasp_terms(
-                self.Dcmm.data.qpos[21:37], local_ball, False, DcmmCfg)
+                self.Dcmm.data.qpos[21:37], local_ball, False, DcmmCfg,
+                palm_axis=2 if getattr(self,'roll_palm_version','legacy')=='palm_z_v1' else 1)
             if phase != 'waiting':
                 ready = True
                 finger_terms['posture'] = 0.
@@ -2146,7 +2153,7 @@ class DcmmVecEnv(gym.Env):
             finger_terms.update(getattr(self, 'roll_target_terms', {}))
             self.roll_previous_hand_speed = joint_speed
             reward_roll_scoop += sum(finger_terms.values())
-            info['roll_grasp'] = dict(version='grip_v1', phase=phase,
+            info['roll_grasp'] = dict(version='grip_v1', palm_version=getattr(self,'roll_palm_version','legacy'), phase=phase,
                                      finger_contacts=finger_count,
                                      retention=self.roll_grip_feedback_state.copy(),
                                      control=getattr(self, 'roll_grip_diagnostics', {}),

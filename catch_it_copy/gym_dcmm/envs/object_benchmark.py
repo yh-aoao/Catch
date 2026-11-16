@@ -263,6 +263,10 @@ def make_object_benchmark(object_benchmark='off',benchmark_catalog=None,benchmar
     parameters={k:v for k,v in kwargs.items() if k in accepted}
     if motion=='bounce' and kwargs.get('bounce_grasp_version')=='controlled_hold_v1':parameters['bounce_grasp']=kwargs.get('bounce_grasp')
     env=BenchmarkObject(**parameters)
+    if motion=='roll':
+        version=kwargs.get('roll_palm_version','legacy')
+        if version not in ('legacy','palm_z_v1'):raise ValueError('Unknown roll_palm_version')
+        env.roll_palm_version=version
     env.roll_log=bool(kwargs.get('roll_log',False))
     env.benchmark_shape=shape;env.benchmark_profile=profile;env.benchmark_catalog=data
     env.benchmark_object=selected
@@ -283,7 +287,7 @@ def make_benchmark_vector(num_envs,benchmark_backend='async',**kwargs):
 
 def write_provenance(output,config,env=None):
     data=catalog(config.get('benchmark_catalog'))
-    names=['train_DCMM.py','configs/config.yaml','gym_dcmm/envs/object_benchmark.py','ycb_objects/benchmark_geometry.py','ycb_objects/benchmark_randomization.py','ycb_objects/episode_randomization.py','gym_dcmm/utils/roll_evaluation.py',
+    names=['train_DCMM.py','configs/config.yaml','gym_dcmm/envs/object_benchmark.py','ycb_objects/benchmark_geometry.py','ycb_objects/benchmark_randomization.py','ycb_objects/episode_randomization.py','gym_dcmm/utils/roll_evaluation.py','gym_dcmm/utils/roll_palm.py','gym_dcmm/utils/roll_grasp.py',
            'gym_dcmm/envs/roll_physical.py','gym_dcmm/envs/bounce_physical_v2.py',
            'ycb_objects/calibration_data/balls.roll_table_priors_v1.json','ycb_objects/calibration_data/balls.three_ball_training_v1.json']
     result=dict(version=config['object_benchmark'],catalog=data,options=config.get('benchmark_options'),

@@ -1638,3 +1638,7 @@ original、tennis_ball、baseball、racquetball、golf_ball、softball
 4.throw的参数的泛化有什么逻辑吗
 5.把bounce和roll的参数泛化范围缩小再训练的话就有可能成功率更高？之前有没有是过多目标固定参数的模型效果怎么样
 6.或许是训练不够？之前单个目标的时候都是num=32训练，那么三球的时候是多少？
+
+去掉roll的柠檬，新增多一个圆柱体目标
+总体参数泛化范围缩小
+扩大num训练，有什么方法来扩大？

@@ -64,7 +64,7 @@ def table_pair(xml,profile,resource=None):
 
 
 def make_roll_physical(roll_physics=VERSION,roll_material_file=None,roll_ball_mode='fixed',
-                       roll_ball_weights=None,roll_reward_version='legacy',roll_adaptive_wait=None,
+                       roll_ball_weights=None,roll_reward_version='legacy',roll_adaptive_wait=None,roll_palm_version='legacy',
                        test_object='default',roll_speed=None,roll_wait_guard=False,
                        ycb_collision='auto',ycb_joint_damping=None,benchmark_visual_scale=1.,**kwargs):
     if roll_physics!=VERSION or kwargs.get('object_motion')!='roll' or kwargs.get('object_eval',False):
@@ -77,6 +77,8 @@ def make_roll_physical(roll_physics=VERSION,roll_material_file=None,roll_ball_mo
         raise ValueError('Roll mixed physics training requires test_object=default')
     if roll_ball_weights is not None and roll_ball_mode!='mixed':
         raise ValueError('roll_ball_weights requires mixed mode')
+    if roll_palm_version not in ("legacy","palm_z_v1"):
+        raise ValueError("Unknown roll_palm_version")
     materials=load_materials(roll_material_file)
     catalog=materials['profiles']
     name='original' if test_object in ('default','sphere') else (test_object[4:] if test_object.startswith('ycb:') else test_object)
@@ -169,6 +171,7 @@ def make_roll_physical(roll_physics=VERSION,roll_material_file=None,roll_ball_mo
 
     accepted=inspect.signature(Base.__init__).parameters
     env=PhysicalRoll(**{k:v for k,v in kwargs.items() if k in accepted})
+    env.roll_palm_version=roll_palm_version
     env.roll_log=bool(kwargs.get('roll_log',False))
     if roll_reward_version=='adaptive_wait_v1':
         from gym_dcmm.envs.roll_adaptive import AdaptiveRollReward
@@ -179,10 +182,10 @@ def make_roll_physical(roll_physics=VERSION,roll_material_file=None,roll_ball_mo
 def write_provenance(output,config):
     root=Path(__file__).resolve().parents[2]
     names=['train_DCMM.py','configs/config.yaml','gym_dcmm/envs/roll_physical.py',
-           'gym_dcmm/envs/roll_adaptive.py','gym_dcmm/utils/roll_adaptive_wait.py',
+           'gym_dcmm/envs/roll_adaptive.py','gym_dcmm/utils/roll_palm.py','gym_dcmm/utils/roll_grasp.py','gym_dcmm/utils/roll_adaptive_wait.py',
            'gym_dcmm/envs/DcmmVecEnv_roll_645edc4.py','gym_dcmm/envs/DcmmVecEnv.py']
     result=dict(version=VERSION,materials=load_materials(config.get('roll_material_file')),
                 ball_mode=config.get('roll_ball_mode'),weights=config.get('roll_ball_weights'),
-                speed=config.get('roll_speed'),reward_version=config.get('roll_reward_version'),
+                speed=config.get('roll_speed'),reward_version=config.get('roll_reward_version'),palm_version=config.get('roll_palm_version','legacy'),
                 sources={n:hashlib.sha256((root/n).read_bytes()).hexdigest() for n in names})
     (Path(output)/'roll_physics_provenance.json').write_text(json.dumps(result,indent=2))

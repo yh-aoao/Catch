@@ -2,9 +2,13 @@
 import numpy as np
 
 
-def grasp_terms(joints, local_ball, contact, cfg):
+def grasp_terms(joints, local_ball, contact, cfg, palm_axis=1):
     # link6 local Y is the palm normal; X/Z span the palm.
     local_ball = np.asarray(local_ball)
+    if palm_axis==2:
+        local_ball=local_ball[[0,2,1]]
+    elif palm_axis!=1:
+        raise ValueError("palm_axis must be 1 or 2")
     inside = (np.linalg.norm(local_ball[[0, 2]]) <= cfg.roll_grasp_entry_radius
               and -0.02 <= local_ball[1] <= cfg.roll_grasp_entry_depth)
     ready = bool(inside)

@@ -376,6 +376,7 @@ def main(config: DictConfig):
                         'roll_ball_mode':str(config.roll_ball_mode),
                         'roll_ball_weights':OmegaConf.to_container(config.roll_ball_weights,resolve=True) if config.roll_ball_weights is not None else None,
                         'roll_reward_version':roll_reward_version,
+                        'roll_palm_version':str(config.get('roll_palm_version','legacy')),
                         **({'roll_speed':roll_speed} if config.test_object=='default' else {})}
                        if physical_roll else {}),
                     **({'bounce_ball_mode': str(config.bounce_ball_mode),

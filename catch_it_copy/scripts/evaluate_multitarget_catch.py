@@ -55,6 +55,8 @@ def main():
     p.add_argument('--objects',nargs='+',help='Optional target subset, primarily for smoke tests')
     p.add_argument('--catalog',type=Path,default=ROOT/'ycb_objects/calibration_data/object_benchmark_all_targets_v1.json')
     p.add_argument('--output',type=Path,default=None)
+    p.add_argument('--radius-scale',type=float,default=1.,help='Original ball nominal radius multiplier; requires --objects original and dr_episode')
+    p.add_argument('--mass-policy',choices=['fixed','density'],default='fixed',help='Keep mass, or multiply mass by radius-scale cubed')
     p.add_argument('--resume',action='store_true',help='Skip complete cases only, validating the original run settings')
     a=p.parse_args()
     if min(a.episodes,a.instances,a.jobs)<1 or a.seed<0 or a.seed+a.instances>=2**32 or a.episodes%a.instances:
@@ -71,6 +73,9 @@ def main():
         checkpoint=Path(m['checkpoint']);checkpoint=checkpoint if checkpoint.is_absolute() else model_dir/checkpoint
         if not checkpoint.is_file():p.error('Missing checkpoint: '+str(checkpoint))
         m['checkpoint']=str(checkpoint.resolve());m['checkpoint_sha256']=sha(checkpoint)
+    if not 0.5<=a.radius_scale<=1.5:p.error('radius-scale must be between 0.5 and 1.5')
+    if (a.radius_scale!=1. or a.mass_policy!='fixed') and (a.objects!=['original'] or any(m['physics']!='dr_episode' for m in models)):
+        p.error('Radius experiment requires --objects original and dr_episode models')
     data=json.loads(a.catalog.read_text())
     known=set(data['roll'])|set(data['bounce'])
     if a.objects and set(a.objects)-known:p.error('Unknown target in --objects')
@@ -84,7 +89,7 @@ def main():
         'gym_dcmm/envs/DcmmVecEnv_roll_645edc4.py','gym_dcmm/envs/bounce_grasp.py',
         'gym_dcmm/utils/roll_evaluation.py','gym_dcmm/algs/ppo_dcmm_645edc4/ppo_dcmm_catch_two_stage.py',
         'gym_dcmm/algs/ppo_dcmm_5fe75d5f/ppo_dcmm_catch_hold.py']
-    spec=dict(episodes=a.episodes,instances=a.instances,seed=a.seed,models=models,objects=a.objects,
+    spec=dict(radius_scale=a.radius_scale,mass_policy=a.mass_policy,episodes=a.episodes,instances=a.instances,seed=a.seed,models=models,objects=a.objects,
         catalog_sha256=sha(a.catalog),source_sha256={n:sha(ROOT/n) for n in source_names})
     output=(a.output or ROOT/'evaluation_results'/datetime.now().strftime('multitarget_%Y%m%d_%H%M%S_%f')).resolve()
     if a.resume:
@@ -115,7 +120,7 @@ def main():
         for obj in data[m['motion']]:
             if a.objects and obj not in a.objects:continue
             folder=output/m['name']/obj;folder.mkdir(parents=True,exist_ok=True)
-            request=dict(m,object=obj,seed=a.seed,episodes=a.episodes,instances=a.instances,case_dir=str(folder))
+            request=dict(m,radius_scale=a.radius_scale,mass_policy=a.mass_policy,object=obj,seed=a.seed,episodes=a.episodes,instances=a.instances,case_dir=str(folder))
             cases.append((request,config))
     def run(case):
         request,config=case;folder=Path(request['case_dir']);result=folder/'summary.json'

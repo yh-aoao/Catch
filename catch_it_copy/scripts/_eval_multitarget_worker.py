@@ -71,7 +71,8 @@ def evaluate(self):
                         draw=physics['randomization']
                         assert draw['version']=='physical_dr_episode_v1' and draw['sampling']=='episode_reset'
                         for k,lo,hi in [('size_scale',.95,1.05),('mass_scale',.9,1.1),('friction_scale',.85,1.15),('rolling_scale',.8,1.2),('damping_scale',.9,1.1)]:
-                            assert lo<=draw[k]<=hi,(k,draw)
+                            factor=request.get('radius_scale',1.) if k=='size_scale' else (request.get('radius_scale',1.)**3 if k=='mass_scale' and request.get('mass_policy')=='density' else 1.)
+                            assert lo-1e-12<=draw[k]/factor<=hi+1e-12,(k,draw)
                         episode_draws.append(draw)
                     else:assert 'randomization' not in physics
                     held=bool(final.get('roll_stable_hold',False));successes+=int(ok[i]);stable+=int(held)
@@ -106,5 +107,20 @@ def evaluate(self):
 roll.PPO_Catch_TwoStage.test=evaluate
 PPO_Catch_Hold.test=evaluate
 if __name__=='__main__':
+    # Evaluation-only sampler override; geometry/inertia updates use the existing
+    # per-episode implementation. No training source or nominal catalog is changed.
+    request=json.loads(Path(os.environ['MULTITARGET_EVAL_REQUEST']).read_text())
+    radius=request.get('radius_scale',1.)
+    if radius!=1.:
+        assert request['object']=='original' and request['physics']=='dr_episode'
+        from ycb_objects import benchmark_randomization as br
+        from ycb_objects import episode_randomization as er
+        original_sample=br.sample
+        def radius_sample(*args,**kwargs):
+            draw=original_sample(*args,**kwargs)
+            draw['size_scale']*=radius
+            if request.get('mass_policy')=='density':draw['mass_scale']*=radius**3
+            return draw
+        br.sample=er.sample=radius_sample
     from train_DCMM import main
     main()

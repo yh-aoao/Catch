@@ -326,6 +326,7 @@ def main(config: DictConfig):
                         'benchmark_options':OmegaConf.to_container(config.benchmark_options,resolve=True),
                         'benchmark_seed':int(config.seed)}
                        if benchmark!='off' else {}),
+                    **({"throw_generalization":str(config.throw_generalization)} if config.object_motion == "throw" else {}),
                     task=task, camera_name=["top"],
                     render_per_step=False,
                     render_mode = None if (physical_bounce or physical_roll or config.get('basket_carry_reward',False)) and not config.viewer and not config.imshow_cam else "rgb_array",

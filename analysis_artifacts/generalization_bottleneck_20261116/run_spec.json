@@ -1,0 +1,511 @@
+{
+  "episodes_per_case": 20,
+  "instances": 4,
+  "source_sha256": {
+    "ycb_objects/episode_randomization.py": "f3ea2cb0fee3838c36bdd18f3a9d8ea2adff858a6b2534290f6347f7a8bffa50",
+    "ycb_objects/benchmark_randomization.py": "1358a6d670ed566ad673a8c26d8100437744dc453e81d5a3d100b493769a049b",
+    "gym_dcmm/envs/object_benchmark.py": "fb5165d5f773288828ca143bd101cf985d86b524955beda096373559a98e9b78",
+    "gym_dcmm/envs/bounce_grasp.py": "f130370f930c412d7fbf9793e12ed12cae91c34551a6d317e03164b58a482582",
+    "scripts/_eval_multitarget_worker.py": "ce6f18d08e7f16a63eca1e6deb9e64adebbf01c6619330a76fc5b4ffcecd95be",
+    "gym_dcmm/utils/roll_evaluation.py": "9b952076a427417ba7307c4439bb4ecd143ec42005456c57425eb113edde83b8"
+  },
+  "baseline_source": "/home/isee/Catch/analysis_artifacts/episode_dr_catch_20261116/results",
+  "cases": [
+    {
+      "request": {
+        "name": "roll_best_236_00_range0.5",
+        "motion": "roll",
+        "physics": "dr_episode",
+        "checkpoint": "/home/isee/Catch/11-16/roll_catch_best_reward_236.00.pth",
+        "checkpoint_sha256": "1c40a31cac8fa543577ac48cfcaa225be6969082b6c8f25699d156fde058c933",
+        "object": "original",
+        "seed": 41000,
+        "episodes": 20,
+        "instances": 4,
+        "case_dir": "/home/isee/Catch/analysis_artifacts/generalization_bottleneck_20261116/roll_best_236_00_range0.5/original"
+      },
+      "config": "/home/isee/Catch/analysis_artifacts/episode_dr_catch_20261116/results/configs/roll_best_236_00.yaml",
+      "scale": 0.5
+    },
+    {
+      "request": {
+        "name": "roll_best_236_00_range0.0",
+        "motion": "roll",
+        "physics": "dr_episode",
+        "checkpoint": "/home/isee/Catch/11-16/roll_catch_best_reward_236.00.pth",
+        "checkpoint_sha256": "1c40a31cac8fa543577ac48cfcaa225be6969082b6c8f25699d156fde058c933",
+        "object": "original",
+        "seed": 41000,
+        "episodes": 20,
+        "instances": 4,
+        "case_dir": "/home/isee/Catch/analysis_artifacts/generalization_bottleneck_20261116/roll_best_236_00_range0.0/original"
+      },
+      "config": "/home/isee/Catch/analysis_artifacts/episode_dr_catch_20261116/results/configs/roll_best_236_00.yaml",
+      "scale": 0.0
+    },
+    {
+      "request": {
+        "name": "roll_best_236_00_range0.5",
+        "motion": "roll",
+        "physics": "dr_episode",
+        "checkpoint": "/home/isee/Catch/11-16/roll_catch_best_reward_236.00.pth",
+        "checkpoint_sha256": "1c40a31cac8fa543577ac48cfcaa225be6969082b6c8f25699d156fde058c933",
+        "object": "tennis_ball",
+        "seed": 41000,
+        "episodes": 20,
+        "instances": 4,
+        "case_dir": "/home/isee/Catch/analysis_artifacts/generalization_bottleneck_20261116/roll_best_236_00_range0.5/tennis_ball"
+      },
+      "config": "/home/isee/Catch/analysis_artifacts/episode_dr_catch_20261116/results/configs/roll_best_236_00.yaml",
+      "scale": 0.5
+    },
+    {
+      "request": {
+        "name": "roll_best_236_00_range0.0",
+        "motion": "roll",
+        "physics": "dr_episode",
+        "checkpoint": "/home/isee/Catch/11-16/roll_catch_best_reward_236.00.pth",
+        "checkpoint_sha256": "1c40a31cac8fa543577ac48cfcaa225be6969082b6c8f25699d156fde058c933",
+        "object": "tennis_ball",
+        "seed": 41000,
+        "episodes": 20,
+        "instances": 4,
+        "case_dir": "/home/isee/Catch/analysis_artifacts/generalization_bottleneck_20261116/roll_best_236_00_range0.0/tennis_ball"
+      },
+      "config": "/home/isee/Catch/analysis_artifacts/episode_dr_catch_20261116/results/configs/roll_best_236_00.yaml",
+      "scale": 0.0
+    },
+    {
+      "request": {
+        "name": "roll_best_236_00_range0.5",
+        "motion": "roll",
+        "physics": "dr_episode",
+        "checkpoint": "/home/isee/Catch/11-16/roll_catch_best_reward_236.00.pth",
+        "checkpoint_sha256": "1c40a31cac8fa543577ac48cfcaa225be6969082b6c8f25699d156fde058c933",
+        "object": "baseball",
+        "seed": 41000,
+        "episodes": 20,
+        "instances": 4,
+        "case_dir": "/home/isee/Catch/analysis_artifacts/generalization_bottleneck_20261116/roll_best_236_00_range0.5/baseball"
+      },
+      "config": "/home/isee/Catch/analysis_artifacts/episode_dr_catch_20261116/results/configs/roll_best_236_00.yaml",
+      "scale": 0.5
+    },
+    {
+      "request": {
+        "name": "roll_best_236_00_range0.0",
+        "motion": "roll",
+        "physics": "dr_episode",
+        "checkpoint": "/home/isee/Catch/11-16/roll_catch_best_reward_236.00.pth",
+        "checkpoint_sha256": "1c40a31cac8fa543577ac48cfcaa225be6969082b6c8f25699d156fde058c933",
+        "object": "baseball",
+        "seed": 41000,
+        "episodes": 20,
+        "instances": 4,
+        "case_dir": "/home/isee/Catch/analysis_artifacts/generalization_bottleneck_20261116/roll_best_236_00_range0.0/baseball"
+      },
+      "config": "/home/isee/Catch/analysis_artifacts/episode_dr_catch_20261116/results/configs/roll_best_236_00.yaml",
+      "scale": 0.0
+    },
+    {
+      "request": {
+        "name": "roll_best_236_00_range0.5",
+        "motion": "roll",
+        "physics": "dr_episode",
+        "checkpoint": "/home/isee/Catch/11-16/roll_catch_best_reward_236.00.pth",
+        "checkpoint_sha256": "1c40a31cac8fa543577ac48cfcaa225be6969082b6c8f25699d156fde058c933",
+        "object": "orange",
+        "seed": 41000,
+        "episodes": 20,
+        "instances": 4,
+        "case_dir": "/home/isee/Catch/analysis_artifacts/generalization_bottleneck_20261116/roll_best_236_00_range0.5/orange"
+      },
+      "config": "/home/isee/Catch/analysis_artifacts/episode_dr_catch_20261116/results/configs/roll_best_236_00.yaml",
+      "scale": 0.5
+    },
+    {
+      "request": {
+        "name": "roll_best_236_00_range0.0",
+        "motion": "roll",
+        "physics": "dr_episode",
+        "checkpoint": "/home/isee/Catch/11-16/roll_catch_best_reward_236.00.pth",
+        "checkpoint_sha256": "1c40a31cac8fa543577ac48cfcaa225be6969082b6c8f25699d156fde058c933",
+        "object": "orange",
+        "seed": 41000,
+        "episodes": 20,
+        "instances": 4,
+        "case_dir": "/home/isee/Catch/analysis_artifacts/generalization_bottleneck_20261116/roll_best_236_00_range0.0/orange"
+      },
+      "config": "/home/isee/Catch/analysis_artifacts/episode_dr_catch_20261116/results/configs/roll_best_236_00.yaml",
+      "scale": 0.0
+    },
+    {
+      "request": {
+        "name": "roll_best_236_00_range0.5",
+        "motion": "roll",
+        "physics": "dr_episode",
+        "checkpoint": "/home/isee/Catch/11-16/roll_catch_best_reward_236.00.pth",
+        "checkpoint_sha256": "1c40a31cac8fa543577ac48cfcaa225be6969082b6c8f25699d156fde058c933",
+        "object": "apple",
+        "seed": 41000,
+        "episodes": 20,
+        "instances": 4,
+        "case_dir": "/home/isee/Catch/analysis_artifacts/generalization_bottleneck_20261116/roll_best_236_00_range0.5/apple"
+      },
+      "config": "/home/isee/Catch/analysis_artifacts/episode_dr_catch_20261116/results/configs/roll_best_236_00.yaml",
+      "scale": 0.5
+    },
+    {
+      "request": {
+        "name": "roll_best_236_00_range0.0",
+        "motion": "roll",
+        "physics": "dr_episode",
+        "checkpoint": "/home/isee/Catch/11-16/roll_catch_best_reward_236.00.pth",
+        "checkpoint_sha256": "1c40a31cac8fa543577ac48cfcaa225be6969082b6c8f25699d156fde058c933",
+        "object": "apple",
+        "seed": 41000,
+        "episodes": 20,
+        "instances": 4,
+        "case_dir": "/home/isee/Catch/analysis_artifacts/generalization_bottleneck_20261116/roll_best_236_00_range0.0/apple"
+      },
+      "config": "/home/isee/Catch/analysis_artifacts/episode_dr_catch_20261116/results/configs/roll_best_236_00.yaml",
+      "scale": 0.0
+    },
+    {
+      "request": {
+        "name": "roll_best_236_00_range0.5",
+        "motion": "roll",
+        "physics": "dr_episode",
+        "checkpoint": "/home/isee/Catch/11-16/roll_catch_best_reward_236.00.pth",
+        "checkpoint_sha256": "1c40a31cac8fa543577ac48cfcaa225be6969082b6c8f25699d156fde058c933",
+        "object": "lemon",
+        "seed": 41000,
+        "episodes": 20,
+        "instances": 4,
+        "case_dir": "/home/isee/Catch/analysis_artifacts/generalization_bottleneck_20261116/roll_best_236_00_range0.5/lemon"
+      },
+      "config": "/home/isee/Catch/analysis_artifacts/episode_dr_catch_20261116/results/configs/roll_best_236_00.yaml",
+      "scale": 0.5
+    },
+    {
+      "request": {
+        "name": "roll_best_236_00_range0.0",
+        "motion": "roll",
+        "physics": "dr_episode",
+        "checkpoint": "/home/isee/Catch/11-16/roll_catch_best_reward_236.00.pth",
+        "checkpoint_sha256": "1c40a31cac8fa543577ac48cfcaa225be6969082b6c8f25699d156fde058c933",
+        "object": "lemon",
+        "seed": 41000,
+        "episodes": 20,
+        "instances": 4,
+        "case_dir": "/home/isee/Catch/analysis_artifacts/generalization_bottleneck_20261116/roll_best_236_00_range0.0/lemon"
+      },
+      "config": "/home/isee/Catch/analysis_artifacts/episode_dr_catch_20261116/results/configs/roll_best_236_00.yaml",
+      "scale": 0.0
+    },
+    {
+      "request": {
+        "name": "roll_best_236_00_range0.5",
+        "motion": "roll",
+        "physics": "dr_episode",
+        "checkpoint": "/home/isee/Catch/11-16/roll_catch_best_reward_236.00.pth",
+        "checkpoint_sha256": "1c40a31cac8fa543577ac48cfcaa225be6969082b6c8f25699d156fde058c933",
+        "object": "tomato_soup_can",
+        "seed": 41000,
+        "episodes": 20,
+        "instances": 4,
+        "case_dir": "/home/isee/Catch/analysis_artifacts/generalization_bottleneck_20261116/roll_best_236_00_range0.5/tomato_soup_can"
+      },
+      "config": "/home/isee/Catch/analysis_artifacts/episode_dr_catch_20261116/results/configs/roll_best_236_00.yaml",
+      "scale": 0.5
+    },
+    {
+      "request": {
+        "name": "roll_best_236_00_range0.0",
+        "motion": "roll",
+        "physics": "dr_episode",
+        "checkpoint": "/home/isee/Catch/11-16/roll_catch_best_reward_236.00.pth",
+        "checkpoint_sha256": "1c40a31cac8fa543577ac48cfcaa225be6969082b6c8f25699d156fde058c933",
+        "object": "tomato_soup_can",
+        "seed": 41000,
+        "episodes": 20,
+        "instances": 4,
+        "case_dir": "/home/isee/Catch/analysis_artifacts/generalization_bottleneck_20261116/roll_best_236_00_range0.0/tomato_soup_can"
+      },
+      "config": "/home/isee/Catch/analysis_artifacts/episode_dr_catch_20261116/results/configs/roll_best_236_00.yaml",
+      "scale": 0.0
+    },
+    {
+      "request": {
+        "name": "bounce_best_1_57_range0.5",
+        "motion": "bounce",
+        "physics": "dr_episode",
+        "checkpoint": "/home/isee/Catch/11-16/bounce_catch_best_reward_1.57.pth",
+        "checkpoint_sha256": "1e23656cf551a2a3247c6b8a0bc878482f225da11bafad96ad29c8354466b8d9",
+        "object": "original",
+        "seed": 41000,
+        "episodes": 20,
+        "instances": 4,
+        "case_dir": "/home/isee/Catch/analysis_artifacts/generalization_bottleneck_20261116/bounce_best_1_57_range0.5/original"
+      },
+      "config": "/home/isee/Catch/analysis_artifacts/episode_dr_catch_20261116/results/configs/bounce_best_1_57.yaml",
+      "scale": 0.5
+    },
+    {
+      "request": {
+        "name": "bounce_best_1_57_range0.0",
+        "motion": "bounce",
+        "physics": "dr_episode",
+        "checkpoint": "/home/isee/Catch/11-16/bounce_catch_best_reward_1.57.pth",
+        "checkpoint_sha256": "1e23656cf551a2a3247c6b8a0bc878482f225da11bafad96ad29c8354466b8d9",
+        "object": "original",
+        "seed": 41000,
+        "episodes": 20,
+        "instances": 4,
+        "case_dir": "/home/isee/Catch/analysis_artifacts/generalization_bottleneck_20261116/bounce_best_1_57_range0.0/original"
+      },
+      "config": "/home/isee/Catch/analysis_artifacts/episode_dr_catch_20261116/results/configs/bounce_best_1_57.yaml",
+      "scale": 0.0
+    },
+    {
+      "request": {
+        "name": "bounce_best_1_57_range0.5",
+        "motion": "bounce",
+        "physics": "dr_episode",
+        "checkpoint": "/home/isee/Catch/11-16/bounce_catch_best_reward_1.57.pth",
+        "checkpoint_sha256": "1e23656cf551a2a3247c6b8a0bc878482f225da11bafad96ad29c8354466b8d9",
+        "object": "tennis_ball",
+        "seed": 41000,
+        "episodes": 20,
+        "instances": 4,
+        "case_dir": "/home/isee/Catch/analysis_artifacts/generalization_bottleneck_20261116/bounce_best_1_57_range0.5/tennis_ball"
+      },
+      "config": "/home/isee/Catch/analysis_artifacts/episode_dr_catch_20261116/results/configs/bounce_best_1_57.yaml",
+      "scale": 0.5
+    },
+    {
+      "request": {
+        "name": "bounce_best_1_57_range0.0",
+        "motion": "bounce",
+        "physics": "dr_episode",
+        "checkpoint": "/home/isee/Catch/11-16/bounce_catch_best_reward_1.57.pth",
+        "checkpoint_sha256": "1e23656cf551a2a3247c6b8a0bc878482f225da11bafad96ad29c8354466b8d9",
+        "object": "tennis_ball",
+        "seed": 41000,
+        "episodes": 20,
+        "instances": 4,
+        "case_dir": "/home/isee/Catch/analysis_artifacts/generalization_bottleneck_20261116/bounce_best_1_57_range0.0/tennis_ball"
+      },
+      "config": "/home/isee/Catch/analysis_artifacts/episode_dr_catch_20261116/results/configs/bounce_best_1_57.yaml",
+      "scale": 0.0
+    },
+    {
+      "request": {
+        "name": "bounce_best_1_57_range0.5",
+        "motion": "bounce",
+        "physics": "dr_episode",
+        "checkpoint": "/home/isee/Catch/11-16/bounce_catch_best_reward_1.57.pth",
+        "checkpoint_sha256": "1e23656cf551a2a3247c6b8a0bc878482f225da11bafad96ad29c8354466b8d9",
+        "object": "baseball",
+        "seed": 41000,
+        "episodes": 20,
+        "instances": 4,
+        "case_dir": "/home/isee/Catch/analysis_artifacts/generalization_bottleneck_20261116/bounce_best_1_57_range0.5/baseball"
+      },
+      "config": "/home/isee/Catch/analysis_artifacts/episode_dr_catch_20261116/results/configs/bounce_best_1_57.yaml",
+      "scale": 0.5
+    },
+    {
+      "request": {
+        "name": "bounce_best_1_57_range0.0",
+        "motion": "bounce",
+        "physics": "dr_episode",
+        "checkpoint": "/home/isee/Catch/11-16/bounce_catch_best_reward_1.57.pth",
+        "checkpoint_sha256": "1e23656cf551a2a3247c6b8a0bc878482f225da11bafad96ad29c8354466b8d9",
+        "object": "baseball",
+        "seed": 41000,
+        "episodes": 20,
+        "instances": 4,
+        "case_dir": "/home/isee/Catch/analysis_artifacts/generalization_bottleneck_20261116/bounce_best_1_57_range0.0/baseball"
+      },
+      "config": "/home/isee/Catch/analysis_artifacts/episode_dr_catch_20261116/results/configs/bounce_best_1_57.yaml",
+      "scale": 0.0
+    },
+    {
+      "request": {
+        "name": "bounce_best_1_57_range0.5",
+        "motion": "bounce",
+        "physics": "dr_episode",
+        "checkpoint": "/home/isee/Catch/11-16/bounce_catch_best_reward_1.57.pth",
+        "checkpoint_sha256": "1e23656cf551a2a3247c6b8a0bc878482f225da11bafad96ad29c8354466b8d9",
+        "object": "racquetball",
+        "seed": 41000,
+        "episodes": 20,
+        "instances": 4,
+        "case_dir": "/home/isee/Catch/analysis_artifacts/generalization_bottleneck_20261116/bounce_best_1_57_range0.5/racquetball"
+      },
+      "config": "/home/isee/Catch/analysis_artifacts/episode_dr_catch_20261116/results/configs/bounce_best_1_57.yaml",
+      "scale": 0.5
+    },
+    {
+      "request": {
+        "name": "bounce_best_1_57_range0.0",
+        "motion": "bounce",
+        "physics": "dr_episode",
+        "checkpoint": "/home/isee/Catch/11-16/bounce_catch_best_reward_1.57.pth",
+        "checkpoint_sha256": "1e23656cf551a2a3247c6b8a0bc878482f225da11bafad96ad29c8354466b8d9",
+        "object": "racquetball",
+        "seed": 41000,
+        "episodes": 20,
+        "instances": 4,
+        "case_dir": "/home/isee/Catch/analysis_artifacts/generalization_bottleneck_20261116/bounce_best_1_57_range0.0/racquetball"
+      },
+      "config": "/home/isee/Catch/analysis_artifacts/episode_dr_catch_20261116/results/configs/bounce_best_1_57.yaml",
+      "scale": 0.0
+    },
+    {
+      "request": {
+        "name": "bounce_best_1_57_range0.5",
+        "motion": "bounce",
+        "physics": "dr_episode",
+        "checkpoint": "/home/isee/Catch/11-16/bounce_catch_best_reward_1.57.pth",
+        "checkpoint_sha256": "1e23656cf551a2a3247c6b8a0bc878482f225da11bafad96ad29c8354466b8d9",
+        "object": "golf_ball",
+        "seed": 41000,
+        "episodes": 20,
+        "instances": 4,
+        "case_dir": "/home/isee/Catch/analysis_artifacts/generalization_bottleneck_20261116/bounce_best_1_57_range0.5/golf_ball"
+      },
+      "config": "/home/isee/Catch/analysis_artifacts/episode_dr_catch_20261116/results/configs/bounce_best_1_57.yaml",
+      "scale": 0.5
+    },
+    {
+      "request": {
+        "name": "bounce_best_1_57_range0.0",
+        "motion": "bounce",
+        "physics": "dr_episode",
+        "checkpoint": "/home/isee/Catch/11-16/bounce_catch_best_reward_1.57.pth",
+        "checkpoint_sha256": "1e23656cf551a2a3247c6b8a0bc878482f225da11bafad96ad29c8354466b8d9",
+        "object": "golf_ball",
+        "seed": 41000,
+        "episodes": 20,
+        "instances": 4,
+        "case_dir": "/home/isee/Catch/analysis_artifacts/generalization_bottleneck_20261116/bounce_best_1_57_range0.0/golf_ball"
+      },
+      "config": "/home/isee/Catch/analysis_artifacts/episode_dr_catch_20261116/results/configs/bounce_best_1_57.yaml",
+      "scale": 0.0
+    },
+    {
+      "request": {
+        "name": "bounce_best_1_57_range0.5",
+        "motion": "bounce",
+        "physics": "dr_episode",
+        "checkpoint": "/home/isee/Catch/11-16/bounce_catch_best_reward_1.57.pth",
+        "checkpoint_sha256": "1e23656cf551a2a3247c6b8a0bc878482f225da11bafad96ad29c8354466b8d9",
+        "object": "softball",
+        "seed": 41000,
+        "episodes": 20,
+        "instances": 4,
+        "case_dir": "/home/isee/Catch/analysis_artifacts/generalization_bottleneck_20261116/bounce_best_1_57_range0.5/softball"
+      },
+      "config": "/home/isee/Catch/analysis_artifacts/episode_dr_catch_20261116/results/configs/bounce_best_1_57.yaml",
+      "scale": 0.5
+    },
+    {
+      "request": {
+        "name": "bounce_best_1_57_range0.0",
+        "motion": "bounce",
+        "physics": "dr_episode",
+        "checkpoint": "/home/isee/Catch/11-16/bounce_catch_best_reward_1.57.pth",
+        "checkpoint_sha256": "1e23656cf551a2a3247c6b8a0bc878482f225da11bafad96ad29c8354466b8d9",
+        "object": "softball",
+        "seed": 41000,
+        "episodes": 20,
+        "instances": 4,
+        "case_dir": "/home/isee/Catch/analysis_artifacts/generalization_bottleneck_20261116/bounce_best_1_57_range0.0/softball"
+      },
+      "config": "/home/isee/Catch/analysis_artifacts/episode_dr_catch_20261116/results/configs/bounce_best_1_57.yaml",
+      "scale": 0.0
+    },
+    {
+      "request": {
+        "name": "bounce_best_1_57_range1.0",
+        "motion": "bounce",
+        "physics": "dr_episode",
+        "checkpoint": "/home/isee/Catch/11-16/bounce_catch_best_reward_1.57.pth",
+        "checkpoint_sha256": "1e23656cf551a2a3247c6b8a0bc878482f225da11bafad96ad29c8354466b8d9",
+        "object": "original",
+        "seed": 41000,
+        "episodes": 20,
+        "instances": 4,
+        "case_dir": "/home/isee/Catch/analysis_artifacts/generalization_bottleneck_20261116/bounce_best_1_57_range1.0/original"
+      },
+      "config": "/home/isee/Catch/analysis_artifacts/episode_dr_catch_20261116/results/configs/bounce_best_1_57.yaml",
+      "scale": 1.0
+    },
+    {
+      "request": {
+        "name": "bounce_best_1_57_range1.0",
+        "motion": "bounce",
+        "physics": "dr_episode",
+        "checkpoint": "/home/isee/Catch/11-16/bounce_catch_best_reward_1.57.pth",
+        "checkpoint_sha256": "1e23656cf551a2a3247c6b8a0bc878482f225da11bafad96ad29c8354466b8d9",
+        "object": "baseball",
+        "seed": 41000,
+        "episodes": 20,
+        "instances": 4,
+        "case_dir": "/home/isee/Catch/analysis_artifacts/generalization_bottleneck_20261116/bounce_best_1_57_range1.0/baseball"
+      },
+      "config": "/home/isee/Catch/analysis_artifacts/episode_dr_catch_20261116/results/configs/bounce_best_1_57.yaml",
+      "scale": 1.0
+    },
+    {
+      "request": {
+        "name": "bounce_three_ball_13_68",
+        "motion": "bounce",
+        "physics": "dr_episode",
+        "checkpoint": "/home/isee/Catch/11-5/bounce_catch_best_reward_13.68.pth",
+        "checkpoint_sha256": "7d7ca9b8459dcb9ab6a545ce257b6659c908a45eaae9948c5429a2d292adf748",
+        "object": "original",
+        "seed": 41000,
+        "episodes": 20,
+        "instances": 4,
+        "case_dir": "/home/isee/Catch/analysis_artifacts/generalization_bottleneck_20261116/bounce_three_ball_13_68/original"
+      },
+      "config": "/home/isee/Catch/analysis_artifacts/episode_dr_catch_20261116/results/configs/bounce_best_1_57.yaml",
+      "scale": 1.0
+    },
+    {
+      "request": {
+        "name": "bounce_three_ball_13_68",
+        "motion": "bounce",
+        "physics": "dr_episode",
+        "checkpoint": "/home/isee/Catch/11-5/bounce_catch_best_reward_13.68.pth",
+        "checkpoint_sha256": "7d7ca9b8459dcb9ab6a545ce257b6659c908a45eaae9948c5429a2d292adf748",
+        "object": "tennis_ball",
+        "seed": 41000,
+        "episodes": 20,
+        "instances": 4,
+        "case_dir": "/home/isee/Catch/analysis_artifacts/generalization_bottleneck_20261116/bounce_three_ball_13_68/tennis_ball"
+      },
+      "config": "/home/isee/Catch/analysis_artifacts/episode_dr_catch_20261116/results/configs/bounce_best_1_57.yaml",
+      "scale": 1.0
+    },
+    {
+      "request": {
+        "name": "bounce_three_ball_13_68",
+        "motion": "bounce",
+        "physics": "dr_episode",
+        "checkpoint": "/home/isee/Catch/11-5/bounce_catch_best_reward_13.68.pth",
+        "checkpoint_sha256": "7d7ca9b8459dcb9ab6a545ce257b6659c908a45eaae9948c5429a2d292adf748",
+        "object": "baseball",
+        "seed": 41000,
+        "episodes": 20,
+        "instances": 4,
+        "case_dir": "/home/isee/Catch/analysis_artifacts/generalization_bottleneck_20261116/bounce_three_ball_13_68/baseball"
+      },
+      "config": "/home/isee/Catch/analysis_artifacts/episode_dr_catch_20261116/results/configs/bounce_best_1_57.yaml",
+      "scale": 1.0
+    }
+  ]
+}

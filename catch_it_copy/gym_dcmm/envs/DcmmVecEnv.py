@@ -175,10 +175,16 @@ class DcmmVecEnv(gym.Env):
         print_ctrl=False,
         print_info=False,
         print_contacts=False,
+        throw_generalization="off",
         object_motion="throw", # 新增的参数用来判断物体运动类型（throw/roll）
         bounce_physics="legacy", bounce_launch="legacy", bounce_log=False,
         basket_log=False, basket_self_collision_debug=False, roll_log=False, basket_fixed_base_training=False, basket_control_probe="off", basket_arm_control="cartesian", basket_reward_version="legacy", basket_curriculum_stage=3, basket_mobile_options=None, basket_eval_hand_flex=None, basket_fixed_hand_flex=None, basket_fixed_arm_drive_bonus=0., basket_fixed_physical=False, basket_carry_reward=False, basket_carry_options=None, basket_finger_reward=False, basket_finger_options=None,
     ):
+        if throw_generalization not in ("off", "multishape_v1"):
+            raise ValueError("Unknown throw_generalization")
+        if throw_generalization != "off" and (object_motion != "throw" or object_eval):
+            raise ValueError("Throw multishape requires throw and object_eval=false")
+        self.throw_generalization=throw_generalization
         # 任务合法性检查（仅支持Tracking/Catching）
         if task not in ["Tracking", "Catching"]:
             raise ValueError("Invalid task: {}".format(task))
@@ -1186,6 +1192,11 @@ class DcmmVecEnv(gym.Env):
         Returns:
             str: 修改后的Mujoco XML模型字符串
         """
+        if self.throw_generalization == "multishape_v1":
+            from ycb_objects.throw_generalization import randomize_xml
+            xml, self.throw_randomization = randomize_xml(self.Dcmm.model_xml_string, DcmmCfg)
+            self.random_mass = self.throw_randomization["mass"]
+            return xml
         # 解析XML模型字符串
         root = ET.fromstring(self.Dcmm.model_xml_string)
 

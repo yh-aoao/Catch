@@ -1,0 +1,830 @@
+{
+  "totals": [
+    {
+      "model": "roll_best_236_00",
+      "scale": 1.0,
+      "episodes": 140,
+      "successes": 56,
+      "success_rate": 0.4,
+      "stable_hold_rate": 0.07142857142857142
+    },
+    {
+      "model": "roll_best_236_00",
+      "scale": 0.5,
+      "episodes": 140,
+      "successes": 64,
+      "success_rate": 0.45714285714285713,
+      "stable_hold_rate": 0.09285714285714286
+    },
+    {
+      "model": "roll_best_236_00",
+      "scale": 0.0,
+      "episodes": 140,
+      "successes": 58,
+      "success_rate": 0.4142857142857143,
+      "stable_hold_rate": 0.11428571428571428
+    },
+    {
+      "model": "bounce_best_1_57",
+      "scale": 1.0,
+      "episodes": 120,
+      "successes": 63,
+      "success_rate": 0.525,
+      "stable_hold_rate": null
+    },
+    {
+      "model": "bounce_best_1_57",
+      "scale": 0.5,
+      "episodes": 120,
+      "successes": 66,
+      "success_rate": 0.55,
+      "stable_hold_rate": null
+    },
+    {
+      "model": "bounce_best_1_57",
+      "scale": 0.0,
+      "episodes": 120,
+      "successes": 64,
+      "success_rate": 0.5333333333333333,
+      "stable_hold_rate": null
+    }
+  ],
+  "per_object": [
+    {
+      "model": "roll_best_236_00",
+      "motion": "roll",
+      "object": "original",
+      "scale": 1.0,
+      "episodes": 20,
+      "successes": 12,
+      "success_rate": 0.6,
+      "stable_hold_episodes": 1,
+      "failure_reasons": {
+        "ball_left": 1,
+        "ball_on_floor": 6,
+        "out_of_bounds": 1
+      },
+      "failed_with_contact": 7,
+      "failed_departed": 8
+    },
+    {
+      "model": "roll_best_236_00",
+      "motion": "roll",
+      "object": "tennis_ball",
+      "scale": 1.0,
+      "episodes": 20,
+      "successes": 9,
+      "success_rate": 0.45,
+      "stable_hold_episodes": 0,
+      "failure_reasons": {
+        "ball_left": 2,
+        "ball_on_floor": 6,
+        "out_of_bounds": 2,
+        "timeout": 1
+      },
+      "failed_with_contact": 10,
+      "failed_departed": 11
+    },
+    {
+      "model": "roll_best_236_00",
+      "motion": "roll",
+      "object": "baseball",
+      "scale": 1.0,
+      "episodes": 20,
+      "successes": 11,
+      "success_rate": 0.55,
+      "stable_hold_episodes": 4,
+      "failure_reasons": {
+        "ball_on_floor": 4,
+        "base_collision": 1,
+        "out_of_bounds": 2,
+        "timeout": 2
+      },
+      "failed_with_contact": 7,
+      "failed_departed": 9
+    },
+    {
+      "model": "roll_best_236_00",
+      "motion": "roll",
+      "object": "orange",
+      "scale": 1.0,
+      "episodes": 20,
+      "successes": 9,
+      "success_rate": 0.45,
+      "stable_hold_episodes": 1,
+      "failure_reasons": {
+        "ball_left": 1,
+        "ball_on_floor": 8,
+        "timeout": 2
+      },
+      "failed_with_contact": 11,
+      "failed_departed": 11
+    },
+    {
+      "model": "roll_best_236_00",
+      "motion": "roll",
+      "object": "apple",
+      "scale": 1.0,
+      "episodes": 20,
+      "successes": 7,
+      "success_rate": 0.35,
+      "stable_hold_episodes": 0,
+      "failure_reasons": {
+        "ball_left": 2,
+        "ball_on_floor": 10,
+        "timeout": 1
+      },
+      "failed_with_contact": 13,
+      "failed_departed": 13
+    },
+    {
+      "model": "roll_best_236_00",
+      "motion": "roll",
+      "object": "lemon",
+      "scale": 1.0,
+      "episodes": 20,
+      "successes": 4,
+      "success_rate": 0.2,
+      "stable_hold_episodes": 3,
+      "failure_reasons": {
+        "ball_left": 4,
+        "ball_on_floor": 11,
+        "timeout": 1
+      },
+      "failed_with_contact": 16,
+      "failed_departed": 16
+    },
+    {
+      "model": "roll_best_236_00",
+      "motion": "roll",
+      "object": "tomato_soup_can",
+      "scale": 1.0,
+      "episodes": 20,
+      "successes": 4,
+      "success_rate": 0.2,
+      "stable_hold_episodes": 1,
+      "failure_reasons": {
+        "ball_left": 3,
+        "ball_on_floor": 11,
+        "out_of_bounds": 2
+      },
+      "failed_with_contact": 16,
+      "failed_departed": 16
+    },
+    {
+      "model": "roll_best_236_00",
+      "motion": "roll",
+      "object": "original",
+      "scale": 0.5,
+      "episodes": 20,
+      "successes": 12,
+      "success_rate": 0.6,
+      "stable_hold_episodes": 1,
+      "failure_reasons": {
+        "ball_on_floor": 6,
+        "out_of_bounds": 1,
+        "timeout": 1
+      },
+      "failed_with_contact": 7,
+      "failed_departed": 8
+    },
+    {
+      "model": "roll_best_236_00",
+      "motion": "roll",
+      "object": "tennis_ball",
+      "scale": 0.5,
+      "episodes": 20,
+      "successes": 11,
+      "success_rate": 0.55,
+      "stable_hold_episodes": 1,
+      "failure_reasons": {
+        "ball_on_floor": 4,
+        "out_of_bounds": 2,
+        "timeout": 3
+      },
+      "failed_with_contact": 8,
+      "failed_departed": 9
+    },
+    {
+      "model": "roll_best_236_00",
+      "motion": "roll",
+      "object": "baseball",
+      "scale": 0.5,
+      "episodes": 20,
+      "successes": 11,
+      "success_rate": 0.55,
+      "stable_hold_episodes": 3,
+      "failure_reasons": {
+        "ball_on_floor": 5,
+        "out_of_bounds": 1,
+        "timeout": 3
+      },
+      "failed_with_contact": 8,
+      "failed_departed": 9
+    },
+    {
+      "model": "roll_best_236_00",
+      "motion": "roll",
+      "object": "orange",
+      "scale": 0.5,
+      "episodes": 20,
+      "successes": 11,
+      "success_rate": 0.55,
+      "stable_hold_episodes": 1,
+      "failure_reasons": {
+        "ball_on_floor": 7,
+        "timeout": 2
+      },
+      "failed_with_contact": 9,
+      "failed_departed": 9
+    },
+    {
+      "model": "roll_best_236_00",
+      "motion": "roll",
+      "object": "apple",
+      "scale": 0.5,
+      "episodes": 20,
+      "successes": 11,
+      "success_rate": 0.55,
+      "stable_hold_episodes": 3,
+      "failure_reasons": {
+        "ball_left": 1,
+        "ball_on_floor": 8
+      },
+      "failed_with_contact": 8,
+      "failed_departed": 9
+    },
+    {
+      "model": "roll_best_236_00",
+      "motion": "roll",
+      "object": "lemon",
+      "scale": 0.5,
+      "episodes": 20,
+      "successes": 3,
+      "success_rate": 0.15,
+      "stable_hold_episodes": 3,
+      "failure_reasons": {
+        "ball_left": 2,
+        "ball_on_floor": 14,
+        "timeout": 1
+      },
+      "failed_with_contact": 16,
+      "failed_departed": 17
+    },
+    {
+      "model": "roll_best_236_00",
+      "motion": "roll",
+      "object": "tomato_soup_can",
+      "scale": 0.5,
+      "episodes": 20,
+      "successes": 5,
+      "success_rate": 0.25,
+      "stable_hold_episodes": 1,
+      "failure_reasons": {
+        "ball_left": 1,
+        "ball_on_floor": 8,
+        "out_of_bounds": 2,
+        "timeout": 4
+      },
+      "failed_with_contact": 15,
+      "failed_departed": 15
+    },
+    {
+      "model": "roll_best_236_00",
+      "motion": "roll",
+      "object": "original",
+      "scale": 0.0,
+      "episodes": 20,
+      "successes": 12,
+      "success_rate": 0.6,
+      "stable_hold_episodes": 2,
+      "failure_reasons": {
+        "ball_left": 1,
+        "ball_on_floor": 4,
+        "out_of_bounds": 1,
+        "timeout": 2
+      },
+      "failed_with_contact": 7,
+      "failed_departed": 8
+    },
+    {
+      "model": "roll_best_236_00",
+      "motion": "roll",
+      "object": "tennis_ball",
+      "scale": 0.0,
+      "episodes": 20,
+      "successes": 13,
+      "success_rate": 0.65,
+      "stable_hold_episodes": 2,
+      "failure_reasons": {
+        "ball_left": 1,
+        "ball_on_floor": 2,
+        "out_of_bounds": 2,
+        "timeout": 2
+      },
+      "failed_with_contact": 6,
+      "failed_departed": 7
+    },
+    {
+      "model": "roll_best_236_00",
+      "motion": "roll",
+      "object": "baseball",
+      "scale": 0.0,
+      "episodes": 20,
+      "successes": 11,
+      "success_rate": 0.55,
+      "stable_hold_episodes": 3,
+      "failure_reasons": {
+        "ball_left": 1,
+        "ball_on_floor": 1,
+        "out_of_bounds": 1,
+        "timeout": 6
+      },
+      "failed_with_contact": 8,
+      "failed_departed": 9
+    },
+    {
+      "model": "roll_best_236_00",
+      "motion": "roll",
+      "object": "orange",
+      "scale": 0.0,
+      "episodes": 20,
+      "successes": 8,
+      "success_rate": 0.4,
+      "stable_hold_episodes": 2,
+      "failure_reasons": {
+        "ball_on_floor": 10,
+        "timeout": 2
+      },
+      "failed_with_contact": 12,
+      "failed_departed": 12
+    },
+    {
+      "model": "roll_best_236_00",
+      "motion": "roll",
+      "object": "apple",
+      "scale": 0.0,
+      "episodes": 20,
+      "successes": 7,
+      "success_rate": 0.35,
+      "stable_hold_episodes": 3,
+      "failure_reasons": {
+        "ball_on_floor": 13
+      },
+      "failed_with_contact": 13,
+      "failed_departed": 13
+    },
+    {
+      "model": "roll_best_236_00",
+      "motion": "roll",
+      "object": "lemon",
+      "scale": 0.0,
+      "episodes": 20,
+      "successes": 2,
+      "success_rate": 0.1,
+      "stable_hold_episodes": 2,
+      "failure_reasons": {
+        "ball_left": 2,
+        "ball_on_floor": 14,
+        "base_collision": 1,
+        "timeout": 1
+      },
+      "failed_with_contact": 15,
+      "failed_departed": 18
+    },
+    {
+      "model": "roll_best_236_00",
+      "motion": "roll",
+      "object": "tomato_soup_can",
+      "scale": 0.0,
+      "episodes": 20,
+      "successes": 5,
+      "success_rate": 0.25,
+      "stable_hold_episodes": 2,
+      "failure_reasons": {
+        "ball_left": 1,
+        "ball_on_floor": 12,
+        "out_of_bounds": 2
+      },
+      "failed_with_contact": 15,
+      "failed_departed": 15
+    },
+    {
+      "model": "bounce_best_1_57",
+      "motion": "bounce",
+      "object": "original",
+      "scale": 1.0,
+      "episodes": 20,
+      "successes": 8,
+      "success_rate": 0.4,
+      "stable_hold_episodes": null,
+      "failure_reasons": {
+        "base_collision": 1,
+        "out_of_bounds": 6,
+        "timeout": 5
+      },
+      "failed_with_contact": 12,
+      "failed_hold_0p05": 0
+    },
+    {
+      "model": "bounce_best_1_57",
+      "motion": "bounce",
+      "object": "tennis_ball",
+      "scale": 1.0,
+      "episodes": 20,
+      "successes": 10,
+      "success_rate": 0.5,
+      "stable_hold_episodes": null,
+      "failure_reasons": {
+        "base_collision": 3,
+        "out_of_bounds": 3,
+        "timeout": 4
+      },
+      "failed_with_contact": 10,
+      "failed_hold_0p05": 0
+    },
+    {
+      "model": "bounce_best_1_57",
+      "motion": "bounce",
+      "object": "baseball",
+      "scale": 1.0,
+      "episodes": 20,
+      "successes": 2,
+      "success_rate": 0.1,
+      "stable_hold_episodes": null,
+      "failure_reasons": {
+        "out_of_bounds": 11,
+        "timeout": 7
+      },
+      "failed_with_contact": 16,
+      "failed_hold_0p05": 0
+    },
+    {
+      "model": "bounce_best_1_57",
+      "motion": "bounce",
+      "object": "racquetball",
+      "scale": 1.0,
+      "episodes": 20,
+      "successes": 16,
+      "success_rate": 0.8,
+      "stable_hold_episodes": null,
+      "failure_reasons": {
+        "base_collision": 2,
+        "out_of_bounds": 1,
+        "timeout": 1
+      },
+      "failed_with_contact": 4,
+      "failed_hold_0p05": 1
+    },
+    {
+      "model": "bounce_best_1_57",
+      "motion": "bounce",
+      "object": "golf_ball",
+      "scale": 1.0,
+      "episodes": 20,
+      "successes": 16,
+      "success_rate": 0.8,
+      "stable_hold_episodes": null,
+      "failure_reasons": {
+        "base_collision": 3,
+        "timeout": 1
+      },
+      "failed_with_contact": 4,
+      "failed_hold_0p05": 1
+    },
+    {
+      "model": "bounce_best_1_57",
+      "motion": "bounce",
+      "object": "softball",
+      "scale": 1.0,
+      "episodes": 20,
+      "successes": 11,
+      "success_rate": 0.55,
+      "stable_hold_episodes": null,
+      "failure_reasons": {
+        "out_of_bounds": 5,
+        "timeout": 4
+      },
+      "failed_with_contact": 9,
+      "failed_hold_0p05": 1
+    },
+    {
+      "model": "bounce_best_1_57",
+      "motion": "bounce",
+      "object": "original",
+      "scale": 0.5,
+      "episodes": 20,
+      "successes": 7,
+      "success_rate": 0.35,
+      "stable_hold_episodes": null,
+      "failure_reasons": {
+        "base_collision": 1,
+        "out_of_bounds": 4,
+        "timeout": 8
+      },
+      "failed_with_contact": 12,
+      "failed_hold_0p05": 1
+    },
+    {
+      "model": "bounce_best_1_57",
+      "motion": "bounce",
+      "object": "tennis_ball",
+      "scale": 0.5,
+      "episodes": 20,
+      "successes": 11,
+      "success_rate": 0.55,
+      "stable_hold_episodes": null,
+      "failure_reasons": {
+        "base_collision": 3,
+        "out_of_bounds": 4,
+        "timeout": 2
+      },
+      "failed_with_contact": 8,
+      "failed_hold_0p05": 0
+    },
+    {
+      "model": "bounce_best_1_57",
+      "motion": "bounce",
+      "object": "baseball",
+      "scale": 0.5,
+      "episodes": 20,
+      "successes": 2,
+      "success_rate": 0.1,
+      "stable_hold_episodes": null,
+      "failure_reasons": {
+        "base_collision": 1,
+        "out_of_bounds": 5,
+        "timeout": 12
+      },
+      "failed_with_contact": 17,
+      "failed_hold_0p05": 1
+    },
+    {
+      "model": "bounce_best_1_57",
+      "motion": "bounce",
+      "object": "racquetball",
+      "scale": 0.5,
+      "episodes": 20,
+      "successes": 16,
+      "success_rate": 0.8,
+      "stable_hold_episodes": null,
+      "failure_reasons": {
+        "out_of_bounds": 1,
+        "timeout": 3
+      },
+      "failed_with_contact": 4,
+      "failed_hold_0p05": 1
+    },
+    {
+      "model": "bounce_best_1_57",
+      "motion": "bounce",
+      "object": "golf_ball",
+      "scale": 0.5,
+      "episodes": 20,
+      "successes": 17,
+      "success_rate": 0.85,
+      "stable_hold_episodes": null,
+      "failure_reasons": {
+        "base_collision": 1,
+        "out_of_bounds": 1,
+        "timeout": 1
+      },
+      "failed_with_contact": 3,
+      "failed_hold_0p05": 1
+    },
+    {
+      "model": "bounce_best_1_57",
+      "motion": "bounce",
+      "object": "softball",
+      "scale": 0.5,
+      "episodes": 20,
+      "successes": 13,
+      "success_rate": 0.65,
+      "stable_hold_episodes": null,
+      "failure_reasons": {
+        "base_collision": 1,
+        "out_of_bounds": 4,
+        "timeout": 2
+      },
+      "failed_with_contact": 7,
+      "failed_hold_0p05": 3
+    },
+    {
+      "model": "bounce_best_1_57",
+      "motion": "bounce",
+      "object": "original",
+      "scale": 0.0,
+      "episodes": 20,
+      "successes": 8,
+      "success_rate": 0.4,
+      "stable_hold_episodes": null,
+      "failure_reasons": {
+        "base_collision": 3,
+        "out_of_bounds": 7,
+        "timeout": 2
+      },
+      "failed_with_contact": 11,
+      "failed_hold_0p05": 0
+    },
+    {
+      "model": "bounce_best_1_57",
+      "motion": "bounce",
+      "object": "tennis_ball",
+      "scale": 0.0,
+      "episodes": 20,
+      "successes": 10,
+      "success_rate": 0.5,
+      "stable_hold_episodes": null,
+      "failure_reasons": {
+        "base_collision": 1,
+        "out_of_bounds": 7,
+        "timeout": 2
+      },
+      "failed_with_contact": 8,
+      "failed_hold_0p05": 0
+    },
+    {
+      "model": "bounce_best_1_57",
+      "motion": "bounce",
+      "object": "baseball",
+      "scale": 0.0,
+      "episodes": 20,
+      "successes": 3,
+      "success_rate": 0.15,
+      "stable_hold_episodes": null,
+      "failure_reasons": {
+        "base_collision": 1,
+        "out_of_bounds": 6,
+        "timeout": 10
+      },
+      "failed_with_contact": 15,
+      "failed_hold_0p05": 0
+    },
+    {
+      "model": "bounce_best_1_57",
+      "motion": "bounce",
+      "object": "racquetball",
+      "scale": 0.0,
+      "episodes": 20,
+      "successes": 15,
+      "success_rate": 0.75,
+      "stable_hold_episodes": null,
+      "failure_reasons": {
+        "base_collision": 3,
+        "out_of_bounds": 2
+      },
+      "failed_with_contact": 4,
+      "failed_hold_0p05": 0
+    },
+    {
+      "model": "bounce_best_1_57",
+      "motion": "bounce",
+      "object": "golf_ball",
+      "scale": 0.0,
+      "episodes": 20,
+      "successes": 17,
+      "success_rate": 0.85,
+      "stable_hold_episodes": null,
+      "failure_reasons": {
+        "base_collision": 2,
+        "out_of_bounds": 1
+      },
+      "failed_with_contact": 2,
+      "failed_hold_0p05": 0
+    },
+    {
+      "model": "bounce_best_1_57",
+      "motion": "bounce",
+      "object": "softball",
+      "scale": 0.0,
+      "episodes": 20,
+      "successes": 11,
+      "success_rate": 0.55,
+      "stable_hold_episodes": null,
+      "failure_reasons": {
+        "base_collision": 2,
+        "out_of_bounds": 6,
+        "timeout": 1
+      },
+      "failed_with_contact": 9,
+      "failed_hold_0p05": 1
+    }
+  ],
+  "extra_diagnostics": [
+    {
+      "model": "bounce_best_1_57_range1.0",
+      "object": "original",
+      "successes": 8,
+      "episodes": 20,
+      "failed_never_two_groups": 6,
+      "failed_never_valid_hold": 8,
+      "failure_contact_gate_fractions": {
+        "capture": 0.4807692307692308,
+        "groups": 0.6269230769230769,
+        "span": 0.5661538461538461,
+        "speed": 0.6223076923076923,
+        "off_ground": 0.9992307692307693,
+        "joint": 1.0,
+        "valid": 0.07692307692307693
+      }
+    },
+    {
+      "model": "bounce_best_1_57_range1.0",
+      "object": "baseball",
+      "successes": 2,
+      "episodes": 20,
+      "failed_never_two_groups": 9,
+      "failed_never_valid_hold": 14,
+      "failure_contact_gate_fractions": {
+        "capture": 0.7522935779816514,
+        "groups": 0.22362385321100917,
+        "span": 0.22935779816513763,
+        "speed": 0.32224770642201833,
+        "off_ground": 1.0,
+        "joint": 1.0,
+        "valid": 0.045871559633027525
+      }
+    },
+    {
+      "model": "bounce_three_ball_13_68",
+      "object": "original",
+      "successes": 19,
+      "episodes": 20,
+      "failed_never_two_groups": 0,
+      "failed_never_valid_hold": 0,
+      "failure_contact_gate_fractions": {
+        "capture": 0.9368421052631579,
+        "groups": 0.07368421052631578,
+        "span": 0.07368421052631578,
+        "speed": 0.24210526315789474,
+        "off_ground": 1.0,
+        "joint": 1.0,
+        "valid": 0.031578947368421054
+      }
+    },
+    {
+      "model": "bounce_three_ball_13_68",
+      "object": "tennis_ball",
+      "successes": 19,
+      "episodes": 20,
+      "failed_never_two_groups": 0,
+      "failed_never_valid_hold": 0,
+      "failure_contact_gate_fractions": {
+        "capture": 0.3741935483870968,
+        "groups": 0.14838709677419354,
+        "span": 0.14838709677419354,
+        "speed": 0.5225806451612903,
+        "off_ground": 0.8387096774193549,
+        "joint": 1.0,
+        "valid": 0.11612903225806452
+      }
+    },
+    {
+      "model": "bounce_three_ball_13_68",
+      "object": "baseball",
+      "successes": 19,
+      "episodes": 20,
+      "failed_never_two_groups": 1,
+      "failed_never_valid_hold": 1,
+      "failure_contact_gate_fractions": {
+        "capture": 0.9615384615384616,
+        "groups": 0.0,
+        "span": 0.6602564102564102,
+        "speed": 0.8504273504273504,
+        "off_ground": 1.0,
+        "joint": 1.0,
+        "valid": 0.0
+      }
+    }
+  ],
+  "nominal_robot": [
+    {
+      "model": "roll_best_236_00",
+      "object": "apple",
+      "successes": 9,
+      "episodes": 20,
+      "reference_object_fixed_successes": 7
+    },
+    {
+      "model": "roll_best_236_00",
+      "object": "lemon",
+      "successes": 5,
+      "episodes": 20,
+      "reference_object_fixed_successes": 2
+    },
+    {
+      "model": "bounce_best_1_57",
+      "object": "original",
+      "successes": 9,
+      "episodes": 20,
+      "reference_object_fixed_successes": 8
+    },
+    {
+      "model": "bounce_best_1_57",
+      "object": "baseball",
+      "successes": 3,
+      "episodes": 20,
+      "reference_object_fixed_successes": 3
+    }
+  ]
+}

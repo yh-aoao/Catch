@@ -1,0 +1,954 @@
+{
+  "stable": {
+    "folder": "/home/isee/Catch/catch_it_copy/distillation_aux_future_stable/runs/catch_10000_seed123",
+    "config": {
+      "seed": 123,
+      "device": "cuda:4",
+      "learning_rate": 0.0003,
+      "num_envs_per_task": 8,
+      "iterations": 10000,
+      "rollout_steps": 64,
+      "updates_per_iteration": 8,
+      "calibration_steps": 128,
+      "eval_every": 1000,
+      "eval_episodes": 300,
+      "baseline_episodes": 300,
+      "max_eval_steps": 100000,
+      "tasks": {
+        "throw": {
+          "checkpoint": "best_model/throw_catch_best_reward_497.09.pth",
+          "sha256": "fcfebd624e282d8b171284fab65f3fe70a195f850db381fc6ee5197139e7f735",
+          "expected_action_dim": 20,
+          "family": "ppo_dcmm",
+          "action_indices": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ],
+          "action_scales": [
+            1.5,
+            0.025,
+            0.15
+          ],
+          "success_metric": "success",
+          "interface_note": "New server teacher: require 8 tracking + 12 hand outputs. SHA256 is computed on load and recorded; pin it after server check. Verify closed-loop behavior before full training.",
+          "success_definition": "throw_official"
+        },
+        "roll": {
+          "checkpoint": "best_model/roll_catch_best_reward_252.54.pth",
+          "sha256": "40020e1b13a29ad49de9e9b6ad2e6316678f418bdd8712be898b7a257af3d0ba",
+          "family": "ppo_dcmm_645edc4",
+          "action_indices": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ],
+          "action_scales": [
+            1.5,
+            0.025,
+            0.15
+          ],
+          "success_metric": "roll_eval_success",
+          "success_definition": "region_retention_v5",
+          "expected_action_dim": 20
+        },
+        "bounce": {
+          "checkpoint": "best_model/bounce_catch_best_reward_653.87.pth",
+          "sha256": "f3ff1fe5aa34a8d4384dda6915b6749847002447d2816f18e72b661c6254a09c",
+          "family": "ppo_dcmm_5fe75d5f",
+          "action_indices": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ],
+          "action_scales": [
+            1.5,
+            0.025,
+            0.15
+          ],
+          "success_metric": "success",
+          "success_definition": "bounce_catch_proximity_v2",
+          "expected_action_dim": 20
+        }
+      },
+      "env_kwargs": {
+        "camera_name": [
+          "top"
+        ],
+        "render_per_step": false,
+        "render_mode": "rgb_array",
+        "object_name": "object",
+        "img_size": [
+          160,
+          160
+        ],
+        "imshow_cam": false,
+        "print_obs": false,
+        "print_info": false,
+        "print_reward": false,
+        "print_ctrl": false,
+        "print_contacts": false,
+        "object_eval": false,
+        "env_time": 2.5,
+        "steps_per_policy": 20,
+        "bounce_physics": "legacy",
+        "bounce_launch": "legacy",
+        "bounce_log": false,
+        "basket_log": false,
+        "roll_log": false
+      },
+      "evaluation_revision": "2026-10-12-bounce-catch-v2",
+      "stage": "catch",
+      "save_every": 200,
+      "batch_episodes_per_task": 2,
+      "capacity_frames_per_task": 8192,
+      "max_episode_steps": 512,
+      "bptt_steps": 16,
+      "loss": "bce",
+      "model": {
+        "cnn_channels": [
+          16,
+          32,
+          32
+        ],
+        "cnn_kernels": [
+          5,
+          4,
+          3
+        ],
+        "cnn_strides": [
+          2,
+          2,
+          1
+        ],
+        "embedding": 128,
+        "gru_hidden": 256,
+        "mlp_hidden": [
+          512,
+          256,
+          128
+        ]
+      },
+      "vision": {
+        "camera": "top",
+        "height": 160,
+        "width": 160,
+        "near": 0.1,
+        "far": 5.0,
+        "gl_backend": "egl",
+        "cameras": [
+          {
+            "name": "top",
+            "near": 0.1,
+            "far": 5.0
+          },
+          {
+            "name": "wrist",
+            "near": 0.01,
+            "far": 1.5
+          }
+        ]
+      },
+      "auxiliary": {
+        "position_weight": 0.1,
+        "velocity_weight": 0.0,
+        "scales": [
+          1.0,
+          1.0,
+          1.0,
+          5.0,
+          5.0,
+          5.0
+        ]
+      },
+      "experiment": {
+        "variant": "future_stable"
+      },
+      "skip_teacher_baseline": true,
+      "eval_start": 5000,
+      "evaluation_seed": 20261110,
+      "lr_schedule": {
+        "kind": "cosine",
+        "start": 5000,
+        "end": 10000,
+        "minimum": 3e-05
+      },
+      "diagnostics_every": 100
+    },
+    "evaluations": [
+      {
+        "iteration": 5000,
+        "tasks": {
+          "throw": {
+            "successes": 210,
+            "episodes": 300,
+            "success_rate": 0.7,
+            "seed": 20261110
+          },
+          "roll": {
+            "successes": 188,
+            "episodes": 300,
+            "success_rate": 0.6266666666666667,
+            "seed": 20261110
+          },
+          "bounce": {
+            "successes": 211,
+            "episodes": 300,
+            "success_rate": 0.7033333333333334,
+            "seed": 20261110
+          }
+        },
+        "mean": 0.6766666666666667,
+        "minimum": 0.6266666666666667
+      },
+      {
+        "iteration": 6000,
+        "tasks": {
+          "throw": {
+            "successes": 165,
+            "episodes": 300,
+            "success_rate": 0.55,
+            "seed": 20261110
+          },
+          "roll": {
+            "successes": 217,
+            "episodes": 300,
+            "success_rate": 0.7233333333333334,
+            "seed": 20261110
+          },
+          "bounce": {
+            "successes": 191,
+            "episodes": 300,
+            "success_rate": 0.6366666666666667,
+            "seed": 20261110
+          }
+        },
+        "mean": 0.6366666666666667,
+        "minimum": 0.55
+      },
+      {
+        "iteration": 7000,
+        "tasks": {
+          "throw": {
+            "successes": 221,
+            "episodes": 300,
+            "success_rate": 0.7366666666666667,
+            "seed": 20261110
+          },
+          "roll": {
+            "successes": 178,
+            "episodes": 300,
+            "success_rate": 0.5933333333333334,
+            "seed": 20261110
+          },
+          "bounce": {
+            "successes": 191,
+            "episodes": 300,
+            "success_rate": 0.6366666666666667,
+            "seed": 20261110
+          }
+        },
+        "mean": 0.6555555555555556,
+        "minimum": 0.5933333333333334
+      },
+      {
+        "iteration": 8000,
+        "tasks": {
+          "throw": {
+            "successes": 196,
+            "episodes": 300,
+            "success_rate": 0.6533333333333333,
+            "seed": 20261110
+          },
+          "roll": {
+            "successes": 206,
+            "episodes": 300,
+            "success_rate": 0.6866666666666666,
+            "seed": 20261110
+          },
+          "bounce": {
+            "successes": 234,
+            "episodes": 300,
+            "success_rate": 0.78,
+            "seed": 20261110
+          }
+        },
+        "mean": 0.7066666666666667,
+        "minimum": 0.6533333333333333
+      },
+      {
+        "iteration": 9000,
+        "tasks": {
+          "throw": {
+            "successes": 209,
+            "episodes": 300,
+            "success_rate": 0.6966666666666667,
+            "seed": 20261110
+          },
+          "roll": {
+            "successes": 222,
+            "episodes": 300,
+            "success_rate": 0.74,
+            "seed": 20261110
+          },
+          "bounce": {
+            "successes": 244,
+            "episodes": 300,
+            "success_rate": 0.8133333333333334,
+            "seed": 20261110
+          }
+        },
+        "mean": 0.75,
+        "minimum": 0.6966666666666667
+      },
+      {
+        "iteration": 10000,
+        "tasks": {
+          "throw": {
+            "successes": 194,
+            "episodes": 300,
+            "success_rate": 0.6466666666666666,
+            "seed": 20261110
+          },
+          "roll": {
+            "successes": 210,
+            "episodes": 300,
+            "success_rate": 0.7,
+            "seed": 20261110
+          },
+          "bounce": {
+            "successes": 246,
+            "episodes": 300,
+            "success_rate": 0.82,
+            "seed": 20261110
+          }
+        },
+        "mean": 0.7222222222222222,
+        "minimum": 0.6466666666666666
+      }
+    ],
+    "checkpoints": {
+      "student_best.pth": {
+        "iteration": 9000,
+        "schema": "distillation_aux_future_stable_v1",
+        "sha256": "076b7c653a674d749e930f11ea4ed68dca5078b7a083220b3e3b1a9aaa708424"
+      },
+      "student_last.pth": {
+        "iteration": 10000,
+        "schema": "distillation_aux_future_stable_v1",
+        "sha256": "78ea4478bf6479306137bf653e226ad3860e476a83211778290bdc8e4e4caafa"
+      }
+    },
+    "highest_mean": {
+      "iteration": 9000,
+      "tasks": {
+        "throw": {
+          "successes": 209,
+          "episodes": 300,
+          "success_rate": 0.6966666666666667,
+          "seed": 20261110
+        },
+        "roll": {
+          "successes": 222,
+          "episodes": 300,
+          "success_rate": 0.74,
+          "seed": 20261110
+        },
+        "bounce": {
+          "successes": 244,
+          "episodes": 300,
+          "success_rate": 0.8133333333333334,
+          "seed": 20261110
+        }
+      },
+      "mean": 0.75,
+      "minimum": 0.6966666666666667
+    },
+    "loss_windows": [
+      {
+        "end": 5000,
+        "count": 200,
+        "loss": 0.9126638724491931,
+        "imitation_loss": 0.9125545952096581,
+        "module_loss": 4.243675940064823e-05,
+        "learning_rate": 0.0003000000000000012
+      },
+      {
+        "end": 6000,
+        "count": 200,
+        "loss": 0.9097799344838131,
+        "imitation_loss": 0.909683773308061,
+        "module_loss": 3.8806991246962964e-05,
+        "learning_rate": 0.00027888657208565543
+      },
+      {
+        "end": 7000,
+        "count": 200,
+        "loss": 0.9079652555123903,
+        "imitation_loss": 0.907883112730924,
+        "module_loss": 3.535579522088148e-05,
+        "learning_rate": 0.0002146247129638532
+      },
+      {
+        "end": 8000,
+        "count": 200,
+        "loss": 0.9039968430716544,
+        "imitation_loss": 0.9039284385088832,
+        "module_loss": 3.1548354402920195e-05,
+        "learning_rate": 0.00013140790017181664
+      },
+      {
+        "end": 9000,
+        "count": 200,
+        "loss": 0.9035515791131183,
+        "imitation_loss": 0.9034919985430315,
+        "module_loss": 2.880270870608062e-05,
+        "learning_rate": 6.102212776066665e-05
+      },
+      {
+        "end": 10000,
+        "count": 200,
+        "loss": 0.9023261578194797,
+        "imitation_loss": 0.9022704953048378,
+        "module_loss": 2.674184514134259e-05,
+        "learning_rate": 3.035236846704783e-05
+      }
+    ],
+    "log_rows": 10000,
+    "unique_iterations": 10000
+  },
+  "uncertain": {
+    "folder": "/home/isee/Catch/catch_it_copy/distillation_aux_future_uncertain/catch_10000_seed123",
+    "config": {
+      "seed": 123,
+      "device": "cuda:4",
+      "learning_rate": 0.0003,
+      "num_envs_per_task": 8,
+      "iterations": 10000,
+      "rollout_steps": 64,
+      "updates_per_iteration": 8,
+      "calibration_steps": 128,
+      "eval_every": 1000,
+      "eval_episodes": 300,
+      "baseline_episodes": 300,
+      "max_eval_steps": 100000,
+      "tasks": {
+        "throw": {
+          "checkpoint": "best_model/throw_catch_best_reward_497.09.pth",
+          "sha256": "fcfebd624e282d8b171284fab65f3fe70a195f850db381fc6ee5197139e7f735",
+          "expected_action_dim": 20,
+          "family": "ppo_dcmm",
+          "action_indices": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ],
+          "action_scales": [
+            1.5,
+            0.025,
+            0.15
+          ],
+          "success_metric": "success",
+          "interface_note": "New server teacher: require 8 tracking + 12 hand outputs. SHA256 is computed on load and recorded; pin it after server check. Verify closed-loop behavior before full training.",
+          "success_definition": "throw_official"
+        },
+        "roll": {
+          "checkpoint": "best_model/roll_catch_best_reward_252.54.pth",
+          "sha256": "40020e1b13a29ad49de9e9b6ad2e6316678f418bdd8712be898b7a257af3d0ba",
+          "family": "ppo_dcmm_645edc4",
+          "action_indices": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ],
+          "action_scales": [
+            1.5,
+            0.025,
+            0.15
+          ],
+          "success_metric": "roll_eval_success",
+          "success_definition": "region_retention_v5",
+          "expected_action_dim": 20
+        },
+        "bounce": {
+          "checkpoint": "best_model/bounce_catch_best_reward_653.87.pth",
+          "sha256": "f3ff1fe5aa34a8d4384dda6915b6749847002447d2816f18e72b661c6254a09c",
+          "family": "ppo_dcmm_5fe75d5f",
+          "action_indices": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ],
+          "action_scales": [
+            1.5,
+            0.025,
+            0.15
+          ],
+          "success_metric": "success",
+          "success_definition": "bounce_catch_proximity_v2",
+          "expected_action_dim": 20
+        }
+      },
+      "env_kwargs": {
+        "camera_name": [
+          "top"
+        ],
+        "render_per_step": false,
+        "render_mode": "rgb_array",
+        "object_name": "object",
+        "img_size": [
+          160,
+          160
+        ],
+        "imshow_cam": false,
+        "print_obs": false,
+        "print_info": false,
+        "print_reward": false,
+        "print_ctrl": false,
+        "print_contacts": false,
+        "object_eval": false,
+        "env_time": 2.5,
+        "steps_per_policy": 20,
+        "bounce_physics": "legacy",
+        "bounce_launch": "legacy",
+        "bounce_log": false,
+        "basket_log": false,
+        "roll_log": false
+      },
+      "evaluation_revision": "2026-10-12-bounce-catch-v2",
+      "stage": "catch",
+      "save_every": 200,
+      "batch_episodes_per_task": 2,
+      "capacity_frames_per_task": 8192,
+      "max_episode_steps": 512,
+      "bptt_steps": 16,
+      "loss": "bce",
+      "model": {
+        "cnn_channels": [
+          16,
+          32,
+          32
+        ],
+        "cnn_kernels": [
+          5,
+          4,
+          3
+        ],
+        "cnn_strides": [
+          2,
+          2,
+          1
+        ],
+        "embedding": 128,
+        "gru_hidden": 256,
+        "mlp_hidden": [
+          512,
+          256,
+          128
+        ],
+        "future_prediction": {
+          "horizons": [
+            1,
+            3,
+            5,
+            8
+          ],
+          "target_scale_m": 0.1,
+          "logvar_bounds": [
+            -6.0,
+            4.0
+          ]
+        }
+      },
+      "vision": {
+        "camera": "top",
+        "height": 160,
+        "width": 160,
+        "near": 0.1,
+        "far": 5.0,
+        "gl_backend": "egl",
+        "cameras": [
+          {
+            "name": "top",
+            "near": 0.1,
+            "far": 5.0
+          },
+          {
+            "name": "wrist",
+            "near": 0.01,
+            "far": 1.5
+          }
+        ]
+      },
+      "auxiliary": {
+        "position_weight": 0.1,
+        "velocity_weight": 0.0,
+        "scales": [
+          1.0,
+          1.0,
+          1.0,
+          5.0,
+          5.0,
+          5.0
+        ]
+      },
+      "experiment": {
+        "variant": "future_uncertain"
+      },
+      "skip_teacher_baseline": true,
+      "eval_start": 5000,
+      "evaluation_seed": 20261110,
+      "lr_schedule": {
+        "kind": "constant"
+      },
+      "diagnostics_every": 100
+    },
+    "evaluations": [
+      {
+        "iteration": 5000,
+        "tasks": {
+          "throw": {
+            "successes": 191,
+            "episodes": 300,
+            "success_rate": 0.6366666666666667,
+            "seed": 20261110
+          },
+          "roll": {
+            "successes": 162,
+            "episodes": 300,
+            "success_rate": 0.54,
+            "seed": 20261110
+          },
+          "bounce": {
+            "successes": 176,
+            "episodes": 300,
+            "success_rate": 0.5866666666666667,
+            "seed": 20261110
+          }
+        },
+        "mean": 0.5877777777777778,
+        "minimum": 0.54
+      },
+      {
+        "iteration": 6000,
+        "tasks": {
+          "throw": {
+            "successes": 153,
+            "episodes": 300,
+            "success_rate": 0.51,
+            "seed": 20261110
+          },
+          "roll": {
+            "successes": 213,
+            "episodes": 300,
+            "success_rate": 0.71,
+            "seed": 20261110
+          },
+          "bounce": {
+            "successes": 203,
+            "episodes": 300,
+            "success_rate": 0.6766666666666666,
+            "seed": 20261110
+          }
+        },
+        "mean": 0.6322222222222221,
+        "minimum": 0.51
+      },
+      {
+        "iteration": 7000,
+        "tasks": {
+          "throw": {
+            "successes": 173,
+            "episodes": 300,
+            "success_rate": 0.5766666666666667,
+            "seed": 20261110
+          },
+          "roll": {
+            "successes": 161,
+            "episodes": 300,
+            "success_rate": 0.5366666666666666,
+            "seed": 20261110
+          },
+          "bounce": {
+            "successes": 223,
+            "episodes": 300,
+            "success_rate": 0.7433333333333333,
+            "seed": 20261110
+          }
+        },
+        "mean": 0.6188888888888888,
+        "minimum": 0.5366666666666666
+      },
+      {
+        "iteration": 8000,
+        "tasks": {
+          "throw": {
+            "successes": 171,
+            "episodes": 300,
+            "success_rate": 0.57,
+            "seed": 20261110
+          },
+          "roll": {
+            "successes": 222,
+            "episodes": 300,
+            "success_rate": 0.74,
+            "seed": 20261110
+          },
+          "bounce": {
+            "successes": 224,
+            "episodes": 300,
+            "success_rate": 0.7466666666666667,
+            "seed": 20261110
+          }
+        },
+        "mean": 0.6855555555555556,
+        "minimum": 0.57
+      },
+      {
+        "iteration": 9000,
+        "tasks": {
+          "throw": {
+            "successes": 151,
+            "episodes": 300,
+            "success_rate": 0.5033333333333333,
+            "seed": 20261110
+          },
+          "roll": {
+            "successes": 219,
+            "episodes": 300,
+            "success_rate": 0.73,
+            "seed": 20261110
+          },
+          "bounce": {
+            "successes": 162,
+            "episodes": 300,
+            "success_rate": 0.54,
+            "seed": 20261110
+          }
+        },
+        "mean": 0.5911111111111111,
+        "minimum": 0.5033333333333333
+      },
+      {
+        "iteration": 10000,
+        "tasks": {
+          "throw": {
+            "successes": 202,
+            "episodes": 300,
+            "success_rate": 0.6733333333333333,
+            "seed": 20261110
+          },
+          "roll": {
+            "successes": 183,
+            "episodes": 300,
+            "success_rate": 0.61,
+            "seed": 20261110
+          },
+          "bounce": {
+            "successes": 229,
+            "episodes": 300,
+            "success_rate": 0.7633333333333333,
+            "seed": 20261110
+          }
+        },
+        "mean": 0.6822222222222222,
+        "minimum": 0.61
+      }
+    ],
+    "checkpoints": {
+      "student_best.pth": {
+        "iteration": 10000,
+        "schema": "distillation_aux_future_uncertain_v1",
+        "sha256": "52eac18e52d386bd38b85c82c2542a562b87305dc5b626973140e28e34e7f9a5"
+      },
+      "student_last.pth": {
+        "iteration": 10000,
+        "schema": "distillation_aux_future_uncertain_v1",
+        "sha256": "34ae3cb799bdb58d86e41e2b625f340f98a69f3babf03ff16ad7373b59f866b9"
+      }
+    },
+    "highest_mean": {
+      "iteration": 8000,
+      "tasks": {
+        "throw": {
+          "successes": 171,
+          "episodes": 300,
+          "success_rate": 0.57,
+          "seed": 20261110
+        },
+        "roll": {
+          "successes": 222,
+          "episodes": 300,
+          "success_rate": 0.74,
+          "seed": 20261110
+        },
+        "bounce": {
+          "successes": 224,
+          "episodes": 300,
+          "success_rate": 0.7466666666666667,
+          "seed": 20261110
+        }
+      },
+      "mean": 0.6855555555555556,
+      "minimum": 0.57
+    },
+    "loss_windows": [
+      {
+        "end": 5000,
+        "count": 200,
+        "loss": 0.847073380164802,
+        "imitation_loss": 0.9144792957929895,
+        "module_loss": -0.06746340666882503,
+        "learning_rate": 0.0003000000000000012
+      },
+      {
+        "end": 6000,
+        "count": 200,
+        "loss": 0.8421389307803474,
+        "imitation_loss": 0.9115142248035408,
+        "module_loss": -0.069427634578084,
+        "learning_rate": 0.0003000000000000012
+      },
+      {
+        "end": 7000,
+        "count": 200,
+        "loss": 0.8407432008115575,
+        "imitation_loss": 0.9113558229478076,
+        "module_loss": -0.07065908419329901,
+        "learning_rate": 0.0003000000000000012
+      },
+      {
+        "end": 8000,
+        "count": 200,
+        "loss": 0.8364171730494127,
+        "imitation_loss": 0.9085917495307513,
+        "module_loss": -0.07221774987238405,
+        "learning_rate": 0.0003000000000000012
+      },
+      {
+        "end": 9000,
+        "count": 200,
+        "loss": 0.8329307818436064,
+        "imitation_loss": 0.9063678568112664,
+        "module_loss": -0.073476328704254,
+        "learning_rate": 0.0003000000000000012
+      },
+      {
+        "end": 10000,
+        "count": 200,
+        "loss": 0.8330960459355264,
+        "imitation_loss": 0.907432308930438,
+        "module_loss": -0.07437446593051618,
+        "learning_rate": 0.0003000000000000012
+      }
+    ],
+    "log_rows": 10000,
+    "unique_iterations": 10000
+  },
+  "source_comparison": {
+    "shared_files": 359,
+    "changed_shared_files": []
+  }
+}

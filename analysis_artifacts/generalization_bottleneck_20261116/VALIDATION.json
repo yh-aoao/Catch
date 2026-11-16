@@ -1,0 +1,19 @@
+{
+  "new_cases": 35,
+  "new_episodes": 700,
+  "reused_baseline_cases": 13,
+  "reused_baseline_episodes": 260,
+  "total_evaluated_comparison_episodes": 960,
+  "exact_quotas": true,
+  "checkpoint_hashes_verified": true,
+  "baseline_production_sources_identical": true,
+  "range_scaling_and_launch_seeds_verified": true,
+  "specialist_identical_physics_and_initial_state": true,
+  "instrumented_full_range_successes_reproduce_baseline": true,
+  "notes": [
+    "Fixed means nominal TARGET physics only; robot gains, hand friction, launch and observation/control noise remain in the main range experiment.",
+    "The separate nominal_robot test fixes PID multipliers and disables observation/control noise; it does not disable every possible environment randomization.",
+    "Per-object samples are small (20); these inference tests do not establish benefits of retraining under smaller ranges.",
+    "Explicit initial-state seeds are matched; later noise is not strictly paired because historical synchronous envs share a global NumPy RNG."
+  ]
+}

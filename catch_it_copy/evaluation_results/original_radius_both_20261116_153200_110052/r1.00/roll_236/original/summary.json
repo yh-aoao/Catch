@@ -1,0 +1,933 @@
+{
+  "name": "roll_236",
+  "motion": "roll",
+  "physics": "dr_episode",
+  "checkpoint": "/home/isee/Catch/11-16/roll_catch_best_reward_236.00.pth",
+  "checkpoint_sha256": "1c40a31cac8fa543577ac48cfcaa225be6969082b6c8f25699d156fde058c933",
+  "radius_scale": 1.0,
+  "mass_policy": "fixed",
+  "object": "original",
+  "seed": 41000,
+  "episodes": 100,
+  "instances": 4,
+  "case_dir": "/home/isee/Catch/catch_it_copy/evaluation_results/original_radius_both_20261116_153200_110052/r1.00/roll_236/original",
+  "completed": true,
+  "successes": 56,
+  "success_rate": 0.56,
+  "wilson_95_interval": [
+    0.4622810465167699,
+    0.6532797336983921
+  ],
+  "stable_hold_episodes": 3,
+  "stable_hold_rate": 0.03,
+  "reasons": {
+    "ball_left": 2,
+    "timeout": 68,
+    "ball_on_floor": 25,
+    "out_of_bounds": 4,
+    "base_collision": 1
+  },
+  "parameter_samples": [
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 1.0223829334837962,
+      "mass_scale": 1.0224726274310985,
+      "friction_scale": 0.9790432251197227,
+      "rolling_scale": 0.9953905152994937,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 0.9896340841272382,
+      "mass_scale": 1.0695392841352587,
+      "friction_scale": 0.9256217439082988,
+      "rolling_scale": 0.9727278598850695,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 0.9979380260977507,
+      "mass_scale": 1.065863736125513,
+      "friction_scale": 0.9541880297273122,
+      "rolling_scale": 0.9451969043474772,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 0.9838878611151645,
+      "mass_scale": 0.9247639202058032,
+      "friction_scale": 0.8909350692671832,
+      "rolling_scale": 0.8789067113946465,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 1.025632995663765,
+      "mass_scale": 0.9937664797745337,
+      "friction_scale": 1.1349072351524159,
+      "rolling_scale": 1.1899217202704055,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 1.0245111893367995,
+      "mass_scale": 0.9599531254935432,
+      "friction_scale": 1.1117210323972515,
+      "rolling_scale": 1.0583063177953271,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 1.0047923366035252,
+      "mass_scale": 0.9807749474768904,
+      "friction_scale": 1.0913209046530616,
+      "rolling_scale": 0.9371209278029943,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 1.0388498467192258,
+      "mass_scale": 0.9030035741069075,
+      "friction_scale": 0.920956128490922,
+      "rolling_scale": 1.0843736364067946,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 1.0045501358797955,
+      "mass_scale": 1.0940294358160747,
+      "friction_scale": 0.9156890180615169,
+      "rolling_scale": 1.1641683168941288,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 0.9582136871963315,
+      "mass_scale": 0.9664686207133093,
+      "friction_scale": 1.0870751550248787,
+      "rolling_scale": 1.183228433799849,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 1.046217029779698,
+      "mass_scale": 0.9754339523884675,
+      "friction_scale": 1.0919844493069715,
+      "rolling_scale": 0.8629462618415495,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 1.020811540630845,
+      "mass_scale": 0.9829792058262271,
+      "friction_scale": 0.978704528823152,
+      "rolling_scale": 0.8367203489509524,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 1.0030556684896745,
+      "mass_scale": 1.0707706174011047,
+      "friction_scale": 0.9985451171351168,
+      "rolling_scale": 1.1804539023375034,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 1.0403470212124808,
+      "mass_scale": 0.9934968261454609,
+      "friction_scale": 0.8882583049293271,
+      "rolling_scale": 0.8032937308130889,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 0.9633274063686994,
+      "mass_scale": 1.0938079544469526,
+      "friction_scale": 0.9253381623419012,
+      "rolling_scale": 1.1776311905890595,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 1.001704993107233,
+      "mass_scale": 0.9936964245217682,
+      "friction_scale": 1.0537390440654502,
+      "rolling_scale": 0.8526711398640404,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 1.020904022009444,
+      "mass_scale": 0.9258652459103177,
+      "friction_scale": 1.0625974998986605,
+      "rolling_scale": 1.163910480023691,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 1.0229657337766662,
+      "mass_scale": 1.0316610856653132,
+      "friction_scale": 1.1192000108173852,
+      "rolling_scale": 1.1177978149910062,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 0.9692668628884695,
+      "mass_scale": 0.9076842517874217,
+      "friction_scale": 1.0917003675724768,
+      "rolling_scale": 1.1871927165231029,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 1.0427678888043546,
+      "mass_scale": 0.9191363858390444,
+      "friction_scale": 0.9209085709597742,
+      "rolling_scale": 0.8146540054409931,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 1.0422985916662226,
+      "mass_scale": 1.0409522838074698,
+      "friction_scale": 1.0034191249818383,
+      "rolling_scale": 1.0255650006742763,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 1.0429411092808925,
+      "mass_scale": 1.0800561607090684,
+      "friction_scale": 0.9165114331835013,
+      "rolling_scale": 0.9598411862999602,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 1.0458304738682793,
+      "mass_scale": 1.0728125942478717,
+      "friction_scale": 0.9036838067709067,
+      "rolling_scale": 0.8270403501087016,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 1.0402665903931614,
+      "mass_scale": 0.961144492910563,
+      "friction_scale": 1.059938579716309,
+      "rolling_scale": 1.0978251550376097,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 1.0145365689614647,
+      "mass_scale": 1.070785725162525,
+      "friction_scale": 0.9507453646386069,
+      "rolling_scale": 1.1448982972583899,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 1.0335211980678123,
+      "mass_scale": 0.9394054964615512,
+      "friction_scale": 0.9236132736785524,
+      "rolling_scale": 1.141673720360983,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 0.991381066010767,
+      "mass_scale": 0.9934468488435587,
+      "friction_scale": 1.0237148937289104,
+      "rolling_scale": 0.9930457956955092,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 0.9549426688549565,
+      "mass_scale": 0.9092833573288733,
+      "friction_scale": 1.0382484228816589,
+      "rolling_scale": 1.1693099764752612,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 0.9583292601842378,
+      "mass_scale": 1.0667991596094395,
+      "friction_scale": 1.0566952353227799,
+      "rolling_scale": 1.1546668443715509,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 1.015562016733001,
+      "mass_scale": 0.9315487296345949,
+      "friction_scale": 0.9408783186752454,
+      "rolling_scale": 0.9480186066783752,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 1.0420238098747472,
+      "mass_scale": 0.9126021186375681,
+      "friction_scale": 1.0300034607777206,
+      "rolling_scale": 0.9060858885518642,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 0.9998847068281392,
+      "mass_scale": 0.9076734619918183,
+      "friction_scale": 1.1114989716241919,
+      "rolling_scale": 1.1653179350795984,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 1.0220125783153156,
+      "mass_scale": 0.9090403164228292,
+      "friction_scale": 1.0923742652340922,
+      "rolling_scale": 1.0376721979205534,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 1.0240803212176122,
+      "mass_scale": 1.012655957934744,
+      "friction_scale": 0.9271350102621277,
+      "rolling_scale": 1.080731560383845,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 0.9709760549068857,
+      "mass_scale": 0.980619946808351,
+      "friction_scale": 1.1226936785365789,
+      "rolling_scale": 0.8599829063196354,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 1.0263068191009637,
+      "mass_scale": 0.9258620584797798,
+      "friction_scale": 0.8996725083611877,
+      "rolling_scale": 0.9640940435244609,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 0.9538445533432345,
+      "mass_scale": 1.0420940377313028,
+      "friction_scale": 0.8746474867270941,
+      "rolling_scale": 1.0194746608101468,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 0.9760538556993807,
+      "mass_scale": 0.9937677290289377,
+      "friction_scale": 0.8615580675524576,
+      "rolling_scale": 1.1302608934815221,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 1.049263495750709,
+      "mass_scale": 1.024845651362066,
+      "friction_scale": 1.1267830481370682,
+      "rolling_scale": 0.866890408505467,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 0.9979940714188444,
+      "mass_scale": 0.9302941208667661,
+      "friction_scale": 1.1036087962887857,
+      "rolling_scale": 0.8875761064467137,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 1.0256773940584072,
+      "mass_scale": 0.9240560865867269,
+      "friction_scale": 1.0055399832207432,
+      "rolling_scale": 1.0804521231547783,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 0.9714384936148818,
+      "mass_scale": 1.0364068037719383,
+      "friction_scale": 1.053356774302505,
+      "rolling_scale": 1.014982336629995,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 0.957101961805224,
+      "mass_scale": 1.0809036577889548,
+      "friction_scale": 0.8659361273193507,
+      "rolling_scale": 0.8664280820090038,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 1.0327032997406431,
+      "mass_scale": 1.0271125336908742,
+      "friction_scale": 1.0108462232354238,
+      "rolling_scale": 0.920257769256269,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 0.9775306200748574,
+      "mass_scale": 1.0924459725021265,
+      "friction_scale": 1.1307161831167043,
+      "rolling_scale": 1.1796492167473807,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 0.9632171089785024,
+      "mass_scale": 1.08237611176348,
+      "friction_scale": 1.1444468188768648,
+      "rolling_scale": 0.9234049550758655,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 1.0404409562783445,
+      "mass_scale": 1.0065354622670097,
+      "friction_scale": 1.0361330126295702,
+      "rolling_scale": 1.1596090415244797,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 0.9971053329308543,
+      "mass_scale": 1.039003393921594,
+      "friction_scale": 1.1022670333212918,
+      "rolling_scale": 0.8739850861262038,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 0.9819889243739488,
+      "mass_scale": 1.0664389063864719,
+      "friction_scale": 0.941228106126382,
+      "rolling_scale": 0.8840556418273641,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 1.0320037015739578,
+      "mass_scale": 1.0699121436963202,
+      "friction_scale": 0.8684886843373348,
+      "rolling_scale": 0.9418378063632044,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 0.9700322180665957,
+      "mass_scale": 0.9074801511436237,
+      "friction_scale": 1.060793240238254,
+      "rolling_scale": 0.975438626580933,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 0.9975734905790112,
+      "mass_scale": 0.9287091283359831,
+      "friction_scale": 1.0042379406909856,
+      "rolling_scale": 0.9496305157307201,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 0.9599276823782819,
+      "mass_scale": 0.9859426070672854,
+      "friction_scale": 0.955559273649258,
+      "rolling_scale": 0.8633854899728186,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 0.9939587887037468,
+      "mass_scale": 0.9121374340326985,
+      "friction_scale": 0.9780020465338097,
+      "rolling_scale": 1.1406402474880997,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 1.0383340229918154,
+      "mass_scale": 0.9499036748615354,
+      "friction_scale": 1.000320423995415,
+      "rolling_scale": 1.158368272527063,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 0.9663232324966818,
+      "mass_scale": 0.9741023239308283,
+      "friction_scale": 0.9450901092528442,
+      "rolling_scale": 1.0867952903909326,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 0.959523603131821,
+      "mass_scale": 0.9139711326022144,
+      "friction_scale": 0.9418252467761747,
+      "rolling_scale": 1.1754934024530215,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 1.020011478472245,
+      "mass_scale": 1.020484398603311,
+      "friction_scale": 1.0324506956627246,
+      "rolling_scale": 0.911818871583345,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 0.9590145846436401,
+      "mass_scale": 0.9795631290481883,
+      "friction_scale": 0.9617666412744555,
+      "rolling_scale": 1.1854304845617762,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 1.0397662697909151,
+      "mass_scale": 1.0304827237171235,
+      "friction_scale": 0.9234260562924962,
+      "rolling_scale": 0.9464467772116301,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 1.0258142513912174,
+      "mass_scale": 1.0445790388338998,
+      "friction_scale": 1.043111103798605,
+      "rolling_scale": 1.0678326616753426,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 1.0003413669403542,
+      "mass_scale": 0.9887994227959159,
+      "friction_scale": 0.870647086854041,
+      "rolling_scale": 0.9852830830646092,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 1.0154737558736848,
+      "mass_scale": 1.0145330400326205,
+      "friction_scale": 0.9282531727697256,
+      "rolling_scale": 0.9769503955317891,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 1.0060364159993311,
+      "mass_scale": 0.9573445019908521,
+      "friction_scale": 0.968954909267489,
+      "rolling_scale": 1.1764435475912771,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 1.0372493019642062,
+      "mass_scale": 1.078527333709796,
+      "friction_scale": 0.9908862708202,
+      "rolling_scale": 0.9047945877997756,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 0.9542511339671534,
+      "mass_scale": 1.0025781344696163,
+      "friction_scale": 1.1008279327831634,
+      "rolling_scale": 1.034847258367226,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 0.9803518657617956,
+      "mass_scale": 1.048517029412171,
+      "friction_scale": 1.1365783972174515,
+      "rolling_scale": 0.8754884599275718,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 1.0416516971556327,
+      "mass_scale": 1.0145342780653783,
+      "friction_scale": 1.1484559843980608,
+      "rolling_scale": 1.1428385688876395,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 0.9693775819784477,
+      "mass_scale": 1.0100030290836648,
+      "friction_scale": 1.1092729343209038,
+      "rolling_scale": 0.8255679230546173,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 1.0227426591059015,
+      "mass_scale": 1.012767765632146,
+      "friction_scale": 0.9889775385588957,
+      "rolling_scale": 1.1127575006125294,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 1.038907884165969,
+      "mass_scale": 1.0724947995864826,
+      "friction_scale": 0.959514839445369,
+      "rolling_scale": 1.1222066572450669,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 1.0179253175823426,
+      "mass_scale": 0.9016892674530127,
+      "friction_scale": 0.884005691212792,
+      "rolling_scale": 0.9789955294362679,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 1.042103355251985,
+      "mass_scale": 1.0706499991800527,
+      "friction_scale": 1.0867079542773759,
+      "rolling_scale": 0.8239571638612058,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 1.0300432547454033,
+      "mass_scale": 0.960253818358012,
+      "friction_scale": 1.0154455941375233,
+      "rolling_scale": 1.1749850008782612,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 0.9812565446359188,
+      "mass_scale": 1.081037222742043,
+      "friction_scale": 0.9683083110154065,
+      "rolling_scale": 1.0424700327033227,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 1.0214205102558418,
+      "mass_scale": 0.9633755201203874,
+      "friction_scale": 1.0462289795018955,
+      "rolling_scale": 1.05147394057371,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 0.9644805137144878,
+      "mass_scale": 0.9475953535147084,
+      "friction_scale": 0.993875584485022,
+      "rolling_scale": 1.0921581270563547,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 0.9700067753025982,
+      "mass_scale": 1.0789325019842133,
+      "friction_scale": 0.9986185640222782,
+      "rolling_scale": 1.0454632334416418,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 0.9892370673677486,
+      "mass_scale": 1.0904202537377365,
+      "friction_scale": 1.1349081108435313,
+      "rolling_scale": 0.9090154770330935,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 1.0246891609528341,
+      "mass_scale": 0.9908015792016291,
+      "friction_scale": 1.1138408912876308,
+      "rolling_scale": 0.9974944064354501,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 0.9875824871263329,
+      "mass_scale": 1.0576407485580388,
+      "friction_scale": 1.1360154262081077,
+      "rolling_scale": 0.9600939900185411,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 1.0051270533171717,
+      "mass_scale": 1.0799022604984816,
+      "friction_scale": 0.9422163829982455,
+      "rolling_scale": 1.143247868344109,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 0.9515714339434812,
+      "mass_scale": 1.07867479243599,
+      "friction_scale": 0.8654626385635359,
+      "rolling_scale": 0.9004112020004499,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 1.024381926293799,
+      "mass_scale": 1.0762703245229257,
+      "friction_scale": 1.119756878623506,
+      "rolling_scale": 1.0969352805914518,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 1.0478653628814665,
+      "mass_scale": 1.0161988533086608,
+      "friction_scale": 0.9661410755888503,
+      "rolling_scale": 1.0073142443108254,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 0.9501856645081284,
+      "mass_scale": 0.9736500809662313,
+      "friction_scale": 1.0785590108563468,
+      "rolling_scale": 0.8367751645501249,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 1.0428245130412495,
+      "mass_scale": 1.0951482096919318,
+      "friction_scale": 1.0939584104112487,
+      "rolling_scale": 0.9325313342666897,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 1.0244749167852845,
+      "mass_scale": 1.0670725495699196,
+      "friction_scale": 0.8900155407514903,
+      "rolling_scale": 0.8719456241605987,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 1.0134795393394507,
+      "mass_scale": 0.9724481484455177,
+      "friction_scale": 0.9473875428978467,
+      "rolling_scale": 1.1843792234409827,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 0.996875907489434,
+      "mass_scale": 0.9984631383984102,
+      "friction_scale": 0.9269405426764952,
+      "rolling_scale": 0.8355761262487631,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 1.0348480951143446,
+      "mass_scale": 0.9667346702710703,
+      "friction_scale": 0.904263130933476,
+      "rolling_scale": 1.03009546111668,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 0.9606017104119579,
+      "mass_scale": 0.9697372344095959,
+      "friction_scale": 1.0480487446126707,
+      "rolling_scale": 1.191612296113826,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 1.0050799293390111,
+      "mass_scale": 1.0407935759157736,
+      "friction_scale": 1.0695364742804643,
+      "rolling_scale": 0.9866487928454678,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 1.026200286528387,
+      "mass_scale": 1.0478405748241344,
+      "friction_scale": 0.9207809013052399,
+      "rolling_scale": 1.1196807480273496,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 1.0198528132886502,
+      "mass_scale": 0.9381455782053677,
+      "friction_scale": 0.9675959183944225,
+      "rolling_scale": 0.9912093371447723,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 1.044674305198419,
+      "mass_scale": 1.0000991734820128,
+      "friction_scale": 0.9475522957957508,
+      "rolling_scale": 0.9612580693283717,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 1.0095201544786345,
+      "mass_scale": 1.0106735972281105,
+      "friction_scale": 1.1344209876325357,
+      "rolling_scale": 0.8827794214696646,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 1.042326212680126,
+      "mass_scale": 0.993600290500559,
+      "friction_scale": 0.9128561393027221,
+      "rolling_scale": 1.0129752021603025,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 0.9508353499664947,
+      "mass_scale": 1.0527548433167717,
+      "friction_scale": 0.8954348735070653,
+      "rolling_scale": 0.9641149433015251,
+      "damping_scale": 1.0
+    },
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 0.9703128711740451,
+      "mass_scale": 1.0804473621185875,
+      "friction_scale": 1.0103560772558249,
+      "rolling_scale": 0.9841091957771791,
+      "damping_scale": 1.0
+    }
+  ],
+  "wall_seconds": 109.04488200500055
+}

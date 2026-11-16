@@ -1,0 +1,38 @@
+{
+  "name": "roll_236",
+  "motion": "roll",
+  "physics": "dr_episode",
+  "checkpoint": "/home/isee/Catch/11-16/roll_catch_best_reward_236.00.pth",
+  "checkpoint_sha256": "1c40a31cac8fa543577ac48cfcaa225be6969082b6c8f25699d156fde058c933",
+  "radius_scale": 0.9,
+  "mass_policy": "fixed",
+  "object": "original",
+  "seed": 41000,
+  "episodes": 1,
+  "instances": 1,
+  "case_dir": "/home/isee/Catch/analysis_artifacts/radius_smoke_20261116/roll_236/original",
+  "completed": true,
+  "successes": 1,
+  "success_rate": 1.0,
+  "wilson_95_interval": [
+    0.20654931437723745,
+    1.0
+  ],
+  "stable_hold_episodes": 0,
+  "stable_hold_rate": 0.0,
+  "reasons": {
+    "timeout": 1
+  },
+  "parameter_samples": [
+    {
+      "version": "physical_dr_episode_v1",
+      "sampling": "episode_reset",
+      "size_scale": 0.8906706757145144,
+      "mass_scale": 1.0695392841352587,
+      "friction_scale": 0.9256217439082988,
+      "rolling_scale": 0.9727278598850695,
+      "damping_scale": 1.0
+    }
+  ],
+  "wall_seconds": 1.1253409700002521
+}

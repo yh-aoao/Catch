@@ -40,6 +40,7 @@ hydra:
     dir: .
 
 object_motion: "throw"
+throw_generalization: "off" # off / multishape_v1; opt-in original shape/size/mass ranges
 
 # Legacy remains frozen; newer physics modes are opt-in and keep reward/PPO.
 bounce_physics: "legacy" # legacy / stable_v1 / physical_v2

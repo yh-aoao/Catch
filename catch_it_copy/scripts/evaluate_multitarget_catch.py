@@ -70,6 +70,7 @@ def main():
     for m in models:
         if not re.fullmatch(r'[A-Za-z0-9_-]+',m['name']) or m['motion'] not in ('roll','bounce') or m['physics'] not in ('fixed','dr','dr_episode'):
             p.error('Invalid manifest name/motion/physics')
+        if m.get('roll_palm_version','legacy') not in ('legacy','palm_z_v1'):p.error('Invalid roll_palm_version')
         checkpoint=Path(m['checkpoint']);checkpoint=checkpoint if checkpoint.is_absolute() else model_dir/checkpoint
         if not checkpoint.is_file():p.error('Missing checkpoint: '+str(checkpoint))
         m['checkpoint']=str(checkpoint.resolve());m['checkpoint_sha256']=sha(checkpoint)
@@ -87,7 +88,7 @@ def main():
         'ycb_objects/benchmark_geometry.py','ycb_objects/benchmark_randomization.py','ycb_objects/episode_randomization.py',
         'ycb_objects/calibration_data/balls.roll_table_priors_v1.json','ycb_objects/calibration_data/balls.three_ball_training_v1.json',
         'gym_dcmm/envs/DcmmVecEnv_roll_645edc4.py','gym_dcmm/envs/bounce_grasp.py',
-        'gym_dcmm/utils/roll_evaluation.py','gym_dcmm/algs/ppo_dcmm_645edc4/ppo_dcmm_catch_two_stage.py',
+        'gym_dcmm/utils/roll_evaluation.py','gym_dcmm/utils/roll_palm.py','gym_dcmm/utils/roll_grasp.py','gym_dcmm/algs/ppo_dcmm_645edc4/ppo_dcmm_catch_two_stage.py',
         'gym_dcmm/algs/ppo_dcmm_5fe75d5f/ppo_dcmm_catch_hold.py']
     spec=dict(radius_scale=a.radius_scale,mass_policy=a.mass_policy,episodes=a.episodes,instances=a.instances,seed=a.seed,models=models,objects=a.objects,
         catalog_sha256=sha(a.catalog),source_sha256={n:sha(ROOT/n) for n in source_names})
@@ -111,6 +112,7 @@ def main():
             'checkpoint_tracking=','checkpoint_catching='+m['checkpoint'],'benchmark_catalog='+str(output/'catalog_used.json'),
             '+benchmark_options.domain_randomization='+({'dr':'physical_dr_v1','dr_episode':'physical_dr_episode_v1'}.get(m['physics'],'off')),
             m['motion']+'_ball_mode=fixed','seed='+str(a.seed)]
+        if m['motion']=='roll':args.append('roll_palm_version='+m.get('roll_palm_version','legacy'))
         config_dir=output/'configs';config_dir.mkdir(exist_ok=True)
         config=config_dir/(m['name']+'.yaml')
         if not a.resume:

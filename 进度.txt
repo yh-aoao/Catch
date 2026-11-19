@@ -1652,3 +1652,19 @@ original、tennis_ball、baseball、racquetball、golf_ball、softball
 
 bash scripts/train_targets_creation_dr_v2.sh bounce track device_id=0 num_envs=42
 bash scripts/train_targets_creation_dr_v2.sh roll track device_id=0 num_envs=36
+
+roll:220
+bounce:211
+throw:207（c）210（t）
+蒸馏：210
+
+目前训练：
+1.蒸馏：加了roll、bounce的三球固定参数以及basket单球抛，由指令来控制目前是接球还是抛球
+2.roll：删去柠檬，加了一个圆柱体罐子，加大了num，训练和throw一样
+3.bounce：和roll一样
+4.throw：的泛化
+bash scripts/train_targets_creation_dr_v2.sh roll catch \
+  checkpoint_tracking=/你的路径/新roll_track模型.pth \
+  device_id=0
+
+  211：roll207：bounce

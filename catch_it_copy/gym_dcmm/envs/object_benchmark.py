@@ -114,7 +114,7 @@ def choose(motion,test_object,mode,weights,data,slot=None,num_slots=None):
             return names[index]
         return str(np.random.choice(names,p=probabilities))
     if weights is not None:raise ValueError('Weights require mixed benchmark')
-    name='original' if test_object in ('default','sphere') else test_object.removeprefix('ycb:')
+    name='original' if test_object in ('default','sphere') else (test_object[4:] if test_object.startswith('ycb:') else test_object)
     if name not in names:raise ValueError('Choose a benchmark '+motion+' object from '+str(names))
     return name
 

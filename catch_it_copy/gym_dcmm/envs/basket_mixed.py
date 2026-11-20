@@ -45,7 +45,7 @@ class BasketMixedEnv(DcmmVecEnv):
         if mobile and not (kwargs.get('object_motion') in ('basket','throw_basket')
                 and kwargs.get('task')=='Catching' and not kwargs.get('basket_fixed_base_training')
                 and kwargs.get('basket_fixed_physical') and kwargs.get('basket_carry_reward')
-                and kwargs.get('basket_finger_reward') and kwargs.get('basket_arm_control')=='joint_velocity'):
+                and kwargs.get('basket_finger_reward') and kwargs.get('basket_arm_control') in ('joint_velocity','ee_delta')):
             raise ValueError('Single mobile requires physical finger/carry mobile Basket')
         if mobile and basket_mixed_ball not in ('mixed','tennis_ball','baseball'):
             raise ValueError('Mobile single-ball requires tennis_ball or baseball')
@@ -53,7 +53,7 @@ class BasketMixedEnv(DcmmVecEnv):
                 and kwargs.get('basket_fixed_base_training') and kwargs.get('basket_fixed_physical')
                 and kwargs.get('basket_carry_reward') and kwargs.get('basket_finger_reward')
                 and kwargs.get('basket_reward_version')=='basket_aim_v1'
-                and kwargs.get('basket_arm_control')=='joint_velocity'):
+                and kwargs.get('basket_arm_control') in ('joint_velocity','ee_delta')):
             raise ValueError('Three-ball training requires fixed physical Basket finger/carry joint-velocity task')
         from gym_dcmm.utils.basket_delivery import make_options as delivery_options,new_state
         if basket_delivery_version not in ('legacy','ballistic_v2'):

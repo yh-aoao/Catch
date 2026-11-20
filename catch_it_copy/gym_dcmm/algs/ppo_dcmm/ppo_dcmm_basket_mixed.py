@@ -44,7 +44,7 @@ class PPO_Basket_Mixed(PPO_Catch_OneStage):
                         or checkpoint.get('basket_delivery_options')!=self.delivery_options
                         or checkpoint.get('basket_finger_options')!=self.finger_options
                         or checkpoint.get('basket_carry_options')!=self.carry_options
-                        or checkpoint.get('basket_arm_control')!='joint_velocity'
+                        or checkpoint.get('basket_arm_control')!=self.basket_arm_control
                         or checkpoint.get('action_layout')!='arm6_hand12'):
                     raise ValueError('Range practice source must match ball, physics and reward protocol')
                 self.model.load_state_dict(checkpoint['model'],strict=True)
@@ -52,6 +52,8 @@ class PPO_Basket_Mixed(PPO_Catch_OneStage):
                 self.value_mean_std.load_state_dict(checkpoint['value_mean_std'],strict=True)
                 kind='fixed37'
             else:
+                if self.basket_arm_control!='joint_velocity':
+                    raise ValueError('ee_delta warm starts require a matching fixed37 checkpoint')
                 kind=import_throw(self.model,self.running_mean_std,checkpoint,self.finger_options,self.carry_options)
             with open(path,'rb') as stream:digest=hashlib.sha256(stream.read()).hexdigest()
             self.source_metadata=dict(kind=kind,name=os.path.basename(path),sha256=digest)
@@ -172,7 +174,7 @@ class PPO_Basket_Mixed(PPO_Catch_OneStage):
             basket_ball_protocol=self.ball_protocol,basket_delivery_version=self.delivery_version,
             basket_delivery_options=self.delivery_options,basket_trained_ball=self.ball_mode,
             basket_fixed_protocol='aim_carry_fingers_v1',basket_finger_options=self.finger_options,
-            basket_carry_options=self.carry_options,basket_arm_control='joint_velocity',action_layout='arm6_hand12',
+            basket_carry_options=self.carry_options,basket_arm_control=self.basket_arm_control,action_layout='arm6_hand12',
             source_metadata=self.source_metadata,training_metrics=dict(agent_steps=int(self.agent_steps),
                 episode_reward=float(self.episode_rewards.get_mean()),per_ball_success={n:m.get_mean() for n,m in zip(NAMES,self.per_ball)})),f'{name}.pth')
 
@@ -192,6 +194,8 @@ class PPO_Basket_Mixed(PPO_Catch_OneStage):
         trained_ball=checkpoint.get('basket_trained_ball','mixed')
         if trained_ball!='mixed' and trained_ball!=self.ball_mode:
             raise ValueError('Single-ball checkpoint requires its matching ball preset')
+        if checkpoint.get('basket_arm_control','joint_velocity')!=self.basket_arm_control:
+            raise ValueError('Basket checkpoint arm action semantics differ from this configuration')
         self._validate_mobile_checkpoint(checkpoint)
         if checkpoint.get('basket_mixed_options')!=self.mixed_options:raise ValueError('Use matching three-ball grip/options')
         if checkpoint.get('basket_ball_protocol')!=self.ball_protocol:raise ValueError('Three-ball physical parameters differ from training')

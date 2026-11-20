@@ -6,9 +6,11 @@ from gym_dcmm.algs.ppo_dcmm.utils import RunningMeanStd
 
 
 class FrozenThrowPolicy:
-    def __init__(self, checkpoint, finger_options, carry_options, device):
+    def __init__(self, checkpoint, finger_options, carry_options, device, arm_control='joint_velocity'):
+        if arm_control not in ('joint_velocity','ee_delta'):
+            raise ValueError('Unsupported Basket throw action semantics')
         if (checkpoint.get('action_layout') != 'arm6_hand12'
-                or checkpoint.get('basket_arm_control') != 'joint_velocity'
+                or checkpoint.get('basket_arm_control') != arm_control
                 or checkpoint.get('basket_fixed_protocol') != 'aim_carry_fingers_v1'
                 or checkpoint.get('basket_finger_options') != finger_options
                 or checkpoint.get('basket_carry_options') != carry_options):
@@ -28,6 +30,7 @@ class FrozenThrowPolicy:
         self.normalizer.requires_grad_(False)
         self.finger_options = dict(finger_options)
         self.carry_options = dict(carry_options)
+        self.arm_control = arm_control
 
     @torch.no_grad()
     def actions(self, raw_observation):
@@ -45,6 +48,6 @@ class FrozenThrowPolicy:
 
     def export(self):
         return dict(model=self.model.state_dict(), running_mean_std=self.normalizer.state_dict(),
-            action_layout='arm6_hand12', basket_arm_control='joint_velocity',
+            action_layout='arm6_hand12', basket_arm_control=self.arm_control,
             basket_fixed_protocol='aim_carry_fingers_v1',
             basket_finger_options=self.finger_options, basket_carry_options=self.carry_options)

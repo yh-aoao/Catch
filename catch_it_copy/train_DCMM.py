@@ -118,6 +118,11 @@ def main(config: DictConfig):
     single_mobile=(mixed_basket and config.basket_reward_version=='basket_mobile_v1'
                    and config.basket_training_stage=='mobile_joint'
                    and mixed_ball in ('mixed','tennis_ball','baseball'))
+    if config.basket_arm_control=='ee_delta':
+        if (not mixed_basket or config.object_motion not in ('basket','throw_basket')
+                or (config.basket_reward_version=='basket_mobile_v1' and not single_mobile)
+                or abs(float(config.train.ppo.action_catch_denorm[1])-.025)>1e-9):
+            raise ValueError('ee_delta requires conditional Basket with arm scale .025 and mobile_joint for moving base')
     if config.get('basket_free_stop') and not single_mobile:
         raise ValueError('basket_free_stop requires a mixed/single-ball mobile_joint task')
     if single_mobile and (config.test_object!='default' or config.object_eval or config.basket_mixed_source):
@@ -180,7 +185,7 @@ def main(config: DictConfig):
                 config.basket_throw_checkpoint = to_absolute_path(config.basket_throw_checkpoint)
         expected_task = 'Catching_OneStage' if basket_stage == 'joint' else 'Catching_TwoStage'
         if (config.object_motion not in ('basket', 'throw_basket') or config.basket_fixed_base_training
-                or config.basket_arm_control != 'joint_velocity' or config.task != expected_task
+                or config.basket_arm_control not in ('joint_velocity','ee_delta') or config.task != expected_task
                 or config.checkpoint_tracking or config.basket_control_probe != 'off' or config.object_eval):
             raise ValueError('basket_mobile_v1 requires movable Basket joint_velocity OneStage, no Tracking checkpoint/probe/object_eval')
         if bool(config.basket_mobile.parking_only) != (basket_stage == 'parking'):
@@ -208,7 +213,10 @@ def main(config: DictConfig):
         else:
             print('[basket-mobile-v1] random target per episode; physical carry -> settle -> throw; policy=base2+arm6+hand12; initialization=' + ('fixed_actor_transfer' if warm_start else 'scratch'), flush=True)
     if config.basket_reward_version in ('launch_v4', 'launch_v5', 'launch_simple_v1', 'basket_aim_v1'):
-        if config.object_motion not in ('basket', 'throw_basket') or config.basket_arm_control != 'joint_velocity' or not config.basket_fixed_base_training or config.task != 'Catching_OneStage':
+        arm_allowed=(config.basket_arm_control=='joint_velocity' or
+                     (config.basket_arm_control=='ee_delta' and config.basket_reward_version=='basket_aim_v1'))
+        if (config.object_motion not in ('basket', 'throw_basket') or not arm_allowed
+                or not config.basket_fixed_base_training or config.task != 'Catching_OneStage'):
             raise ValueError('launch_v4/v5/simple requires fixed-base Basket joint_velocity Catching_OneStage')
         if config.test and config.basket_curriculum_stage != 3:
             raise ValueError('Formal Basket testing requires curriculum stage 3')

@@ -62,8 +62,8 @@ class PPO_Basket_MobileJoint(PPO_Catch_OneStage):
                         raise ValueError('Mixed mobile source must match three-ball physics and ballistic reward')
                 else:
                     checkpoint=single_ball_fixed35(checkpoint,self.single_ball,self.single_ball_protocol,
-                        self.delivery_version,self.delivery_options)
-            self.model.import_throw(checkpoint,self.running_mean_std,self.finger_options,self.carry_options)
+                        self.delivery_version,self.delivery_options,arm_control=self.basket_arm_control)
+            self.model.import_throw(checkpoint,self.running_mean_std,self.finger_options,self.carry_options,arm_control=self.basket_arm_control)
             with open(source_path,'rb') as stream:digest=hashlib.sha256(stream.read()).hexdigest()
             self.basket_transfer_metadata=dict(version='joint_fixed37_throw_base2_v1' if self.conditioned else 'joint_fixed35_throw_base2_v1',
                 source_name=os.path.basename(source_path),source_sha256=digest)

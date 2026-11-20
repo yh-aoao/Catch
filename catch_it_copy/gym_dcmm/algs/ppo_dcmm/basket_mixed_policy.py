@@ -71,14 +71,15 @@ class MacroSuccess:
     def get_mean(self):return sum(m.get_mean() for m in self.meters)/len(self.meters)
 
 
-def single_ball_fixed35(checkpoint,ball,protocol,delivery_version,delivery_options):
+def single_ball_fixed35(checkpoint,ball,protocol,delivery_version,delivery_options,arm_control='joint_velocity'):
     """Exactly absorb constant physical inputs into the first-layer biases."""
     import copy
     if (checkpoint.get('basket_mixed_protocol')!='mixed37_known_radius_mass_v1'
             or checkpoint.get('basket_trained_ball')!=ball
             or checkpoint.get('basket_ball_protocol')!=protocol
             or checkpoint.get('basket_delivery_version')!=delivery_version
-            or checkpoint.get('basket_delivery_options')!=delivery_options):
+            or checkpoint.get('basket_delivery_options')!=delivery_options
+            or checkpoint.get('basket_arm_control','joint_velocity')!=arm_control):
         raise ValueError('Single mobile source must match ball, physics and delivery reward')
     profile=protocol[ball]
     # Match MixedNormalizer's float32 arithmetic, including physical input rounding.

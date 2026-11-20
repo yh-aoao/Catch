@@ -53,13 +53,13 @@ class JointActorCritic(nn.Module):
     def sigma(self):
         return torch.cat((self.navigation.sigma,self.throw_sigma))
 
-    def import_throw(self, checkpoint, normalizer, finger_options, carry_options):
+    def import_throw(self, checkpoint, normalizer, finger_options, carry_options, arm_control='joint_velocity'):
         # Validate dimensions, action semantics and reward contract before loading.
         if self.throw_dim==37:
             if (checkpoint.get('basket_fixed_protocol')!='aim_carry_fingers_v1'
                     or checkpoint.get('basket_finger_options')!=finger_options
                     or checkpoint.get('basket_carry_options')!=carry_options
-                    or checkpoint.get('basket_arm_control')!='joint_velocity'
+                    or checkpoint.get('basket_arm_control')!=arm_control
                     or checkpoint.get('action_layout')!='arm6_hand12'):
                 raise ValueError('Mixed mobile source finger/carry/action protocol mismatch')
             state=checkpoint['model']
@@ -70,7 +70,7 @@ class JointActorCritic(nn.Module):
             return
         from gym_dcmm.utils.basket_throw_policy import FrozenThrowPolicy
         validated = FrozenThrowPolicy(checkpoint,finger_options,carry_options,
-                                      self.throw_sigma.device)
+                                      self.throw_sigma.device,arm_control=arm_control)
         self.throw_actor.load_state_dict(validated.model.actor_mlp.state_dict(),strict=True)
         self.throw_mu.load_state_dict(validated.model.mu.state_dict(),strict=True)
         with torch.no_grad():self.throw_sigma.copy_(validated.model.sigma)

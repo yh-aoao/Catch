@@ -1,0 +1,62 @@
+{
+  "basket": {
+    "successes": 3,
+    "episodes": 3,
+    "success_rate": 1.0,
+    "object_macro_success_rate": 1.0,
+    "success_metric": "safe_basket_success",
+    "objects": {
+      "original": {
+        "successes": 3,
+        "episodes": 3,
+        "success_rate": 1.0,
+        "wilson_95": [
+          0.43849391955098227,
+          1.0
+        ],
+        "records": [
+          {
+            "episode": 0,
+            "success": true,
+            "reward": 49.81320724590142,
+            "length": 82,
+            "reason": "basket_score",
+            "stable_hold": false,
+            "basket_rehearsal": false
+          },
+          {
+            "episode": 1,
+            "success": true,
+            "reward": 49.085774883236724,
+            "length": 66,
+            "reason": "basket_score",
+            "stable_hold": false,
+            "basket_rehearsal": false
+          },
+          {
+            "episode": 2,
+            "success": true,
+            "reward": 46.07003907881096,
+            "length": 73,
+            "reason": "basket_score",
+            "stable_hold": false,
+            "basket_rehearsal": false
+          }
+        ]
+      }
+    },
+    "seed": 20261119,
+    "phase_groups": {
+      "mobile": {
+        "episodes": 3,
+        "successes": 3,
+        "success_rate": 1.0
+      },
+      "rehearsal": {
+        "episodes": 0,
+        "successes": 0,
+        "success_rate": null
+      }
+    }
+  }
+}

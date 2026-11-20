@@ -21,8 +21,8 @@ LEGACY_OBJECTS={'original','tennis_ball','baseball'}
 def catalog(path=None):
     path=Path(path or DEFAULT_CATALOG).resolve();raw=path.read_bytes();data=json.loads(raw)
     if data.get('schema')!='object_motion_benchmark_v1':raise ValueError('Invalid benchmark catalog schema')
-    allowed={'roll':{'orange','apple','lemon','tomato_soup_can','small_cylinder','tuna_fish_can'}|LEGACY_OBJECTS,
-             'bounce':{'racquetball','golf_ball','softball'}|LEGACY_OBJECTS}
+    allowed={'roll':{'orange','apple','lemon','tomato_soup_can','small_cylinder','tuna_fish_can','peach'}|LEGACY_OBJECTS,
+             'bounce':{'racquetball','golf_ball','softball','table_tennis_ball'}|LEGACY_OBJECTS}
     for motion,names in allowed.items():
         if not data.get(motion) or set(data[motion])-names:raise ValueError('Invalid benchmark objects: '+motion)
         for name,p in data[motion].items():
@@ -202,6 +202,16 @@ def make_object_benchmark(object_benchmark='off',benchmark_catalog=None,benchmar
         accepted=inspect.signature(BounceEnv.__init__).parameters
 
     class BenchmarkObject(Base):
+        def _get_ctrl(self):
+            ctrl=super()._get_ctrl()
+            if selected=='table_tennis_ball':
+                from ycb_objects.unseen_motion import sphere_drag
+                model,d=self.Dcmm.model,self.Dcmm.data
+                bid=model.body('object').id
+                dof=int(model.jnt_dofadr[model.body_jntadr[bid]])
+                radius=float(model.geom_size[model.geom('benchmark_collision').id,0])
+                d.qfrc_applied[dof:dof+3]=sphere_drag(d.qvel[dof:dof+3],radius)
+            return ctrl
         def _reset_object_roll(self):
             return inject(super()._reset_object_roll(),shape,profile,'table_surface')
 
@@ -287,7 +297,7 @@ def make_benchmark_vector(num_envs,benchmark_backend='async',**kwargs):
 
 def write_provenance(output,config,env=None):
     data=catalog(config.get('benchmark_catalog'))
-    names=['train_DCMM.py','configs/config.yaml','gym_dcmm/envs/object_benchmark.py','ycb_objects/benchmark_geometry.py','ycb_objects/benchmark_randomization.py','ycb_objects/episode_randomization.py','gym_dcmm/utils/roll_evaluation.py','gym_dcmm/utils/roll_palm.py','gym_dcmm/utils/roll_grasp.py',
+    names=['train_DCMM.py','configs/config.yaml','gym_dcmm/envs/object_benchmark.py','ycb_objects/benchmark_geometry.py','ycb_objects/unseen_motion.py','ycb_objects/benchmark_randomization.py','ycb_objects/episode_randomization.py','gym_dcmm/utils/roll_evaluation.py','gym_dcmm/utils/roll_palm.py','gym_dcmm/utils/roll_grasp.py',
            'gym_dcmm/envs/roll_physical.py','gym_dcmm/envs/bounce_physical_v2.py',
            'ycb_objects/calibration_data/balls.roll_table_priors_v1.json','ycb_objects/calibration_data/balls.three_ball_training_v1.json']
     result=dict(version=config['object_benchmark'],catalog=data,options=config.get('benchmark_options'),

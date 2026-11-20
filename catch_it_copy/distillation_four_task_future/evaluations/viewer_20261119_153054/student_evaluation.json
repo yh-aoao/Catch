@@ -1,0 +1,89 @@
+{
+  "basket": {
+    "successes": 6,
+    "episodes": 6,
+    "success_rate": 1.0,
+    "object_macro_success_rate": 1.0,
+    "success_metric": "safe_basket_success",
+    "objects": {
+      "original": {
+        "successes": 6,
+        "episodes": 6,
+        "success_rate": 1.0,
+        "wilson_95": [
+          0.6096569663469354,
+          0.9999999999999999
+        ],
+        "records": [
+          {
+            "episode": 0,
+            "success": true,
+            "reward": 39.731064066420586,
+            "length": 17,
+            "reason": "basket_score",
+            "stable_hold": false,
+            "basket_rehearsal": true
+          },
+          {
+            "episode": 1,
+            "success": true,
+            "reward": 46.526238298824076,
+            "length": 110,
+            "reason": "basket_score",
+            "stable_hold": false,
+            "basket_rehearsal": false
+          },
+          {
+            "episode": 2,
+            "success": true,
+            "reward": 47.8057377254676,
+            "length": 79,
+            "reason": "basket_score",
+            "stable_hold": false,
+            "basket_rehearsal": false
+          },
+          {
+            "episode": 3,
+            "success": true,
+            "reward": 49.1103036745112,
+            "length": 85,
+            "reason": "basket_score",
+            "stable_hold": false,
+            "basket_rehearsal": false
+          },
+          {
+            "episode": 4,
+            "success": true,
+            "reward": 49.48909787405847,
+            "length": 83,
+            "reason": "basket_score",
+            "stable_hold": false,
+            "basket_rehearsal": false
+          },
+          {
+            "episode": 5,
+            "success": true,
+            "reward": 49.599507412674534,
+            "length": 89,
+            "reason": "basket_score",
+            "stable_hold": false,
+            "basket_rehearsal": false
+          }
+        ]
+      }
+    },
+    "seed": 20261119,
+    "phase_groups": {
+      "mobile": {
+        "episodes": 5,
+        "successes": 5,
+        "success_rate": 1.0
+      },
+      "rehearsal": {
+        "episodes": 1,
+        "successes": 1,
+        "success_rate": 1.0
+      }
+    }
+  }
+}

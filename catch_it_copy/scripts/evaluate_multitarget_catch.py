@@ -47,6 +47,7 @@ def main():
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('--model-dir',type=Path,default=ROOT.parent/'11-11')
     p.add_argument('--models-file',type=Path,default=DEFAULT_MANIFEST)
+    p.add_argument('--checkpoint',type=Path,help='Override checkpoint for exactly one selected model; relative paths use current directory')
     p.add_argument('--only',nargs='+',help='Subset of model names in the manifest')
     p.add_argument('--episodes',type=int,default=200,help='Completed episodes per model and target')
     p.add_argument('--instances',type=int,default=20,help='Physical samples per DR target; also vector environment count')
@@ -67,6 +68,9 @@ def main():
     if len(set(names))!=len(names):p.error('Model names must be unique')
     if a.only and set(a.only)-set(names):p.error('Unknown model name in --only')
     models=[m.copy() for m in models if not a.only or m['name'] in a.only]
+    if a.checkpoint is not None:
+        if len(models)!=1:p.error('--checkpoint requires exactly one model; use --only to select it')
+        models[0]['checkpoint']=str(a.checkpoint.resolve())
     for m in models:
         if not re.fullmatch(r'[A-Za-z0-9_-]+',m['name']) or m['motion'] not in ('roll','bounce') or m['physics'] not in ('fixed','dr','dr_episode'):
             p.error('Invalid manifest name/motion/physics')
@@ -85,7 +89,7 @@ def main():
     source_names=['scripts/evaluate_multitarget_catch.py','scripts/_eval_multitarget_worker.py','train_DCMM.py',
         'configs/config.yaml','configs/train/DcmmPPO.yaml','gym_dcmm/envs/object_benchmark.py',
         'gym_dcmm/envs/roll_physical.py','gym_dcmm/envs/bounce_physical_v2.py',
-        'ycb_objects/benchmark_geometry.py','ycb_objects/benchmark_randomization.py','ycb_objects/episode_randomization.py',
+        'ycb_objects/benchmark_geometry.py','ycb_objects/unseen_motion.py','ycb_objects/benchmark_randomization.py','ycb_objects/episode_randomization.py',
         'ycb_objects/calibration_data/balls.roll_table_priors_v1.json','ycb_objects/calibration_data/balls.three_ball_training_v1.json',
         'gym_dcmm/envs/DcmmVecEnv_roll_645edc4.py','gym_dcmm/envs/bounce_grasp.py',
         'gym_dcmm/utils/roll_evaluation.py','gym_dcmm/utils/roll_palm.py','gym_dcmm/utils/roll_grasp.py','gym_dcmm/algs/ppo_dcmm_645edc4/ppo_dcmm_catch_two_stage.py',

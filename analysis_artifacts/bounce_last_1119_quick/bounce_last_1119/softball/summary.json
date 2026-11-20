@@ -1,0 +1,67 @@
+{
+  "name": "bounce_last_1119",
+  "motion": "bounce",
+  "physics": "dr",
+  "checkpoint": "/home/isee/Catch/11-19/bounce_catch_last.pth",
+  "checkpoint_sha256": "a2dfa062981dc648b35aab9e70bd526fc71fa30359fd5896194e6e905e9f2968",
+  "radius_scale": 1.0,
+  "mass_policy": "fixed",
+  "object": "softball",
+  "seed": 41000,
+  "episodes": 20,
+  "instances": 4,
+  "case_dir": "/home/isee/Catch/analysis_artifacts/bounce_last_1119_quick/bounce_last_1119/softball",
+  "completed": true,
+  "successes": 3,
+  "success_rate": 0.15,
+  "wilson_95_interval": [
+    0.052368745896216595,
+    0.36041886474075696
+  ],
+  "stable_hold_episodes": null,
+  "stable_hold_rate": null,
+  "reasons": {
+    "controlled_hold": 3,
+    "out_of_bounds": 6,
+    "timeout": 11
+  },
+  "parameter_samples": [
+    {
+      "version": "physical_dr_v1",
+      "sampling": "environment_creation",
+      "size_scale": 1.026781712933732,
+      "mass_scale": 1.0229859363147162,
+      "friction_scale": 0.8818013296000147,
+      "rolling_scale": 1.0,
+      "damping_scale": 0.9252767423709667
+    },
+    {
+      "version": "physical_dr_v1",
+      "sampling": "environment_creation",
+      "size_scale": 1.0256739801382022,
+      "mass_scale": 1.050844164286673,
+      "friction_scale": 1.1122068592837577,
+      "rolling_scale": 1.0,
+      "damping_scale": 0.9598917682468895
+    },
+    {
+      "version": "physical_dr_v1",
+      "sampling": "environment_creation",
+      "size_scale": 1.0169572918099654,
+      "mass_scale": 1.0196718988204032,
+      "friction_scale": 0.9305754087073278,
+      "rolling_scale": 1.0,
+      "damping_scale": 0.9838260852585877
+    },
+    {
+      "version": "physical_dr_v1",
+      "sampling": "environment_creation",
+      "size_scale": 0.9733400778132805,
+      "mass_scale": 0.9709707499734517,
+      "friction_scale": 0.878371807486391,
+      "rolling_scale": 1.0,
+      "damping_scale": 1.051273011297507
+    }
+  ],
+  "wall_seconds": 90.93194161899737
+}

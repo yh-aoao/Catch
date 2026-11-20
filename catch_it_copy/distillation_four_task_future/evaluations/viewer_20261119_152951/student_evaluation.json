@@ -1,0 +1,50 @@
+{
+  "throw": {
+    "successes": 2,
+    "episodes": 3,
+    "success_rate": 0.6666666666666666,
+    "object_macro_success_rate": 0.6666666666666666,
+    "success_metric": "success",
+    "objects": {
+      "original": {
+        "successes": 2,
+        "episodes": 3,
+        "success_rate": 0.6666666666666666,
+        "wilson_95": [
+          0.2076549551264879,
+          0.9385096847238394
+        ],
+        "records": [
+          {
+            "episode": 0,
+            "success": false,
+            "reward": 42.99238115752211,
+            "length": 35,
+            "reason": "ball_left",
+            "stable_hold": false,
+            "basket_rehearsal": false
+          },
+          {
+            "episode": 1,
+            "success": true,
+            "reward": 603.8881398156836,
+            "length": 63,
+            "reason": "unspecified",
+            "stable_hold": false,
+            "basket_rehearsal": false
+          },
+          {
+            "episode": 2,
+            "success": true,
+            "reward": 479.775200489925,
+            "length": 63,
+            "reason": "unspecified",
+            "stable_hold": false,
+            "basket_rehearsal": false
+          }
+        ]
+      }
+    },
+    "seed": 20261119
+  }
+}

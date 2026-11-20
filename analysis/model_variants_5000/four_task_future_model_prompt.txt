@@ -1,0 +1,37 @@
+Use case: infographic-diagram / scientific-educational.
+Create the CURRENT four-task student distillation architecture diagram by extending the reference Future diagram. Match reference white background, pastel rounded rectangles, fine orthogonal arrows, bold readable Chinese typography, blue original backbone, green Future, purple new Basket/control modules, orange dashed training-only boxes. Large wide landscape 4K-like diagram, clear hierarchy, spacious labeled pathways, no overlapping text/lines. This is a precise engineering diagram, not decorative artwork. Title: “四任务蒸馏模型（Future Stable + Basket）”. Subtitle: “Throw / Roll / Bounce / Basket 同时蒸馏 · 共享视觉与时序主干 · 双动作头”.
+
+Upper/main inference area, left→right:
+LEFT INPUTS:
+“Top 深度图”→blue “CNN” and “Wrist 深度图”→separate blue “CNN”, both feed blue “特征拼接”.
+Blue “机器人自身状态（36维）” with small note “底盘 / 末端 / 手指 / 机械臂关节位置与速度”→concat.
+Blue “上一执行动作（20维）”→concat.
+Purple goal input “Basket 目标（5维）\n篮筐相对位置3 + 停车目标2”→purple “目标编码 MLP\n5 → 64 → 64”→purple “按任务指令屏蔽\ncatch 时为0”→same concat.
+Purple “外部任务指令（1维）\n0 = catch / 1 = basket” and purple “Basket 阶段状态（4维）\n投球阶段 / 稳定进度 / 接触状态 / 剩余时间” must also feed concat. Clearly indicate Basket four state dimensions zeroed in catch mode. Group these as explicit context input, NOT train-only. The command additionally routes action-head selection at RIGHT; use distinct purple dashed control arrow (legend says dashed purple=外部控制，not training border).
+All concat→blue “共享 GRU\n时序特征 h（256维）”.
+
+TWO ACTION BRANCHES:
+Upper/catch branch reads h and retains reference Future structure:
+h→green “Future 预测头\n256 → 128 → 9”→green “未来1 / 3 / 5策略步\n三维位移（共9维）”→green “Linear 9 → 256”.
+h direct residual→green circle “+”; mapped Future also→same plus. Plus→blue “抓球动作头\n256 → 512 → 256 → 128 → 20”. Label this branch “catch：Throw / Roll / Bounce”.
+Lower Basket branch reads ORIGINAL h directly (bypasses Future sum),→purple “Basket 动作头\n256 → 512 → 256 → 128 → 20”. Label “basket：移动持球投框”. Do NOT connect Future sum to Basket head.
+Both heads→purple “按任务指令选择”→“Tanh”→purple “Basket 阶段动作屏蔽”→blue final “机器人动作（20维）\n底盘2 + 机械臂6 + 手指12”.
+Stage masking annotation: “catch：全部20维\nBasket导航：底盘2维\nBasket投球：机械臂6 + 手指12”. External stage state drives this masking with control arrow.
+Action-interface small note below output: “抓球：末端增量控制；Basket：关节速度控制”.
+Main label “以上输入与控制路径：训练、推理均使用”. NO Track 8D label, because this new experiment only Catch/Basket20D.
+
+BOTTOM training-only supervision band in orange dashed boxes, visually separate but correct connection arrows from original h or relevant predictions:
+A. “位置辅助监督（仅三个抓球任务）”: original h→“Aux MLP 256 → 128 → 6\n启用位置3维，速度权重0”→“位置 Smooth L1 × 0.1”; “仿真物体真实位置” also feeds same loss.
+B. “Future监督（仅三个抓球任务）”: branch predicted9→“未来位移 Smooth L1 × 0.1”; “仿真轨迹真实位移” also feeds loss; note “仅首次手接触前有效，不跨回合”.
+C. “四教师动作蒸馏（仅训练）”: four compact boxes “Throw教师：单球”, “Roll教师：三球”, “Bounce教师：三球”, “Basket教师：单球”→“按任务匹配的冻结教师动作标签”→“动作模仿损失”; student selected action logits BEFORE Tanh must also feed imitation loss. Can label source “学生选中动作头的 logits（Tanh之前）” instead of long crossing arrow, but connection must be obvious and training-only. Note “Basket仅监督阶段启用的动作组”.
+Training-only boxes never feed object truth/teacher labels as inference inputs.
+Footer exact:
+“四任务等权；Roll / Bounce 内三球等权；各回合按长度归一化”
+“Lcatch = L模仿 + 0.1 L位置 + 0.1 L未来；LBasket = L模仿”
+“Future Stable：5000轮前 lr=3e-4，之后余弦衰减至10000轮 lr=3e-5”
+Add concise clear note “任务指令由外部提供；不输入 Throw/Roll/Bounce 类别、球种、质量或半径”.
+Legend top right should fit compact: blue共享主干/抓球，green Future，purple Basket与显式控制，orange dashed训练监督. Distinguish orange dashed container from purple dashed routing.
+Do not add Contact or learned gates. Do not imply Basket mode is detected automatically from images. Do not show Basket using Future auxiliary supervision. Preserve original diagram’s academic and readable visual style while accurately expanding its architecture.
+
+Targeted correction:
+Precisely edit this architecture diagram. Preserve the entire layout, every existing block, all mathematical dimensions and text, all colors, and arrows except the following local fixes. (1) There is an empty blue rounded box at the left, immediately below “上一步执行动作（20维）” and above “Basket 目标（5维）”. Change that empty block into a PURPLE rounded box labeled “任务指令（1维）”. Keep its existing arrow into “特征拼接”. Add an unambiguous purple control connector from the lower-left “外部任务指令（1维） 0=catch / 1=basket” box to this new “任务指令（1维）” block, with arrowhead at the new block. This is the SAME command fanning out to both GRU input and the action selector; do not imply two independent commands. Route connectors cleanly without crossing through text. (2) In the top-right legend replace “紫虚线箭头：外部控制（不训练）” with “紫虚线：外部指定的控制路由”. The task command and control routing operate in BOTH training and inference; they are externally supplied, not learned. (3) Make the Basket stages label in the input clearly read “投球阶段 / 稳定进度 / 接触状态 / 剩余时间”. Do not alter any other parts. Keep crisp legible high-resolution Chinese text, preserve white background, blue shared original network, green Future, purple Basket, orange dashed train-only panels. Do not add blank blocks.

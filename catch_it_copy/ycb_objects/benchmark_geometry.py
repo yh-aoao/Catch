@@ -31,6 +31,17 @@ def mesh_points(model,data,geom):
 
 @lru_cache(maxsize=16)
 def geometry(name,kind,factor=.4):
+    if name=='table_tennis_ball':
+        if kind!='sphere':raise ValueError('Table tennis ball requires sphere kind')
+        # Real standard-size plastic table-tennis ball, not a YCB asset.
+        radius=.020;mass=.0027;diagonal=np.full(3,(2/3)*mass*radius**2)
+        root=ET.Element('mujoco');body=ET.SubElement(ET.SubElement(root,'worldbody'),'body',name='object')
+        ET.SubElement(body,'inertial',mass=str(mass),pos='0 0 0',diaginertia=' '.join(map(str,diagonal)))
+        ET.SubElement(body,'geom',name='benchmark_collision',type='sphere',size=str(radius),mass='0',rgba='.95 .95 .95 1',contype='1',conaffinity='1')
+        ET.SubElement(body,'geom',name='object',type='sphere',size=str(radius),mass='0',contype='0',conaffinity='0',rgba='0 0 0 0',group='5')
+        return dict(xml=ET.tostring(root,encoding='unicode'),kind=kind,mass=mass,radius=radius,marker_radius=radius,
+                    points=np.zeros((1,3)),long_axis=np.array([0.,0.,1.]),inertia=diagonal,extents=[2*radius]*3,
+                    com_source=[0.,0.,0.],inertia_basis='thin spherical shell approximation; real standard 40mm/2.7g ball')
     if name=='small_cylinder':
         if kind!='cylinder':raise ValueError('small_cylinder requires cylinder kind')
         radius=.028;half_length=.045;mass=.065

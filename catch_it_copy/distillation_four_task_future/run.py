@@ -145,14 +145,15 @@ def optimize(student,optimizer,batch,config):
 
 
 @torch.no_grad()
-def evaluate(config,adapters,student,output):
+def evaluate(config,adapters,student,output,tasks=None,viewer=False):
     student.eval();results={}
-    for ti,task in enumerate(TASKS):
+    for task in tasks or TASKS:
+        ti=TASKS.index(task)
         objects={};cfg=config['tasks'][task];count=config['eval_episodes']//len(cfg['objects'])
         for oi,obj in enumerate(cfg['objects']):
             pool=None;rows=[];reward_sum=0.;length=0
             try:
-                pool=Pool(task,env_config(config,task),1,config['evaluation_seed']+1000000+ti*10000+oi*1009,objects=[obj])
+                pool=Pool(task,env_config(config,task),1,config['evaluation_seed']+1000000+ti*10000+oi*1009,viewer=viewer,objects=[obj])
                 previous=np.zeros((1,20),np.float32);hidden=None
                 rehearsal=bool(np.asarray(pool.obs['teacher_obs'].get('basket_rehearsal',[False])).reshape(-1)[0])
                 for _ in range(count*config['max_episode_steps']+1):
@@ -280,7 +281,10 @@ def main():
     for flag in ('iterations','num-envs','episodes','eval-start','eval-every','seed','eval-seed'):p.add_argument('--'+flag,type=int)
     p.add_argument('--skip-teacher-baseline',action='store_true');p.add_argument('--allow-source-changes',action='store_true')
     p.add_argument('--check-steps',type=int,default=2)
+    p.add_argument('--viewer',action='store_true',help='Open a passive MuJoCo viewer during student evaluation')
+    p.add_argument('--tasks',nargs='+',choices=TASKS,help='Evaluation only: select tasks to view/test')
     args=p.parse_args()
+    if (args.viewer or args.tasks) and args.command!='eval':p.error('--viewer and --tasks are evaluation only')
     os.environ.setdefault('OMP_NUM_THREADS','1');os.environ.setdefault('OPENBLAS_NUM_THREADS','1');os.environ.setdefault('MKL_NUM_THREADS','1')
     if args.egl_device_id is not None:
         if args.egl_device_id<0:p.error('EGL device must be nonnegative')
@@ -298,6 +302,7 @@ def main():
     for flag,key in [('iterations','iterations'),('num_envs','num_envs_per_task'),('episodes','eval_episodes'),('eval_start','eval_start'),('eval_every','eval_every'),('seed','seed'),('eval_seed','evaluation_seed')]:
         if getattr(args,flag) is not None:config[key]=getattr(args,flag)
     if args.gl_backend:config['vision']['gl_backend']=args.gl_backend
+    elif args.viewer:config['vision']['gl_backend']='glfw'
     config['device']=args.device or ('cpu' if args.command=='check' else config['device'])
     if args.skip_teacher_baseline:config['skip_teacher_baseline']=True
     validate(config)
@@ -312,7 +317,7 @@ def main():
         if changed and not args.allow_source_changes:raise ValueError('Source changed; review before --allow-source-changes')
         save_json(args.output/'evaluation_audit.json',dict(checkpoint_sha256=sha256(args.checkpoint),iteration=saved['iteration'],source_changes=changed,config=config))
         student=Student(config).to(config['device']);student.load_state_dict(saved['student'],strict=True)
-        evaluate(config,adapters,student,args.output/'student_evaluation.json');return
+        evaluate(config,adapters,student,args.output/'student_evaluation.json',tasks=args.tasks,viewer=args.viewer);return
     teachers={t:FrozenTeacher(t,c,config['device']) for t,c in config['tasks'].items()}
     checks={t:teacher.parity() for t,teacher in teachers.items()};save_json(args.output/'teacher_check.json',checks);print(json.dumps(checks,indent=2),flush=True)
     save_json(args.output/'resolved_config.json',config)

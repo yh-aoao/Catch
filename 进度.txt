@@ -1668,3 +1668,17 @@ bash scripts/train_targets_creation_dr_v2.sh roll catch \
   device_id=0
 
   211：roll207：bounce
+
+
+python -m distillation_four_task_future.run eval \
+  --checkpoint /home/isee/Catch/11-19/student_last.pth \
+  --output "distillation_four_task_future/evaluations/viewer_$(date +%Y%m%d_%H%M%S)" \
+  --tasks roll \
+  --viewer \
+  --gl-backend glfw \
+  --device cuda:0 \
+  --episodes 12 \
+  --eval-seed 20261119 \
+  --allow-source-changes
+
+  

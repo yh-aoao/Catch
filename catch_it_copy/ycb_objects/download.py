@@ -1,11 +1,12 @@
 """Download selected elpis-lab YCB assets; no repository code is executed."""
-import argparse, json, hashlib, urllib.request
+import argparse, json, hashlib, urllib.request, re
 from pathlib import Path
 import xml.etree.ElementTree as ET
 
 def main():
-    p=argparse.ArgumentParser(); p.add_argument('--objects', nargs='+', default=['tennis_ball','baseball','tomato_soup_can']); a=p.parse_args()
-    revision=json.load(urllib.request.urlopen('https://api.github.com/repos/elpis-lab/YCB_Dataset/commits/main'))['sha']
+    p=argparse.ArgumentParser(); p.add_argument('--objects', nargs='+', default=['tennis_ball','baseball','tomato_soup_can']); p.add_argument('--revision',help='Pinned 40-character commit SHA; avoids GitHub API rate limits'); a=p.parse_args()
+    if a.revision and not re.fullmatch(r'[0-9a-fA-F]{40}',a.revision):p.error('revision must be a 40-character commit SHA')
+    revision=a.revision or json.load(urllib.request.urlopen('https://api.github.com/repos/elpis-lab/YCB_Dataset/commits/main'))['sha']
     root=Path(__file__).resolve().parents[1]/'assets/ycb'; root.mkdir(parents=True,exist_ok=True)
     base='https://raw.githubusercontent.com/elpis-lab/YCB_Dataset/'+revision+'/'
     for name in a.objects:

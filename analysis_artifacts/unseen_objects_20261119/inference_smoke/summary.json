@@ -1,0 +1,79 @@
+[
+  {
+    "name": "bounce_unseen_1119",
+    "motion": "bounce",
+    "physics": "dr",
+    "checkpoint": "/home/isee/Catch/11-19/bounce_catch_best_reward_2.11.pth",
+    "checkpoint_sha256": "afa5989e1163bd1f4bb5c02f5f031fe55e94b76ca96b6efed5956a580de2c9fa",
+    "radius_scale": 1.0,
+    "mass_policy": "fixed",
+    "object": "table_tennis_ball",
+    "seed": 41000,
+    "episodes": 1,
+    "instances": 1,
+    "case_dir": "/home/isee/Catch/analysis_artifacts/unseen_objects_20261119/inference_smoke/bounce_unseen_1119/table_tennis_ball",
+    "completed": true,
+    "successes": 0,
+    "success_rate": 0.0,
+    "wilson_95_interval": [
+      0.0,
+      0.7934506856227626
+    ],
+    "stable_hold_episodes": null,
+    "stable_hold_rate": null,
+    "reasons": {
+      "timeout": 1
+    },
+    "parameter_samples": [
+      {
+        "version": "physical_dr_v1",
+        "sampling": "environment_creation",
+        "size_scale": 1.026781712933732,
+        "mass_scale": 1.0229859363147162,
+        "friction_scale": 0.8818013296000147,
+        "rolling_scale": 1.0,
+        "damping_scale": 0.9252767423709667
+      }
+    ],
+    "wall_seconds": 4.859492772986414
+  },
+  {
+    "name": "roll_unseen_1119",
+    "motion": "roll",
+    "physics": "dr",
+    "checkpoint": "/home/isee/Catch/11-19/roll_catch_best_reward_376.90.pth",
+    "roll_palm_version": "palm_z_v1",
+    "checkpoint_sha256": "f281b79fdeea4ef3f5979011c49215fd59239dc73b087c4d7fbc5f1756807dcf",
+    "radius_scale": 1.0,
+    "mass_policy": "fixed",
+    "object": "peach",
+    "seed": 41000,
+    "episodes": 1,
+    "instances": 1,
+    "case_dir": "/home/isee/Catch/analysis_artifacts/unseen_objects_20261119/inference_smoke/roll_unseen_1119/peach",
+    "completed": true,
+    "successes": 1,
+    "success_rate": 1.0,
+    "wilson_95_interval": [
+      0.20654931437723745,
+      1.0
+    ],
+    "stable_hold_episodes": 0,
+    "stable_hold_rate": 0.0,
+    "reasons": {
+      "timeout": 1
+    },
+    "parameter_samples": [
+      {
+        "version": "physical_dr_v1",
+        "sampling": "environment_creation",
+        "size_scale": 1.026781712933732,
+        "mass_scale": 1.0229859363147162,
+        "friction_scale": 0.8818013296000147,
+        "rolling_scale": 0.8505534847419334,
+        "damping_scale": 1.0
+      }
+    ],
+    "wall_seconds": 1.6872678479994647
+  }
+]

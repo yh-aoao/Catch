@@ -38,8 +38,9 @@ def region_state(nominal,base_position,yaw,cfg,values):
 class BasketFreeStopEnv(BasketMixedEnv):
     def __init__(self,basket_free_stop=None,**kwargs):
         self.free_stop_options=options(basket_free_stop)
-        if kwargs.get('basket_reward_version')!='basket_mobile_v1' or kwargs.get('basket_mixed_ball')!='mixed':
-            raise ValueError('Free stopping requires the conditional three-ball mobile task')
+        if (kwargs.get('basket_reward_version')!='basket_mobile_v1'
+                or kwargs.get('basket_mixed_ball') not in ('mixed','tennis_ball','baseball')):
+            raise ValueError('Free stopping requires a supported mixed/single-ball mobile task')
         mobile=kwargs.get('basket_mobile_options',{})
         if mobile.get('hold_position') or mobile.get('approach_braking'):
             raise ValueError('Free stopping requires policy braking; disable fixed position/approach brakes')

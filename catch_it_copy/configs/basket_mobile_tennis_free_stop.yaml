@@ -1,0 +1,16 @@
+# Stage two: inherit the NEW single-tennis range policy and learn where to stop.
+defaults:
+  - basket_mobile_tennis
+  - _self_
+basket_throw_checkpoint: '' # Required: checkpoint from basket_tennis_range.
+checkpoint_catching: ''
+checkpoint_tracking: ''
+basket_mixed_source: ''
+basket_warm_start: ''
+basket_range: {}
+basket_free_stop:
+  y_offset_range: [-0.08, 0.08]
+basket_mobile:
+  hold_position: false
+  approach_braking: false
+output_name: BasketTennisFreeStop

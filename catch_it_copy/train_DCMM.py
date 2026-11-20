@@ -118,8 +118,8 @@ def main(config: DictConfig):
     single_mobile=(mixed_basket and config.basket_reward_version=='basket_mobile_v1'
                    and config.basket_training_stage=='mobile_joint'
                    and mixed_ball in ('mixed','tennis_ball','baseball'))
-    if config.get('basket_free_stop') and not (single_mobile and mixed_ball=='mixed'):
-        raise ValueError('basket_free_stop requires three-ball mobile_joint')
+    if config.get('basket_free_stop') and not single_mobile:
+        raise ValueError('basket_free_stop requires a mixed/single-ball mobile_joint task')
     if single_mobile and (config.test_object!='default' or config.object_eval or config.basket_mixed_source):
         raise ValueError('Single mobile uses basket_throw_checkpoint and its native ball physics')
     if mixed_basket:

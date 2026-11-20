@@ -21,7 +21,7 @@ LEGACY_OBJECTS={'original','tennis_ball','baseball'}
 def catalog(path=None):
     path=Path(path or DEFAULT_CATALOG).resolve();raw=path.read_bytes();data=json.loads(raw)
     if data.get('schema')!='object_motion_benchmark_v1':raise ValueError('Invalid benchmark catalog schema')
-    allowed={'roll':{'orange','apple','lemon','tomato_soup_can','small_cylinder','tuna_fish_can','peach'}|LEGACY_OBJECTS,
+    allowed={'roll':{'orange','apple','lemon','tomato_soup_can','small_cylinder','tuna_fish_can','peach','chips_can','coke_can'}|LEGACY_OBJECTS,
              'bounce':{'racquetball','golf_ball','softball','table_tennis_ball'}|LEGACY_OBJECTS}
     for motion,names in allowed.items():
         if not data.get(motion) or set(data[motion])-names:raise ValueError('Invalid benchmark objects: '+motion)

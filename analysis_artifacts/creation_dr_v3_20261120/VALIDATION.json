@@ -1,0 +1,38 @@
+{
+  "version": "creation_dr_v3",
+  "targets": {
+    "roll": [
+      "original",
+      "tennis_ball",
+      "baseball",
+      "orange",
+      "apple",
+      "tomato_soup_can",
+      "coke_can"
+    ],
+    "bounce": [
+      "original",
+      "tennis_ball",
+      "baseball",
+      "racquetball",
+      "golf_ball"
+    ]
+  },
+  "default_num_envs": {
+    "roll": 28,
+    "bounce": 20
+  },
+  "parameter_sampling": "environment_creation",
+  "physical_randomization_ranges": "unchanged full physical_dr_v1",
+  "roll_palm_version": "palm_z_v1",
+  "training": "fresh Track then Catch initialized from new Track",
+  "short_ppo_checks": {
+    "roll_track": "passed",
+    "roll_catch": "passed",
+    "bounce_track": "passed",
+    "bounce_catch": "passed"
+  },
+  "formal_training_started": false,
+  "old_configs_preserved": true,
+  "coke_can_mass_kg": 0.39
+}

@@ -87,6 +87,9 @@ def geometry(name,kind,factor=.4):
         # unlike the taller soup can. The longest axis would turn a diameter
         # into the cylinder height.
         if name=='tuna_fish_can':long_axis=vectors[:,0]
+        # Source Coke mesh is authored along Z. Preserve that exact axis;
+        # vertex-density PCA can tilt it and inflate the fitted radius.
+        if name=='coke_can':long_axis=np.array([0.,0.,1.])
         transform=align(long_axis,[0,0,1]);canonical=centered@transform.T
         # Fit cylinder to the source can's principal axis and radial extent.
         radius=float(np.percentile(np.linalg.norm(canonical[:,:2],axis=1),99.5))

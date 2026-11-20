@@ -1,0 +1,53 @@
+{
+  "schema": "object_motion_benchmark_v1",
+  "surface_id": "generic_dry_rigid_surface_prior_v1",
+  "status": "held_out_chips_can; imported YCB geometry/mass, homogeneous-cylinder inertia and surface materials are approximations",
+  "sources": {
+    "ycb": "https://ycb-benchmarks.s3.amazonaws.com/index.html",
+    "table_tennis_standard": "https://nttc.nl/wp-content/uploads/2015/05/ITTF_T3.pdf"
+  },
+  "roll": {
+    "chips_can": {
+      "kind": "cylinder",
+      "sliding_friction": 0.3,
+      "torsional_length_m": 0.0001,
+      "rolling_length_m": 2e-05,
+      "time_constant": 0.008,
+      "distance_m": [
+        2.0,
+        2.2
+      ],
+      "speed_mps": [
+        0.8,
+        1.3
+      ]
+    }
+  },
+  "bounce": {
+    "table_tennis_ball": {
+      "kind": "sphere",
+      "inertia_factor": 0.6666666666666666,
+      "sliding_friction": 0.3,
+      "torsional_length_m": 0.0001,
+      "time_constant": 0.008,
+      "damping_ratio": 0.042,
+      "normal_cor_target": 0.88,
+      "cor_basis": "engineering prior for generic floor, not ITTF steel-block measurement",
+      "launch_height_m": [
+        0.9,
+        1.2
+      ],
+      "rebound_apex_m": [
+        0.65,
+        0.85
+      ],
+      "horizontal_retention_prior": 0.75,
+      "drag_model": {
+        "type": "quadratic_sphere",
+        "air_density_kg_m3": 1.225,
+        "drag_coefficient": 0.47,
+        "limitations": "constant Cd; no wind, lift or spin-induced aerodynamic forces"
+      }
+    }
+  }
+}

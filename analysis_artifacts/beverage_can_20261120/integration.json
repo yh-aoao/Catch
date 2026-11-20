@@ -1,0 +1,30 @@
+{
+  "object": "coke_can",
+  "source": "Open Robotics gazebo_models; NON-YCB",
+  "nominal_mass_kg": 0.39,
+  "mass_status": "upstream model mass, not empty-can measurement",
+  "nominal_fitted_dimensions_m": [
+    0.06734764483028408,
+    0.06734764483028408,
+    0.12389999734188908
+  ],
+  "collision": "analytical cylinder fitted to source mesh; uniform solid inertia approximation",
+  "visual": "converted original textured Collada; millimeters to meters",
+  "training_catalogs_changed": false,
+  "passive_trials": 40,
+  "passive_crossings": 40,
+  "launch_y": [
+    2.0,
+    2.2
+  ],
+  "launch_speed": [
+    0.8,
+    1.3
+  ],
+  "contact_parameters": "generic can priors; not measured",
+  "limitations": [
+    "Rigid mass distribution, no liquid slosh or can deformation",
+    "Source model is not a measured empty can",
+    "Physical DR samples on environment creation; launch resamples each episode"
+  ]
+}

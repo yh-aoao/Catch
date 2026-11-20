@@ -1,0 +1,42 @@
+usage: evaluate_multitarget_catch.py [-h] [--model-dir MODEL_DIR]
+                                     [--models-file MODELS_FILE]
+                                     [--checkpoint CHECKPOINT]
+                                     [--only ONLY [ONLY ...]]
+                                     [--episodes EPISODES]
+                                     [--instances INSTANCES] [--jobs JOBS]
+                                     [--seed SEED]
+                                     [--objects OBJECTS [OBJECTS ...]]
+                                     [--catalog CATALOG] [--output OUTPUT]
+                                     [--radius-scale RADIUS_SCALE]
+                                     [--mass-policy {fixed,density}]
+                                     [--resume]
+
+Headless multi-target Catch evaluation. Run with the dcmm Python.
+
+options:
+  -h, --help            show this help message and exit
+  --model-dir MODEL_DIR
+  --models-file MODELS_FILE
+  --checkpoint CHECKPOINT
+                        Override checkpoint for exactly one selected model;
+                        relative paths use current directory
+  --only ONLY [ONLY ...]
+                        Subset of model names in the manifest
+  --episodes EPISODES   Completed episodes per model and target
+  --instances INSTANCES
+                        Physical samples per DR target; also vector
+                        environment count
+  --jobs JOBS           Concurrent model/target jobs; each uses instances
+                        synchronous envs
+  --seed SEED
+  --objects OBJECTS [OBJECTS ...]
+                        Optional target subset, primarily for smoke tests
+  --catalog CATALOG
+  --output OUTPUT
+  --radius-scale RADIUS_SCALE
+                        Original ball nominal radius multiplier; requires
+                        --objects original and dr_episode
+  --mass-policy {fixed,density}
+                        Keep mass, or multiply mass by radius-scale cubed
+  --resume              Skip complete cases only, validating the original run
+                        settings

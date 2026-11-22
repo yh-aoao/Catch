@@ -1,0 +1,490 @@
+{
+  "seed": 123,
+  "device": "cpu",
+  "learning_rate": 0.0003,
+  "num_envs_per_task": 8,
+  "iterations": 10000,
+  "rollout_steps": 64,
+  "updates_per_iteration": 8,
+  "calibration_steps": 128,
+  "eval_every": 1000,
+  "eval_episodes": 300,
+  "baseline_episodes": 300,
+  "max_eval_steps": 100000,
+  "tasks": {
+    "throw": {
+      "checkpoint": "../11-19/throw_catch_best_reward_515.51.pth",
+      "sha256": "9f6310e6e6d99730362d26af8e8353844256778fbfaf10a8a845da46500269bf",
+      "objects": [
+        "sphere",
+        "box",
+        "cylinder",
+        "capsule",
+        "ellipsoid"
+      ],
+      "action_scales": [
+        1.5,
+        0.025,
+        0.15
+      ],
+      "env_kwargs": {
+        "throw_generalization": "multishape_v1"
+      },
+      "family": "ppo_dcmm",
+      "success_metric": "success",
+      "expected_action_dim": 20,
+      "action_indices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19
+      ],
+      "env_factory": "distillation_visual_basket.factories:make_catch"
+    },
+    "roll": {
+      "checkpoint": "../11-22/roll_catch_best_reward_403.15.pth",
+      "sha256": "ea0e8947dab7b8b0f7e5b300e88d65eed91018f43f8afd43216cb5b8a77e872d",
+      "objects": [
+        "original",
+        "tennis_ball",
+        "baseball",
+        "orange",
+        "apple",
+        "tomato_soup_can",
+        "coke_can"
+      ],
+      "action_scales": [
+        1.5,
+        0.025,
+        0.15
+      ],
+      "env_kwargs": {
+        "roll_physics": "physical_v1",
+        "roll_material_file": null,
+        "roll_reward_version": "legacy",
+        "roll_speed": [
+          0.8,
+          1.3
+        ],
+        "roll_ball_mode": "fixed",
+        "roll_wait_guard": false,
+        "object_benchmark": "roll_v1",
+        "benchmark_catalog": "ycb_objects/calibration_data/object_benchmark_creation_v3.json",
+        "benchmark_options": {
+          "domain_randomization": "physical_dr_v1"
+        },
+        "roll_palm_version": "palm_z_v1"
+      },
+      "family": "ppo_dcmm_645edc4",
+      "success_metric": "roll_eval_success",
+      "expected_action_dim": 20,
+      "action_indices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19
+      ],
+      "env_factory": "distillation_visual_basket.factories:make_catch"
+    },
+    "bounce": {
+      "checkpoint": "../11-22/bounce_catch_best_reward_14.04.pth",
+      "sha256": "3b99ee7b3c09e98a250448f505560b5522fd9856903a6bacc22ee3a84cd283d8",
+      "objects": [
+        "original",
+        "tennis_ball",
+        "baseball",
+        "racquetball",
+        "golf_ball"
+      ],
+      "action_scales": [
+        1.5,
+        0.025,
+        0.08
+      ],
+      "env_kwargs": {
+        "bounce_physics": "physical_v2",
+        "bounce_launch": "baseball_intercept_v1",
+        "bounce_material_file": null,
+        "bounce_grasp_version": "controlled_hold_v1",
+        "bounce_grasp": {
+          "finger_backfold_weight": 0.15,
+          "finger_prepare_sync_weight": 0.05,
+          "finger_contact_weight": 1.0,
+          "thumb_opposition_weight": 0.5
+        },
+        "bounce_v2": {
+          "height": [
+            0.9,
+            1.1
+          ],
+          "distance": [
+            1.6,
+            2.0
+          ],
+          "speed": [
+            1.3,
+            1.7
+          ],
+          "vertical_speed": [
+            -0.2,
+            -0.2
+          ],
+          "heading_degrees": [
+            -15.0,
+            15.0
+          ],
+          "spin_factor": [
+            0.5,
+            1.5
+          ],
+          "damping_ratio": [
+            0.11,
+            0.11
+          ],
+          "ground_friction": 0.3,
+          "time_constant": 0.008,
+          "mass_jitter": 0.1,
+          "radius_jitter": 0.05
+        },
+        "bounce_ball_mode": "fixed",
+        "object_benchmark": "bounce_v1",
+        "benchmark_catalog": "ycb_objects/calibration_data/object_benchmark_creation_v3.json",
+        "benchmark_options": {
+          "domain_randomization": "physical_dr_v1"
+        }
+      },
+      "family": "ppo_dcmm_5fe75d5f",
+      "success_metric": "success",
+      "expected_action_dim": 20,
+      "action_indices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19
+      ],
+      "env_factory": "distillation_visual_basket.factories:make_catch"
+    },
+    "basket": {
+      "checkpoint": "../11-22/throw_basket_catch_best_reward_40.98.pth",
+      "sha256": "ebff17572a69874d753d42178e1cbaf3dc118858a32fdf606fa41f04d4a82443",
+      "objects": [
+        "tennis_ball"
+      ],
+      "action_scales": [
+        0.3,
+        0.025,
+        0.15
+      ],
+      "env_kwargs": {
+        "env_time": 10.0,
+        "basket_arm_control": "joint_velocity",
+        "basket_reward_version": "basket_mobile_v1",
+        "basket_fixed_base_training": false,
+        "basket_fixed_physical": true,
+        "basket_carry_reward": true,
+        "basket_finger_reward": true,
+        "basket_mobile_options": {
+          "target_x_range": [
+            -0.2,
+            0.2
+          ],
+          "target_y_range": [
+            1.15,
+            1.55
+          ],
+          "max_time": 10.0,
+          "max_speed": 0.3,
+          "max_acceleration": 0.35,
+          "position_tolerance": 0.04,
+          "speed_tolerance": 0.04,
+          "settle_seconds": 0.3,
+          "carry_settle_seconds": 0.1,
+          "brake_after_unlock": true,
+          "approach_braking": false,
+          "preserve_fixed_throw": true,
+          "parking_only": false,
+          "hold_position": false,
+          "settle_contact_grace": 0.03,
+          "release_speed_tolerance": 0.15,
+          "release_position_tolerance": 0.08,
+          "post_ready_seconds": 2.5,
+          "fixed_throw_probability": 0.0,
+          "hold_only": false,
+          "hold_time_range": [
+            0.0,
+            0.0
+          ],
+          "collision_free_spawn": true,
+          "hold_aim_bonus": 0.0,
+          "arm_drive_bonus": 0.0,
+          "hold_ball_speed_tolerance": 0.15,
+          "hold_arm_offset_deg": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "hold_hand_flex": [
+            1.0,
+            0.9,
+            0.9
+          ],
+          "hold_thumb_flex": [
+            0.4,
+            0.4,
+            0.4
+          ],
+          "hold_ball_local": [
+            0.0,
+            0.03,
+            0.07
+          ]
+        },
+        "basket_finger_options": {
+          "sync_weight": 2.0,
+          "coupling_weight": 1.0,
+          "extension_weight": 2.0,
+          "post_release_weight": 1.0,
+          "smooth_weight": 0.01,
+          "sync_tolerance": 0.2,
+          "coupling_tolerance": 0.25,
+          "extension_margin": 0.05,
+          "limit_margin": 0.03,
+          "extension_scale": 0.25,
+          "post_release_ramp": 0.15,
+          "long_open": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "thumb_open": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "basket_carry_options": {
+          "forward_distance": 0.06,
+          "forward_speed": 0.3,
+          "forward_bonus": 2.0,
+          "position_bonus": 1.0,
+          "slip_cost": 2.0,
+          "release_bonus": 2.0,
+          "local_tolerance": [
+            0.008,
+            0.015,
+            0.01
+          ],
+          "local_sigma": [
+            0.015,
+            0.02,
+            0.015
+          ]
+        },
+        "basket_delivery_version": "ballistic_v2",
+        "basket_delivery_options": {
+          "aim_sigma": 0.35,
+          "progress_bonus": 8.0,
+          "miss_cost": 8.0,
+          "launch_scale": 0.4,
+          "flight_scale": 0.6
+        },
+        "basket_free_stop": {
+          "y_offset_range": [
+            -0.08,
+            0.08
+          ]
+        },
+        "basket_mixed_ball": "tennis_ball"
+      },
+      "family": "basket_mobile_joint",
+      "success_metric": "safe_basket_success",
+      "expected_action_dim": 20,
+      "action_indices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19
+      ],
+      "env_factory": "distillation_visual_basket.factories:AutonomousBasketEnv"
+    }
+  },
+  "env_kwargs": {
+    "camera_name": [
+      "top"
+    ],
+    "render_per_step": false,
+    "render_mode": "rgb_array",
+    "object_name": "object",
+    "img_size": [
+      160,
+      160
+    ],
+    "imshow_cam": false,
+    "print_obs": false,
+    "print_info": false,
+    "print_reward": false,
+    "print_ctrl": false,
+    "print_contacts": false,
+    "object_eval": false,
+    "env_time": 2.5,
+    "steps_per_policy": 20,
+    "bounce_log": false,
+    "basket_log": false,
+    "roll_log": false
+  },
+  "evaluation_revision": "2026-10-12-bounce-catch-v2",
+  "stage": "catch",
+  "save_every": 200,
+  "capacity_frames_per_task": 8192,
+  "max_episode_steps": 512,
+  "bptt_steps": 16,
+  "loss": "bce",
+  "model": {
+    "cnn_channels": [
+      16,
+      32,
+      32
+    ],
+    "cnn_kernels": [
+      5,
+      4,
+      3
+    ],
+    "cnn_strides": [
+      2,
+      2,
+      1
+    ],
+    "embedding": 128,
+    "gru_hidden": 256,
+    "mlp_hidden": [
+      512,
+      256,
+      128
+    ]
+  },
+  "vision": {
+    "camera": "top",
+    "height": 160,
+    "width": 160,
+    "near": 0.1,
+    "far": 5.0,
+    "gl_backend": "egl",
+    "cameras": [
+      {
+        "name": "top",
+        "near": 0.1,
+        "far": 5.0
+      },
+      {
+        "name": "wrist",
+        "near": 0.01,
+        "far": 1.5
+      }
+    ]
+  },
+  "auxiliary": {
+    "position_weight": 0.1,
+    "velocity_weight": 0.0,
+    "scales": [
+      1.0,
+      1.0,
+      1.0,
+      5.0,
+      5.0,
+      5.0
+    ]
+  },
+  "experiment": {
+    "variant": "visual_basket_autonomous",
+    "student_context": "task_command_only",
+    "basket_position": "training_supervision_only",
+    "basket_controller": "no_phase_gating"
+  },
+  "skip_teacher_baseline": true,
+  "eval_start": 5000,
+  "evaluation_seed": 20261117,
+  "lr_schedule": {
+    "kind": "cosine",
+    "start": 5000,
+    "end": 10000,
+    "minimum": 3e-05
+  },
+  "diagnostics_every": 100,
+  "schema": "visual_basket_autonomous_v1",
+  "batch_episodes_per_object": 1,
+  "source_contract_note": "Teacher target sets/creation DR reconstructed from local evaluation/configs; catch checkpoints lack full environment manifests.",
+  "basket_position_weight": 0.1,
+  "batch_episodes_per_task": 2,
+  "teacher_mix_start": 0.8,
+  "teacher_mix_min": 0.1,
+  "teacher_mix_decay": 5000,
+  "eval_num_envs": 4
+}

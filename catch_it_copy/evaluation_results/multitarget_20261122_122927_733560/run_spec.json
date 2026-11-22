@@ -1,0 +1,42 @@
+{
+  "radius_scale": 1.0,
+  "mass_policy": "fixed",
+  "episodes": 200,
+  "instances": 4,
+  "seed": 41000,
+  "models": [
+    {
+      "name": "roll_seven_1122",
+      "motion": "roll",
+      "physics": "dr",
+      "checkpoint": "/home/yuhao2/Catch/catch_it_copy/outputs/roll_seven_object_beverage_catch_creation_dr_v3_seed123/2026-11-21/01:46:33/nn/roll_catch_best_reward_403.15.pth",
+      "roll_palm_version": "palm_z_v1",
+      "checkpoint_sha256": "ea0e8947dab7b8b0f7e5b300e88d65eed91018f43f8afd43216cb5b8a77e872d"
+    }
+  ],
+  "objects": null,
+  "catalog_sha256": "60abd77bbce61784f70db67a923a8970ce1e2e94db556aea4c695cfe384af498",
+  "source_sha256": {
+    "scripts/evaluate_multitarget_catch.py": "cb25af5bf579bf6bf1f96dc5c22c2649ebaad30819ebb0790e6cc3a3899f983c",
+    "scripts/_eval_multitarget_worker.py": "1e6a8a4824a3e04dd1157806922d29053e8240adfd6b8a395a646fcb3ae22918",
+    "train_DCMM.py": "0237a2228c49f5d71572e2237c60bad8cab4d6368164365c20c501d9a3af2f5c",
+    "configs/config.yaml": "6d0b717c0cd9e0c304907f471086ea5858a0c203b2ad30a88d0c618e33e5c4ce",
+    "configs/train/DcmmPPO.yaml": "24b38442bdddc431f3a6ab9e6b52d9f30c0a49933eebeeb5e8ea13494ac736ee",
+    "gym_dcmm/envs/object_benchmark.py": "ae616b81ab2276471637398c63d81225b011c7953b39e41c73cc69519a2fd135",
+    "gym_dcmm/envs/roll_physical.py": "4edd108c4e14cfffc674c4096c19b0fa50ad294e44e4bc04e5f8f21e4f842ee2",
+    "gym_dcmm/envs/bounce_physical_v2.py": "1cb1e455f45fb123e94c41aa58ce7ad43f298025e3bd538944a1aa002a2cc43f",
+    "ycb_objects/benchmark_geometry.py": "b9d384c84d08ef8b52f384f04f091027d504d2d67696d579eff681ba41371f98",
+    "ycb_objects/unseen_motion.py": "56008701ea06972b7b4fc47c81dacf26da63ae576d5943a0a5b52313c44fe602",
+    "ycb_objects/benchmark_randomization.py": "1358a6d670ed566ad673a8c26d8100437744dc453e81d5a3d100b493769a049b",
+    "ycb_objects/episode_randomization.py": "f3ea2cb0fee3838c36bdd18f3a9d8ea2adff858a6b2534290f6347f7a8bffa50",
+    "ycb_objects/calibration_data/balls.roll_table_priors_v1.json": "d6c3da0c92a73ade608f0509e44ab92ab14eafadb40a100a173e4ec899806a14",
+    "ycb_objects/calibration_data/balls.three_ball_training_v1.json": "4f8b6b5397ae56eae3c46af8a2e96d348e8477511cb56a1960d575f60083488e",
+    "gym_dcmm/envs/DcmmVecEnv_roll_645edc4.py": "3c93bb99557cac7c4eeeeda034aaceb14803041e50d04e0d35572a0aa2f07cbe",
+    "gym_dcmm/envs/bounce_grasp.py": "f130370f930c412d7fbf9793e12ed12cae91c34551a6d317e03164b58a482582",
+    "gym_dcmm/utils/roll_evaluation.py": "9b952076a427417ba7307c4439bb4ecd143ec42005456c57425eb113edde83b8",
+    "gym_dcmm/utils/roll_palm.py": "11fe87ac0b85daabcea21c1f9891295e88f3008ac04e8fca75d5ee8fc575a225",
+    "gym_dcmm/utils/roll_grasp.py": "afe46ee9483151042bcd8008364c8700065f58924cbbdeeb5f16a5f4bf7e39fa",
+    "gym_dcmm/algs/ppo_dcmm_645edc4/ppo_dcmm_catch_two_stage.py": "30b4e176023be0866d9d055a8b6344cc803f7acbbea12cf644bdc3df60fb703f",
+    "gym_dcmm/algs/ppo_dcmm_5fe75d5f/ppo_dcmm_catch_hold.py": "4c4c30efa972b0ffb1939cf6a06255ec70323e04e236250bb0e19e800ae2db87"
+  }
+}

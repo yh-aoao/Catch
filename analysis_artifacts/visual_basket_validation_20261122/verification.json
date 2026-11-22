@@ -1,0 +1,17 @@
+{
+  "schema": "visual_basket_autonomous_v1",
+  "teacher_inference_checks": 4,
+  "physical_conditions_checked": 18,
+  "regression_and_contract_tests": 12,
+  "parallel_smoke_workers": 4,
+  "steps_per_worker": 2,
+  "backpropagation": "passed",
+  "student_privileged_context": "rejected",
+  "autonomous_arm_hand_and_base_control": "passed",
+  "full_training_started": false,
+  "success_rate_evaluation_performed": false,
+  "notes": [
+    "18-condition check used initial reconstructed config; final smoke additionally verified orange/golf with corrected creation_v3 launch/speed settings.",
+    "Basket center in Top frustum at smoke state; not an occlusion/visibility benchmark."
+  ]
+}

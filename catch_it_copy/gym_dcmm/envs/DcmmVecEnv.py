@@ -2948,10 +2948,22 @@ class DcmmVecEnv(gym.Env):
 
         if self.mobile_basket:
             from gym_dcmm.utils.basket_mobile import base_command
-            self.Dcmm.target_base_vel[:2] = base_command(self.basket_mobile_state,
+            autonomous = getattr(self, 'basket_autonomous_control', False)
+            control_cfg = self.basket_cfg
+            control_state = self.basket_mobile_state
+            if autonomous:
+                # Visual-only student: generic actuator limits, no phase-controlled braking/hold.
+                import copy
+                control_cfg = copy.copy(self.basket_cfg)
+                control_cfg.mobile_brake_after_unlock = False
+                control_cfg.mobile_hold_position = False
+                control_cfg.mobile_approach_braking = False
+                control_cfg.mobile_hold_only = False
+                control_cfg.mobile_carry_settle_seconds = 0.
+            self.Dcmm.target_base_vel[:2] = base_command(control_state,
                 action_dict['base'], self.steps_per_policy*self.Dcmm.model.opt.timestep,
-                self.basket_cfg, parking=self._basket_parking_state())
-            if not self.basket_mobile_state['unlocked']:
+                control_cfg, parking=None if autonomous else self._basket_parking_state())
+            if not autonomous and not self.basket_mobile_state['unlocked']:
                 self.Dcmm.target_arm_qpos[:] = self.basket_carry_arm
                 self.Dcmm.target_hand_qpos[:] = self.basket_carry_hand
 

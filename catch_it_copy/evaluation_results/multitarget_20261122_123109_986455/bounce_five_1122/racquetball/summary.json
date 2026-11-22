@@ -1,0 +1,68 @@
+{
+  "name": "bounce_five_1122",
+  "motion": "bounce",
+  "physics": "dr",
+  "checkpoint": "/home/yuhao2/Catch/catch_it_copy/outputs/bounce_five_ball_catch_v3_seed123/2026-11-21/21:17:13/bounce_catch_best_reward_14.04.pth",
+  "checkpoint_sha256": "3b99ee7b3c09e98a250448f505560b5522fd9856903a6bacc22ee3a84cd283d8",
+  "radius_scale": 1.0,
+  "mass_policy": "fixed",
+  "object": "racquetball",
+  "seed": 41000,
+  "episodes": 200,
+  "instances": 4,
+  "case_dir": "/home/yuhao2/Catch/catch_it_copy/evaluation_results/multitarget_20261122_123109_986455/bounce_five_1122/racquetball",
+  "completed": true,
+  "successes": 193,
+  "success_rate": 0.965,
+  "wilson_95_interval": [
+    0.9295293884777092,
+    0.9829444579914328
+  ],
+  "stable_hold_episodes": null,
+  "stable_hold_rate": null,
+  "reasons": {
+    "controlled_hold": 193,
+    "timeout": 3,
+    "base_collision": 3,
+    "out_of_bounds": 1
+  },
+  "parameter_samples": [
+    {
+      "version": "physical_dr_v1",
+      "sampling": "environment_creation",
+      "size_scale": 1.026781712933732,
+      "mass_scale": 1.0229859363147162,
+      "friction_scale": 0.8818013296000147,
+      "rolling_scale": 1.0,
+      "damping_scale": 0.9252767423709667
+    },
+    {
+      "version": "physical_dr_v1",
+      "sampling": "environment_creation",
+      "size_scale": 1.0256739801382022,
+      "mass_scale": 1.050844164286673,
+      "friction_scale": 1.1122068592837577,
+      "rolling_scale": 1.0,
+      "damping_scale": 0.9598917682468895
+    },
+    {
+      "version": "physical_dr_v1",
+      "sampling": "environment_creation",
+      "size_scale": 1.0169572918099654,
+      "mass_scale": 1.0196718988204032,
+      "friction_scale": 0.9305754087073278,
+      "rolling_scale": 1.0,
+      "damping_scale": 0.9838260852585877
+    },
+    {
+      "version": "physical_dr_v1",
+      "sampling": "environment_creation",
+      "size_scale": 0.9733400778132805,
+      "mass_scale": 0.9709707499734517,
+      "friction_scale": 0.878371807486391,
+      "rolling_scale": 1.0,
+      "damping_scale": 1.051273011297507
+    }
+  ],
+  "wall_seconds": 1906.157425864134
+}

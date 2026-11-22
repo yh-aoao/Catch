@@ -1,0 +1,11 @@
+Modify the reference into a clear high-resolution landscape Chinese architecture diagram titled "四任务蒸馏：Future Stable + 视觉自主 Basket". Keep its white background, pastel blue shared backbone/Catch, green Future, purple Basket, orange dashed training-only panels.
+Inference inputs exactly: Top深度图→CNN; Wrist深度图→CNN; 机器人自身状态36维; 上一步执行动作20维; 任务指令1维（0 Catch / 1 Basket）. All concatenate into shared GRU h_t256.
+Delete ALL old Basket目标5维, goal encoder, 阶段状态4维, stage action masks and their arrows.
+GRU to Catch action head through h_t + Linear(Future预测). Future branch: MLP256→128→9 predicts future1/3/5 steps displacement9, Linear9→256 feeds addition. Catch head256→512→256→128→20 handles Throw五类/Roll七目标/Bounce五目标.
+GRU DIRECTLY to Basket head256→512→256→128→20 (不直接使用Future). Both heads→按任务指令选择→Tanh→20维动作（底盘2+机械臂6+手指12）. Basket全部20维始终可用；自主学习停车与投球时机. Catch末端位姿增量；Basket关节速度动作.
+Bottom four orange dashed panels ONLY TRAINING:
+A 位置辅助监督（仅Catch）: h_t→Aux MLP256→128→6→位置Smooth L1×0.1←物体真实位置. 速度权重0.
+B Future监督（仅Catch）: Future预测→未来位移Smooth L1×0.1←仿真轨迹真实位移. 首次手接触前有效，不跨回合.
+C 新增篮筐位置辅助监督（仅Basket）: h_t→MLP256→128→3→篮筐位置Smooth L1×0.1←仿真篮筐相对位置真值3维. 机械臂基座坐标系. Neither truth nor predicted basket position connects to action heads or inference inputs.
+D 四教师动作模仿: Throw五类/Roll七目标/Bounce五目标/Basket网球 teachers→完整控制行为标签（含持球反馈和底盘制动）→动作模仿损失←学生选中动作logits（Tanh前）. 移动/投球片段平衡监督，阶段只作训练元数据.
+Footer: "学生不输入篮筐坐标、停车参考、阶段、进度、接触提示或剩余时间". Another footer: "无阶段动作屏蔽、自动持球或阶段制动". Include compact color legend. Clear accurate arrows and legible Chinese, no overlaps. Preserve visual continuity with reference while spaciously redesigning layout.

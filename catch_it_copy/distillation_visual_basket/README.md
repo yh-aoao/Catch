@@ -34,7 +34,7 @@ python -m distillation_visual_basket.run train \
   --output distillation_visual_basket/runs/catch_10000_seed123 \
   --device cuda:0 --gl-backend egl --egl-device-id 0 \
   --num-envs 32 --rollout-steps 16 \
-  --iterations 10000 --eval-start 5000 --eval-every 1000 \
+  --iterations 10000 --eval-start 1000 --eval-every 1000 \
   --episodes 300 --skip-teacher-baseline
 ```
 
@@ -44,7 +44,7 @@ python -m distillation_visual_basket.run train \
 
 32环境×4任务×16步=2048条环境交互/轮。增加环境数但不降低rollout长度，会增加每轮数据量和总训练预算，不能只按迭代秒数比较加速。这里的32/16与旧6/64的1536条/轮接近但不相同。旧版和新版迭代编号不代表相同数据量。
 
-自动评估每任务合计300回合，各目标尽量均分，默认每个目标4进程；Basket仅统计移动场景。5000、6000、…、10000轮保留`student_005000.pth`等模型，另保存best、last和可续训resume_last。best按最低任务的目标宏平均成功率选择；不保证每个任务同时最优。
+自动评估每任务合计300回合，各目标尽量均分，默认每个目标4进程；Basket仅统计移动场景。1000、2000、…、10000轮保留`student_001000.pth`等模型，另保存best、last和可续训resume_last。best按最低任务的目标宏平均成功率选择；不保证每个任务同时最优。
 
 服务器若四个教师都放在同一目录，在上述命令增加：
 

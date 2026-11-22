@@ -337,7 +337,13 @@ def main(config: DictConfig):
                     **({"throw_generalization":str(config.throw_generalization)} if config.object_motion == "throw" else {}),
                     task=task, camera_name=["top"],
                     render_per_step=False,
-                    render_mode = None if (physical_bounce or physical_roll or config.get('basket_carry_reward',False)) and not config.viewer and not config.imshow_cam else "rgb_array",
+                    # Bounce Track uses state observations. Its passive viewer
+                    # syncs in render() even without an offscreen camera image.
+                    render_mode = None if (
+                        (physical_bounce and config.task == 'Tracking' and not config.imshow_cam)
+                        or ((physical_bounce or physical_roll or config.get('basket_carry_reward',False))
+                            and not config.viewer and not config.imshow_cam)
+                    ) else "rgb_array",
                     object_name = "object",
                     img_size = config.train.ppo.img_dim,
                     imshow_cam = config.imshow_cam, 

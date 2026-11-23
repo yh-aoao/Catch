@@ -1714,3 +1714,28 @@ basket:222
 2.消融实验
 3.catch和basket会不会影响互相蒸馏
 4.
+
+————————————————————11-22——————————————————————————————————————————————————————————————————————
+1.其他模型学的都差不多，但是bounce的原始球还是存在很大问题，目前打算重新训练一版，感觉训练出来的随机性有点强？
+2.可以先用现在的一版进行蒸馏：
+/home/isee/Catch/11-19/throw_catch_best_reward_515.51.pth
+/home/isee/Catch/11-22/throw_basket_catch_best_reward_40.98.pth
+/home/isee/Catch/11-22/roll_catch_best_reward_403.15.pth
+/home/isee/Catch/11-22/bounce_catch_best_reward_14.04.pth
+
+
+bounce重新训练：
+bash scripts/train_targets_creation_dr_v3.sh bounce track \
+  num_envs=60 device_id=0 seed=123 \
+  output_name=bounce_five_ball_track_v3_num30_seed123
+
+bash scripts/train_targets_creation_dr_v3.sh bounce catch \
+  checkpoint_tracking=/home/yuhao2/Catch/catch_it_copy/outputs/bounce_five_ball_track_v3_retest_seed123/2026-11-21/17:30:28/nn/bounce_track_best_reward_20.77.pth \
+  num_envs=60 device_id=0 seed=123 \
+  output_name=bounce_five_ball_catch_v3_seed123
+
+————————————————————11-23————————————————————————————————————————————————————————————————————————
+basket模式有问题：
+现在是有环境帮他稳住球，并且一开始就是一个持球的姿态，并且满足停车条件后，环境开放投球控制，并在投球阶段要求底盘制动
+所以问题是：
+*-

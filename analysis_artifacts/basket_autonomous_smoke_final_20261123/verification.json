@@ -1,0 +1,22 @@
+{
+  "protocol": "basket_autonomous_teacher_v1",
+  "unit_and_physical_tests": 3,
+  "random_reset_seeds": 8,
+  "training_workers": 2,
+  "first_run_steps": 128,
+  "resumed_steps": 256,
+  "evaluation_checkpoints": [
+    128,
+    256
+  ],
+  "full_training_started": false,
+  "training_success_claim": false,
+  "checks": [
+    "random supported initial arm/hand poses",
+    "all20 actions active without old parking reference",
+    "no policy-time ball pose reset",
+    "zero explicit ball actuator/generalized/body force",
+    "PPO forward/backward and log-probability",
+    "checkpoint save and resume"
+  ]
+}

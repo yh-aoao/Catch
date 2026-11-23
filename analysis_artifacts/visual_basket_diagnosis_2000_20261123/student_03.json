@@ -1,0 +1,122 @@
+{
+  "mode": "student",
+  "episode": 3,
+  "seed": 20261120,
+  "iteration": 2000,
+  "steps": 188,
+  "success": false,
+  "reason": "premature_release",
+  "parking_unlocked": false,
+  "min_parking_distance": 0.0021896978338605266,
+  "max_base_speed": 0.252800387832686,
+  "contact_fraction": 0.9787234042553191,
+  "reward": -29.456731185168785,
+  "control": {
+    "reward_version": "basket_mobile_v1",
+    "launch_success": false,
+    "basket_success": false,
+    "safe_launch_success": false,
+    "arm_self_collision": false,
+    "reward_revision": "basket_delivery_v2",
+    "forward_distance": 0.0,
+    "release_forward_speed": 0.25070876596898933,
+    "basket_hit": false,
+    "safe_basket_success": false,
+    "aim_error": -1.0,
+    "preparation": {
+      "seconds": 0.8000000000000006,
+      "stable_seconds": 0.10000000000000007,
+      "ball_speed": 0.001986940975482856,
+      "slip_speed": 0.0014827680694174273,
+      "local": [
+        0.026134870430258684,
+        0.0387654182720618,
+        0.07793720758605174
+      ]
+    },
+    "spawn_check": {
+      "lift": 0.056,
+      "minimum_gap": 0.001432277442133069
+    },
+    "policy_seconds": 7.513999999999445,
+    "arm_forward": 0.0,
+    "proximal_forward_speed": 0.0,
+    "release_policy_seconds": 7.463999999999428,
+    "carry_position_quality": 1.0,
+    "carry_local_reference": [
+      0.026134870430258684,
+      0.0387654182720618,
+      0.07793720758605174
+    ],
+    "carry_local_error": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "finger_coordination": {
+      "phase": [
+        [
+          1.3255789305298993,
+          1.2918350836044667,
+          0.8826074126779921
+        ],
+        [
+          -0.32762184002902783,
+          0.6354014533501441,
+          -0.40657678604128983
+        ],
+        [
+          0.1073542419853611,
+          1.8272575362166434,
+          2.0888685171355013
+        ]
+      ],
+      "sync_loss": 0.4328520565009535,
+      "coupling_loss": 0.1011465437226028,
+      "extension_loss": 0.09188685210940699,
+      "post_release_ramp": 0.0,
+      "min_long_angle": -0.36562918406872985,
+      "thumb_angles": [
+        0.05798335740964089,
+        -0.18723287604417224,
+        0.7238571563361083
+      ],
+      "post_reward_version": "post_release_v2",
+      "post_joint_speed": 2.026855181673559,
+      "post_reward_exposure": 0.0
+    },
+    "mobile_phase": "navigate",
+    "target": [
+      0.09481397184972329,
+      1.209934100924291,
+      0.55
+    ],
+    "parking_target": [
+      0.09481397184972329,
+      0.21184441007192978
+    ],
+    "parking_distance": 0.1700583454620157,
+    "base_speed": 0.027075104355547185,
+    "settle_seconds": 0.0,
+    "parking_success": false,
+    "qualified_release": false,
+    "release_parking_distance": 0.1693917740684494,
+    "release_base_speed": 0.0035691460659957445,
+    "ready_time": -1.0,
+    "deadline": 10.0,
+    "rehearsal": false,
+    "hold_until": 0.0,
+    "hold_only": false,
+    "held_ball_speed_at_ready": -1.0,
+    "arm_drive_forward": 0.0,
+    "arm_drive_speed": 0.0,
+    "last_contact_arm_drive": 0.0,
+    "ballistic_quality": 0.0,
+    "ballistic_best": 0.0,
+    "release_ballistic_quality": 0.0,
+    "release_ballistic_error": -1.0
+  },
+  "release_check": {
+    "reason": "no_candidate"
+  }
+}

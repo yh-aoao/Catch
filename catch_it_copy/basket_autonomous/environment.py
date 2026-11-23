@@ -23,6 +23,12 @@ class AutonomousTeacherEnv(DcmmVecEnv):
     observation_version='robot36_ball6_goal3_previous20_v1'
     def __init__(self,options=None,**kwargs):
         self.options=dict(options or {})
+        self.training_stage=self.options.get('training_stage','joint')
+        if self.training_stage not in ('joint','fixed','mobile'):
+            raise ValueError('Unknown autonomous training stage')
+        probability=float(self.options.get('fixed_replay_probability',0.))
+        if not 0.<=probability<=1.:raise ValueError('Invalid fixed replay probability')
+        self.fixed_episode=False
         self.radius=.033275785333333335;self.mass=.058
         self.reset_stats={};self.last_action=np.zeros(20,np.float32)
         defaults=dict(task='Catching',object_motion='throw_basket',viewer=False,render_mode=None,
@@ -138,6 +144,19 @@ class AutonomousTeacherEnv(DcmmVecEnv):
         self.reset_stats=dict(attempts=attempt+1,anchor=anchor.get('source','pose_bank'),
             arm=d.qpos[15:21].tolist(),hand=d.qpos[21:37].tolist(),ball_local=palm_coordinates(d,d.qpos[37:40]).tolist(),
             preparation_seconds=float(d.time-start_time),placement=placement)
+        self.fixed_episode=(self.training_stage=='fixed' or
+            (self.training_stage=='mobile' and self.np_random.random()<float(self.options.get('fixed_replay_probability',0.))))
+        if self.fixed_episode:
+            # The fixed-base curriculum is explicit; mobile episodes never use this zero command.
+            x=self.options.get('fixed_goal_x_range',[-.10,.10])
+            y=self.options.get('fixed_goal_y_range',[.85,1.15])
+            if len(x)!=2 or len(y)!=2 or x[0]>x[1] or not 0.<y[0]<=y[1]:
+                raise ValueError('Invalid fixed goal ranges')
+            base=d.body('arm_base')
+            local=np.array([self.np_random.uniform(*x),self.np_random.uniform(*y),0.])
+            self.basket_center[:2]=(base.xpos+base.xmat.reshape(3,3)@local)[:2]
+            m.body_pos[m.body('basket_target').id]=self.basket_center
+            mujoco.mj_forward(m,d)
         self.steps=0
         self.start_time=float(d.time);self.terminated=False;self.terminated_reason=None
         self.basket_arm_self_collision=False;self.basket_robot_collision=False
@@ -147,7 +166,7 @@ class AutonomousTeacherEnv(DcmmVecEnv):
         self._initializing=False
         self.prev_ee_pos3d=self._get_relative_ee_pos3d().copy();self.prev_obj_pos3d=self._get_relative_object_pos3d().copy()
         self._initial_ball=d.qpos[37:40].copy()
-        return self.observation(),dict(reset_sampling=copy.deepcopy(self.reset_stats))
+        return self.observation(),dict(reset_sampling=copy.deepcopy(self.reset_stats),fixed_episode=self.fixed_episode)
 
     def observation(self):
         d=self.Dcmm.data
@@ -205,10 +224,12 @@ class AutonomousTeacherEnv(DcmmVecEnv):
         command=np.clip(command,-1,1)
         self.steps+=1
         previous_action=self.last_action.copy()
-        physical=command*np.repeat([.3,.025,.15],[2,6,12])
+        executed=command.copy()
+        if self.fixed_episode:executed[:2]=0.
+        physical=executed*np.repeat([.3,.025,.15],[2,6,12])
         self._step_mujoco_simulation(dict(base=physical[:2],arm=physical[2:8],hand=physical[8:]))
         d=self.Dcmm.data
-        self.last_action=command.copy();touch=self.touching()
+        self.last_action=executed.copy();touch=self.touching()
         elapsed=float(d.time-self.start_time)
         truncated=elapsed>=float(self.options.get('episode_seconds',10.)) and not self.terminated
         if truncated:self.terminated_reason='timeout'
@@ -217,12 +238,12 @@ class AutonomousTeacherEnv(DcmmVecEnv):
         progress=max(0.,quality-self._quality_best);self._quality_best=max(self._quality_best,quality)
         # No target posture or parking waypoint: only contact, ballistic progress, smooth control, actual score.
         reward=-.02+.005*float(touch)+4.*progress+self._release_reward
-        reward-=.002*float(np.mean(command**2))+.01*float(np.mean((command-previous_action)**2))
+        reward-=.002*float(np.mean(executed**2))+.01*float(np.mean((executed-previous_action)**2))
         self._release_reward=0.
         safe_score=self._scored and not self.basket_robot_collision and not self.basket_arm_self_collision
         if safe_score:reward+=100.
         elif self.terminated or truncated:reward-=15.
-        info=dict(success=bool(self._scored),safe_basket_success=bool(self._scored and not self.basket_robot_collision and not self.basket_arm_self_collision),
+        info=dict(fixed_episode=self.fixed_episode,success=bool(self._scored),safe_basket_success=bool(self._scored and not self.basket_robot_collision and not self.basket_arm_self_collision),
             terminated_reason=self.terminated_reason,hand_contact=touch,elapsed=elapsed,
             base_speed=float(np.linalg.norm(d.qvel[:2])),low_speed_seconds=self._low_speed_time,
             released=self._released_once,release_stopped=bool(self._release and self._release['valid_stop']),

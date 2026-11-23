@@ -30,7 +30,7 @@ def evaluate(model,config,count,seed,viewer=False):
     if viewer:
         import mujoco.viewer
         from .environment import AutonomousTeacherEnv
-        env=AutonomousTeacherEnv(config['options']);window=None
+        env=AutonomousTeacherEnv(evaluation_options(config));window=None
         try:
             for episode in range(count):
                 np.random.seed(seed+episode);obs,_=env.reset(seed=seed+episode)
@@ -50,7 +50,7 @@ def evaluate(model,config,count,seed,viewer=False):
             env.close()
     else:
         from .pool import Pool
-        pool=Pool(min(8,count),config['options'],seed)
+        pool=Pool(min(8,count),evaluation_options(config),seed)
         totals=np.zeros(pool.count);lengths=np.zeros(pool.count,dtype=int)
         try:
             for _ in range(count*512):
@@ -66,13 +66,17 @@ def evaluate(model,config,count,seed,viewer=False):
     return dict(episodes=count,successes=successes,success_rate=successes/count,reasons=dict(Counter(r['terminated_reason'] for r in records)),records=records)
 
 
-def train(config,output,resume=None):
+def train(config,output,resume=None,initialize_from=None):
     import torch
     from .policy import Policy
     from .pool import Pool
     device=torch.device(config['device']);model=Policy().to(device)
     optimizer=torch.optim.Adam(model.parameters(),lr=config['learning_rate'],eps=1e-5)
     steps=0;iteration=0;best=-1.
+    if initialize_from:
+        saved=torch.load(initialize_from,map_location='cpu',weights_only=False)
+        validate_initialization(saved,config)
+        model.load_state_dict(saved['model'],strict=True)
     if resume:
         saved=torch.load(resume,map_location='cpu',weights_only=False)
         model.load_state_dict(saved['model'],strict=True);optimizer.load_state_dict(saved['optimizer'])
@@ -81,27 +85,31 @@ def train(config,output,resume=None):
         if saved.get('rng_cuda') is not None and device.type=='cuda':torch.cuda.set_rng_state(saved['rng_cuda'],device)
     n=config['num_envs'];pool=Pool(n,config['options'],config['seed']+steps)
     rewards=deque(maxlen=100);success=deque(maxlen=100);totals=np.zeros(n)
+    grouped={key:deque(maxlen=200) for key in ('fixed','mobile')}
     next_eval=(steps//config['eval_every']+1)*config['eval_every'];next_save=(steps//config['save_every']+1)*config['save_every']
     try:
         while steps<config['total_steps']:
             started=time.monotonic();iteration+=1;horizon=min(config['rollout_steps'],(config['total_steps']-steps)//n)
             if horizon<1:raise ValueError('total_steps must divide by num_envs')
             model.train();model.update_normalizer(torch.as_tensor(pool.obs,device=device))
-            states=[];raw_actions=[];old_logs=[];values=[];deltas=[];dones=[]
+            states=[];raw_actions=[];old_logs=[];values=[];deltas=[];dones=[];active_masks=[]
             collection_start=time.monotonic()
             for _ in range(horizon):
                 with torch.no_grad():
                     state=model.normalize(torch.as_tensor(pool.obs,device=device))
-                    action,raw,logp,value=model.sample(state)
+                    active=torch.ones(n,20,device=device)
+                    active[torch.as_tensor(pool.fixed,device=device),:2]=0.
+                    action,raw,logp,value=model.sample(state,active)
                 obs,reward,terminated,truncated,infos,final=pool.step(action.cpu().numpy())
                 with torch.no_grad():next_value=model.value(model.normalize(torch.as_tensor(final,device=device)))
                 scaled=torch.as_tensor(reward*config['reward_scale'],dtype=torch.float32,device=device)
                 term=torch.as_tensor(terminated,device=device);done=torch.as_tensor(terminated|truncated,device=device)
-                states.append(state);raw_actions.append(raw);old_logs.append(logp);values.append(value)
+                active_masks.append(active);states.append(state);raw_actions.append(raw);old_logs.append(logp);values.append(value)
                 deltas.append(scaled+config['gamma']*next_value*(~term)-value);dones.append(done)
                 totals+=reward
                 for i in np.flatnonzero(terminated|truncated):
                     rewards.append(float(totals[i]));success.append(float(infos[i]['safe_basket_success']));totals[i]=0.
+                    grouped['fixed' if infos[i].get('fixed_episode',False) else 'mobile'].append(float(infos[i]['safe_basket_success']))
                 steps+=n
             collection_seconds=time.monotonic()-collection_start
             advantages=torch.zeros(horizon,n,device=device);last=torch.zeros(n,device=device)
@@ -109,17 +117,17 @@ def train(config,output,resume=None):
                 last=deltas[t]+config['gamma']*config['gae_lambda']*(~dones[t])*last;advantages[t]=last
             returns=(advantages+torch.stack(values)).flatten().detach()
             advantage=advantages.flatten();advantage=(advantage-advantage.mean())/(advantage.std(unbiased=False)+1e-8)
-            state=torch.cat(states);raw=torch.cat(raw_actions);old_log=torch.cat(old_logs);size=len(state)
+            active=torch.cat(active_masks);state=torch.cat(states);raw=torch.cat(raw_actions);old_log=torch.cat(old_logs);size=len(state)
             metrics=[];early_stop=False
             for epoch in range(config['epochs']):
                 order=torch.randperm(size,device=device)
                 for start in range(0,size,config['minibatch_size']):
                     idx=order[start:start+config['minibatch_size']]
-                    distribution=model.distribution(state[idx]);logp=model.log_probability(distribution,raw[idx])
+                    distribution=model.distribution(state[idx]);logp=model.log_probability(distribution,raw[idx],active[idx])
                     ratio=(logp-old_log[idx]).exp()
                     actor=-torch.minimum(ratio*advantage[idx],ratio.clamp(1-config['clip'],1+config['clip'])*advantage[idx]).mean()
                     critic=.5*(model.value(state[idx])-returns[idx]).square().mean()
-                    entropy=distribution.entropy().sum(-1).mean()
+                    entropy=(distribution.entropy()*active[idx]).sum(-1).mean()
                     loss=actor+config['value_weight']*critic-config['entropy_weight']*entropy
                     if not torch.isfinite(loss):raise FloatingPointError('Non-finite PPO loss')
                     optimizer.zero_grad(set_to_none=True);loss.backward();torch.nn.utils.clip_grad_norm_(model.parameters(),1.);optimizer.step()
@@ -130,6 +138,8 @@ def train(config,output,resume=None):
             row=dict(iteration=iteration,steps=steps,collect_seconds=collection_seconds,seconds=time.monotonic()-started,
                 physics_fps=horizon*n/max(collection_seconds,1e-6),reward_100=float(np.mean(rewards)) if rewards else None,
                 success_100=float(np.mean(success)) if success else None,
+                fixed_sr=float(np.mean(grouped['fixed'])) if grouped['fixed'] else None,
+                mobile_sr=float(np.mean(grouped['mobile'])) if grouped['mobile'] else None,
                 actor_loss=float(np.mean([v[0] for v in metrics])),value_loss=float(np.mean([v[1] for v in metrics])),kl=float(np.mean([v[2] for v in metrics])))
             if steps>=next_eval or steps==config['total_steps']:
                 before_python=random.getstate();before_numpy=np.random.get_state();before_torch=torch.get_rng_state()
@@ -149,10 +159,32 @@ def train(config,output,resume=None):
     finally:pool.close()
 
 
+def evaluation_options(config):
+    options=copy.deepcopy(config['options'])
+    # Report mobile performance without easier fixed rehearsal episodes.
+    if options.get('training_stage')=='mobile':options['fixed_replay_probability']=0.
+    return options
+
+
+def validate_initialization(saved,config):
+    from .policy import SCHEMA
+    if saved.get('schema')!=SCHEMA or saved.get('actions')!='full20_joint_velocity_hand_increment_v1':
+        raise ValueError('Expected autonomous joint-velocity teacher checkpoint')
+    if saved.get('config',{}).get('options',{}).get('training_stage')!='fixed':
+        raise ValueError('Stage two must initialize from the new random-hold fixed stage')
+    if config['options'].get('training_stage')!='mobile':
+        raise ValueError('Initialization is only supported for mobile stage')
+    source=saved['config']['options'];target=config['options']
+    # Carry the same initial-state distribution into mobile training.
+    for key in ('arm_jitter_rad','hand_jitter_rad','pose_bank_entries','fixed_goal_x_range','fixed_goal_y_range'):
+        if source.get(key)!=target.get(key):raise ValueError('Stage initialization protocol differs: '+key)
+
+
 def main():
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('command',choices=['train','eval'])
     p.add_argument('--config',type=Path,default=Path(__file__).parent/'configs/train.json')
     p.add_argument('--output',type=Path,required=True);p.add_argument('--checkpoint',type=Path);p.add_argument('--resume',type=Path)
+    p.add_argument('--initialize-from',type=Path,help='Initialize mobile stage from a fixed-stage teacher; reset optimizer/steps')
     p.add_argument('--device');p.add_argument('--pose-bank',type=Path);p.add_argument('--viewer',action='store_true')
     for name in ('num-envs','total-steps','rollout-steps','eval-every','eval-episodes','save-every','seed'):p.add_argument('--'+name,type=int)
     args=p.parse_args()
@@ -162,6 +194,8 @@ def main():
     if args.command=='eval' and not args.checkpoint:p.error('eval requires --checkpoint')
     if args.command=='train' and (args.checkpoint or args.viewer):p.error('train uses --resume for continuation, not --checkpoint/viewer')
     if args.command=='eval' and args.resume:p.error('--resume is train only')
+    if args.initialize_from and (args.command!='train' or source):p.error('--initialize-from is train only and cannot combine with resume/checkpoint')
+    if args.initialize_from:args.initialize_from=args.initialize_from.resolve()
     if source:source=source.resolve()
     args.output=args.output.resolve()
     import torch
@@ -189,13 +223,19 @@ def main():
         if type(config[key]) is not int or config[key]<1:raise ValueError('Invalid '+key)
     if config['total_steps']%config['num_envs']:raise ValueError('total_steps must be divisible by num_envs')
     if config['device'].startswith('cuda') and not torch.cuda.is_available():raise RuntimeError('CUDA unavailable')
+    if args.initialize_from:
+        initial=torch.load(args.initialize_from,map_location='cpu',weights_only=False)
+        validate_initialization(initial,config)
+        config['initialization']=dict(path=str(args.initialize_from),sha256=hashlib.sha256(args.initialize_from.read_bytes()).hexdigest())
+    elif args.command=='train' and not args.resume and config['options'].get('training_stage')=='mobile':
+        p.error('Mobile stage requires --initialize-from fixed-stage checkpoint (or --resume)')
     if args.output.exists() and not args.resume:raise FileExistsError('Choose a new output directory')
     args.output.mkdir(parents=True,exist_ok=bool(args.resume))
     torch.set_num_threads(1);torch.manual_seed(config['seed']);np.random.seed(config['seed']);random.seed(config['seed'])
     (args.output/'resolved_config.json').write_text(json.dumps(config,indent=2))
     hashes={str(path.relative_to(ROOT)):hashlib.sha256(path.read_bytes()).hexdigest() for path in Path(__file__).parent.glob('*.py')}
     (args.output/'source_hashes.json').write_text(json.dumps(hashes,indent=2))
-    if args.command=='train':train(config,args.output,args.resume)
+    if args.command=='train':train(config,args.output,args.resume,args.initialize_from)
     else:
         model=Policy().to(config['device']);model.load_state_dict(saved['model'],strict=True)
         result=evaluate(model,config,config['eval_episodes'],config['seed']+500000,args.viewer)

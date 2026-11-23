@@ -1,0 +1,49 @@
+{
+  "samples": 1200,
+  "loop_interval_ms_percentiles": {
+    "min": 48.84457300067879,
+    "median": 50.00026600009733,
+    "p95": 50.10529029987083,
+    "max": 51.067357999272645
+  },
+  "query_duration_ms_percentiles": {
+    "median": 1.8469439996806614,
+    "p95": 2.536261199929868,
+    "max": 8.35224799993739
+  },
+  "joint_ranges_deg": [
+    6.000071326389494,
+    2.0000810712426773,
+    1.000097831400852,
+    1.0352201442423714,
+    0.9598761941826681,
+    13.999306991549457
+  ],
+  "states": {
+    "0": 1,
+    "1": 115,
+    "2": 1022,
+    "5": 62
+  },
+  "error_warn_codes": [
+    [
+      0,
+      0
+    ]
+  ],
+  "largest_joint_jump": {
+    "time_s": [
+      44.350072365000415,
+      44.40007739900011
+    ],
+    "delta_deg": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      -9.000422116371563
+    ]
+  },
+  "limitation": "Original recorder used SDK default is_real=False; do not treat differences as measured motion velocities. Pose and joints queried sequentially; no hardware timestamp synchronization."
+}

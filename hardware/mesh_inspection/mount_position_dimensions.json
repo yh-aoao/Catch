@@ -1,0 +1,93 @@
+{
+  "units": "mm",
+  "source_xml": "/home/isee/Catch/catch_it_copy/assets/urdf/x1_xarm6_leap_right_object.xml",
+  "interpretation": "Forward +Y from steer_fl/fr XML names. Measurements in leveled initial geometry (root +0.5deg applied), not raw base_link coordinates. Chassis bounds exclude separately modeled wheels/accessories.",
+  "raw_arm_base_position_mm": [
+    0.0,
+    118.467,
+    297.77799999999996
+  ],
+  "leveled_arm_base_position_mm": [
+    0.0,
+    115.86391885199988,
+    298.80046800709187
+  ],
+  "chassis_bounds_mm": [
+    [
+      -249.99999999999997,
+      -359.9344891852766,
+      -5.060002948343663
+    ],
+    [
+      249.99999999999997,
+      360.0655682864813,
+      245.80000325515135
+    ]
+  ],
+  "rail_top_bounds_mm": [
+    [
+      -131.50000572204587,
+      -339.93446782673084,
+      245.8000026862595
+    ],
+    [
+      131.50000572204587,
+      340.0655334290475,
+      245.80000325515135
+    ]
+  ],
+  "arm_center_to_front_body_edge_mm": 244.20164943448145,
+  "arm_center_to_rear_body_edge_mm": 475.7984080372765,
+  "arm_center_to_left_body_edge_mm": 249.99999999999997,
+  "arm_center_to_right_body_edge_mm": 249.99999999999997,
+  "arm_center_ahead_axle_midpoint_mm": 115.79876179495271,
+  "arm_center_behind_front_steer_axis_mm": 131.2011436108952,
+  "arm_center_behind_front_rail_end_mm": 224.20161457704762,
+  "arm_mount_plane_above_rail_top_mm": 53.00046475194051,
+  "crossbeams": {
+    "a4_Link": {
+      "center_mm": [
+        1.192093321833454e-06,
+        167.56504671463495,
+        268.3004783885452
+      ],
+      "front_body_edge_to_center_mm": 192.50052157184638,
+      "front_rail_end_to_center_mm": 172.50048671441255,
+      "bounds_mm": [
+        [
+          -157.49999761581412,
+          145.06503413754052,
+          245.80046581145072
+        ],
+        [
+          157.50000000000077,
+          190.0650592917294,
+          290.80049096563965
+        ]
+      ]
+    },
+    "a5_Link": {
+      "center_mm": [
+        1.192093719737386e-06,
+        62.76096112787201,
+        268.2999017933396
+      ],
+      "front_body_edge_to_center_mm": 297.3046071586093,
+      "front_rail_end_to_center_mm": 277.3045723011755,
+      "bounds_mm": [
+        [
+          -157.49999761581412,
+          40.26094855077756,
+          245.79988921624516
+        ],
+        [
+          157.50000000000156,
+          85.26097370496645,
+          290.79991437043407
+        ]
+      ]
+    }
+  },
+  "crossbeam_center_spacing_mm": 104.80408558676294,
+  "note": "Use central circular opening in Arm_base_Link as mount-center marker, not rectangular plate geometric center. Plate local Y extends -73..+63mm. Hardware screw locations and strength are not inferred."
+}

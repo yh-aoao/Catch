@@ -25,12 +25,13 @@ class Policy(nn.Module):
         self.mean.add_(delta*n/total);self.count.copy_(total)
     def distribution(self,x):return Normal(self.actor(x),self.log_std.clamp(-5,1).exp())
     def value(self,x):return self.critic(x).squeeze(-1)
-    def log_probability(self,distribution,raw):
+    def log_probability(self,distribution,raw,active=None):
         # Numerically stable log(1-tanh(raw)^2).
         correction=2*(np.log(2)-raw-torch.nn.functional.softplus(-2*raw))
-        return (distribution.log_prob(raw)-correction).sum(-1)
-    def sample(self,x):
+        terms=distribution.log_prob(raw)-correction
+        return (terms if active is None else terms*active).sum(-1)
+    def sample(self,x,active=None):
         distribution=self.distribution(x);raw=distribution.sample()
-        return raw.tanh(),raw,self.log_probability(distribution,raw),self.value(x)
+        return raw.tanh(),raw,self.log_probability(distribution,raw,active),self.value(x)
     @torch.no_grad()
     def act(self,observation):return self.actor(self.normalize(observation)).tanh()

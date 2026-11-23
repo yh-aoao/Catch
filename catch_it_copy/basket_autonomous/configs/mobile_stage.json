@@ -1,0 +1,44 @@
+{
+  "seed": 123,
+  "device": "cuda:0",
+  "num_envs": 32,
+  "total_steps": 25000000,
+  "rollout_steps": 64,
+  "learning_rate": 0.0001,
+  "epochs": 4,
+  "minibatch_size": 512,
+  "gamma": 0.99,
+  "gae_lambda": 0.95,
+  "clip": 0.2,
+  "entropy_weight": 0.001,
+  "value_weight": 0.5,
+  "target_kl": 0.02,
+  "reward_scale": 0.1,
+  "eval_every": 1000000,
+  "eval_episodes": 100,
+  "save_every": 100000,
+  "options": {
+    "episode_seconds": 10.0,
+    "reset_attempts": 80,
+    "arm_jitter_rad": [
+      0.35,
+      0.2,
+      0.25,
+      0.22,
+      0.25,
+      0.3
+    ],
+    "hand_jitter_rad": 0.2,
+    "pose_bank": "basket_autonomous/configs/caught_pose_bank.json",
+    "training_stage": "mobile",
+    "fixed_replay_probability": 0.3,
+    "fixed_goal_x_range": [
+      -0.1,
+      0.1
+    ],
+    "fixed_goal_y_range": [
+      0.85,
+      1.15
+    ]
+  }
+}

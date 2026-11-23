@@ -70,3 +70,56 @@ python -m unittest basket_autonomous.test_autonomous
 ```
 
 检查覆盖随机持球起点差异、真实手部接触、全动作可执行、没有旧停车参考调用、没有策略回合内球位置重置、球体控制力为零，以及策略概率/梯度。小规模训练检查只证明采集、PPO更新、保存、评估、续训可运行，不能证明已经学会自主投球。
+
+## 两阶段随机持球版本（2026-11-23）
+
+原 `configs/train.json` 仍是单阶段。新增配置使用同一个65维观测、20维关节速度/手指增量Actor，分两次PPO训练：
+
+1. `configs/fixed_stage.json`：从零训练随机持球→调整→抛球。底盘执行零速度指令，仅训练机械臂和手指；目标框相对机械臂基座X为±0.10m，Y为0.85–1.15m。底盘由轮子速度控制器保持静止，未添加世界焊接约束。底盘两维不计入此类回合的PPO概率与熵。
+2. `configs/mobile_stage.json`：加载新第一阶段权重，重建优化器、从0重新统计本阶段步数。所有模型参数可训练，学习率1e-4；每回合约70%为移动任务，30%为第一阶段固定底座复习。输出`fixed_sr`、`mobile_sr`分别统计两组近期成功率，自动评估只测试移动任务，不混入复习回合。
+
+两个阶段均随机采样持球姿态；没有目标持球手型、策略期球体重放、抗重力补偿、粘球、外加球体力。reset内仍允许碰撞排除与短暂重力筛选，以生成有效起点；这不是实际接球过程，也不保证覆盖所有接球后状态。
+
+移动回合全部20维动作从第一步就可执行，没有停车参考、动作阶段门控或自动底盘制动。停稳要求仍只用于判断有效投球：释放前平动速度<0.05m/s、角速度<0.15rad/s并维持0.12秒；由策略主动满足，环境不会为其刹车。不强迫先恢复成某个手型再抛球。
+
+这是**训练课程的两阶段**，不是把回合强行切成“移动→锁底盘→解锁机械臂”。第一阶段只专注抛球，第二阶段同时继续学持球、移动、减速和抛球。
+
+第一阶段命令：
+
+```bash
+conda activate dcmm
+cd ~/Catch/catch_it_copy
+python -m basket_autonomous.run train \
+  --config basket_autonomous/configs/fixed_stage.json \
+  --output basket_autonomous/runs/tennis_random_hold_fixed_seed123 \
+  --device cuda:0 --num-envs 32 --rollout-steps 64 \
+  --total-steps 1000000000000 \
+  --eval-every 1000000 --eval-episodes 100 --save-every 100000
+```
+
+先评估第一阶段随机持球成功率，再启动第二阶段：
+
+```bash
+python -m basket_autonomous.run train \
+  --config basket_autonomous/configs/mobile_stage.json \
+  --initialize-from basket_autonomous/runs/tennis_random_hold_fixed_seed123/teacher_best.pth \
+  --output basket_autonomous/runs/tennis_random_hold_mobile_seed123 \
+  --device cuda:0 --num-envs 32 --rollout-steps 64 \
+  --total-steps 1000000000000 \
+  --eval-every 1000000 --eval-episodes 100 --save-every 100000
+```
+
+两阶段切换用`--initialize-from`，同一阶段中断续训用`--resume .../resume_last.pth`。旧40.98阶段式教师和原单阶段自主教师不能作为新第一阶段权重导入。查看第二阶段：
+
+```bash
+python -m basket_autonomous.run eval \
+  --checkpoint basket_autonomous/runs/tennis_random_hold_mobile_seed123/teacher_best.pth \
+  --output basket_autonomous/evaluations/tennis_two_stage_viewer_01 \
+  --device cpu --eval-episodes 10 --viewer
+```
+
+每次独立运行使用新的output目录。此版控制接口延续自主版的关节速度，不是另一个`ee_delta`版本；旧Hydra两阶段和末端增量配置未修改。
+
+服务器需同步整个`basket_autonomous/`目录，以及已有的`gym_dcmm/envs/DcmmVecEnv.py`自主控制支持。修改前目录保存在`backups/before_autonomous_two_stage_20261123/basket_autonomous/`。
+
+验证：6项测试通过，覆盖真实随机接触、无辅助动作、两阶段权重导入、固定回合PPO屏蔽、移动动作梯度；两个阶段的双进程物理采集和终止后自动reset检查通过。没有启动正式训练，不能据此推断训练成功率。

@@ -1,0 +1,19 @@
+{
+  "mode": "offline",
+  "source_xml": "/home/isee/Catch/catch_it_copy/assets/urdf/x1_xarm6_leap_right_object.xml",
+  "source_xml_sha256": "b13a04e1bd4413cf986d131a5b1b32f843c58539ccd6e2bdf4d3aa8e73762030",
+  "observation_order": [
+    "x_m",
+    "y_m",
+    "z_m",
+    "qw",
+    "qx",
+    "qy",
+    "qz",
+    "vx_m_s",
+    "vy_m_s",
+    "vz_m_s"
+  ],
+  "geometry": "Full training XML arm chain including mounting offsets and base tilt; no added 2.4mm correction",
+  "limitations": "Not a physical base/encoder calibration. Velocity uses host joint-receive timestamps; first sample and gaps >0.2s invalid. Arm-only observation: not a complete 24D policy input. Out-of-range joints are reported, never clipped or commanded."
+}

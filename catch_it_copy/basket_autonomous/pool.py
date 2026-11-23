@@ -13,7 +13,7 @@ def worker(pipe,options,seed):
         np.random.seed(seed);random.seed(seed)
         from .environment import AutonomousTeacherEnv
         env=AutonomousTeacherEnv(options)
-        episode=0;obs,info=env.reset(seed=seed);pipe.send(('ok',obs))
+        episode=0;obs,info=env.reset(seed=seed);pipe.send(('ok',(obs,info)))
         while True:
             command,payload=pipe.recv()
             if command=='close':break
@@ -23,6 +23,7 @@ def worker(pipe,options,seed):
             if terminated or truncated:
                 episode+=1;obs,reset_info=env.reset(seed=seed+episode*100003)
                 info['reset_sampling']=reset_info['reset_sampling']
+                info['next_fixed_episode']=reset_info.get('fixed_episode',False)
             pipe.send(('ok',(obs,reward,terminated,truncated,info,final)))
     except (EOFError,BrokenPipeError):pass
     except BaseException:
@@ -38,12 +39,12 @@ class Pool:
         self.pipes=[];self.processes=[];self.count=count
         context=mp.get_context('spawn')
         try:
-            observations=[]
+            observations=[];fixed=[]
             for i in range(count):
                 parent,child=context.Pipe();p=context.Process(target=worker,args=(child,options,seed+i*1009),daemon=True)
                 p.start();child.close();self.pipes.append(parent);self.processes.append(p)
-                observations.append(self.receive(parent))
-            self.obs=np.stack(observations)
+                obs,info=self.receive(parent);observations.append(obs);fixed.append(info.get('fixed_episode',False))
+            self.obs=np.stack(observations);self.fixed=np.asarray(fixed,dtype=bool)
         except BaseException:self.close();raise
     def receive(self,p):
         if not p.poll(180):raise TimeoutError('Autonomous physics worker timed out')
@@ -56,6 +57,7 @@ class Pool:
         result=[self.receive(p) for p in self.pipes]
         obs,reward,terminated,truncated,info,final=zip(*result)
         self.obs=np.stack(obs)
+        self.fixed=np.asarray([v.get('next_fixed_episode',v.get('fixed_episode',False)) for v in info],dtype=bool)
         return self.obs,np.asarray(reward),np.asarray(terminated),np.asarray(truncated),list(info),np.stack(final)
     def close(self):
         for p in self.pipes:

@@ -1,0 +1,70 @@
+{
+  "samples": 1200,
+  "explicit_actual_joint_query": true,
+  "loop_interval_ms": {
+    "median": 50.00048600049922,
+    "p95": 50.090754599659704,
+    "max": 50.83206099970994
+  },
+  "query_duration_ms": {
+    "median": 1.8938375001198438,
+    "p95": 2.5173068000640337,
+    "max": 5.860332999873208
+  },
+  "joint_ranges_deg": [
+    4.00079239606,
+    4.000563212941947,
+    4.000735100280486,
+    4.00062050872146,
+    4.000677804500973,
+    4.000047550926329
+  ],
+  "max_step_deg": [
+    0.36268228431781147,
+    0.34474870533021584,
+    0.35987479112167003,
+    0.3267578305631087,
+    0.3492177761322367,
+    0.3407952965438137
+  ],
+  "error_warn_codes": [
+    [
+      0,
+      0
+    ]
+  ],
+  "state_counts": {
+    "1": 78,
+    "2": 1122
+  },
+  "quiet_samples": 825,
+  "fk_comparison": {
+    "model": "assets/urdf/xarm6_right.xml",
+    "body": "link6",
+    "transform_tested": "Rz(+90deg): [x,y,z] -> [-y,x,z]; orientation assumed SDK extrinsic xyz RPY",
+    "quiet_position_error_mm": {
+      "median": 2.401351002606971,
+      "p95": 2.4071094860380473,
+      "max": 2.418409121822038
+    },
+    "quiet_orientation_error_deg": {
+      "median": 0.05848234231959834,
+      "p95": 0.06511184704643991,
+      "max": 0.06512121120542118
+    },
+    "quiet_mean_position_difference_mm": [
+      1.9976348784814815,
+      1.0796433947775026,
+      -0.5003137525880847
+    ],
+    "limitation": "Small near-home sweep, nominal model only. SDK TCP pose and actual joints are sequential and may refer to different instants. This supports a coordinate hypothesis, not a calibrated whole-workspace transform or an independently measured physical TCP accuracy."
+  },
+  "last5s_joint_peak_to_peak_deg": [
+    0.00011459155902615592,
+    0.0,
+    5.7295779512855916e-05,
+    0.0,
+    0.00011459155902615592,
+    0.00022918311805232927
+  ]
+}

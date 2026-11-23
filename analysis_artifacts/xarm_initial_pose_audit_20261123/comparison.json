@@ -1,0 +1,253 @@
+{
+  "reference_only": true,
+  "motion_commands_sent": 0,
+  "current_recording": "/home/isee/Catch/analysis_artifacts/xarm_arm_obs_20261123_152946",
+  "config": "/home/isee/Catch/catch_it_copy/configs/env/DcmmCfg.py",
+  "config_sha256": "a3b895a71ef4c08fdd806c466e934a87f174a9564c85c4c1ca6d8da4da1a80e1",
+  "current_joints_rad": [
+    0.106462,
+    0.040139,
+    0.034906,
+    -0.047132,
+    -0.052364,
+    0.0
+  ],
+  "current_joints_deg": [
+    6.099823278521771,
+    2.2997952938756114,
+    1.9999664796836516,
+    -2.700464680010596,
+    -3.000236198423043,
+    0.0
+  ],
+  "initial_joints_rad": [
+    0.0,
+    0.0,
+    -0.0,
+    3.07,
+    2.25,
+    -1.5
+  ],
+  "initial_joints_deg": [
+    0.0,
+    0.0,
+    -0.0,
+    175.8980431051627,
+    128.91550390443524,
+    -85.94366926962348
+  ],
+  "direct_numeric_difference_deg": [
+    -6.099823278521771,
+    -2.2997952938756114,
+    -1.9999664796836516,
+    178.59850778517333,
+    131.91574010285825,
+    -85.94366926962348
+  ],
+  "training_limits_rad": [
+    [
+      -6.28319,
+      6.28319
+    ],
+    [
+      -2.059,
+      2.0944
+    ],
+    [
+      -3.927,
+      0.19198
+    ],
+    [
+      1.8,
+      4.141
+    ],
+    [
+      0.0,
+      2.65
+    ],
+    [
+      -2.35,
+      -0.785
+    ]
+  ],
+  "training_limits_deg": [
+    [
+      -360.00026887880375,
+      360.00026887880375
+    ],
+    [
+      -117.97201001743652,
+      120.0002806121996
+    ],
+    [
+      -225.0005261478743,
+      10.999643750921544
+    ],
+    [
+      103.13240312354819,
+      237.2618229636739
+    ],
+    [
+      0.0,
+      151.83381570966816
+    ],
+    [
+      -134.64508185574346,
+      -44.97718691776962
+    ]
+  ],
+  "current_config_initial_arrays": {
+    "arm_joints": [
+      0.0,
+      0.0,
+      -0.0,
+      3.07,
+      2.25,
+      -1.5
+    ],
+    "roll_arm_joints": [
+      0.0,
+      0.0,
+      -0.0,
+      3.07,
+      2.25,
+      -1.5
+    ]
+  },
+  "historical_initial_arrays": {
+    "future/configs/env/DcmmCfg.py": {
+      "arm_joints": [
+        0.0,
+        0.0,
+        -0.0,
+        3.07,
+        2.25,
+        -1.5
+      ],
+      "roll_arm_joints": [
+        0.0,
+        0.0,
+        -0.0,
+        3.07,
+        2.25,
+        -1.5
+      ]
+    },
+    "future/configs/env/DcmmCfg_roll_645edc4.py": {
+      "arm_joints": [
+        0.0,
+        0.0,
+        -0.0,
+        3.07,
+        2.25,
+        -1.5
+      ],
+      "roll_arm_joints": [
+        0.0,
+        0.0,
+        -0.0,
+        3.07,
+        2.25,
+        -1.5
+      ]
+    },
+    "future/configs/env/DcmmCfg_bounce_5fe75d5f.py": {
+      "arm_joints": [
+        0.0,
+        0.0,
+        -0.0,
+        3.07,
+        2.25,
+        -1.5
+      ],
+      "roll_arm_joints": [
+        0.0,
+        0.0,
+        -0.0,
+        3.07,
+        2.25,
+        -1.5
+      ]
+    }
+  },
+  "initial_within_training_limits": true,
+  "note": "Endpoint reference only. Not an approved path or hardware joint-limit check. Joint order/sign near home was checked; full workspace and mounting calibration remain unverified.",
+  "current_observation": {
+    "arm_observation_10": [
+      -0.02415057118723224,
+      0.18866619388077419,
+      0.1030846591239829,
+      -0.010273399929424063,
+      -0.6504234265395537,
+      -0.7594075173212026,
+      0.012001920616447862,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "arm": {
+      "ee_pos3d": [
+        -0.02415057118723224,
+        0.18866619388077419,
+        0.1030846591239829
+      ],
+      "ee_quat": [
+        -0.010273399929424063,
+        -0.6504234265395537,
+        -0.7594075173212026,
+        0.012001920616447862
+      ],
+      "ee_v_lin_3d": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    "velocity_valid": false,
+    "dt_s": null,
+    "outside_training_joint_limits": [
+      4,
+      5,
+      6
+    ],
+    "hardware_model_alignment_verified": false,
+    "note": "Nominal training geometry; not a calibrated real-base transform. No robot commands."
+  },
+  "initial_observation": {
+    "arm_observation_10": [
+      -0.009015993523478994,
+      0.25389157354087655,
+      0.21079837048344996,
+      0.8980663259855626,
+      -0.43509933058985373,
+      -6.968209431577503e-05,
+      0.0645402339278426,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "arm": {
+      "ee_pos3d": [
+        -0.009015993523478994,
+        0.25389157354087655,
+        0.21079837048344996
+      ],
+      "ee_quat": [
+        0.8980663259855626,
+        -0.43509933058985373,
+        -6.968209431577503e-05,
+        0.0645402339278426
+      ],
+      "ee_v_lin_3d": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    "velocity_valid": false,
+    "dt_s": 1,
+    "outside_training_joint_limits": [],
+    "hardware_model_alignment_verified": false,
+    "note": "Nominal training geometry; not a calibrated real-base transform. No robot commands."
+  }
+}

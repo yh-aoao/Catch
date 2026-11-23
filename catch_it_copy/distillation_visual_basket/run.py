@@ -48,6 +48,9 @@ def env_config(config,task):
 
 
 def validate(config):
+    mode=config.get('sampling_mode','per_task')
+    if mode not in ('per_task','per_object'):raise ValueError('Invalid sampling_mode')
+    if mode=='per_object' and (type(config.get('batch_episodes_per_object')) is not int or config['batch_episodes_per_object']<1):raise ValueError('Invalid batch_episodes_per_object')
     if tuple(config['tasks'])!=TASKS:raise ValueError('Expected four tasks in canonical order')
     for k in ('iterations','num_envs_per_task','rollout_steps','updates_per_iteration','calibration_steps','eval_every','eval_start',
               'eval_episodes','save_every','batch_episodes_per_object','capacity_frames_per_task','max_episode_steps','bptt_steps'):
@@ -58,6 +61,7 @@ def validate(config):
     for task,c in config['tasks'].items():
         if config['num_envs_per_task']<len(c['objects']):raise ValueError('Need one worker per target at minimum')
         if config['capacity_frames_per_task']//len(c['objects'])<config['max_episode_steps']:raise ValueError('Replay too small')
+        if not isinstance(c.get('sha256'),str) or len(c['sha256'])!=64 or any(ch not in '0123456789abcdef' for ch in c['sha256']):raise ValueError('Teacher hash not pinned: '+task+'; run distillation_visual_basket.prepare_config first')
         ActionAdapter(c)
     s=config['lr_schedule']
     if s['kind']!='cosine' or not 0<=s['start']<s['end'] or not 0<s['minimum']<=config['learning_rate']:raise ValueError('Invalid Stable LR schedule')
@@ -293,6 +297,7 @@ def main():
     p.add_argument('--viewer',action='store_true',help='Open a passive MuJoCo viewer during student evaluation')
     p.add_argument('--tasks',nargs='+',choices=TASKS,help='Evaluation only: select tasks to view/test')
     args=p.parse_args()
+    args.output=args.output.expanduser().resolve()
     if (args.viewer or args.tasks) and args.command!='eval':p.error('--viewer and --tasks are evaluation only')
     os.environ.setdefault('OMP_NUM_THREADS','1');os.environ.setdefault('OPENBLAS_NUM_THREADS','1');os.environ.setdefault('MKL_NUM_THREADS','1')
     if args.egl_device_id is not None:
@@ -321,6 +326,8 @@ def main():
     torch.set_num_threads(1);seed_all(config['seed'])
     if args.output.exists() and not args.resume:raise FileExistsError('Choose a new output directory')
     args.output.mkdir(parents=True,exist_ok=bool(args.resume))
+    counts=[len(c['objects'])*config['batch_episodes_per_object'] for c in config['tasks'].values()] if config.get('sampling_mode','per_task')=='per_object' else [config.get('batch_episodes_per_task',2)]*4
+    print('[sampling] {}: {} = {} sequences/update; task weights each 25%'.format(config.get('sampling_mode','per_task'),'+'.join(map(str,counts)),sum(counts)),flush=True)
     adapters={t:ActionAdapter(c) for t,c in config['tasks'].items()}
     if args.command=='eval':
         current=provenance();old=saved['metadata']['source_asset_sha256']

@@ -13,6 +13,7 @@ from gym_dcmm.utils.basket_aim import crossing_error
 from gym_dcmm.utils.basket_grip import palm_coordinates
 from gym_dcmm.utils.basket_simple import arm_self_contacts
 from gym_dcmm.utils.roll_rewards import hand_collision_ids
+from .carry_reward import VERSION as CARRY_VERSION,carry_terms,region_distance,navigation_progress,purposeful_launch
 
 SCHEMA='basket_autonomous_teacher_v1'
 HAND=np.array([0,2,3,4,6,7,8,10,11,13,14,15])
@@ -28,6 +29,8 @@ class AutonomousTeacherEnv(DcmmVecEnv):
             raise ValueError('Unknown autonomous training stage')
         probability=float(self.options.get('fixed_replay_probability',0.))
         if not 0.<=probability<=1.:raise ValueError('Invalid fixed replay probability')
+        self.reward_version=self.options.get('reward_version','autonomous_v1')
+        if self.reward_version not in ('autonomous_v1',CARRY_VERSION):raise ValueError('Unknown autonomous reward version')
         self.fixed_episode=False
         self.radius=.033275785333333335;self.mass=.058
         self.reset_stats={};self.last_action=np.zeros(20,np.float32)
@@ -166,7 +169,35 @@ class AutonomousTeacherEnv(DcmmVecEnv):
         self._initializing=False
         self.prev_ee_pos3d=self._get_relative_ee_pos3d().copy();self.prev_obj_pos3d=self._get_relative_object_pos3d().copy()
         self._initial_ball=d.qpos[37:40].copy()
+        self._ever_intentional_launch=False
+        self._carry_slip_integral=0.;self._carry_exposure=0.;self._carry_slip_max=0.
+        self._navigation_best=self._navigation_distance()
+        self._reward_totals={}
         return self.observation(),dict(reset_sampling=copy.deepcopy(self.reset_stats),fixed_episode=self.fixed_episode)
+
+    def _navigation_distance(self):
+        d=self.Dcmm.data;base=d.body('arm_base')
+        goal=base.xmat.reshape(3,3).T@(self.basket_center-base.xpos)
+        return region_distance(goal,self.options.get('fixed_goal_x_range',[-.1,.1]),
+            self.options.get('fixed_goal_y_range',[.85,1.15]))
+
+    def _carry_measurements(self):
+        d=self.Dcmm.data;palm=d.body('link6');rotation=palm.xmat.reshape(3,3)
+        twist=np.zeros(6)
+        mujoco.mj_objectVelocity(self.Dcmm.model,d,mujoco.mjtObj.mjOBJ_BODY,
+            self.Dcmm.model.body('link6').id,twist,0)
+        ball=d.qpos[37:40];velocity=d.qvel[36:39]
+        local=rotation.T@(ball-palm.xpos)
+        relative=rotation.T@(velocity-twist[3:]-np.cross(twist[:3],ball-palm.xpos))
+        direction=self.basket_center[:2]-ball[:2]
+        direction/=max(float(np.linalg.norm(direction)),1e-9)
+        base=d.body('arm_base');base_twist=np.zeros(6)
+        mujoco.mj_objectVelocity(self.Dcmm.model,d,mujoco.mjtObj.mjOBJ_BODY,
+            self.Dcmm.model.body('arm_base').id,base_twist,0)
+        palm_carrier=base_twist[3:]+np.cross(base_twist[:3],palm.xpos-base.xpos)
+        ball_carrier=base_twist[3:]+np.cross(base_twist[:3],ball-base.xpos)
+        # Throw-intent fade excludes carrier motion: driving with a stable hand is not a swing.
+        return local,relative,float(np.dot((twist[3:]-palm_carrier)[:2],direction)),float(np.dot((velocity-ball_carrier)[:2],direction))
 
     def observation(self):
         d=self.Dcmm.data
@@ -201,6 +232,7 @@ class AutonomousTeacherEnv(DcmmVecEnv):
                 self._release=copy.deepcopy(self._last_touch)
                 error=crossing_error(self._release['position'],self._release['velocity'],self.basket_center,m.opt.gravity,self.basket_cfg.basket_tilt_deg)
                 self._release['predicted_error']=error
+                self._ever_intentional_launch |= purposeful_launch(self._release['position'],self._release['velocity'],self.basket_center,error)
                 self._release['valid_stop']=self._release['stopped_seconds']>=.12
                 self._release['distance']=float(np.linalg.norm(self._release['position'][:2]-self.basket_center[:2]))
                 if not self._released_once:
@@ -236,16 +268,39 @@ class AutonomousTeacherEnv(DcmmVecEnv):
         error=crossing_error(d.qpos[37:40],d.qvel[36:39],self.basket_center,self.Dcmm.model.opt.gravity,self.basket_cfg.basket_tilt_deg)
         quality=0. if error is None else math.exp(-(error/.5)**2)
         progress=max(0.,quality-self._quality_best);self._quality_best=max(self._quality_best,quality)
-        # No target posture or parking waypoint: only contact, ballistic progress, smooth control, actual score.
-        reward=-.02+.005*float(touch)+4.*progress+self._release_reward
-        reward-=.002*float(np.mean(executed**2))+.01*float(np.mean((executed-previous_action)**2))
+        dt=self.steps_per_policy*self.Dcmm.model.opt.timestep
+        terms=dict(time=-.02,contact=.005*float(touch),ballistic_progress=4.*progress,
+            release=self._release_reward,action_cost=-.002*float(np.mean(executed**2)),
+            action_smoothness=-.01*float(np.mean((executed-previous_action)**2)),score=0.,failure=0.)
         self._release_reward=0.
+        drop_failure=bool(self.terminated_reason in ('ball_on_floor','out_of_bounds') and not self._ever_intentional_launch)
+        diagnostics={}
+        if self.reward_version==CARRY_VERSION:
+            # Replace the unconditional contact bonus; stability is weaker than the time cost.
+            terms['contact']=0.
+            local,relative,palm_forward,ball_forward=self._carry_measurements()
+            carry,diagnostics=carry_terms(local,relative,touch,self._released_once,palm_forward,ball_forward,dt)
+            terms.update(carry)
+            eligible=(not self.fixed_episode and diagnostics['carry_gate']>.5 and
+                diagnostics['in_support_envelope'] and diagnostics['slip_speed']<.25)
+            self._navigation_best,terms['carry_navigation']=navigation_progress(
+                self._navigation_best,self._navigation_distance(),eligible)
+            terms['drop_failure']=-5.*float(drop_failure)
+            if diagnostics['carry_gate']>0.:
+                exposure=dt*diagnostics['carry_gate']
+                self._carry_exposure+=exposure;self._carry_slip_integral+=exposure*diagnostics['slip_speed']
+                self._carry_slip_max=max(self._carry_slip_max,diagnostics['slip_speed'])
         safe_score=self._scored and not self.basket_robot_collision and not self.basket_arm_self_collision
-        if safe_score:reward+=100.
-        elif self.terminated or truncated:reward-=15.
+        if safe_score:terms['score']=100.
+        elif self.terminated or truncated:terms['failure']=-15.
+        reward=sum(terms.values())
+        for key,value in terms.items():self._reward_totals[key]=self._reward_totals.get(key,0.)+value
         info=dict(fixed_episode=self.fixed_episode,success=bool(self._scored),safe_basket_success=bool(self._scored and not self.basket_robot_collision and not self.basket_arm_self_collision),
             terminated_reason=self.terminated_reason,hand_contact=touch,elapsed=elapsed,
             base_speed=float(np.linalg.norm(d.qvel[:2])),low_speed_seconds=self._low_speed_time,
             released=self._released_once,release_stopped=bool(self._release and self._release['valid_stop']),
-            predicted_error=error,reset_attempts=self.reset_stats['attempts'])
+            predicted_error=error,reset_attempts=self.reset_stats['attempts'],reward_version=self.reward_version,
+            reward_terms=terms,reward_totals=self._reward_totals.copy(),carry_diagnostics=diagnostics,
+            carry_seconds=self._carry_exposure,carry_slip_mean=self._carry_slip_integral/max(self._carry_exposure,1e-9),
+            carry_slip_max=self._carry_slip_max,drop_failure=drop_failure,purposeful_launch=self._ever_intentional_launch)
         return self.observation(),float(reward),bool(self.terminated),bool(truncated),info

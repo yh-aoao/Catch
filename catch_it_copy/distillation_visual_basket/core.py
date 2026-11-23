@@ -78,6 +78,8 @@ class Replay:
     keys=('depth','proprio','previous','context','target','object_target','object_valid','world_position','contact_after','basket_target','basket_valid','basket_phase')
     def __init__(self,config):
         self.batch_per_task=config.get('batch_episodes_per_task',2)
+        self.sampling_mode=config.get('sampling_mode','per_task')
+        if self.sampling_mode not in ('per_task','per_object'):raise ValueError('Unknown replay sampling mode')
         self.groups=[(t,o) for t in TASKS for o in config['tasks'][t]['objects']]
         self.data={t+'/'+o:deque() for t,o in self.groups};self.sizes={k:0 for k in self.data}
         self.capacities={t+'/'+o:config['capacity_frames_per_task']//len(config['tasks'][t]['objects']) for t,o in self.groups}
@@ -110,11 +112,16 @@ class Replay:
     def sample(self,per_object,device):
         if not self.ready():raise RuntimeError('Replay needs every task/object condition')
         entries=[]
-        for task in TASKS:
-            indices=[i for i,(t,o) in enumerate(self.groups) if t==task]
-            for _ in range(self.batch_per_task):
-                i=random.choice(indices);t,o=self.groups[i]
-                entries.append((i,random.choice(self.data[t+'/'+o])))
+        if self.sampling_mode=='per_object':
+            if type(per_object) is not int or per_object<1:raise ValueError('Need positive episodes per object')
+            for i,(task,obj) in enumerate(self.groups):
+                for _ in range(per_object):entries.append((i,random.choice(self.data[task+'/'+obj])))
+        else:
+            for task in TASKS:
+                indices=[i for i,(t,o) in enumerate(self.groups) if t==task]
+                for _ in range(self.batch_per_task):
+                    i=random.choice(indices);t,o=self.groups[i]
+                    entries.append((i,random.choice(self.data[t+'/'+o])))
         length=max(len(e['depth']) for _,e in entries);batch={}
         for key in self.keys+('future_target','future_valid'):
             example=entries[0][1][key]
@@ -126,7 +133,7 @@ class Replay:
         for i,(index,e) in enumerate(entries):
             valid[i,:len(e['depth'])]=1
             task=self.groups[index][0];n=sum(t==task for t,o in self.groups)
-            weights.append(1/(4*self.batch_per_task));task_ids.append(TASKS.index(task))
+            weights.append(1/(4*n*per_object) if self.sampling_mode=='per_object' else 1/(4*self.batch_per_task));task_ids.append(TASKS.index(task))
         batch.update(valid=valid,weights=torch.tensor(weights,device=device),task_id=torch.tensor(task_ids,device=device),
                      group_id=torch.tensor([index for index,e in entries],device=device))
         return batch

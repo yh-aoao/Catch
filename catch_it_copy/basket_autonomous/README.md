@@ -123,3 +123,60 @@ python -m basket_autonomous.run eval \
 服务器需同步整个`basket_autonomous/`目录，以及已有的`gym_dcmm/envs/DcmmVecEnv.py`自主控制支持。修改前目录保存在`backups/before_autonomous_two_stage_20261123/basket_autonomous/`。
 
 验证：6项测试通过，覆盖真实随机接触、无辅助动作、两阶段权重导入、固定回合PPO屏蔽、移动动作梯度；两个阶段的双进程物理采集和终止后自动reset检查通过。没有启动正式训练，不能据此推断训练成功率。
+
+## 持球与移动奖励 V2（新增配置，2026-11-23）
+
+入口仍是`basket_autonomous.run`。新增`fixed_carry_v2.json`和`mobile_carry_v2.json`，旧stage配置保持原奖励。依旧固定网球、随机有效持球起点、关节速度6+手指增量12（移动回合另有底盘2），第一阶段从零训练；第二阶段加载本次V2第一阶段，全部参数继续训练，保留30%固定回合。没有新增持球/制动辅助或目标手型。
+
+奖励在原投中、弹道、释放、时间和动作代价基础上增加：
+
+| 项目 | 数值与用途 |
+| --- | --- |
+| 持球稳定 | 最大+0.08/秒；真实接触、球在手部宽松区域内、球相对手掌速度较小时获得。没有奖励球处于某个精确点。 |
+| 滑移 | 最高-0.35/秒；使用扣除手掌平移与转动的相对速度，不惩罚整体携球运动。 |
+| 边界外滑 | 最高-0.50/秒；仅在球接近宽松手部区域边界且向外滑时惩罚，向内调整不受此项惩罚。区域是手掌坐标中的球心范围X[-0.10,0.10]、Y[-0.08,0.20]、Z[-0.035,0.16]米，属于近似防滑包络，非精确接触支撑多边形。 |
+| 持球移动进展 | 每回合最多+4；真实持球且滑移较小时，朝第一阶段练过的可投范围前进。使用历史最佳距离，往返不重复奖励；固定回合、脱手后不奖励。范围为目标在机械臂基座坐标X±0.10m、Y0.85–1.15m，非唯一停车点。 |
+| 额外掉球代价 | 未检测到有效向前抛掷便落地/飞出范围，额外-5；原失败-15保留。有效抛掷是启发式判别：释放球向目标速度≥0.6m/s，且存在弹道穿框平面的解或向上速度>0.1m/s；不要求投中，也不要求停稳。 |
+
+原无条件接触小奖励在V2中移除。时间代价仍为每0.04秒-0.02（每秒-0.5），因此仅靠静止持球不能持续赚分。稳定、防滑项在相对底盘的向前挥臂/球速0.25–0.80m/s时逐渐减弱，达到0.80m/s或第一次确认脱手后关闭；此判别只影响奖励，不门控动作。移动进展和弹道进展都有限额，不能一直持球刷分。
+
+真实投中+100、弹道最佳质量进步最多+4、第一次释放质量最多+8、失败-15与原版一致。有效投中仍要求模型自行停稳后释放；环境不会执行阶段刹车。
+
+新诊断输出包括`drop_failure_100`（近100个已结束回合掉球比例）、`carry_slip_mean_100`与`carry_slip_max_100`（近100回合的携球相对滑速均值/峰值的平均，m/s），并保留`fixed_sr`、`mobile_sr`。逐回合info包含完整`reward_terms`、`reward_totals`与携球诊断。
+
+第一阶段：
+
+```bash
+conda activate dcmm
+cd ~/Catch/catch_it_copy
+python -m basket_autonomous.run train \
+  --config basket_autonomous/configs/fixed_carry_v2.json \
+  --output basket_autonomous/runs/tennis_hold_v2_fixed_seed123 \
+  --device cuda:0 --num-envs 32 --rollout-steps 64 \
+  --total-steps 1000000000000 \
+  --eval-every 1000000 --eval-episodes 100 --save-every 100000
+```
+
+第一阶段投中率稳定后启动第二阶段，不能用旧40.98权重替代新第一阶段：
+
+```bash
+python -m basket_autonomous.run train \
+  --config basket_autonomous/configs/mobile_carry_v2.json \
+  --initialize-from basket_autonomous/runs/tennis_hold_v2_fixed_seed123/teacher_best.pth \
+  --output basket_autonomous/runs/tennis_hold_v2_mobile_seed123 \
+  --device cuda:0 --num-envs 32 --rollout-steps 64 \
+  --total-steps 1000000000000 \
+  --eval-every 1000000 --eval-episodes 100 --save-every 100000
+```
+
+同阶段续训使用`--resume .../resume_last.pth`，不与`--initialize-from`同时使用。每个新实验选择不同输出目录。
+
+同步服务器时更新整个`basket_autonomous/`目录，包括新`carry_reward.py`和两个V2配置。仍依赖已有`DcmmVecEnv.py`自主控制支持。
+
+修改前备份：`backups/before_autonomous_carry_v2_20261123/source.tar.gz`；在项目目录执行下面命令恢复本次改动的既有文件，新模块与新配置会保留：
+
+```bash
+ tar -xzf backups/before_autonomous_carry_v2_20261123/source.tar.gz
+```
+
+13项检查与两阶段双进程采集检查通过，包括新旧奖励下相同动作物理轨迹一致、整体携球平移不产生虚假滑移、禁止往返刷进展、稳定与释放奖励判别，以及权重协议匹配。没有启动训练，尚无本版训练成功率。

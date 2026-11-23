@@ -16,7 +16,7 @@ def package(model,config,steps,optimizer=None,iteration=0,best=-1.):
     from .policy import SCHEMA
     result=dict(schema=SCHEMA,model=model.state_dict(),config=copy.deepcopy(config),steps=steps,iteration=iteration,
         observation_version='robot36_ball6_goal3_previous20_v1',actions='full20_joint_velocity_hand_increment_v1',
-        reset_protocol='random_physical_supported_hold_v1',best=best)
+        reset_protocol='random_physical_supported_hold_v1',reward_version=config['options'].get('reward_version','autonomous_v1'),best=best)
     if optimizer is not None:
         import torch
         result.update(optimizer=optimizer.state_dict(),rng_python=random.getstate(),rng_torch=torch.get_rng_state(),
@@ -86,6 +86,7 @@ def train(config,output,resume=None,initialize_from=None):
     n=config['num_envs'];pool=Pool(n,config['options'],config['seed']+steps)
     rewards=deque(maxlen=100);success=deque(maxlen=100);totals=np.zeros(n)
     grouped={key:deque(maxlen=200) for key in ('fixed','mobile')}
+    carry_metrics={key:deque(maxlen=100) for key in ('drop_failure','carry_slip_mean','carry_slip_max')}
     next_eval=(steps//config['eval_every']+1)*config['eval_every'];next_save=(steps//config['save_every']+1)*config['save_every']
     try:
         while steps<config['total_steps']:
@@ -110,6 +111,7 @@ def train(config,output,resume=None,initialize_from=None):
                 for i in np.flatnonzero(terminated|truncated):
                     rewards.append(float(totals[i]));success.append(float(infos[i]['safe_basket_success']));totals[i]=0.
                     grouped['fixed' if infos[i].get('fixed_episode',False) else 'mobile'].append(float(infos[i]['safe_basket_success']))
+                    for key,buffer in carry_metrics.items():buffer.append(float(infos[i].get(key,0.)))
                 steps+=n
             collection_seconds=time.monotonic()-collection_start
             advantages=torch.zeros(horizon,n,device=device);last=torch.zeros(n,device=device)
@@ -141,6 +143,7 @@ def train(config,output,resume=None,initialize_from=None):
                 fixed_sr=float(np.mean(grouped['fixed'])) if grouped['fixed'] else None,
                 mobile_sr=float(np.mean(grouped['mobile'])) if grouped['mobile'] else None,
                 actor_loss=float(np.mean([v[0] for v in metrics])),value_loss=float(np.mean([v[1] for v in metrics])),kl=float(np.mean([v[2] for v in metrics])))
+            row.update({key+'_100':float(np.mean(buffer)) if buffer else None for key,buffer in carry_metrics.items()})
             if steps>=next_eval or steps==config['total_steps']:
                 before_python=random.getstate();before_numpy=np.random.get_state();before_torch=torch.get_rng_state()
                 result=evaluate(model,config,config['eval_episodes'],config['seed']+500000)
@@ -176,7 +179,7 @@ def validate_initialization(saved,config):
         raise ValueError('Initialization is only supported for mobile stage')
     source=saved['config']['options'];target=config['options']
     # Carry the same initial-state distribution into mobile training.
-    for key in ('arm_jitter_rad','hand_jitter_rad','pose_bank_entries','fixed_goal_x_range','fixed_goal_y_range'):
+    for key in ('arm_jitter_rad','hand_jitter_rad','pose_bank_entries','fixed_goal_x_range','fixed_goal_y_range','reward_version'):
         if source.get(key)!=target.get(key):raise ValueError('Stage initialization protocol differs: '+key)
 
 

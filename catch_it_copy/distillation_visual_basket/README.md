@@ -66,3 +66,40 @@ python -m unittest distillation_visual_basket.test_student distillation_visual_b
 ```
 
 check恢复教师并核对推理映射，不运行教师成功率基线；env-check覆盖18种条件的真实渲染与动作接口。smoke使用四个真实worker采集短序列并执行一次反向传播，短序列人为截断仅作工程验证，不是成功率评估。
+
+## V2：每目标覆盖采样，Bounce 16.34
+
+新模板`configs/catch_all_objects_v2.json`继承本次runs_bak的实际训练配置：Throw524.87、Roll403.15、Basket40.98，Bounce改为服务器上的16.34。它没有替换为尚未正式训练的新`basket_autonomous`教师。
+
+`sampling_mode=per_object`、`batch_episodes_per_object=1`：每次优化更新依次覆盖全部目标组合，5+7+5+1=18条完整回合序列。一个目标每次必抽一次。四任务依然各占25%损失权重，所以Roll每目标权重为1/28、Throw和Bounce各目标为1/20、Basket为1/4。每轮8次优化即144次回合采样，不代表144个独立新回合；允许重复使用回放池数据。
+
+旧配置或旧checkpoint没有`sampling_mode`时，继续默认`per_task`（每任务2条，总8条），不改变旧版采样语义。新实验增加了优化序列数量，显存和计算开销通常会上升；环境采集数量未增加，不能把它描述为只增加并行的加速方案。
+
+服务器先生成锁定路径与SHA256的配置（输出文件使用新名字，避免覆盖）：
+
+```bash
+cd /home/yuhao2/Catch/catch_it_copy
+python -m distillation_visual_basket.prepare_config \
+  --config distillation_visual_basket/configs/catch_all_objects_v2.json \
+  --teacher-root /home/yuhao2/Catch/catch_it_copy/best_model_1122 \
+  --bounce-checkpoint '/home/yuhao2/Catch/catch_it_copy/outputs/bounce_five_ball_catch_v3_seed123/2026-11-22/15:22:56/bounce_catch_best_reward_16.34.pth' \
+  --output distillation_visual_basket/configs/catch_all_objects_v2_server.json
+```
+
+准备命令显式确认四个选定文件，计算哈希；Bounce的显式路径优先于统一目录。模板没有猜测Bounce16.34的哈希，必须在服务器准备后使用。准备命令核对Bounce的controlled_hold协议标记；完整教师网络恢复与原推理方法对照仍由check/train入口执行，不是绕过校验。
+
+```bash
+export OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1
+export MPLCONFIGDIR=/tmp/catch_mpl
+python -m distillation_visual_basket.run train \
+  --config distillation_visual_basket/configs/catch_all_objects_v2_server.json \
+  --output /home/yuhao2/Catch/catch_it_copy/distillation_visual_basket/runs/all_objects_v2_seed123 \
+  --device cuda:2 --gl-backend egl --egl-device-id 2 \
+  --num-envs 8 --rollout-steps 64 \
+  --iterations 10000 --eval-start 1000 --eval-every 1000 \
+  --episodes 300 --skip-teacher-baseline
+```
+
+训练命令不要再加`--teacher-root`，因为准备后的四个路径已锁定，且Bounce不在统一目录。`--num-envs 8`每任务8个、总32个渲染worker，保留本次运行的2048条采集步/轮。每1000轮评估并保存模型。新实验从头训练，使用新输出目录，不从旧8序列实验resume，以免混入已变化的教师标签和训练预算。
+
+首次启动应看到`[sampling] per_object: 5+7+5+1 = 18 sequences/update; task weights each 25%`。本地测试覆盖18组完整覆盖、重复采样倍数、任务等权、18序列反向传播、显式路径覆盖和实际哈希固定，以及旧8序列回归；服务器16.34文件不在本地，未执行它的实际成功率测试。

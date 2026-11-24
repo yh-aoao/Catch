@@ -31,6 +31,11 @@ class AutonomousTeacherEnv(DcmmVecEnv):
         if not 0.<=probability<=1.:raise ValueError('Invalid fixed replay probability')
         self.reward_version=self.options.get('reward_version','autonomous_v1')
         if self.reward_version not in ('autonomous_v1',CARRY_VERSION):raise ValueError('Unknown autonomous reward version')
+        self.arm_velocity_protocol=self.options.get('arm_velocity_protocol','measured_v1')
+        self.release_protocol=self.options.get('release_protocol','contact_gap_v1')
+        if self.arm_velocity_protocol not in ('measured_v1','integrated_target_v2'):raise ValueError('Unknown velocity protocol')
+        if self.release_protocol not in ('contact_gap_v1','separated_flight_v2'):raise ValueError('Unknown release protocol')
+        self.basket_integrated_arm_velocity=self.arm_velocity_protocol=='integrated_target_v2'
         self.fixed_episode=False
         self.radius=.033275785333333335;self.mass=.058
         self.reset_stats={};self.last_action=np.zeros(20,np.float32)
@@ -170,6 +175,9 @@ class AutonomousTeacherEnv(DcmmVecEnv):
         self.prev_ee_pos3d=self._get_relative_ee_pos3d().copy();self.prev_obj_pos3d=self._get_relative_object_pos3d().copy()
         self._initial_ball=d.qpos[37:40].copy()
         self._ever_intentional_launch=False
+        if self.release_protocol=='separated_flight_v2':
+            self._last_touch=dict(position=d.qpos[37:40].copy(),velocity=d.qvel[36:39].copy(),
+                time=float(d.time),base_speed=float(np.linalg.norm(d.qvel[:2])),stopped_seconds=0.)
         self._carry_slip_integral=0.;self._carry_exposure=0.;self._carry_slip_max=0.
         self._navigation_best=self._navigation_distance()
         self._reward_totals={}
@@ -213,6 +221,42 @@ class AutonomousTeacherEnv(DcmmVecEnv):
         if out.shape!=(65,) or not np.isfinite(out).all():raise FloatingPointError('Invalid autonomous teacher observation')
         return out
 
+    def _hand_clearance(self,hands):
+        # Minimum surface distance to ALL hand collision geometries, not palm-center distance.
+        return min(float(mujoco.mj_geomDistance(self.Dcmm.model,self.Dcmm.data,
+            self.object_id,int(g),1.,None)) for g in hands)
+
+    def _update_confirmed_release(self,touch,p,speed,dt,hands):
+        d=self.Dcmm.data
+        if touch:
+            self._no_hand_seconds=0.
+            self._last_touch=dict(position=p.copy(),velocity=d.qvel[36:39].copy(),time=float(d.time),
+                base_speed=speed,stopped_seconds=self._low_speed_time)
+            # Short contact gaps and recontacts cannot earn release credit or disable carrying.
+            self._release=None
+            return
+        self._no_hand_seconds+=dt
+        if self._last_touch is None or self._no_hand_seconds<.04:return
+        if self._release is None:
+            self._release=copy.deepcopy(self._last_touch)
+            r=self._release
+            r['predicted_error']=crossing_error(r['position'],r['velocity'],self.basket_center,
+                self.Dcmm.model.opt.gravity,self.basket_cfg.basket_tilt_deg)
+            r['valid_stop']=r['stopped_seconds']>=.12
+            r['distance']=float(np.linalg.norm(r['position'][:2]-self.basket_center[:2]))
+            r['confirmed']=False
+        r=self._release
+        moved=float(np.linalg.norm(p-r['position']))
+        if (not r['confirmed'] and self._no_hand_seconds>=.10 and moved>=.20
+                and self._hand_clearance(hands)>=.01):
+            r['confirmed']=True
+            intentional=purposeful_launch(r['position'],r['velocity'],self.basket_center,r['predicted_error'])
+            self._ever_intentional_launch |= intentional
+            if not self._released_once:
+                error=r['predicted_error'];quality=0. if error is None else math.exp(-(error/.5)**2)
+                self._release_reward=8.*quality if r['valid_stop'] and intentional else -2.
+                self._released_once=True
+
     def _basket_check_flight(self,previous):
         if self._initializing:return
         d=self.Dcmm.data;m=self.Dcmm.model;dt=float(m.opt.timestep)
@@ -220,30 +264,33 @@ class AutonomousTeacherEnv(DcmmVecEnv):
         touch=any(int(g) in hands for g in contacts['object_contacts']);p=d.qpos[37:40].copy()
         speed=float(np.linalg.norm(d.qvel[:2]))
         self._low_speed_time=self._low_speed_time+dt if speed<.05 and np.linalg.norm(d.qvel[3:6])<.15 else 0.
-        if touch:
-            self._no_hand_seconds=0.
-            self._last_touch=dict(position=p.copy(),velocity=d.qvel[36:39].copy(),time=float(d.time),base_speed=speed,
-                stopped_seconds=self._low_speed_time)
-            # Recontact is physical; no regrasp, teleport or target hold is applied.
-            self._release=None
+        if self.release_protocol=='separated_flight_v2':
+            self._update_confirmed_release(touch,p,speed,dt,hands)
         else:
-            self._no_hand_seconds+=dt
-            if self._last_touch is not None and self._no_hand_seconds>=.04 and self._release is None:
-                self._release=copy.deepcopy(self._last_touch)
-                error=crossing_error(self._release['position'],self._release['velocity'],self.basket_center,m.opt.gravity,self.basket_cfg.basket_tilt_deg)
-                self._release['predicted_error']=error
-                self._ever_intentional_launch |= purposeful_launch(self._release['position'],self._release['velocity'],self.basket_center,error)
-                self._release['valid_stop']=self._release['stopped_seconds']>=.12
-                self._release['distance']=float(np.linalg.norm(self._release['position'][:2]-self.basket_center[:2]))
-                if not self._released_once:
-                    quality=0. if error is None else math.exp(-(error/.5)**2)
-                    self._release_reward=8.*quality if self._release['valid_stop'] else -2.
-                    self._released_once=True
+            if touch:
+                self._no_hand_seconds=0.
+                self._last_touch=dict(position=p.copy(),velocity=d.qvel[36:39].copy(),time=float(d.time),base_speed=speed,
+                    stopped_seconds=self._low_speed_time)
+                # Recontact is physical; no regrasp, teleport or target hold is applied.
+                self._release=None
+            else:
+                self._no_hand_seconds+=dt
+                if self._last_touch is not None and self._no_hand_seconds>=.04 and self._release is None:
+                    self._release=copy.deepcopy(self._last_touch)
+                    error=crossing_error(self._release['position'],self._release['velocity'],self.basket_center,m.opt.gravity,self.basket_cfg.basket_tilt_deg)
+                    self._release['predicted_error']=error
+                    self._ever_intentional_launch |= purposeful_launch(self._release['position'],self._release['velocity'],self.basket_center,error)
+                    self._release['valid_stop']=self._release['stopped_seconds']>=.12
+                    self._release['distance']=float(np.linalg.norm(self._release['position'][:2]-self.basket_center[:2]))
+                    if not self._released_once:
+                        quality=0. if error is None else math.exp(-(error/.5)**2)
+                        self._release_reward=8.*quality if self._release['valid_stop'] else -2.
+                        self._released_once=True
         floor=any(int(g)==self.floor_id for g in contacts['object_contacts'])
         crossed,scored,_=hoop_crossing(previous,p,self.basket_center,self.basket_cfg.basket_tilt_deg,self.basket_cfg.basket_radius,self.radius)
         release=self._release
         airborne=bool(release and d.time-release['time']>=.1 and np.linalg.norm(p-release['position'])>=.2)
-        if crossed and scored and airborne and not touch and release['valid_stop'] and release['distance']>=.3 and not floor:
+        if crossed and scored and airborne and not touch and (self.release_protocol=='contact_gap_v1' or release.get('confirmed',False)) and release['valid_stop'] and release['distance']>=.3 and not floor:
             self._scored=True;self.terminated=True;self.terminated_reason='basket_score'
         elif floor or p[2]<self.radius*.8:
             self.terminated=True;self.terminated_reason='ball_on_floor'
@@ -299,7 +346,8 @@ class AutonomousTeacherEnv(DcmmVecEnv):
             terminated_reason=self.terminated_reason,hand_contact=touch,elapsed=elapsed,
             base_speed=float(np.linalg.norm(d.qvel[:2])),low_speed_seconds=self._low_speed_time,
             released=self._released_once,release_stopped=bool(self._release and self._release['valid_stop']),
-            predicted_error=error,reset_attempts=self.reset_stats['attempts'],reward_version=self.reward_version,
+            predicted_error=error,reset_attempts=self.reset_stats['attempts'],reward_version=self.reward_version,arm_velocity_protocol=self.arm_velocity_protocol,release_protocol=self.release_protocol,
+            release_pending=bool(self._release and not self._release.get('confirmed',True)),
             reward_terms=terms,reward_totals=self._reward_totals.copy(),carry_diagnostics=diagnostics,
             carry_seconds=self._carry_exposure,carry_slip_mean=self._carry_slip_integral/max(self._carry_exposure,1e-9),
             carry_slip_max=self._carry_slip_max,drop_failure=drop_failure,purposeful_launch=self._ever_intentional_launch)

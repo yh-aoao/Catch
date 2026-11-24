@@ -180,3 +180,41 @@ python -m basket_autonomous.run train \
 ```
 
 13项检查与两阶段双进程采集检查通过，包括新旧奖励下相同动作物理轨迹一致、整体携球平移不产生虚假滑移、禁止往返刷进展、稳定与释放奖励判别，以及权重协议匹配。没有启动训练，尚无本版训练成功率。
+
+## 两处修复（2026-11-24；仍为上述两阶段V2）
+
+没有改成三阶段，没有调整V2奖励权重或随机范围。
+
+- `arm_velocity_protocol=integrated_target_v2`：把关节速度积分到上一次关节目标，零速度保留该目标；目标与实测角度偏差限制在±0.35rad以内，避免阻挡时积累过大误差。不把机械臂强制恢复到某个初始化手型。仅显式启用该协议的自主版使用新转换，其他任务保持原路径。
+- `release_protocol=separated_flight_v2`：0.04秒无接触仅建立候选；连续至少0.10秒无接触、球距最后接触点至少0.20m、与所有手部碰撞几何体表面间隙至少0.01m，才确认真实离手。候选阶段重新接触即撤销，不奖励、不锁定已释放；真实离手后还需满足原向前抛掷判别，才能获得正释放奖励。投中几何判据、停稳要求与奖励数值保留。
+
+当前四个两阶段配置已显式启用两个新协议。旧权重配置中没有这两个字段，因此eval/resume仍使用旧语义以便复现；**要尝试修复后的V2，请在新输出目录从零启动，不要resume旧实验**。新第二阶段必须加载本次修复后第一阶段权重，协议不匹配会报错。
+
+第一阶段：
+
+```bash
+conda activate dcmm
+cd ~/Catch/catch_it_copy
+python -m basket_autonomous.run train \
+  --config basket_autonomous/configs/fixed_carry_v2.json \
+  --output basket_autonomous/runs/tennis_hold_v2_fixed_fix_seed123 \
+  --device cuda:0 --num-envs 32 --rollout-steps 64 \
+  --total-steps 1000000000000 \
+  --eval-every 1000000 --eval-episodes 100 --save-every 100000
+```
+
+第一阶段确认学会后，再启动第二阶段：
+
+```bash
+python -m basket_autonomous.run train \
+  --config basket_autonomous/configs/mobile_carry_v2.json \
+  --initialize-from basket_autonomous/runs/tennis_hold_v2_fixed_fix_seed123/teacher_best.pth \
+  --output basket_autonomous/runs/tennis_hold_v2_mobile_fix_seed123 \
+  --device cuda:0 --num-envs 32 --rollout-steps 64 \
+  --total-steps 1000000000000 \
+  --eval-every 1000000 --eval-episodes 100 --save-every 100000
+```
+
+同步服务器必须同时更新`basket_autonomous/`源码和配置、`gym_dcmm/envs/DcmmVecEnv.py`，不能只更新配置或自主版目录。修改前备份为`backups/before_autonomous_control_release_fix_20261124/source.tar.gz`。
+
+检查包括短接触间断不奖励、重新接触撤销候选、飞离手部才确认、真实掉落没有正释放奖励、零指令保持关节目标、非零指令仍可调整目标，以及两个阶段双进程采集与reset。8个相同随机起点下，零动作2秒持球从修复前0/8改善为7/8；剩余1个起点掉球，未添加球体力或固定姿态辅助。这是控制诊断，不是训练后投篮成功率；没有启动正式训练。

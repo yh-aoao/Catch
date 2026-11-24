@@ -2873,9 +2873,16 @@ class DcmmVecEnv(gym.Env):
                 for i, jid in enumerate(joint_ids):
                     if not self.Dcmm.model.jnt_limited[jid]:
                         limits[i] = [-2*np.pi, 2*np.pi]
-                target = joint_velocity_target(self.Dcmm.data.qpos[15:21], action_arm,
+                integrated = getattr(self, 'basket_integrated_arm_velocity', False)
+                reference = self.Dcmm.target_arm_qpos if integrated else self.Dcmm.data.qpos[15:21]
+                target = joint_velocity_target(reference, action_arm,
                     DcmmCfg.basket_arm_action_scale, DcmmCfg.basket_joint_speed_limits,
                     self.steps_per_policy*self.Dcmm.model.opt.timestep, limits)
+                if integrated:
+                    # Position-servo velocity interface: retain zero-speed targets and
+                    # bound tracking error so blocked joints cannot accumulate windup.
+                    measured = self.Dcmm.data.qpos[15:21]
+                    target = np.clip(target, measured-.35, measured+.35)
                 result_QP = (target, True)
             else:
                 result_QP, _ = self.Dcmm.move_ee_pose(action_arm, measured_state=True)

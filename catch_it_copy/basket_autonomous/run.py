@@ -179,7 +179,7 @@ def validate_initialization(saved,config):
         raise ValueError('Initialization is only supported for mobile stage')
     source=saved['config']['options'];target=config['options']
     # Carry the same initial-state distribution into mobile training.
-    for key in ('arm_jitter_rad','hand_jitter_rad','pose_bank_entries','fixed_goal_x_range','fixed_goal_y_range','reward_version'):
+    for key in ('arm_jitter_rad','hand_jitter_rad','pose_bank_entries','fixed_goal_x_range','fixed_goal_y_range','reward_version','arm_velocity_protocol','release_protocol'):
         if source.get(key)!=target.get(key):raise ValueError('Stage initialization protocol differs: '+key)
 
 

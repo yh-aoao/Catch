@@ -13,7 +13,7 @@ from gym_dcmm.utils.basket_aim import crossing_error
 from gym_dcmm.utils.basket_grip import palm_coordinates
 from gym_dcmm.utils.basket_simple import arm_self_contacts
 from gym_dcmm.utils.roll_rewards import hand_collision_ids
-from .carry_reward import VERSION as CARRY_VERSION,carry_terms,region_distance,navigation_progress,purposeful_launch
+from .carry_reward import VERSION as CARRY_VERSION,carry_terms,region_distance,navigation_progress,purposeful_launch,release_distance_reward
 
 SCHEMA='basket_autonomous_teacher_v1'
 HAND=np.array([0,2,3,4,6,7,8,10,11,13,14,15])
@@ -44,6 +44,15 @@ class AutonomousTeacherEnv(DcmmVecEnv):
         self.navigation_cap=float(self.options.get('navigation_progress_cap',1.))
         if not np.isfinite([self.navigation_weight,self.navigation_cap]).all() or self.navigation_weight<0 or self.navigation_cap<=0:
             raise ValueError('Invalid navigation progress settings')
+        self.release_distance_options=self.options.get('release_distance_reward')
+        if self.release_distance_options is not None:
+            r=self.release_distance_options
+            bounds=np.asarray(r.get('range',[.85,1.15]),float)
+            numbers=np.array([r.get('bonus',15.),r.get('penalty',25.),r.get('margin',.05),r.get('penalty_distance',.5)],float)
+            if (bounds.shape!=(2,) or not np.isfinite(bounds).all() or bounds[0]<=0 or bounds[1]<=bounds[0]
+                    or not np.isfinite(numbers).all() or np.any(numbers[:2]<0) or np.any(numbers[2:]<=0)):
+                raise ValueError('Invalid release_distance_reward settings')
+            if self.release_protocol!='separated_flight_v2':raise ValueError('Distance reward requires confirmed release protocol')
         self.fixed_episode=False
         self.radius=.033275785333333335;self.mass=.058
         self.reset_stats={};self.last_action=np.zeros(20,np.float32)
@@ -192,6 +201,7 @@ class AutonomousTeacherEnv(DcmmVecEnv):
         self.basket_arm_self_collision=False;self.basket_robot_collision=False
         self._reset_targets();self.last_action.fill(0)
         self._no_hand_seconds=0.;self._release=None;self._last_touch=None;self._low_speed_time=0.
+        self._distance_reward_paid=False;self._release_distance_value=None
         self._scored=False;self._release_reward=0.;self._quality_best=0.;self._released_once=False
         self._initializing=False
         self.prev_ee_pos3d=self._get_relative_ee_pos3d().copy();self.prev_obj_pos3d=self._get_relative_object_pos3d().copy()
@@ -200,6 +210,8 @@ class AutonomousTeacherEnv(DcmmVecEnv):
         if self.release_protocol=='separated_flight_v2':
             self._last_touch=dict(position=d.qpos[37:40].copy(),velocity=d.qvel[36:39].copy(),
                 time=float(d.time),base_speed=float(np.linalg.norm(d.qvel[:2])),stopped_seconds=0.)
+        if self._last_touch is not None and self.release_distance_options is not None:
+            self._last_touch['base_target_distance']=float(np.linalg.norm(self.basket_center[:2]-d.body('arm_base').xpos[:2]))
         self._carry_slip_integral=0.;self._carry_exposure=0.;self._carry_slip_max=0.
         self._initial_base_xy=d.body('arm_base').xpos[:2].copy()
         self._navigation_best=self._navigation_distance()
@@ -255,6 +267,8 @@ class AutonomousTeacherEnv(DcmmVecEnv):
             self._no_hand_seconds=0.
             self._last_touch=dict(position=p.copy(),velocity=d.qvel[36:39].copy(),time=float(d.time),
                 base_speed=speed,stopped_seconds=self._low_speed_time)
+            if getattr(self,'release_distance_options',None) is not None:
+                self._last_touch['base_target_distance']=float(np.linalg.norm(self.basket_center[:2]-d.body('arm_base').xpos[:2]))
             # Short contact gaps and recontacts cannot earn release credit or disable carrying.
             self._release=None
             return
@@ -364,6 +378,18 @@ class AutonomousTeacherEnv(DcmmVecEnv):
         safe_score=self._scored and not self.basket_robot_collision and not self.basket_arm_self_collision
         if safe_score:terms['score']=100.
         elif self.terminated or truncated:terms['failure']=-15.
+        if self.release_distance_options is not None:
+            terms['release_distance']=0.
+            r=self._release
+            if not self.fixed_episode and self._released_once and not self._distance_reward_paid and r and r.get('confirmed',False):
+                self._distance_reward_paid=True
+                self._release_distance_value=r.get('base_target_distance')
+                if self._release_distance_value is not None:
+                    cfg=self.release_distance_options
+                    value=release_distance_reward(self._release_distance_value,cfg.get('range',[.85,1.15]),
+                        cfg.get('bonus',15.),cfg.get('penalty',25.),cfg.get('margin',.05),cfg.get('penalty_distance',.5))
+                    intentional=purposeful_launch(r['position'],r['velocity'],self.basket_center,r['predicted_error'])
+                    terms['release_distance']=value if value<0. or intentional else 0.
         reward=sum(terms.values())
         for key,value in terms.items():self._reward_totals[key]=self._reward_totals.get(key,0.)+value
         info=dict(fixed_episode=self.fixed_episode,success=bool(self._scored),safe_basket_success=bool(self._scored and not self.basket_robot_collision and not self.basket_arm_self_collision),
@@ -372,6 +398,7 @@ class AutonomousTeacherEnv(DcmmVecEnv):
             base_displacement=float(np.linalg.norm(d.body('arm_base').xpos[:2]-self._initial_base_xy)),
             target_relative_to_base=(d.body('arm_base').xmat.reshape(3,3).T@(self.basket_center-d.body('arm_base').xpos)).tolist(),
             released=self._released_once,release_stopped=bool(self._release and self._release['valid_stop']),
+            release_base_target_distance=self._release_distance_value,
             predicted_error=error,reset_attempts=self.reset_stats['attempts'],reward_version=self.reward_version,arm_velocity_protocol=self.arm_velocity_protocol,release_protocol=self.release_protocol,
             release_pending=bool(self._release and not self._release.get('confirmed',True)),
             reward_terms=terms,reward_totals=self._reward_totals.copy(),carry_diagnostics=diagnostics,

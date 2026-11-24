@@ -43,3 +43,12 @@ def purposeful_launch(position,velocity,target,predicted_error):
     forward=float(np.dot(np.asarray(velocity)[:2],direction))
     # No requirement to hit or to be stopped: those have their own score/release criteria.
     return bool(forward>=.60 and (predicted_error is not None or velocity[2]>.10))
+
+
+def release_distance_reward(distance,bounds,bonus=15.,penalty=25.,margin=.05,penalty_distance=.5):
+    """Once per confirmed release. Smooth at both interval boundaries."""
+    low,high=bounds
+    if low<=distance<=high:
+        return bonus*min(1.,max(0.,min(distance-low,high-distance)/margin))
+    deviation=max(low-distance,distance-high,0.)
+    return -penalty*min(deviation/penalty_distance,1.)

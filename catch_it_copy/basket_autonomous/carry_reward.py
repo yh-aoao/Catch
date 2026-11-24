@@ -30,11 +30,11 @@ def region_distance(relative_goal,x_range,y_range):
     return float(np.linalg.norm(goal[:2]-np.clip(goal[:2],bounds[:,0],bounds[:,1])))
 
 
-def navigation_progress(best,current,eligible):
+def navigation_progress(best,current,eligible,weight=4.,cap=1.):
     # Best-so-far distance prevents farming by driving backwards and forwards.
     if not eligible:return best,0.
     updated=min(best,max(0.,current))
-    return updated,4.*max(0.,min(best,1.)-min(updated,1.))
+    return updated,weight*max(0.,min(best,cap)-min(updated,cap))
 
 
 def purposeful_launch(position,velocity,target,predicted_error):

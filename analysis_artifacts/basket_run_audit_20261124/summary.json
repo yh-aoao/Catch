@@ -1,0 +1,5904 @@
+[
+  {
+    "run": "basket_autonomous/runs/tennis_hold_v2_fixed_fix_seed123",
+    "last_metrics": {
+      "iteration": 1613,
+      "steps": 6606848,
+      "collect_seconds": 12.358829403005075,
+      "seconds": 12.435178447980434,
+      "physics_fps": 331.4229743315374,
+      "reward_100": 89.31457306023756,
+      "success_100": 0.82,
+      "fixed_sr": 0.85,
+      "mobile_sr": null,
+      "actor_loss": 0.020249340496957303,
+      "value_loss": 2.250968027114868,
+      "kl": 0.014792744966689498,
+      "drop_failure_100": 0.02,
+      "carry_slip_mean_100": 0.20695849604671726,
+      "carry_slip_max_100": 0.4612282465039147
+    },
+    "config": {
+      "seed": 123,
+      "device": "cuda:1",
+      "num_envs": 64,
+      "total_steps": 1000000000000,
+      "rollout_steps": 64,
+      "learning_rate": 0.0003,
+      "epochs": 4,
+      "minibatch_size": 512,
+      "gamma": 0.99,
+      "gae_lambda": 0.95,
+      "clip": 0.2,
+      "entropy_weight": 0.001,
+      "value_weight": 0.5,
+      "target_kl": 0.02,
+      "reward_scale": 0.1,
+      "eval_every": 1000000,
+      "eval_episodes": 100,
+      "save_every": 100000,
+      "options": {
+        "episode_seconds": 10.0,
+        "reset_attempts": 80,
+        "arm_jitter_rad": [
+          0.35,
+          0.2,
+          0.25,
+          0.22,
+          0.25,
+          0.3
+        ],
+        "hand_jitter_rad": 0.2,
+        "training_stage": "fixed",
+        "fixed_replay_probability": 0.0,
+        "fixed_goal_x_range": [
+          -0.1,
+          0.1
+        ],
+        "fixed_goal_y_range": [
+          0.85,
+          1.15
+        ],
+        "reward_version": "carry_navigation_v2",
+        "arm_velocity_protocol": "integrated_target_v2",
+        "release_protocol": "separated_flight_v2",
+        "pose_bank_entries": [
+          {
+            "arm": [
+              0.046559644147336716,
+              0.976091894188703,
+              -1.128990374535906,
+              3.1040636434391446,
+              2.035906177712292,
+              -1.4559745377879743
+            ],
+            "hand": [
+              2.0146111460743614,
+              -3.132153780375595e-05,
+              -0.21778867267373545,
+              1.4255299816400895,
+              -0.35493513452612546,
+              -0.00038984192467778,
+              -0.3989839164617157,
+              2.5117840992262424,
+              1.510320955453296,
+              -0.017819356878749148,
+              -0.08448333560539965,
+              1.3735589549076157,
+              0.022701817107802558,
+              -0.8390461175348336,
+              1.5588816109537282,
+              0.7245389066986637
+            ],
+            "local": [
+              -0.004088052500393958,
+              0.019605689135573062,
+              0.0788358848733016
+            ],
+            "source": "physical_throw_catch_episode_0"
+          },
+          {
+            "arm": [
+              -0.24687182923121193,
+              0.8367592079018792,
+              -1.0110102589408223,
+              2.854629872025908,
+              1.9755355201863658,
+              -1.373205051751023
+            ],
+            "hand": [
+              1.9893758754252104,
+              -0.0001323558198230968,
+              -0.3301172157419348,
+              1.26187110208294,
+              -0.36766089832951376,
+              -0.0009693801930324943,
+              -0.5303848136343903,
+              2.581656110510248,
+              1.7224346736727492,
+              0.04248561628562753,
+              0.008113664615426454,
+              1.775989502717778,
+              0.016589431035075996,
+              -0.8147737754978068,
+              1.267995416760984,
+              1.25692877702776
+            ],
+            "local": [
+              -0.001440440275618608,
+              0.009612895152801334,
+              0.07864124783852447
+            ],
+            "source": "physical_throw_catch_episode_1"
+          },
+          {
+            "arm": [
+              -0.10701311859933949,
+              0.9790847093156667,
+              -1.2158868027209666,
+              2.974361028443925,
+              1.9308135822075312,
+              -1.3534710537504633
+            ],
+            "hand": [
+              2.1588377919239745,
+              -0.015759334669251314,
+              -0.2031211969089844,
+              0.24247052759745366,
+              -0.38191791729777225,
+              0.0007017186801765234,
+              -0.44732325728069705,
+              2.598896497850477,
+              1.5514463420467721,
+              0.03912055163606748,
+              0.31355281047303096,
+              1.5796781296645888,
+              0.014163288758463234,
+              -0.9651322189288906,
+              0.9465460849929143,
+              1.8389297927616135
+            ],
+            "local": [
+              -0.002735058092664315,
+              0.004984055962015697,
+              0.0798778895942534
+            ],
+            "source": "physical_throw_catch_episode_4"
+          },
+          {
+            "arm": [
+              -0.5447525038695913,
+              0.7743086003906301,
+              -1.2734985340526455,
+              2.5015435244739503,
+              1.5346747348250551,
+              -1.2562641140663025
+            ],
+            "hand": [
+              2.278955813377477,
+              0.00013796365637466177,
+              -0.3044799066804033,
+              1.989224567479673,
+              -0.3880372647137074,
+              0.0008918586352074647,
+              -0.3181575244681746,
+              2.344502418767462,
+              1.5780808747519892,
+              -0.0008736727436310541,
+              -0.06000697859959417,
+              1.535923537926641,
+              0.006123304129130784,
+              -0.8054847234951992,
+              1.622509974980459,
+              0.3790936619456421
+            ],
+            "local": [
+              -0.0038267221140072766,
+              0.01696939852548171,
+              0.08095936628826454
+            ],
+            "source": "physical_throw_catch_episode_7"
+          }
+        ]
+      },
+      "pose_bank_sha256": "12247d5fc5b4231be4ef255c80386852d3b42ffa99b1317fb7495a02a897ae4e"
+    },
+    "evaluations": [
+      {
+        "file": "eval_001003520.json",
+        "episodes": 100,
+        "successes": 1,
+        "success_rate": 0.01,
+        "reasons": {
+          "arm_self_collision": 1,
+          "ball_on_floor": 31,
+          "timeout": 66,
+          "base_collision": 1,
+          "basket_score": 1
+        },
+        "groups": {
+          "unspecified": {
+            "n": 100,
+            "successes": 1,
+            "reasons": {
+              "arm_self_collision": 1,
+              "ball_on_floor": 31,
+              "timeout": 66,
+              "base_collision": 1,
+              "basket_score": 1
+            }
+          }
+        },
+        "contact_at_end": 68,
+        "released": 32,
+        "purposeful_launch": 5,
+        "mean_steps": 179.52,
+        "mean_reward": -16.00244311020264,
+        "mean_terms": {
+          "carry_slip": -0.08959103101375632,
+          "carry_edge": -0.001174727366253173,
+          "contact": 0.0,
+          "release": -0.19097054655230258,
+          "carry_stability": 0.4966270559011779,
+          "drop_failure": -1.35,
+          "action_cost": -0.024859641536921263,
+          "time": -3.5903999999999883,
+          "score": 1.0,
+          "action_smoothness": -0.003784620282055499,
+          "carry_navigation": 0.0,
+          "ballistic_progress": 2.6017104006474714,
+          "failure": -14.85
+        }
+      },
+      {
+        "file": "eval_002002944.json",
+        "episodes": 100,
+        "successes": 72,
+        "success_rate": 0.72,
+        "reasons": {
+          "basket_score": 72,
+          "ball_on_floor": 28
+        },
+        "groups": {
+          "unspecified": {
+            "n": 100,
+            "successes": 72,
+            "reasons": {
+              "basket_score": 72,
+              "ball_on_floor": 28
+            }
+          }
+        },
+        "contact_at_end": 0,
+        "released": 100,
+        "purposeful_launch": 95,
+        "mean_steps": 18.47,
+        "mean_reward": 77.93914441807733,
+        "mean_terms": {
+          "carry_slip": -0.025428370957784396,
+          "carry_edge": 0.0,
+          "contact": 0.0,
+          "release": 7.028269947686117,
+          "carry_stability": 0.004668487792665538,
+          "drop_failure": -0.25,
+          "action_cost": -0.005836029777899385,
+          "time": -0.36939999999999995,
+          "score": 72.0,
+          "action_smoothness": -0.007770211429597112,
+          "carry_navigation": 0.0,
+          "ballistic_progress": 3.764640594763816,
+          "failure": -4.2
+        }
+      },
+      {
+        "file": "eval_003002368.json",
+        "episodes": 100,
+        "successes": 90,
+        "success_rate": 0.9,
+        "reasons": {
+          "basket_score": 90,
+          "ball_on_floor": 9,
+          "base_collision": 1
+        },
+        "groups": {
+          "unspecified": {
+            "n": 100,
+            "successes": 90,
+            "reasons": {
+              "basket_score": 90,
+              "ball_on_floor": 9,
+              "base_collision": 1
+            }
+          }
+        },
+        "contact_at_end": 1,
+        "released": 99,
+        "purposeful_launch": 96,
+        "mean_steps": 15.9,
+        "mean_reward": 99.01034666280084,
+        "mean_terms": {
+          "carry_slip": -0.024579056609809854,
+          "carry_edge": 0.0,
+          "contact": 0.0,
+          "release": 7.206713923609665,
+          "carry_stability": 0.003715826501535228,
+          "drop_failure": -0.15,
+          "action_cost": -0.0076551677975058565,
+          "time": -0.31799999999999995,
+          "score": 90.0,
+          "action_smoothness": -0.01046063859598944,
+          "carry_navigation": 0.0,
+          "ballistic_progress": 3.8106117756929523,
+          "failure": -1.5
+        }
+      },
+      {
+        "file": "eval_004001792.json",
+        "episodes": 100,
+        "successes": 94,
+        "success_rate": 0.94,
+        "reasons": {
+          "basket_score": 94,
+          "ball_on_floor": 4,
+          "base_collision": 2
+        },
+        "groups": {
+          "unspecified": {
+            "n": 100,
+            "successes": 94,
+            "reasons": {
+              "basket_score": 94,
+              "ball_on_floor": 4,
+              "base_collision": 2
+            }
+          }
+        },
+        "contact_at_end": 1,
+        "released": 98,
+        "purposeful_launch": 97,
+        "mean_steps": 16.15,
+        "mean_reward": 104.04405084158493,
+        "mean_terms": {
+          "carry_slip": -0.022571686228233374,
+          "carry_edge": 0.0,
+          "contact": 0.0,
+          "release": 7.4705975178512345,
+          "carry_stability": 0.005396290260536765,
+          "drop_failure": 0.0,
+          "action_cost": -0.01013492929190397,
+          "time": -0.32299999999999995,
+          "score": 94.0,
+          "action_smoothness": -0.014125528657389806,
+          "carry_navigation": 0.0,
+          "ballistic_progress": 3.8378891776507076,
+          "failure": -0.9
+        }
+      },
+      {
+        "file": "eval_005001216.json",
+        "episodes": 100,
+        "successes": 98,
+        "success_rate": 0.98,
+        "reasons": {
+          "basket_score": 98,
+          "base_collision": 1,
+          "ball_on_floor": 1
+        },
+        "groups": {
+          "unspecified": {
+            "n": 100,
+            "successes": 98,
+            "reasons": {
+              "basket_score": 98,
+              "base_collision": 1,
+              "ball_on_floor": 1
+            }
+          }
+        },
+        "contact_at_end": 1,
+        "released": 99,
+        "purposeful_launch": 99,
+        "mean_steps": 17.41,
+        "mean_reward": 108.76813489685576,
+        "mean_terms": {
+          "carry_slip": -0.02642539427240077,
+          "carry_edge": 0.0,
+          "contact": 0.0,
+          "release": 7.599483246711991,
+          "carry_stability": 0.006800149349123664,
+          "drop_failure": 0.0,
+          "action_cost": -0.013115509311407805,
+          "time": -0.34819999999999995,
+          "score": 98.0,
+          "action_smoothness": -0.024647589225438426,
+          "carry_navigation": 0.0,
+          "ballistic_progress": 3.874239993603888,
+          "failure": -0.3
+        }
+      },
+      {
+        "file": "eval_006000640.json",
+        "episodes": 100,
+        "successes": 96,
+        "success_rate": 0.96,
+        "reasons": {
+          "basket_score": 96,
+          "ball_on_floor": 4
+        },
+        "groups": {
+          "unspecified": {
+            "n": 100,
+            "successes": 96,
+            "reasons": {
+              "basket_score": 96,
+              "ball_on_floor": 4
+            }
+          }
+        },
+        "contact_at_end": 0,
+        "released": 100,
+        "purposeful_launch": 98,
+        "mean_steps": 17.85,
+        "mean_reward": 106.41301620822274,
+        "mean_terms": {
+          "carry_slip": -0.027744079123567567,
+          "carry_edge": 0.0,
+          "contact": 0.0,
+          "release": 7.6219288552511015,
+          "carry_stability": 0.0067389139351996166,
+          "drop_failure": -0.1,
+          "action_cost": -0.014456621091663837,
+          "time": -0.35700000000000004,
+          "score": 96.0,
+          "action_smoothness": -0.030855005726485977,
+          "carry_navigation": 0.0,
+          "ballistic_progress": 3.9144041449781666,
+          "failure": -0.6
+        }
+      }
+    ],
+    "current_source_matches": {
+      "basket_autonomous/run.py": true,
+      "basket_autonomous/test_autonomous.py": true,
+      "basket_autonomous/__init__.py": true,
+      "basket_autonomous/carry_reward.py": true,
+      "basket_autonomous/policy.py": true,
+      "basket_autonomous/pool.py": true,
+      "basket_autonomous/environment.py": false,
+      "basket_autonomous/test_two_stage.py": true,
+      "basket_autonomous/test_control_release_fix.py": true,
+      "basket_autonomous/test_carry_reward.py": true
+    }
+  },
+  {
+    "run": "basket_autonomous/runs/tennis_hold_v2_fixed_seed123",
+    "last_metrics": {
+      "iteration": 2539,
+      "steps": 5199872,
+      "collect_seconds": 3.277750914974604,
+      "seconds": 3.3075696430169046,
+      "physics_fps": 624.8186799807111,
+      "reward_100": -10.87630653972317,
+      "success_100": 0.03,
+      "fixed_sr": 0.02,
+      "mobile_sr": null,
+      "actor_loss": -0.005084815621376038,
+      "value_loss": 0.0193797018378973,
+      "kl": 0.015618869895115494,
+      "drop_failure_100": 0.46,
+      "carry_slip_mean_100": 0.1486339920397518,
+      "carry_slip_max_100": 0.38881981651089814
+    },
+    "config": {
+      "seed": 123,
+      "device": "cuda:0",
+      "num_envs": 32,
+      "total_steps": 1000000000000,
+      "rollout_steps": 64,
+      "learning_rate": 0.0003,
+      "epochs": 4,
+      "minibatch_size": 512,
+      "gamma": 0.99,
+      "gae_lambda": 0.95,
+      "clip": 0.2,
+      "entropy_weight": 0.001,
+      "value_weight": 0.5,
+      "target_kl": 0.02,
+      "reward_scale": 0.1,
+      "eval_every": 1000000,
+      "eval_episodes": 100,
+      "save_every": 100000,
+      "options": {
+        "episode_seconds": 10.0,
+        "reset_attempts": 80,
+        "arm_jitter_rad": [
+          0.35,
+          0.2,
+          0.25,
+          0.22,
+          0.25,
+          0.3
+        ],
+        "hand_jitter_rad": 0.2,
+        "training_stage": "fixed",
+        "fixed_replay_probability": 0.0,
+        "fixed_goal_x_range": [
+          -0.1,
+          0.1
+        ],
+        "fixed_goal_y_range": [
+          0.85,
+          1.15
+        ],
+        "reward_version": "carry_navigation_v2",
+        "pose_bank_entries": [
+          {
+            "arm": [
+              0.046559644147336716,
+              0.976091894188703,
+              -1.128990374535906,
+              3.1040636434391446,
+              2.035906177712292,
+              -1.4559745377879743
+            ],
+            "hand": [
+              2.0146111460743614,
+              -3.132153780375595e-05,
+              -0.21778867267373545,
+              1.4255299816400895,
+              -0.35493513452612546,
+              -0.00038984192467778,
+              -0.3989839164617157,
+              2.5117840992262424,
+              1.510320955453296,
+              -0.017819356878749148,
+              -0.08448333560539965,
+              1.3735589549076157,
+              0.022701817107802558,
+              -0.8390461175348336,
+              1.5588816109537282,
+              0.7245389066986637
+            ],
+            "local": [
+              -0.004088052500393958,
+              0.019605689135573062,
+              0.0788358848733016
+            ],
+            "source": "physical_throw_catch_episode_0"
+          },
+          {
+            "arm": [
+              -0.24687182923121193,
+              0.8367592079018792,
+              -1.0110102589408223,
+              2.854629872025908,
+              1.9755355201863658,
+              -1.373205051751023
+            ],
+            "hand": [
+              1.9893758754252104,
+              -0.0001323558198230968,
+              -0.3301172157419348,
+              1.26187110208294,
+              -0.36766089832951376,
+              -0.0009693801930324943,
+              -0.5303848136343903,
+              2.581656110510248,
+              1.7224346736727492,
+              0.04248561628562753,
+              0.008113664615426454,
+              1.775989502717778,
+              0.016589431035075996,
+              -0.8147737754978068,
+              1.267995416760984,
+              1.25692877702776
+            ],
+            "local": [
+              -0.001440440275618608,
+              0.009612895152801334,
+              0.07864124783852447
+            ],
+            "source": "physical_throw_catch_episode_1"
+          },
+          {
+            "arm": [
+              -0.10701311859933949,
+              0.9790847093156667,
+              -1.2158868027209666,
+              2.974361028443925,
+              1.9308135822075312,
+              -1.3534710537504633
+            ],
+            "hand": [
+              2.1588377919239745,
+              -0.015759334669251314,
+              -0.2031211969089844,
+              0.24247052759745366,
+              -0.38191791729777225,
+              0.0007017186801765234,
+              -0.44732325728069705,
+              2.598896497850477,
+              1.5514463420467721,
+              0.03912055163606748,
+              0.31355281047303096,
+              1.5796781296645888,
+              0.014163288758463234,
+              -0.9651322189288906,
+              0.9465460849929143,
+              1.8389297927616135
+            ],
+            "local": [
+              -0.002735058092664315,
+              0.004984055962015697,
+              0.0798778895942534
+            ],
+            "source": "physical_throw_catch_episode_4"
+          },
+          {
+            "arm": [
+              -0.5447525038695913,
+              0.7743086003906301,
+              -1.2734985340526455,
+              2.5015435244739503,
+              1.5346747348250551,
+              -1.2562641140663025
+            ],
+            "hand": [
+              2.278955813377477,
+              0.00013796365637466177,
+              -0.3044799066804033,
+              1.989224567479673,
+              -0.3880372647137074,
+              0.0008918586352074647,
+              -0.3181575244681746,
+              2.344502418767462,
+              1.5780808747519892,
+              -0.0008736727436310541,
+              -0.06000697859959417,
+              1.535923537926641,
+              0.006123304129130784,
+              -0.8054847234951992,
+              1.622509974980459,
+              0.3790936619456421
+            ],
+            "local": [
+              -0.0038267221140072766,
+              0.01696939852548171,
+              0.08095936628826454
+            ],
+            "source": "physical_throw_catch_episode_7"
+          }
+        ]
+      },
+      "pose_bank_sha256": "12247d5fc5b4231be4ef255c80386852d3b42ffa99b1317fb7495a02a897ae4e"
+    },
+    "evaluations": [
+      {
+        "file": "eval_001001472.json",
+        "episodes": 100,
+        "successes": 0,
+        "success_rate": 0.0,
+        "reasons": {
+          "base_collision": 2,
+          "timeout": 96,
+          "ball_on_floor": 2
+        },
+        "groups": {
+          "unspecified": {
+            "n": 100,
+            "successes": 0,
+            "reasons": {
+              "base_collision": 2,
+              "timeout": 96,
+              "ball_on_floor": 2
+            }
+          }
+        },
+        "contact_at_end": 91,
+        "released": 78,
+        "purposeful_launch": 1,
+        "mean_steps": 243.2,
+        "mean_reward": -15.459759973874272,
+        "mean_terms": {
+          "carry_slip": -0.22398313290936042,
+          "carry_edge": -8.813630292375709e-06,
+          "contact": 0.0,
+          "release": 2.5017411818956377,
+          "carry_stability": 0.27255656223375924,
+          "drop_failure": -0.1,
+          "action_cost": -0.04790719223372637,
+          "time": -4.863999999999981,
+          "score": 0.0,
+          "action_smoothness": -0.20625899936384312,
+          "carry_navigation": 0.0,
+          "ballistic_progress": 2.2081004201335537,
+          "failure": -15.0
+        }
+      },
+      {
+        "file": "eval_002000896.json",
+        "episodes": 100,
+        "successes": 0,
+        "success_rate": 0.0,
+        "reasons": {
+          "base_collision": 7,
+          "ball_on_floor": 7,
+          "timeout": 86
+        },
+        "groups": {
+          "unspecified": {
+            "n": 100,
+            "successes": 0,
+            "reasons": {
+              "base_collision": 7,
+              "ball_on_floor": 7,
+              "timeout": 86
+            }
+          }
+        },
+        "contact_at_end": 80,
+        "released": 96,
+        "purposeful_launch": 0,
+        "mean_steps": 228.85,
+        "mean_reward": -15.56532676907628,
+        "mean_terms": {
+          "carry_slip": -0.19510963175997698,
+          "carry_edge": -6.937428607142912e-05,
+          "contact": 0.0,
+          "release": 2.613227413340313,
+          "carry_stability": 0.09798284423445822,
+          "drop_failure": -0.35,
+          "action_cost": -0.1254537504350394,
+          "time": -4.576999999999984,
+          "score": 0.0,
+          "action_smoothness": -0.31834807794335057,
+          "carry_navigation": 0.0,
+          "ballistic_progress": 2.2894438077733845,
+          "failure": -15.0
+        }
+      },
+      {
+        "file": "eval_003000320.json",
+        "episodes": 100,
+        "successes": 0,
+        "success_rate": 0.0,
+        "reasons": {
+          "base_collision": 8,
+          "timeout": 91,
+          "ball_on_floor": 1
+        },
+        "groups": {
+          "unspecified": {
+            "n": 100,
+            "successes": 0,
+            "reasons": {
+              "base_collision": 8,
+              "timeout": 91,
+              "ball_on_floor": 1
+            }
+          }
+        },
+        "contact_at_end": 85,
+        "released": 96,
+        "purposeful_launch": 1,
+        "mean_steps": 236.07,
+        "mean_reward": -16.28032692034557,
+        "mean_terms": {
+          "carry_slip": -0.22335741577929966,
+          "carry_edge": -1.7198740014375624e-05,
+          "contact": 0.0,
+          "release": 2.7643046220371117,
+          "carry_stability": 0.11459727899009634,
+          "drop_failure": -0.05,
+          "action_cost": -0.1369191453294456,
+          "time": -4.721399999999983,
+          "score": 0.0,
+          "action_smoothness": -1.1147689741449662,
+          "carry_navigation": 0.0,
+          "ballistic_progress": 2.0872339126209476,
+          "failure": -15.0
+        }
+      },
+      {
+        "file": "eval_004001792.json",
+        "episodes": 100,
+        "successes": 0,
+        "success_rate": 0.0,
+        "reasons": {
+          "timeout": 94,
+          "ball_on_floor": 3,
+          "base_collision": 3
+        },
+        "groups": {
+          "unspecified": {
+            "n": 100,
+            "successes": 0,
+            "reasons": {
+              "timeout": 94,
+              "ball_on_floor": 3,
+              "base_collision": 3
+            }
+          }
+        },
+        "contact_at_end": 86,
+        "released": 99,
+        "purposeful_launch": 2,
+        "mean_steps": 239.16,
+        "mean_reward": -16.07910421827787,
+        "mean_terms": {
+          "carry_slip": -0.11170107239892291,
+          "carry_edge": 0.0,
+          "contact": 0.0,
+          "release": 2.7280495064233343,
+          "carry_stability": 0.061818772714827185,
+          "drop_failure": -0.15,
+          "action_cost": -0.17380432952575386,
+          "time": -4.783199999999982,
+          "score": 0.0,
+          "action_smoothness": -0.9755193334052572,
+          "carry_navigation": 0.0,
+          "ballistic_progress": 2.3252522379139036,
+          "failure": -15.0
+        }
+      },
+      {
+        "file": "eval_005001216.json",
+        "episodes": 100,
+        "successes": 0,
+        "success_rate": 0.0,
+        "reasons": {
+          "ball_on_floor": 12,
+          "timeout": 86,
+          "base_collision": 2
+        },
+        "groups": {
+          "unspecified": {
+            "n": 100,
+            "successes": 0,
+            "reasons": {
+              "ball_on_floor": 12,
+              "timeout": 86,
+              "base_collision": 2
+            }
+          }
+        },
+        "contact_at_end": 77,
+        "released": 100,
+        "purposeful_launch": 20,
+        "mean_steps": 227.04,
+        "mean_reward": -13.93151913062099,
+        "mean_terms": {
+          "carry_slip": -0.09133914982004804,
+          "carry_edge": -9.88247859284573e-06,
+          "contact": 0.0,
+          "release": 3.6239263320344115,
+          "carry_stability": 0.03200742178961411,
+          "drop_failure": -0.45,
+          "action_cost": -0.20154016403511166,
+          "time": -4.540799999999985,
+          "score": 0.0,
+          "action_smoothness": -0.34407767566027464,
+          "carry_navigation": 0.0,
+          "ballistic_progress": 3.0403139875490144,
+          "failure": -15.0
+        }
+      }
+    ],
+    "current_source_matches": {
+      "basket_autonomous/test_autonomous.py": true,
+      "basket_autonomous/run.py": false,
+      "basket_autonomous/__init__.py": true,
+      "basket_autonomous/environment.py": false,
+      "basket_autonomous/policy.py": true,
+      "basket_autonomous/test_carry_reward.py": true,
+      "basket_autonomous/pool.py": true,
+      "basket_autonomous/test_two_stage.py": true,
+      "basket_autonomous/carry_reward.py": true
+    }
+  },
+  {
+    "run": "basket_autonomous/runs/tennis_hold_v2_fixed_seed123_new",
+    "last_metrics": {
+      "iteration": 5402,
+      "steps": 22126592,
+      "collect_seconds": 6.074314468016382,
+      "seconds": 6.152305204013828,
+      "physics_fps": 674.3147760240314,
+      "reward_100": -14.090076898160977,
+      "success_100": 0.01,
+      "fixed_sr": 0.01,
+      "mobile_sr": null,
+      "actor_loss": 0.017687837965786456,
+      "value_loss": 0.1782390780746937,
+      "kl": 0.015566968359053135,
+      "drop_failure_100": 0.34,
+      "carry_slip_mean_100": 0.16703513556901053,
+      "carry_slip_max_100": 0.40626300901921525
+    },
+    "config": {
+      "seed": 123,
+      "device": "cuda:1",
+      "num_envs": 64,
+      "total_steps": 1000000000000,
+      "rollout_steps": 64,
+      "learning_rate": 0.0003,
+      "epochs": 4,
+      "minibatch_size": 512,
+      "gamma": 0.99,
+      "gae_lambda": 0.95,
+      "clip": 0.2,
+      "entropy_weight": 0.001,
+      "value_weight": 0.5,
+      "target_kl": 0.02,
+      "reward_scale": 0.1,
+      "eval_every": 1000000,
+      "eval_episodes": 100,
+      "save_every": 100000,
+      "options": {
+        "episode_seconds": 10.0,
+        "reset_attempts": 80,
+        "arm_jitter_rad": [
+          0.35,
+          0.2,
+          0.25,
+          0.22,
+          0.25,
+          0.3
+        ],
+        "hand_jitter_rad": 0.2,
+        "training_stage": "fixed",
+        "fixed_replay_probability": 0.0,
+        "fixed_goal_x_range": [
+          -0.1,
+          0.1
+        ],
+        "fixed_goal_y_range": [
+          0.85,
+          1.15
+        ],
+        "reward_version": "carry_navigation_v2",
+        "pose_bank_entries": [
+          {
+            "arm": [
+              0.046559644147336716,
+              0.976091894188703,
+              -1.128990374535906,
+              3.1040636434391446,
+              2.035906177712292,
+              -1.4559745377879743
+            ],
+            "hand": [
+              2.0146111460743614,
+              -3.132153780375595e-05,
+              -0.21778867267373545,
+              1.4255299816400895,
+              -0.35493513452612546,
+              -0.00038984192467778,
+              -0.3989839164617157,
+              2.5117840992262424,
+              1.510320955453296,
+              -0.017819356878749148,
+              -0.08448333560539965,
+              1.3735589549076157,
+              0.022701817107802558,
+              -0.8390461175348336,
+              1.5588816109537282,
+              0.7245389066986637
+            ],
+            "local": [
+              -0.004088052500393958,
+              0.019605689135573062,
+              0.0788358848733016
+            ],
+            "source": "physical_throw_catch_episode_0"
+          },
+          {
+            "arm": [
+              -0.24687182923121193,
+              0.8367592079018792,
+              -1.0110102589408223,
+              2.854629872025908,
+              1.9755355201863658,
+              -1.373205051751023
+            ],
+            "hand": [
+              1.9893758754252104,
+              -0.0001323558198230968,
+              -0.3301172157419348,
+              1.26187110208294,
+              -0.36766089832951376,
+              -0.0009693801930324943,
+              -0.5303848136343903,
+              2.581656110510248,
+              1.7224346736727492,
+              0.04248561628562753,
+              0.008113664615426454,
+              1.775989502717778,
+              0.016589431035075996,
+              -0.8147737754978068,
+              1.267995416760984,
+              1.25692877702776
+            ],
+            "local": [
+              -0.001440440275618608,
+              0.009612895152801334,
+              0.07864124783852447
+            ],
+            "source": "physical_throw_catch_episode_1"
+          },
+          {
+            "arm": [
+              -0.10701311859933949,
+              0.9790847093156667,
+              -1.2158868027209666,
+              2.974361028443925,
+              1.9308135822075312,
+              -1.3534710537504633
+            ],
+            "hand": [
+              2.1588377919239745,
+              -0.015759334669251314,
+              -0.2031211969089844,
+              0.24247052759745366,
+              -0.38191791729777225,
+              0.0007017186801765234,
+              -0.44732325728069705,
+              2.598896497850477,
+              1.5514463420467721,
+              0.03912055163606748,
+              0.31355281047303096,
+              1.5796781296645888,
+              0.014163288758463234,
+              -0.9651322189288906,
+              0.9465460849929143,
+              1.8389297927616135
+            ],
+            "local": [
+              -0.002735058092664315,
+              0.004984055962015697,
+              0.0798778895942534
+            ],
+            "source": "physical_throw_catch_episode_4"
+          },
+          {
+            "arm": [
+              -0.5447525038695913,
+              0.7743086003906301,
+              -1.2734985340526455,
+              2.5015435244739503,
+              1.5346747348250551,
+              -1.2562641140663025
+            ],
+            "hand": [
+              2.278955813377477,
+              0.00013796365637466177,
+              -0.3044799066804033,
+              1.989224567479673,
+              -0.3880372647137074,
+              0.0008918586352074647,
+              -0.3181575244681746,
+              2.344502418767462,
+              1.5780808747519892,
+              -0.0008736727436310541,
+              -0.06000697859959417,
+              1.535923537926641,
+              0.006123304129130784,
+              -0.8054847234951992,
+              1.622509974980459,
+              0.3790936619456421
+            ],
+            "local": [
+              -0.0038267221140072766,
+              0.01696939852548171,
+              0.08095936628826454
+            ],
+            "source": "physical_throw_catch_episode_7"
+          }
+        ]
+      },
+      "pose_bank_sha256": "12247d5fc5b4231be4ef255c80386852d3b42ffa99b1317fb7495a02a897ae4e"
+    },
+    "evaluations": [
+      {
+        "file": "eval_001003520.json",
+        "episodes": 100,
+        "successes": 0,
+        "success_rate": 0.0,
+        "reasons": {
+          "ball_on_floor": 16,
+          "timeout": 83,
+          "base_collision": 1
+        },
+        "groups": {
+          "unspecified": {
+            "n": 100,
+            "successes": 0,
+            "reasons": {
+              "ball_on_floor": 16,
+              "timeout": 83,
+              "base_collision": 1
+            }
+          }
+        },
+        "contact_at_end": 81,
+        "released": 35,
+        "purposeful_launch": 0,
+        "mean_steps": 235.31,
+        "mean_reward": -17.912375210060944,
+        "mean_terms": {
+          "carry_slip": -0.2694703743390331,
+          "carry_edge": -0.00024345423807065826,
+          "contact": 0.0,
+          "release": 0.2049467771004216,
+          "carry_stability": 0.4267683786802815,
+          "drop_failure": -0.8,
+          "action_cost": -0.03966703047774732,
+          "time": -4.706199999999984,
+          "score": 0.0,
+          "action_smoothness": -0.014331313968938757,
+          "carry_navigation": 0.0,
+          "ballistic_progress": 2.285821807182142,
+          "failure": -15.0
+        }
+      },
+      {
+        "file": "eval_002002944.json",
+        "episodes": 100,
+        "successes": 0,
+        "success_rate": 0.0,
+        "reasons": {
+          "timeout": 100
+        },
+        "groups": {
+          "unspecified": {
+            "n": 100,
+            "successes": 0,
+            "reasons": {
+              "timeout": 100
+            }
+          }
+        },
+        "contact_at_end": 97,
+        "released": 56,
+        "purposeful_launch": 1,
+        "mean_steps": 250.0,
+        "mean_reward": -15.915894894530092,
+        "mean_terms": {
+          "carry_slip": -0.17905325878126796,
+          "carry_edge": 0.0,
+          "contact": 0.0,
+          "release": 1.6827372706776662,
+          "carry_stability": 0.36509963730919054,
+          "drop_failure": 0.0,
+          "action_cost": -0.049481791670657686,
+          "time": -4.999999999999981,
+          "score": 0.0,
+          "action_smoothness": -0.028207009572990046,
+          "carry_navigation": 0.0,
+          "ballistic_progress": 2.293010257507964,
+          "failure": -15.0
+        }
+      },
+      {
+        "file": "eval_003002368.json",
+        "episodes": 100,
+        "successes": 0,
+        "success_rate": 0.0,
+        "reasons": {
+          "ball_on_floor": 10,
+          "timeout": 89,
+          "base_collision": 1
+        },
+        "groups": {
+          "unspecified": {
+            "n": 100,
+            "successes": 0,
+            "reasons": {
+              "ball_on_floor": 10,
+              "timeout": 89,
+              "base_collision": 1
+            }
+          }
+        },
+        "contact_at_end": 87,
+        "released": 77,
+        "purposeful_launch": 1,
+        "mean_steps": 234.61,
+        "mean_reward": -16.53439502285855,
+        "mean_terms": {
+          "carry_slip": -0.22843272831464753,
+          "carry_edge": 0.0,
+          "contact": 0.0,
+          "release": 2.291787281769953,
+          "carry_stability": 0.15195706370042844,
+          "drop_failure": -0.5,
+          "action_cost": -0.0834446429597959,
+          "time": -4.692199999999983,
+          "score": 0.0,
+          "action_smoothness": -0.8410589093493378,
+          "carry_navigation": 0.0,
+          "ballistic_progress": 2.3669969122948498,
+          "failure": -15.0
+        }
+      },
+      {
+        "file": "eval_004001792.json",
+        "episodes": 100,
+        "successes": 0,
+        "success_rate": 0.0,
+        "reasons": {
+          "ball_on_floor": 10,
+          "timeout": 88,
+          "base_collision": 2
+        },
+        "groups": {
+          "unspecified": {
+            "n": 100,
+            "successes": 0,
+            "reasons": {
+              "ball_on_floor": 10,
+              "timeout": 88,
+              "base_collision": 2
+            }
+          }
+        },
+        "contact_at_end": 83,
+        "released": 85,
+        "purposeful_launch": 4,
+        "mean_steps": 232.23,
+        "mean_reward": -14.618993526865047,
+        "mean_terms": {
+          "carry_slip": -0.17614027497790363,
+          "carry_edge": 0.0,
+          "contact": 0.0,
+          "release": 2.903904745358163,
+          "carry_stability": 0.15647882489154472,
+          "drop_failure": -0.45,
+          "action_cost": -0.08622099498242138,
+          "time": -4.644599999999984,
+          "score": 0.0,
+          "action_smoothness": -0.06908899656886097,
+          "carry_navigation": 0.0,
+          "ballistic_progress": 2.746673169414434,
+          "failure": -15.0
+        }
+      },
+      {
+        "file": "eval_005001216.json",
+        "episodes": 100,
+        "successes": 0,
+        "success_rate": 0.0,
+        "reasons": {
+          "timeout": 87,
+          "ball_on_floor": 12,
+          "base_collision": 1
+        },
+        "groups": {
+          "unspecified": {
+            "n": 100,
+            "successes": 0,
+            "reasons": {
+              "timeout": 87,
+              "ball_on_floor": 12,
+              "base_collision": 1
+            }
+          }
+        },
+        "contact_at_end": 81,
+        "released": 98,
+        "purposeful_launch": 4,
+        "mean_steps": 223.0,
+        "mean_reward": -14.939033013053624,
+        "mean_terms": {
+          "carry_slip": -0.12108149840875615,
+          "carry_edge": -0.0003930348642535948,
+          "contact": 0.0,
+          "release": 2.1740103207900208,
+          "carry_stability": 0.0678421936985001,
+          "drop_failure": -0.45,
+          "action_cost": -0.0830580306664854,
+          "time": -4.459999999999983,
+          "score": 0.0,
+          "action_smoothness": -0.11844787284061022,
+          "carry_navigation": 0.0,
+          "ballistic_progress": 3.052094909237961,
+          "failure": -15.0
+        }
+      },
+      {
+        "file": "eval_006000640.json",
+        "episodes": 100,
+        "successes": 0,
+        "success_rate": 0.0,
+        "reasons": {
+          "timeout": 95,
+          "ball_on_floor": 5
+        },
+        "groups": {
+          "unspecified": {
+            "n": 100,
+            "successes": 0,
+            "reasons": {
+              "timeout": 95,
+              "ball_on_floor": 5
+            }
+          }
+        },
+        "contact_at_end": 91,
+        "released": 100,
+        "purposeful_launch": 3,
+        "mean_steps": 242.63,
+        "mean_reward": -15.02448791675604,
+        "mean_terms": {
+          "carry_slip": -0.10239849750346217,
+          "carry_edge": -0.00011166614365267162,
+          "contact": 0.0,
+          "release": 2.7072325360437177,
+          "carry_stability": 0.07475811836117759,
+          "drop_failure": -0.25,
+          "action_cost": -0.12050550823815169,
+          "time": -4.852599999999982,
+          "score": 0.0,
+          "action_smoothness": -0.14559494077653182,
+          "carry_navigation": 0.0,
+          "ballistic_progress": 2.6647320415008595,
+          "failure": -15.0
+        }
+      },
+      {
+        "file": "eval_007000064.json",
+        "episodes": 100,
+        "successes": 0,
+        "success_rate": 0.0,
+        "reasons": {
+          "timeout": 95,
+          "base_collision": 3,
+          "ball_on_floor": 1,
+          "arm_self_collision": 1
+        },
+        "groups": {
+          "unspecified": {
+            "n": 100,
+            "successes": 0,
+            "reasons": {
+              "timeout": 95,
+              "base_collision": 3,
+              "ball_on_floor": 1,
+              "arm_self_collision": 1
+            }
+          }
+        },
+        "contact_at_end": 94,
+        "released": 94,
+        "purposeful_launch": 0,
+        "mean_steps": 242.05,
+        "mean_reward": -16.75847979553303,
+        "mean_terms": {
+          "carry_slip": -0.18370966596890642,
+          "carry_edge": 0.0,
+          "contact": 0.0,
+          "release": 2.2740941305187903,
+          "carry_stability": 0.04871183100139429,
+          "drop_failure": -0.05,
+          "action_cost": -0.1363866686488688,
+          "time": -4.840999999999982,
+          "score": 0.0,
+          "action_smoothness": -1.3460697694142234,
+          "carry_navigation": 0.0,
+          "ballistic_progress": 2.4758803469787805,
+          "failure": -15.0
+        }
+      },
+      {
+        "file": "eval_008003584.json",
+        "episodes": 100,
+        "successes": 0,
+        "success_rate": 0.0,
+        "reasons": {
+          "timeout": 95,
+          "ball_on_floor": 4,
+          "base_collision": 1
+        },
+        "groups": {
+          "unspecified": {
+            "n": 100,
+            "successes": 0,
+            "reasons": {
+              "timeout": 95,
+              "ball_on_floor": 4,
+              "base_collision": 1
+            }
+          }
+        },
+        "contact_at_end": 88,
+        "released": 100,
+        "purposeful_launch": 2,
+        "mean_steps": 243.73,
+        "mean_reward": -14.965988714520458,
+        "mean_terms": {
+          "carry_slip": -0.06062341096332327,
+          "carry_edge": -9.30607442855694e-05,
+          "contact": 0.0,
+          "release": 2.786255003962462,
+          "carry_stability": 0.027891387180189322,
+          "drop_failure": -0.15,
+          "action_cost": -0.1610310656060279,
+          "time": -4.874599999999982,
+          "score": 0.0,
+          "action_smoothness": -0.2530802202205246,
+          "carry_navigation": 0.0,
+          "ballistic_progress": 2.719292651871051,
+          "failure": -15.0
+        }
+      },
+      {
+        "file": "eval_009003008.json",
+        "episodes": 100,
+        "successes": 0,
+        "success_rate": 0.0,
+        "reasons": {
+          "timeout": 95,
+          "ball_on_floor": 5
+        },
+        "groups": {
+          "unspecified": {
+            "n": 100,
+            "successes": 0,
+            "reasons": {
+              "timeout": 95,
+              "ball_on_floor": 5
+            }
+          }
+        },
+        "contact_at_end": 83,
+        "released": 100,
+        "purposeful_launch": 2,
+        "mean_steps": 242.89,
+        "mean_reward": -14.732246732132273,
+        "mean_terms": {
+          "carry_slip": -0.06711018698807283,
+          "carry_edge": -0.00015229036652801472,
+          "contact": 0.0,
+          "release": 3.134536764614943,
+          "carry_stability": 0.031058378288885843,
+          "drop_failure": -0.15,
+          "action_cost": -0.16130209352955224,
+          "time": -4.857799999999982,
+          "score": 0.0,
+          "action_smoothness": -0.31794960249173165,
+          "carry_navigation": 0.0,
+          "ballistic_progress": 2.656472298339784,
+          "failure": -15.0
+        }
+      },
+      {
+        "file": "eval_010002432.json",
+        "episodes": 100,
+        "successes": 0,
+        "success_rate": 0.0,
+        "reasons": {
+          "timeout": 79,
+          "ball_on_floor": 21
+        },
+        "groups": {
+          "unspecified": {
+            "n": 100,
+            "successes": 0,
+            "reasons": {
+              "timeout": 79,
+              "ball_on_floor": 21
+            }
+          }
+        },
+        "contact_at_end": 76,
+        "released": 100,
+        "purposeful_launch": 5,
+        "mean_steps": 217.96,
+        "mean_reward": -15.18893308097995,
+        "mean_terms": {
+          "carry_slip": -0.07289346404704132,
+          "carry_edge": -3.4788639586067776e-05,
+          "contact": 0.0,
+          "release": 3.0773971304024355,
+          "carry_stability": 0.03913205656080593,
+          "drop_failure": -0.8,
+          "action_cost": -0.15047957271173598,
+          "time": -4.359199999999985,
+          "score": 0.0,
+          "action_smoothness": -0.4840259564161534,
+          "carry_navigation": 0.0,
+          "ballistic_progress": 2.5611715138713267,
+          "failure": -15.0
+        }
+      },
+      {
+        "file": "eval_011001856.json",
+        "episodes": 100,
+        "successes": 0,
+        "success_rate": 0.0,
+        "reasons": {
+          "timeout": 86,
+          "ball_on_floor": 14
+        },
+        "groups": {
+          "unspecified": {
+            "n": 100,
+            "successes": 0,
+            "reasons": {
+              "timeout": 86,
+              "ball_on_floor": 14
+            }
+          }
+        },
+        "contact_at_end": 79,
+        "released": 100,
+        "purposeful_launch": 3,
+        "mean_steps": 223.23,
+        "mean_reward": -15.931893116290352,
+        "mean_terms": {
+          "carry_slip": -0.05682658447189795,
+          "carry_edge": 0.0,
+          "contact": 0.0,
+          "release": 2.385154197972755,
+          "carry_stability": 0.017063179008447768,
+          "drop_failure": -0.6,
+          "action_cost": -0.16964038752958177,
+          "time": -4.464599999999985,
+          "score": 0.0,
+          "action_smoothness": -0.7213387182244098,
+          "carry_navigation": 0.0,
+          "ballistic_progress": 2.678295196954333,
+          "failure": -15.0
+        }
+      },
+      {
+        "file": "eval_012001280.json",
+        "episodes": 100,
+        "successes": 0,
+        "success_rate": 0.0,
+        "reasons": {
+          "ball_on_floor": 10,
+          "timeout": 88,
+          "arm_self_collision": 1,
+          "base_collision": 1
+        },
+        "groups": {
+          "unspecified": {
+            "n": 100,
+            "successes": 0,
+            "reasons": {
+              "ball_on_floor": 10,
+              "timeout": 88,
+              "arm_self_collision": 1,
+              "base_collision": 1
+            }
+          }
+        },
+        "contact_at_end": 85,
+        "released": 91,
+        "purposeful_launch": 2,
+        "mean_steps": 235.73,
+        "mean_reward": -16.72255569322441,
+        "mean_terms": {
+          "carry_slip": -0.14755806405054955,
+          "carry_edge": -1.9029864897716086e-05,
+          "contact": 0.0,
+          "release": 2.671201335418927,
+          "carry_stability": 0.06871646587080446,
+          "drop_failure": -0.5,
+          "action_cost": -0.16235963975012305,
+          "time": -4.714599999999983,
+          "score": 0.0,
+          "action_smoothness": -1.4748407699570523,
+          "carry_navigation": 0.0,
+          "ballistic_progress": 2.5369040091084796,
+          "failure": -15.0
+        }
+      },
+      {
+        "file": "eval_013000704.json",
+        "episodes": 100,
+        "successes": 0,
+        "success_rate": 0.0,
+        "reasons": {
+          "timeout": 98,
+          "ball_on_floor": 2
+        },
+        "groups": {
+          "unspecified": {
+            "n": 100,
+            "successes": 0,
+            "reasons": {
+              "timeout": 98,
+              "ball_on_floor": 2
+            }
+          }
+        },
+        "contact_at_end": 94,
+        "released": 94,
+        "purposeful_launch": 0,
+        "mean_steps": 248.81,
+        "mean_reward": -16.94698126941126,
+        "mean_terms": {
+          "carry_slip": -0.22540519276039322,
+          "carry_edge": 0.0,
+          "contact": 0.0,
+          "release": 2.207742551732961,
+          "carry_stability": 0.10400775085839525,
+          "drop_failure": -0.1,
+          "action_cost": -0.16166241340957582,
+          "time": -4.976199999999982,
+          "score": 0.0,
+          "action_smoothness": -0.9571199546921301,
+          "carry_navigation": 0.0,
+          "ballistic_progress": 2.161655988859481,
+          "failure": -15.0
+        }
+      },
+      {
+        "file": "eval_014000128.json",
+        "episodes": 100,
+        "successes": 0,
+        "success_rate": 0.0,
+        "reasons": {
+          "ball_on_floor": 15,
+          "timeout": 85
+        },
+        "groups": {
+          "unspecified": {
+            "n": 100,
+            "successes": 0,
+            "reasons": {
+              "ball_on_floor": 15,
+              "timeout": 85
+            }
+          }
+        },
+        "contact_at_end": 76,
+        "released": 96,
+        "purposeful_launch": 19,
+        "mean_steps": 228.65,
+        "mean_reward": -15.353018214930142,
+        "mean_terms": {
+          "carry_slip": -0.12069675657891381,
+          "carry_edge": 0.0,
+          "contact": 0.0,
+          "release": 3.002001102430484,
+          "carry_stability": 0.06241510590600091,
+          "drop_failure": -0.55,
+          "action_cost": -0.17754134564943613,
+          "time": -4.5729999999999835,
+          "score": 0.0,
+          "action_smoothness": -0.573345622609381,
+          "carry_navigation": 0.0,
+          "ballistic_progress": 2.5771493015711036,
+          "failure": -15.0
+        }
+      },
+      {
+        "file": "eval_015003648.json",
+        "episodes": 100,
+        "successes": 0,
+        "success_rate": 0.0,
+        "reasons": {
+          "timeout": 94,
+          "ball_on_floor": 6
+        },
+        "groups": {
+          "unspecified": {
+            "n": 100,
+            "successes": 0,
+            "reasons": {
+              "timeout": 94,
+              "ball_on_floor": 6
+            }
+          }
+        },
+        "contact_at_end": 84,
+        "released": 100,
+        "purposeful_launch": 4,
+        "mean_steps": 239.88,
+        "mean_reward": -15.426469115000828,
+        "mean_terms": {
+          "carry_slip": -0.12016416202391048,
+          "carry_edge": -4.398868510304405e-05,
+          "contact": 0.0,
+          "release": 3.09300634403808,
+          "carry_stability": 0.04043357250775127,
+          "drop_failure": -0.25,
+          "action_cost": -0.16633009187504647,
+          "time": -4.797599999999982,
+          "score": 0.0,
+          "action_smoothness": -0.6772940127143754,
+          "carry_navigation": 0.0,
+          "ballistic_progress": 2.4515232237517752,
+          "failure": -15.0
+        }
+      },
+      {
+        "file": "eval_016003072.json",
+        "episodes": 100,
+        "successes": 0,
+        "success_rate": 0.0,
+        "reasons": {
+          "timeout": 97,
+          "ball_on_floor": 3
+        },
+        "groups": {
+          "unspecified": {
+            "n": 100,
+            "successes": 0,
+            "reasons": {
+              "timeout": 97,
+              "ball_on_floor": 3
+            }
+          }
+        },
+        "contact_at_end": 88,
+        "released": 99,
+        "purposeful_launch": 20,
+        "mean_steps": 246.58,
+        "mean_reward": -15.05968278636525,
+        "mean_terms": {
+          "carry_slip": -0.15663675293368107,
+          "carry_edge": -5.8341134323498985e-06,
+          "contact": 0.0,
+          "release": 3.301982346444541,
+          "carry_stability": 0.06726798505991863,
+          "drop_failure": -0.15,
+          "action_cost": -0.1998604507659376,
+          "time": -4.931599999999982,
+          "score": 0.0,
+          "action_smoothness": -0.8211330819971977,
+          "carry_navigation": 0.0,
+          "ballistic_progress": 2.830303001940537,
+          "failure": -15.0
+        }
+      },
+      {
+        "file": "eval_017002496.json",
+        "episodes": 100,
+        "successes": 0,
+        "success_rate": 0.0,
+        "reasons": {
+          "timeout": 86,
+          "ball_on_floor": 13,
+          "base_collision": 1
+        },
+        "groups": {
+          "unspecified": {
+            "n": 100,
+            "successes": 0,
+            "reasons": {
+              "timeout": 86,
+              "ball_on_floor": 13,
+              "base_collision": 1
+            }
+          }
+        },
+        "contact_at_end": 77,
+        "released": 100,
+        "purposeful_launch": 35,
+        "mean_steps": 231.67,
+        "mean_reward": -15.249658776416394,
+        "mean_terms": {
+          "carry_slip": -0.12111289069585665,
+          "carry_edge": -4.1273739118243185e-06,
+          "contact": 0.0,
+          "release": 3.0073916458556607,
+          "carry_stability": 0.04095134865005495,
+          "drop_failure": -0.5,
+          "action_cost": -0.22821679775834083,
+          "time": -4.633399999999984,
+          "score": 0.0,
+          "action_smoothness": -0.48691419854500567,
+          "carry_navigation": 0.0,
+          "ballistic_progress": 2.6716462434510033,
+          "failure": -15.0
+        }
+      },
+      {
+        "file": "eval_018001920.json",
+        "episodes": 100,
+        "successes": 1,
+        "success_rate": 0.01,
+        "reasons": {
+          "ball_on_floor": 19,
+          "timeout": 80,
+          "basket_score": 1
+        },
+        "groups": {
+          "unspecified": {
+            "n": 100,
+            "successes": 1,
+            "reasons": {
+              "ball_on_floor": 19,
+              "timeout": 80,
+              "basket_score": 1
+            }
+          }
+        },
+        "contact_at_end": 73,
+        "released": 100,
+        "purposeful_launch": 57,
+        "mean_steps": 215.6,
+        "mean_reward": -13.521287199125508,
+        "mean_terms": {
+          "carry_slip": -0.0878947399179601,
+          "carry_edge": 0.0,
+          "contact": 0.0,
+          "release": 3.117873691383414,
+          "carry_stability": 0.02938908055075813,
+          "drop_failure": -0.45,
+          "action_cost": -0.2203264522573352,
+          "time": -4.311999999999986,
+          "score": 1.0,
+          "action_smoothness": -0.6446658698395127,
+          "carry_navigation": 0.0,
+          "ballistic_progress": 2.8963370909551283,
+          "failure": -14.85
+        }
+      },
+      {
+        "file": "eval_019001344.json",
+        "episodes": 100,
+        "successes": 0,
+        "success_rate": 0.0,
+        "reasons": {
+          "timeout": 91,
+          "ball_on_floor": 9
+        },
+        "groups": {
+          "unspecified": {
+            "n": 100,
+            "successes": 0,
+            "reasons": {
+              "timeout": 91,
+              "ball_on_floor": 9
+            }
+          }
+        },
+        "contact_at_end": 82,
+        "released": 99,
+        "purposeful_launch": 19,
+        "mean_steps": 232.04,
+        "mean_reward": -15.299028477379215,
+        "mean_terms": {
+          "carry_slip": -0.15030752823140667,
+          "carry_edge": -0.0002454427306258242,
+          "contact": 0.0,
+          "release": 3.220906096620187,
+          "carry_stability": 0.04502635662226499,
+          "drop_failure": -0.35,
+          "action_cost": -0.22247046264052397,
+          "time": -4.640799999999984,
+          "score": 0.0,
+          "action_smoothness": -0.9606509501440803,
+          "carry_navigation": 0.0,
+          "ballistic_progress": 2.7595134531249683,
+          "failure": -15.0
+        }
+      },
+      {
+        "file": "eval_020000768.json",
+        "episodes": 100,
+        "successes": 0,
+        "success_rate": 0.0,
+        "reasons": {
+          "ball_on_floor": 28,
+          "timeout": 69,
+          "arm_self_collision": 1,
+          "base_collision": 2
+        },
+        "groups": {
+          "unspecified": {
+            "n": 100,
+            "successes": 0,
+            "reasons": {
+              "ball_on_floor": 28,
+              "timeout": 69,
+              "arm_self_collision": 1,
+              "base_collision": 2
+            }
+          }
+        },
+        "contact_at_end": 61,
+        "released": 100,
+        "purposeful_launch": 28,
+        "mean_steps": 204.18,
+        "mean_reward": -15.842505048628816,
+        "mean_terms": {
+          "carry_slip": -0.1055375877235224,
+          "carry_edge": 0.0,
+          "contact": 0.0,
+          "release": 3.0780900094093915,
+          "carry_stability": 0.03282166165455865,
+          "drop_failure": -1.0,
+          "action_cost": -0.2046981035336852,
+          "time": -4.083599999999987,
+          "score": 0.0,
+          "action_smoothness": -1.0635639094516927,
+          "carry_navigation": 0.0,
+          "ballistic_progress": 2.503982881016135,
+          "failure": -15.0
+        }
+      },
+      {
+        "file": "eval_021000192.json",
+        "episodes": 100,
+        "successes": 0,
+        "success_rate": 0.0,
+        "reasons": {
+          "base_collision": 22,
+          "ball_on_floor": 15,
+          "timeout": 63
+        },
+        "groups": {
+          "unspecified": {
+            "n": 100,
+            "successes": 0,
+            "reasons": {
+              "base_collision": 22,
+              "ball_on_floor": 15,
+              "timeout": 63
+            }
+          }
+        },
+        "contact_at_end": 60,
+        "released": 99,
+        "purposeful_launch": 34,
+        "mean_steps": 192.63,
+        "mean_reward": -14.571085352106941,
+        "mean_terms": {
+          "carry_slip": -0.09701388413706492,
+          "carry_edge": 0.0,
+          "contact": 0.0,
+          "release": 3.1877341485598056,
+          "carry_stability": 0.04152797229230501,
+          "drop_failure": -0.5,
+          "action_cost": -0.19550921034693722,
+          "time": -3.852599999999989,
+          "score": 0.0,
+          "action_smoothness": -0.6307835990467705,
+          "carry_navigation": 0.0,
+          "ballistic_progress": 2.4755592205717245,
+          "failure": -15.0
+        }
+      },
+      {
+        "file": "eval_022003712.json",
+        "episodes": 100,
+        "successes": 0,
+        "success_rate": 0.0,
+        "reasons": {
+          "arm_self_collision": 22,
+          "ball_on_floor": 17,
+          "timeout": 59,
+          "base_collision": 2
+        },
+        "groups": {
+          "unspecified": {
+            "n": 100,
+            "successes": 0,
+            "reasons": {
+              "arm_self_collision": 22,
+              "ball_on_floor": 17,
+              "timeout": 59,
+              "base_collision": 2
+            }
+          }
+        },
+        "contact_at_end": 74,
+        "released": 93,
+        "purposeful_launch": 29,
+        "mean_steps": 180.6,
+        "mean_reward": -13.910453456822031,
+        "mean_terms": {
+          "carry_slip": -0.11459241110162179,
+          "carry_edge": 0.0,
+          "contact": 0.0,
+          "release": 3.2843592703847686,
+          "carry_stability": 0.04411049718170624,
+          "drop_failure": -0.35,
+          "action_cost": -0.1941116016799212,
+          "time": -3.6119999999999886,
+          "score": 0.0,
+          "action_smoothness": -0.5753640640586883,
+          "carry_navigation": 0.0,
+          "ballistic_progress": 2.6071448524517216,
+          "failure": -15.0
+        }
+      }
+    ],
+    "current_source_matches": {
+      "basket_autonomous/environment.py": false,
+      "basket_autonomous/pool.py": true,
+      "basket_autonomous/run.py": false,
+      "basket_autonomous/test_two_stage.py": true,
+      "basket_autonomous/carry_reward.py": true,
+      "basket_autonomous/test_carry_reward.py": true,
+      "basket_autonomous/policy.py": true,
+      "basket_autonomous/test_autonomous.py": true,
+      "basket_autonomous/__init__.py": true
+    }
+  },
+  {
+    "run": "basket_autonomous/runs/tennis_random_hold_fixed_seed123",
+    "last_metrics": {
+      "iteration": 1807,
+      "steps": 3700736,
+      "collect_seconds": 3.8509943099925295,
+      "seconds": 3.882651077990886,
+      "physics_fps": 531.8107052731461,
+      "reward_100": -13.925158745913246,
+      "success_100": 0.0,
+      "fixed_sr": 0.005,
+      "mobile_sr": null,
+      "actor_loss": 0.0038428980857133864,
+      "value_loss": 0.022564758732914924,
+      "kl": 0.015745101706124844
+    },
+    "config": {},
+    "evaluations": [],
+    "current_source_matches": {}
+  },
+  {
+    "run": "basket_autonomous/tennis_hold_v2_fixed_seed123_new",
+    "last_metrics": {
+      "iteration": 5108,
+      "steps": 20922368,
+      "collect_seconds": 6.363119800982531,
+      "seconds": 6.427531545981765,
+      "physics_fps": 643.7093954081354,
+      "reward_100": -15.26718674175477,
+      "success_100": 0.0,
+      "fixed_sr": 0.005,
+      "mobile_sr": null,
+      "actor_loss": 0.03603388834744692,
+      "value_loss": 0.024433097802102566,
+      "kl": 0.01882406245567836,
+      "drop_failure_100": 0.34,
+      "carry_slip_mean_100": 0.17045760318346426,
+      "carry_slip_max_100": 0.36723892914607176
+    },
+    "config": {
+      "seed": 123,
+      "device": "cuda:1",
+      "num_envs": 64,
+      "total_steps": 1000000000000,
+      "rollout_steps": 64,
+      "learning_rate": 0.0003,
+      "epochs": 4,
+      "minibatch_size": 512,
+      "gamma": 0.99,
+      "gae_lambda": 0.95,
+      "clip": 0.2,
+      "entropy_weight": 0.001,
+      "value_weight": 0.5,
+      "target_kl": 0.02,
+      "reward_scale": 0.1,
+      "eval_every": 1000000,
+      "eval_episodes": 100,
+      "save_every": 100000,
+      "options": {
+        "episode_seconds": 10.0,
+        "reset_attempts": 80,
+        "arm_jitter_rad": [
+          0.35,
+          0.2,
+          0.25,
+          0.22,
+          0.25,
+          0.3
+        ],
+        "hand_jitter_rad": 0.2,
+        "training_stage": "fixed",
+        "fixed_replay_probability": 0.0,
+        "fixed_goal_x_range": [
+          -0.1,
+          0.1
+        ],
+        "fixed_goal_y_range": [
+          0.85,
+          1.15
+        ],
+        "reward_version": "carry_navigation_v2",
+        "pose_bank_entries": [
+          {
+            "arm": [
+              0.046559644147336716,
+              0.976091894188703,
+              -1.128990374535906,
+              3.1040636434391446,
+              2.035906177712292,
+              -1.4559745377879743
+            ],
+            "hand": [
+              2.0146111460743614,
+              -3.132153780375595e-05,
+              -0.21778867267373545,
+              1.4255299816400895,
+              -0.35493513452612546,
+              -0.00038984192467778,
+              -0.3989839164617157,
+              2.5117840992262424,
+              1.510320955453296,
+              -0.017819356878749148,
+              -0.08448333560539965,
+              1.3735589549076157,
+              0.022701817107802558,
+              -0.8390461175348336,
+              1.5588816109537282,
+              0.7245389066986637
+            ],
+            "local": [
+              -0.004088052500393958,
+              0.019605689135573062,
+              0.0788358848733016
+            ],
+            "source": "physical_throw_catch_episode_0"
+          },
+          {
+            "arm": [
+              -0.24687182923121193,
+              0.8367592079018792,
+              -1.0110102589408223,
+              2.854629872025908,
+              1.9755355201863658,
+              -1.373205051751023
+            ],
+            "hand": [
+              1.9893758754252104,
+              -0.0001323558198230968,
+              -0.3301172157419348,
+              1.26187110208294,
+              -0.36766089832951376,
+              -0.0009693801930324943,
+              -0.5303848136343903,
+              2.581656110510248,
+              1.7224346736727492,
+              0.04248561628562753,
+              0.008113664615426454,
+              1.775989502717778,
+              0.016589431035075996,
+              -0.8147737754978068,
+              1.267995416760984,
+              1.25692877702776
+            ],
+            "local": [
+              -0.001440440275618608,
+              0.009612895152801334,
+              0.07864124783852447
+            ],
+            "source": "physical_throw_catch_episode_1"
+          },
+          {
+            "arm": [
+              -0.10701311859933949,
+              0.9790847093156667,
+              -1.2158868027209666,
+              2.974361028443925,
+              1.9308135822075312,
+              -1.3534710537504633
+            ],
+            "hand": [
+              2.1588377919239745,
+              -0.015759334669251314,
+              -0.2031211969089844,
+              0.24247052759745366,
+              -0.38191791729777225,
+              0.0007017186801765234,
+              -0.44732325728069705,
+              2.598896497850477,
+              1.5514463420467721,
+              0.03912055163606748,
+              0.31355281047303096,
+              1.5796781296645888,
+              0.014163288758463234,
+              -0.9651322189288906,
+              0.9465460849929143,
+              1.8389297927616135
+            ],
+            "local": [
+              -0.002735058092664315,
+              0.004984055962015697,
+              0.0798778895942534
+            ],
+            "source": "physical_throw_catch_episode_4"
+          },
+          {
+            "arm": [
+              -0.5447525038695913,
+              0.7743086003906301,
+              -1.2734985340526455,
+              2.5015435244739503,
+              1.5346747348250551,
+              -1.2562641140663025
+            ],
+            "hand": [
+              2.278955813377477,
+              0.00013796365637466177,
+              -0.3044799066804033,
+              1.989224567479673,
+              -0.3880372647137074,
+              0.0008918586352074647,
+              -0.3181575244681746,
+              2.344502418767462,
+              1.5780808747519892,
+              -0.0008736727436310541,
+              -0.06000697859959417,
+              1.535923537926641,
+              0.006123304129130784,
+              -0.8054847234951992,
+              1.622509974980459,
+              0.3790936619456421
+            ],
+            "local": [
+              -0.0038267221140072766,
+              0.01696939852548171,
+              0.08095936628826454
+            ],
+            "source": "physical_throw_catch_episode_7"
+          }
+        ]
+      },
+      "pose_bank_sha256": "12247d5fc5b4231be4ef255c80386852d3b42ffa99b1317fb7495a02a897ae4e"
+    },
+    "evaluations": [
+      {
+        "file": "eval_001003520.json",
+        "episodes": 100,
+        "successes": 0,
+        "success_rate": 0.0,
+        "reasons": {
+          "ball_on_floor": 16,
+          "timeout": 83,
+          "base_collision": 1
+        },
+        "groups": {
+          "unspecified": {
+            "n": 100,
+            "successes": 0,
+            "reasons": {
+              "ball_on_floor": 16,
+              "timeout": 83,
+              "base_collision": 1
+            }
+          }
+        },
+        "contact_at_end": 81,
+        "released": 35,
+        "purposeful_launch": 0,
+        "mean_steps": 235.31,
+        "mean_reward": -17.912375210060944,
+        "mean_terms": {
+          "carry_slip": -0.2694703743390331,
+          "carry_edge": -0.00024345423807065826,
+          "contact": 0.0,
+          "release": 0.2049467771004216,
+          "carry_stability": 0.4267683786802815,
+          "drop_failure": -0.8,
+          "action_cost": -0.03966703047774732,
+          "time": -4.706199999999984,
+          "score": 0.0,
+          "action_smoothness": -0.014331313968938757,
+          "carry_navigation": 0.0,
+          "ballistic_progress": 2.285821807182142,
+          "failure": -15.0
+        }
+      },
+      {
+        "file": "eval_002002944.json",
+        "episodes": 100,
+        "successes": 0,
+        "success_rate": 0.0,
+        "reasons": {
+          "timeout": 100
+        },
+        "groups": {
+          "unspecified": {
+            "n": 100,
+            "successes": 0,
+            "reasons": {
+              "timeout": 100
+            }
+          }
+        },
+        "contact_at_end": 97,
+        "released": 56,
+        "purposeful_launch": 1,
+        "mean_steps": 250.0,
+        "mean_reward": -15.915894894530092,
+        "mean_terms": {
+          "carry_slip": -0.17905325878126796,
+          "carry_edge": 0.0,
+          "contact": 0.0,
+          "release": 1.6827372706776662,
+          "carry_stability": 0.36509963730919054,
+          "drop_failure": 0.0,
+          "action_cost": -0.049481791670657686,
+          "time": -4.999999999999981,
+          "score": 0.0,
+          "action_smoothness": -0.028207009572990046,
+          "carry_navigation": 0.0,
+          "ballistic_progress": 2.293010257507964,
+          "failure": -15.0
+        }
+      },
+      {
+        "file": "eval_003002368.json",
+        "episodes": 100,
+        "successes": 0,
+        "success_rate": 0.0,
+        "reasons": {
+          "ball_on_floor": 10,
+          "timeout": 89,
+          "base_collision": 1
+        },
+        "groups": {
+          "unspecified": {
+            "n": 100,
+            "successes": 0,
+            "reasons": {
+              "ball_on_floor": 10,
+              "timeout": 89,
+              "base_collision": 1
+            }
+          }
+        },
+        "contact_at_end": 87,
+        "released": 77,
+        "purposeful_launch": 1,
+        "mean_steps": 234.61,
+        "mean_reward": -16.53439502285855,
+        "mean_terms": {
+          "carry_slip": -0.22843272831464753,
+          "carry_edge": 0.0,
+          "contact": 0.0,
+          "release": 2.291787281769953,
+          "carry_stability": 0.15195706370042844,
+          "drop_failure": -0.5,
+          "action_cost": -0.0834446429597959,
+          "time": -4.692199999999983,
+          "score": 0.0,
+          "action_smoothness": -0.8410589093493378,
+          "carry_navigation": 0.0,
+          "ballistic_progress": 2.3669969122948498,
+          "failure": -15.0
+        }
+      },
+      {
+        "file": "eval_004001792.json",
+        "episodes": 100,
+        "successes": 0,
+        "success_rate": 0.0,
+        "reasons": {
+          "ball_on_floor": 10,
+          "timeout": 88,
+          "base_collision": 2
+        },
+        "groups": {
+          "unspecified": {
+            "n": 100,
+            "successes": 0,
+            "reasons": {
+              "ball_on_floor": 10,
+              "timeout": 88,
+              "base_collision": 2
+            }
+          }
+        },
+        "contact_at_end": 83,
+        "released": 85,
+        "purposeful_launch": 4,
+        "mean_steps": 232.23,
+        "mean_reward": -14.618993526865047,
+        "mean_terms": {
+          "carry_slip": -0.17614027497790363,
+          "carry_edge": 0.0,
+          "contact": 0.0,
+          "release": 2.903904745358163,
+          "carry_stability": 0.15647882489154472,
+          "drop_failure": -0.45,
+          "action_cost": -0.08622099498242138,
+          "time": -4.644599999999984,
+          "score": 0.0,
+          "action_smoothness": -0.06908899656886097,
+          "carry_navigation": 0.0,
+          "ballistic_progress": 2.746673169414434,
+          "failure": -15.0
+        }
+      },
+      {
+        "file": "eval_005001216.json",
+        "episodes": 100,
+        "successes": 0,
+        "success_rate": 0.0,
+        "reasons": {
+          "timeout": 87,
+          "ball_on_floor": 12,
+          "base_collision": 1
+        },
+        "groups": {
+          "unspecified": {
+            "n": 100,
+            "successes": 0,
+            "reasons": {
+              "timeout": 87,
+              "ball_on_floor": 12,
+              "base_collision": 1
+            }
+          }
+        },
+        "contact_at_end": 81,
+        "released": 98,
+        "purposeful_launch": 4,
+        "mean_steps": 223.0,
+        "mean_reward": -14.939033013053624,
+        "mean_terms": {
+          "carry_slip": -0.12108149840875615,
+          "carry_edge": -0.0003930348642535948,
+          "contact": 0.0,
+          "release": 2.1740103207900208,
+          "carry_stability": 0.0678421936985001,
+          "drop_failure": -0.45,
+          "action_cost": -0.0830580306664854,
+          "time": -4.459999999999983,
+          "score": 0.0,
+          "action_smoothness": -0.11844787284061022,
+          "carry_navigation": 0.0,
+          "ballistic_progress": 3.052094909237961,
+          "failure": -15.0
+        }
+      },
+      {
+        "file": "eval_006000640.json",
+        "episodes": 100,
+        "successes": 0,
+        "success_rate": 0.0,
+        "reasons": {
+          "timeout": 95,
+          "ball_on_floor": 5
+        },
+        "groups": {
+          "unspecified": {
+            "n": 100,
+            "successes": 0,
+            "reasons": {
+              "timeout": 95,
+              "ball_on_floor": 5
+            }
+          }
+        },
+        "contact_at_end": 91,
+        "released": 100,
+        "purposeful_launch": 3,
+        "mean_steps": 242.63,
+        "mean_reward": -15.02448791675604,
+        "mean_terms": {
+          "carry_slip": -0.10239849750346217,
+          "carry_edge": -0.00011166614365267162,
+          "contact": 0.0,
+          "release": 2.7072325360437177,
+          "carry_stability": 0.07475811836117759,
+          "drop_failure": -0.25,
+          "action_cost": -0.12050550823815169,
+          "time": -4.852599999999982,
+          "score": 0.0,
+          "action_smoothness": -0.14559494077653182,
+          "carry_navigation": 0.0,
+          "ballistic_progress": 2.6647320415008595,
+          "failure": -15.0
+        }
+      },
+      {
+        "file": "eval_007000064.json",
+        "episodes": 100,
+        "successes": 0,
+        "success_rate": 0.0,
+        "reasons": {
+          "timeout": 95,
+          "base_collision": 3,
+          "ball_on_floor": 1,
+          "arm_self_collision": 1
+        },
+        "groups": {
+          "unspecified": {
+            "n": 100,
+            "successes": 0,
+            "reasons": {
+              "timeout": 95,
+              "base_collision": 3,
+              "ball_on_floor": 1,
+              "arm_self_collision": 1
+            }
+          }
+        },
+        "contact_at_end": 94,
+        "released": 94,
+        "purposeful_launch": 0,
+        "mean_steps": 242.05,
+        "mean_reward": -16.75847979553303,
+        "mean_terms": {
+          "carry_slip": -0.18370966596890642,
+          "carry_edge": 0.0,
+          "contact": 0.0,
+          "release": 2.2740941305187903,
+          "carry_stability": 0.04871183100139429,
+          "drop_failure": -0.05,
+          "action_cost": -0.1363866686488688,
+          "time": -4.840999999999982,
+          "score": 0.0,
+          "action_smoothness": -1.3460697694142234,
+          "carry_navigation": 0.0,
+          "ballistic_progress": 2.4758803469787805,
+          "failure": -15.0
+        }
+      },
+      {
+        "file": "eval_008003584.json",
+        "episodes": 100,
+        "successes": 0,
+        "success_rate": 0.0,
+        "reasons": {
+          "timeout": 95,
+          "ball_on_floor": 4,
+          "base_collision": 1
+        },
+        "groups": {
+          "unspecified": {
+            "n": 100,
+            "successes": 0,
+            "reasons": {
+              "timeout": 95,
+              "ball_on_floor": 4,
+              "base_collision": 1
+            }
+          }
+        },
+        "contact_at_end": 88,
+        "released": 100,
+        "purposeful_launch": 2,
+        "mean_steps": 243.73,
+        "mean_reward": -14.965988714520458,
+        "mean_terms": {
+          "carry_slip": -0.06062341096332327,
+          "carry_edge": -9.30607442855694e-05,
+          "contact": 0.0,
+          "release": 2.786255003962462,
+          "carry_stability": 0.027891387180189322,
+          "drop_failure": -0.15,
+          "action_cost": -0.1610310656060279,
+          "time": -4.874599999999982,
+          "score": 0.0,
+          "action_smoothness": -0.2530802202205246,
+          "carry_navigation": 0.0,
+          "ballistic_progress": 2.719292651871051,
+          "failure": -15.0
+        }
+      },
+      {
+        "file": "eval_009003008.json",
+        "episodes": 100,
+        "successes": 0,
+        "success_rate": 0.0,
+        "reasons": {
+          "timeout": 95,
+          "ball_on_floor": 5
+        },
+        "groups": {
+          "unspecified": {
+            "n": 100,
+            "successes": 0,
+            "reasons": {
+              "timeout": 95,
+              "ball_on_floor": 5
+            }
+          }
+        },
+        "contact_at_end": 83,
+        "released": 100,
+        "purposeful_launch": 2,
+        "mean_steps": 242.89,
+        "mean_reward": -14.732246732132273,
+        "mean_terms": {
+          "carry_slip": -0.06711018698807283,
+          "carry_edge": -0.00015229036652801472,
+          "contact": 0.0,
+          "release": 3.134536764614943,
+          "carry_stability": 0.031058378288885843,
+          "drop_failure": -0.15,
+          "action_cost": -0.16130209352955224,
+          "time": -4.857799999999982,
+          "score": 0.0,
+          "action_smoothness": -0.31794960249173165,
+          "carry_navigation": 0.0,
+          "ballistic_progress": 2.656472298339784,
+          "failure": -15.0
+        }
+      },
+      {
+        "file": "eval_010002432.json",
+        "episodes": 100,
+        "successes": 0,
+        "success_rate": 0.0,
+        "reasons": {
+          "timeout": 79,
+          "ball_on_floor": 21
+        },
+        "groups": {
+          "unspecified": {
+            "n": 100,
+            "successes": 0,
+            "reasons": {
+              "timeout": 79,
+              "ball_on_floor": 21
+            }
+          }
+        },
+        "contact_at_end": 76,
+        "released": 100,
+        "purposeful_launch": 5,
+        "mean_steps": 217.96,
+        "mean_reward": -15.18893308097995,
+        "mean_terms": {
+          "carry_slip": -0.07289346404704132,
+          "carry_edge": -3.4788639586067776e-05,
+          "contact": 0.0,
+          "release": 3.0773971304024355,
+          "carry_stability": 0.03913205656080593,
+          "drop_failure": -0.8,
+          "action_cost": -0.15047957271173598,
+          "time": -4.359199999999985,
+          "score": 0.0,
+          "action_smoothness": -0.4840259564161534,
+          "carry_navigation": 0.0,
+          "ballistic_progress": 2.5611715138713267,
+          "failure": -15.0
+        }
+      },
+      {
+        "file": "eval_011001856.json",
+        "episodes": 100,
+        "successes": 0,
+        "success_rate": 0.0,
+        "reasons": {
+          "timeout": 86,
+          "ball_on_floor": 14
+        },
+        "groups": {
+          "unspecified": {
+            "n": 100,
+            "successes": 0,
+            "reasons": {
+              "timeout": 86,
+              "ball_on_floor": 14
+            }
+          }
+        },
+        "contact_at_end": 79,
+        "released": 100,
+        "purposeful_launch": 3,
+        "mean_steps": 223.23,
+        "mean_reward": -15.931893116290352,
+        "mean_terms": {
+          "carry_slip": -0.05682658447189795,
+          "carry_edge": 0.0,
+          "contact": 0.0,
+          "release": 2.385154197972755,
+          "carry_stability": 0.017063179008447768,
+          "drop_failure": -0.6,
+          "action_cost": -0.16964038752958177,
+          "time": -4.464599999999985,
+          "score": 0.0,
+          "action_smoothness": -0.7213387182244098,
+          "carry_navigation": 0.0,
+          "ballistic_progress": 2.678295196954333,
+          "failure": -15.0
+        }
+      },
+      {
+        "file": "eval_012001280.json",
+        "episodes": 100,
+        "successes": 0,
+        "success_rate": 0.0,
+        "reasons": {
+          "ball_on_floor": 10,
+          "timeout": 88,
+          "arm_self_collision": 1,
+          "base_collision": 1
+        },
+        "groups": {
+          "unspecified": {
+            "n": 100,
+            "successes": 0,
+            "reasons": {
+              "ball_on_floor": 10,
+              "timeout": 88,
+              "arm_self_collision": 1,
+              "base_collision": 1
+            }
+          }
+        },
+        "contact_at_end": 85,
+        "released": 91,
+        "purposeful_launch": 2,
+        "mean_steps": 235.73,
+        "mean_reward": -16.72255569322441,
+        "mean_terms": {
+          "carry_slip": -0.14755806405054955,
+          "carry_edge": -1.9029864897716086e-05,
+          "contact": 0.0,
+          "release": 2.671201335418927,
+          "carry_stability": 0.06871646587080446,
+          "drop_failure": -0.5,
+          "action_cost": -0.16235963975012305,
+          "time": -4.714599999999983,
+          "score": 0.0,
+          "action_smoothness": -1.4748407699570523,
+          "carry_navigation": 0.0,
+          "ballistic_progress": 2.5369040091084796,
+          "failure": -15.0
+        }
+      },
+      {
+        "file": "eval_013000704.json",
+        "episodes": 100,
+        "successes": 0,
+        "success_rate": 0.0,
+        "reasons": {
+          "timeout": 98,
+          "ball_on_floor": 2
+        },
+        "groups": {
+          "unspecified": {
+            "n": 100,
+            "successes": 0,
+            "reasons": {
+              "timeout": 98,
+              "ball_on_floor": 2
+            }
+          }
+        },
+        "contact_at_end": 94,
+        "released": 94,
+        "purposeful_launch": 0,
+        "mean_steps": 248.81,
+        "mean_reward": -16.94698126941126,
+        "mean_terms": {
+          "carry_slip": -0.22540519276039322,
+          "carry_edge": 0.0,
+          "contact": 0.0,
+          "release": 2.207742551732961,
+          "carry_stability": 0.10400775085839525,
+          "drop_failure": -0.1,
+          "action_cost": -0.16166241340957582,
+          "time": -4.976199999999982,
+          "score": 0.0,
+          "action_smoothness": -0.9571199546921301,
+          "carry_navigation": 0.0,
+          "ballistic_progress": 2.161655988859481,
+          "failure": -15.0
+        }
+      },
+      {
+        "file": "eval_014000128.json",
+        "episodes": 100,
+        "successes": 0,
+        "success_rate": 0.0,
+        "reasons": {
+          "ball_on_floor": 15,
+          "timeout": 85
+        },
+        "groups": {
+          "unspecified": {
+            "n": 100,
+            "successes": 0,
+            "reasons": {
+              "ball_on_floor": 15,
+              "timeout": 85
+            }
+          }
+        },
+        "contact_at_end": 76,
+        "released": 96,
+        "purposeful_launch": 19,
+        "mean_steps": 228.65,
+        "mean_reward": -15.353018214930142,
+        "mean_terms": {
+          "carry_slip": -0.12069675657891381,
+          "carry_edge": 0.0,
+          "contact": 0.0,
+          "release": 3.002001102430484,
+          "carry_stability": 0.06241510590600091,
+          "drop_failure": -0.55,
+          "action_cost": -0.17754134564943613,
+          "time": -4.5729999999999835,
+          "score": 0.0,
+          "action_smoothness": -0.573345622609381,
+          "carry_navigation": 0.0,
+          "ballistic_progress": 2.5771493015711036,
+          "failure": -15.0
+        }
+      },
+      {
+        "file": "eval_015003648.json",
+        "episodes": 100,
+        "successes": 0,
+        "success_rate": 0.0,
+        "reasons": {
+          "timeout": 94,
+          "ball_on_floor": 6
+        },
+        "groups": {
+          "unspecified": {
+            "n": 100,
+            "successes": 0,
+            "reasons": {
+              "timeout": 94,
+              "ball_on_floor": 6
+            }
+          }
+        },
+        "contact_at_end": 84,
+        "released": 100,
+        "purposeful_launch": 4,
+        "mean_steps": 239.88,
+        "mean_reward": -15.426469115000828,
+        "mean_terms": {
+          "carry_slip": -0.12016416202391048,
+          "carry_edge": -4.398868510304405e-05,
+          "contact": 0.0,
+          "release": 3.09300634403808,
+          "carry_stability": 0.04043357250775127,
+          "drop_failure": -0.25,
+          "action_cost": -0.16633009187504647,
+          "time": -4.797599999999982,
+          "score": 0.0,
+          "action_smoothness": -0.6772940127143754,
+          "carry_navigation": 0.0,
+          "ballistic_progress": 2.4515232237517752,
+          "failure": -15.0
+        }
+      },
+      {
+        "file": "eval_016003072.json",
+        "episodes": 100,
+        "successes": 0,
+        "success_rate": 0.0,
+        "reasons": {
+          "timeout": 97,
+          "ball_on_floor": 3
+        },
+        "groups": {
+          "unspecified": {
+            "n": 100,
+            "successes": 0,
+            "reasons": {
+              "timeout": 97,
+              "ball_on_floor": 3
+            }
+          }
+        },
+        "contact_at_end": 88,
+        "released": 99,
+        "purposeful_launch": 20,
+        "mean_steps": 246.58,
+        "mean_reward": -15.05968278636525,
+        "mean_terms": {
+          "carry_slip": -0.15663675293368107,
+          "carry_edge": -5.8341134323498985e-06,
+          "contact": 0.0,
+          "release": 3.301982346444541,
+          "carry_stability": 0.06726798505991863,
+          "drop_failure": -0.15,
+          "action_cost": -0.1998604507659376,
+          "time": -4.931599999999982,
+          "score": 0.0,
+          "action_smoothness": -0.8211330819971977,
+          "carry_navigation": 0.0,
+          "ballistic_progress": 2.830303001940537,
+          "failure": -15.0
+        }
+      },
+      {
+        "file": "eval_017002496.json",
+        "episodes": 100,
+        "successes": 0,
+        "success_rate": 0.0,
+        "reasons": {
+          "timeout": 86,
+          "ball_on_floor": 13,
+          "base_collision": 1
+        },
+        "groups": {
+          "unspecified": {
+            "n": 100,
+            "successes": 0,
+            "reasons": {
+              "timeout": 86,
+              "ball_on_floor": 13,
+              "base_collision": 1
+            }
+          }
+        },
+        "contact_at_end": 77,
+        "released": 100,
+        "purposeful_launch": 35,
+        "mean_steps": 231.67,
+        "mean_reward": -15.249658776416394,
+        "mean_terms": {
+          "carry_slip": -0.12111289069585665,
+          "carry_edge": -4.1273739118243185e-06,
+          "contact": 0.0,
+          "release": 3.0073916458556607,
+          "carry_stability": 0.04095134865005495,
+          "drop_failure": -0.5,
+          "action_cost": -0.22821679775834083,
+          "time": -4.633399999999984,
+          "score": 0.0,
+          "action_smoothness": -0.48691419854500567,
+          "carry_navigation": 0.0,
+          "ballistic_progress": 2.6716462434510033,
+          "failure": -15.0
+        }
+      },
+      {
+        "file": "eval_018001920.json",
+        "episodes": 100,
+        "successes": 1,
+        "success_rate": 0.01,
+        "reasons": {
+          "ball_on_floor": 19,
+          "timeout": 80,
+          "basket_score": 1
+        },
+        "groups": {
+          "unspecified": {
+            "n": 100,
+            "successes": 1,
+            "reasons": {
+              "ball_on_floor": 19,
+              "timeout": 80,
+              "basket_score": 1
+            }
+          }
+        },
+        "contact_at_end": 73,
+        "released": 100,
+        "purposeful_launch": 57,
+        "mean_steps": 215.6,
+        "mean_reward": -13.521287199125508,
+        "mean_terms": {
+          "carry_slip": -0.0878947399179601,
+          "carry_edge": 0.0,
+          "contact": 0.0,
+          "release": 3.117873691383414,
+          "carry_stability": 0.02938908055075813,
+          "drop_failure": -0.45,
+          "action_cost": -0.2203264522573352,
+          "time": -4.311999999999986,
+          "score": 1.0,
+          "action_smoothness": -0.6446658698395127,
+          "carry_navigation": 0.0,
+          "ballistic_progress": 2.8963370909551283,
+          "failure": -14.85
+        }
+      },
+      {
+        "file": "eval_019001344.json",
+        "episodes": 100,
+        "successes": 0,
+        "success_rate": 0.0,
+        "reasons": {
+          "timeout": 91,
+          "ball_on_floor": 9
+        },
+        "groups": {
+          "unspecified": {
+            "n": 100,
+            "successes": 0,
+            "reasons": {
+              "timeout": 91,
+              "ball_on_floor": 9
+            }
+          }
+        },
+        "contact_at_end": 82,
+        "released": 99,
+        "purposeful_launch": 19,
+        "mean_steps": 232.04,
+        "mean_reward": -15.299028477379215,
+        "mean_terms": {
+          "carry_slip": -0.15030752823140667,
+          "carry_edge": -0.0002454427306258242,
+          "contact": 0.0,
+          "release": 3.220906096620187,
+          "carry_stability": 0.04502635662226499,
+          "drop_failure": -0.35,
+          "action_cost": -0.22247046264052397,
+          "time": -4.640799999999984,
+          "score": 0.0,
+          "action_smoothness": -0.9606509501440803,
+          "carry_navigation": 0.0,
+          "ballistic_progress": 2.7595134531249683,
+          "failure": -15.0
+        }
+      },
+      {
+        "file": "eval_020000768.json",
+        "episodes": 100,
+        "successes": 0,
+        "success_rate": 0.0,
+        "reasons": {
+          "ball_on_floor": 28,
+          "timeout": 69,
+          "arm_self_collision": 1,
+          "base_collision": 2
+        },
+        "groups": {
+          "unspecified": {
+            "n": 100,
+            "successes": 0,
+            "reasons": {
+              "ball_on_floor": 28,
+              "timeout": 69,
+              "arm_self_collision": 1,
+              "base_collision": 2
+            }
+          }
+        },
+        "contact_at_end": 61,
+        "released": 100,
+        "purposeful_launch": 28,
+        "mean_steps": 204.18,
+        "mean_reward": -15.842505048628816,
+        "mean_terms": {
+          "carry_slip": -0.1055375877235224,
+          "carry_edge": 0.0,
+          "contact": 0.0,
+          "release": 3.0780900094093915,
+          "carry_stability": 0.03282166165455865,
+          "drop_failure": -1.0,
+          "action_cost": -0.2046981035336852,
+          "time": -4.083599999999987,
+          "score": 0.0,
+          "action_smoothness": -1.0635639094516927,
+          "carry_navigation": 0.0,
+          "ballistic_progress": 2.503982881016135,
+          "failure": -15.0
+        }
+      }
+    ],
+    "current_source_matches": {
+      "basket_autonomous/environment.py": false,
+      "basket_autonomous/pool.py": true,
+      "basket_autonomous/run.py": false,
+      "basket_autonomous/test_two_stage.py": true,
+      "basket_autonomous/carry_reward.py": true,
+      "basket_autonomous/test_carry_reward.py": true,
+      "basket_autonomous/policy.py": true,
+      "basket_autonomous/test_autonomous.py": true,
+      "basket_autonomous/__init__.py": true
+    }
+  },
+  {
+    "run": "basket_autonomous/tennis_random_hold_fixed_seed123",
+    "last_metrics": {
+      "iteration": 1807,
+      "steps": 3700736,
+      "collect_seconds": 3.8509943099925295,
+      "seconds": 3.882651077990886,
+      "physics_fps": 531.8107052731461,
+      "reward_100": -13.925158745913246,
+      "success_100": 0.0,
+      "fixed_sr": 0.005,
+      "mobile_sr": null,
+      "actor_loss": 0.0038428980857133864,
+      "value_loss": 0.022564758732914924,
+      "kl": 0.015745101706124844
+    },
+    "config": {},
+    "evaluations": [],
+    "current_source_matches": {}
+  },
+  {
+    "run": "basket_three_stage/tennis_stage1_hold_seed123",
+    "last_metrics": {
+      "iteration": 1820,
+      "steps": 7454720,
+      "collect_seconds": 8.31051043397747,
+      "seconds": 8.417218888003845,
+      "physics_fps": 492.8698462676287,
+      "reward_100": -15.525435126254104,
+      "success_100": 0.0,
+      "hold_sr": 0.0,
+      "fixed_throw_sr": null,
+      "mobile_sr": null,
+      "actor_loss": 0.014389640651643276,
+      "value_loss": 0.017821928752320155,
+      "kl": 0.013340393813060862,
+      "drop_failure_100": 0.77,
+      "carry_slip_mean_100": 0.21925654110291665,
+      "carry_slip_max_100": 0.5701070899943083
+    },
+    "config": {
+      "seed": 123,
+      "device": "cuda:5",
+      "num_envs": 64,
+      "total_steps": 1000000000000,
+      "rollout_steps": 64,
+      "learning_rate": 0.0003,
+      "epochs": 4,
+      "minibatch_size": 512,
+      "gamma": 0.99,
+      "gae_lambda": 0.95,
+      "clip": 0.2,
+      "entropy_weight": 0.001,
+      "value_weight": 0.5,
+      "target_kl": 0.02,
+      "reward_scale": 0.1,
+      "eval_every": 500000,
+      "eval_episodes": 100,
+      "save_every": 100000,
+      "options": {
+        "episode_seconds": 10.0,
+        "reset_attempts": 160,
+        "arm_jitter_rad": [
+          0.35,
+          0.2,
+          0.25,
+          0.22,
+          0.25,
+          0.3
+        ],
+        "hand_jitter_rad": 0.2,
+        "training_stage": "fixed",
+        "fixed_replay_probability": 0.0,
+        "fixed_goal_x_range": [
+          -0.1,
+          0.1
+        ],
+        "fixed_goal_y_range": [
+          0.85,
+          1.15
+        ],
+        "reward_version": "carry_navigation_v2",
+        "arm_velocity_protocol": "integrated_target_v2",
+        "release_protocol": "separated_flight_v2",
+        "curriculum_stage": "hold",
+        "sampling_probabilities": [
+          0.6,
+          0.35,
+          0.05
+        ],
+        "near_arm_jitter_rad": [
+          0.035,
+          0.035,
+          0.035,
+          0.035,
+          0.035,
+          0.035
+        ],
+        "near_hand_jitter_rad": 0.04,
+        "near_ball_jitter_m": [
+          0.003,
+          0.003,
+          0.002
+        ],
+        "hold_max_seconds": 4.0,
+        "pose_bank_entries": [
+          {
+            "arm": [
+              0.046559644147336716,
+              0.976091894188703,
+              -1.128990374535906,
+              3.1040636434391446,
+              2.035906177712292,
+              -1.4559745377879743
+            ],
+            "hand": [
+              2.0146111460743614,
+              -3.132153780375595e-05,
+              -0.21778867267373545,
+              1.4255299816400895,
+              -0.35493513452612546,
+              -0.00038984192467778,
+              -0.3989839164617157,
+              2.5117840992262424,
+              1.510320955453296,
+              -0.017819356878749148,
+              -0.08448333560539965,
+              1.3735589549076157,
+              0.022701817107802558,
+              -0.8390461175348336,
+              1.5588816109537282,
+              0.7245389066986637
+            ],
+            "local": [
+              -0.004088052500393958,
+              0.019605689135573062,
+              0.0788358848733016
+            ],
+            "task": "throw",
+            "source": "real_throw_student_handoff_episode0",
+            "contact_validated": true,
+            "supported_seconds": 0.3,
+            "source_policy": "/home/isee/Catch/11-19/student_last.pth",
+            "source_policy_sha256": "d07b17cdb206e2f9cc02ba98aa866e46ba50f248ffa14feeb9c0c4d1e296c620",
+            "policy_kind": "visual_student",
+            "seed": 20261119,
+            "episode": 0,
+            "sim_time": 1.7200000000000013,
+            "source_report": "/home/isee/Catch/analysis_artifacts/catch_then_basket_20261119_v1/summary.json",
+            "source_state_sha256": "17bd041a9fa6de4bc7ba1dfb084478b212074eff000d00a00c6dfae6c999a96c",
+            "basket_validation": {
+              "placement": {
+                "lift": 0.0,
+                "minimum_gap": 0.0017802976823598632
+              },
+              "local": [
+                -0.0015287752169458487,
+                0.03184507011007737,
+                0.0768417117506894
+              ],
+              "arm": [
+                0.046544069213795634,
+                1.0138708306974886,
+                -1.1184897808808816,
+                3.103974309699275,
+                2.0276929989434347,
+                -1.4541073941348757
+              ],
+              "hand": [
+                1.9552069530980867,
+                -0.010027108472077505,
+                -0.07299439552144181,
+                1.4254228894834229,
+                -0.31746326090059734,
+                8.988471025973619e-05,
+                -0.09003703177769236,
+                2.0419144543968972,
+                1.383389260918341,
+                -0.0026108885704221934,
+                -0.057992061703112725,
+                1.3732930861002548,
+                -0.014752931924412117,
+                -0.44626634283999045,
+                1.4851696631552458,
+                0.3427013067548579
+              ]
+            }
+          },
+          {
+            "arm": [
+              -0.24687182923121193,
+              0.8367592079018792,
+              -1.0110102589408223,
+              2.854629872025908,
+              1.9755355201863658,
+              -1.373205051751023
+            ],
+            "hand": [
+              1.9893758754252104,
+              -0.0001323558198230968,
+              -0.3301172157419348,
+              1.26187110208294,
+              -0.36766089832951376,
+              -0.0009693801930324943,
+              -0.5303848136343903,
+              2.581656110510248,
+              1.7224346736727492,
+              0.04248561628562753,
+              0.008113664615426454,
+              1.775989502717778,
+              0.016589431035075996,
+              -0.8147737754978068,
+              1.267995416760984,
+              1.25692877702776
+            ],
+            "local": [
+              -0.001440440275618608,
+              0.009612895152801334,
+              0.07864124783852447
+            ],
+            "task": "throw",
+            "source": "real_throw_student_handoff_episode1",
+            "contact_validated": true,
+            "supported_seconds": 0.3,
+            "source_policy": "/home/isee/Catch/11-19/student_last.pth",
+            "source_policy_sha256": "d07b17cdb206e2f9cc02ba98aa866e46ba50f248ffa14feeb9c0c4d1e296c620",
+            "policy_kind": "visual_student",
+            "seed": 20261120,
+            "episode": 1,
+            "sim_time": 1.7200000000000013,
+            "source_report": "/home/isee/Catch/analysis_artifacts/catch_then_basket_20261119_v1/summary.json",
+            "source_state_sha256": "278e4c8387ca33650f80e075623e35b399b163def9c99d51e49b350fb35afe00",
+            "basket_validation": {
+              "placement": {
+                "lift": 0.044,
+                "minimum_gap": 0.0013803917238218444
+              },
+              "local": [
+                -0.0014953671360253438,
+                0.027127645590128605,
+                0.07526339470771674
+              ],
+              "arm": [
+                -0.24689619314583944,
+                0.882223253414034,
+                -0.9958833972080585,
+                2.853365559703728,
+                1.9652741907088824,
+                -1.3706495646299626
+              ],
+              "hand": [
+                1.8673341121659186,
+                -0.012766068931612418,
+                -0.08152485642854881,
+                1.2618338338519535,
+                -0.3155114210307499,
+                1.2370727774750373e-05,
+                -0.09549050501531918,
+                2.0419614517778943,
+                1.534923609567184,
+                0.027834412025482997,
+                -0.04297013905547712,
+                1.7741792611430007,
+                -0.011194048290397801,
+                -0.4270307074775249,
+                1.2407474667624228,
+                0.8871173252011707
+              ]
+            }
+          },
+          {
+            "arm": [
+              -0.5447525038695913,
+              0.7743086003906301,
+              -1.2734985340526455,
+              2.5015435244739503,
+              1.5346747348250551,
+              -1.2562641140663025
+            ],
+            "hand": [
+              2.278955813377477,
+              0.00013796365637466177,
+              -0.3044799066804033,
+              1.989224567479673,
+              -0.3880372647137074,
+              0.0008918586352074647,
+              -0.3181575244681746,
+              2.344502418767462,
+              1.5780808747519892,
+              -0.0008736727436310541,
+              -0.06000697859959417,
+              1.535923537926641,
+              0.006123304129130784,
+              -0.8054847234951992,
+              1.622509974980459,
+              0.3790936619456421
+            ],
+            "local": [
+              -0.0038267221140072766,
+              0.01696939852548171,
+              0.08095936628826454
+            ],
+            "task": "throw",
+            "source": "real_throw_student_handoff_episode7",
+            "contact_validated": true,
+            "supported_seconds": 0.3,
+            "source_policy": "/home/isee/Catch/11-19/student_last.pth",
+            "source_policy_sha256": "d07b17cdb206e2f9cc02ba98aa866e46ba50f248ffa14feeb9c0c4d1e296c620",
+            "policy_kind": "visual_student",
+            "seed": 20261126,
+            "episode": 7,
+            "sim_time": 2.0799999999999925,
+            "source_report": "/home/isee/Catch/analysis_artifacts/catch_then_basket_20261119_v1/summary.json",
+            "source_state_sha256": "6908a6d2e2a916d10592f3d4379814c56419b7173c159af852bc8e7bcecde64f",
+            "basket_validation": {
+              "placement": {
+                "lift": 0.0,
+                "minimum_gap": 0.0010692778912818057
+              },
+              "local": [
+                -0.0020494002924792186,
+                0.02983540587006347,
+                0.07945139047368356
+              ],
+              "arm": [
+                -0.5448067977758301,
+                0.8201920981977597,
+                -1.2542180558565303,
+                2.497258627044675,
+                1.5254986435923026,
+                -1.2531710710801494
+              ],
+              "hand": [
+                2.1516982818562407,
+                -0.00040152477544900264,
+                -0.08410113216603617,
+                1.9890586004902475,
+                -0.30635450877853754,
+                0.0002497878124623962,
+                -0.08262766227369743,
+                2.041861295230796,
+                1.4094289775766935,
+                0.00522164088606224,
+                -0.053728778375788384,
+                1.5356818124235012,
+                -0.012970053036629726,
+                -0.40135356736912636,
+                1.562035871993188,
+                0.12773588490453747
+              ]
+            }
+          },
+          {
+            "arm": [
+              0.010678607523002658,
+              0.7748404416953177,
+              -0.9290519567294845,
+              3.063510062616983,
+              2.0116675758912224,
+              -1.434259075053954
+            ],
+            "hand": [
+              2.241721687630899,
+              4.8971826678244965e-05,
+              -0.2370556481248956,
+              1.628174219634869,
+              -0.3574712578721641,
+              0.00029429226592896226,
+              -0.42816718722982006,
+              2.5211409627291514,
+              1.658687398638221,
+              0.004330014220693477,
+              -0.07910209910189898,
+              1.4914149611413055,
+              0.01727182371476829,
+              -0.8263332161898728,
+              1.1627185387994479,
+              1.4152987824674592
+            ],
+            "local": [
+              -0.003942679018551086,
+              0.011898900978890473,
+              0.07899356121476825
+            ],
+            "task": "throw",
+            "source": "real_throw_student_viewer_handoff",
+            "contact_validated": true,
+            "supported_seconds": 0.3,
+            "source_policy": "/home/isee/Catch/11-19/student_last.pth",
+            "source_policy_sha256": "d07b17cdb206e2f9cc02ba98aa866e46ba50f248ffa14feeb9c0c4d1e296c620",
+            "policy_kind": "visual_student",
+            "seed": 20261119,
+            "episode": 0,
+            "sim_time": 1.6800000000000013,
+            "source_report": "/home/isee/Catch/analysis_artifacts/catch_then_basket_viewer_01/episodes.jsonl",
+            "source_state_sha256": "c58a94de63da6fd56153c7a995b945652f22870b2946996ce384cdec7887bae3",
+            "basket_validation": {
+              "placement": {
+                "lift": 0.0,
+                "minimum_gap": 0.001697475249900153
+              },
+              "local": [
+                -0.0014773792321985664,
+                0.02396208328303047,
+                0.0768260591626754
+              ],
+              "arm": [
+                0.010661692774508322,
+                0.809542489723653,
+                -0.9175153549619496,
+                3.0633888736893113,
+                2.003872368357483,
+                -1.4323465143672045
+              ],
+              "hand": [
+                2.1837560616357083,
+                -0.010676634845895271,
+                -0.0728203514628257,
+                1.6281610689740103,
+                -0.31697564223507463,
+                0.00010553763090164785,
+                -0.0904684660335459,
+                2.0418760680340418,
+                1.5396140233659394,
+                -0.00033194818927534603,
+                -0.05666942419654782,
+                1.491188460041731,
+                -0.013939967293027952,
+                -0.42824330710703845,
+                1.146386577543237,
+                1.0476473120673522
+              ]
+            }
+          },
+          {
+            "arm": [
+              0.3775793531672634,
+              0.8358745339571295,
+              -1.1985124103417895,
+              3.526281674627319,
+              2.064573705307478,
+              -1.696471412488607
+            ],
+            "hand": [
+              0.5972108708077842,
+              -0.04136466867779559,
+              1.2725451255669622,
+              0.36725123723587155,
+              0.6982512036671014,
+              -0.02581895771993421,
+              0.9806883598437436,
+              0.4603224359301546,
+              1.3615765636939292,
+              0.08245226779627005,
+              0.24615342131642368,
+              0.5830389594264755,
+              -0.01210051126807515,
+              0.6393928354323138,
+              0.8154377675940928,
+              0.6494368339605159
+            ],
+            "local": [
+              -0.03421027492658245,
+              0.011128983946928746,
+              0.07518235893915673
+            ],
+            "task": "roll",
+            "source": "real_roll_seed173112_step54",
+            "episode": 1,
+            "seed": 173112,
+            "sim_time": 2.1999999999999793,
+            "relative_velocity": [
+              -0.20587362310965146,
+              -0.18177634953022315,
+              -0.012330242023713522
+            ],
+            "arm_velocity": [
+              -0.06006729999402177,
+              0.17807531159842088,
+              -0.11020682365237419,
+              -0.24038523865870276,
+              -0.2102964975029366,
+              0.17406870418461162
+            ],
+            "object_radius": 0.033275785333333335,
+            "object_mass": 0.058,
+            "teacher_checkpoint": "/home/isee/Catch/11-5/roll_catch_best_reward_270.37.pth",
+            "teacher_sha256": "966011743c774100d28680ecb43f0b6cb4c5e5373dba3948649e72c56d4d2b5c",
+            "supported_seconds": 0.08,
+            "contact_validated": true,
+            "basket_validation": {
+              "placement": {
+                "lift": 0.004,
+                "minimum_gap": 0.0010663629244417744
+              },
+              "local": [
+                -0.03533986152121512,
+                0.024972117518514192,
+                0.07864921593777767
+              ],
+              "arm": [
+                0.3776932705046772,
+                0.8862677382627426,
+                -1.1822153119993464,
+                3.528249330628087,
+                2.0555549681314065,
+                -1.6938749128831445
+              ],
+              "hand": [
+                0.5058995254566483,
+                0.01087586974113125,
+                1.2518972965206874,
+                0.36696741643994024,
+                0.601433553953537,
+                0.010563783772745217,
+                0.9540702176168163,
+                0.46012663596536707,
+                1.231332732890124,
+                -0.013365244621412144,
+                0.20756039078892916,
+                0.5820385989346876,
+                -0.011877565678334088,
+                0.5380809355501072,
+                0.8319291823870881,
+                0.6510362102108109
+              ]
+            }
+          },
+          {
+            "arm": [
+              0.3947810048768153,
+              0.8922558121689537,
+              -1.2598778555555536,
+              3.483579149446656,
+              2.047548810530957,
+              -1.6802259257164882
+            ],
+            "hand": [
+              0.7812007443986,
+              -0.14872842120517346,
+              1.0814127891629763,
+              0.5622234196282136,
+              0.8257510077402824,
+              -0.12666231559469085,
+              1.1690430019957698,
+              0.9565429308371528,
+              0.7665844127468007,
+              0.006380407224962357,
+              0.39508870981155275,
+              0.02731603398179712,
+              -0.03613236868265757,
+              0.9234255936953375,
+              0.2517753215872365,
+              0.9411011554837716
+            ],
+            "local": [
+              -0.04734680660827857,
+              0.05602297956518354,
+              0.09122850684662215
+            ],
+            "task": "roll",
+            "source": "real_roll_seed173112_step60",
+            "episode": 1,
+            "seed": 173112,
+            "sim_time": 2.439999999999953,
+            "relative_velocity": [
+              0.04983639180478729,
+              0.08661532705289712,
+              -0.034408486064119406
+            ],
+            "arm_velocity": [
+              0.2701271974617491,
+              0.2095924784527085,
+              0.04481443249614196,
+              0.09708901930168884,
+              0.17876456263880938,
+              -0.14173194363424135
+            ],
+            "object_radius": 0.033275785333333335,
+            "object_mass": 0.058,
+            "teacher_checkpoint": "/home/isee/Catch/11-5/roll_catch_best_reward_270.37.pth",
+            "teacher_sha256": "966011743c774100d28680ecb43f0b6cb4c5e5373dba3948649e72c56d4d2b5c",
+            "supported_seconds": 0.08,
+            "contact_validated": true,
+            "basket_validation": {
+              "placement": {
+                "lift": 0.011,
+                "minimum_gap": 0.0010962565722927795
+              },
+              "local": [
+                -0.04929401661818076,
+                0.0674625927639059,
+                0.0909526038920105
+              ],
+              "arm": [
+                0.394866141267634,
+                0.9507059726259051,
+                -1.2421623400276538,
+                3.485829593545193,
+                2.0360230732126894,
+                -1.6776709375379901
+              ],
+              "hand": [
+                0.6902998840050174,
+                0.00502984671347416,
+                1.0643396247938628,
+                0.5622279584998762,
+                0.7355972737267977,
+                -0.008832322439726543,
+                1.155080533965508,
+                0.9564049024202884,
+                0.5908237678936176,
+                -0.0014306777213343963,
+                0.33370352506277745,
+                0.026876873302334695,
+                -0.012206583421780236,
+                0.8739309484465542,
+                0.24263499555575715,
+                0.9425150040080303
+              ]
+            }
+          },
+          {
+            "arm": [
+              0.17100406137643948,
+              0.8017271875644938,
+              -1.1100702181610267,
+              3.517162896211972,
+              2.085802959728168,
+              -1.6050765458684004
+            ],
+            "hand": [
+              1.085244126818322,
+              -0.163778389470696,
+              1.3138731649865227,
+              -0.36304395413122875,
+              0.9385810353624733,
+              -0.13033275310668777,
+              1.39460869593336,
+              0.08112557679543358,
+              1.2289109901909394,
+              -0.10127150021621552,
+              0.25943956082193226,
+              -0.03882873039567603,
+              -0.021919685122967592,
+              1.0705671419480933,
+              0.9423881615331061,
+              0.6269745567852348
+            ],
+            "local": [
+              0.046360439886231834,
+              0.015519836033676935,
+              0.0809364363967377
+            ],
+            "task": "roll",
+            "source": "real_roll_seed273115_step51",
+            "episode": 2,
+            "seed": 273115,
+            "sim_time": 2.0799999999999925,
+            "relative_velocity": [
+              -0.013995441557238406,
+              0.12301368855595068,
+              0.1035800404605292
+            ],
+            "arm_velocity": [
+              -0.5061811190134198,
+              -0.17915672812050717,
+              -0.45998049312315165,
+              0.25775333450243276,
+              -0.5226124276679426,
+              -0.03812030297993895
+            ],
+            "object_radius": 0.033275785333333335,
+            "object_mass": 0.058,
+            "teacher_checkpoint": "/home/isee/Catch/11-5/roll_catch_best_reward_270.37.pth",
+            "teacher_sha256": "966011743c774100d28680ecb43f0b6cb4c5e5373dba3948649e72c56d4d2b5c",
+            "supported_seconds": 0.08,
+            "contact_validated": true,
+            "basket_validation": {
+              "placement": {
+                "lift": 0.017,
+                "minimum_gap": 0.0011109721260214728
+              },
+              "local": [
+                0.04612349957886324,
+                0.028475514860679625,
+                0.07551038015378736
+              ],
+              "arm": [
+                0.17108361333770936,
+                0.8525524753090249,
+                -1.0902026529210112,
+                3.5192501992128604,
+                2.0733348909182383,
+                -1.6018405619239127
+              ],
+              "hand": [
+                0.9523848488980947,
+                -0.012217644247635846,
+                1.2390129461238966,
+                -0.36356154574532046,
+                0.8484615079814011,
+                -0.012939590882852613,
+                1.389233241129067,
+                0.0809559686315817,
+                1.1309902973284072,
+                -0.012005712991074557,
+                0.23223981899584756,
+                -0.038885394915982516,
+                -0.01189414139467094,
+                0.91392068157216,
+                0.926273708799103,
+                0.6279699555122358
+              ]
+            }
+          },
+          {
+            "arm": [
+              0.3409332087827446,
+              0.7970260437763197,
+              -1.124652744118016,
+              3.549511967557492,
+              2.131198586376177,
+              -1.620098290866044
+            ],
+            "hand": [
+              1.2288837033071331,
+              -0.030942245734622974,
+              0.7664202224708047,
+              -0.042919017554657324,
+              0.7538451659825373,
+              -0.058166705769682144,
+              1.283791417121866,
+              0.5228834131797474,
+              1.4430454608611127,
+              0.07292317480645412,
+              0.5882332997401652,
+              -0.08514955338580626,
+              -0.010279342975329883,
+              0.927349705060981,
+              0.523497443580107,
+              1.0428195500786694
+            ],
+            "local": [
+              0.06523677822171853,
+              0.01742703847528618,
+              0.07276278596409252
+            ],
+            "task": "roll",
+            "source": "real_roll_seed373118_step60",
+            "episode": 3,
+            "seed": 373118,
+            "sim_time": 2.439999999999953,
+            "relative_velocity": [
+              0.04888871097371063,
+              -0.07553156290834712,
+              -0.08506556742726654
+            ],
+            "arm_velocity": [
+              -0.7820085876425771,
+              0.013541459914541656,
+              -0.010226568344432113,
+              0.029167625445170924,
+              -0.1969064917669186,
+              0.1207277425175724
+            ],
+            "object_radius": 0.033275785333333335,
+            "object_mass": 0.058,
+            "teacher_checkpoint": "/home/isee/Catch/11-5/roll_catch_best_reward_270.37.pth",
+            "teacher_sha256": "966011743c774100d28680ecb43f0b6cb4c5e5373dba3948649e72c56d4d2b5c",
+            "supported_seconds": 0.08,
+            "contact_validated": true,
+            "basket_validation": {
+              "placement": {
+                "lift": 0.006,
+                "minimum_gap": 0.001709181928433584
+              },
+              "local": [
+                0.07400789841356425,
+                0.0313208339580122,
+                0.07581119747360124
+              ],
+              "arm": [
+                0.3410740101085284,
+                0.8400882793735581,
+                -1.107443610402736,
+                3.5514264593750733,
+                2.1198666975765326,
+                -1.6171414097119452
+              ],
+              "hand": [
+                1.115870074814144,
+                -0.012850159614059739,
+                0.7441195306293413,
+                -0.04356517422748752,
+                0.6656473477984289,
+                -0.013920805727733564,
+                1.2707177478180354,
+                0.5224807510351593,
+                1.3662130554712582,
+                -0.013269179854663998,
+                0.5748638390891404,
+                -0.08535245915441074,
+                -0.012386905131069877,
+                0.8182129339094409,
+                0.500972477631567,
+                0.9138698208891293
+              ]
+            }
+          },
+          {
+            "arm": [
+              0.4248831958526387,
+              0.8715897527574036,
+              -1.1394921064494856,
+              3.578105498559486,
+              2.2053565637218187,
+              -1.7052908158786293
+            ],
+            "hand": [
+              0.6548476613491762,
+              -0.07177458775836619,
+              1.0403245372645236,
+              0.5320016217039844,
+              0.7280919835857671,
+              -0.11223109837752798,
+              0.9977851893282795,
+              0.7575479592742482,
+              0.8109685897162622,
+              -0.1082628872961758,
+              0.5381270682861842,
+              0.215883616443714,
+              -0.010019572332024322,
+              1.0707080306358687,
+              0.5877468021537872,
+              0.9880729776882646
+            ],
+            "local": [
+              -0.029587474050556267,
+              0.048900333754760765,
+              0.08587716497807019
+            ],
+            "task": "roll",
+            "source": "real_roll_seed473121_step59",
+            "episode": 4,
+            "seed": 473121,
+            "sim_time": 2.3999999999999573,
+            "relative_velocity": [
+              -0.05125209462302231,
+              -0.08537443946941935,
+              -0.09481800289642942
+            ],
+            "arm_velocity": [
+              -0.07714930439340437,
+              0.0016307997266990018,
+              -0.012919829274431978,
+              0.08404309122727735,
+              0.1179377472633108,
+              -0.08426252875049468
+            ],
+            "object_radius": 0.033275785333333335,
+            "object_mass": 0.058,
+            "teacher_checkpoint": "/home/isee/Catch/11-5/roll_catch_best_reward_270.37.pth",
+            "teacher_sha256": "966011743c774100d28680ecb43f0b6cb4c5e5373dba3948649e72c56d4d2b5c",
+            "supported_seconds": 0.08,
+            "contact_validated": true,
+            "basket_validation": {
+              "placement": {
+                "lift": 0.045,
+                "minimum_gap": 0.001126032339605211
+              },
+              "local": [
+                -0.03981227481285783,
+                0.06012659686419473,
+                0.08360738846393538
+              ],
+              "arm": [
+                0.42490237244924917,
+                0.9264893181846648,
+                -1.1224423249049647,
+                3.580653671897141,
+                2.191869800490498,
+                -1.7025064468268074
+              ],
+              "hand": [
+                0.5449034143336774,
+                0.010454188746319076,
+                1.0166674133798592,
+                0.5319429858963683,
+                0.6101583775189457,
+                -0.005697038287542765,
+                0.9794616604588238,
+                0.7578510380630015,
+                0.605651603163222,
+                0.00982904936771336,
+                0.4694800170682096,
+                0.2130890921179686,
+                -0.012215064227000434,
+                0.9371467939744466,
+                0.5605374843688902,
+                0.9886144079444478
+              ]
+            }
+          },
+          {
+            "arm": [
+              0.3660308020518084,
+              0.8732769506246054,
+              -1.26365808421955,
+              3.5563300082321443,
+              2.092062338954307,
+              -1.6560824407029342
+            ],
+            "hand": [
+              0.8983357271074314,
+              0.1349834354592395,
+              1.061168859386507,
+              0.4121598989171322,
+              0.6828426997381811,
+              0.031329129623673575,
+              1.0033436888601572,
+              0.6769219660325831,
+              1.254529524978746,
+              0.12222665091614744,
+              0.511328457632977,
+              0.30256743795631813,
+              -0.01513693828740633,
+              1.4889542174996169,
+              0.8838010877180738,
+              0.6305134174884433
+            ],
+            "local": [
+              -0.00012004537424080246,
+              0.04188623922100272,
+              0.08915438706194748
+            ],
+            "task": "roll",
+            "source": "real_roll_seed573124_step61",
+            "episode": 5,
+            "seed": 573124,
+            "sim_time": 2.4799999999999485,
+            "relative_velocity": [
+              0.025624818470652545,
+              0.06863216605380734,
+              0.22000878481279096
+            ],
+            "arm_velocity": [
+              -0.13430568658700542,
+              0.10629225799090597,
+              -0.17852941682966966,
+              -0.012557247253015094,
+              -0.111190159436815,
+              0.06433461613948029
+            ],
+            "object_radius": 0.033275785333333335,
+            "object_mass": 0.058,
+            "teacher_checkpoint": "/home/isee/Catch/11-5/roll_catch_best_reward_270.37.pth",
+            "teacher_sha256": "966011743c774100d28680ecb43f0b6cb4c5e5373dba3948649e72c56d4d2b5c",
+            "supported_seconds": 0.08,
+            "contact_validated": true,
+            "basket_validation": {
+              "placement": {
+                "lift": 0.045,
+                "minimum_gap": 0.001303640772696027
+              },
+              "local": [
+                0.012623937213203481,
+                0.05223512920667657,
+                0.07595974164770646
+              ],
+              "arm": [
+                0.3661071153526254,
+                0.9360777705509136,
+                -1.2402610251416415,
+                3.560364597386301,
+                2.078365155794922,
+                -1.653584546060785
+              ],
+              "hand": [
+                0.7755059705778892,
+                -0.01663149403536917,
+                0.9655982149910535,
+                0.41051271938808265,
+                0.5150511902949035,
+                -0.014993924496933242,
+                0.9647429772038062,
+                0.6756948519105318,
+                1.1179236807549164,
+                -0.02274521113792718,
+                0.4947029131251708,
+                0.30308839038422997,
+                -0.012123925316247154,
+                1.288636193990329,
+                0.8189222203773256,
+                0.630408330566099
+              ]
+            }
+          },
+          {
+            "arm": [
+              0.17698183429356265,
+              0.8756781627910283,
+              -1.233961101140478,
+              3.4743302096839215,
+              2.0526904545841074,
+              -1.5749278619012146
+            ],
+            "hand": [
+              0.8776959635287962,
+              0.0447506307201223,
+              1.4598627085449545,
+              -0.03272470333909667,
+              0.5821533237557321,
+              0.09107578698377375,
+              0.9213480944011516,
+              0.40965796364929846,
+              0.9746202715019102,
+              -0.012099671502153249,
+              0.22303336460165274,
+              0.31210290669951324,
+              0.04760917654167494,
+              0.8514640677158444,
+              0.7932944106583242,
+              0.7088219850810905
+            ],
+            "local": [
+              0.00431671905589774,
+              0.038769169354688354,
+              0.07500560589898064
+            ],
+            "task": "roll",
+            "source": "real_roll_seed773130_step36",
+            "episode": 7,
+            "seed": 773130,
+            "sim_time": 1.480000000000001,
+            "relative_velocity": [
+              0.2093147387596698,
+              -0.01481474624100268,
+              0.0030323500341911253
+            ],
+            "arm_velocity": [
+              0.28351705235368146,
+              -0.17750103133284875,
+              -0.4047524232411812,
+              0.18445136735177337,
+              -0.5383711457348315,
+              -0.2583799853382704
+            ],
+            "object_radius": 0.033275785333333335,
+            "object_mass": 0.058,
+            "teacher_checkpoint": "/home/isee/Catch/11-5/roll_catch_best_reward_270.37.pth",
+            "teacher_sha256": "966011743c774100d28680ecb43f0b6cb4c5e5373dba3948649e72c56d4d2b5c",
+            "supported_seconds": 0.08,
+            "contact_validated": true,
+            "basket_validation": {
+              "placement": {
+                "lift": 0.005,
+                "minimum_gap": 0.0013803709532294178
+              },
+              "local": [
+                -0.0007272498438229326,
+                0.059431287006726105,
+                0.0807577458059363
+              ],
+              "arm": [
+                0.1770496189173341,
+                0.9329193809313386,
+                -1.2152475934622529,
+                3.476300647944091,
+                2.0417639981736344,
+                -1.572629163682481
+              ],
+              "hand": [
+                0.7737382593874473,
+                -0.013838844645060583,
+                1.4366619902594395,
+                -0.030177738468251798,
+                0.45387813684654404,
+                0.0037467537045474237,
+                0.8863744198827739,
+                0.4088759430732871,
+                0.8665855448140416,
+                -0.009080491896822179,
+                0.1921029642360315,
+                0.31275331327702255,
+                -0.012291202396763618,
+                0.7268836796788829,
+                0.7891827540297117,
+                0.7078011486653795
+              ]
+            }
+          },
+          {
+            "arm": [
+              0.276360473091853,
+              0.8917061113137885,
+              -1.173498388167413,
+              3.489937325527722,
+              2.2518476868530257,
+              -1.6644419156779533
+            ],
+            "hand": [
+              0.953903666273159,
+              -0.04976551919485628,
+              1.2259971059224197,
+              0.113818197920897,
+              0.4956892595619294,
+              -0.05211449448298377,
+              1.0138765094780866,
+              0.45796989950869915,
+              0.7338478932109078,
+              -0.04268487939032171,
+              0.2534619667402647,
+              -0.0030176778285430045,
+              0.04977816651106711,
+              0.8174028495536109,
+              0.7663062632714288,
+              0.6597104909874354
+            ],
+            "local": [
+              0.007160434969742865,
+              0.043058162407243,
+              0.07974254281541844
+            ],
+            "task": "roll",
+            "source": "real_roll_seed873133_step47",
+            "episode": 8,
+            "seed": 873133,
+            "sim_time": 1.9200000000000015,
+            "relative_velocity": [
+              0.029173807275658836,
+              0.12174146389304888,
+              -0.03951312567591963
+            ],
+            "arm_velocity": [
+              0.005346265489009697,
+              -0.3664409606411388,
+              0.0033861641289273103,
+              0.23532483507437704,
+              0.1735094717891862,
+              -0.24263906202411473
+            ],
+            "object_radius": 0.033275785333333335,
+            "object_mass": 0.058,
+            "teacher_checkpoint": "/home/isee/Catch/11-5/roll_catch_best_reward_270.37.pth",
+            "teacher_sha256": "966011743c774100d28680ecb43f0b6cb4c5e5373dba3948649e72c56d4d2b5c",
+            "supported_seconds": 0.08,
+            "contact_validated": true,
+            "basket_validation": {
+              "placement": {
+                "lift": 0.044,
+                "minimum_gap": 0.0011819330955337784
+              },
+              "local": [
+                -0.0024408562859601006,
+                0.06389326135034365,
+                0.07545442574983882
+              ],
+              "arm": [
+                0.2763893390290021,
+                0.9422037716394704,
+                -1.1532573550225609,
+                3.4923336651834647,
+                2.2409898959376005,
+                -1.6616213688302182
+              ],
+              "hand": [
+                0.8429271088831841,
+                -0.011219726556011044,
+                1.2192397716248649,
+                0.11369129879557552,
+                0.3191523810734632,
+                0.00038632049290290556,
+                0.9630192161698531,
+                0.4558728426283774,
+                0.6120408913155301,
+                -0.012351358402535016,
+                0.21716945019112868,
+                -0.003053660193999175,
+                -0.012275132802540018,
+                0.6665662239725714,
+                0.7595093679717971,
+                0.6588053486691633
+              ]
+            }
+          },
+          {
+            "arm": [
+              0.32999819445124984,
+              0.8813774008967943,
+              -1.2395308848755997,
+              3.541565837526283,
+              2.1306125964100024,
+              -1.698139139832675
+            ],
+            "hand": [
+              1.045430915038803,
+              -0.03154231923092836,
+              1.4954290352517472,
+              0.13907713855229537,
+              0.8414359376885162,
+              0.03829368693735978,
+              1.0372595979409933,
+              0.43668969653781087,
+              1.0275447768720178,
+              -0.05263504447868169,
+              0.18854210402556354,
+              0.019200431010080975,
+              -0.026293882270352054,
+              0.7782324327558044,
+              0.3942715281536127,
+              0.7798561132322754
+            ],
+            "local": [
+              -0.019249293222997628,
+              0.03580187855112274,
+              0.07572778978433556
+            ],
+            "task": "roll",
+            "source": "real_roll_seed873133_step52",
+            "episode": 8,
+            "seed": 873133,
+            "sim_time": 2.119999999999988,
+            "relative_velocity": [
+              -0.2134051220477451,
+              -0.07293602902878735,
+              -0.1162427327177337
+            ],
+            "arm_velocity": [
+              -0.05910896644815484,
+              -0.13979500907619732,
+              0.18254661613407205,
+              0.04396436491479831,
+              -0.23380564152923802,
+              0.10193632010050901
+            ],
+            "object_radius": 0.033275785333333335,
+            "object_mass": 0.058,
+            "teacher_checkpoint": "/home/isee/Catch/11-5/roll_catch_best_reward_270.37.pth",
+            "teacher_sha256": "966011743c774100d28680ecb43f0b6cb4c5e5373dba3948649e72c56d4d2b5c",
+            "supported_seconds": 0.28,
+            "contact_validated": true,
+            "basket_validation": {
+              "placement": {
+                "lift": 0.005,
+                "minimum_gap": 0.0015688560919491917
+              },
+              "local": [
+                -0.006453035246795354,
+                0.04393984644332086,
+                0.07852659621716893
+              ],
+              "arm": [
+                0.3301151273108688,
+                0.9331796917655187,
+                -1.218620661421161,
+                3.5444067499408694,
+                2.1202248668967782,
+                -1.6954184891047015
+              ],
+              "hand": [
+                0.9593445891581056,
+                -0.011548536822912913,
+                1.49899752949617,
+                0.13899635337700567,
+                0.7214997474202542,
+                -0.012930601781543342,
+                1.0172606059793803,
+                0.436200429323832,
+                0.9146748418024839,
+                -0.012048006224177748,
+                0.16022028173612887,
+                0.019257844272563274,
+                -0.01234220706553861,
+                0.7093256721126259,
+                0.39357563192942685,
+                0.7807222983887707
+              ]
+            }
+          },
+          {
+            "arm": [
+              0.18745591685649368,
+              0.8574430469801261,
+              -1.2159804046839766,
+              3.451372813150495,
+              2.125344416696489,
+              -1.5083327519236907
+            ],
+            "hand": [
+              0.9902852039149591,
+              0.06711434595866132,
+              1.3478763451076912,
+              -0.043372598862747566,
+              0.5652953166067304,
+              0.05581923507844255,
+              1.0004070137348053,
+              0.7194356425325179,
+              0.8127175091509676,
+              0.06226887501808714,
+              0.1982105247902076,
+              0.12025997883853318,
+              0.03778120300413144,
+              0.8276836242017273,
+              0.7411191664505292,
+              0.8337559885010785
+            ],
+            "local": [
+              0.018306982156730392,
+              0.031166255088588998,
+              0.07712239818398227
+            ],
+            "task": "roll",
+            "source": "real_roll_seed1073139_step38",
+            "episode": 10,
+            "seed": 1073139,
+            "sim_time": 1.5600000000000012,
+            "relative_velocity": [
+              -0.11471923343734529,
+              0.23351300184817925,
+              -0.018846369948090608
+            ],
+            "arm_velocity": [
+              -0.1131581128947679,
+              0.2505111552313879,
+              -0.2822217798707216,
+              0.020619633504875702,
+              -0.00028275134570254876,
+              -0.005490907993671006
+            ],
+            "object_radius": 0.033275785333333335,
+            "object_mass": 0.058,
+            "teacher_checkpoint": "/home/isee/Catch/11-5/roll_catch_best_reward_270.37.pth",
+            "teacher_sha256": "966011743c774100d28680ecb43f0b6cb4c5e5373dba3948649e72c56d4d2b5c",
+            "supported_seconds": 0.08,
+            "contact_validated": true,
+            "basket_validation": {
+              "placement": {
+                "lift": 0.05,
+                "minimum_gap": 0.001139713859805755
+              },
+              "local": [
+                0.008138957404552578,
+                0.05117903296699903,
+                0.075148959518649
+              ],
+              "arm": [
+                0.1874499508928712,
+                0.9214491257001084,
+                -1.1941378648535337,
+                3.453763686840054,
+                2.110944491416327,
+                -1.5066816646552452
+              ],
+              "hand": [
+                0.8127270164381674,
+                -0.016311622979185883,
+                1.1853380223498322,
+                -0.046448659111677795,
+                0.43868036535419586,
+                0.010357242894270818,
+                0.9700161385940592,
+                0.7192834192667282,
+                0.680317479449077,
+                -0.010959990789696516,
+                0.15734717110283652,
+                0.12015720948314648,
+                -0.012163118291628269,
+                0.6753323955758131,
+                0.7272354751723537,
+                0.832131489110336
+              ]
+            }
+          },
+          {
+            "arm": [
+              1.1253041086389584,
+              -0.028780777979023855,
+              -0.3673185421084743,
+              4.140761965685541,
+              2.142265675124118,
+              -2.2200587077557885
+            ],
+            "hand": [
+              1.723041805827285,
+              -0.010028097629013213,
+              1.522213827811193,
+              0.3261961957442652,
+              1.6480763561056744,
+              0.0012480470553042976,
+              0.9415085409269468,
+              2.0416183816441844,
+              2.1545613259455076,
+              0.010056783379348625,
+              1.1534879310554313,
+              0.27292995214774174,
+              -0.01003398644057822,
+              0.5486989757841867,
+              1.6243353534645588,
+              1.7147716028872204
+            ],
+            "local": [
+              0.005046147811500938,
+              -0.03407423731792371,
+              0.07770551939759268
+            ],
+            "task": "bounce",
+            "source": "real_bounce_seed72100_step40",
+            "episode": 0,
+            "seed": 72100,
+            "sim_time": 1.639999999999771,
+            "relative_velocity": [
+              0.0067838734019862795,
+              0.046986604493061926,
+              0.003771495847029016
+            ],
+            "arm_velocity": [
+              0.304786115013692,
+              -0.06861433893906634,
+              0.03400549022794708,
+              0.16222545243043193,
+              0.16117807056564473,
+              -0.06994415451158291
+            ],
+            "object_radius": 0.033275785333333335,
+            "object_mass": 0.058,
+            "teacher_checkpoint": "/home/isee/Catch/11-22/bounce_catch_best_reward_14.04.pth",
+            "teacher_sha256": "3b99ee7b3c09e98a250448f505560b5522fd9856903a6bacc22ee3a84cd283d8",
+            "supported_seconds": 0.04,
+            "contact_validated": true,
+            "basket_validation": {
+              "placement": {
+                "lift": 0.006,
+                "minimum_gap": 0.00124563368244969
+              },
+              "local": [
+                0.004707083549118031,
+                -0.02881733818097342,
+                0.08395568530814523
+              ],
+              "arm": [
+                1.1253600677888378,
+                -0.007317411672141196,
+                -0.3519055918436254,
+                4.142852577512678,
+                2.1340713764253634,
+                -2.216433560708007
+              ],
+              "hand": [
+                1.5945709294318107,
+                -0.02013019659770004,
+                1.241795324260336,
+                0.3650589213140865,
+                1.4954012585986916,
+                -0.00491125340893804,
+                0.8277488341762956,
+                2.0507228308314858,
+                2.1304729547798953,
+                0.015283536943867915,
+                1.160448047732736,
+                0.22789490869066756,
+                0.009943480600404528,
+                0.7299353643537033,
+                1.5680053269163081,
+                1.644059499841718
+              ]
+            }
+          },
+          {
+            "arm": [
+              -1.245284017768606,
+              -0.5439490729178095,
+              -0.20235133124783936,
+              2.7777180989630708,
+              2.2188085675641394,
+              -0.9531596286616122
+            ],
+            "hand": [
+              1.8292286505095998,
+              -0.010261871527194657,
+              0.9779630282133863,
+              1.105518706957797,
+              0.581078971616214,
+              -0.010014482027768893,
+              0.5510169453312114,
+              1.8163295455883481,
+              1.9855651250767687,
+              0.01028981783975792,
+              0.16857867176314242,
+              -0.36867408808859287,
+              -0.010042949634189686,
+              0.811129966493546,
+              1.5085092501453017,
+              1.8801831688306938
+            ],
+            "local": [
+              0.002425402074147153,
+              0.0009716262099359815,
+              0.092223576133733
+            ],
+            "task": "bounce",
+            "source": "real_bounce_seed172103_step34",
+            "episode": 1,
+            "seed": 172103,
+            "sim_time": 1.399999999999904,
+            "relative_velocity": [
+              -0.017806865204014803,
+              -0.01614294249527062,
+              -0.03108404700382742
+            ],
+            "arm_velocity": [
+              -0.9490844184043733,
+              -0.6741849891883648,
+              -0.06172718212210896,
+              0.026477988103387095,
+              -0.09567591581083448,
+              0.4427293896676032
+            ],
+            "object_radius": 0.033275785333333335,
+            "object_mass": 0.058,
+            "teacher_checkpoint": "/home/isee/Catch/11-22/bounce_catch_best_reward_14.04.pth",
+            "teacher_sha256": "3b99ee7b3c09e98a250448f505560b5522fd9856903a6bacc22ee3a84cd283d8",
+            "supported_seconds": 0.04,
+            "contact_validated": true,
+            "basket_validation": {
+              "placement": {
+                "lift": 0.041,
+                "minimum_gap": 0.0011560314590397594
+              },
+              "local": [
+                0.004381180727018871,
+                -0.011903345697771503,
+                0.11334321799106972
+              ],
+              "arm": [
+                -1.2453215012583925,
+                -0.5329949185253097,
+                -0.17822434386947875,
+                2.7717848148961837,
+                2.2108512464405683,
+                -0.9516828882802606
+              ],
+              "hand": [
+                1.778289694526971,
+                -0.018425292525457077,
+                0.9150637316403146,
+                1.0757851803745047,
+                0.4968046312453418,
+                -0.010371352015092454,
+                0.5270626263253344,
+                1.8164225034391963,
+                1.9917607771375159,
+                0.022328310566604392,
+                0.18092129555983857,
+                -0.3606105685097345,
+                -0.011233359121193026,
+                0.7980175808705431,
+                1.4937784639010745,
+                1.7994288277158763
+              ]
+            }
+          },
+          {
+            "arm": [
+              0.9284629135130105,
+              -0.08547057788288573,
+              -0.3905671318722664,
+              3.9574102746834696,
+              2.125488333530303,
+              -2.321175527742358
+            ],
+            "hand": [
+              1.7922749435153271,
+              0.010023008130382344,
+              1.4105458038818188,
+              0.2831082566865817,
+              2.057684229422802,
+              0.004465509145137809,
+              0.7615347951814851,
+              1.8811259048122517,
+              2.0371292934447967,
+              0.009555278247505782,
+              1.1698716615412763,
+              0.6109970727175903,
+              -0.010037127916050995,
+              0.5709542471427832,
+              1.7031440538596625,
+              1.6897740979826346
+            ],
+            "local": [
+              -0.00758520526961564,
+              -0.05440326717700989,
+              0.0766489511023385
+            ],
+            "task": "bounce",
+            "source": "real_bounce_seed572115_step41",
+            "episode": 5,
+            "seed": 572115,
+            "sim_time": 1.6799999999997488,
+            "relative_velocity": [
+              0.02416196878563007,
+              0.021320418902620576,
+              0.007505305151333847
+            ],
+            "arm_velocity": [
+              0.19490544027687623,
+              -0.1680198578272363,
+              0.10704263779893425,
+              -0.02842701745944596,
+              0.01226885648647145,
+              -0.040323010685719946
+            ],
+            "object_radius": 0.033275785333333335,
+            "object_mass": 0.058,
+            "teacher_checkpoint": "/home/isee/Catch/11-22/bounce_catch_best_reward_14.04.pth",
+            "teacher_sha256": "3b99ee7b3c09e98a250448f505560b5522fd9856903a6bacc22ee3a84cd283d8",
+            "supported_seconds": 0.04,
+            "contact_validated": true,
+            "basket_validation": {
+              "placement": {
+                "lift": 0.003,
+                "minimum_gap": 0.0014727458880873512
+              },
+              "local": [
+                -3.87656332380415e-06,
+                -0.052089213872807405,
+                0.07670149927674488
+              ],
+              "arm": [
+                0.9285443789473902,
+                -0.06396203707029452,
+                -0.37358401888044,
+                3.9629871841115314,
+                2.117974570808325,
+                -2.317647552659029
+              ],
+              "hand": [
+                1.6494878210716473,
+                -0.019793994250660835,
+                1.1857400022404088,
+                0.28323275150640626,
+                1.9531336387555265,
+                0.021734892392230743,
+                0.5755561939680323,
+                1.768822989830357,
+                1.9859280287650176,
+                -0.016964915308463214,
+                1.1307857640849772,
+                0.5751000841553043,
+                -0.0017091956619429845,
+                0.7590073548081532,
+                1.5782845824076581,
+                1.6873609879852298
+              ]
+            }
+          },
+          {
+            "arm": [
+              0.9299255035306504,
+              -0.08748290352688733,
+              -0.38972398439744876,
+              3.9587262654810593,
+              2.1255691148440703,
+              -2.326176688298466
+            ],
+            "hand": [
+              1.7874271674551507,
+              0.009854214422578526,
+              1.5582436170127933,
+              -0.1108591490265361,
+              2.0188072438058877,
+              0.003876910311955437,
+              0.8994130053030197,
+              1.9335982160308554,
+              2.0010941479240603,
+              -0.009697831788017147,
+              1.0026763611696676,
+              1.0354996455355228,
+              -0.010045978462469329,
+              0.4758214766813714,
+              1.6778914343234284,
+              1.609283123411851
+            ],
+            "local": [
+              -0.006091080865554061,
+              -0.05040895956406717,
+              0.07674586396069301
+            ],
+            "task": "bounce",
+            "source": "real_bounce_seed572115_step46",
+            "episode": 5,
+            "seed": 572115,
+            "sim_time": 1.879999999999638,
+            "relative_velocity": [
+              0.019023499784825728,
+              -0.0035425527014899347,
+              -0.0031309862715590982
+            ],
+            "arm_velocity": [
+              0.1329749427207069,
+              0.023803550210739877,
+              0.02120377347630562,
+              0.028367405506642154,
+              0.022859251078072233,
+              -0.05305113014060164
+            ],
+            "object_radius": 0.033275785333333335,
+            "object_mass": 0.058,
+            "teacher_checkpoint": "/home/isee/Catch/11-22/bounce_catch_best_reward_14.04.pth",
+            "teacher_sha256": "3b99ee7b3c09e98a250448f505560b5522fd9856903a6bacc22ee3a84cd283d8",
+            "supported_seconds": 0.05250000000000001,
+            "contact_validated": true,
+            "basket_validation": {
+              "placement": {
+                "lift": 0.003,
+                "minimum_gap": 0.0013958191134536765
+              },
+              "local": [
+                -0.00025432489645838344,
+                -0.0449690543160653,
+                0.07689504502330921
+              ],
+              "arm": [
+                0.930013265823978,
+                -0.0686436759469037,
+                -0.37216808174044963,
+                3.9644606500935593,
+                2.1170124576285576,
+                -2.3228571591617198
+              ],
+              "hand": [
+                1.6085564139140174,
+                -0.02326369152773333,
+                1.2084319741586087,
+                -0.11065906312852995,
+                1.8788986840190047,
+                0.02037343889508854,
+                0.6769842300037502,
+                1.841189573611518,
+                1.9328628684036957,
+                -0.010979829087127874,
+                0.9896881090054547,
+                1.023264971988325,
+                -0.011181967314032279,
+                0.7053171481772782,
+                1.5353021022965778,
+                1.633244044686824
+              ]
+            }
+          },
+          {
+            "arm": [
+              0.9317107470057856,
+              -0.08810486597158758,
+              -0.38981276552205935,
+              3.957182113670216,
+              2.1250371958396665,
+              -2.327822230410816
+            ],
+            "hand": [
+              1.8080997392685607,
+              0.010025753173004021,
+              1.5878983621177607,
+              -0.34063938194379195,
+              2.018672148901517,
+              -0.009475115445762133,
+              1.025061005053075,
+              1.9659827014612554,
+              2.0269863982713288,
+              -0.010010138244176525,
+              0.8487792073002611,
+              1.4356806286054102,
+              -0.010052939508250869,
+              0.4465015100545209,
+              1.6864899565021,
+              1.4546988805389478
+            ],
+            "local": [
+              -0.010422943516928457,
+              -0.05040204462346936,
+              0.07683020159568003
+            ],
+            "task": "bounce",
+            "source": "real_bounce_seed572115_step51",
+            "episode": 5,
+            "seed": 572115,
+            "sim_time": 2.0799999999996692,
+            "relative_velocity": [
+              -0.03490855476278275,
+              0.030440515168298866,
+              0.000951875771127441
+            ],
+            "arm_velocity": [
+              0.001490565050195288,
+              0.00027920673955764765,
+              0.0003977685002048217,
+              -0.00318677121637167,
+              0.0004426370872972843,
+              -0.005060510085443616
+            ],
+            "object_radius": 0.033275785333333335,
+            "object_mass": 0.058,
+            "teacher_checkpoint": "/home/isee/Catch/11-22/bounce_catch_best_reward_14.04.pth",
+            "teacher_sha256": "3b99ee7b3c09e98a250448f505560b5522fd9856903a6bacc22ee3a84cd283d8",
+            "supported_seconds": 0.06500000000000002,
+            "contact_validated": true,
+            "basket_validation": {
+              "placement": {
+                "lift": 0.003,
+                "minimum_gap": 0.001594847401161871
+              },
+              "local": [
+                -0.006509528086967139,
+                -0.04537261407934769,
+                0.07672057107602584
+              ],
+              "arm": [
+                0.9317968350641612,
+                -0.06809494572641474,
+                -0.3735980860243359,
+                3.963110832868083,
+                2.116413590843737,
+                -2.3245525401959277
+              ],
+              "hand": [
+                1.5890070434512422,
+                -0.02829729670036916,
+                1.2074868648865362,
+                -0.3411082394292024,
+                1.8237633125254222,
+                0.017890522920291543,
+                0.8336462385317555,
+                1.7615526623837965,
+                1.9414484710159117,
+                -0.010800605583755375,
+                0.8248328575914325,
+                1.4315981086532488,
+                0.011570243583078474,
+                0.6089540052493866,
+                1.6737088534335989,
+                1.3265331946425432
+              ]
+            }
+          },
+          {
+            "arm": [
+              -1.1645967709723093,
+              -0.7975008609108253,
+              0.010117235012888456,
+              2.9024362750560746,
+              2.010444305757137,
+              -0.8932243975464768
+            ],
+            "hand": [
+              1.8854440736344236,
+              -0.010031426029673367,
+              0.9558202363578943,
+              1.32574318254125,
+              0.618130259725069,
+              -0.010008387761246742,
+              0.6233093891316691,
+              1.8166242486420066,
+              1.6394508157417793,
+              -0.010016957520994527,
+              0.08226242551681587,
+              -0.346013338906202,
+              -0.010046519445489977,
+              0.7536696226069111,
+              1.5338152594102312,
+              1.8803002597873955
+            ],
+            "local": [
+              -2.3749874220696694e-05,
+              0.02391404293413373,
+              0.07815539899100238
+            ],
+            "task": "bounce",
+            "source": "real_bounce_seed2572175_step34",
+            "episode": 25,
+            "seed": 2572175,
+            "sim_time": 1.399999999999904,
+            "relative_velocity": [
+              -0.0007458076063718512,
+              0.004661896445517125,
+              -0.014650610570258009
+            ],
+            "arm_velocity": [
+              -0.41642729155819097,
+              -0.6481397908359824,
+              0.0813745781379613,
+              -0.03233127689987889,
+              -0.04654714127419049,
+              0.2646360552883187
+            ],
+            "object_radius": 0.033275785333333335,
+            "object_mass": 0.058,
+            "teacher_checkpoint": "/home/isee/Catch/11-22/bounce_catch_best_reward_14.04.pth",
+            "teacher_sha256": "3b99ee7b3c09e98a250448f505560b5522fd9856903a6bacc22ee3a84cd283d8",
+            "supported_seconds": 0.04,
+            "contact_validated": true,
+            "basket_validation": {
+              "placement": {
+                "lift": 0.041,
+                "minimum_gap": 0.0011491034388663099
+              },
+              "local": [
+                -0.003928708886442105,
+                0.017317017449716306,
+                0.09127694688793689
+              ],
+              "arm": [
+                -1.1646294285850163,
+                -0.7911108891660347,
+                0.03314198373546289,
+                2.897130150384834,
+                2.0021960796779092,
+                -0.8928221091924221
+              ],
+              "hand": [
+                1.8109088253097372,
+                -0.01646321862557975,
+                0.8265489161771017,
+                1.2589740655978987,
+                0.5330376067034337,
+                -0.010811942809809691,
+                0.6029810600597287,
+                1.8164052503847263,
+                1.5666735688051308,
+                0.0032939742148156426,
+                0.05354250565418675,
+                -0.34612294157344237,
+                -0.011395895517364363,
+                0.7742012114642448,
+                1.499183413187652,
+                1.7595351395780336
+              ]
+            }
+          }
+        ]
+      },
+      "pose_bank_sha256": "7a0e51635ae4de4d7de4ce19ddac937d120408a4e727b61fda67d7d7df0f1c69"
+    },
+    "evaluations": [
+      {
+        "file": "eval_000503808.json",
+        "episodes": 100,
+        "successes": 83,
+        "success_rate": 0.83,
+        "reasons": {
+          "ball_on_floor": 10,
+          "stable_hold": 83,
+          "arm_self_collision": 2,
+          "timeout": 5
+        },
+        "groups": {
+          "bounce": {
+            "n": 39,
+            "successes": 33,
+            "reasons": {
+              "stable_hold": 33,
+              "arm_self_collision": 2,
+              "ball_on_floor": 3,
+              "timeout": 1
+            }
+          },
+          "generic": {
+            "n": 1,
+            "successes": 1,
+            "reasons": {
+              "stable_hold": 1
+            }
+          },
+          "roll": {
+            "n": 22,
+            "successes": 12,
+            "reasons": {
+              "ball_on_floor": 7,
+              "stable_hold": 12,
+              "timeout": 3
+            }
+          },
+          "throw": {
+            "n": 38,
+            "successes": 37,
+            "reasons": {
+              "stable_hold": 37,
+              "timeout": 1
+            }
+          }
+        },
+        "contact_at_end": 90,
+        "released": 10,
+        "purposeful_launch": 0,
+        "mean_steps": 50.86,
+        "mean_reward": 14.74515945206509,
+        "mean_terms": {
+          "action_cost": -0.0017730598962539805,
+          "hold_stable": 0.8121239784900609,
+          "time": -0.040687999999999995,
+          "action_smoothness": -0.0036668946177138883,
+          "hold_success": 16.6,
+          "hold_slip": -0.07083657191100584,
+          "failure": -2.55
+        }
+      },
+      {
+        "file": "eval_001003520.json",
+        "episodes": 100,
+        "successes": 17,
+        "success_rate": 0.17,
+        "reasons": {
+          "ball_on_floor": 24,
+          "base_collision": 4,
+          "timeout": 55,
+          "stable_hold": 17
+        },
+        "groups": {
+          "bounce": {
+            "n": 40,
+            "successes": 2,
+            "reasons": {
+              "base_collision": 4,
+              "timeout": 19,
+              "ball_on_floor": 15,
+              "stable_hold": 2
+            }
+          },
+          "generic": {
+            "n": 2,
+            "successes": 1,
+            "reasons": {
+              "stable_hold": 1,
+              "timeout": 1
+            }
+          },
+          "roll": {
+            "n": 22,
+            "successes": 3,
+            "reasons": {
+              "ball_on_floor": 9,
+              "timeout": 10,
+              "stable_hold": 3
+            }
+          },
+          "throw": {
+            "n": 36,
+            "successes": 11,
+            "reasons": {
+              "timeout": 25,
+              "stable_hold": 11
+            }
+          }
+        },
+        "contact_at_end": 65,
+        "released": 31,
+        "purposeful_launch": 0,
+        "mean_steps": 78.0,
+        "mean_reward": -8.54793956393363,
+        "mean_terms": {
+          "action_cost": -0.005174468409745022,
+          "hold_stable": 0.8802065432304835,
+          "time": -0.06239999999999998,
+          "action_smoothness": -0.05536107390595499,
+          "hold_success": 3.4,
+          "hold_slip": -0.25521056484841376,
+          "failure": -12.45
+        }
+      },
+      {
+        "file": "eval_001503232.json",
+        "episodes": 100,
+        "successes": 10,
+        "success_rate": 0.1,
+        "reasons": {
+          "ball_on_floor": 23,
+          "stable_hold": 10,
+          "timeout": 60,
+          "base_collision": 7
+        },
+        "groups": {
+          "bounce": {
+            "n": 38,
+            "successes": 6,
+            "reasons": {
+              "ball_on_floor": 14,
+              "stable_hold": 6,
+              "timeout": 11,
+              "base_collision": 7
+            }
+          },
+          "generic": {
+            "n": 1,
+            "successes": 0,
+            "reasons": {
+              "timeout": 1
+            }
+          },
+          "roll": {
+            "n": 23,
+            "successes": 1,
+            "reasons": {
+              "ball_on_floor": 8,
+              "timeout": 14,
+              "stable_hold": 1
+            }
+          },
+          "throw": {
+            "n": 38,
+            "successes": 3,
+            "reasons": {
+              "stable_hold": 3,
+              "timeout": 34,
+              "ball_on_floor": 1
+            }
+          }
+        },
+        "contact_at_end": 69,
+        "released": 31,
+        "purposeful_launch": 0,
+        "mean_steps": 82.32,
+        "mean_reward": -11.142563118148876,
+        "mean_terms": {
+          "action_cost": -0.015873740744777022,
+          "hold_stable": 0.9382148465016481,
+          "time": -0.065856,
+          "action_smoothness": -0.2221029210958899,
+          "hold_success": 2.0,
+          "hold_slip": -0.27694530280985463,
+          "failure": -13.5
+        }
+      },
+      {
+        "file": "eval_002002944.json",
+        "episodes": 100,
+        "successes": 4,
+        "success_rate": 0.04,
+        "reasons": {
+          "ball_on_floor": 25,
+          "base_collision": 2,
+          "stable_hold": 4,
+          "timeout": 68,
+          "arm_self_collision": 1
+        },
+        "groups": {
+          "bounce": {
+            "n": 38,
+            "successes": 3,
+            "reasons": {
+              "base_collision": 2,
+              "stable_hold": 3,
+              "timeout": 23,
+              "ball_on_floor": 10
+            }
+          },
+          "generic": {
+            "n": 1,
+            "successes": 0,
+            "reasons": {
+              "arm_self_collision": 1
+            }
+          },
+          "roll": {
+            "n": 24,
+            "successes": 0,
+            "reasons": {
+              "ball_on_floor": 15,
+              "timeout": 9
+            }
+          },
+          "throw": {
+            "n": 37,
+            "successes": 1,
+            "reasons": {
+              "timeout": 36,
+              "stable_hold": 1
+            }
+          }
+        },
+        "contact_at_end": 69,
+        "released": 28,
+        "purposeful_launch": 0,
+        "mean_steps": 81.67,
+        "mean_reward": -13.771002595100345,
+        "mean_terms": {
+          "action_cost": -0.03236654924117029,
+          "hold_stable": 0.8195733841288246,
+          "time": -0.06533599999999998,
+          "action_smoothness": -0.5653300008375041,
+          "hold_success": 0.8,
+          "hold_slip": -0.3275434291504936,
+          "failure": -14.4
+        }
+      },
+      {
+        "file": "eval_002502656.json",
+        "episodes": 100,
+        "successes": 15,
+        "success_rate": 0.15,
+        "reasons": {
+          "ball_on_floor": 31,
+          "stable_hold": 15,
+          "timeout": 49,
+          "base_collision": 5
+        },
+        "groups": {
+          "bounce": {
+            "n": 37,
+            "successes": 6,
+            "reasons": {
+              "timeout": 20,
+              "ball_on_floor": 6,
+              "stable_hold": 6,
+              "base_collision": 5
+            }
+          },
+          "generic": {
+            "n": 2,
+            "successes": 0,
+            "reasons": {
+              "ball_on_floor": 2
+            }
+          },
+          "roll": {
+            "n": 23,
+            "successes": 1,
+            "reasons": {
+              "ball_on_floor": 22,
+              "stable_hold": 1
+            }
+          },
+          "throw": {
+            "n": 38,
+            "successes": 8,
+            "reasons": {
+              "stable_hold": 8,
+              "timeout": 29,
+              "ball_on_floor": 1
+            }
+          }
+        },
+        "contact_at_end": 62,
+        "released": 36,
+        "purposeful_launch": 0,
+        "mean_steps": 72.97,
+        "mean_reward": -9.559226198412142,
+        "mean_terms": {
+          "action_cost": -0.023217851262465113,
+          "hold_stable": 0.8344009574471137,
+          "time": -0.05837599999999999,
+          "action_smoothness": -0.3388362268917263,
+          "hold_success": 3.0,
+          "hold_slip": -0.2231970777050641,
+          "failure": -12.75
+        }
+      },
+      {
+        "file": "eval_003002368.json",
+        "episodes": 100,
+        "successes": 9,
+        "success_rate": 0.09,
+        "reasons": {
+          "ball_on_floor": 15,
+          "base_collision": 1,
+          "timeout": 75,
+          "stable_hold": 9
+        },
+        "groups": {
+          "bounce": {
+            "n": 38,
+            "successes": 6,
+            "reasons": {
+              "base_collision": 1,
+              "ball_on_floor": 4,
+              "timeout": 27,
+              "stable_hold": 6
+            }
+          },
+          "generic": {
+            "n": 2,
+            "successes": 0,
+            "reasons": {
+              "timeout": 2
+            }
+          },
+          "roll": {
+            "n": 23,
+            "successes": 0,
+            "reasons": {
+              "ball_on_floor": 11,
+              "timeout": 12
+            }
+          },
+          "throw": {
+            "n": 37,
+            "successes": 3,
+            "reasons": {
+              "timeout": 34,
+              "stable_hold": 3
+            }
+          }
+        },
+        "contact_at_end": 75,
+        "released": 17,
+        "purposeful_launch": 0,
+        "mean_steps": 88.7,
+        "mean_reward": -12.137684127684128,
+        "mean_terms": {
+          "action_cost": -0.04340130859300494,
+          "hold_stable": 0.9415611319680487,
+          "time": -0.07095999999999998,
+          "action_smoothness": -0.767781692988053,
+          "hold_success": 1.8,
+          "hold_slip": -0.3471022580711219,
+          "failure": -13.65
+        }
+      },
+      {
+        "file": "eval_003502080.json",
+        "episodes": 100,
+        "successes": 19,
+        "success_rate": 0.19,
+        "reasons": {
+          "ball_on_floor": 28,
+          "stable_hold": 19,
+          "timeout": 51,
+          "arm_self_collision": 2
+        },
+        "groups": {
+          "bounce": {
+            "n": 36,
+            "successes": 1,
+            "reasons": {
+              "ball_on_floor": 11,
+              "timeout": 23,
+              "stable_hold": 1,
+              "arm_self_collision": 1
+            }
+          },
+          "generic": {
+            "n": 2,
+            "successes": 1,
+            "reasons": {
+              "arm_self_collision": 1,
+              "stable_hold": 1
+            }
+          },
+          "roll": {
+            "n": 24,
+            "successes": 0,
+            "reasons": {
+              "ball_on_floor": 17,
+              "timeout": 7
+            }
+          },
+          "throw": {
+            "n": 38,
+            "successes": 17,
+            "reasons": {
+              "stable_hold": 17,
+              "timeout": 21
+            }
+          }
+        },
+        "contact_at_end": 65,
+        "released": 28,
+        "purposeful_launch": 0,
+        "mean_steps": 75.72,
+        "mean_reward": -8.697390871281662,
+        "mean_terms": {
+          "action_cost": -0.036737637607865026,
+          "hold_stable": 0.7338368440697794,
+          "time": -0.06057599999999999,
+          "action_smoothness": -0.6611975545212627,
+          "hold_success": 3.8,
+          "hold_slip": -0.32271652322231353,
+          "failure": -12.15
+        }
+      },
+      {
+        "file": "eval_004001792.json",
+        "episodes": 100,
+        "successes": 6,
+        "success_rate": 0.06,
+        "reasons": {
+          "ball_on_floor": 53,
+          "stable_hold": 6,
+          "timeout": 39,
+          "base_collision": 2
+        },
+        "groups": {
+          "bounce": {
+            "n": 40,
+            "successes": 3,
+            "reasons": {
+              "stable_hold": 3,
+              "ball_on_floor": 32,
+              "timeout": 3,
+              "base_collision": 2
+            }
+          },
+          "generic": {
+            "n": 2,
+            "successes": 0,
+            "reasons": {
+              "ball_on_floor": 2
+            }
+          },
+          "roll": {
+            "n": 23,
+            "successes": 0,
+            "reasons": {
+              "ball_on_floor": 19,
+              "timeout": 4
+            }
+          },
+          "throw": {
+            "n": 35,
+            "successes": 3,
+            "reasons": {
+              "stable_hold": 3,
+              "timeout": 32
+            }
+          }
+        },
+        "contact_at_end": 42,
+        "released": 55,
+        "purposeful_launch": 3,
+        "mean_steps": 75.6,
+        "mean_reward": -13.413651500297771,
+        "mean_terms": {
+          "action_cost": -0.040645817903131244,
+          "hold_stable": 0.6359792358638107,
+          "time": -0.06047999999999999,
+          "action_smoothness": -0.7295776242104125,
+          "hold_success": 1.2,
+          "hold_slip": -0.31892729404803993,
+          "failure": -14.1
+        }
+      },
+      {
+        "file": "eval_004501504.json",
+        "episodes": 100,
+        "successes": 0,
+        "success_rate": 0.0,
+        "reasons": {
+          "ball_on_floor": 38,
+          "timeout": 59,
+          "base_collision": 3
+        },
+        "groups": {
+          "bounce": {
+            "n": 38,
+            "successes": 0,
+            "reasons": {
+              "ball_on_floor": 15,
+              "timeout": 20,
+              "base_collision": 3
+            }
+          },
+          "generic": {
+            "n": 1,
+            "successes": 0,
+            "reasons": {
+              "ball_on_floor": 1
+            }
+          },
+          "roll": {
+            "n": 23,
+            "successes": 0,
+            "reasons": {
+              "ball_on_floor": 15,
+              "timeout": 8
+            }
+          },
+          "throw": {
+            "n": 38,
+            "successes": 0,
+            "reasons": {
+              "timeout": 31,
+              "ball_on_floor": 7
+            }
+          }
+        },
+        "contact_at_end": 45,
+        "released": 43,
+        "purposeful_launch": 0,
+        "mean_steps": 78.6,
+        "mean_reward": -15.86382422009602,
+        "mean_terms": {
+          "action_cost": -0.04789681968510151,
+          "hold_stable": 0.5361879402122792,
+          "time": -0.06287999999999998,
+          "action_smoothness": -0.8533617221454157,
+          "hold_success": 0.0,
+          "hold_slip": -0.4358736184777841,
+          "failure": -15.0
+        }
+      },
+      {
+        "file": "eval_005001216.json",
+        "episodes": 100,
+        "successes": 4,
+        "success_rate": 0.04,
+        "reasons": {
+          "ball_on_floor": 22,
+          "base_collision": 3,
+          "timeout": 71,
+          "stable_hold": 4
+        },
+        "groups": {
+          "bounce": {
+            "n": 38,
+            "successes": 2,
+            "reasons": {
+              "base_collision": 3,
+              "timeout": 30,
+              "ball_on_floor": 3,
+              "stable_hold": 2
+            }
+          },
+          "generic": {
+            "n": 1,
+            "successes": 1,
+            "reasons": {
+              "stable_hold": 1
+            }
+          },
+          "roll": {
+            "n": 23,
+            "successes": 0,
+            "reasons": {
+              "ball_on_floor": 15,
+              "timeout": 8
+            }
+          },
+          "throw": {
+            "n": 38,
+            "successes": 1,
+            "reasons": {
+              "timeout": 33,
+              "ball_on_floor": 4,
+              "stable_hold": 1
+            }
+          }
+        },
+        "contact_at_end": 52,
+        "released": 26,
+        "purposeful_launch": 4,
+        "mean_steps": 85.84,
+        "mean_reward": -14.232320832775518,
+        "mean_terms": {
+          "action_cost": -0.042272044772431246,
+          "hold_stable": 0.6699083820990434,
+          "time": -0.06867199999999998,
+          "action_smoothness": -0.7260310602047482,
+          "hold_success": 0.8,
+          "hold_slip": -0.4652541098973801,
+          "failure": -14.4
+        }
+      },
+      {
+        "file": "eval_005500928.json",
+        "episodes": 100,
+        "successes": 3,
+        "success_rate": 0.03,
+        "reasons": {
+          "ball_on_floor": 30,
+          "timeout": 66,
+          "stable_hold": 3,
+          "base_collision": 1
+        },
+        "groups": {
+          "bounce": {
+            "n": 38,
+            "successes": 3,
+            "reasons": {
+              "timeout": 26,
+              "ball_on_floor": 8,
+              "stable_hold": 3,
+              "base_collision": 1
+            }
+          },
+          "generic": {
+            "n": 2,
+            "successes": 0,
+            "reasons": {
+              "ball_on_floor": 2
+            }
+          },
+          "roll": {
+            "n": 23,
+            "successes": 0,
+            "reasons": {
+              "ball_on_floor": 13,
+              "timeout": 10
+            }
+          },
+          "throw": {
+            "n": 37,
+            "successes": 0,
+            "reasons": {
+              "ball_on_floor": 7,
+              "timeout": 30
+            }
+          }
+        },
+        "contact_at_end": 61,
+        "released": 34,
+        "purposeful_launch": 1,
+        "mean_steps": 81.2,
+        "mean_reward": -14.626279859917947,
+        "mean_terms": {
+          "action_cost": -0.0476666802122444,
+          "hold_stable": 0.6560614833536133,
+          "time": -0.06495999999999998,
+          "action_smoothness": -0.8116202974565327,
+          "hold_success": 0.6,
+          "hold_slip": -0.4080943656027833,
+          "failure": -14.55
+        }
+      },
+      {
+        "file": "eval_006000640.json",
+        "episodes": 100,
+        "successes": 2,
+        "success_rate": 0.02,
+        "reasons": {
+          "ball_on_floor": 24,
+          "timeout": 74,
+          "stable_hold": 2
+        },
+        "groups": {
+          "bounce": {
+            "n": 37,
+            "successes": 1,
+            "reasons": {
+              "timeout": 33,
+              "ball_on_floor": 3,
+              "stable_hold": 1
+            }
+          },
+          "generic": {
+            "n": 1,
+            "successes": 0,
+            "reasons": {
+              "timeout": 1
+            }
+          },
+          "roll": {
+            "n": 23,
+            "successes": 0,
+            "reasons": {
+              "ball_on_floor": 9,
+              "timeout": 14
+            }
+          },
+          "throw": {
+            "n": 39,
+            "successes": 1,
+            "reasons": {
+              "ball_on_floor": 12,
+              "timeout": 26,
+              "stable_hold": 1
+            }
+          }
+        },
+        "contact_at_end": 56,
+        "released": 24,
+        "purposeful_launch": 1,
+        "mean_steps": 86.98,
+        "mean_reward": -15.052213276752175,
+        "mean_terms": {
+          "action_cost": -0.05701267044268549,
+          "hold_stable": 0.7668252239015323,
+          "time": -0.06958399999999998,
+          "action_smoothness": -1.0006100706448777,
+          "hold_success": 0.4,
+          "hold_slip": -0.3918317595661428,
+          "failure": -14.7
+        }
+      },
+      {
+        "file": "eval_006500352.json",
+        "episodes": 100,
+        "successes": 2,
+        "success_rate": 0.02,
+        "reasons": {
+          "ball_on_floor": 27,
+          "timeout": 69,
+          "arm_self_collision": 2,
+          "stable_hold": 2
+        },
+        "groups": {
+          "bounce": {
+            "n": 39,
+            "successes": 0,
+            "reasons": {
+              "ball_on_floor": 14,
+              "timeout": 23,
+              "arm_self_collision": 2
+            }
+          },
+          "generic": {
+            "n": 2,
+            "successes": 0,
+            "reasons": {
+              "ball_on_floor": 2
+            }
+          },
+          "roll": {
+            "n": 23,
+            "successes": 1,
+            "reasons": {
+              "ball_on_floor": 10,
+              "timeout": 12,
+              "stable_hold": 1
+            }
+          },
+          "throw": {
+            "n": 36,
+            "successes": 1,
+            "reasons": {
+              "timeout": 34,
+              "ball_on_floor": 1,
+              "stable_hold": 1
+            }
+          }
+        },
+        "contact_at_end": 63,
+        "released": 28,
+        "purposeful_launch": 0,
+        "mean_steps": 84.5,
+        "mean_reward": -15.056944814275086,
+        "mean_terms": {
+          "action_cost": -0.047222227647379045,
+          "hold_stable": 0.6427181043336628,
+          "time": -0.0676,
+          "action_smoothness": -0.7899303117472681,
+          "hold_success": 0.4,
+          "hold_slip": -0.49491037921410197,
+          "failure": -14.7
+        }
+      },
+      {
+        "file": "eval_007000064.json",
+        "episodes": 100,
+        "successes": 1,
+        "success_rate": 0.01,
+        "reasons": {
+          "ball_on_floor": 32,
+          "timeout": 66,
+          "stable_hold": 1,
+          "base_collision": 1
+        },
+        "groups": {
+          "bounce": {
+            "n": 41,
+            "successes": 1,
+            "reasons": {
+              "ball_on_floor": 7,
+              "timeout": 32,
+              "stable_hold": 1,
+              "base_collision": 1
+            }
+          },
+          "generic": {
+            "n": 1,
+            "successes": 0,
+            "reasons": {
+              "timeout": 1
+            }
+          },
+          "roll": {
+            "n": 24,
+            "successes": 0,
+            "reasons": {
+              "ball_on_floor": 16,
+              "timeout": 8
+            }
+          },
+          "throw": {
+            "n": 34,
+            "successes": 0,
+            "reasons": {
+              "ball_on_floor": 9,
+              "timeout": 25
+            }
+          }
+        },
+        "contact_at_end": 57,
+        "released": 34,
+        "purposeful_launch": 0,
+        "mean_steps": 80.41,
+        "mean_reward": -15.353079165579679,
+        "mean_terms": {
+          "action_cost": -0.047461708257012084,
+          "hold_stable": 0.6102803959330099,
+          "time": -0.06432799999999998,
+          "action_smoothness": -0.7841643143773079,
+          "hold_success": 0.2,
+          "hold_slip": -0.41740553887836923,
+          "failure": -14.85
+        }
+      }
+    ],
+    "current_source_matches": {
+      "basket_three_stage/__init__.py": true,
+      "basket_three_stage/prepare_bank.py": true,
+      "basket_three_stage/pool.py": true,
+      "basket_three_stage/run.py": true,
+      "basket_three_stage/test_three_stage.py": true,
+      "basket_three_stage/collect_poses.py": true,
+      "basket_three_stage/environment.py": true,
+      "basket_three_stage/policy.py": true,
+      "basket_autonomous/environment.py": true,
+      "basket_autonomous/carry_reward.py": true,
+      "gym_dcmm/envs/DcmmVecEnv.py": true
+    }
+  }
+]

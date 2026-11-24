@@ -1,0 +1,1 @@
+中文论文引言及数字顺序参考文献。A4单栏，Noto Serif CJK SC 11pt与Times New Roman，标题18pt黑色无横线。保留初版，另存12篇扩展版；正文与参考文献分开分页。交付Word，渲染PNG仅用于内部检查。

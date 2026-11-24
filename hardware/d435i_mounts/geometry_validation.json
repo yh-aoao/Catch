@@ -1,0 +1,199 @@
+{
+  "units": "mm",
+  "camera_hole_diameter_mm": 3.4,
+  "camera_hole_pitch_mm": 45,
+  "top_camera_surface_centres_mm": [
+    [
+      -12.69337567,
+      17.5,
+      -21.98557159
+    ],
+    [
+      -12.69337567,
+      62.5,
+      -21.98557159
+    ]
+  ],
+  "top_hole_axis": [
+    -0.8660254037844387,
+    0.0,
+    0.5000000000000001
+  ],
+  "wrist_bore_midpoints_mm": [
+    [
+      105.0,
+      1.5,
+      15.0
+    ],
+    [
+      105.0,
+      1.5,
+      60.0
+    ]
+  ],
+  "top_optional_M8_midpoints_mm": [
+    [
+      22.5,
+      17.5,
+      -2.5
+    ],
+    [
+      22.5,
+      62.5,
+      -2.5
+    ]
+  ],
+  "source_sha256": {
+    "l3_Link.STL": "ed679cb1a7179abf959059f63c1447c17b65b620b897c4471be1d277830a6b31",
+    "p1_Link.STL": "8b83aef41f2b9ffc7c122a2ba980f3acb6d508dde301c03c1f291d41ef0f2519"
+  },
+  "outputs": {
+    "top_l3_d435i": {
+      "bounds_mm": [
+        [
+          -22.5,
+          -2.7824964554667986e-12,
+          -41.47114181518555
+        ],
+        [
+          45.0,
+          80.0,
+          0.0
+        ]
+      ],
+      "volume_mm3": 34754.542812156724,
+      "triangles": 1436,
+      "watertight": true,
+      "winding_consistent": true,
+      "connected_components": 1,
+      "sha256": "f2c71035d45f97aa99282d428b8747f0f6b13f6c6f803d1b1c62263742a936f6",
+      "print_size_mm": [
+        67.5,
+        41.47114181518555,
+        80.00000000000279
+      ]
+    },
+    "top_l3_d435i_M8_foot": {
+      "bounds_mm": [
+        [
+          -22.5,
+          -2.7824964554667986e-12,
+          -41.47114181518555
+        ],
+        [
+          45.0,
+          80.0,
+          0.0
+        ]
+      ],
+      "volume_mm3": 34173.895601536184,
+      "triangles": 2468,
+      "watertight": true,
+      "winding_consistent": true,
+      "connected_components": 1,
+      "sha256": "ca1b50903472a239d9fef7444feba4d60fc177965b3e3a9f61a0c4b0d73ba155",
+      "print_size_mm": [
+        67.5,
+        41.47114181518555,
+        80.00000000000279
+      ]
+    },
+    "wrist_p1_d435i_FIT_PROTOTYPE": {
+      "bounds_mm": [
+        [
+          0.0,
+          -7.806255641895632e-15,
+          0.0
+        ],
+        [
+          113.0,
+          3.0,
+          75.0
+        ]
+      ],
+      "volume_mm3": 16823.166804549885,
+      "triangles": 4084,
+      "watertight": true,
+      "winding_consistent": true,
+      "connected_components": 1,
+      "sha256": "25f9bb9b820abb9acd8d620c3f49beef1034371f8c30d33907d8c026c492b13d",
+      "print_size_mm": [
+        113.0,
+        75.0,
+        3.0000000000000164
+      ]
+    },
+    "d435i_hole_gauge": {
+      "bounds_mm": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          60.0,
+          12.0,
+          3.0
+        ]
+      ],
+      "volume_mm3": 2105.5466628608515,
+      "triangles": 1044,
+      "watertight": true,
+      "winding_consistent": true,
+      "connected_components": 1,
+      "sha256": "2a4b58b7117dd228e1ca41c7c764a3e78cc14985e9b47aac09ae4ff72037ed97",
+      "print_size_mm": [
+        60.0,
+        12.0,
+        3.0
+      ]
+    }
+  },
+  "checks": {
+    "top_camera_bores": [
+      {
+        "bore_vertex_count": 356,
+        "vertex_diameter_min_max_mm": [
+          3.3989774829557993,
+          3.400002482329919
+        ]
+      },
+      {
+        "bore_vertex_count": 348,
+        "vertex_diameter_min_max_mm": [
+          3.3989773457087047,
+          3.4000050840417293
+        ]
+      }
+    ],
+    "wrist_camera_bores": [
+      {
+        "bore_vertex_count": 256,
+        "vertex_diameter_min_max_mm": [
+          3.3999931191415143,
+          3.4000068117101128
+        ]
+      },
+      {
+        "bore_vertex_count": 256,
+        "vertex_diameter_min_max_mm": [
+          3.399993306094943,
+          3.4000068117101128
+        ]
+      }
+    ],
+    "top_only_camera_bores_changed": true,
+    "top_boolean_residual_mm3": {
+      "added": 0.00043370576198261307,
+      "removed_outside_bores": 0.00013716214592326045
+    },
+    "wrist_only_camera_bores_changed": true,
+    "wrist_boolean_residual_mm3": {
+      "added": 1.1483574659690751e-17,
+      "removed_outside_bores": 3.1097983678376183e-24
+    }
+  },
+  "physical_fit_verified": false,
+  "load_strength_verified": false,
+  "assembly_collision_verified": false
+}

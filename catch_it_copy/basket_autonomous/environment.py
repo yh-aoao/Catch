@@ -36,6 +36,14 @@ class AutonomousTeacherEnv(DcmmVecEnv):
         if self.arm_velocity_protocol not in ('measured_v1','integrated_target_v2'):raise ValueError('Unknown velocity protocol')
         if self.release_protocol not in ('contact_gap_v1','separated_flight_v2'):raise ValueError('Unknown release protocol')
         self.basket_integrated_arm_velocity=self.arm_velocity_protocol=='integrated_target_v2'
+        for key,default in (('mobile_goal_x_range',[-.2,.2]),('mobile_goal_y_range',[1.15,1.55])):
+            bounds=np.asarray(self.options.get(key,default),float)
+            if bounds.shape!=(2,) or not np.isfinite(bounds).all() or bounds[0]>bounds[1] or (key.endswith('y_range') and bounds[0]<=0):
+                raise ValueError('Invalid '+key)
+        self.navigation_weight=float(self.options.get('navigation_progress_weight',4.))
+        self.navigation_cap=float(self.options.get('navigation_progress_cap',1.))
+        if not np.isfinite([self.navigation_weight,self.navigation_cap]).all() or self.navigation_weight<0 or self.navigation_cap<=0:
+            raise ValueError('Invalid navigation progress settings')
         self.fixed_episode=False
         self.radius=.033275785333333335;self.mass=.058
         self.reset_stats={};self.last_action=np.zeros(20,np.float32)
@@ -45,7 +53,8 @@ class AutonomousTeacherEnv(DcmmVecEnv):
             basket_arm_control='joint_velocity',basket_reward_version='basket_mobile_v1',
             basket_fixed_base_training=False,basket_fixed_physical=False,
             basket_carry_reward=False,basket_finger_reward=False,
-            basket_mobile_options=dict(target_x_range=[-.2,.2],target_y_range=[1.15,1.55],
+            basket_mobile_options=dict(target_x_range=self.options.get('mobile_goal_x_range',[-.2,.2]),
+                target_y_range=self.options.get('mobile_goal_y_range',[1.15,1.55]),
                 preserve_fixed_throw=False,fixed_throw_probability=0.,post_ready_seconds=0.,
                 hold_position=False,approach_braking=False,brake_after_unlock=False,
                 carry_settle_seconds=.001,max_speed=.3,max_acceleration=.35,max_time=self.options.get('episode_seconds',10.)))
@@ -192,6 +201,7 @@ class AutonomousTeacherEnv(DcmmVecEnv):
             self._last_touch=dict(position=d.qpos[37:40].copy(),velocity=d.qvel[36:39].copy(),
                 time=float(d.time),base_speed=float(np.linalg.norm(d.qvel[:2])),stopped_seconds=0.)
         self._carry_slip_integral=0.;self._carry_exposure=0.;self._carry_slip_max=0.
+        self._initial_base_xy=d.body('arm_base').xpos[:2].copy()
         self._navigation_best=self._navigation_distance()
         self._reward_totals={}
         return self.observation(),dict(reset_sampling=copy.deepcopy(self.reset_stats),fixed_episode=self.fixed_episode)
@@ -344,7 +354,8 @@ class AutonomousTeacherEnv(DcmmVecEnv):
             eligible=(not self.fixed_episode and diagnostics['carry_gate']>.5 and
                 diagnostics['in_support_envelope'] and diagnostics['slip_speed']<.25)
             self._navigation_best,terms['carry_navigation']=navigation_progress(
-                self._navigation_best,self._navigation_distance(),eligible)
+                self._navigation_best,self._navigation_distance(),eligible,
+                weight=self.navigation_weight,cap=self.navigation_cap)
             terms['drop_failure']=-5.*float(drop_failure)
             if diagnostics['carry_gate']>0.:
                 exposure=dt*diagnostics['carry_gate']
@@ -358,6 +369,8 @@ class AutonomousTeacherEnv(DcmmVecEnv):
         info=dict(fixed_episode=self.fixed_episode,success=bool(self._scored),safe_basket_success=bool(self._scored and not self.basket_robot_collision and not self.basket_arm_self_collision),
             terminated_reason=self.terminated_reason,hand_contact=touch,elapsed=elapsed,
             base_speed=float(np.linalg.norm(d.qvel[:2])),low_speed_seconds=self._low_speed_time,
+            base_displacement=float(np.linalg.norm(d.body('arm_base').xpos[:2]-self._initial_base_xy)),
+            target_relative_to_base=(d.body('arm_base').xmat.reshape(3,3).T@(self.basket_center-d.body('arm_base').xpos)).tolist(),
             released=self._released_once,release_stopped=bool(self._release and self._release['valid_stop']),
             predicted_error=error,reset_attempts=self.reset_stats['attempts'],reward_version=self.reward_version,arm_velocity_protocol=self.arm_velocity_protocol,release_protocol=self.release_protocol,
             release_pending=bool(self._release and not self._release.get('confirmed',True)),

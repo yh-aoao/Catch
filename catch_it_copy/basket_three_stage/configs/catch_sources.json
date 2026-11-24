@@ -1,0 +1,205 @@
+{
+  "tasks": {
+    "throw": {
+      "checkpoint": "../best_model/throw_catch_best_reward_497.09.pth",
+      "sha256": "fcfebd624e282d8b171284fab65f3fe70a195f850db381fc6ee5197139e7f735",
+      "objects": [
+        "original"
+      ],
+      "action_scales": [
+        1.5,
+        0.025,
+        0.15
+      ],
+      "env_kwargs": {},
+      "family": "ppo_dcmm",
+      "success_metric": "success",
+      "expected_action_dim": 20,
+      "action_indices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19
+      ],
+      "env_factory": "gym_dcmm.envs.DcmmVecEnv:DcmmVecEnv"
+    },
+    "roll": {
+      "checkpoint": "../11-5/roll_catch_best_reward_270.37.pth",
+      "sha256": "966011743c774100d28680ecb43f0b6cb4c5e5373dba3948649e72c56d4d2b5c",
+      "objects": [
+        "original",
+        "tennis_ball",
+        "baseball"
+      ],
+      "action_scales": [
+        1.5,
+        0.025,
+        0.15
+      ],
+      "env_kwargs": {
+        "roll_physics": "physical_v1",
+        "roll_material_file": "ycb_objects/calibration_data/balls.roll_table_priors_v1.json",
+        "roll_reward_version": "legacy",
+        "roll_speed": [
+          0.8,
+          1.3
+        ],
+        "roll_ball_mode": "fixed",
+        "roll_wait_guard": false
+      },
+      "family": "ppo_dcmm_645edc4",
+      "success_metric": "roll_eval_success",
+      "expected_action_dim": 20,
+      "action_indices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19
+      ],
+      "env_factory": "gym_dcmm.envs.roll_physical:make_roll_physical"
+    },
+    "bounce": {
+      "checkpoint": "/home/isee/Catch/11-22/bounce_catch_best_reward_14.04.pth",
+      "sha256": "3b99ee7b3c09e98a250448f505560b5522fd9856903a6bacc22ee3a84cd283d8",
+      "objects": [
+        "original",
+        "tennis_ball",
+        "baseball"
+      ],
+      "action_scales": [
+        1.5,
+        0.025,
+        0.08
+      ],
+      "env_kwargs": {
+        "bounce_physics": "physical_v2",
+        "bounce_launch": "baseball_intercept_v1",
+        "bounce_material_file": "ycb_objects/calibration_data/balls.three_ball_training_v1.json",
+        "bounce_grasp_version": "controlled_hold_v1",
+        "bounce_grasp": {
+          "finger_backfold_weight": 0.15,
+          "finger_prepare_sync_weight": 0.05,
+          "finger_contact_weight": 1.0,
+          "thumb_opposition_weight": 0.5
+        },
+        "bounce_v2": {
+          "height": [
+            0.9,
+            1.1
+          ],
+          "distance": [
+            1.6,
+            2.0
+          ],
+          "speed": [
+            1.3,
+            1.7
+          ],
+          "vertical_speed": [
+            -0.2,
+            -0.2
+          ],
+          "heading_degrees": [
+            -15.0,
+            15.0
+          ],
+          "spin_factor": [
+            0.5,
+            1.5
+          ],
+          "damping_ratio": [
+            0.11,
+            0.11
+          ],
+          "ground_friction": 0.3,
+          "time_constant": 0.008,
+          "mass_jitter": 0.1,
+          "radius_jitter": 0.05
+        },
+        "bounce_ball_mode": "fixed"
+      },
+      "family": "ppo_dcmm_5fe75d5f",
+      "success_metric": "success",
+      "expected_action_dim": 20,
+      "action_indices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19
+      ],
+      "env_factory": "gym_dcmm.envs.bounce_physical_v2:make_bounce_physical_v2"
+    }
+  },
+  "env_kwargs": {
+    "camera_name": [
+      "top"
+    ],
+    "render_per_step": false,
+    "render_mode": "rgb_array",
+    "object_name": "object",
+    "img_size": [
+      160,
+      160
+    ],
+    "imshow_cam": false,
+    "print_obs": false,
+    "print_info": false,
+    "print_reward": false,
+    "print_ctrl": false,
+    "print_contacts": false,
+    "object_eval": false,
+    "env_time": 2.5,
+    "steps_per_policy": 20,
+    "bounce_log": false,
+    "basket_log": false,
+    "roll_log": false
+  }
+}

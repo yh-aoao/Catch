@@ -1,0 +1,68 @@
+{
+  "seed": 123,
+  "device": "cuda:0",
+  "num_envs": 32,
+  "total_steps": 25000000,
+  "rollout_steps": 64,
+  "learning_rate": 0.0001,
+  "epochs": 4,
+  "minibatch_size": 512,
+  "gamma": 0.99,
+  "gae_lambda": 0.95,
+  "clip": 0.2,
+  "entropy_weight": 0.001,
+  "value_weight": 0.5,
+  "target_kl": 0.02,
+  "reward_scale": 0.1,
+  "eval_every": 1000000,
+  "eval_episodes": 100,
+  "save_every": 100000,
+  "options": {
+    "episode_seconds": 10.0,
+    "reset_attempts": 160,
+    "arm_jitter_rad": [
+      0.35,
+      0.2,
+      0.25,
+      0.22,
+      0.25,
+      0.3
+    ],
+    "hand_jitter_rad": 0.2,
+    "pose_bank": "basket_three_stage/configs/caught_poses.json",
+    "training_stage": "mobile",
+    "fixed_replay_probability": 0.0,
+    "fixed_goal_x_range": [
+      -0.1,
+      0.1
+    ],
+    "fixed_goal_y_range": [
+      0.85,
+      1.15
+    ],
+    "reward_version": "carry_navigation_v2",
+    "arm_velocity_protocol": "integrated_target_v2",
+    "release_protocol": "separated_flight_v2",
+    "curriculum_stage": "mobile",
+    "sampling_probabilities": [
+      0.6,
+      0.35,
+      0.05
+    ],
+    "near_arm_jitter_rad": [
+      0.035,
+      0.035,
+      0.035,
+      0.035,
+      0.035,
+      0.035
+    ],
+    "near_hand_jitter_rad": 0.04,
+    "near_ball_jitter_m": [
+      0.003,
+      0.003,
+      0.002
+    ],
+    "hold_max_seconds": 4.0
+  }
+}

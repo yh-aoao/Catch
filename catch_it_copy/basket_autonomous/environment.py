@@ -110,6 +110,19 @@ class AutonomousTeacherEnv(DcmmVecEnv):
             pid=getattr(self.Dcmm,name);pid.integral[:]=0.;pid.e_prev[:]=0.;pid.init=False
         self.update_target_ctrl()
 
+    def _sample_hold_anchor(self):
+        return self.pose_bank[int(self.np_random.integers(len(self.pose_bank)))]
+
+    def _hold_noise_scales(self,anchor):
+        return (np.asarray(self.options.get('arm_jitter_rad',[.35,.20,.25,.22,.25,.30])),
+            float(self.options.get('hand_jitter_rad',.20)),np.array([.008,.008,.005]))
+
+    def _accept_hold_placement(self,anchor,placement):
+        return True
+
+    def _accept_prepared_hold(self,anchor):
+        return True
+
     def reset(self,*,seed=None,options=None):
         self._initializing=True
         super().reset(seed=seed,options=options)
@@ -119,20 +132,20 @@ class AutonomousTeacherEnv(DcmmVecEnv):
         attempts=int(self.options.get('reset_attempts',80))
         for attempt in range(attempts):
             mujoco.mj_resetData(m,d);d.qpos[:]=base_state;d.time=start_time
-            anchor=self.pose_bank[int(self.np_random.integers(len(self.pose_bank)))]
-            arm_scale=np.asarray(self.options.get('arm_jitter_rad',[.35,.20,.25,.22,.25,.30]))
+            anchor=self._sample_hold_anchor()
+            arm_scale,hand_scale,local_scale=self._hold_noise_scales(anchor)
             d.qpos[15:21]=self._clip_joints(15,np.asarray(anchor['arm'])+self.np_random.uniform(-arm_scale,arm_scale))
-            hand_scale=float(self.options.get('hand_jitter_rad',.20))
             d.qpos[21:37]=self._clip_joints(21,np.asarray(anchor['hand'])+self.np_random.uniform(-hand_scale,hand_scale,16))
             d.qpos[:2]+=self.np_random.uniform(-.08,.08,2)
             d.qvel[:]=0.;mujoco.mj_forward(m,d)
-            local=np.asarray(anchor['local'])+self.np_random.uniform([-.008,-.008,-.005],[.008,.008,.005])
+            local=np.asarray(anchor['local'])+self.np_random.uniform(-local_scale,local_scale)
             d.qpos[37:40]=d.body('link6').xpos+d.body('link6').xmat.reshape(3,3)@local
             d.qpos[40:44]=[1.,0.,0.,0.];mujoco.mj_forward(m,d)
             # Reset-only collision-free placement. No in-episode lift or correction.
             from gym_dcmm.utils.basket_hold import clear_spawn
             try:placement=clear_spawn(m,d,self.object_id,np.array(sorted(hands)))
             except ValueError:continue
+            if not self._accept_hold_placement(anchor,placement):continue
             self._reset_targets()
             stable=0.;valid=True
             # Only reset preparation: random robot targets stay still, ball evolves under contact/gravity.
@@ -147,7 +160,7 @@ class AutonomousTeacherEnv(DcmmVecEnv):
                 held=touch and np.linalg.norm(d.qvel[36:39])<.35 and np.linalg.norm(local)<.18
                 stable=stable+m.opt.timestep if held else 0.
                 if d.time-start_time>=.12 and stable>=.04:break
-            if valid and stable>=.04:break
+            if valid and stable>=.04 and self._accept_prepared_hold(anchor):break
         else:raise RuntimeError('No physically supported random hold found; widen pose bank or inspect sampling (no fixed fallback)')
         self.reset_stats=dict(attempts=attempt+1,anchor=anchor.get('source','pose_bank'),
             arm=d.qpos[15:21].tolist(),hand=d.qpos[21:37].tolist(),ball_local=palm_coordinates(d,d.qpos[37:40]).tolist(),

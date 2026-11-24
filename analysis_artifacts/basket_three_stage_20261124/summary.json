@@ -1,0 +1,34 @@
+{
+  "schema": "basket_three_stage_teacher_v1",
+  "input_dimension": 66,
+  "action_dimension": 20,
+  "training_started": false,
+  "tests_passed": 24,
+  "final_new_tests_passed": 5,
+  "cli_stages": [
+    "hold",
+    "throw",
+    "mobile"
+  ],
+  "cli_only_inference": true,
+  "bank": {
+    "total": 20,
+    "counts": {
+      "throw": 4,
+      "roll": 10,
+      "bounce": 6
+    },
+    "sha256": "7a0e51635ae4de4d7de4ce19ddac937d120408a4e727b61fda67d7d7df0f1c69"
+  },
+  "sampling": {
+    "recorded": 0.6,
+    "near_recorded": 0.35,
+    "generic": 0.05,
+    "task_sampling": "equal among throw/roll/bounce for recorded/near"
+  },
+  "limitations": [
+    "Small seed bank, not complete coverage of Catch outcomes.",
+    "Reset projects joint limits and settles under physics; not bitwise replay.",
+    "Initial velocities zero; not a continuous Catch-to-Throw rollout."
+  ]
+}

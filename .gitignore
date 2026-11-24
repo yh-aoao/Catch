@@ -43,9 +43,12 @@ catch_it_copy/.git/
 # OS
 .DS_Store
 Thumbs.db
+
 catch_it_copy/evaluation_results/
 catch_it_copy/distillation_visual_basket/runs/
 catch_it_copy/*/runs/
 catch_it_copy/analysis_artifacts/
-*.pth
+catch_it_copy/*/outputs/
 *.jsonl
+# 按需再加：eval的json
+catch_it_copy/*/runs/*.json

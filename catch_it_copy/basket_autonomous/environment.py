@@ -52,6 +52,7 @@ class AutonomousTeacherEnv(DcmmVecEnv):
             if (bounds.shape!=(2,) or not np.isfinite(bounds).all() or bounds[0]<=0 or bounds[1]<=bounds[0]
                     or not np.isfinite(numbers).all() or np.any(numbers[:2]<0) or np.any(numbers[2:]<=0)):
                 raise ValueError('Invalid release_distance_reward settings')
+            if r.get('mode','capped') not in ('capped','linear'):raise ValueError('Invalid distance penalty mode')
             if self.release_protocol!='separated_flight_v2':raise ValueError('Distance reward requires confirmed release protocol')
         self.fixed_episode=False
         self.radius=.033275785333333335;self.mass=.058
@@ -387,9 +388,18 @@ class AutonomousTeacherEnv(DcmmVecEnv):
                 if self._release_distance_value is not None:
                     cfg=self.release_distance_options
                     value=release_distance_reward(self._release_distance_value,cfg.get('range',[.85,1.15]),
-                        cfg.get('bonus',15.),cfg.get('penalty',25.),cfg.get('margin',.05),cfg.get('penalty_distance',.5))
+                        cfg.get('bonus',15.),cfg.get('penalty',25.),cfg.get('margin',.05),cfg.get('penalty_distance',.5),cfg.get('mode','capped'))
                     intentional=purposeful_launch(r['position'],r['velocity'],self.basket_center,r['predicted_error'])
                     terms['release_distance']=value if value<0. or intentional else 0.
+            if (not self.fixed_episode and not self._distance_reward_paid and (self.terminated or truncated)
+                    and self.release_distance_options.get('terminal_fallback',False)):
+                # No confirmed release: settle at terminal distance, never pay a positive hold bonus.
+                self._distance_reward_paid=True
+                self._release_distance_value=float(np.linalg.norm(self.basket_center[:2]-d.body('arm_base').xpos[:2]))
+                cfg=self.release_distance_options
+                terms['release_distance']=min(0.,release_distance_reward(self._release_distance_value,
+                    cfg.get('range',[.85,1.15]),cfg.get('bonus',15.),cfg.get('penalty',25.),
+                    cfg.get('margin',.05),cfg.get('penalty_distance',.5),cfg.get('mode','capped')))
         reward=sum(terms.values())
         for key,value in terms.items():self._reward_totals[key]=self._reward_totals.get(key,0.)+value
         info=dict(fixed_episode=self.fixed_episode,success=bool(self._scored),safe_basket_success=bool(self._scored and not self.basket_robot_collision and not self.basket_arm_self_collision),

@@ -7,6 +7,12 @@ import numpy as np
 ROOT=Path(__file__).resolve().parents[1]
 
 
+def json_default(value):
+    if isinstance(value,np.generic):return value.item()
+    if isinstance(value,np.ndarray):return value.tolist()
+    raise TypeError('Unsupported JSON value: '+type(value).__name__)
+
+
 def gate_streak_after(level,streak,success_rate):
     return streak+1 if success_rate>=(.8 if level<2 else .7) else 0
 
@@ -156,9 +162,12 @@ def train(config,output,resume=None,initialize_from=None):
             row.update({key+'_100':float(np.mean(buffer)) if buffer else None for key,buffer in carry_metrics.items()})
             if steps>=next_eval or steps==config['total_steps']:
                 before_python=random.getstate();before_numpy=np.random.get_state();before_torch=torch.get_rng_state()
+                # Preserve current weights/optimizer before a potentially expensive evaluation.
+                atomic_save(output/'teacher_last.pth',package(model,config,steps,best=best,iteration=iteration))
+                atomic_save(output/'resume_last.pth',package(model,config,steps,optimizer=optimizer,best=best,iteration=iteration))
                 result=evaluate(model,config,config['eval_episodes'],config['seed']+500000)
                 random.setstate(before_python);np.random.set_state(before_numpy);torch.set_rng_state(before_torch)
-                (output/('eval_%09d.json'%steps)).write_text(json.dumps(result,indent=2))
+                (output/('eval_%09d.json'%steps)).write_text(json.dumps(result,indent=2,default=json_default))
                 row['eval_success_rate']=result['success_rate']
                 rank=result['success_rate']+(config['options'].get('preparation_level',0) if config['options']['two_stage']=='prepare' else 0.)
                 if rank>best:best=rank;atomic_save(output/'teacher_best.pth',package(model,config,steps,best=best,iteration=iteration))
@@ -180,8 +189,8 @@ def train(config,output,resume=None,initialize_from=None):
                 atomic_save(output/'teacher_last.pth',package(model,config,steps,best=best,iteration=iteration))
                 atomic_save(output/'resume_last.pth',package(model,config,steps,optimizer=optimizer,best=best,iteration=iteration))
                 next_save=(steps//config['save_every']+1)*config['save_every']
-            with (output/'metrics.jsonl').open('a') as f:f.write(json.dumps(row)+'\n')
-            print(json.dumps(row),flush=True)
+            with (output/'metrics.jsonl').open('a') as f:f.write(json.dumps(row,default=json_default)+'\n')
+            print(json.dumps(row,default=json_default),flush=True)
     finally:pool.close()
 
 
@@ -274,6 +283,6 @@ def main():
     else:
         model=Policy().to(config['device']);model.load_state_dict(saved['model'],strict=True)
         result=evaluate(model,config,config['eval_episodes'],config['seed']+500000,args.viewer)
-        (args.output/'evaluation.json').write_text(json.dumps(result,indent=2));print(json.dumps({k:v for k,v in result.items() if k!='records'},indent=2))
+        (args.output/'evaluation.json').write_text(json.dumps(result,indent=2,default=json_default));print(json.dumps({k:v for k,v in result.items() if k!='records'},indent=2))
 
 if __name__=='__main__':main()

@@ -16,6 +16,11 @@ class Checks(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         torch.set_num_threads(1);cls.c=config('stage1_prepare.json')
+    def test_numpy_json_fallback(self):
+        from .run import json_default
+        data=dict(flag=np.bool_(True),distance=np.float64(1.),count=np.int64(2),array=np.array([1.,2.]))
+        result=json.loads(json.dumps(data,default=json_default))
+        self.assertIs(result['flag'],True);self.assertEqual(result['array'],[1.,2.])
     def test_real_pose_bank_and_prepare(self):
         self.assertEqual(len(self.c['options']['pose_bank_entries']),20)
         e=AutonomousTeacherEnv(dict(self.c['options'],episode_seconds=.04))
@@ -76,5 +81,6 @@ class Checks(unittest.TestCase):
         finally:pool.close()
         c=copy.deepcopy(self.c);c['options']['episode_seconds']=.04
         result=evaluate(Policy(),c,2,123)
+        json.dumps(result)  # Actual nested metrics must serialize without a fallback.
         self.assertEqual(result['episodes'],2);self.assertEqual(result['successes'],0)
 if __name__=='__main__':unittest.main()

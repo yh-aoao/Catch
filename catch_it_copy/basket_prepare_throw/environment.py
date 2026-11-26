@@ -25,8 +25,8 @@ def preparation_metrics(env,info):
     posture_ok=(edge<=1e-6 and palm_up>=.25 and margin>=.01 and slip<.12 and arm_speed<1.)
     ready=(posture_ok and info['hand_contact'] and not env._released_once and .85<=distance<=1.15
         and env._navigation_distance()<=.05 and info['base_speed']<.05 and env._low_speed_time>=.12)
-    return dict(ready=ready,posture_quality=posture_quality,ball_local=local.tolist(),palm_up=palm_up,
-        arm_limit_margin=margin,arm_speed=arm_speed,slip_speed=slip,base_target_distance=distance)
+    return dict(ready=bool(ready),posture_quality=posture_quality,ball_local=local.tolist(),palm_up=palm_up,
+        arm_limit_margin=float(margin),arm_speed=arm_speed,slip_speed=slip,base_target_distance=distance)
 
 class AutonomousTeacherEnv(Base):
     def __init__(self,options=None,**kwargs):
@@ -100,7 +100,7 @@ class AutonomousTeacherEnv(Base):
             reward=sum(terms.values());info['reward_terms']=terms
             info.update(success=bool(prepare_success and self.episode_kind=='prepare'),safe_basket_success=False)
         for k,v in info['reward_terms'].items():self._totals[k]=self._totals.get(k,0.)+v
-        info.update(episode_kind=self.episode_kind,phase=self.phase,preparation=metrics,prepare_success=prepare_success,
+        info.update(episode_kind=self.episode_kind,phase=self.phase,preparation=metrics,prepare_success=bool(prepare_success),
             reached_throw_phase=self.phase=='throw',terminated_reason=self.terminated_reason,
             task_success=bool(prepare_success if self.episode_kind=='prepare' else info['safe_basket_success']),
             reward_totals=self._totals.copy())

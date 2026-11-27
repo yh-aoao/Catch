@@ -14,6 +14,7 @@ from distillation.teachers import ROOT,sha256
 from distillation.core import ActionAdapter
 from future_prediction_experiments.training import learning_rate
 from .core import SCHEMA,TASKS,Student,Replay,losses,action_mask
+from .runtime import validate_render_config,render_device
 from .teachers import FrozenTeacher
 from .environments import Pool,terminal_success
 
@@ -44,10 +45,12 @@ def restore_rng(s,saved_device=None,device=None):
 def env_config(config,task):
     c=copy.deepcopy(config['tasks'][task]);c.update(stage='catch',vision=config['vision'],extra_labels=False)
     c['env_kwargs']=dict(config['env_kwargs'],**c['env_kwargs'])
+    c['render_devices']=[render_device(config,task,i,config['num_envs_per_task']) for i in range(config['num_envs_per_task'])]
     return c
 
 
 def validate(config):
+    validate_render_config(config)
     mode=config.get('sampling_mode','per_task')
     if mode not in ('per_task','per_object'):raise ValueError('Invalid sampling_mode')
     if mode=='per_object' and (type(config.get('batch_episodes_per_object')) is not int or config['batch_episodes_per_object']<1):raise ValueError('Invalid batch_episodes_per_object')
@@ -91,12 +94,17 @@ class Collector:
 
     def collect(self,steps):
         self.student.eval();before=time.monotonic()
+        timings=dict(student_inference_seconds=0.,teacher_inference_seconds=0.,environment_wait_seconds=0.)
         for step in range(steps):
             dispatched={}
             for task,pool in self.pools.items():
-                packet=pool.obs;action,hidden=student_step(self.student,packet,self.previous[task],self.hidden[task])
+                packet=pool.obs;stamp=time.monotonic()
+                action,hidden=student_step(self.student,packet,self.previous[task],self.hidden[task])
+                timings['student_inference_seconds']+=time.monotonic()-stamp
                 adapter=self.adapters[task]
+                stamp=time.monotonic()
                 target=adapter.canonical(self.teachers[task].predict(packet['teacher_obs']))
+                timings['teacher_inference_seconds']+=time.monotonic()-stamp
                 choose_teacher=np.random.random(len(action))<self.teacher_fraction
                 action=np.where(choose_teacher[:,None],target,action)
                 command=adapter.executable(action)*action_mask(packet['context'])
@@ -110,7 +118,9 @@ class Collector:
                 dispatched[task]=(objects,command,hidden)
             for task,pool in self.pools.items():
                 objects,command,hidden=dispatched[task]
+                stamp=time.monotonic()
                 _,_,done,infos=pool.step_wait()
+                timings['environment_wait_seconds']+=time.monotonic()-stamp
                 for i,pending in enumerate(self.pending[task]):
                     pending[-1]['contact_after']=np.float32(infos[i]['module_hand_contact'])
                     if len(pending)>self.config['max_episode_steps']:raise RuntimeError('Episode exceeded configured step limit')
@@ -119,6 +129,11 @@ class Collector:
                 self.previous[task]=command.copy();self.previous[task][done]=0
                 hidden[:,torch.as_tensor(done,device=hidden.device)]=0;self.hidden[task]=hidden
             if steps>=16 and (step+1)%16==0:print('[collect] {}/{} steps/env {:.1f}s'.format(step+1,steps,time.monotonic()-before),flush=True)
+
+        timings['collect_seconds']=time.monotonic()-before
+        timings['collect_other_seconds']=max(0.,timings['collect_seconds']-sum(timings[k] for k in ('student_inference_seconds','teacher_inference_seconds','environment_wait_seconds')))
+        self.timings=timings
+        return timings
 
     @torch.no_grad()
     def refresh_hidden(self):
@@ -205,7 +220,7 @@ def train(config,teachers,adapters,output,resume=None,allow_source_changes=False
     metadata=dict(teacher_hashes={t:v.hash for t,v in teachers.items()},source_asset_sha256=provenance())
     if resume:
         saved=torch.load(resume,map_location='cpu',weights_only=True)
-        from model_experiments.visual_resume import validate_resume
+        from .runtime import validate_resume
         changes,reset=validate_resume(saved,config,metadata,SCHEMA,allow_source_changes)
         save_json(output/'resume_audit.json',dict(changed_sources=changes,old_config=saved['config'],new_config=config))
         student.load_state_dict(saved['student'],strict=True);optimizer.load_state_dict(saved['optimizer']);replay.load_state_dict(saved['replay'])
@@ -225,20 +240,35 @@ def train(config,teachers,adapters,output,resume=None,allow_source_changes=False
             before=time.monotonic();lr=learning_rate(config,iteration)
             for g in optimizer.param_groups:g['lr']=lr
             collector.teacher_fraction=max(config['teacher_mix_min'],config['teacher_mix_start']*(1-iteration/config['teacher_mix_decay']))
-            collector.collect(config['rollout_steps'])
+            timings=collector.collect(config['rollout_steps'])
+            stamp=time.monotonic()
             updates=[optimize(student,optimizer,replay.sample(config['batch_episodes_per_object'],config['device']),config) for _ in range(config['updates_per_iteration'])]
-            collector.refresh_hidden()
+            if student.mean.device.type=='cuda':torch.cuda.synchronize(student.mean.device)
+            timings['update_seconds']=time.monotonic()-stamp
+            stamp=time.monotonic();collector.refresh_hidden()
+            if student.mean.device.type=='cuda':torch.cuda.synchronize(student.mean.device)
+            timings['refresh_hidden_seconds']=time.monotonic()-stamp
             row=dict(iteration=iteration,learning_rate=lr,seconds=time.monotonic()-before,teacher_fraction=collector.teacher_fraction,collected_policy_steps=4*config['num_envs_per_task']*config['rollout_steps'],replay_frames=dict(replay.sizes),
-                     **{k:float(np.mean([v[k] for v in updates])) for k in updates[0]})
+                     **timings,**{k:float(np.mean([v[k] for v in updates])) for k in updates[0]})
+            stamp=time.monotonic()
             saved=package(student,config,metadata,iteration);atomic_save(output/'student_last.pth',saved)
+            save_seconds=time.monotonic()-stamp;row['evaluation_seconds']=0.
             if should_evaluate(iteration,config):
+                stamp=time.monotonic()
                 atomic_save(output/('student_%06d.pth'%iteration),saved);rng=rng_state()
+                save_seconds+=time.monotonic()-stamp;stamp=time.monotonic()
                 result=evaluate(config,adapters,student,output/('eval_%06d.json'%iteration));restore_rng(rng)
+                row['evaluation_seconds']=time.monotonic()-stamp
                 score=min(v['object_macro_success_rate'] for v in result.values());row['min_task_success']=score
                 row['macro_success']=sum(v['object_macro_success_rate'] for v in result.values())/4
-                if score>best:best=score;atomic_save(output/'student_best.pth',saved)
+                if score>best:
+                    stamp=time.monotonic();best=score;atomic_save(output/'student_best.pth',saved)
+                    save_seconds+=time.monotonic()-stamp
             if iteration%config['save_every']==0 or iteration==config['iterations']:
+                stamp=time.monotonic()
                 atomic_save(output/'resume_last.pth',dict(saved,optimizer=optimizer.state_dict(),replay=replay.state_dict(),best_score=best,rng=rng_state()))
+                save_seconds+=time.monotonic()-stamp
+            row['save_seconds']=save_seconds;row['seconds']=time.monotonic()-before
             with (output/'metrics.jsonl').open('a') as f:f.write(json.dumps(row)+'\n')
             print(json.dumps(row),flush=True)
     finally:collector.close()
@@ -283,6 +313,8 @@ def main():
     p.add_argument('--device');p.add_argument('--gl-backend',choices=['egl','glfw','osmesa','auto']);p.add_argument('--egl-device-id',type=int)
     for flag in ('iterations','num-envs','episodes','eval-start','eval-every','seed','eval-seed','rollout-steps'):p.add_argument('--'+flag,type=int)
     p.add_argument('--skip-teacher-baseline',action='store_true');p.add_argument('--allow-source-changes',action='store_true')
+    p.add_argument('--render-devices',nargs='+',type=int,help='Round-robin EGL device IDs for environment workers')
+    p.add_argument('--render-task-devices',nargs='+',help='Explicit EGL mapping: throw=1 roll=1 bounce=2 basket=3')
     p.add_argument('--check-steps',type=int,default=2)
     p.add_argument('--viewer',action='store_true',help='Open a passive MuJoCo viewer during student evaluation')
     p.add_argument('--tasks',nargs='+',choices=TASKS,help='Evaluation only: select tasks to view/test')
@@ -290,6 +322,7 @@ def main():
     args.output=args.output.expanduser().resolve()
     if (args.viewer or args.tasks) and args.command!='eval':p.error('--viewer and --tasks are evaluation only')
     os.environ.setdefault('OMP_NUM_THREADS','1');os.environ.setdefault('OPENBLAS_NUM_THREADS','1');os.environ.setdefault('MKL_NUM_THREADS','1')
+    if sum(x is not None for x in (args.egl_device_id,args.render_devices,args.render_task_devices))>1:p.error('Choose one of --egl-device-id, --render-devices, --render-task-devices')
     if args.egl_device_id is not None:
         if args.egl_device_id<0:p.error('EGL device must be nonnegative')
         os.environ['MUJOCO_EGL_DEVICE_ID']=str(args.egl_device_id)
@@ -307,8 +340,20 @@ def main():
     if args.check_steps<1:p.error('check-steps must be positive')
     for flag,key in [('iterations','iterations'),('num_envs','num_envs_per_task'),('episodes','eval_episodes'),('eval_start','eval_start'),('eval_every','eval_every'),('seed','seed'),('eval_seed','evaluation_seed'),('rollout_steps','rollout_steps')]:
         if getattr(args,flag) is not None:config[key]=getattr(args,flag)
+    if args.egl_device_id is not None or args.render_devices is not None:
+        config['render_devices']=args.render_devices if args.render_devices is not None else [args.egl_device_id]
+        config.pop('render_task_devices',None)
+    if args.render_task_devices is not None:
+        try:
+            pairs=[value.split('=') for value in args.render_task_devices]
+            mapping={task:int(device) for task,device in pairs}
+            if len(mapping)!=len(pairs):raise ValueError('Duplicate task')
+        except ValueError:p.error('Expected task=device entries, e.g. throw=1 roll=1 bounce=2 basket=3')
+        config['render_task_devices']=mapping;config.pop('render_devices',None)
     if args.gl_backend:config['vision']['gl_backend']=args.gl_backend
     elif args.viewer:config['vision']['gl_backend']='glfw'
+    if args.viewer and args.render_devices is None and args.render_task_devices is None and args.egl_device_id is None:
+        config.pop('render_devices',None);config.pop('render_task_devices',None)
     config['device']=args.device or ('cpu' if args.command=='check' else config['device'])
     if args.skip_teacher_baseline:config['skip_teacher_baseline']=True
     validate(config)
@@ -318,6 +363,7 @@ def main():
     args.output.mkdir(parents=True,exist_ok=bool(args.resume))
     counts=[len(c['objects'])*config['batch_episodes_per_object'] for c in config['tasks'].values()] if config.get('sampling_mode','per_task')=='per_object' else [config.get('batch_episodes_per_task',2)]*4
     print('[sampling] {}: {} = {} sequences/update; task weights each 25%'.format(config.get('sampling_mode','per_task'),'+'.join(map(str,counts)),sum(counts)),flush=True)
+    print('[render-devices] '+json.dumps({t:env_config(config,t)['render_devices'] for t in TASKS}),flush=True)
     adapters={t:ActionAdapter(c) for t,c in config['tasks'].items()}
     if args.command=='eval':
         current=provenance();old=saved['metadata']['source_asset_sha256']

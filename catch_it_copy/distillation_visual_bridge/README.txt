@@ -33,3 +33,52 @@ Server paths: prepare_config supports --teacher-root, --bounce-checkpoint and
 It checks all files, pins hashes, imports Basket checkpoint options and validates
 Bounce grasp protocol. Do not add --teacher-root again after preparing overrides.
 Resume only this experiment's resume_last.pth; older schemas are rejected.
+
+Multi-GPU rendering (2026-11-27)
+------------------------------
+Network inference/training stays on --device. Environment rendering is independent:
+  --render-devices 1 2 3
+round-robins workers over EGL IDs (globally offset by task), or:
+  --render-task-devices throw=1 roll=1 bounce=2 basket=3
+assigns an EGL ID per task. The task map must contain all four tasks.
+These options and --egl-device-id are mutually exclusive. Legacy single-device
+commands still work. No CUDA_VISIBLE_DEVICES changes are made by this code.
+Use EGL IDs available on the server; CUDA numbering may differ when visibility
+is restricted. Worker startup prints task/object/EGL_DEVICE for inspection.
+
+Fresh server run:
+python -m distillation_visual_bridge.run train \
+  --config distillation_visual_bridge/configs/server.json \
+  --output distillation_visual_bridge/runs/bridge_multigpu_seed123 \
+  --device cuda:0 --gl-backend egl \
+  --render-task-devices throw=1 roll=1 bounce=2 basket=3 \
+  --num-envs 8 --rollout-steps 64 --iterations 10000 \
+  --eval-start 1000 --eval-every 1000 --episodes 300 --skip-teacher-baseline
+
+Resume (keep the existing output directory):
+python -m distillation_visual_bridge.run train \
+  --resume distillation_visual_bridge/runs/bridge_seed123/resume_last.pth \
+  --output distillation_visual_bridge/runs/bridge_seed123 \
+  --device cuda:0 --gl-backend egl \
+  --render-task-devices throw=1 roll=1 bounce=2 basket=3 \
+  --allow-source-changes
+
+Rendering placement is stored in checkpoints and used in evaluation too.
+It may be changed on resume; model/teacher/sampling contracts stay checked.
+Use --allow-source-changes when moving a pre-change checkpoint to the updated
+source. Viewer evaluation clears inherited EGL assignments unless explicitly
+specified. This change does not add DDP or concurrent sampling/training.
+
+metrics.jsonl timing fields:
+  collect_seconds: total collection wall time
+  student_inference_seconds / teacher_inference_seconds: includes CPU copies
+  environment_wait_seconds: main-process blocked receive time, not total worker
+    physics/render time; workers overlap network inference and other workers
+  collect_other_seconds: collection bookkeeping and dispatch/replay work
+  update_seconds: replay sampling and 8 optimizer updates
+  refresh_hidden_seconds: rebuild pending-episode GRU states
+  save_seconds / evaluation_seconds: checkpoint I/O and periodic evaluation
+  seconds: entire iteration, now including saving/evaluation (old rows excluded it)
+CUDA is synchronized at update/refresh timing boundaries. Per-worker physics and
+render timings are not measured separately. Total samples remain 2048/iteration
+for 8 envs/task x 64 steps x 4 tasks, and 18 sequences/update x 8 updates.

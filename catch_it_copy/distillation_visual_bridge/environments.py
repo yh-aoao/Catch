@@ -74,6 +74,9 @@ def _worker(pipe, task, config, seed, viewer):
         if backend == 'auto':
             backend = 'glfw' if viewer or sys.platform != 'linux' else 'egl'
         os.environ['MUJOCO_GL'] = backend
+        if config.get('render_device') is not None:
+            os.environ['MUJOCO_EGL_DEVICE_ID']=str(config['render_device'])
+        print('[worker] task={} object={} EGL_DEVICE={}'.format(task,config.get('selected_object'),os.environ.get('MUJOCO_EGL_DEVICE_ID','default')),flush=True)
         import torch
         torch.set_num_threads(1)
         os.chdir(ROOT)
@@ -227,6 +230,8 @@ class Pool(BasePool):
             context=mp.get_context('spawn');observations=[]
             for i in range(count):
                 cfg=copy.deepcopy(config);obj=names[i%len(names)];cfg['selected_object']=obj
+                devices=config.get('render_devices')
+                if devices:cfg['render_device']=devices[i%len(devices)]
                 if task=='throw':cfg['env_kwargs']['throw_shape']=obj
                 if task in ('roll','bounce'):
                     cfg['env_kwargs']['test_object']='default' if obj=='original' else 'ycb:'+obj

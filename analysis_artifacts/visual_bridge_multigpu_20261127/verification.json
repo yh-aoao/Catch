@@ -1,0 +1,13 @@
+{
+  "tests": "7 passed: test_runtime + test_sampling",
+  "checked": [
+    "round robin placement",
+    "explicit task mapping",
+    "spawn configuration propagation",
+    "legacy fallback and input validation",
+    "resume permits rendering placement change but rejects rollout change",
+    "collector timing and sample/action invariance",
+    "18-sequence finite gradient update"
+  ],
+  "hardware_limit": "NVIDIA driver unavailable locally; no physical multi-GPU throughput benchmark performed"
+}

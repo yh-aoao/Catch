@@ -82,3 +82,27 @@ metrics.jsonl timing fields:
 CUDA is synchronized at update/refresh timing boundaries. Per-worker physics and
 render timings are not measured separately. Total samples remain 2048/iteration
 for 8 envs/task x 64 steps x 4 tasks, and 18 sequences/update x 8 updates.
+
+Single/multi rendering speed benchmark
+-------------------------------------
+python -m distillation_visual_bridge.benchmark \
+  --config distillation_visual_bridge/configs/server.json \
+  --output analysis_artifacts/bridge_speed_test_01 \
+  --device cuda:4 --single-render-device 5 --multi-render-devices 5 6 7 \
+  --num-envs 8 --rollout-steps 64 --warmup 10 --iterations 50
+
+Runs sequentially in fresh subprocesses: single EGL 5, then EGL 5/6/7.
+Each starts from identical seeds/student initialization, separately calibrates
+normalization and fills replay, discards ten training iterations, then measures
+50 iterations. Same 32 workers, 2048 steps/iteration, 18 sequences/update and
+8 updates are preserved. Uses real optimizers, not render-only timing. No eval
+or checkpoint saves during measurement; it does not resume/modify live training.
+Optional --checkpoint freezes one student snapshot for both runs (fresh Adam and
+replay; this is benchmarking, not an exact training resume). Input config is frozen
+in input_config.json. --repeats 2 alternates order to reduce trial ordering bias.
+
+Outputs: comparison.json with single_seconds, multi_seconds, speedup and
+ time_reduction_percent; single_01/multi_01 directories hold measured metrics,
+configs and summaries. Child stdout/stderr is in single_01.log/multi_01.log.
+Use a quiet server and stop competing jobs on tested resources for fair comparison.
+A speedup below 1 means multi-GPU rendering was slower in this experiment.

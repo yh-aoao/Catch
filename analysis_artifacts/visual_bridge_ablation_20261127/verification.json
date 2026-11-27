@@ -1,0 +1,18 @@
+{
+  "tests": "12 passed: test_ablation, test_runtime, test_benchmark",
+  "baseline_regression": "Compared old HEAD core with updated default: exactly identical parameters, outputs, and all loss terms at fixed seed",
+  "variants": [
+    "full",
+    "no-position",
+    "no-future",
+    "none"
+  ],
+  "position_ablation_scope": "object position and basket position auxiliary heads",
+  "checks": [
+    "disabled labels can be NaN without affecting training",
+    "removed modules absent from state dict",
+    "retained branches receive finite gradients",
+    "all four variants save/load identically"
+  ],
+  "full_training_run": false
+}

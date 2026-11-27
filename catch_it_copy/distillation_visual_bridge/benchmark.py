@@ -45,7 +45,7 @@ def worker(args):
         if saved.get('schema')!=SCHEMA:raise ValueError('Expected visual Bridge student checkpoint')
         # Environment, teacher, and learning settings must match the tested run.
         for key in ('tasks','env_kwargs','vision','model','auxiliary','sampling_mode',
-                    'capacity_frames_per_task','batch_episodes_per_object','updates_per_iteration','bptt_steps'):
+                    'ablation','capacity_frames_per_task','batch_episodes_per_object','updates_per_iteration','bptt_steps'):
             expected=copy.deepcopy(saved['config'].get(key));actual=copy.deepcopy(config.get(key))
             if key=='vision':
                 expected.pop('gl_backend',None);actual.pop('gl_backend',None)

@@ -106,3 +106,32 @@ Outputs: comparison.json with single_seconds, multi_seconds, speedup and
 configs and summaries. Child stdout/stderr is in single_01.log/multi_01.log.
 Use a quiet server and stop competing jobs on tested resources for fair comparison.
 A speedup below 1 means multi-GPU rendering was slower in this experiment.
+
+Ablation experiments (2026-11-27)
+-------------------------------
+Default (no --ablation): unchanged full model.
+--ablation no-position: remove BOTH object-position aux_head and basket-position
+  auxiliary head and their losses; retain Future forecast, fusion and loss.
+--ablation no-future: remove forecast, fusion and future loss; Catch action head
+  reads GRU h directly; retain object and basket position auxiliary supervision.
+--ablation none: remove both position heads and Future branches/losses.
+
+Basket uses its original direct action head in all variants; Future was only
+connected to Catch even in the full model. Position outputs were supervision-only.
+Disabled modules are absent from state_dict/optimizer, rather than only loss
+weights being zero. Metrics keep disabled losses at zero for consistent tables.
+Auxiliary label collection/replay format stays compatible and is not a policy input.
+Teacher files, scene physics, command, sampling, task weights and eval stay fixed.
+Use separate output directories and fresh training for the four experiments.
+Ablation choice is stored in checkpoint config and restored automatically for
+resume/eval; changing it on resume or eval is rejected. Original full model state
+keys and default forward/loss results are unchanged (verified against HEAD).
+
+Use the usual command with these output/flag pairs:
+full:        --output distillation_visual_bridge/runs/bridge_seed123
+no-position: --output distillation_visual_bridge/runs/bridge_no_position_seed123 --ablation no-position
+no-future:   --output distillation_visual_bridge/runs/bridge_no_future_seed123 --ablation no-future
+none:        --output distillation_visual_bridge/runs/bridge_no_aux_seed123 --ablation none
+All: --num-envs 32 --rollout-steps 16 --iterations 10000 --eval-start 1000
+     --eval-every 1000 --episodes 300 --skip-teacher-baseline
+     --config distillation_visual_bridge/configs/server.json

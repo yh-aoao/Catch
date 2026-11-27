@@ -13,7 +13,7 @@ from distillation.run import atomic_save,save_json,seed_all,wilson
 from distillation.teachers import ROOT,sha256
 from distillation.core import ActionAdapter
 from future_prediction_experiments.training import learning_rate
-from .core import SCHEMA,TASKS,Student,Replay,losses,action_mask
+from .core import SCHEMA,TASKS,Student,Replay,losses,action_mask,ABLATIONS
 from .runtime import validate_render_config,render_device
 from .teachers import FrozenTeacher
 from .environments import Pool,terminal_success
@@ -51,6 +51,7 @@ def env_config(config,task):
 
 def validate(config):
     validate_render_config(config)
+    if config.get('ablation','full') not in ABLATIONS:raise ValueError('Unknown ablation')
     mode=config.get('sampling_mode','per_task')
     if mode not in ('per_task','per_object'):raise ValueError('Invalid sampling_mode')
     if mode=='per_object' and (type(config.get('batch_episodes_per_object')) is not int or config['batch_episodes_per_object']<1):raise ValueError('Invalid batch_episodes_per_object')
@@ -315,6 +316,7 @@ def main():
     p.add_argument('--skip-teacher-baseline',action='store_true');p.add_argument('--allow-source-changes',action='store_true')
     p.add_argument('--render-devices',nargs='+',type=int,help='Round-robin EGL device IDs for environment workers')
     p.add_argument('--render-task-devices',nargs='+',help='Explicit EGL mapping: throw=1 roll=1 bounce=2 basket=3')
+    p.add_argument('--ablation',choices=ABLATIONS,help='full (default), no-position (all position heads), no-future, or none')
     p.add_argument('--check-steps',type=int,default=2)
     p.add_argument('--viewer',action='store_true',help='Open a passive MuJoCo viewer during student evaluation')
     p.add_argument('--tasks',nargs='+',choices=TASKS,help='Evaluation only: select tasks to view/test')
@@ -334,6 +336,10 @@ def main():
         if saved.get('schema')!=SCHEMA:raise ValueError('Expected autonomous visual Basket student')
         config=copy.deepcopy(saved['config'])
     else:config=json.loads(args.config.read_text())
+    if args.ablation is not None:
+        if saved is not None and args.ablation!=config.get('ablation','full'):
+            p.error('Cannot change ablation when resuming/evaluating a checkpoint; start a new run')
+        if saved is None:config['ablation']=args.ablation
     if args.teacher_root:
         for task,cfg in config['tasks'].items():cfg['checkpoint']=str((args.teacher_root/Path(cfg['checkpoint']).name).resolve())
     if args.resume and args.command!='train':p.error('resume is train only')
@@ -363,6 +369,7 @@ def main():
     args.output.mkdir(parents=True,exist_ok=bool(args.resume))
     counts=[len(c['objects'])*config['batch_episodes_per_object'] for c in config['tasks'].values()] if config.get('sampling_mode','per_task')=='per_object' else [config.get('batch_episodes_per_task',2)]*4
     print('[sampling] {}: {} = {} sequences/update; task weights each 25%'.format(config.get('sampling_mode','per_task'),'+'.join(map(str,counts)),sum(counts)),flush=True)
+    print('[ablation] '+config.get('ablation','full'),flush=True)
     print('[render-devices] '+json.dumps({t:env_config(config,t)['render_devices'] for t in TASKS}),flush=True)
     adapters={t:ActionAdapter(c) for t,c in config['tasks'].items()}
     if args.command=='eval':

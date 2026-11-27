@@ -11,6 +11,7 @@ SCHEMA='visual_bridge_basket_v1'
 TASKS=('throw','roll','bounce','basket')
 CONTEXT_DIM=10
 PROPRIO_DIM=36
+ABLATIONS=('full','no-position','no-future','none')
 
 
 def robot_input(obs, joint_position, joint_velocity):
@@ -36,6 +37,10 @@ def action_mask(context):
 class Student(BaseStudent):
     def __init__(self,config):
         super().__init__('catch',config['vision'],config['model'],config['auxiliary'])
+        variant=config.get('ablation','full')
+        if variant not in ABLATIONS:raise ValueError('Unknown ablation: '+str(variant))
+        self.position_enabled=variant in ('full','no-future')
+        self.future_enabled=variant in ('full','no-position')
         model=config['model']
         self.proprio_dim=PROPRIO_DIM
         self.mean=torch.zeros(PROPRIO_DIM)
@@ -48,6 +53,10 @@ class Student(BaseStudent):
         layers.append(nn.Linear(width,20));self.basket_head=nn.Sequential(*layers)
         self.forecast=nn.Sequential(nn.Linear(self.hidden_dim,128),nn.ELU(),nn.Linear(128,9))
         self.fusion=nn.Linear(9,self.hidden_dim)
+        if not self.position_enabled:
+            self.aux_head=None;self.basket_position_head=None
+        if not self.future_enabled:
+            self.forecast=None;self.fusion=None
         self.extra={}
 
     def forward(self,depth,proprio,previous,context,hidden=None,auxiliary=False):
@@ -62,15 +71,19 @@ class Student(BaseStudent):
         # Only the explicit task command is consumed. Extra context is reserved zero padding.
         if bool((context[...,1:]!=0).any()):raise ValueError('Privileged context is forbidden')
         h,hidden=self.gru(torch.cat([visual,state,previous.float(),mode],-1),hidden)
-        predicted=self.forecast(h)
-        catch_logits=self.head(h+self.fusion(predicted))
+        self.extra={}
+        if self.future_enabled:
+            predicted=self.forecast(h)
+            catch_logits=self.head(h+self.fusion(predicted))
+            self.extra['future']=predicted
+        else:catch_logits=self.head(h)
         basket_logits=self.basket_head(h)
         logits=torch.where(mode.bool(),basket_logits,catch_logits)
-        self.extra={'future':predicted,'basket_position':self.basket_position_head(h)}
+        if self.position_enabled:self.extra['basket_position']=self.basket_position_head(h)
         # Catch context is sanitized for masks too; phase values are irrelevant in catch mode.
         mask=action_mask(context)
         result=(logits.tanh()*mask,hidden,logits)
-        if auxiliary:return (*result,self.aux_head(h))
+        if auxiliary:return (*result,self.aux_head(h) if self.position_enabled else None)
         return result
 
 
@@ -167,16 +180,20 @@ def losses(student,batch,begin,end,logits,prediction,config,lengths):
                 lengths[i]/(2*navigation.sum()),lengths[i]/(2*throwing.sum()))
     per_episode=(imitation*frame_weights).sum(1)/lengths.clamp_min(1)
     catch=(1-context[...,0])*valid
-    aux_target=batch['object_target'][:,begin:end]
-    aux_valid=batch['object_valid'][:,begin:end]
-    scale=prediction.new_tensor(config['auxiliary']['scales'])
-    aux_error=F.smooth_l1_loss(prediction/scale,torch.where(aux_valid.bool(),aux_target,torch.zeros_like(aux_target))/scale,reduction='none')
-    position=((aux_error[...,:3]*aux_valid[...,:3]).mean(-1)*catch).sum(1)/lengths.clamp_min(1)
-    future_mask=batch['future_valid'][:,begin:end]*catch[...,None]
-    future_target=batch['future_target'][:,begin:end]
-    safe_target=torch.where(future_mask[...,None].bool(),future_target,torch.zeros_like(future_target))
-    future_error=F.smooth_l1_loss(student.extra['future'].reshape(*future_mask.shape,3),safe_target,reduction='none').mean(-1)
-    future=(future_error*future_mask).mean(-1).sum(1)/lengths.clamp_min(1)
+    position=logits.new_zeros(len(lengths))
+    if student.position_enabled:
+        aux_target=batch['object_target'][:,begin:end]
+        aux_valid=batch['object_valid'][:,begin:end]
+        scale=prediction.new_tensor(config['auxiliary']['scales'])
+        aux_error=F.smooth_l1_loss(prediction/scale,torch.where(aux_valid.bool(),aux_target,torch.zeros_like(aux_target))/scale,reduction='none')
+        position=((aux_error[...,:3]*aux_valid[...,:3]).mean(-1)*catch).sum(1)/lengths.clamp_min(1)
+    future=logits.new_zeros(len(lengths))
+    if student.future_enabled:
+        future_mask=batch['future_valid'][:,begin:end]*catch[...,None]
+        future_target=batch['future_target'][:,begin:end]
+        safe_target=torch.where(future_mask[...,None].bool(),future_target,torch.zeros_like(future_target))
+        future_error=F.smooth_l1_loss(student.extra['future'].reshape(*future_mask.shape,3),safe_target,reduction='none').mean(-1)
+        future=(future_error*future_mask).mean(-1).sum(1)/lengths.clamp_min(1)
     weights=batch['weights']
     result={'imitation_loss':(per_episode*weights).sum(),'position_loss':(position*weights).sum(),'future_loss':(future*weights).sum()}
     result['loss']=result['imitation_loss']+config['auxiliary']['position_weight']*result['position_loss']+.1*result['future_loss']
@@ -187,9 +204,11 @@ def losses(student,batch,begin,end,logits,prediction,config,lengths):
     for index,(task,obj) in enumerate([(t,o) for t in TASKS for o in config['tasks'][t]['objects']]):
         select=batch['group_id']==index
         result['imitation/'+task+'/'+obj]=per_episode[select].mean() if select.any() else per_episode.new_zeros(())
-    basket=valid*batch['basket_valid'][:,begin:end]
-    position_error=F.smooth_l1_loss(student.extra['basket_position'],batch['basket_target'][:,begin:end],reduction='none').mean(-1)
-    per_episode=(position_error*basket).sum(1)/lengths.clamp_min(1)
-    result['basket_position_loss']=(per_episode*weights).sum()
+    result['basket_position_loss']=logits.new_zeros(())
+    if student.position_enabled:
+        basket=valid*batch['basket_valid'][:,begin:end]
+        position_error=F.smooth_l1_loss(student.extra['basket_position'],batch['basket_target'][:,begin:end],reduction='none').mean(-1)
+        per_episode=(position_error*basket).sum(1)/lengths.clamp_min(1)
+        result['basket_position_loss']=(per_episode*weights).sum()
     result['loss']=result['loss']+config['basket_position_weight']*result['basket_position_loss']
     return result

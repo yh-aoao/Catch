@@ -57,6 +57,8 @@ class Student(BaseStudent):
             self.aux_head=None;self.basket_position_head=None
         if not self.future_enabled:
             self.forecast=None;self.fusion=None
+        self.basket_phase_head=(nn.Sequential(nn.Linear(self.hidden_dim,128),nn.ELU(),nn.Linear(128,1))
+            if config.get("basket_phase_weight",0.)>0 else None)
         self.extra={}
 
     def forward(self,depth,proprio,previous,context,hidden=None,auxiliary=False):
@@ -77,6 +79,7 @@ class Student(BaseStudent):
             catch_logits=self.head(h+self.fusion(predicted))
             self.extra['future']=predicted
         else:catch_logits=self.head(h)
+        if self.basket_phase_head is not None:self.extra['basket_phase_logits']=self.basket_phase_head(h).squeeze(-1)
         basket_logits=self.basket_head(h)
         logits=torch.where(mode.bool(),basket_logits,catch_logits)
         if self.position_enabled:self.extra['basket_position']=self.basket_position_head(h)
@@ -205,6 +208,24 @@ def losses(student,batch,begin,end,logits,prediction,config,lengths):
         precision=(residual*carry_mask).sum(1)/lengths.clamp_min(1)
         result['basket_carry_precision_loss']=(precision*weights).sum()
         result['loss']=result['loss']+carry_weight*result['basket_carry_precision_loss']
+    # Throw-phase action precision: same single Basket action head, all 20 controls.
+    # Phase balancing prevents a short throwing segment being diluted by navigation.
+    throw_weight=config.get('basket_throw_precision_weight',0.)
+    if throw_weight>0:
+        throw_mask=frame_weights*context[...,0]*(all_phase[:,begin:end]>=.5)
+        residual=(logits.tanh()-target).square()
+        grouped=sum(residual[...,a:b].mean(-1) for a,b in ((0,2),(2,8),(8,20)))/3
+        precision=(grouped*throw_mask).sum(1)/lengths.clamp_min(1)
+        result['basket_throw_precision_loss']=(precision*weights).sum()
+        result['loss']=result['loss']+throw_weight*result['basket_throw_precision_loss']
+    if student.basket_phase_head is not None:
+        phase_logits=student.extra['basket_phase_logits']
+        phase_target=all_phase[:,begin:end]
+        basket_mask=frame_weights*context[...,0]
+        phase_error=F.binary_cross_entropy_with_logits(phase_logits,phase_target,reduction='none')
+        phase_loss=(phase_error*basket_mask).sum(1)/lengths.clamp_min(1)
+        result['basket_phase_loss']=(phase_loss*weights).sum()
+        result['loss']=result['loss']+config['basket_phase_weight']*result['basket_phase_loss']
     # Fixed slots make keys stable even when a phase/group has no valid forecast labels.
     for i,task in enumerate(TASKS):
         select=batch['task_id']==i

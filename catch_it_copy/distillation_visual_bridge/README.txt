@@ -281,3 +281,28 @@ Example: CUDA_VISIBLE_DEVICES=6 -> usually only cuda:0 is valid for PyTorch;
 --device cuda:6 is then invalid. --egl-device-id uses a separate EGL enumeration
 and is NOT checked against PyTorch's filtered device count. Existing single/multi
 render placement flags stay unchanged. Sync run.py/runtime.py (or full package).
+
+2026-11-28: Optional single-head Basket throwing repair
+-----------------------------------------------------
+--basket-phase-weight 0.1 enables a GRU(256)->128->1 auxiliary phase
+classifier. Teacher basket_phase is a training label only. Predictions do not
+select, mix or gate actions, and no stage is added to deployment inputs.
+--basket-throw-precision-weight 1 enables normalized-action MSE during the
+throw phase. Base2, arm6 and hand12 group errors receive equal weight. It uses
+the existing within-episode phase balancing (half navigation, half throwing
+when both exist), then the existing per-task weight. The entire throw phase
+is supervised, including post-release frames; it is not a release-only loss.
+These starting weights are experimental, not verified optimal settings.
+Both options default to zero, preserving existing experiments and checkpoints.
+The phase classifier is independent of the position/future ablation switches.
+Logs add basket_phase_loss and basket_throw_precision_loss (unweighted terms,
+including existing task weighting); total loss applies the configured weights.
+
+To transfer an existing single-head student, use --init-checkpoint in a NEW
+output directory with the same ablation/teacher/model/environment contracts.
+Existing action/visual/GRU/normalizer weights are copied unchanged; only a newly
+enabled phase head is randomly initialized. All other missing/unexpected keys
+are errors. Optimizer/replay/iteration/teacher-mix schedule start afresh, and
+initialization_audit.json records new parameter keys. This is not exact resume.
+Do not use --resume to add these options to an existing experiment.
+Eval/viewer reconstruct the optional classifier automatically from checkpoint.

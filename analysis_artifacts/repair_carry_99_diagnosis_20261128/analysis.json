@@ -1,0 +1,85 @@
+{
+  "note": "Four diagnostic episodes only; not a success-rate estimate. Teacher-carry is an oracle intervention, not autonomous student evaluation.",
+  "student_traces": {
+    "student_000.jsonl": {
+      "first_throw_ready": {
+        "step": 189,
+        "time": 7.519999999999369,
+        "goal_distance": 1.1435098535689747,
+        "base_speed": 0.08184736105378815,
+        "hand_contact": true
+      },
+      "first_released": {
+        "step": 216,
+        "time": 8.599999999999616,
+        "goal_distance": 1.1274644099656557,
+        "base_speed": 0.12038206727580267,
+        "hand_contact": false
+      },
+      "first_purposeful_launch": {
+        "step": 216,
+        "time": 8.599999999999616,
+        "goal_distance": 1.1274644099656557,
+        "base_speed": 0.12038206727580267,
+        "hand_contact": false
+      },
+      "first_basket_region_hit": {
+        "step": 220,
+        "time": 8.75999999999967,
+        "goal_distance": 1.1404083618237197,
+        "base_speed": 0.01878510462731248,
+        "hand_contact": false
+      },
+      "carry": {
+        "frames": 188,
+        "action_mae_base_arm_hand": [
+          0.09877853301673276,
+          0.02536390063994612,
+          0.023528881448837895
+        ]
+      },
+      "throw_before_release": {
+        "frames": 27,
+        "action_mae_base_arm_hand": [
+          0.21044468871507518,
+          0.4190500842078221,
+          0.3388098695920493
+        ]
+      }
+    },
+    "student_001.jsonl": {
+      "first_throw_ready": {
+        "step": 122,
+        "time": 4.839999999999675,
+        "goal_distance": 1.1410700182393338,
+        "base_speed": 0.0033611170475912958,
+        "hand_contact": true
+      },
+      "first_released": {
+        "step": 311,
+        "time": 12.400000000000853,
+        "goal_distance": 0.720887262464611,
+        "base_speed": 0.2597812397373497,
+        "hand_contact": false
+      },
+      "first_purposeful_launch": null,
+      "first_basket_region_hit": null,
+      "carry": {
+        "frames": 121,
+        "action_mae_base_arm_hand": [
+          0.024381887461376293,
+          0.015632943588180067,
+          0.012014061903735601
+        ]
+      },
+      "throw_before_release": {
+        "frames": 189,
+        "action_mae_base_arm_hand": [
+          0.302218590595571,
+          0.49364541632063647,
+          0.4364661420334894
+        ]
+      }
+    }
+  }
+}

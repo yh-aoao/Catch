@@ -75,8 +75,9 @@ def env_config(config,task):
 def validate(config):
     validate_render_config(config)
     if config.get('basket_rollin','step') not in ('step','episode'):raise ValueError('Invalid basket_rollin')
-    weight=config.get('basket_carry_precision_weight',0.)
-    if not isinstance(weight,(int,float)) or not math.isfinite(weight) or weight<0:raise ValueError('Invalid basket_carry_precision_weight')
+    for key in ('basket_carry_precision_weight','basket_throw_precision_weight','basket_phase_weight'):
+        weight=config.get(key,0.)
+        if not isinstance(weight,(int,float)) or not math.isfinite(weight) or weight<0:raise ValueError('Invalid '+key)
     if config.get('ablation','full') not in ABLATIONS:raise ValueError('Unknown ablation')
     mode=config.get('sampling_mode','per_task')
     if mode not in ('per_task','per_object'):raise ValueError('Invalid sampling_mode')
@@ -261,10 +262,11 @@ def train(config,teachers,adapters,output,resume=None,allow_source_changes=False
         initial=torch.load(init_checkpoint,map_location='cpu',weights_only=True)
         from .runtime import validate_initial_student
         validate_initial_student(initial,config,SCHEMA,metadata['teacher_hashes'])
-        student.load_state_dict(initial['student'],strict=True)
+        from .runtime import load_initial_weights
+        initialized_keys=load_initial_weights(student,initial['student'])
         save_json(output/'initialization_audit.json',dict(checkpoint=str(init_checkpoint.resolve()),
             checkpoint_sha256=sha256(init_checkpoint),source_iteration=initial['iteration'],
-            source_config=initial['config'],new_config=config,
+            source_config=initial['config'],new_config=config,new_parameter_keys=initialized_keys,
             reset=['optimizer','replay','iteration','teacher_mix_schedule'],
             note='Model/normalization only. New experiment; not an exact resume.'))
         del initial
@@ -372,6 +374,8 @@ def main():
     p.add_argument('--ablation',choices=ABLATIONS,help='full (default), no-position (all position heads), no-future, or none')
     p.add_argument('--basket-rollin',choices=['step','episode'],help='Fresh training: Basket action executor selection frequency')
     p.add_argument('--basket-carry-precision-weight',type=float,help='Extra arm/hand action MSE during carry; default 0')
+    p.add_argument('--basket-phase-weight',type=float,help='Training-only stage prediction auxiliary loss; default 0')
+    p.add_argument('--basket-throw-precision-weight',type=float,help='Extra full action MSE during throwing; default 0')
     p.add_argument('--basket-success-metric',choices=['strict','hit'],help='Basket evaluation metric for a fresh run or standalone eval; hit removes stopped-release requirement')
     p.add_argument('--eval-num-envs',type=int,help='Parallel environments per object during evaluation')
     p.add_argument('--check-steps',type=int,default=2)
@@ -395,7 +399,7 @@ def main():
         if saved.get('schema')!=SCHEMA:raise ValueError('Expected autonomous visual Basket student')
         config=copy.deepcopy(saved['config'])
     else:config=json.loads(args.config.read_text())
-    for flag,key,default in [('basket_rollin','basket_rollin','step'),('basket_carry_precision_weight','basket_carry_precision_weight',0.)]:
+    for flag,key,default in [('basket_rollin','basket_rollin','step'),('basket_carry_precision_weight','basket_carry_precision_weight',0.),('basket_throw_precision_weight','basket_throw_precision_weight',0.),('basket_phase_weight','basket_phase_weight',0.)]:
         value=getattr(args,flag)
         if value is not None:
             if saved is not None and value!=config.get(key,default):p.error('Repair settings cannot change on resume/eval; start a separate run')

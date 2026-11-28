@@ -73,3 +73,13 @@ def validate_torch_device(requested):
         valid=', '.join('cuda:'+str(i) for i in range(count))
         raise ValueError('Invalid network device {}: PyTorch sees {} GPU(s); valid logical devices: {}. CUDA_VISIBLE_DEVICES={!r}. CUDA ordinals are logical after visibility filtering: e.g. CUDA_VISIBLE_DEVICES=6 usually makes physical GPU6 cuda:0. EGL numbering is separate; do not infer EGL IDs from this count.'.format(device,count,valid,visible))
     return torch.device('cuda',index)
+
+
+def load_initial_weights(student,state):
+    """Allow only newly enabled auxiliary phase-head parameters in weight transfer."""
+    expected=set(student.state_dict());provided=set(state)
+    missing=expected-provided;extra=provided-expected
+    if extra or any(not key.startswith('basket_phase_head.') for key in missing):
+        raise ValueError('Initialization weights differ beyond new phase head: missing={}, extra={}'.format(sorted(missing),sorted(extra)))
+    student.load_state_dict(state,strict=not missing)
+    return sorted(missing)

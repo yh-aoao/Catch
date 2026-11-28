@@ -1,0 +1,20 @@
+{
+  "episodes": 20,
+  "successes": 2,
+  "success_rate": 0.1,
+  "reached_throw_phase": 18,
+  "release_stopped": 2,
+  "circle_hits_ignoring_stop_and_bridge": 17,
+  "reasons": {
+    "ball_on_floor": 16,
+    "basket_score": 2,
+    "premature_bridge_release": 1,
+    "arm_self_collision": 1
+  },
+  "action_conversion_max_error": 5.960464477539063e-08,
+  "teacher_sha256": "e00e4fb57fdd3db35e2e8944f008f9d53a5925c18789549b603f56890805c552",
+  "basket_diameter_m": 0.6,
+  "autonomous_control": true,
+  "integrated_joint_targets": true,
+  "note": "Circle hits are geometric diagnostics, NOT strict task successes. No student or depth policy is evaluated."
+}

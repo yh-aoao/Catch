@@ -197,6 +197,14 @@ def losses(student,batch,begin,end,logits,prediction,config,lengths):
     weights=batch['weights']
     result={'imitation_loss':(per_episode*weights).sum(),'position_loss':(position*weights).sum(),'future_loss':(future*weights).sum()}
     result['loss']=result['imitation_loss']+config['auxiliary']['position_weight']*result['position_loss']+.1*result['future_loss']
+    # Phase metadata is used only for supervision, never as a policy input/mask.
+    carry_weight=config.get('basket_carry_precision_weight',0.)
+    if carry_weight>0:
+        carry_mask=valid*context[...,0]*(all_phase[:,begin:end]<.5)
+        residual=(logits.tanh()[...,2:]-target[...,2:]).square().mean(-1)
+        precision=(residual*carry_mask).sum(1)/lengths.clamp_min(1)
+        result['basket_carry_precision_loss']=(precision*weights).sum()
+        result['loss']=result['loss']+carry_weight*result['basket_carry_precision_loss']
     # Fixed slots make keys stable even when a phase/group has no valid forecast labels.
     for i,task in enumerate(TASKS):
         select=batch['task_id']==i

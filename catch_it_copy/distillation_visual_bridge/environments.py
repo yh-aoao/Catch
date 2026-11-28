@@ -6,6 +6,7 @@ Render the current simulation state once per policy observation, without advanci
 physics or consuming the physics RNG. No object-centred camera or segmentation.
 """
 import faulthandler
+import time
 import importlib
 import multiprocessing as mp
 import os
@@ -17,6 +18,10 @@ from distillation.teachers import ROOT
 from distillation.environments import Pool as BasePool, stack_tree, terminal_success
 from .core import encode_depth, camera_specs, robot_input, command_context
 from visual_module_experiments.labels import labels
+
+
+def reset_observation(env,task,episode_seed):
+    return env.reset(seed=episode_seed)[0] if task=='basket' else env.reset()[0]
 
 
 def hand_contact(env):
@@ -167,10 +172,13 @@ def _worker(pipe, task, config, seed, viewer):
         def reset():
             nonlocal episode, previous_object, previous_time
             previous_object, previous_time = None, None
-            np.random.seed((int(seed) + int(episode) * 100003) % (2**32))
+            episode_seed=(int(seed) + int(episode) * 100003) % (2**32)
+            np.random.seed(episode_seed)
             random.seed(seed + episode * 100003)
             episode += 1
-            return env.reset()[0]
+            # Bridge reset samples from Gym's Generator as well as global NumPy.
+            # Seeding only global NumPy left Basket evaluation nondeterministic.
+            return reset_observation(env,task,episode_seed)
 
         obs = reset()
         if viewer:
@@ -208,13 +216,12 @@ def _worker(pipe, task, config, seed, viewer):
         except (EOFError, BrokenPipeError):
             pass
     finally:
-        if window is not None:
-            window.close()
-        if sensor is not None:
-            sensor.close()
-        if env is not None:
-            env.close()
-        pipe.close()
+        for resource in (window,sensor,env,pipe):
+            if resource is not None:
+                try:resource.close()
+                except Exception:
+                    traceback.print_exc()
+
 
 
 class Pool(BasePool):
@@ -238,6 +245,7 @@ class Pool(BasePool):
                 parent,child=context.Pipe()
                 process=context.Process(target=_worker,args=(child,task,cfg,seed+i*1009,viewer),daemon=True)
                 process.start();child.close();self.pipes.append(parent);self.processes.append(process)
+                print('[pool] task={} worker={}/{} pid={}'.format(task,i+1,count,process.pid),flush=True)
                 observations.append(self._receive(parent))
             self.obs=stack_tree(observations)
         except BaseException:
@@ -250,3 +258,30 @@ class Pool(BasePool):
         results=[self._receive(p) for p in self.pipes]
         obs,reward,done,info=zip(*results);self.obs=stack_tree(obs)
         return self.obs,np.asarray(reward),np.asarray(done),list(info)
+
+    def close(self):
+        """Idempotent bounded shutdown, including workers stuck in native rendering.
+
+        Close parent receive endpoints before joining: a worker may otherwise be
+        blocked sending an unconsumed depth packet when evaluation stops early.
+        """
+        pipes,self.pipes=self.pipes,[]
+        processes,self.processes=self.processes,[]
+        for pipe in pipes:
+            try:pipe.send(('close',None))
+            except (BrokenPipeError,EOFError,OSError):pass
+        for pipe in pipes:
+            try:pipe.close()
+            except OSError:pass
+        deadline=time.monotonic()+5.
+        for process in processes:process.join(timeout=max(0.,deadline-time.monotonic()))
+        for process in processes:
+            if process.is_alive():process.terminate()
+        deadline=time.monotonic()+2.
+        for process in processes:process.join(timeout=max(0.,deadline-time.monotonic()))
+        for process in processes:
+            if process.is_alive():process.kill()
+        for process in processes:
+            process.join(timeout=2.)
+            if not process.is_alive():process.close()
+        if hasattr(self,'obs'):self.obs=None

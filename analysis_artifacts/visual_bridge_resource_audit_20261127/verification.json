@@ -1,0 +1,10 @@
+{
+  "audit": "Resource lifecycle and bounded memory changes",
+  "checks": [
+    "15 tests passed (resources/runtime/ablation/benchmark; before adding real spawned sender test)",
+    "Old HEAD vs new optimize: two-chunk BPTT loss and post-Adam tensors bit-identical on CPU",
+    "CUDA RNG tested with mocks: only active GPU touched; new and legacy checkpoint restoration"
+  ],
+  "hardware_limit": "No NVIDIA driver available locally; actual EGL/VRAM plateau on cluster not measured",
+  "interpretation": "Persistent 0.2 GB environment processes during sequential startup do not by themselves prove a leak"
+}

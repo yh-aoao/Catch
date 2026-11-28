@@ -43,6 +43,7 @@ class PlacementTests(unittest.TestCase):
         class Pipe:
             def close(self):pass
         class Process:
+            pid=12345
             def start(self):pass
         class Context:
             def Pipe(self):return Pipe(),Pipe()

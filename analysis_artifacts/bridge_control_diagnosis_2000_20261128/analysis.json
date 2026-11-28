@@ -1,0 +1,58 @@
+{
+  "teacher": {
+    "episodes": 2,
+    "hits": 2,
+    "strict_successes": 0,
+    "reached_throw_phase": 2,
+    "reasons": {
+      "ball_on_floor": 2
+    }
+  },
+  "student": {
+    "episodes": 2,
+    "hits": 0,
+    "strict_successes": 0,
+    "reached_throw_phase": 0,
+    "reasons": {
+      "premature_bridge_release": 2
+    }
+  },
+  "teacher-carry": {
+    "episodes": 2,
+    "hits": 2,
+    "strict_successes": 0,
+    "reached_throw_phase": 2,
+    "reasons": {
+      "ball_on_floor": 2
+    }
+  },
+  "teacher-base": {
+    "episodes": 2,
+    "hits": 0,
+    "strict_successes": 0,
+    "reached_throw_phase": 0,
+    "reasons": {
+      "premature_bridge_release": 2
+    }
+  },
+  "teacher-arm-hand": {
+    "episodes": 2,
+    "hits": 1,
+    "strict_successes": 0,
+    "reached_throw_phase": 1,
+    "reasons": {
+      "ball_on_floor": 1,
+      "arm_self_collision": 1
+    }
+  },
+  "interpretation": {
+    "scope": "Two matched initial states per mode; diagnostic evidence, not reliable success-rate estimates",
+    "finding": "Student failed before handoff with purposeful_launch=false in both seeds. Teacher carry followed by student throw hit in both. Teacher base alone failed in both; teacher arm/hand alone hit once and had a self-collision once.",
+    "candidate_repair": [
+      "Episode-level Basket teacher roll-in",
+      "Extra carry arm/hand action precision loss"
+    ],
+    "candidate_status": "Implemented opt-in, not trained; efficacy unverified",
+    "original_ablations": "Default training unaffected; repair requires a separate output directory"
+  }
+}

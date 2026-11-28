@@ -5,6 +5,7 @@ import json
 import math
 import os
 import random
+import signal
 import time
 from pathlib import Path
 import numpy as np
@@ -14,7 +15,7 @@ from distillation.teachers import ROOT,sha256
 from distillation.core import ActionAdapter
 from future_prediction_experiments.training import learning_rate
 from .core import SCHEMA,TASKS,Student,Replay,losses,action_mask,ABLATIONS
-from .runtime import validate_render_config,render_device
+from .runtime import validate_render_config,render_device,latch_episode_choices,validate_torch_device
 from .teachers import FrozenTeacher
 from .environments import Pool,terminal_success
 
@@ -29,17 +30,39 @@ def provenance():
     return result
 
 
-def rng_state():
-    n=np.random.get_state()
-    return dict(torch=torch.get_rng_state(),python=random.getstate(),numpy=(n[0],n[1].tolist(),*n[2:]),
-                cuda=torch.cuda.get_rng_state_all() if torch.cuda.is_available() else None)
+def rng_state(device):
+    n=np.random.get_state();device=torch.device(device)
+    cuda=None
+    if device.type=='cuda':
+        cuda=dict(state=torch.cuda.get_rng_state(device),device=str(device))
+    return dict(torch=torch.get_rng_state(),python=random.getstate(),numpy=(n[0],n[1].tolist(),*n[2:]),cuda=cuda)
 
 
 def restore_rng(s,saved_device=None,device=None):
     torch.set_rng_state(s['torch']);random.setstate(s['python'])
     n=s['numpy'];np.random.set_state((n[0],np.asarray(n[1],dtype=np.uint32),*n[2:]))
-    from model_experiments.visual_resume import restore_cuda_rng
-    restore_cuda_rng(s['cuda'],saved_device,device)
+    target=torch.device(device or saved_device or 'cpu')
+    cuda=s.get('cuda')
+    if cuda is None or target.type!='cuda':return
+    if isinstance(cuda,dict):state=cuda['state']
+    else:
+        # Legacy checkpoints stored all visible devices; restore only the active stream.
+        source=torch.device(saved_device or target)
+        index=source.index if source.index is not None else 0
+        if index>=len(cuda):raise ValueError('Checkpoint lacks active CUDA RNG state')
+        state=cuda[index]
+    torch.cuda.set_rng_state(state.cpu(),target)
+
+
+def resource_metrics(student,collector):
+    result=dict(environment_processes=sum(p.is_alive() for pool in collector.pools.values() for p in pool.processes))
+    device=student.mean.device
+    if device.type=='cuda':
+        result.update(cuda_allocated_mb=torch.cuda.memory_allocated(device)/2**20,
+                      cuda_reserved_mb=torch.cuda.memory_reserved(device)/2**20,
+                      cuda_peak_allocated_mb=torch.cuda.max_memory_allocated(device)/2**20,
+                      cuda_peak_reserved_mb=torch.cuda.max_memory_reserved(device)/2**20)
+    return result
 
 
 def env_config(config,task):
@@ -51,6 +74,9 @@ def env_config(config,task):
 
 def validate(config):
     validate_render_config(config)
+    if config.get('basket_rollin','step') not in ('step','episode'):raise ValueError('Invalid basket_rollin')
+    weight=config.get('basket_carry_precision_weight',0.)
+    if not isinstance(weight,(int,float)) or not math.isfinite(weight) or weight<0:raise ValueError('Invalid basket_carry_precision_weight')
     if config.get('ablation','full') not in ABLATIONS:raise ValueError('Unknown ablation')
     mode=config.get('sampling_mode','per_task')
     if mode not in ('per_task','per_object'):raise ValueError('Invalid sampling_mode')
@@ -86,6 +112,7 @@ class Collector:
         self.pools={};self.pending={};self.previous={};self.hidden={};self.states=[]
         self.calibrating=not student.normalizer_fitted.item()
         self.teacher_fraction=1. if self.calibrating else .8
+        self.basket_episode_teacher=None
         try:
             for ti,task in enumerate(TASKS):
                 n=config['num_envs_per_task'];self.pools[task]=Pool(task,env_config(config,task),n,config['seed']+ti*10000+start*1000000)
@@ -107,6 +134,8 @@ class Collector:
                 target=adapter.canonical(self.teachers[task].predict(packet['teacher_obs']))
                 timings['teacher_inference_seconds']+=time.monotonic()-stamp
                 choose_teacher=np.random.random(len(action))<self.teacher_fraction
+                if task=='basket' and self.config.get('basket_rollin','step')=='episode':
+                    self.basket_episode_teacher,choose_teacher=latch_episode_choices(choose_teacher,self.basket_episode_teacher)
                 action=np.where(choose_teacher[:,None],target,action)
                 command=adapter.executable(action)*action_mask(packet['context'])
                 for i,pending in enumerate(self.pending[task]):
@@ -127,6 +156,7 @@ class Collector:
                     if len(pending)>self.config['max_episode_steps']:raise RuntimeError('Episode exceeded configured step limit')
                     if done[i]:
                         self.replay.add(task,str(objects[i]),pending);self.pending[task][i]=[]
+                        if task=='basket' and self.basket_episode_teacher is not None:self.basket_episode_teacher[i]=-1
                 self.previous[task]=command.copy();self.previous[task][done]=0
                 hidden[:,torch.as_tensor(done,device=hidden.device)]=0;self.hidden[task]=hidden
             if steps>=16 and (step+1)%16==0:print('[collect] {}/{} steps/env {:.1f}s'.format(step+1,steps,time.monotonic()-before),flush=True)
@@ -154,10 +184,14 @@ class Collector:
 
 def optimize(student,optimizer,batch,config):
     student.train();optimizer.zero_grad(set_to_none=True);hidden=None;values={}
+    device=student.mean.device
+    # Depth dominates replay memory. Keep full episodes in host RAM and transfer
+    # only the current BPTT chunk; loss metadata is small and stays on the device.
+    batch={key:(value if key=='depth' else value.to(device)) for key,value in batch.items()}
     lengths=batch['valid'].sum(1)
     for begin in range(0,batch['depth'].shape[1],config['bptt_steps']):
         end=begin+config['bptt_steps']
-        x=[batch[k][:,begin:end] for k in ('depth','proprio','previous','context')]
+        x=[batch[k][:,begin:end].to(device) for k in ('depth','proprio','previous','context')]
         _,hidden,logits,prediction=student(*x,hidden,auxiliary=True)
         terms=losses(student,batch,begin,end,logits,prediction,config,lengths)
         if not torch.isfinite(terms['loss']):raise FloatingPointError('Non-finite loss')
@@ -165,7 +199,8 @@ def optimize(student,optimizer,batch,config):
         for key,value in terms.items():values[key]=values.get(key,0.)+value.item()
     norm=torch.nn.utils.clip_grad_norm_(student.parameters(),1.)
     if not torch.isfinite(norm):raise FloatingPointError('Non-finite gradients')
-    optimizer.step();return values
+    optimizer.step();student.extra={}
+    return values
 
 
 @torch.no_grad()
@@ -191,7 +226,8 @@ def evaluate(config,adapters,student,output,tasks=None,viewer=False):
                     for i in np.flatnonzero(done):
                         if len(rows)<count:
                             info=infos[i];rows.append(dict(episode=len(rows),worker=int(i),success=terminal_success(info,cfg['success_metric']),
-                                reward=float(reward_sum[i]),length=int(length[i]),reason=str(info.get('terminated_reason','unspecified'))))
+                                reward=float(reward_sum[i]),length=int(length[i]),reason=str(info.get('terminated_reason','unspecified')),
+                                **({k:bool(info.get(k,False)) for k in ('reached_throw_phase','released','release_stopped','basket_region_hit','basket_stopped_region_hit','safe_basket_success')} if task=='basket' else {})))
                         previous[i]=0;hidden[:,i]=0;reward_sum[i]=0;length[i]=0
                     if len(rows)==count:break
                 if len(rows)!=count:raise RuntimeError('Incomplete evaluation')
@@ -199,6 +235,8 @@ def evaluate(config,adapters,student,output,tasks=None,viewer=False):
                 objects[obj]=dict(successes=successes,episodes=count,success_rate=successes/count,wilson_95=wilson(successes,count),records=rows)
             finally:
                 if pool is not None:pool.close()
+            if task=='basket':
+                objects[obj]['diagnostics']={k:sum(r[k] for r in rows) for k in ('reached_throw_phase','released','release_stopped','basket_region_hit','basket_stopped_region_hit','safe_basket_success')}
             print('[eval] {} / {} {}/{}'.format(task,obj,successes,count),flush=True)
         successes=sum(v['successes'] for v in objects.values());episodes=sum(v['episodes'] for v in objects.values())
         results[task]=dict(successes=successes,episodes=episodes,success_rate=successes/episodes,
@@ -215,10 +253,21 @@ def package(student,config,metadata,iteration):
 def should_evaluate(i,c):return (i>=c['eval_start'] and (i-c['eval_start'])%c['eval_every']==0) or i==c['iterations']
 
 
-def train(config,teachers,adapters,output,resume=None,allow_source_changes=False):
+def train(config,teachers,adapters,output,resume=None,allow_source_changes=False,init_checkpoint=None):
     student=Student(config).to(config['device']);optimizer=torch.optim.Adam(student.parameters(),lr=config['learning_rate'])
     replay=Replay(config);start=0;best=-float('inf')
     metadata=dict(teacher_hashes={t:v.hash for t,v in teachers.items()},source_asset_sha256=provenance())
+    if init_checkpoint is not None:
+        initial=torch.load(init_checkpoint,map_location='cpu',weights_only=True)
+        from .runtime import validate_initial_student
+        validate_initial_student(initial,config,SCHEMA,metadata['teacher_hashes'])
+        student.load_state_dict(initial['student'],strict=True)
+        save_json(output/'initialization_audit.json',dict(checkpoint=str(init_checkpoint.resolve()),
+            checkpoint_sha256=sha256(init_checkpoint),source_iteration=initial['iteration'],
+            source_config=initial['config'],new_config=config,
+            reset=['optimizer','replay','iteration','teacher_mix_schedule'],
+            note='Model/normalization only. New experiment; not an exact resume.'))
+        del initial
     if resume:
         saved=torch.load(resume,map_location='cpu',weights_only=True)
         from .runtime import validate_resume
@@ -243,7 +292,7 @@ def train(config,teachers,adapters,output,resume=None,allow_source_changes=False
             collector.teacher_fraction=max(config['teacher_mix_min'],config['teacher_mix_start']*(1-iteration/config['teacher_mix_decay']))
             timings=collector.collect(config['rollout_steps'])
             stamp=time.monotonic()
-            updates=[optimize(student,optimizer,replay.sample(config['batch_episodes_per_object'],config['device']),config) for _ in range(config['updates_per_iteration'])]
+            updates=[optimize(student,optimizer,replay.sample(config['batch_episodes_per_object'],'cpu'),config) for _ in range(config['updates_per_iteration'])]
             if student.mean.device.type=='cuda':torch.cuda.synchronize(student.mean.device)
             timings['update_seconds']=time.monotonic()-stamp
             stamp=time.monotonic();collector.refresh_hidden()
@@ -256,9 +305,9 @@ def train(config,teachers,adapters,output,resume=None,allow_source_changes=False
             save_seconds=time.monotonic()-stamp;row['evaluation_seconds']=0.
             if should_evaluate(iteration,config):
                 stamp=time.monotonic()
-                atomic_save(output/('student_%06d.pth'%iteration),saved);rng=rng_state()
+                atomic_save(output/('student_%06d.pth'%iteration),saved);rng=rng_state(config['device'])
                 save_seconds+=time.monotonic()-stamp;stamp=time.monotonic()
-                result=evaluate(config,adapters,student,output/('eval_%06d.json'%iteration));restore_rng(rng)
+                result=evaluate(config,adapters,student,output/('eval_%06d.json'%iteration));restore_rng(rng,config['device'],config['device'])
                 row['evaluation_seconds']=time.monotonic()-stamp
                 score=min(v['object_macro_success_rate'] for v in result.values());row['min_task_success']=score
                 row['macro_success']=sum(v['object_macro_success_rate'] for v in result.values())/4
@@ -267,8 +316,9 @@ def train(config,teachers,adapters,output,resume=None,allow_source_changes=False
                     save_seconds+=time.monotonic()-stamp
             if iteration%config['save_every']==0 or iteration==config['iterations']:
                 stamp=time.monotonic()
-                atomic_save(output/'resume_last.pth',dict(saved,optimizer=optimizer.state_dict(),replay=replay.state_dict(),best_score=best,rng=rng_state()))
+                atomic_save(output/'resume_last.pth',dict(saved,optimizer=optimizer.state_dict(),replay=replay.state_dict(),best_score=best,rng=rng_state(config['device'])))
                 save_seconds+=time.monotonic()-stamp
+            row.update(resource_metrics(student,collector))
             row['save_seconds']=save_seconds;row['seconds']=time.monotonic()-before
             with (output/'metrics.jsonl').open('a') as f:f.write(json.dumps(row)+'\n')
             print(json.dumps(row),flush=True)
@@ -306,10 +356,13 @@ def env_check(config,teachers,adapters,output,steps):
 
 
 def main():
+    def stop(signum,frame):raise SystemExit(128+signum)
+    signal.signal(signal.SIGTERM,stop)
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('command',choices=['check','env-check','train','eval'])
     p.add_argument('--config',type=Path,default=Path(__file__).with_name('configs')/'catch.json')
     p.add_argument('--output',type=Path,required=True);p.add_argument('--checkpoint',type=Path);p.add_argument('--resume',type=Path)
+    p.add_argument('--init-checkpoint',type=Path,help='Initialize student weights/normalizer in a new experiment; reset optimizer/replay/iteration')
     p.add_argument('--teacher-root',type=Path,help='Directory containing the four unchanged teacher files')
     p.add_argument('--device');p.add_argument('--gl-backend',choices=['egl','glfw','osmesa','auto']);p.add_argument('--egl-device-id',type=int)
     for flag in ('iterations','num-envs','episodes','eval-start','eval-every','seed','eval-seed','rollout-steps'):p.add_argument('--'+flag,type=int)
@@ -317,11 +370,17 @@ def main():
     p.add_argument('--render-devices',nargs='+',type=int,help='Round-robin EGL device IDs for environment workers')
     p.add_argument('--render-task-devices',nargs='+',help='Explicit EGL mapping: throw=1 roll=1 bounce=2 basket=3')
     p.add_argument('--ablation',choices=ABLATIONS,help='full (default), no-position (all position heads), no-future, or none')
+    p.add_argument('--basket-rollin',choices=['step','episode'],help='Fresh training: Basket action executor selection frequency')
+    p.add_argument('--basket-carry-precision-weight',type=float,help='Extra arm/hand action MSE during carry; default 0')
+    p.add_argument('--basket-success-metric',choices=['strict','hit'],help='Basket evaluation metric for a fresh run or standalone eval; hit removes stopped-release requirement')
+    p.add_argument('--eval-num-envs',type=int,help='Parallel environments per object during evaluation')
     p.add_argument('--check-steps',type=int,default=2)
     p.add_argument('--viewer',action='store_true',help='Open a passive MuJoCo viewer during student evaluation')
     p.add_argument('--tasks',nargs='+',choices=TASKS,help='Evaluation only: select tasks to view/test')
     args=p.parse_args()
     args.output=args.output.expanduser().resolve()
+    if args.basket_success_metric and args.command not in ('train','eval'):p.error('--basket-success-metric is train/eval only')
+    if args.eval_num_envs is not None and args.eval_num_envs<1:p.error('--eval-num-envs must be positive')
     if (args.viewer or args.tasks) and args.command!='eval':p.error('--viewer and --tasks are evaluation only')
     os.environ.setdefault('OMP_NUM_THREADS','1');os.environ.setdefault('OPENBLAS_NUM_THREADS','1');os.environ.setdefault('MKL_NUM_THREADS','1')
     if sum(x is not None for x in (args.egl_device_id,args.render_devices,args.render_task_devices))>1:p.error('Choose one of --egl-device-id, --render-devices, --render-task-devices')
@@ -336,12 +395,18 @@ def main():
         if saved.get('schema')!=SCHEMA:raise ValueError('Expected autonomous visual Basket student')
         config=copy.deepcopy(saved['config'])
     else:config=json.loads(args.config.read_text())
+    for flag,key,default in [('basket_rollin','basket_rollin','step'),('basket_carry_precision_weight','basket_carry_precision_weight',0.)]:
+        value=getattr(args,flag)
+        if value is not None:
+            if saved is not None and value!=config.get(key,default):p.error('Repair settings cannot change on resume/eval; start a separate run')
+            if saved is None:config[key]=value
     if args.ablation is not None:
         if saved is not None and args.ablation!=config.get('ablation','full'):
             p.error('Cannot change ablation when resuming/evaluating a checkpoint; start a new run')
         if saved is None:config['ablation']=args.ablation
     if args.teacher_root:
         for task,cfg in config['tasks'].items():cfg['checkpoint']=str((args.teacher_root/Path(cfg['checkpoint']).name).resolve())
+    if args.init_checkpoint and (args.command!='train' or args.resume):p.error('--init-checkpoint is fresh train only, mutually exclusive with --resume')
     if args.resume and args.command!='train':p.error('resume is train only')
     if args.check_steps<1:p.error('check-steps must be positive')
     for flag,key in [('iterations','iterations'),('num_envs','num_envs_per_task'),('episodes','eval_episodes'),('eval_start','eval_start'),('eval_every','eval_every'),('seed','seed'),('eval_seed','evaluation_seed'),('rollout_steps','rollout_steps')]:
@@ -361,9 +426,15 @@ def main():
     if args.viewer and args.render_devices is None and args.render_task_devices is None and args.egl_device_id is None:
         config.pop('render_devices',None);config.pop('render_task_devices',None)
     config['device']=args.device or ('cpu' if args.command=='check' else config['device'])
+    if args.eval_num_envs is not None:config['eval_num_envs']=args.eval_num_envs
+    if args.basket_success_metric:
+        metric='basket_region_hit' if args.basket_success_metric=='hit' else 'safe_basket_success'
+        if args.resume and config['tasks']['basket']['success_metric']!=metric:p.error('Changing the training evaluation metric requires a new run')
+        config['tasks']['basket']['success_metric']=metric
     if args.skip_teacher_baseline:config['skip_teacher_baseline']=True
     validate(config)
-    if config['device'].startswith('cuda') and not torch.cuda.is_available():raise RuntimeError('CUDA unavailable')
+    config['device']=str(validate_torch_device(config['device']))
+    print('[network-device] {} CUDA_VISIBLE_DEVICES={!r}'.format(config['device'],os.environ.get('CUDA_VISIBLE_DEVICES')),flush=True)
     torch.set_num_threads(1);seed_all(config['seed'])
     if args.output.exists() and not args.resume:raise FileExistsError('Choose a new output directory')
     args.output.mkdir(parents=True,exist_ok=bool(args.resume))
@@ -382,7 +453,7 @@ def main():
     teachers={t:FrozenTeacher(t,c,config['device']) for t,c in config['tasks'].items()}
     checks={t:teacher.parity() for t,teacher in teachers.items()};save_json(args.output/'teacher_check.json',checks);print(json.dumps(checks,indent=2),flush=True)
     save_json(args.output/'resolved_config.json',config)
-    if args.command=='train':train(config,teachers,adapters,args.output,args.resume,args.allow_source_changes)
+    if args.command=='train':train(config,teachers,adapters,args.output,args.resume,args.allow_source_changes,args.init_checkpoint)
     elif args.command=='env-check':env_check(config,teachers,adapters,args.output,args.check_steps)
     else:
         student=Student(config)

@@ -37,6 +37,8 @@ def worker(args):
     if args.num_envs is not None:config['num_envs_per_task']=args.num_envs
     if args.rollout_steps is not None:config['rollout_steps']=args.rollout_steps
     validate(config)
+    from .runtime import validate_torch_device
+    args.device=str(validate_torch_device(args.device));config['device']=args.device
     torch.set_num_threads(1);seed_all(config['seed'])
     student=Student(config).to(args.device)
     if args.checkpoint:
@@ -45,7 +47,7 @@ def worker(args):
         if saved.get('schema')!=SCHEMA:raise ValueError('Expected visual Bridge student checkpoint')
         # Environment, teacher, and learning settings must match the tested run.
         for key in ('tasks','env_kwargs','vision','model','auxiliary','sampling_mode',
-                    'ablation','capacity_frames_per_task','batch_episodes_per_object','updates_per_iteration','bptt_steps'):
+                    'ablation','basket_rollin','basket_carry_precision_weight','capacity_frames_per_task','batch_episodes_per_object','updates_per_iteration','bptt_steps'):
             expected=copy.deepcopy(saved['config'].get(key));actual=copy.deepcopy(config.get(key))
             if key=='vision':
                 expected.pop('gl_backend',None);actual.pop('gl_backend',None)
@@ -76,7 +78,7 @@ def worker(args):
             sync();before=time.monotonic();row=collector.collect(config['rollout_steps'])
             stamp=time.monotonic()
             for _ in range(config['updates_per_iteration']):
-                optimize(student,optimizer,replay.sample(config['batch_episodes_per_object'],args.device),config)
+                optimize(student,optimizer,replay.sample(config['batch_episodes_per_object'],'cpu'),config)
             sync();row['update_seconds']=time.monotonic()-stamp
             stamp=time.monotonic();collector.refresh_hidden();sync()
             row['refresh_hidden_seconds']=time.monotonic()-stamp;row['seconds']=time.monotonic()-before

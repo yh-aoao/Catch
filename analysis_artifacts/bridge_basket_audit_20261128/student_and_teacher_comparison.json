@@ -1,0 +1,80 @@
+{
+  "eval_001000": {
+    "task_success_rates": {
+      "throw": 0.15666666666666668,
+      "roll": 0.12666666666666668,
+      "bounce": 0.2,
+      "basket": 0.0033333333333333335
+    },
+    "basket_reasons": {
+      "premature_bridge_release": 256,
+      "ball_on_floor": 26,
+      "base_collision": 8,
+      "timeout": 7,
+      "arm_self_collision": 2,
+      "basket_score": 1
+    }
+  },
+  "eval_002000": {
+    "task_success_rates": {
+      "throw": 0.29333333333333333,
+      "roll": 0.41333333333333333,
+      "bounce": 0.22,
+      "basket": 0.0
+    },
+    "basket_reasons": {
+      "premature_bridge_release": 231,
+      "ball_on_floor": 64,
+      "base_collision": 4,
+      "timeout": 1
+    }
+  },
+  "loss_windows": {
+    "100": {
+      "imitation/basket": 1.1943242643238046,
+      "basket_position_loss": 0.002405883079472071
+    },
+    "1000": {
+      "imitation/basket": 1.1728945771657164,
+      "basket_position_loss": 0.00020213297715485635
+    },
+    "2000": {
+      "imitation/basket": 1.1762396836758127,
+      "basket_position_loss": 0.0001010444882063899
+    },
+    "2450": {
+      "imitation/basket": 1.1853408130747267,
+      "basket_position_loss": 8.482027532650094e-05
+    }
+  },
+  "teacher_control_and_scoring": {
+    "episodes": 20,
+    "successes": 2,
+    "success_rate": 0.1,
+    "reached_throw_phase": 18,
+    "release_stopped": 2,
+    "circle_hits_ignoring_stop_and_bridge": 17,
+    "reasons": {
+      "ball_on_floor": 16,
+      "basket_score": 2,
+      "premature_bridge_release": 1,
+      "arm_self_collision": 1
+    },
+    "action_conversion_max_error": 5.960464477539063e-08,
+    "teacher_sha256": "e00e4fb57fdd3db35e2e8944f008f9d53a5925c18789549b603f56890805c552",
+    "basket_diameter_m": 0.6,
+    "autonomous_control": true,
+    "integrated_joint_targets": true,
+    "note": "Circle hits are geometric diagnostics, NOT strict task successes. No student or depth policy is evaluated."
+  },
+  "findings": [
+    "No legacy hold/braking actuator overrides in autonomous path",
+    "Direct teacher action conversion max error <= 6e-8",
+    "Teacher still uses scripted bridge-ready flag as input to select carry/throw heads; student receives no such flag",
+    "Student 2000 has 231 premature releases of 300; scoring difference alone cannot explain failure",
+    "Teacher 0.6m geometric hitting and strict stopped-release success are different metrics",
+    "Per-step teacher/student mixing gives teacher fraction 0.48 at iteration2000 and may disrupt complete carry trajectories; causal contribution not yet tested",
+    "Gym generator was not seeded by old worker reset; corrected for Basket reproducibility"
+  ],
+  "scope": "Diagnostic counters and reset seed fix only; no changes to teacher mixing, model, loss, physical controls, or strict success criterion."
+}
